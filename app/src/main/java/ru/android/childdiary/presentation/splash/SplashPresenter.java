@@ -29,7 +29,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         unsubscribeOnDestroy(Observable.timer(5, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(time -> onInitialized(), error -> onUnexpectedError(error)));
+                .subscribe(time -> onInitialized(), this::onUnexpectedError));
     }
 
     private void onInitialized() {
