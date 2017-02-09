@@ -11,7 +11,7 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseFragment<P extends BasePresenter> extends MvpAppCompatFragment implements BaseView {
+public abstract class BaseFragment<P extends BasePresenter> extends MvpAppCompatFragment implements BaseFragmentView {
     private Unbinder mUnbinder;
 
     public BaseFragment() {

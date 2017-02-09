@@ -12,7 +12,7 @@ import butterknife.ButterKnife;
 import ru.android.childdiary.BuildConfig;
 
 @SuppressLint("Registered")
-public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseView {
+public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseActivityView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
