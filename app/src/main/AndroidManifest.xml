@@ -12,7 +12,9 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name=".presentation.main.MainActivity" />
-        <activity android:name=".presentation.splash.SplashActivity">
+        <activity
+            android:name=".presentation.splash.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,9 +22,27 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.onboarding.IntroActivity" />
-        <activity android:name=".presentation.settings.SettingsActivity" />
-        <activity android:name=".presentation.profile.edit.ProfileEditActivity" />
-        <activity android:name=".presentation.profile.review.ProfileReviewActivity" />
+        <activity
+            android:name=".presentation.settings.SettingsActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.profile.edit.ProfileEditActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.profile.review.ProfileReviewActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
 
     </application>
 </manifest>

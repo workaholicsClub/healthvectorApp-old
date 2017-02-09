@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ru.android.childdiary.app.ChildDiaryApplication;
-import ru.android.childdiary.presentation.core.NavigationController;
+import ru.android.childdiary.presentation.core.navigation.NavigationController;
 
 @Module
 public class ApplicationModule {
