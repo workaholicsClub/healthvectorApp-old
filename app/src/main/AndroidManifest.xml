@@ -1,13 +1,49 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.android.childdiary">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="ru.android.childdiary"
+    tools:ignore="UnusedAttribute">
 
     <application
+        android:name=".app.ChildDiaryApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity android:name=".presentation.main.MainActivity" />
+        <activity
+            android:name=".presentation.splash.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".presentation.onboarding.IntroActivity" />
+        <activity
+            android:name=".presentation.settings.SettingsActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.profile.edit.ProfileEditActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.profile.review.ProfileReviewActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
 
     </application>
-
 </manifest>

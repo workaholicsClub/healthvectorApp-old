@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
@@ -38,7 +37,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
 
     def androidSupportVersion = '25.1.1'
     compile "com.android.support:support-v4:$androidSupportVersion"
@@ -52,30 +53,32 @@ dependencies {
 
     def retrofitVersion = '2.1.0'
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0"
 
     compile "com.google.code.gson:gson:2.8.0"
 
     def butterknifeVersion = '8.5.1'
     compile "com.jakewharton:butterknife:$butterknifeVersion"
-    apt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     def daggerVersion = '2.9'
     compile "com.google.dagger:dagger:$daggerVersion"
-    apt "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    compile 'javax.annotation:jsr250-api:1.0'
 
     def moxyVersion = '1.4.5'
     compile "com.arello-mobile:moxy:$moxyVersion"
     compile "com.arello-mobile:moxy-android:$moxyVersion"
     compile "com.arello-mobile:moxy-app-compat:$moxyVersion"
-    apt "com.arello-mobile:moxy-compiler:$moxyVersion"
+    annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
 
     compile "com.annimon:stream:1.1.4"
 
     def parcelerVersion = '1.1.6'
     compile "org.parceler:parceler-api:$parcelerVersion"
-    apt "org.parceler:parceler:$parcelerVersion"
+    annotationProcessor "org.parceler:parceler:$parcelerVersion"
 
     def icepickVersion = '3.2.0'
     compile "frankiesardo:icepick:$icepickVersion"
@@ -83,11 +86,13 @@ dependencies {
 
     def lombokVersion = '1.16.12'
     provided "org.projectlombok:lombok:$lombokVersion"
-    apt "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
     compile "info.android15.proxypref:proxypref:0.2.0"
 
     compile "org.greenrobot:eventbus:3.0.0"
 
     compile "org.greenrobot:greendao:3.2.0"
+
+    compile "com.github.paolorotolo:appintro:4.1.0"
 }
