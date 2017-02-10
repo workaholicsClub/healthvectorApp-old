@@ -12,7 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public abstract class BaseFragment<P extends BasePresenter> extends MvpAppCompatFragment implements BaseFragmentView {
-    private Unbinder mUnbinder;
+    private Unbinder unbinder;
 
     public BaseFragment() {
     }
@@ -20,13 +20,13 @@ public abstract class BaseFragment<P extends BasePresenter> extends MvpAppCompat
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUnbinder = ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
+        unbinder.unbind();
     }
 
     @Override

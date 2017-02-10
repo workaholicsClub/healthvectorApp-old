@@ -15,10 +15,10 @@ import ru.android.childdiary.presentation.core.navigation.NavigationController;
 
 public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
     @InjectPresenter
-    SplashPresenter mPresenter;
+    SplashPresenter presenter;
 
     @Inject
-    NavigationController mNavigationController;
+    NavigationController navigationController;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +32,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     public void navigateToMain() {
-        mNavigationController.navigateToMain(this);
+        navigationController.navigateToMain(this);
     }
 }

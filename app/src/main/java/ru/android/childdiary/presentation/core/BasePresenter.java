@@ -13,14 +13,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> implements ErrorHandler {
-    private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Getter(AccessLevel.PROTECTED)
     @Inject
-    Context mContext;
+    Context context;
 
     protected void unsubscribeOnDestroy(@NonNull Disposable disposable) {
-        mCompositeDisposable.add(disposable);
+        compositeDisposable.add(disposable);
     }
 
     @Override
@@ -32,6 +32,6 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCompositeDisposable.dispose();
+        compositeDisposable.dispose();
     }
 }

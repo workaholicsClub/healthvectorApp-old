@@ -11,13 +11,13 @@ import ru.android.childdiary.di.modules.ApplicationModule;
 public class ChildDiaryApplication extends Application {
     @Getter
     @Setter
-    private static ApplicationComponent sApplicationComponent;
+    private static ApplicationComponent applicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        sApplicationComponent = DaggerApplicationComponent.builder()
+        applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
     }

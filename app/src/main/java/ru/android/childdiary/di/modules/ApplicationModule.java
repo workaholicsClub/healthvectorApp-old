@@ -13,17 +13,17 @@ import ru.android.childdiary.presentation.core.navigation.NavigationController;
 
 @Module
 public class ApplicationModule {
-    private final ChildDiaryApplication mApplication;
+    private final ChildDiaryApplication application;
 
     public ApplicationModule(ChildDiaryApplication application) {
-        this.mApplication = application;
+        this.application = application;
     }
 
     @Internal
     @Provides
     @Singleton
     Context provideContext() {
-        return mApplication;
+        return application;
     }
 
     @Internal
