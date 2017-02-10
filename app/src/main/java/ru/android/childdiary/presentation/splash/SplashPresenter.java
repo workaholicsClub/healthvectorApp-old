@@ -15,6 +15,8 @@ import ru.android.childdiary.presentation.core.navigation.NavigationController;
 
 @InjectViewState
 public class SplashPresenter extends BasePresenter<SplashView> {
+    private static final long SPLASH_TIME = 3;
+
     @Inject
     NavigationController navigationController;
 
@@ -26,7 +28,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(Observable.timer(5, TimeUnit.SECONDS)
+        unsubscribeOnDestroy(Observable.timer(SPLASH_TIME, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(time -> onInitialized(), this::onUnexpectedError));
