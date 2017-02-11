@@ -8,10 +8,15 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public abstract class BaseFragment<P extends BasePresenter> extends MvpAppCompatFragment implements BaseFragmentView {
+    protected final Logger logger = LoggerFactory.getLogger(toString());
+
     private Unbinder unbinder;
 
     public BaseFragment() {
@@ -31,6 +36,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends MvpAppCompat
 
     @Override
     public void onUnexpectedError(Throwable e) {
+        logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
