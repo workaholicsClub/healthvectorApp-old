@@ -29,7 +29,7 @@ class FileCustomAppenderFactory extends AbstractCustomAppenderFactory {
 
     private Appender<ILoggingEvent> getAppender(LoggerContext loggerContext, String filesDir) {
         val fileName = filesDir + LOG_FILE_NAME;
-        val fineNamePattern = filesDir + "log.%i.txt";
+        val fineNamePattern = filesDir + LOG_ROTATE_PATTERN;
 
         val rollingFileAppender = new RollingFileAppender<ILoggingEvent>();
         rollingFileAppender.setAppend(true);
