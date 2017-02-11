@@ -13,13 +13,13 @@ class CrashReportSystemCustomAppenderFactory extends AbstractCustomAppenderFacto
 
     @Override
     public Appender<ILoggingEvent> getAppender(LoggerContext loggerContext, Context appContext) {
-        val crashlyticsAppender = new CrashReportSystemAppender();
-        crashlyticsAppender.setContext(loggerContext);
+        val crashReportSystemAppender = new CrashReportSystemAppender();
+        crashReportSystemAppender.setContext(loggerContext);
 
-        crashlyticsAppender.setEncoder(getPatternLayoutEncoder(loggerContext, LOG_FILE_PATTERN));
-        crashlyticsAppender.setTagEncoder(getPatternLayoutEncoder(loggerContext, TAG_PATTERN));
+        crashReportSystemAppender.setEncoder(getPatternLayoutEncoder(loggerContext, LOG_FILE_PATTERN));
+        crashReportSystemAppender.setTagEncoder(getPatternLayoutEncoder(loggerContext, TAG_PATTERN));
 
-        crashlyticsAppender.start();
-        return crashlyticsAppender;
+        crashReportSystemAppender.start();
+        return crashReportSystemAppender;
     }
 }
