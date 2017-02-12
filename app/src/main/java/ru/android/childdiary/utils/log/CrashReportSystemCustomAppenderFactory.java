@@ -9,14 +9,14 @@ import lombok.val;
 
 class CrashReportSystemCustomAppenderFactory extends AbstractCustomAppenderFactory {
     private static final String TAG_PATTERN = LogConstants.APPLICATION_LOG_TAG + " %logger{0}";
-    private static final String LOG_FILE_PATTERN = "[%thread] %message%n";
+    private static final String LOG_PATTERN = "[%thread] %message%n";
 
     @Override
     public Appender<ILoggingEvent> getAppender(LoggerContext loggerContext, Context appContext) {
         val crashReportSystemAppender = new CrashReportSystemAppender();
         crashReportSystemAppender.setContext(loggerContext);
 
-        crashReportSystemAppender.setEncoder(getPatternLayoutEncoder(loggerContext, LOG_FILE_PATTERN));
+        crashReportSystemAppender.setEncoder(getPatternLayoutEncoder(loggerContext, LOG_PATTERN));
         crashReportSystemAppender.setTagEncoder(getPatternLayoutEncoder(loggerContext, TAG_PATTERN));
 
         crashReportSystemAppender.start();
