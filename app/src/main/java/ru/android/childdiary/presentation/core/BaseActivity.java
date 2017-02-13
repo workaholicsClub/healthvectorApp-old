@@ -8,18 +8,35 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import butterknife.ButterKnife;
 import ru.android.childdiary.BuildConfig;
+import ru.android.childdiary.app.ChildDiaryApplication;
+import ru.android.childdiary.di.ApplicationComponent;
 
 @SuppressLint("Registered")
 public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseActivityView {
+    protected final Logger logger = LoggerFactory.getLogger(toString());
+
+    protected abstract void injectActivity(ApplicationComponent applicationComponent);
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        logger.debug("onCreate");
 
         ButterKnife.bind(this);
 
+        setupDagger();
+
         setupActionBar();
+    }
+
+    private void setupDagger() {
+        ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
+        injectActivity(component);
     }
 
     private void setupActionBar() {
@@ -31,7 +48,20 @@ public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompat
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        logger.debug("onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        logger.debug("onPause");
+    }
+
+    @Override
     public void onUnexpectedError(Throwable e) {
+        logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }

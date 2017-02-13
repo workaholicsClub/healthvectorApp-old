@@ -8,7 +8,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BaseActivity;
 import ru.android.childdiary.presentation.core.navigation.NavigationController;
@@ -25,9 +24,11 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_splash);
+    }
 
-        ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
-        component.inject(this);
+    @Override
+    protected void injectActivity(ApplicationComponent applicationComponent) {
+        applicationComponent.inject(this);
     }
 
     @Override
