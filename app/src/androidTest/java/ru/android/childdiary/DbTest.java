@@ -28,9 +28,9 @@ import ru.android.childdiary.data.entities.child.AntropometryData;
 import ru.android.childdiary.data.entities.child.AntropometryEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
-import ru.android.childdiary.data.entities.child.Sex;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.utils.ObjectUtils;
-import ru.android.childdiary.utils.db.DbUtils;
+import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 
 import static junit.framework.Assert.assertTrue;

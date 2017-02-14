@@ -6,10 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.requery.Persistable;
-import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.presentation.core.navigation.NavigationController;
-import ru.android.childdiary.utils.db.DbUtils;
 
 @Module
 public class ApplicationModule {
@@ -29,11 +26,5 @@ public class ApplicationModule {
     @Singleton
     public NavigationController provideNavigationController(Context appContext) {
         return new NavigationController(appContext);
-    }
-
-    @Provides
-    @Singleton
-    public ReactiveEntityStore<Persistable> provideDataStore() {
-        return DbUtils.getDataStore(appContext);
     }
 }
