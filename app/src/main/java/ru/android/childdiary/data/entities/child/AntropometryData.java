@@ -11,14 +11,14 @@ import io.requery.Table;
 
 @Table(name = "antropometry")
 @Entity(name = "AntropometryEntity")
-public interface IAntropometry {
+public interface AntropometryData {
     @Key
     @Generated
     long getId();
 
     @ForeignKey
     @ManyToOne
-    IChild getChild();
+    ChildData getChild();
 
     double getHeight();
 

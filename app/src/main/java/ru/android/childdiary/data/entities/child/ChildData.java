@@ -13,7 +13,7 @@ import io.requery.Table;
 
 @Table(name = "child")
 @Entity(name = "ChildEntity")
-public interface IChild {
+public interface ChildData {
     @Key
     @Generated
     long getId();
@@ -33,5 +33,5 @@ public interface IChild {
     double getWeight();
 
     @OneToMany
-    List<IAntropometry> getAntropometryList();
+    List<AntropometryData> getAntropometryList();
 }

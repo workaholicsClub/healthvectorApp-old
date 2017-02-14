@@ -24,10 +24,10 @@ import java.util.Random;
 
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
+import ru.android.childdiary.data.entities.child.AntropometryData;
 import ru.android.childdiary.data.entities.child.AntropometryEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
-import ru.android.childdiary.data.entities.child.IAntropometry;
-import ru.android.childdiary.data.entities.child.IChild;
+import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.Sex;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.db.DbUtils;
@@ -134,8 +134,8 @@ public class DbTest {
 
         // 3. compare
         for (ChildEntity e : expected) {
-            for (IAntropometry antropometryEntity : e.getAntropometryList()) {
-                IChild a = antropometryEntity.getChild();
+            for (AntropometryData antropometryEntity : e.getAntropometryList()) {
+                ChildData a = antropometryEntity.getChild();
                 assertTrue(String.format("objects differ: expected %s, actual %s", e, a), ObjectUtils.equals(a, e));
             }
         }
