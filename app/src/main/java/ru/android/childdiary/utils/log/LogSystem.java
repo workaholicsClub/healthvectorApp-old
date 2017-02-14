@@ -15,15 +15,18 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.util.StatusPrinter;
 import lombok.val;
+import ru.android.childdiary.BuildConfig;
 
 public class LogSystem {
     public static void initLogger(Context appContext) {
         CrashReportSystem.init(appContext);
 
         val factories = new ArrayList<AbstractCustomAppenderFactory>();
-        factories.add(new FileCustomAppenderFactory());
+        if (BuildConfig.DEBUG) {
+            factories.add(new FileCustomAppenderFactory());
+        }
         factories.add(new CrashReportSystemCustomAppenderFactory());
-        if (!CrashReportSystem.printsToLogcat()) {
+        if (BuildConfig.DEBUG) {
             factories.add(new LogcatCustomAppenderFactory());
         }
 
