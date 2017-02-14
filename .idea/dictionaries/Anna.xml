@@ -1,12 +1,15 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Anna">
     <words>
+      <w>antropometry</w>
       <w>butterknife</w>
       <w>childdiary</w>
       <w>crashlytics</w>
+      <w>formatters</w>
       <w>lombok</w>
       <w>onboarding</w>
       <w>parceler</w>
+      <w>requery</w>
     </words>
   </dictionary>
 </component>

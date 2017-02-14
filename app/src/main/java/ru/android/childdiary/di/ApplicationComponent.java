@@ -5,6 +5,8 @@ import android.content.Context;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import io.requery.Persistable;
+import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.presentation.core.navigation.NavigationController;
 import ru.android.childdiary.presentation.main.MainActivity;
@@ -24,6 +26,8 @@ public interface ApplicationComponent {
     Context provideContext();
 
     NavigationController provideNavigationController();
+
+    ReactiveEntityStore<Persistable> provideDataStore();
 
     void inject(SplashPresenter presenter);
 

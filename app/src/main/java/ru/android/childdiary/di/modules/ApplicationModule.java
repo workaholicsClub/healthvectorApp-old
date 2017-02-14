@@ -2,34 +2,38 @@ package ru.android.childdiary.di.modules;
 
 import android.content.Context;
 
-import org.greenrobot.greendao.annotation.apihint.Internal;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.android.childdiary.app.ChildDiaryApplication;
+import io.requery.Persistable;
+import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.presentation.core.navigation.NavigationController;
+import ru.android.childdiary.utils.db.DbUtils;
 
 @Module
 public class ApplicationModule {
-    private final ChildDiaryApplication application;
+    private final Context appContext;
 
-    public ApplicationModule(ChildDiaryApplication application) {
-        this.application = application;
+    public ApplicationModule(Context appContext) {
+        this.appContext = appContext;
     }
 
-    @Internal
     @Provides
     @Singleton
     Context provideContext() {
-        return application;
+        return appContext;
     }
 
-    @Internal
     @Provides
     @Singleton
-    public NavigationController provideNavigationController(Context context) {
-        return new NavigationController(context);
+    public NavigationController provideNavigationController(Context appContext) {
+        return new NavigationController(appContext);
+    }
+
+    @Provides
+    @Singleton
+    public ReactiveEntityStore<Persistable> provideDataStore() {
+        return DbUtils.getDataStore(appContext);
     }
 }
