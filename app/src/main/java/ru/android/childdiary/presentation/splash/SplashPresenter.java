@@ -8,14 +8,13 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.core.navigation.NavigationController;
 
 @InjectViewState
 public class SplashPresenter extends BasePresenter<SplashView> {
-    private static final long SPLASH_TIME = 3;
+    private static final long SPLASH_TIME_IN_SECONDS = 3;
 
     @Inject
     NavigationController navigationController;
@@ -28,14 +27,14 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(Observable.timer(SPLASH_TIME, TimeUnit.SECONDS)
+        unsubscribeOnDestroy(Observable.timer(SPLASH_TIME_IN_SECONDS, TimeUnit.SECONDS)
                 .doOnNext(time -> logger.debug("timer finished"))
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(time -> onInitialized(), this::onUnexpectedError));
     }
 
     private void onInitialized() {
+        logger.debug("onInitialized");
         getViewState().navigateToMain();
         getViewState().finish();
     }

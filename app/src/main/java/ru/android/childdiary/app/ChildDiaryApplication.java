@@ -2,6 +2,8 @@ package ru.android.childdiary.app;
 
 import android.app.Application;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import lombok.Getter;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.di.DaggerApplicationComponent;
@@ -17,6 +19,8 @@ public class ChildDiaryApplication extends Application {
         super.onCreate();
 
         LogSystem.initLogger(this);
+
+        JodaTimeAndroid.init(this);
 
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
