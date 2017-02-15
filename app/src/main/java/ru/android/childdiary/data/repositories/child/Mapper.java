@@ -7,7 +7,7 @@ import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.Child;
 
-public class Mapper {
+class Mapper {
     public static Child map(ChildData childData) {
         return Child.builder()
                 .id(childData.getId())
