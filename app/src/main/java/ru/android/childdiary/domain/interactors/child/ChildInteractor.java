@@ -5,8 +5,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.requery.reactivex.ReactiveResult;
-import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.domain.core.Interactor;
 

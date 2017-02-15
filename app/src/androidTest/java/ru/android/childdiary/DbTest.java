@@ -113,7 +113,7 @@ public class DbTest {
         generateChildren()
                 .flatMap(child -> childDbService.add(child))
                 .doOnNext(child -> logger.debug("value inserted: " + child))
-                .doOnNext(child -> inserted.add(child))
+                .doOnNext(inserted::add)
                 .doOnError(error -> logger.error("failed to insert value", error))
                 .subscribe();
 
@@ -122,7 +122,7 @@ public class DbTest {
         // 2. select children
         List<Child> selected = new ArrayList<>();
         childDbService.getAll()
-                .doOnNext(children -> selected.addAll(children))
+                .doOnNext(selected::addAll)
                 .doOnError(error -> logger.error("failed to select values"))
                 .subscribe();
 
@@ -172,7 +172,7 @@ public class DbTest {
         List<Child> insertedChildren = new ArrayList<>();
         childDbService.add(child)
                 .doOnNext(item -> logger.debug("value inserted: " + item))
-                .doOnNext(item -> insertedChildren.add(item))
+                .doOnNext(insertedChildren::add)
                 .doOnError(error -> logger.error("failed to insert value", error))
                 .subscribe();
 
@@ -191,7 +191,7 @@ public class DbTest {
                     .build();
             antropometryDbService.add(antropometry)
                     .doOnNext(item -> logger.debug("value inserted: " + item))
-                    .doOnNext(item -> inserted.add(item))
+                    .doOnNext(inserted::add)
                     .doOnError(error -> logger.error("failed to insert value", error))
                     .subscribe();
         }
@@ -203,7 +203,7 @@ public class DbTest {
         // 2. select antropometry
         List<Antropometry> selected = new ArrayList<>();
         antropometryDbService.getAll()
-                .doOnNext(antropometryList -> selected.addAll(antropometryList))
+                .doOnNext(selected::addAll)
                 .doOnError(error -> logger.error("failed to select values"))
                 .subscribe();
 
@@ -217,7 +217,7 @@ public class DbTest {
         // 4. select children
         List<Child> selectedChildren = new ArrayList<>();
         childDbService.getAll()
-                .doOnNext(children -> selectedChildren.addAll(children))
+                .doOnNext(selectedChildren::addAll)
                 .doOnError(error -> logger.error("failed to select values"))
                 .subscribe();
 

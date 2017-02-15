@@ -8,9 +8,6 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.requery.reactivex.ReactiveResult;
-import ru.android.childdiary.data.entities.child.ChildEntity;
-import ru.android.childdiary.data.repositories.child.Mapper;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.AntropometryInteractor;
