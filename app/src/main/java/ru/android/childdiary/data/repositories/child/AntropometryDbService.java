@@ -4,12 +4,12 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import io.reactivex.Single;
+import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.entities.child.AntropometryEntity;
-import ru.android.childdiary.domain.models.child.Antropometry;
-import ru.android.childdiary.domain.models.child.Child;
+import ru.android.childdiary.domain.interactors.child.Antropometry;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 @Singleton
 public class AntropometryDbService implements AntropometryService {
@@ -20,33 +20,38 @@ public class AntropometryDbService implements AntropometryService {
     }
 
     @Override
-    public Single<List<Antropometry>> getAll() {
-        return dataStore.select(AntropometryEntity.class).get().observable()
-                .map(Mapper::map)
-                .toSortedList((o1, o2) -> o1.getDate().compareTo(o2.getDate()));
-    }
-
-    @Override
-    public Single<List<Antropometry>> getAll(Child child) {
+    public Observable<List<Antropometry>> getAll() {
         return dataStore.select(AntropometryEntity.class)
-                .where(AntropometryEntity.CHILD_ID.eq(child.getId()))
+                .orderBy(AntropometryEntity.DATE)
                 .get().observable()
                 .map(Mapper::map)
-                .toSortedList((o1, o2) -> o1.getDate().compareTo(o2.getDate()));
+                .toList()
+                .toObservable();
     }
 
     @Override
-    public Single<Antropometry> add(Antropometry antropometry) {
-        return dataStore.insert(Mapper.map(antropometry)).map(Mapper::map);
+    public Observable<List<Antropometry>> getAll(Child child) {
+        return dataStore.select(AntropometryEntity.class)
+                .where(AntropometryEntity.CHILD_ID.eq(child.getId()))
+                .orderBy(AntropometryEntity.DATE)
+                .get().observable()
+                .map(Mapper::map)
+                .toList()
+                .toObservable();
     }
 
     @Override
-    public Single<Antropometry> update(Antropometry antropometry) {
-        return dataStore.update(Mapper.map(antropometry)).map(Mapper::map);
+    public Observable<Antropometry> add(Antropometry antropometry) {
+        return dataStore.insert(Mapper.map(antropometry)).toObservable().map(Mapper::map);
     }
 
     @Override
-    public Single<Antropometry> delete(Antropometry antropometry) {
-        return Single.fromObservable(dataStore.delete(Mapper.map(antropometry)).toObservable());
+    public Observable<Antropometry> update(Antropometry antropometry) {
+        return dataStore.update(Mapper.map(antropometry)).toObservable().map(Mapper::map);
+    }
+
+    @Override
+    public Observable<Antropometry> delete(Antropometry antropometry) {
+        return dataStore.delete(Mapper.map(antropometry)).toObservable();
     }
 }

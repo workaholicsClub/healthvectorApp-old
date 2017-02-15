@@ -9,12 +9,23 @@ import org.slf4j.LoggerFactory;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import ru.android.childdiary.app.ChildDiaryApplication;
+import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.utils.log.LogSystem;
 
 public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> implements ErrorHandler {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    public BasePresenter() {
+        super();
+
+        ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
+        injectPresenter(component);
+    }
+
+    protected abstract void injectPresenter(ApplicationComponent applicationComponent);
 
     protected void unsubscribeOnDestroy(@NonNull Disposable disposable) {
         compositeDisposable.add(disposable);

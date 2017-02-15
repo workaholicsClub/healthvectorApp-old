@@ -2,43 +2,46 @@ package ru.android.childdiary.data.repositories.child;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.Single;
-import ru.android.childdiary.domain.models.child.Antropometry;
-import ru.android.childdiary.domain.models.child.AntropometryRepository;
-import ru.android.childdiary.domain.models.child.Child;
+import io.reactivex.Observable;
+import io.requery.reactivex.ReactiveResult;
+import ru.android.childdiary.domain.interactors.child.Antropometry;
+import ru.android.childdiary.domain.interactors.child.AntropometryRepository;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 @Singleton
 public class AntropometryDataRepository implements AntropometryRepository {
     private final AntropometryDbService dbService;
 
+    @Inject
     public AntropometryDataRepository(AntropometryDbService dbService) {
         this.dbService = dbService;
     }
 
     @Override
-    public Single<List<Antropometry>> getAll() {
+    public Observable<List<Antropometry>> getAll() {
         return dbService.getAll();
     }
 
     @Override
-    public Single<List<Antropometry>> getAll(Child child) {
+    public Observable<List<Antropometry>> getAll(Child child) {
         return dbService.getAll(child);
     }
 
     @Override
-    public Single<Antropometry> add(Antropometry antropometry) {
+    public Observable<Antropometry> add(Antropometry antropometry) {
         return dbService.add(antropometry);
     }
 
     @Override
-    public Single<Antropometry> update(Antropometry antropometry) {
+    public Observable<Antropometry> update(Antropometry antropometry) {
         return dbService.update(antropometry);
     }
 
     @Override
-    public Single<Antropometry> delete(Antropometry antropometry) {
+    public Observable<Antropometry> delete(Antropometry antropometry) {
         return dbService.delete(antropometry);
     }
 }

@@ -4,10 +4,10 @@ import ru.android.childdiary.data.entities.child.AntropometryData;
 import ru.android.childdiary.data.entities.child.AntropometryEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
-import ru.android.childdiary.domain.models.child.Antropometry;
-import ru.android.childdiary.domain.models.child.Child;
+import ru.android.childdiary.domain.interactors.child.Antropometry;
+import ru.android.childdiary.domain.interactors.child.Child;
 
-class Mapper {
+public class Mapper {
     public static Child map(ChildData childData) {
         return Child.builder()
                 .id(childData.getId())

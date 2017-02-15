@@ -4,11 +4,11 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import io.reactivex.Single;
+import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.entities.child.ChildEntity;
-import ru.android.childdiary.domain.models.child.Child;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 @Singleton
 public class ChildDbService implements ChildService {
@@ -19,24 +19,27 @@ public class ChildDbService implements ChildService {
     }
 
     @Override
-    public Single<List<Child>> getAll() {
-        return dataStore.select(ChildEntity.class).get().observable()
+    public Observable<List<Child>> getAll() {
+        return dataStore.select(ChildEntity.class)
+                .orderBy(ChildEntity.NAME)
+                .get().observable()
                 .map(Mapper::map)
-                .toSortedList((o1, o2) -> o1.getName().compareTo(o2.getName()));
+                .toList()
+                .toObservable();
     }
 
     @Override
-    public Single<Child> add(Child child) {
-        return dataStore.insert(Mapper.map(child)).map(Mapper::map);
+    public Observable<Child> add(Child child) {
+        return dataStore.insert(Mapper.map(child)).toObservable().map(Mapper::map);
     }
 
     @Override
-    public Single<Child> update(Child child) {
-        return dataStore.update(Mapper.map(child)).map(Mapper::map);
+    public Observable<Child> update(Child child) {
+        return dataStore.update(Mapper.map(child)).toObservable().map(Mapper::map);
     }
 
     @Override
-    public Single<Child> delete(Child child) {
-        return Single.fromObservable(dataStore.delete(Mapper.map(child)).toObservable());
+    public Observable<Child> delete(Child child) {
+        return dataStore.delete(Mapper.map(child)).toObservable();
     }
 }

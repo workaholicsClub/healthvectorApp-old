@@ -6,11 +6,17 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
 public class SplashPresenter extends BasePresenter<SplashView> {
     private static final long SPLASH_TIME_IN_SECONDS = 3;
+
+    @Override
+    protected void injectPresenter(ApplicationComponent applicationComponent) {
+        applicationComponent.inject(this);
+    }
 
     @Override
     protected void onFirstViewAttach() {

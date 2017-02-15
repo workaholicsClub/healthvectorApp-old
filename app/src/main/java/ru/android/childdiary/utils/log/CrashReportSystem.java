@@ -1,7 +1,6 @@
 package ru.android.childdiary.utils.log;
 
 import android.content.Context;
-import android.util.Log;
 
 class CrashReportSystem {
     public static void init(Context appContext) {

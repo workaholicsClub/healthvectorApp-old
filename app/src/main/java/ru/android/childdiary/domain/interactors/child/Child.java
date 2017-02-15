@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.models.child;
+package ru.android.childdiary.domain.interactors.child;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
