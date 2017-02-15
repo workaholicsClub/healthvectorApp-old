@@ -24,18 +24,6 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public ChildDbService provideChildDbService(ReactiveEntityStore<Persistable> dataStore) {
-        return new ChildDbService(dataStore);
-    }
-
-    @Provides
-    @Singleton
-    public AntropometryDbService provideAntropometryDbService(ReactiveEntityStore<Persistable> dataStore) {
-        return new AntropometryDbService(dataStore);
-    }
-
-    @Provides
-    @Singleton
     public ChildDataRepository provideChildDataRepository(ChildDbService dbService) {
         return new ChildDataRepository(dbService);
     }

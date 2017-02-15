@@ -6,7 +6,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.AntropometryRepository;
 import ru.android.childdiary.domain.interactors.child.Child;

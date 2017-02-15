@@ -2,6 +2,7 @@ package ru.android.childdiary.data.repositories.child;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
@@ -15,6 +16,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public class AntropometryDbService implements AntropometryService {
     private final ReactiveEntityStore<Persistable> dataStore;
 
+    @Inject
     public AntropometryDbService(ReactiveEntityStore<Persistable> dataStore) {
         this.dataStore = dataStore;
     }

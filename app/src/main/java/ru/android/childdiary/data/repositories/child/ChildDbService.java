@@ -2,6 +2,7 @@ package ru.android.childdiary.data.repositories.child;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
@@ -14,6 +15,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public class ChildDbService implements ChildService {
     private final ReactiveEntityStore<Persistable> dataStore;
 
+    @Inject
     public ChildDbService(ReactiveEntityStore<Persistable> dataStore) {
         this.dataStore = dataStore;
     }
