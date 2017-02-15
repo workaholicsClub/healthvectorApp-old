@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.entities.child.ChildEntity;
@@ -42,7 +43,21 @@ public class ChildDbService implements ChildService {
 
     @Override
     public Observable<Child> delete(Child child) {
-        ChildEntity childEntity = dataStore.findByKey(ChildEntity.class, child.getId()).blockingGet();
-        return dataStore.delete(childEntity).toObservable();
+        // delete object by id
+        return Observable.create(emitter -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            ChildEntity result = (ChildEntity) blockingEntityStore.runInTransaction(() -> {
+                Object childEntity = blockingEntityStore.findByKey(ChildEntity.class, child.getId());
+                if (childEntity != null) {
+                    blockingEntityStore.delete(childEntity);
+                }
+                return childEntity;
+            });
+            if (result == null) {
+                throw new RuntimeException("child not found while deleting");
+            }
+            emitter.onNext(child);
+            emitter.onComplete();
+        });
     }
 }

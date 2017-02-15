@@ -118,7 +118,7 @@ public class DbTest {
                 .doOnError(error -> logger.error("failed to insert value", error))
                 .subscribe();
 
-        assertTrue("unexpected inserted values size", inserted.size() == CHILD_COUNT);
+        assertEquals("inserted values size", inserted.size(), CHILD_COUNT);
 
         // 2. select children
         List<Child> selected = new ArrayList<>();
@@ -127,7 +127,7 @@ public class DbTest {
                 .doOnError(error -> logger.error("failed to select values"))
                 .subscribe();
 
-        assertTrue("unexpected selected values size", selected.size() == CHILD_COUNT);
+        assertEquals("selected values size", selected.size(), CHILD_COUNT);
 
         // 3. compare inserted and selected
         for (int i = 0; i < CHILD_COUNT; ++i) {
@@ -178,7 +178,7 @@ public class DbTest {
                     .doOnError(error -> logger.error("failed to insert value", error))
                     .subscribe();
 
-            assertTrue("child wasn't inserted once", insertedChildren.size() == 1);
+            assertEquals("child wasn't inserted once", insertedChildren.size(), 1);
         }
         Child insertedChild = insertedChildren.get(0);
 
@@ -198,7 +198,7 @@ public class DbTest {
                     .subscribe();
         }
 
-        assertTrue("unexpected inserted values size", inserted.size() == ANTROPOMETRY_COUNT);
+        assertEquals("inserted values size", inserted.size(), ANTROPOMETRY_COUNT);
 
         Collections.sort(inserted, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
 
@@ -209,9 +209,7 @@ public class DbTest {
                 .doOnError(error -> logger.error("failed to select values"))
                 .subscribe();
 
-        assertEquals(ANTROPOMETRY_COUNT, selected.size());
-
-        assertTrue("unexpected selected values size", selected.size() == ANTROPOMETRY_COUNT);
+        assertEquals("selected values size", selected.size(), ANTROPOMETRY_COUNT);
 
         // 3. compare inserted and selected
         for (int i = 0; i < ANTROPOMETRY_COUNT; ++i) {
@@ -226,7 +224,22 @@ public class DbTest {
                 .subscribe();
 
         long found = Stream.of(selectedChildren).filter(selectedChild -> selectedChild.equals(insertedChild)).count();
-        assertTrue("chosen child wasn't inserted once", found == 1);
+        assertEquals("chosen child wasn't inserted once", found, 1);
+
+        // delete some antropometry
+        antropometryDbService.delete(selected.get(0))
+                .doOnNext(item -> logger.debug("value deleted: " + item))
+                .doOnError(error -> logger.error("failed to delete value", error))
+                .subscribe();
+
+        // select antropometry
+        selected = new ArrayList<>();
+        antropometryDbService.getAll(insertedChild)
+                .doOnNext(selected::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        assertEquals("after single antropometry deletion: selected values size", selected.size(), ANTROPOMETRY_COUNT - 1);
 
         // 5. cascade delete
         childDbService.delete(insertedChild)
@@ -242,7 +255,7 @@ public class DbTest {
                 .subscribe();
 
         found = Stream.of(selectedChildren).filter(selectedChild -> selectedChild.equals(insertedChild)).count();
-        assertTrue("chosen child wasn't deleted", found == 0);
+        assertEquals("chosen child wasn't deleted", found, 0);
 
         // 7. select antropometry
         selected = new ArrayList<>();
@@ -251,6 +264,6 @@ public class DbTest {
                 .doOnError(error -> logger.error("failed to select values"))
                 .subscribe();
 
-        assertTrue("cascade delete doesn't work", selected.size() == 0);
+        assertEquals("cascade delete doesn't work", selected.size(), 0);
     }
 }
