@@ -35,6 +35,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
@@ -159,35 +160,36 @@ public class DbTest {
         LocalDateTime now = LocalDateTime.now();
 
         // 0. build child
-        Child child = Child.builder()
-                .name("AntropometryTest")
-                .birthDate(now.toLocalDate())
-                .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
-                .sex(Sex.FEMALE)
-                .imageFileName(null)
-                .height(RANDOM.nextDouble())
-                .weight(RANDOM.nextDouble())
-                .build();
-
         List<Child> insertedChildren = new ArrayList<>();
-        childDbService.add(child)
-                .doOnNext(item -> logger.debug("value inserted: " + item))
-                .doOnNext(insertedChildren::add)
-                .doOnError(error -> logger.error("failed to insert value", error))
-                .subscribe();
+        {
+            Child child = Child.builder()
+                    .name("AntropometryTest")
+                    .birthDate(now.toLocalDate())
+                    .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
+                    .sex(Sex.FEMALE)
+                    .imageFileName(null)
+                    .height(RANDOM.nextDouble())
+                    .weight(RANDOM.nextDouble())
+                    .build();
 
-        assertTrue("child wasn't inserted once", insertedChildren.size() == 1);
+            childDbService.add(child)
+                    .doOnNext(item -> logger.debug("value inserted: " + item))
+                    .doOnNext(insertedChildren::add)
+                    .doOnError(error -> logger.error("failed to insert value", error))
+                    .subscribe();
 
+            assertTrue("child wasn't inserted once", insertedChildren.size() == 1);
+        }
         Child insertedChild = insertedChildren.get(0);
 
         // 1. insert antropometry
         List<Antropometry> inserted = new ArrayList<>();
         for (int j = 0; j < ANTROPOMETRY_COUNT; ++j) {
             Antropometry antropometry = Antropometry.builder()
-                    .child(child)
+                    .child(insertedChild)
                     .date(now.minusDays(j).toLocalDate())
-                    .height(child.getHeight() - 0.1 * j)
-                    .weight(child.getWeight() - 0.1 * j)
+                    .height(insertedChild.getHeight() - 0.1 * j)
+                    .weight(insertedChild.getWeight() - 0.1 * j)
                     .build();
             antropometryDbService.add(antropometry)
                     .doOnNext(item -> logger.debug("value inserted: " + item))
@@ -202,10 +204,12 @@ public class DbTest {
 
         // 2. select antropometry
         List<Antropometry> selected = new ArrayList<>();
-        antropometryDbService.getAll()
+        antropometryDbService.getAll(insertedChild)
                 .doOnNext(selected::addAll)
                 .doOnError(error -> logger.error("failed to select values"))
                 .subscribe();
+
+        assertEquals(ANTROPOMETRY_COUNT, selected.size());
 
         assertTrue("unexpected selected values size", selected.size() == ANTROPOMETRY_COUNT);
 
@@ -223,5 +227,30 @@ public class DbTest {
 
         long found = Stream.of(selectedChildren).filter(selectedChild -> selectedChild.equals(insertedChild)).count();
         assertTrue("chosen child wasn't inserted once", found == 1);
+
+        // 5. cascade delete
+        childDbService.delete(insertedChild)
+                .doOnNext(item -> logger.debug("value deleted: " + item))
+                .doOnError(error -> logger.error("failed to delete value", error))
+                .subscribe();
+
+        // 6. select children
+        selectedChildren = new ArrayList<>();
+        childDbService.getAll()
+                .doOnNext(selectedChildren::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        found = Stream.of(selectedChildren).filter(selectedChild -> selectedChild.equals(insertedChild)).count();
+        assertTrue("chosen child wasn't deleted", found == 0);
+
+        // 7. select antropometry
+        selected = new ArrayList<>();
+        antropometryDbService.getAll(insertedChild)
+                .doOnNext(selected::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        assertTrue("cascade delete doesn't work", selected.size() == 0);
     }
 }

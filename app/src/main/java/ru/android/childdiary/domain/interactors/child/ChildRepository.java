@@ -1,6 +1,16 @@
 package ru.android.childdiary.domain.interactors.child;
 
-import ru.android.childdiary.domain.core.CrudRepository;
+import java.util.List;
 
-public interface ChildRepository extends CrudRepository<Child> {
+import io.reactivex.Observable;
+import ru.android.childdiary.domain.core.Repository;
+
+public interface ChildRepository extends Repository {
+    Observable<List<Child>> getAll();
+
+    Observable<Child> add(Child child);
+
+    Observable<Child> update(Child child);
+
+    Observable<Child> delete(Child child);
 }

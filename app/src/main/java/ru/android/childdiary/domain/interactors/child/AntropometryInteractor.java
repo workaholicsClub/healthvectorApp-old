@@ -22,11 +22,6 @@ public class AntropometryInteractor implements Interactor, AntropometryRepositor
     }
 
     @Override
-    public Observable<List<Antropometry>> getAll() {
-        return antropometryRepository.getAll();
-    }
-
-    @Override
     public Observable<Antropometry> add(Antropometry item) {
         return antropometryRepository.add(item);
     }

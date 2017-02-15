@@ -20,11 +20,6 @@ public class AntropometryDataRepository implements AntropometryRepository {
     }
 
     @Override
-    public Observable<List<Antropometry>> getAll() {
-        return dbService.getAll();
-    }
-
-    @Override
     public Observable<List<Antropometry>> getAll(Child child) {
         return dbService.getAll(child);
     }

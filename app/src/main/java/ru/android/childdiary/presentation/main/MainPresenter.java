@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.AntropometryInteractor;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
@@ -36,30 +35,14 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetChildList, this::onUnexpectedError));
-
-        unsubscribeOnDestroy(antropometryInteractor.getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetAntropometryList, this::onUnexpectedError));
     }
 
     private void onGetChildList(List<Child> childList) {
         getViewState().showChildList(childList);
     }
 
-    private void onGetAntropometryList(List<Antropometry> antropometryList) {
-        getViewState().showAntropometryList(antropometryList);
-    }
-
     void addChild(Child child) {
         unsubscribeOnDestroy(childInteractor.add(child)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> getViewState().showToast("added " + item), this::onUnexpectedError));
-    }
-
-    void addAntropometry(Antropometry antropometry) {
-        unsubscribeOnDestroy(antropometryInteractor.add(antropometry)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> getViewState().showToast("added " + item), this::onUnexpectedError));

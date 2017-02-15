@@ -45,7 +45,6 @@ class Mapper {
 
     public static AntropometryEntity map(Antropometry antropometry) {
         AntropometryEntity antropometryEntity = new AntropometryEntity();
-        antropometryEntity.setChild(Mapper.map(antropometry.getChild()));
         antropometryEntity.setHeight(antropometry.getHeight());
         antropometryEntity.setWeight(antropometry.getWeight());
         antropometryEntity.setDate(antropometry.getDate());

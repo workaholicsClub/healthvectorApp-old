@@ -42,6 +42,7 @@ public class ChildDbService implements ChildService {
 
     @Override
     public Observable<Child> delete(Child child) {
-        return dataStore.delete(Mapper.map(child)).toObservable();
+        ChildEntity childEntity = dataStore.findByKey(ChildEntity.class, child.getId()).blockingGet();
+        return dataStore.delete(childEntity).toObservable();
     }
 }

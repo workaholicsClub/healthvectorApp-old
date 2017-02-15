@@ -68,7 +68,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompat
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+            showToast(e.toString());
         }
+    }
+
+    @Override
+    public void showToast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }

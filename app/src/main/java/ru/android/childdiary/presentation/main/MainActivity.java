@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.Arrays;
@@ -56,7 +55,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
 
     @OnClick(R.id.buttonAddAntropometry)
     void onAddAntropometry() {
-        presenter.addAntropometry(Antropometry.builder().date(LocalDate.now()).build());
+
     }
 
     @OnClick(R.id.buttonDeleteAntropometry)

@@ -9,6 +9,7 @@ import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.entities.child.AntropometryEntity;
+import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.Child;
 
@@ -19,16 +20,6 @@ public class AntropometryDbService implements AntropometryService {
     @Inject
     public AntropometryDbService(ReactiveEntityStore<Persistable> dataStore) {
         this.dataStore = dataStore;
-    }
-
-    @Override
-    public Observable<List<Antropometry>> getAll() {
-        return dataStore.select(AntropometryEntity.class)
-                .orderBy(AntropometryEntity.DATE)
-                .get().observable()
-                .map(Mapper::map)
-                .toList()
-                .toObservable();
     }
 
     @Override
@@ -44,7 +35,10 @@ public class AntropometryDbService implements AntropometryService {
 
     @Override
     public Observable<Antropometry> add(Antropometry antropometry) {
-        return dataStore.insert(Mapper.map(antropometry)).toObservable().map(Mapper::map);
+        ChildEntity childEntity = dataStore.findByKey(ChildEntity.class, antropometry.getChild().getId()).blockingGet();
+        AntropometryEntity antropometryEntity = Mapper.map(antropometry);
+        antropometryEntity.setChild(childEntity);
+        return dataStore.insert(antropometryEntity).toObservable().map(Mapper::map);
     }
 
     @Override
