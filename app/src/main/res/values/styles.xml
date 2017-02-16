@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="@style/MaterialDrawerTheme.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Boy" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryBoy</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBoy</item>
+        <item name="colorAccent">@color/colorAccentBoy</item>
+    </style>
+
+    <style name="AppTheme.Girl" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryGirl</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkGirl</item>
+        <item name="colorAccent">@color/colorAccentGirl</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">

@@ -13,5 +13,5 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <include layout="@layout/activity_main_content" />
+    <include layout="@layout/activity_profile_edit_content" />
 </RelativeLayout>

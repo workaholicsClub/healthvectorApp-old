@@ -38,7 +38,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends MvpAppCompat
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
-            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            showToast(e.toString());
         }
     }
 

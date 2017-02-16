@@ -6,7 +6,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.android.childdiary.presentation.core.navigation.NavigationController;
 
 @Module
 public class ApplicationModule {
@@ -20,11 +19,5 @@ public class ApplicationModule {
     @Singleton
     public Context provideContext() {
         return appContext;
-    }
-
-    @Provides
-    @Singleton
-    public NavigationController provideNavigationController(Context appContext) {
-        return new NavigationController(appContext);
     }
 }

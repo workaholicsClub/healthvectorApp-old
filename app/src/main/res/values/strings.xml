@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Развитие ребенка</string>
+    <string name="drawer_item_calendar">Календарь</string>
+    <string name="drawer_item_development_diary">Дневник развития</string>
+    <string name="drawer_item_exercises">Занятия</string>
+    <string name="drawer_item_medical_data">Медицинские данные</string>
+    <string name="drawer_item_settings">Настройки</string>
+    <string name="drawer_item_help">Помощь</string>
+    <string name="add_child">Добавить ребенка</string>
 </resources>
