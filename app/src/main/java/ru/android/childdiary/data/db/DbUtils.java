@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.VisibleForTesting;
 
+import io.reactivex.Observable;
+import io.requery.BlockingEntityStore;
+import io.requery.EntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import io.requery.reactivex.ReactiveSupport;
@@ -44,5 +47,19 @@ public class DbUtils {
         val configuration = source.getConfiguration();
         val dataStore = ReactiveSupport.toReactiveStore(new EntityDataStore<Persistable>(configuration));
         return dataStore;
+    }
+
+    public static <T> Observable<T> deleteObservable(EntityStore dataStore, Class entityClass, T object, long objectId) {
+        return Observable.fromCallable(() -> delete(dataStore, entityClass, object, objectId));
+    }
+
+    private static <T> T delete(EntityStore dataStore, Class entityClass, T object, long objectId) {
+        BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+        Object entity = blockingEntityStore.findByKey(entityClass, objectId);
+        if (entity != null) {
+            blockingEntityStore.delete(entity);
+            return object;
+        }
+        throw new RuntimeException(object.getClass().getSimpleName() + " not found while deleting");
     }
 }
