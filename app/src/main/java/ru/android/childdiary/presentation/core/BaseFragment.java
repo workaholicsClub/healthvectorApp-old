@@ -41,4 +41,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends MvpAppCompat
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void showToast(String text) {
+        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+    }
 }

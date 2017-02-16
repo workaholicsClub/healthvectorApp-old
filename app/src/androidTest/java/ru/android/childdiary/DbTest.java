@@ -1,7 +1,6 @@
 package ru.android.childdiary;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,7 +8,7 @@ import com.annimon.stream.Stream;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -19,43 +18,46 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
+import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
-import ru.android.childdiary.data.entities.child.AntropometryData;
-import ru.android.childdiary.data.entities.child.AntropometryEntity;
-import ru.android.childdiary.data.entities.child.ChildEntity;
-import ru.android.childdiary.data.entities.child.ChildData;
-import ru.android.childdiary.data.entities.child.Sex;
+import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.repositories.child.AntropometryDbService;
+import ru.android.childdiary.data.repositories.child.ChildDbService;
+import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.domain.interactors.child.Antropometry;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ObjectUtils;
-import ru.android.childdiary.utils.db.DbUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class DbTest {
     private static final String DB_NAME = BuildConfig.DB_NAME + "-test";
-    private static final int DB_VERSION_DEFAULT = 1;
-    private static final String DB_VERSION_KEY = "dbVersionKey";
+    private static final int DB_VERSION = 1;
+
     private static final Random RANDOM = new Random();
+
     private static final int CHILD_COUNT = 10;
     private static final int ANTROPOMETRY_COUNT = 10;
+
     private static ReactiveEntityStore<Persistable> dataStore;
+    private static ChildDbService childDbService;
+    private static AntropometryDbService antropometryDbService;
+
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private static Context getContext() {
         // can write only in target context
         return InstrumentationRegistry.getTargetContext();
-    }
-
-    private static int getDbVersion() {
-        SharedPreferences preferences = getContext().getSharedPreferences("dbVersion", Context.MODE_PRIVATE);
-        int dbVersion = preferences.getInt(DB_VERSION_KEY, DB_VERSION_DEFAULT);
-        preferences.edit().putInt(DB_VERSION_KEY, dbVersion + 1).apply();
-        return dbVersion;
     }
 
     @BeforeClass
@@ -66,7 +68,10 @@ public class DbTest {
 
         JodaTimeAndroid.init(context);
 
-        dataStore = DbUtils.getDataStore(context, DB_NAME, getDbVersion(), true);
+        dataStore = DbUtils.getDataStore(context, DB_NAME, DB_VERSION, true);
+
+        childDbService = new ChildDbService(dataStore);
+        antropometryDbService = new AntropometryDbService(dataStore);
     }
 
     @AfterClass
@@ -74,70 +79,191 @@ public class DbTest {
         dataStore.close();
     }
 
-    private static List<ChildEntity> getChildEntities() {
-        List<ChildEntity> result = new ArrayList<>();
+    private static Observable<Child> generateChildren() {
+        LocalDateTime now = LocalDateTime.now();
+
+        List<Child> result = new ArrayList<>();
         for (int i = 0; i < CHILD_COUNT; ++i) {
-            ChildEntity childEntity = new ChildEntity();
-            childEntity.setName("Test" + i);
-            childEntity.setBirthDate(LocalDate.now().minusDays(i));
-            childEntity.setBirthTime(LocalTime.now().minusHours(i));
-            childEntity.setSex(Sex.MALE);
-            childEntity.setImageFileName(null);
-            childEntity.setHeight(RANDOM.nextDouble());
-            childEntity.setWeight(RANDOM.nextDouble());
-            result.add(childEntity);
+            now = now.minusDays(i);
+            now = now.minusHours(i);
+
+            Child child = Child.builder()
+                    .name("Test" + i)
+                    .birthDate(now.toLocalDate())
+                    .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
+                    .sex(Sex.MALE)
+                    .imageFileName(null)
+                    .height(RANDOM.nextDouble())
+                    .weight(RANDOM.nextDouble())
+                    .build();
+
+            result.add(child);
         }
-        return result;
+
+        return Observable.fromArray(result.toArray(new Child[result.size()]));
+    }
+
+    private static void assertObjectEqual(Object o1, Object o2) {
+        assertTrue(String.format(Locale.US, "objects differ:\nfirst %s\nsecond %s", o1, o2), ObjectUtils.equals(o1, o2));
     }
 
     @Test
-    public void testDb() {
-        List<ChildEntity> expected = getChildEntities();
-
-        assertTrue("expected array isn't valid", expected != null && expected.size() > 0);
-
-        // 1. insert child entities
-        dataStore.insert(expected)
-                .doOnSuccess(childEntities -> Stream.of(childEntities).forEach(childEntity -> logger.debug("value inserted: " + childEntity)))
-                .doOnError(throwable -> logger.error("failed to insert child entities", throwable))
+    public void testChild() {
+        // 1. insert children
+        List<Child> inserted = new ArrayList<>();
+        generateChildren()
+                .flatMap(child -> childDbService.add(child))
+                .doOnNext(child -> logger.debug("value inserted: " + child))
+                .doOnNext(inserted::add)
+                .doOnError(error -> logger.error("failed to insert value", error))
                 .subscribe();
 
-        // 2. select child entities
-        List<ChildEntity> actual = dataStore.select(ChildEntity.class).get().toList();
+        assertEquals("inserted values size", inserted.size(), CHILD_COUNT);
 
-        // 3. compare child entities
-        assertTrue("sizes differ!", actual.size() == expected.size() && actual.size() == CHILD_COUNT);
+        // 2. select children
+        List<Child> selected = new ArrayList<>();
+        childDbService.getAll()
+                .doOnNext(selected::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
 
+        assertEquals("selected values size", selected.size(), CHILD_COUNT);
+
+        // 3. compare inserted and selected
         for (int i = 0; i < CHILD_COUNT; ++i) {
-            ChildEntity a = actual.get(i), e = expected.get(i);
-            assertTrue(String.format("objects at %d differ: expected %s, actual %s", i, e, a), ObjectUtils.equals(a, e));
+            assertObjectEqual(inserted.get(i), selected.get(i));
+        }
+    }
+
+    @Test
+    public void testNegativeUpdateNonExistent() {
+        LocalDateTime now = LocalDateTime.now();
+
+        Child child = Child.builder()
+                .name("UpdateNonExistent")
+                .birthDate(now.toLocalDate())
+                .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
+                .sex(Sex.FEMALE)
+                .imageFileName(null)
+                .height(RANDOM.nextDouble())
+                .weight(RANDOM.nextDouble())
+                .build();
+
+        childDbService.update(child)
+                .doOnNext(item -> logger.debug("value inserted: " + item))
+                .doOnError(error -> logger.error("failed to insert value", error))
+                .subscribe(item -> fail(), error -> logger.debug("expected error", error));
+    }
+
+    @Test
+    public void testAntropometry() {
+        LocalDateTime now = LocalDateTime.now();
+
+        // 0. build child
+        List<Child> insertedChildren = new ArrayList<>();
+        {
+            Child child = Child.builder()
+                    .name("AntropometryTest")
+                    .birthDate(now.toLocalDate())
+                    .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
+                    .sex(Sex.FEMALE)
+                    .imageFileName(null)
+                    .height(RANDOM.nextDouble())
+                    .weight(RANDOM.nextDouble())
+                    .build();
+
+            childDbService.add(child)
+                    .doOnNext(item -> logger.debug("value inserted: " + item))
+                    .doOnNext(insertedChildren::add)
+                    .doOnError(error -> logger.error("failed to insert value", error))
+                    .subscribe();
+
+            assertEquals("child wasn't inserted once", insertedChildren.size(), 1);
+        }
+        Child insertedChild = insertedChildren.get(0);
+
+        // 1. insert antropometry
+        List<Antropometry> inserted = new ArrayList<>();
+        for (int j = 0; j < ANTROPOMETRY_COUNT; ++j) {
+            Antropometry antropometry = Antropometry.builder()
+                    .child(insertedChild)
+                    .date(now.minusDays(j).toLocalDate())
+                    .height(insertedChild.getHeight() - 0.1 * j)
+                    .weight(insertedChild.getWeight() - 0.1 * j)
+                    .build();
+            antropometryDbService.add(antropometry)
+                    .doOnNext(item -> logger.debug("value inserted: " + item))
+                    .doOnNext(inserted::add)
+                    .doOnError(error -> logger.error("failed to insert value", error))
+                    .subscribe();
         }
 
-        // 1. insert antropometry entities
-        for (int i = 0; i < CHILD_COUNT / 2; ++i) {
-            ChildEntity childEntity = expected.get(i);
-            for (int j = 0; j < ANTROPOMETRY_COUNT; ++j) {
-                AntropometryEntity antropometryEntity = new AntropometryEntity();
-                antropometryEntity.setChild(childEntity);
-                antropometryEntity.setDate(LocalDate.now().minusDays(j));
-                antropometryEntity.setHeight(childEntity.getHeight() - 0.1 * j);
-                antropometryEntity.setWeight(childEntity.getWeight() - 0.1 * j);
-                dataStore.insert(antropometryEntity)
-                        .doOnSuccess(antropometryEntity1 -> logger.debug("value inserted: " + antropometryEntity1))
-                        .doOnError(throwable -> logger.error("failed to insert antropometry entity", throwable))
-                        .subscribe();
-            }
+        assertEquals("inserted values size", inserted.size(), ANTROPOMETRY_COUNT);
+
+        Collections.sort(inserted, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
+
+        // 2. select antropometry
+        List<Antropometry> selected = new ArrayList<>();
+        antropometryDbService.getAll(insertedChild)
+                .doOnNext(selected::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        assertEquals("selected values size", selected.size(), ANTROPOMETRY_COUNT);
+
+        // 3. compare inserted and selected
+        for (int i = 0; i < ANTROPOMETRY_COUNT; ++i) {
+            assertObjectEqual(inserted.get(i), selected.get(i));
         }
 
-        // 2. select child entities
-        expected = dataStore.select(ChildEntity.class).get().toList();
+        // 4. select children
+        List<Child> selectedChildren = new ArrayList<>();
+        childDbService.getAll()
+                .doOnNext(selectedChildren::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
 
-        // 3. compare
-        for (ChildEntity e : expected) {
-            for (AntropometryData antropometryEntity : e.getAntropometryList()) {
-                ChildData a = antropometryEntity.getChild();
-                assertTrue(String.format("objects differ: expected %s, actual %s", e, a), ObjectUtils.equals(a, e));
-            }
-        }
+        long found = Stream.of(selectedChildren).filter(selectedChild -> selectedChild.equals(insertedChild)).count();
+        assertEquals("chosen child wasn't inserted once", found, 1);
+
+        // delete some antropometry
+        antropometryDbService.delete(selected.get(0))
+                .doOnNext(item -> logger.debug("value deleted: " + item))
+                .doOnError(error -> logger.error("failed to delete value", error))
+                .subscribe();
+
+        // select antropometry
+        selected = new ArrayList<>();
+        antropometryDbService.getAll(insertedChild)
+                .doOnNext(selected::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        assertEquals("after single antropometry deletion: selected values size", selected.size(), ANTROPOMETRY_COUNT - 1);
+
+        // 5. cascade delete
+        childDbService.delete(insertedChild)
+                .doOnNext(item -> logger.debug("value deleted: " + item))
+                .doOnError(error -> logger.error("failed to delete value", error))
+                .subscribe();
+
+        // 6. select children
+        selectedChildren = new ArrayList<>();
+        childDbService.getAll()
+                .doOnNext(selectedChildren::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        found = Stream.of(selectedChildren).filter(selectedChild -> selectedChild.equals(insertedChild)).count();
+        assertEquals("chosen child wasn't deleted", found, 0);
+
+        // 7. select antropometry
+        selected = new ArrayList<>();
+        antropometryDbService.getAll(insertedChild)
+                .doOnNext(selected::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        assertEquals("cascade delete doesn't work", selected.size(), 0);
     }
 }

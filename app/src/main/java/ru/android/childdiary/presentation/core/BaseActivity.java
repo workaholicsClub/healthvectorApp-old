@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.core;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.widget.Toast;
@@ -27,11 +28,15 @@ public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompat
         super.onCreate(savedInstanceState);
         logger.debug("onCreate");
 
-        ButterKnife.bind(this);
-
         setupDagger();
 
         setupActionBar();
+    }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+        ButterKnife.bind(this);
     }
 
     private void setupDagger() {
@@ -63,7 +68,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompat
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+            showToast(e.toString());
         }
+    }
+
+    @Override
+    public void showToast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }

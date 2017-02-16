@@ -5,8 +5,12 @@
       <w>butterknife</w>
       <w>childdiary</w>
       <w>crashlytics</w>
+      <w>firebase</w>
       <w>formatters</w>
+      <w>interactor</w>
+      <w>interactors</w>
       <w>lombok</w>
+      <w>nopex</w>
       <w>onboarding</w>
       <w>parceler</w>
       <w>requery</w>

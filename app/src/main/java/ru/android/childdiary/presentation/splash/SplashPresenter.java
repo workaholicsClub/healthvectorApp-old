@@ -4,23 +4,18 @@ import com.arellomobile.mvp.InjectViewState;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import ru.android.childdiary.app.ChildDiaryApplication;
+import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BasePresenter;
-import ru.android.childdiary.presentation.core.navigation.NavigationController;
 
 @InjectViewState
 public class SplashPresenter extends BasePresenter<SplashView> {
     private static final long SPLASH_TIME_IN_SECONDS = 3;
 
-    @Inject
-    NavigationController navigationController;
-
-    public SplashPresenter() {
-        ChildDiaryApplication.getApplicationComponent().inject(this);
+    @Override
+    protected void injectPresenter(ApplicationComponent applicationComponent) {
+        applicationComponent.inject(this);
     }
 
     @Override
