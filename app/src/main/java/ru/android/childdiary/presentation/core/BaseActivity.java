@@ -35,8 +35,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompat
         logger.debug("onCreate");
 
         setupDagger();
-
-        setupActionBar();
     }
 
     @Override
@@ -48,14 +46,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompat
     private void setupDagger() {
         ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
         injectActivity(component);
-    }
-
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            boolean hasParent = getParent() != null;
-            actionBar.setDisplayHomeAsUpEnabled(hasParent);
-        }
     }
 
     @Override

@@ -23,7 +23,7 @@ import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
 public class SplashPresenter extends BasePresenter<SplashView> {
-    private static final long SPLASH_TIME_IN_SECONDS = 3;
+    private static final long SPLASH_TIME_IN_MILLISECONDS = 1500;
 
     @Inject
     ChildInteractor childInteractor;
@@ -41,7 +41,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(Observable.timer(SPLASH_TIME_IN_SECONDS, TimeUnit.SECONDS)
+        unsubscribeOnDestroy(Observable.timer(SPLASH_TIME_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .doOnNext(time -> logger.debug("timer finished"))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(time -> onTimerFinished(), this::onUnexpectedError));
