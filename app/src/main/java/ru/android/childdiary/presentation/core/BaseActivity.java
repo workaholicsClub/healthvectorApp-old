@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -17,7 +16,9 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import ru.android.childdiary.BuildConfig;
+import ru.android.childdiary.R;
 import ru.android.childdiary.app.ChildDiaryApplication;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.main.MainActivity;
@@ -83,5 +84,21 @@ public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompat
     public final void navigateToProfileEdit(@Nullable Child child) {
         Intent intent = ProfileEditActivity.getIntent(this, child);
         startActivity(intent);
+    }
+
+    protected int getPreferredTheme(@Nullable Child child) {
+        if (child == null) {
+            return R.style.AppTheme;
+        }
+
+        return child.getSex() == Sex.MALE ? R.style.AppTheme_Boy : R.style.AppTheme_Girl;
+    }
+
+    protected int getPreferedAccountHeaderColor(@Nullable Child child) {
+        if (child == null) {
+            return R.color.colorPrimary;
+        }
+
+        return child.getSex() == Sex.MALE ? R.color.colorPrimaryBoy : R.color.colorPrimaryGirl;
     }
 }

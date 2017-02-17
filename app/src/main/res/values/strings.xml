@@ -8,4 +8,16 @@
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_help">Помощь</string>
     <string name="add_child">Добавить ребенка</string>
+    <string name="save">Сохранить</string>
+    <string name="add">Добавить</string>
+    <string name="sex">Пол</string>
+    <string name="child_name">Имя ребенка</string>
+    <string name="birth_date">Дата рождения</string>
+    <string name="birth_time">Время рождения</string>
+    <string name="birth_height">Рост</string>
+    <string name="birth_weight">Вес</string>
+    <string-array name="sex_variants">
+        <item>Мужской</item>
+        <item>Женский</item>
+    </string-array>
 </resources>

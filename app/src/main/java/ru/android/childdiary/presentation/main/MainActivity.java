@@ -84,8 +84,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
             activeChild = childList.size() > 0 ? childList.get(0) : null;
         }
 
-        setTheme(getPreferredTheme());
-
+        setTheme(getPreferredTheme(activeChild));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -95,22 +94,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
         buildDrawer(savedInstanceState);
 
         updateUi();
-    }
-
-    private int getPreferredTheme() {
-        if (activeChild == null) {
-            return R.style.AppTheme;
-        }
-
-        return activeChild.getSex() == Sex.MALE ? R.style.AppTheme_Boy : R.style.AppTheme_Girl;
-    }
-
-    private int getPreferedAccountHeaderColor() {
-        if (activeChild == null) {
-            return R.color.colorPrimary;
-        }
-
-        return activeChild.getSex() == Sex.MALE ? R.color.colorPrimaryBoy : R.color.colorPrimaryGirl;
     }
 
     @Override
@@ -164,7 +147,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
     private void buildHeader(boolean compact, Bundle savedInstanceState) {
         accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(getPreferedAccountHeaderColor())
+                .withHeaderBackground(getPreferedAccountHeaderColor(activeChild))
                 .withCompactStyle(compact)
                 .withOnAccountHeaderListener(this)
                 .withSavedInstance(savedInstanceState)

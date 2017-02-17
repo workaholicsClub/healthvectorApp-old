@@ -1,11 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_top_panel_height"
+        android:background="?colorPrimary"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewPhoto"
+            android:layout_width="@dimen/profile_rounded_image_size"
+            android:layout_height="@dimen/profile_rounded_image_size"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/profile_margin"
+            android:src="?colorAccent" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/childNameWrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/profile_margin"
+            android:layout_marginRight="@dimen/profile_margin"
+            android:layout_toRightOf="@+id/imageViewPhoto">
+
+            <EditText
+                android:id="@+id/editChildName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/child_name"
+                android:inputType="textPersonName|textAutoComplete" />
+        </android.support.design.widget.TextInputLayout>
+    </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/spinnerSex"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_height"
+        android:layout_marginLeft="@dimen/profile_margin"
+        android:layout_marginRight="@dimen/profile_margin"
+        android:layout_marginTop="@dimen/profile_margin" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Test" />
-</FrameLayout>
+        android:layout_marginLeft="@dimen/profile_margin"
+        android:layout_marginRight="@dimen/profile_margin"
+        android:layout_marginTop="@dimen/profile_margin"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonDate"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spinner_height"
+            android:layout_marginRight="@dimen/profile_margin"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/birth_date" />
+
+        <Button
+            android:id="@+id/buttonTime"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spinner_height"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/birth_time" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/profile_margin"
+        android:layout_marginRight="@dimen/profile_margin"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/birthHeightWrapper"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/profile_margin"
+            android:layout_marginTop="@dimen/profile_margin"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/editBirthHeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/birth_height"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/birthWeightWrapper"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/profile_margin"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/editBirthWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/birth_weight"
+                android:inputType="numberDecimal" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+</LinearLayout>

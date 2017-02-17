@@ -66,34 +66,38 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void next() {
         if (childList != null && isTimerFinished) {
-//            getViewState().navigateToProfileEdit(null);
+            boolean hasChildren = false;
+            if (hasChildren) {
+                final int CHILD_COUNT = 4;
+                final Random RANDOM = new Random();
 
-            final int CHILD_COUNT = 4;
-            final Random RANDOM = new Random();
+                LocalDateTime now = LocalDateTime.now();
 
-            LocalDateTime now = LocalDateTime.now();
+                List<Child> result = new ArrayList<>();
+                for (int i = 0; i < CHILD_COUNT; ++i) {
+                    now = now.minusDays(i);
+                    now = now.minusHours(i);
 
-            List<Child> result = new ArrayList<>();
-            for (int i = 0; i < CHILD_COUNT; ++i) {
-                now = now.minusDays(i);
-                now = now.minusHours(i);
+                    Child child = Child.builder()
+                            .id(i)
+                            .name("Test" + i)
+                            .birthDate(now.toLocalDate())
+                            .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
+                            .sex(i % 2 == 0 ? Sex.MALE : Sex.FEMALE)
+                            .imageFileName(null)
+                            .height(RANDOM.nextDouble())
+                            .weight(RANDOM.nextDouble())
+                            .build();
 
-                Child child = Child.builder()
-                        .id(i)
-                        .name("Test" + i)
-                        .birthDate(now.toLocalDate())
-                        .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
-                        .sex(i % 2 == 0 ? Sex.MALE : Sex.FEMALE)
-                        .imageFileName(null)
-                        .height(RANDOM.nextDouble())
-                        .weight(RANDOM.nextDouble())
-                        .build();
+                    result.add(child);
+                }
 
-                result.add(child);
+                getViewState().navigateToMain(result.get(0), result);
+                getViewState().finish();
+            } else {
+                getViewState().navigateToProfileEdit(null);
+                getViewState().finish();
             }
-
-            getViewState().navigateToMain(result.get(0), result);
-            getViewState().finish();
         }
     }
 }
