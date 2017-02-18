@@ -106,7 +106,7 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
     @OnClick(R.id.imageViewPhoto)
     void onPhotoClick() {
         ImagePickerDialogFragment imagePicker = new ImagePickerDialogFragment();
-        imagePicker.show(getFragmentManager(), TAG_DATE_PICKER);
+        imagePicker.show(getSupportFragmentManager(), TAG_DATE_PICKER);
     }
 
     @OnClick(R.id.buttonDate)

@@ -2,18 +2,12 @@ package ru.android.childdiary.presentation.profile.edit;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -27,6 +21,7 @@ import java.io.File;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseDialogFragment;
+import ru.android.childdiary.utils.RequestPermissionInfo;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -35,6 +30,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
     protected static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
     private static final int REQUEST_SELECT_PICTURE = 1;
     private static final String SAMPLE_CROPPED_IMAGE_NAME = "SampleCropImage";
+    String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;// Manifest.permission.READ_EXTERNAL_STORAGE;
     private Listener listener;
 
     @Override
@@ -58,73 +54,19 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         if (position == 1) pickFromGallery();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_SELECT_PICTURE) {
-                final Uri selectedUri = data.getData();
-                if (selectedUri != null) {
-                    startCropActivity(data.getData());
-                } else {
-                    // FIXME
-                    showToast("can not retrieve selected image");
-                }
-            } else if (requestCode == UCrop.REQUEST_CROP) {
-                handleCropResult(data);
-            }
-        }
-        if (resultCode == UCrop.RESULT_ERROR) {
-            handleCropError(data);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_STORAGE_READ_ACCESS_PERMISSION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    pickFromGallery();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-    private void showAlertDialog(@Nullable String title, @Nullable String message,
-                                 @Nullable DialogInterface.OnClickListener onPositiveButtonClickListener,
-                                 @NonNull String positiveText,
-                                 @Nullable DialogInterface.OnClickListener onNegativeButtonClickListener,
-                                 @NonNull String negativeText) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.setPositiveButton(positiveText, onPositiveButtonClickListener);
-        builder.setNegativeButton(negativeText, onNegativeButtonClickListener);
-        builder.show();
-    }
-
-    private void requestPermission(final String permission, String rationale, final int requestCode) {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
-            // FIXME
-            showAlertDialog("permission title rationale", rationale,
-                    (DialogInterface dialog, int which) ->
-                            ActivityCompat.requestPermissions(getActivity(),
-                                    new String[]{permission}, requestCode), "OK", null, "Cancel");
-        } else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
-        }
-    }
-
     private void pickFromGallery() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            // FIXME
-            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
-                    "read storage rationale",
-                    REQUEST_STORAGE_READ_ACCESS_PERMISSION);
-        } else {
+        RequestPermissionInfo permissionInfo = RequestPermissionInfo.builder()
+                .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .requestCode(REQUEST_STORAGE_READ_ACCESS_PERMISSION)
+                .titleResourceId(R.string.request_read_external_storage_permission_title)
+                .textResourceId(R.string.request_read_external_storage_permission_text)
+                .build();
+        requestPermission(permissionInfo);
+    }
+
+    @Override
+    protected void permissionGranted(RequestPermissionInfo permissionInfo) {
+        if (permissionInfo.getRequestCode() == REQUEST_STORAGE_READ_ACCESS_PERMISSION) {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -139,11 +81,6 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         destinationFileName += ".jpg";
         UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getActivity().getCacheDir(), destinationFileName)));
         uCrop = uCrop.withAspectRatio(1, 1);
-        uCrop = advancedConfig(uCrop);
-        uCrop.start(getActivity());
-    }
-
-    private UCrop advancedConfig(@NonNull UCrop uCrop) {
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
         options.setCompressionQuality(90);
@@ -155,7 +92,29 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         options.setCropGridRowCount(0);
         options.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryBoy));
         options.setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDarkBoy));
-        return uCrop.withOptions(options);
+        uCrop.withOptions(options);
+        uCrop.start(getActivity());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_SELECT_PICTURE) {
+            if (resultCode == RESULT_OK) {
+                final Uri selectedUri = data.getData();
+                if (selectedUri != null) {
+                    startCropActivity(data.getData());
+                } else {
+                    // FIXME
+                    showToast("can not retrieve selected image");
+                }
+            }
+        } else if (requestCode == UCrop.REQUEST_CROP) {
+            if (resultCode == RESULT_OK) {
+                handleCropResult(data);
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                handleCropError(data);
+            }
+        }
     }
 
     private void handleCropResult(@NonNull Intent result) {

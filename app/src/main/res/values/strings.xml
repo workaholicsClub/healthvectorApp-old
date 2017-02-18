@@ -19,6 +19,11 @@
     <string name="enter_height">Введите рост</string>
     <string name="enter_weight">Введите вес</string>
     <string name="add_image_button_title">Добавить\nфото</string>
+    <string name="OK">OK</string>
+    <string name="Cancel">Отмена</string>
+    <string name="request_read_external_storage_permission_title">Запрос на чтение SD-карты</string>
+    <string name="request_read_external_storage_permission_text">Необходимо для чтения файлов с SD-карты.</string>
+    <string name="gallery_not_available">Галерея не доступна</string>
     <string-array name="sex_variants">
         <item>Мужской</item>
         <item>Женский</item>
