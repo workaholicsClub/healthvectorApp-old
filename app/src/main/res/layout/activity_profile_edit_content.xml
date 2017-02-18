@@ -17,41 +17,71 @@
             android:layout_height="@dimen/profile_rounded_image_size"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/profile_margin"
-            android:src="?colorAccent" />
+            android:src="@android:color/white" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/childNameWrapper"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageViewPhoto"
+            android:layout_alignEnd="@+id/imageViewPhoto"
+            android:layout_alignLeft="@+id/imageViewPhoto"
+            android:layout_alignRight="@+id/imageViewPhoto"
+            android:layout_alignStart="@+id/imageViewPhoto"
+            android:layout_alignTop="@+id/imageViewPhoto"
+            android:gravity="center"
+            android:text="@string/add_image_button_title"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/editChildName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/profile_margin"
             android:layout_marginRight="@dimen/profile_margin"
-            android:layout_toRightOf="@+id/imageViewPhoto">
-
-            <EditText
-                android:id="@+id/editChildName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/child_name"
-                android:inputType="textPersonName|textAutoComplete" />
-        </android.support.design.widget.TextInputLayout>
+            android:layout_marginEnd="@dimen/profile_margin"
+            android:layout_toRightOf="@+id/imageViewPhoto"
+            android:layout_toEndOf="@+id/imageViewPhoto"
+            android:hint="@string/child_name"
+            android:inputType="textPersonName|textAutoComplete"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/profile_margin"
+        android:layout_marginRight="@dimen/profile_margin"
+        android:layout_marginTop="@dimen/profile_margin"
+        android:text="@string/sex"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp" />
 
     <Spinner
         android:id="@+id/spinnerSex"
         android:layout_width="match_parent"
         android:layout_height="@dimen/spinner_height"
         android:layout_marginLeft="@dimen/profile_margin"
+        android:layout_marginRight="@dimen/profile_margin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/profile_margin"
         android:layout_marginRight="@dimen/profile_margin"
-        android:layout_marginTop="@dimen/profile_margin" />
+        android:layout_marginTop="@dimen/profile_margin"
+        android:text="@string/birth_date_and_time"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/profile_margin"
         android:layout_marginRight="@dimen/profile_margin"
-        android:layout_marginTop="@dimen/profile_margin"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -60,9 +90,10 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/spinner_height"
             android:layout_marginRight="@dimen/profile_margin"
+            android:layout_marginEnd="@dimen/profile_margin"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="@string/birth_date" />
+            android:text="@string/date" />
 
         <Button
             android:id="@+id/buttonTime"
@@ -70,45 +101,43 @@
             android:layout_height="@dimen/spinner_height"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="@string/birth_time" />
+            android:text="@string/time" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/profile_margin"
+        android:layout_marginRight="@dimen/profile_margin"
+        android:layout_marginTop="@dimen/profile_margin"
+        android:text="@string/birth_height_and_weight"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/profile_margin"
         android:layout_marginRight="@dimen/profile_margin"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/birthHeightWrapper"
+        <EditText
+            android:id="@+id/editBirthHeight"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/profile_margin"
-            android:layout_marginTop="@dimen/profile_margin"
-            android:layout_weight="1">
+            android:layout_marginEnd="@dimen/profile_margin"
+            android:layout_weight="1"
+            android:hint="@string/enter_height"
+            android:inputType="numberDecimal" />
 
-            <EditText
-                android:id="@+id/editBirthHeight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/birth_height"
-                android:inputType="numberDecimal" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/birthWeightWrapper"
+        <EditText
+            android:id="@+id/editBirthWeight"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/profile_margin"
-            android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/editBirthWeight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/birth_weight"
-                android:inputType="numberDecimal" />
-        </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/enter_weight"
+            android:inputType="numberDecimal" />
     </LinearLayout>
 </LinearLayout>

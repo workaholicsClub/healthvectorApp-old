@@ -14,7 +14,7 @@ import io.requery.sql.EntityDataStore;
 import io.requery.sql.TableCreationMode;
 import lombok.val;
 import ru.android.childdiary.BuildConfig;
-import ru.android.childdiary.data.entities.Models;
+import ru.android.childdiary.data.entities.child.Models;
 
 public class DbUtils {
     private static final int DB_VERSION_DEFAULT = 1;

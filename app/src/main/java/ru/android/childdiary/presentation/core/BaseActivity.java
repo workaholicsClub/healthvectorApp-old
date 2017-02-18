@@ -94,7 +94,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompat
         return child.getSex() == Sex.MALE ? R.style.AppTheme_Boy : R.style.AppTheme_Girl;
     }
 
-    protected int getPreferedAccountHeaderColor(@Nullable Child child) {
+    protected int getPreferredAccountHeaderColor(@Nullable Child child) {
         if (child == null) {
             return R.color.colorPrimary;
         }

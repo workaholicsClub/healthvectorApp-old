@@ -16,6 +16,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -31,6 +34,7 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> implements ProfileEditView, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
+    private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
 
     @InjectPresenter
     ProfileEditPresenter presenter;
@@ -45,7 +49,9 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
     Spinner spinnerSex;
 
     public static Intent getIntent(Context context, @Nullable Child child) {
-        return new Intent(context, ProfileEditActivity.class);
+        Intent intent = new Intent(context, ProfileEditActivity.class);
+        intent.putExtra(ExtraConstants.EXTRA_CHILD, child);
+        return intent;
     }
 
     @Override
@@ -99,7 +105,8 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
 
     @OnClick(R.id.imageViewPhoto)
     void onPhotoClick() {
-        showToast("Add photo");
+        ImagePickerDialogFragment imagePicker = new ImagePickerDialogFragment();
+        imagePicker.show(getFragmentManager(), TAG_DATE_PICKER);
     }
 
     @OnClick(R.id.buttonDate)
@@ -111,6 +118,7 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
+        dpd.vibrate(false);
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
     }
 
@@ -123,6 +131,7 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
                 now.get(Calendar.MINUTE),
                 DateFormat.is24HourFormat(this)
         );
+        tpd.vibrate(false);
         tpd.show(getFragmentManager(), TAG_TIME_PICKER);
     }
 
@@ -138,11 +147,13 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        showToast("time set");
+        LocalTime localTime = new LocalTime(hourOfDay, minute);
     }
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        showToast("date set");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth);
+        LocalDate localDate = LocalDate.fromCalendarFields(calendar);
     }
 }

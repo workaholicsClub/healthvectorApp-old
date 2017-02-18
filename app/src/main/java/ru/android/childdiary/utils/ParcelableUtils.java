@@ -14,7 +14,8 @@ public class ParcelableUtils {
         intent.putParcelableArrayListExtra(key, new ArrayList<>(parcelables));
     }
 
-    public static <T> List<T> unwrap(Intent intent, String key, Class<T> cls) {
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> unwrap(Intent intent, String key) {
         List<Parcelable> parcelables = intent.getParcelableArrayListExtra(key);
         return Stream.of(parcelables)
                 .map(parcelable -> (T) parcelable)

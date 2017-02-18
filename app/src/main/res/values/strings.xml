@@ -12,12 +12,20 @@
     <string name="add">Добавить</string>
     <string name="sex">Пол</string>
     <string name="child_name">Имя ребенка</string>
-    <string name="birth_date">Дата рождения</string>
-    <string name="birth_time">Время рождения</string>
-    <string name="birth_height">Рост</string>
-    <string name="birth_weight">Вес</string>
+    <string name="birth_date_and_time">Дата и время рождения</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+    <string name="birth_height_and_weight">Рост и вес при рождении</string>
+    <string name="enter_height">Введите рост</string>
+    <string name="enter_weight">Введите вес</string>
+    <string name="add_image_button_title">Добавить\nфото</string>
     <string-array name="sex_variants">
         <item>Мужской</item>
         <item>Женский</item>
+    </string-array>
+    <string-array name="image_picker_actions">
+        <item>Сделать снимок</item>
+        <item>Из галереи</item>
+        <item>Удалить фото</item>
     </string-array>
 </resources>

@@ -69,8 +69,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         activeChild = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-        childList = ParcelableUtils.unwrap(getIntent(), ExtraConstants.EXTRA_CHILD_LIST, Child.class);
-        profiles = Stream.of(childList).map(child -> mapToProfile(child)).collect(Collectors.toList());
+        childList = ParcelableUtils.unwrap(getIntent(), ExtraConstants.EXTRA_CHILD_LIST);
+        profiles = Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList());
 
         profiles.add(new ProfileSettingDrawerItem()
                 .withName(getString(R.string.add_child))
@@ -147,7 +147,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
     private void buildHeader(boolean compact, Bundle savedInstanceState) {
         accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(getPreferedAccountHeaderColor(activeChild))
+                .withHeaderBackground(getPreferredAccountHeaderColor(activeChild))
                 .withCompactStyle(compact)
                 .withOnAccountHeaderListener(this)
                 .withSavedInstance(savedInstanceState)
