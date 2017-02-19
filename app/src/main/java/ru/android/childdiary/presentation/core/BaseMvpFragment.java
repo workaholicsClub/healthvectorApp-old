@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseFragment<P extends BasePresenter> extends MvpAppCompatFragment implements BaseFragmentView {
+public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCompatFragment implements BaseFragmentView {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private Unbinder unbinder;
 
-    public BaseFragment() {
+    public BaseMvpFragment() {
     }
 
     @Override

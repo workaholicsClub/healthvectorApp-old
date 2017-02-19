@@ -3,9 +3,9 @@ package ru.android.childdiary.presentation.profile.review;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.presentation.core.BaseActivity;
+import ru.android.childdiary.presentation.core.BaseMvpActivity;
 
-public class ProfileReviewActivity extends BaseActivity<ProfileReviewPresenter> implements ProfileReviewView {
+public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresenter> implements ProfileReviewView {
     @InjectPresenter
     ProfileReviewPresenter presenter;
 

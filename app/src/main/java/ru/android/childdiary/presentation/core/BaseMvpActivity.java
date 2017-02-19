@@ -25,7 +25,7 @@ import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 
 @SuppressLint("Registered")
-public abstract class BaseActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseActivityView {
+public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseActivityView {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     protected abstract void injectActivity(ApplicationComponent applicationComponent);

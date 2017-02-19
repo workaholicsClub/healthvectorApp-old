@@ -7,9 +7,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.presentation.core.BaseActivity;
+import ru.android.childdiary.presentation.core.BaseMvpActivity;
 
-public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
+public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements SplashView {
     @InjectPresenter
     SplashPresenter presenter;
 

@@ -34,11 +34,11 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.core.BaseActivity;
+import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.utils.ParcelableUtils;
 
-public class MainActivity extends BaseActivity<MainPresenter> implements MainView,
+public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
         Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
     private static final int PROFILE_SETTING_ADD = 0;
 
