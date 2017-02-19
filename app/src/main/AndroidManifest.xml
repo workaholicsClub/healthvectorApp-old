@@ -24,7 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.onboarding.IntroActivity" />
+        <activity
+            android:name=".presentation.onboarding.IntroActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
         <activity
             android:name=".presentation.settings.SettingsActivity"
             android:parentActivityName=".presentation.main.MainActivity">

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -108,7 +109,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         setContentView(R.layout.activity_profile_edit);
 
         setSupportActionBar(toolbar);
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -131,6 +131,16 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         setupImage();
         setupDate();
         setupTime();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
