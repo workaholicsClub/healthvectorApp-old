@@ -9,10 +9,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -48,6 +50,9 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
 
     @BindView(R.id.buttonDone)
     Button buttonDone;
+
+    @BindView(R.id.textViewAddPhoto)
+    TextView textViewAddPhoto;
 
     @BindView(R.id.imageViewPhoto)
     ImageView imageViewPhoto;
@@ -167,5 +172,6 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
     @Override
     public void onSetImage(File resultFile) {
         imageViewPhoto.setImageURI(Uri.fromFile(resultFile));
+        textViewAddPhoto.setVisibility(View.GONE);
     }
 }

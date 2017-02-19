@@ -20,6 +20,7 @@
             android:src="@android:color/white" />
 
         <TextView
+            android:id="@+id/textViewAddPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/imageViewPhoto"
@@ -37,13 +38,13 @@
             android:id="@+id/editChildName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/profile_margin"
             android:layout_marginEnd="@dimen/profile_margin"
-            android:layout_toRightOf="@+id/imageViewPhoto"
+            android:layout_marginRight="@dimen/profile_margin"
             android:layout_toEndOf="@+id/imageViewPhoto"
+            android:layout_toRightOf="@+id/imageViewPhoto"
             android:hint="@string/child_name"
             android:inputType="textPersonName|textAutoComplete"
             android:textColor="@android:color/white"
@@ -89,8 +90,8 @@
             android:id="@+id/buttonDate"
             android:layout_width="0dp"
             android:layout_height="@dimen/spinner_height"
-            android:layout_marginRight="@dimen/profile_margin"
             android:layout_marginEnd="@dimen/profile_margin"
+            android:layout_marginRight="@dimen/profile_margin"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/date" />
@@ -126,8 +127,8 @@
             android:id="@+id/editBirthHeight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/profile_margin"
             android:layout_marginEnd="@dimen/profile_margin"
+            android:layout_marginRight="@dimen/profile_margin"
             android:layout_weight="1"
             android:hint="@string/enter_height"
             android:inputType="numberDecimal" />
