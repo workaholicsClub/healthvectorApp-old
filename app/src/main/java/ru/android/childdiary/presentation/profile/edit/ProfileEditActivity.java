@@ -12,6 +12,7 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,7 +38,6 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 
-// TODO: доработать
 public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
@@ -59,11 +59,34 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
     @BindView(R.id.imageViewPhoto)
     ImageView imageViewPhoto;
 
+    @BindView(R.id.editChildName)
+    EditText editChildName;
+
+    @BindView(R.id.buttonDate)
+    Button buttonDate;
+
+    @BindView(R.id.buttonTime)
+    Button buttonTime;
+
+    @BindView(R.id.editBirthHeight)
+    EditText editBirthHeight;
+
+    @BindView(R.id.editBirthWeight)
+    EditText editBirthWeight;
+
     @BindView(R.id.spinnerSex)
     Spinner spinnerSex;
 
     @State
     Uri imageFileUri;
+
+    @State
+    LocalDate birthDate;
+
+    @State
+    LocalTime birthTime;
+
+    private Child child;
 
     public static Intent getIntent(Context context, @Nullable Child child) {
         Intent intent = new Intent(context, ProfileEditActivity.class);
@@ -78,7 +101,7 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
+        child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
 
         setTheme(getPreferredTheme(child));
         super.onCreate(savedInstanceState);
@@ -87,21 +110,27 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getTitle(child));
-        actionBar.setSubtitle(getSubtitle(child));
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        buttonDone.setText(getButtonDoneText(child));
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sex_variants, R.layout.spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinnerSex.setAdapter(adapter);
-        spinnerSex.setSelection(getSexSpinnerPosition(child));
+        setSexSpinnerPosition(child);
+
+        if (child == null) {
+            actionBar.setTitle(getString(R.string.add_child));
+            buttonDone.setText(getString(R.string.add));
+        } else {
+            actionBar.setTitle(getString(R.string.update_child));
+            buttonDone.setText(getString(R.string.save));
+        }
 
         Icepick.restoreInstanceState(this, savedInstanceState);
 
         setupImage();
+        setupDate();
+        setupTime();
     }
 
     @Override
@@ -110,30 +139,53 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
         Icepick.saveInstanceState(this, outState);
     }
 
-    private String getTitle(Child child) {
-        return child == null ? getString(R.string.add_child) : child.getName();
-    }
-
-    private String getSubtitle(Child child) {
-        return child == null ? "" : "age";
-    }
-
-    private String getButtonDoneText(Child child) {
-        return child == null ? getString(R.string.add) : getString(R.string.save);
-    }
-
-    private int getSexSpinnerPosition(Child child) {
-        if (child == null) {
-            return -1;
+    private void setSexSpinnerPosition(Child child) {
+        int position = -1;
+        if (child != null) {
+            position = child.getSex() == Sex.MALE ? 0 : 1;
         }
-
-        return child.getSex() == Sex.MALE ? 0 : 1;
+        spinnerSex.setSelection(position);
     }
 
-    @OnClick(R.id.imageViewPhoto)
-    void onPhotoClick() {
-        ImagePickerDialogFragment imagePicker = new ImagePickerDialogFragment();
-        imagePicker.show(getSupportFragmentManager(), TAG_DATE_PICKER);
+    private Sex getSexFromSpinnerPosition() {
+        return spinnerSex.getSelectedItemPosition() == 0 ? Sex.MALE : Sex.FEMALE;
+    }
+
+    @OnClick(R.id.buttonDone)
+    void onDoneClick() {
+        Child.ChildBuilder builder = Child.getBuilder(child);
+        fill(builder);
+        if (child == null) {
+            presenter.addChild(builder.build());
+        } else {
+            presenter.updateChild(builder.build());
+        }
+    }
+
+    private void fill(Child.ChildBuilder builder) {
+        // TODO: validation
+        String name = editChildName.getText().toString();
+        double height = Double.parseDouble(editBirthHeight.getText().toString());
+        double weight = Double.parseDouble(editBirthWeight.getText().toString());
+        Sex sex = getSexFromSpinnerPosition();
+        String imageFileName = imageFileUri == null ? null : imageFileUri.getPath();
+        builder.name(name)
+                .birthDate(birthDate)
+                .birthTime(birthTime)
+                .sex(sex)
+                .imageFileName(imageFileName)
+                .height(height)
+                .weight(weight);
+    }
+
+    @Override
+    public void childAdded(Child child) {
+        finish();
+    }
+
+    @Override
+    public void childUpdated(Child child) {
+        finish();
     }
 
     @OnClick(R.id.buttonDate)
@@ -162,6 +214,12 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
         tpd.show(getFragmentManager(), TAG_TIME_PICKER);
     }
 
+    @OnClick(R.id.imageViewPhoto)
+    void onPhotoClick() {
+        ImagePickerDialogFragment imagePicker = new ImagePickerDialogFragment();
+        imagePicker.show(getSupportFragmentManager(), TAG_DATE_PICKER);
+    }
+
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
@@ -176,18 +234,28 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, monthOfYear, dayOfMonth);
-        LocalDate localDate = LocalDate.fromCalendarFields(calendar);
+        birthDate = LocalDate.fromCalendarFields(calendar);
+        setupDate();
     }
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        LocalTime localTime = new LocalTime(hourOfDay, minute);
+        birthTime = new LocalTime(hourOfDay, minute);
+        setupTime();
     }
 
     @Override
     public void onSetImage(File resultFile) {
         imageFileUri = Uri.fromFile(resultFile);
         setupImage();
+    }
+
+    private void setupDate() {
+        buttonDate.setText(birthDate == null ? getString(R.string.date) : birthDate.toString());
+    }
+
+    private void setupTime() {
+        buttonTime.setText(birthTime == null ? getString(R.string.time) : birthTime.toString());
     }
 
     private void setupImage() {

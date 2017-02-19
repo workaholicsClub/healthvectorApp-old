@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,9 +38,9 @@ import ru.android.childdiary.presentation.core.BaseActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.utils.ParcelableUtils;
 
-// TODO: доработать
-public class MainActivity extends BaseActivity<MainPresenter> implements MainView, Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
-    private static final int PROFILE_SETTING_ADD = -1;
+public class MainActivity extends BaseActivity<MainPresenter> implements MainView,
+        Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
+    private static final int PROFILE_SETTING_ADD = 0;
 
     @InjectPresenter
     MainPresenter presenter;
@@ -105,18 +106,36 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
     @Override
     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
         if (profile.getIdentifier() == PROFILE_SETTING_ADD) {
-            showToast("Add profile");
+            navigateToProfileEdit(null);
         } else {
             long id = profile.getIdentifier();
-            Child activeChild = Stream.of(childList).filter(child -> child.getId() == id).findFirst().get();
-            toggleChild(activeChild);
+            Child child = Stream.of(childList).filter(c -> c.getId() == id).findFirst().orElse(null);
+
+            if (child == null) {
+                logger.error("onProfileChanged: profile with id=" + id + " not found");
+                return false;
+            }
+
+            toggleChild(child);
         }
 
         return false;
     }
 
-    private void toggleChild(Child child) {
-        if (activeChild != null && child != null && activeChild.getSex() != child.getSex()) {
+    private void toggleChild(@NonNull Child child) {
+        if (activeChild == null) {
+            // switch to default theme
+            finish();
+            navigateToMain(child, childList);
+            return;
+        }
+
+        if (child.getId() == activeChild.getId()) {
+            return;
+        }
+
+        if (activeChild.getSex() != child.getSex()) {
+            // apply theme for boy or girl
             finish();
             navigateToMain(child, childList);
             return;
@@ -139,9 +158,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
     }
 
     private Drawable mapToIcon(Child child) {
-        return child.getSex() == Sex.MALE
-                ? getResources().getDrawable(R.color.colorPrimaryDarkBoy)
-                : getResources().getDrawable(R.color.colorPrimaryGirl);
+        // TODO: default icon for girl and boy
+        if (child.getImageFileName() == null) {
+            if (child.getSex() == Sex.MALE) {
+                return getResources().getDrawable(R.color.colorPrimaryDarkBoy);
+            } else {
+                return getResources().getDrawable(R.color.colorPrimaryDarkGirl);
+            }
+        }
+        return Drawable.createFromPath(child.getImageFileName());
     }
 
     private void buildHeader(boolean compact, Bundle savedInstanceState) {

@@ -2,12 +2,7 @@ package ru.android.childdiary.presentation.splash;
 
 import com.arellomobile.mvp.InjectViewState;
 
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -15,7 +10,6 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
@@ -66,33 +60,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void next() {
         if (childList != null && isTimerFinished) {
-            boolean hasChildren = false;
+            boolean hasChildren = !childList.isEmpty();
             if (hasChildren) {
-                final int CHILD_COUNT = 4;
-                final Random RANDOM = new Random();
-
-                LocalDateTime now = LocalDateTime.now();
-
-                List<Child> result = new ArrayList<>();
-                for (int i = 0; i < CHILD_COUNT; ++i) {
-                    now = now.minusDays(i);
-                    now = now.minusHours(i);
-
-                    Child child = Child.builder()
-                            .id(i)
-                            .name("Test" + i)
-                            .birthDate(now.toLocalDate())
-                            .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
-                            .sex(i % 2 == 0 ? Sex.MALE : Sex.FEMALE)
-                            .imageFileName(null)
-                            .height(RANDOM.nextDouble())
-                            .weight(RANDOM.nextDouble())
-                            .build();
-
-                    result.add(child);
-                }
-
-                getViewState().navigateToMain(result.get(0), result);
+                // TODO: текущий профиль брать из настроек
+                getViewState().navigateToMain(childList.get(0), childList);
                 getViewState().finish();
             } else {
                 getViewState().navigateToProfileEdit(null);

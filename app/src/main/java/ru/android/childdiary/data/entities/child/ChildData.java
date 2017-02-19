@@ -23,10 +23,12 @@ public interface ChildData {
 
     LocalDate getBirthDate();
 
+    // необязательный параметр
     LocalTime getBirthTime();
 
     Sex getSex();
 
+    // необязательный параметр
     String getImageFileName();
 
     double getHeight();

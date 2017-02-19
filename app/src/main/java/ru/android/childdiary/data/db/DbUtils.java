@@ -28,8 +28,7 @@ public class DbUtils {
     }
 
     public static ReactiveEntityStore<Persistable> getDataStore(Context appContext) {
-        // TODO: когда структура станет стабильной, заменить последний параметр на false
-        return getDataStore(appContext, BuildConfig.DB_NAME, BuildConfig.DB_VERSION, BuildConfig.DEBUG);
+        return getDataStore(appContext, BuildConfig.DB_NAME, BuildConfig.DB_VERSION, false);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
