@@ -22,6 +22,7 @@ import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
 
+import icepick.Icepick;
 import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseDialogFragment;
@@ -52,10 +53,18 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
+        Icepick.restoreInstanceState(this, savedInstanceState);
+
         dialog.setContentView(listView);
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     @Override

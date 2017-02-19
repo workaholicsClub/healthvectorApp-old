@@ -28,6 +28,8 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import icepick.Icepick;
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -59,6 +61,9 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
 
     @BindView(R.id.spinnerSex)
     Spinner spinnerSex;
+
+    @State
+    Uri imageFileUri;
 
     public static Intent getIntent(Context context, @Nullable Child child) {
         Intent intent = new Intent(context, ProfileEditActivity.class);
@@ -93,6 +98,16 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinnerSex.setAdapter(adapter);
         spinnerSex.setSelection(getSexSpinnerPosition(child));
+
+        Icepick.restoreInstanceState(this, savedInstanceState);
+
+        setupImage();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     private String getTitle(Child child) {
@@ -171,7 +186,12 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
 
     @Override
     public void onSetImage(File resultFile) {
-        imageViewPhoto.setImageURI(Uri.fromFile(resultFile));
-        textViewAddPhoto.setVisibility(View.GONE);
+        imageFileUri = Uri.fromFile(resultFile);
+        setupImage();
+    }
+
+    private void setupImage() {
+        imageViewPhoto.setImageURI(imageFileUri);
+        textViewAddPhoto.setVisibility(imageFileUri == null ? View.VISIBLE : View.GONE);
     }
 }
