@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.profile.edit;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -19,6 +21,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.io.File;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -31,7 +34,8 @@ import ru.android.childdiary.presentation.core.BaseActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 
 // TODO: доработать
-public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> implements ProfileEditView, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> implements ProfileEditView,
+        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
@@ -44,6 +48,9 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
 
     @BindView(R.id.buttonDone)
     Button buttonDone;
+
+    @BindView(R.id.imageViewPhoto)
+    ImageView imageViewPhoto;
 
     @BindView(R.id.spinnerSex)
     Spinner spinnerSex;
@@ -146,14 +153,19 @@ public class ProfileEditActivity extends BaseActivity<ProfileEditPresenter> impl
     }
 
     @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth);
+        LocalDate localDate = LocalDate.fromCalendarFields(calendar);
+    }
+
+    @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         LocalTime localTime = new LocalTime(hourOfDay, minute);
     }
 
     @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, monthOfYear, dayOfMonth);
-        LocalDate localDate = LocalDate.fromCalendarFields(calendar);
+    public void onSetImage(File resultFile) {
+        imageViewPhoto.setImageURI(Uri.fromFile(resultFile));
     }
 }

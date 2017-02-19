@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- file provider authorities -->
+    <string name="file_provider_authorities" translatable="false">ru.android.childdiary</string>
+    <!-- translatable strings -->
     <string name="app_name">Развитие ребенка</string>
     <string name="drawer_item_calendar">Календарь</string>
     <string name="drawer_item_development_diary">Дневник развития</string>
@@ -23,7 +26,13 @@
     <string name="Cancel">Отмена</string>
     <string name="request_read_external_storage_permission_title">Запрос на чтение SD-карты</string>
     <string name="request_read_external_storage_permission_text">Необходимо для чтения файлов с SD-карты.</string>
-    <string name="gallery_not_available">Галерея не доступна</string>
+    <string name="camera_not_available">Камера не доступна</string>
+    <string name="select_image">Выберите изображение</string>
+    <string name="failed_to_create_file_for_camera">Не удалось создать файл для фотографии</string>
+    <string name="failed_to_create_file_for_crop">Не удалось создать файл для обработки</string>
+    <string name="failed_to_select_image">Не удалось загрузить выбранное изображение</string>
+    <string name="failed_to_crop_image">При обработке изобарженяия произошла ошибка</string>
+    <string name="failed_to_save_result_file">При сохранении файла произошла ошибка</string>
     <string-array name="sex_variants">
         <item>Мужской</item>
         <item>Женский</item>
