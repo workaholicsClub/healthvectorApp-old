@@ -127,12 +127,65 @@ public class DbTest {
                 .doOnError(error -> logger.error("failed to select values"))
                 .subscribe();
 
-        assertEquals("selected values size", selected.size(), CHILD_COUNT);
-
         // 3. compare inserted and selected
         for (int i = 0; i < CHILD_COUNT; ++i) {
-            assertObjectEqual(inserted.get(i), selected.get(i));
+            Child insertedChild = inserted.get(i);
+            Child selectedChild = Stream.of(selected).filter(child -> child.equals(insertedChild)).findFirst().orElse(null);
+            assertTrue("inserted child not found in selection", selectedChild != null);
         }
+
+        testUpdateChild();
+    }
+
+    @Test
+    public void testUpdateChild() {
+        final String insertedName = "UpdateTest";
+        final String updatedName = "UpdateTestTest";
+        assertTrue(!insertedName.equals(updatedName));
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // 0. build child
+        List<Child> insertedChildren = new ArrayList<>();
+        {
+            Child child = Child.builder()
+                    .name(insertedName)
+                    .birthDate(now.toLocalDate())
+                    .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
+                    .sex(Sex.FEMALE)
+                    .imageFileName(null)
+                    .height(RANDOM.nextDouble())
+                    .weight(RANDOM.nextDouble())
+                    .build();
+
+            childDbService.add(child)
+                    .doOnNext(item -> logger.debug("value inserted: " + item))
+                    .doOnNext(insertedChildren::add)
+                    .doOnError(error -> logger.error("failed to insert value", error))
+                    .subscribe();
+
+            assertEquals("child wasn't inserted once", insertedChildren.size(), 1);
+        }
+        Child insertedChild = insertedChildren.get(0);
+
+        // 1. update child
+        Child updatedChild = Child.getBuilder(insertedChild).name(updatedName).build();
+
+        childDbService.update(updatedChild)
+                .doOnNext(item -> logger.debug("value updated: " + item))
+                .doOnError(error -> logger.error("failed to update value", error))
+                .subscribe();
+
+        // 2. select and check
+        List<Child> selectedChildren = new ArrayList<>();
+        childDbService.getAll()
+                .doOnNext(selectedChildren::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        Child selectedChild = Stream.of(selectedChildren).filter(child -> child.getId() == insertedChild.getId()).findFirst().orElse(null);
+        assertTrue("inserted child not found in selection", selectedChild != null);
+        assertEquals("child wasn't updated", selectedChild.getName(), updatedName);
     }
 
     @Test

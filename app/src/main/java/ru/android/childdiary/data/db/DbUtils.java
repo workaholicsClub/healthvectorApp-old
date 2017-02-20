@@ -2,9 +2,12 @@ package ru.android.childdiary.data.db;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Function;
 import io.requery.BlockingEntityStore;
 import io.requery.EntityStore;
 import io.requery.Persistable;
@@ -15,6 +18,7 @@ import io.requery.sql.TableCreationMode;
 import lombok.val;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.data.entities.Models;
+import ru.android.childdiary.data.entities.child.ChildEntity;
 
 public class DbUtils {
     private static final int DB_VERSION_DEFAULT = 1;
@@ -48,11 +52,11 @@ public class DbUtils {
         return dataStore;
     }
 
-    public static <T> Observable<T> deleteObservable(EntityStore dataStore, Class entityClass, T object, long objectId) {
+    public static <T, E> Observable<T> deleteObservable(EntityStore dataStore, Class<? extends E> entityClass, T object, long objectId) {
         return Observable.fromCallable(() -> delete(dataStore, entityClass, object, objectId));
     }
 
-    private static <T> T delete(EntityStore dataStore, Class entityClass, T object, long objectId) {
+    private static <T, E> T delete(EntityStore dataStore, Class<? extends E> entityClass, T object, long objectId) {
         BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
         Object entity = blockingEntityStore.findByKey(entityClass, objectId);
         if (entity != null) {
@@ -60,5 +64,28 @@ public class DbUtils {
             return object;
         }
         throw new RuntimeException(object.getClass().getSimpleName() + " not found while deleting");
+    }
+
+    public static <T, E> Observable<T> updateObservable(EntityStore dataStore, T object, long objectId,
+                                                        @NonNull BiFunction<? super E, ? super T, ? extends E> copy,
+                                                        @NonNull Function<? super E, ? extends T> map) {
+        return Observable.fromCallable(() -> update(dataStore, object, objectId, copy, map));
+    }
+
+    private static <T, E> T update(EntityStore dataStore, T object, long objectId,
+                                   @NonNull BiFunction<? super E, ? super T, ? extends E> copy,
+                                   @NonNull Function<? super E, ? extends T> map) {
+        try {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            E childEntity = (E) blockingEntityStore.findByKey(ChildEntity.class, objectId);
+            if (childEntity != null) {
+                childEntity = copy.apply(childEntity, object);
+                childEntity = (E) blockingEntityStore.update(childEntity);
+                return map.apply(childEntity);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("error while updating " + object.getClass().getSimpleName(), e);
+        }
+        throw new RuntimeException(object.getClass().getSimpleName() + " not found while updating");
     }
 }

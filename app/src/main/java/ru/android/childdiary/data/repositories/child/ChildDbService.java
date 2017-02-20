@@ -27,19 +27,19 @@ public class ChildDbService implements ChildService {
         return dataStore.select(ChildEntity.class)
                 .orderBy(ChildEntity.NAME)
                 .get().observable()
-                .map(Mapper::map)
+                .map(ChildMapper::map)
                 .toList()
                 .toObservable();
     }
 
     @Override
     public Observable<Child> add(Child child) {
-        return dataStore.insert(Mapper.map(child)).toObservable().map(Mapper::map);
+        return dataStore.insert(ChildMapper.map(child)).toObservable().map(ChildMapper::map);
     }
 
     @Override
     public Observable<Child> update(Child child) {
-        return dataStore.update(Mapper.map(child)).toObservable().map(Mapper::map);
+        return DbUtils.updateObservable(dataStore, child, child.getId(), ChildMapper::copy, ChildMapper::map);
     }
 
     @Override

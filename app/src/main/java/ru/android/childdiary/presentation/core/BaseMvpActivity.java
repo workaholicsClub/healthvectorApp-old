@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.core;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -16,9 +15,6 @@ import butterknife.ButterKnife;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.main.MainActivity;
-import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 
 @SuppressLint("Registered")
 public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseActivityView {
@@ -68,15 +64,5 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     @Override
     public void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-    }
-
-    protected final void navigateToMain(Child lastActiveChild) {
-        Intent intent = MainActivity.getIntent(this, lastActiveChild);
-        startActivity(intent);
-    }
-
-    protected final void navigateToProfileEdit(@Nullable Child child) {
-        Intent intent = ProfileEditActivity.getIntent(this, child);
-        startActivity(intent);
     }
 }

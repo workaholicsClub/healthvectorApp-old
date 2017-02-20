@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.splash;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -9,6 +10,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
+import ru.android.childdiary.presentation.main.MainActivity;
 
 public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements SplashView {
     @InjectPresenter
@@ -29,5 +31,10 @@ public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements 
     public void startApp(Child lastActiveChild) {
         finish();
         navigateToMain(lastActiveChild);
+    }
+
+    private final void navigateToMain(Child lastActiveChild) {
+        Intent intent = MainActivity.getIntent(this, lastActiveChild);
+        startActivity(intent);
     }
 }

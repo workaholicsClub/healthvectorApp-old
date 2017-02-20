@@ -42,6 +42,9 @@ import ru.android.childdiary.utils.UiUtils;
 
 public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener {
+    public static final int RESULT_ADDED = RESULT_FIRST_USER + 1;
+    public static final int RESULT_UPDATED = RESULT_FIRST_USER + 2;
+
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
@@ -201,11 +204,17 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @Override
     public void childAdded(Child child) {
+        Intent data = new Intent();
+        data.putExtra(ExtraConstants.EXTRA_CHILD, child);
+        setResult(RESULT_ADDED, data);
         finish();
     }
 
     @Override
     public void childUpdated(Child child) {
+        Intent data = new Intent();
+        data.putExtra(ExtraConstants.EXTRA_CHILD, child);
+        setResult(RESULT_UPDATED, data);
         finish();
     }
 

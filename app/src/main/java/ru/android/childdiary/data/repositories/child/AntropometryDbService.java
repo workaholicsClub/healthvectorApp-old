@@ -31,22 +31,22 @@ public class AntropometryDbService implements AntropometryService {
                 .where(AntropometryEntity.CHILD_ID.eq(child.getId()))
                 .orderBy(AntropometryEntity.DATE)
                 .get().observable()
-                .map(Mapper::map)
+                .map(AntropometryMapper::map)
                 .toList()
                 .toObservable();
     }
 
     @Override
     public Observable<Antropometry> add(Antropometry antropometry) {
-        // insert object with foreign key
+        // TODO: обобщить
         return Observable.fromCallable(() -> {
             BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
             ChildEntity childEntity = (ChildEntity) blockingEntityStore.findByKey(ChildEntity.class, antropometry.getChild().getId());
             if (childEntity != null) {
-                AntropometryEntity antropometryEntity = Mapper.map(antropometry);
+                AntropometryEntity antropometryEntity = AntropometryMapper.map(antropometry);
                 antropometryEntity.setChild(childEntity);
                 antropometryEntity = (AntropometryEntity) blockingEntityStore.insert(antropometryEntity);
-                return Mapper.map(antropometryEntity);
+                return AntropometryMapper.map(antropometryEntity);
             }
             throw new RuntimeException("child not found while inserting antropometry");
         });
@@ -54,7 +54,8 @@ public class AntropometryDbService implements AntropometryService {
 
     @Override
     public Observable<Antropometry> update(Antropometry antropometry) {
-        return dataStore.update(Mapper.map(antropometry)).toObservable().map(Mapper::map);
+        // TODO: update object with id and foreign key; tests
+        return dataStore.update(AntropometryMapper.map(antropometry)).toObservable().map(AntropometryMapper::map);
     }
 
     @Override
