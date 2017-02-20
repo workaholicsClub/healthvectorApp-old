@@ -7,6 +7,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 
 public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements SplashView {
@@ -22,5 +23,11 @@ public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+    }
+
+    @Override
+    public void startApp(Child lastActiveChild) {
+        finish();
+        navigateToMain(lastActiveChild);
     }
 }

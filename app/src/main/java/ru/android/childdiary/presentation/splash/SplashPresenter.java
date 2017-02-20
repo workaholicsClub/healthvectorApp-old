@@ -22,8 +22,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     @Inject
     ChildInteractor childInteractor;
 
-    private boolean isTimerFinished, isInitialized;
-
+    private boolean isTimerFinished;
     private List<Child> childList;
 
     @Override
@@ -36,9 +35,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         super.onFirstViewAttach();
 
         unsubscribeOnDestroy(Observable.timer(SPLASH_TIME_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .doOnNext(time -> logger.debug("timer finished"))
+                .ignoreElements()
+                .doOnComplete(() -> logger.debug("timer finished"))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(time -> onTimerFinished(), this::onUnexpectedError));
+                .subscribe(() -> onTimerFinished(), this::onUnexpectedError));
 
         unsubscribeOnDestroy(childInteractor.getAll()
                 .subscribeOn(Schedulers.io())
@@ -60,15 +60,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void next() {
         if (childList != null && isTimerFinished) {
-            boolean hasChildren = !childList.isEmpty();
-            if (hasChildren) {
-                // TODO: текущий профиль брать из настроек
-                getViewState().navigateToMain(childList.get(0), childList);
-                getViewState().finish();
-            } else {
-                getViewState().navigateToProfileEdit(null);
-                getViewState().finish();
-            }
+            // TODO: брать активный профиль из настроек
+            Child lastActiveChild = childList.isEmpty() ? null : childList.get(0);
+            getViewState().startApp(lastActiveChild);
         }
     }
 }

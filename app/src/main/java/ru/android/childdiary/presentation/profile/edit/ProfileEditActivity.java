@@ -38,6 +38,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.utils.UiUtils;
 
 public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener {
@@ -103,8 +104,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-
-        setTheme(getPreferredTheme(child));
+        setTheme(UiUtils.getPreferredTheme(child));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_edit);
 

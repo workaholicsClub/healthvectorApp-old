@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,11 +37,13 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.utils.ParcelableUtils;
+import ru.android.childdiary.utils.UiUtils;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
         Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
-    private static final int PROFILE_SETTING_ADD = 0;
+    private static final int PROFILE_SETTING_ADD = 1;
+    private static final int PROFILE_SETTINGS_EDIT = 2;
+    private static final int PROFILE_SETTINGS_USER = 10;
 
     @InjectPresenter
     MainPresenter presenter;
@@ -51,14 +54,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private AccountHeader accountHeader;
     private Drawer drawer;
 
-    private Child activeChild;
-    private List<Child> childList;
-    private List<IProfile> profiles;
-
-    public static Intent getIntent(Context context, Child child, List<Child> childList) {
+    public static Intent getIntent(Context context, Child lastActiveChild) {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_CHILD, child);
-        ParcelableUtils.wrap(intent, ExtraConstants.EXTRA_CHILD_LIST, childList);
+        intent.putExtra(ExtraConstants.EXTRA_CHILD, lastActiveChild);
         return intent;
     }
 
@@ -69,10 +67,19 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        activeChild = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-        childList = ParcelableUtils.unwrap(getIntent(), ExtraConstants.EXTRA_CHILD_LIST);
-        profiles = Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList());
+        Child lastActiveChild = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
+        setTheme(UiUtils.getPreferredTheme(lastActiveChild));
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void childListLoaded(@Nullable Child activeChild, List<Child> childList) {
+        Drawable headerColor = UiUtils.getPreferredAccountHeaderColor(this, activeChild);
+
+        List<IProfile> profiles = Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList());
         profiles.add(new ProfileSettingDrawerItem()
                 .withName(getString(R.string.add_child))
                 .withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add)
@@ -81,83 +88,71 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                         .colorRes(R.color.material_drawer_dark_primary_text))
                 .withIdentifier(PROFILE_SETTING_ADD));
 
-        if (activeChild == null) {
-            activeChild = childList.size() > 0 ? childList.get(0) : null;
+        buildUi(headerColor, profiles);
+    }
+
+    @Override
+    public void addChild() {
+        navigateToProfileEdit(null);
+    }
+
+    @Override
+    public void editChild(@NonNull Child child) {
+        navigateToProfileEdit(child);
+    }
+
+    @Override
+    public void setActive(@Nullable Child child) {
+        // TODO: switch theme if needed
+        Drawable headerColor = UiUtils.getPreferredAccountHeaderColor(this, child);
+        accountHeader.setBackground(headerColor);
+        if (child == null) {
+            getSupportActionBar().setTitle(R.string.app_name);
+        } else {
+            accountHeader.setActiveProfile(mapToProfileId(child));
+            getSupportActionBar().setTitle(child.getName());
         }
-
-        setTheme(getPreferredTheme(activeChild));
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        setSupportActionBar(toolbar);
-
-        buildHeader(false, savedInstanceState);
-        buildDrawer(savedInstanceState);
-
-        updateUi();
     }
 
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+        // TODO: navigation
         showToast(((PrimaryDrawerItem) drawerItem).getName().getText());
         return false;
     }
 
     @Override
     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-        if (profile.getIdentifier() == PROFILE_SETTING_ADD) {
-            navigateToProfileEdit(null);
-        } else {
-            long id = profile.getIdentifier();
-            Child child = Stream.of(childList).filter(c -> c.getId() == id).findFirst().orElse(null);
-
-            if (child == null) {
-                logger.error("onProfileChanged: profile with id=" + id + " not found");
-                return false;
-            }
-
-            toggleChild(child);
+        long itemId = profile.getIdentifier();
+        if (itemId > PROFILE_SETTINGS_USER) {
+            presenter.toggleChild(mapToChildId(profile));
+        } else if (itemId == PROFILE_SETTING_ADD) {
+            presenter.addChild();
+        } else if (itemId == PROFILE_SETTINGS_EDIT) {
+            presenter.editChild();
         }
 
         return false;
     }
 
-    private void toggleChild(@NonNull Child child) {
-        if (activeChild == null) {
-            // switch to default theme
-            finish();
-            navigateToMain(child, childList);
-            return;
-        }
-
-        if (child.getId() == activeChild.getId()) {
-            return;
-        }
-
-        if (activeChild.getSex() != child.getSex()) {
-            // apply theme for boy or girl
-            finish();
-            navigateToMain(child, childList);
-            return;
-        }
-
-        activeChild = child;
-        updateUi();
-    }
-
-    private void updateUi() {
-        getSupportActionBar().setTitle(activeChild == null ? getString(R.string.app_name) : activeChild.getName());
-    }
-
-    private IProfile mapToProfile(Child child) {
+    private IProfile mapToProfile(@NonNull Child child) {
+        // TODO: calculate age and print as formatted string
         return new ProfileDrawerItem()
                 .withName(child.getName())
                 .withEmail("age")
-                .withIcon(mapToIcon(child))
-                .withIdentifier(child.getId());
+                .withIdentifier(mapToProfileId(child))
+                .withIcon(mapToProfileIcon(child));
     }
 
-    private Drawable mapToIcon(Child child) {
+    private long mapToProfileId(@NonNull Child child) {
+        return child.getId() + PROFILE_SETTINGS_USER;
+    }
+
+    private long mapToChildId(IProfile profile) {
+        return profile.getIdentifier() - PROFILE_SETTINGS_USER;
+    }
+
+    private Drawable mapToProfileIcon(@NonNull Child child) {
         // TODO: default icon for girl and boy
         if (child.getImageFileName() == null) {
             if (child.getSex() == Sex.MALE) {
@@ -169,21 +164,22 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         return Drawable.createFromPath(child.getImageFileName());
     }
 
-    private void buildHeader(boolean compact, Bundle savedInstanceState) {
-        accountHeader = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(getPreferredAccountHeaderColor(activeChild))
-                .withCompactStyle(compact)
-                .withOnAccountHeaderListener(this)
-                .withSavedInstance(savedInstanceState)
-                .addProfiles(profiles.toArray(new IProfile[profiles.size()]))
-                .build();
-        if (activeChild != null) {
-            accountHeader.setActiveProfile(activeChild.getId());
-        }
+    private void buildUi(Drawable headerColor, List<IProfile> profiles) {
+        buildHeader(headerColor, profiles);
+        buildDrawer();
     }
 
-    private void buildDrawer(Bundle savedInstanceState) {
+    private void buildHeader(Drawable headerColor, List<IProfile> profiles) {
+        accountHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withCompactStyle(false)
+                .withOnAccountHeaderListener(this)
+                .withHeaderBackground(headerColor)
+                .addProfiles(profiles.toArray(new IProfile[profiles.size()]))
+                .build();
+    }
+
+    private void buildDrawer() {
         drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -214,7 +210,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                                 .withIcon(FontAwesome.Icon.faw_question)
                                 .withOnDrawerItemClickListener(this)
                 )
-                .withSavedInstance(savedInstanceState)
                 .build();
     }
 
@@ -227,43 +222,21 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO: menu
         switch (item.getItemId()) {
             case R.id.menu_1:
-                IconicsDrawable icon = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_android)
-                        .backgroundColorRes(R.color.accent)
-                        .sizeDp(48)
-                        .paddingDp(4);
-                profiles.get(0).withIcon(icon);
-                accountHeader.updateProfile(profiles.get(0));
                 return true;
             case R.id.menu_2:
-                drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 return true;
             case R.id.menu_3:
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
                 return true;
             case R.id.menu_4:
-                buildHeader(true, null);
-                drawer.setHeader(accountHeader.getView());
-                accountHeader.setDrawer(drawer);
                 return true;
             case R.id.menu_5:
-                buildHeader(false, null);
-                drawer.setHeader(accountHeader.getView());
-                accountHeader.setDrawer(drawer);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState = drawer.saveInstanceState(outState);
-        outState = accountHeader.saveInstanceState(outState);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
