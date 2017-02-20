@@ -54,8 +54,8 @@ public class AntropometryDbService implements AntropometryService {
 
     @Override
     public Observable<Antropometry> update(Antropometry antropometry) {
-        // TODO: update object with id and foreign key; tests
-        return dataStore.update(AntropometryMapper.map(antropometry)).toObservable().map(AntropometryMapper::map);
+        return DbUtils.updateObservable(dataStore, AntropometryEntity.class, antropometry, antropometry.getId(),
+                AntropometryMapper::copy, AntropometryMapper::map);
     }
 
     @Override

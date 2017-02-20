@@ -39,7 +39,8 @@ public class ChildDbService implements ChildService {
 
     @Override
     public Observable<Child> update(Child child) {
-        return DbUtils.updateObservable(dataStore, child, child.getId(), ChildMapper::copy, ChildMapper::map);
+        return DbUtils.updateObservable(dataStore, ChildEntity.class, child, child.getId(),
+                ChildMapper::copy, ChildMapper::map);
     }
 
     @Override

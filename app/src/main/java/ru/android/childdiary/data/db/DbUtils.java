@@ -18,7 +18,6 @@ import io.requery.sql.TableCreationMode;
 import lombok.val;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.data.entities.Models;
-import ru.android.childdiary.data.entities.child.ChildEntity;
 
 public class DbUtils {
     private static final int DB_VERSION_DEFAULT = 1;
@@ -63,29 +62,29 @@ public class DbUtils {
             blockingEntityStore.delete(entity);
             return object;
         }
-        throw new RuntimeException(object.getClass().getSimpleName() + " not found while deleting");
+        throw new RuntimeException(object.getClass() + " not found while deleting");
     }
 
-    public static <T, E> Observable<T> updateObservable(EntityStore dataStore, T object, long objectId,
+    public static <T, E> Observable<T> updateObservable(EntityStore dataStore, Class<? extends E> entityClass, T object, long objectId,
                                                         @NonNull BiFunction<? super E, ? super T, ? extends E> copy,
                                                         @NonNull Function<? super E, ? extends T> map) {
-        return Observable.fromCallable(() -> update(dataStore, object, objectId, copy, map));
+        return Observable.fromCallable(() -> update(dataStore, entityClass, object, objectId, copy, map));
     }
 
-    private static <T, E> T update(EntityStore dataStore, T object, long objectId,
+    private static <T, E> T update(EntityStore dataStore, Class<? extends E> entityClass, T object, long objectId,
                                    @NonNull BiFunction<? super E, ? super T, ? extends E> copy,
                                    @NonNull Function<? super E, ? extends T> map) {
         try {
             BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-            E childEntity = (E) blockingEntityStore.findByKey(ChildEntity.class, objectId);
+            E childEntity = (E) blockingEntityStore.findByKey(entityClass, objectId);
             if (childEntity != null) {
                 childEntity = copy.apply(childEntity, object);
                 childEntity = (E) blockingEntityStore.update(childEntity);
                 return map.apply(childEntity);
             }
         } catch (Exception e) {
-            throw new RuntimeException("error while updating " + object.getClass().getSimpleName(), e);
+            throw new RuntimeException("error while updating " + object, e);
         }
-        throw new RuntimeException(object.getClass().getSimpleName() + " not found while updating");
+        throw new RuntimeException(object + " not found while updating");
     }
 }

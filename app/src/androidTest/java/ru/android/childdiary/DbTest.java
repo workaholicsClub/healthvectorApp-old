@@ -133,79 +133,6 @@ public class DbTest {
             Child selectedChild = Stream.of(selected).filter(child -> child.equals(insertedChild)).findFirst().orElse(null);
             assertTrue("inserted child not found in selection", selectedChild != null);
         }
-
-        testUpdateChild();
-    }
-
-    @Test
-    public void testUpdateChild() {
-        final String insertedName = "UpdateTest";
-        final String updatedName = "UpdateTestTest";
-        assertTrue(!insertedName.equals(updatedName));
-
-        LocalDateTime now = LocalDateTime.now();
-
-        // 0. build child
-        List<Child> insertedChildren = new ArrayList<>();
-        {
-            Child child = Child.builder()
-                    .name(insertedName)
-                    .birthDate(now.toLocalDate())
-                    .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
-                    .sex(Sex.FEMALE)
-                    .imageFileName(null)
-                    .height(RANDOM.nextDouble())
-                    .weight(RANDOM.nextDouble())
-                    .build();
-
-            childDbService.add(child)
-                    .doOnNext(item -> logger.debug("value inserted: " + item))
-                    .doOnNext(insertedChildren::add)
-                    .doOnError(error -> logger.error("failed to insert value", error))
-                    .subscribe();
-
-            assertEquals("child wasn't inserted once", insertedChildren.size(), 1);
-        }
-        Child insertedChild = insertedChildren.get(0);
-
-        // 1. update child
-        Child updatedChild = Child.getBuilder(insertedChild).name(updatedName).build();
-
-        childDbService.update(updatedChild)
-                .doOnNext(item -> logger.debug("value updated: " + item))
-                .doOnError(error -> logger.error("failed to update value", error))
-                .subscribe();
-
-        // 2. select and check
-        List<Child> selectedChildren = new ArrayList<>();
-        childDbService.getAll()
-                .doOnNext(selectedChildren::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
-                .subscribe();
-
-        Child selectedChild = Stream.of(selectedChildren).filter(child -> child.getId() == insertedChild.getId()).findFirst().orElse(null);
-        assertTrue("inserted child not found in selection", selectedChild != null);
-        assertEquals("child wasn't updated", selectedChild.getName(), updatedName);
-    }
-
-    @Test
-    public void testNegativeUpdateNonExistent() {
-        LocalDateTime now = LocalDateTime.now();
-
-        Child child = Child.builder()
-                .name("UpdateNonExistent")
-                .birthDate(now.toLocalDate())
-                .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
-                .sex(Sex.FEMALE)
-                .imageFileName(null)
-                .height(RANDOM.nextDouble())
-                .weight(RANDOM.nextDouble())
-                .build();
-
-        childDbService.update(child)
-                .doOnNext(item -> logger.debug("value inserted: " + item))
-                .doOnError(error -> logger.error("failed to insert value", error))
-                .subscribe(item -> fail(), error -> logger.debug("expected error", error));
     }
 
     @Test
@@ -244,6 +171,7 @@ public class DbTest {
                     .height(insertedChild.getHeight() - 0.1 * j)
                     .weight(insertedChild.getWeight() - 0.1 * j)
                     .build();
+
             antropometryDbService.add(antropometry)
                     .doOnNext(item -> logger.debug("value inserted: " + item))
                     .doOnNext(inserted::add)
@@ -318,5 +246,128 @@ public class DbTest {
                 .subscribe();
 
         assertEquals("cascade delete doesn't work", selected.size(), 0);
+    }
+
+    @Test
+    public void testUpdate() {
+        final String insertedName = "UpdateTest";
+        final String updatedName = "UpdateTestTest";
+
+        final double insertedHeight = 1;
+        final double updatedHeight = 2;
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // 0. build child
+        List<Child> insertedChildren = new ArrayList<>();
+        {
+            Child child = Child.builder()
+                    .name(insertedName)
+                    .birthDate(now.toLocalDate())
+                    .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
+                    .sex(Sex.FEMALE)
+                    .imageFileName(null)
+                    .height(RANDOM.nextDouble())
+                    .weight(RANDOM.nextDouble())
+                    .build();
+
+            childDbService.add(child)
+                    .doOnNext(item -> logger.debug("value inserted: " + item))
+                    .doOnNext(insertedChildren::add)
+                    .doOnError(error -> logger.error("failed to insert value", error))
+                    .subscribe();
+
+            assertEquals("child wasn't inserted once", insertedChildren.size(), 1);
+        }
+        Child insertedChild = insertedChildren.get(0);
+
+        // 1. update child
+        Child updatedChild = Child.getBuilder(insertedChild).name(updatedName).build();
+
+        childDbService.update(updatedChild)
+                .doOnNext(item -> logger.debug("value updated: " + item))
+                .doOnError(error -> logger.error("failed to update value", error))
+                .subscribe();
+
+        // 2. select and check
+        List<Child> selectedChildren = new ArrayList<>();
+        childDbService.getAll()
+                .doOnNext(selectedChildren::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        Child selectedChild = Stream.of(selectedChildren).filter(child -> child.getId() == insertedChild.getId()).findFirst().orElse(null);
+        assertTrue("inserted child not found in selection", selectedChild != null);
+        assertEquals("child wasn't updated", selectedChild.getName(), updatedName);
+
+        // 3. insert antropometry
+        List<Antropometry> inserted = new ArrayList<>();
+        {
+            Antropometry antropometry = Antropometry.builder()
+                    .child(insertedChild)
+                    .date(now.toLocalDate())
+                    .height(insertedHeight)
+                    .weight(0)
+                    .build();
+
+            antropometryDbService.add(antropometry)
+                    .doOnNext(item -> logger.debug("value inserted: " + item))
+                    .doOnNext(inserted::add)
+                    .doOnError(error -> logger.error("failed to insert value", error))
+                    .subscribe();
+
+            assertEquals("antropometry wasn't inserted once", inserted.size(), 1);
+        }
+        Antropometry insertedAntropometry = inserted.get(0);
+
+        // 4. select and check
+        List<Antropometry> selected = new ArrayList<>();
+        antropometryDbService.getAll(insertedChild)
+                .doOnNext(selected::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        Antropometry selectedAntropometry = Stream.of(selected).filter(antropometry -> antropometry.getId() == insertedAntropometry.getId()).findFirst().orElse(null);
+        assertTrue("inserted antropometry not found in selection", selectedAntropometry != null);
+        assertEquals("antropometry wasn't inserted properly", selectedAntropometry.getHeight(), insertedHeight);
+
+        // 5. update antropometry
+        Antropometry updatedAntropometry = Antropometry.getBuilder(insertedAntropometry).height(updatedHeight).build();
+
+        antropometryDbService.update(updatedAntropometry)
+                .doOnNext(item -> logger.debug("value updated: " + item))
+                .doOnError(error -> logger.error("failed to update value", error))
+                .subscribe();
+
+        // 6. select and check
+        selected = new ArrayList<>();
+        antropometryDbService.getAll(insertedChild)
+                .doOnNext(selected::addAll)
+                .doOnError(error -> logger.error("failed to select values"))
+                .subscribe();
+
+        selectedAntropometry = Stream.of(selected).filter(antropometry -> antropometry.getId() == insertedAntropometry.getId()).findFirst().orElse(null);
+        assertTrue("inserted antropometry not found in selection", selectedAntropometry != null);
+        assertEquals("antropometry wasn't updated", selectedAntropometry.getHeight(), updatedHeight);
+    }
+
+    @Test
+    public void testNegativeUpdateNonExistent() {
+        LocalDateTime now = LocalDateTime.now();
+
+        Child child = Child.builder()
+                .name("UpdateNonExistent")
+                .birthDate(now.toLocalDate())
+                .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
+                .sex(Sex.FEMALE)
+                .imageFileName(null)
+                .height(RANDOM.nextDouble())
+                .weight(RANDOM.nextDouble())
+                .build();
+
+        childDbService.update(child)
+                .doOnNext(item -> logger.debug("value inserted: " + item))
+                .doOnError(error -> logger.error("failed to insert value", error))
+                .subscribe(item -> fail(), error -> logger.debug("expected error", error));
     }
 }
