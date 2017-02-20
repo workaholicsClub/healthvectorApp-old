@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
@@ -50,10 +49,11 @@ public class DbTest {
     private static final int ANTROPOMETRY_COUNT = 10;
 
     private static ReactiveEntityStore<Persistable> dataStore;
+
     private static ChildDbService childDbService;
     private static AntropometryDbService antropometryDbService;
 
-    private final Logger logger = LoggerFactory.getLogger(toString());
+    private final Logger logger = LoggerFactory.getLogger(DbTest.class);
 
     private static Context getContext() {
         // can write only in target context
@@ -79,295 +79,255 @@ public class DbTest {
         dataStore.close();
     }
 
-    private static Observable<Child> generateChildren() {
-        LocalDateTime now = LocalDateTime.now();
-
-        List<Child> result = new ArrayList<>();
-        for (int i = 0; i < CHILD_COUNT; ++i) {
-            now = now.minusDays(i);
-            now = now.minusHours(i);
-
-            Child child = Child.builder()
-                    .name("Test" + i)
-                    .birthDate(now.toLocalDate())
-                    .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
-                    .sex(Sex.MALE)
-                    .imageFileName(null)
-                    .height(RANDOM.nextDouble())
-                    .weight(RANDOM.nextDouble())
-                    .build();
-
-            result.add(child);
-        }
-
-        return Observable.fromArray(result.toArray(new Child[result.size()]));
-    }
-
-    private static void assertObjectEqual(Object o1, Object o2) {
+    private void assertObjectEqual(Object o1, Object o2) {
         assertTrue(String.format(Locale.US, "objects differ:\nfirst %s\nsecond %s", o1, o2), ObjectUtils.equals(o1, o2));
     }
 
-    @Test
-    public void testChild() {
-        // 1. insert children
-        List<Child> inserted = new ArrayList<>();
-        generateChildren()
-                .flatMap(child -> childDbService.add(child))
-                .doOnNext(child -> logger.debug("value inserted: " + child))
-                .doOnNext(inserted::add)
-                .doOnError(error -> logger.error("failed to insert value", error))
-                .subscribe();
+    private <T> void logOnNextSelect(T items) {
+        logger.debug("values selected: " + items);
+    }
 
-        assertEquals("inserted values size", inserted.size(), CHILD_COUNT);
+    private void logOnErrorSelect(Throwable throwable) {
+        logger.error("failed to select values", throwable);
+    }
 
-        // 2. select children
+    private <T> void logOnNextInsert(T item) {
+        logger.debug("value inserted: " + item);
+    }
+
+    private void logOnErrorInsert(Throwable throwable) {
+        logger.error("failed to insert value", throwable);
+    }
+
+    private <T> void logOnNextUpdate(T item) {
+        logger.debug("value updated: " + item);
+    }
+
+    private void logOnErrorUpdate(Throwable throwable) {
+        logger.error("failed to update value", throwable);
+    }
+
+    private <T> void logOnNextDelete(T item) {
+        logger.debug("value deleted: " + item);
+    }
+
+    private void logOnErrorDelete(Throwable throwable) {
+        logger.error("failed to delete value", throwable);
+    }
+
+    private List<Child> checkInSelection(int count, Child... inserted) {
         List<Child> selected = new ArrayList<>();
         childDbService.getAll()
+                .doOnNext(this::logOnNextSelect)
                 .doOnNext(selected::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
+                .doOnError(this::logOnErrorSelect)
                 .subscribe();
-
-        // 3. compare inserted and selected
-        for (int i = 0; i < CHILD_COUNT; ++i) {
-            Child insertedChild = inserted.get(i);
-            Child selectedChild = Stream.of(selected).filter(child -> child.equals(insertedChild)).findFirst().orElse(null);
-            assertTrue("inserted child not found in selection", selectedChild != null);
-        }
+        selectedContainInserted(new ChildIdsComparator(), selected, count, inserted);
+        return selected;
     }
 
-    @Test
-    public void testAntropometry() {
-        LocalDateTime now = LocalDateTime.now();
-
-        // 0. build child
-        List<Child> insertedChildren = new ArrayList<>();
-        {
-            Child child = Child.builder()
-                    .name("AntropometryTest")
-                    .birthDate(now.toLocalDate())
-                    .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
-                    .sex(Sex.FEMALE)
-                    .imageFileName(null)
-                    .height(RANDOM.nextDouble())
-                    .weight(RANDOM.nextDouble())
-                    .build();
-
-            childDbService.add(child)
-                    .doOnNext(item -> logger.debug("value inserted: " + item))
-                    .doOnNext(insertedChildren::add)
-                    .doOnError(error -> logger.error("failed to insert value", error))
-                    .subscribe();
-
-            assertEquals("child wasn't inserted once", insertedChildren.size(), 1);
-        }
-        Child insertedChild = insertedChildren.get(0);
-
-        // 1. insert antropometry
-        List<Antropometry> inserted = new ArrayList<>();
-        for (int j = 0; j < ANTROPOMETRY_COUNT; ++j) {
-            Antropometry antropometry = Antropometry.builder()
-                    .child(insertedChild)
-                    .date(now.minusDays(j).toLocalDate())
-                    .height(insertedChild.getHeight() - 0.1 * j)
-                    .weight(insertedChild.getWeight() - 0.1 * j)
-                    .build();
-
-            antropometryDbService.add(antropometry)
-                    .doOnNext(item -> logger.debug("value inserted: " + item))
-                    .doOnNext(inserted::add)
-                    .doOnError(error -> logger.error("failed to insert value", error))
-                    .subscribe();
-        }
-
-        assertEquals("inserted values size", inserted.size(), ANTROPOMETRY_COUNT);
-
-        Collections.sort(inserted, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
-
-        // 2. select antropometry
+    private List<Antropometry> checkInSelection(Child child, int count, Antropometry... inserted) {
         List<Antropometry> selected = new ArrayList<>();
-        antropometryDbService.getAll(insertedChild)
+        antropometryDbService.getAll(child)
+                .doOnNext(this::logOnNextSelect)
                 .doOnNext(selected::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
+                .doOnError(this::logOnErrorSelect)
                 .subscribe();
-
-        assertEquals("selected values size", selected.size(), ANTROPOMETRY_COUNT);
-
-        // 3. compare inserted and selected
-        for (int i = 0; i < ANTROPOMETRY_COUNT; ++i) {
-            assertObjectEqual(inserted.get(i), selected.get(i));
-        }
-
-        // 4. select children
-        List<Child> selectedChildren = new ArrayList<>();
-        childDbService.getAll()
-                .doOnNext(selectedChildren::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
-                .subscribe();
-
-        long found = Stream.of(selectedChildren).filter(selectedChild -> selectedChild.equals(insertedChild)).count();
-        assertEquals("chosen child wasn't inserted once", found, 1);
-
-        // delete some antropometry
-        antropometryDbService.delete(selected.get(0))
-                .doOnNext(item -> logger.debug("value deleted: " + item))
-                .doOnError(error -> logger.error("failed to delete value", error))
-                .subscribe();
-
-        // select antropometry
-        selected = new ArrayList<>();
-        antropometryDbService.getAll(insertedChild)
-                .doOnNext(selected::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
-                .subscribe();
-
-        assertEquals("after single antropometry deletion: selected values size", selected.size(), ANTROPOMETRY_COUNT - 1);
-
-        // 5. cascade delete
-        childDbService.delete(insertedChild)
-                .doOnNext(item -> logger.debug("value deleted: " + item))
-                .doOnError(error -> logger.error("failed to delete value", error))
-                .subscribe();
-
-        // 6. select children
-        selectedChildren = new ArrayList<>();
-        childDbService.getAll()
-                .doOnNext(selectedChildren::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
-                .subscribe();
-
-        found = Stream.of(selectedChildren).filter(selectedChild -> selectedChild.equals(insertedChild)).count();
-        assertEquals("chosen child wasn't deleted", found, 0);
-
-        // 7. select antropometry
-        selected = new ArrayList<>();
-        antropometryDbService.getAll(insertedChild)
-                .doOnNext(selected::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
-                .subscribe();
-
-        assertEquals("cascade delete doesn't work", selected.size(), 0);
+        selectedContainInserted(new AntropometryIdsComparator(), selected, count, inserted);
+        return selected;
     }
 
-    @Test
-    public void testUpdate() {
-        final String insertedName = "UpdateTest";
-        final String updatedName = "UpdateTestTest";
-
-        final double insertedHeight = 1;
-        final double updatedHeight = 2;
-
-        LocalDateTime now = LocalDateTime.now();
-
-        // 0. build child
-        List<Child> insertedChildren = new ArrayList<>();
-        {
-            Child child = Child.builder()
-                    .name(insertedName)
-                    .birthDate(now.toLocalDate())
-                    .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
-                    .sex(Sex.FEMALE)
-                    .imageFileName(null)
-                    .height(RANDOM.nextDouble())
-                    .weight(RANDOM.nextDouble())
-                    .build();
-
-            childDbService.add(child)
-                    .doOnNext(item -> logger.debug("value inserted: " + item))
-                    .doOnNext(insertedChildren::add)
-                    .doOnError(error -> logger.error("failed to insert value", error))
-                    .subscribe();
-
-            assertEquals("child wasn't inserted once", insertedChildren.size(), 1);
+    private <T> void selectedContainInserted(IdsComparator<T> idsEqual, List<T> selected, int count, T... items) {
+        for (int i = 0; i < items.length; ++i) {
+            T insertedItem = items[i];
+            long found;
+            found = Stream.of(selected).filter(item -> item.equals(insertedItem)).count();
+            assertEquals("item value found in selection", count, found);
+            found = Stream.of(selected).filter(item -> idsEqual.idsEqual(item, insertedItem)).count();
+            assertEquals("item id found in selection", count, found);
         }
-        Child insertedChild = insertedChildren.get(0);
+    }
 
-        // 1. update child
-        Child updatedChild = Child.getBuilder(insertedChild).name(updatedName).build();
-
-        childDbService.update(updatedChild)
-                .doOnNext(item -> logger.debug("value updated: " + item))
-                .doOnError(error -> logger.error("failed to update value", error))
+    private Child add(Child item) {
+        List<Child> inserted = new ArrayList<>();
+        childDbService.add(item)
+                .doOnNext(this::logOnNextInsert)
+                .doOnNext(inserted::add)
+                .doOnError(this::logOnErrorInsert)
                 .subscribe();
+        assertEquals("inserted values size", 1, inserted.size());
+        return inserted.get(0);
+    }
 
-        // 2. select and check
-        List<Child> selectedChildren = new ArrayList<>();
-        childDbService.getAll()
-                .doOnNext(selectedChildren::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
-                .subscribe();
-
-        Child selectedChild = Stream.of(selectedChildren).filter(child -> child.getId() == insertedChild.getId()).findFirst().orElse(null);
-        assertTrue("inserted child not found in selection", selectedChild != null);
-        assertEquals("child wasn't updated", selectedChild.getName(), updatedName);
-
-        // 3. insert antropometry
+    private Antropometry add(Antropometry item) {
         List<Antropometry> inserted = new ArrayList<>();
-        {
-            Antropometry antropometry = Antropometry.builder()
-                    .child(insertedChild)
-                    .date(now.toLocalDate())
-                    .height(insertedHeight)
-                    .weight(0)
-                    .build();
-
-            antropometryDbService.add(antropometry)
-                    .doOnNext(item -> logger.debug("value inserted: " + item))
-                    .doOnNext(inserted::add)
-                    .doOnError(error -> logger.error("failed to insert value", error))
-                    .subscribe();
-
-            assertEquals("antropometry wasn't inserted once", inserted.size(), 1);
-        }
-        Antropometry insertedAntropometry = inserted.get(0);
-
-        // 4. select and check
-        List<Antropometry> selected = new ArrayList<>();
-        antropometryDbService.getAll(insertedChild)
-                .doOnNext(selected::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
+        antropometryDbService.add(item)
+                .doOnNext(this::logOnNextInsert)
+                .doOnNext(inserted::add)
+                .doOnError(this::logOnErrorInsert)
                 .subscribe();
-
-        Antropometry selectedAntropometry = Stream.of(selected).filter(antropometry -> antropometry.getId() == insertedAntropometry.getId()).findFirst().orElse(null);
-        assertTrue("inserted antropometry not found in selection", selectedAntropometry != null);
-        assertEquals("antropometry wasn't inserted properly", selectedAntropometry.getHeight(), insertedHeight);
-
-        // 5. update antropometry
-        Antropometry updatedAntropometry = Antropometry.getBuilder(insertedAntropometry).height(updatedHeight).build();
-
-        antropometryDbService.update(updatedAntropometry)
-                .doOnNext(item -> logger.debug("value updated: " + item))
-                .doOnError(error -> logger.error("failed to update value", error))
-                .subscribe();
-
-        // 6. select and check
-        selected = new ArrayList<>();
-        antropometryDbService.getAll(insertedChild)
-                .doOnNext(selected::addAll)
-                .doOnError(error -> logger.error("failed to select values"))
-                .subscribe();
-
-        selectedAntropometry = Stream.of(selected).filter(antropometry -> antropometry.getId() == insertedAntropometry.getId()).findFirst().orElse(null);
-        assertTrue("inserted antropometry not found in selection", selectedAntropometry != null);
-        assertEquals("antropometry wasn't updated", selectedAntropometry.getHeight(), updatedHeight);
+        assertEquals("inserted values size", 1, inserted.size());
+        return inserted.get(0);
     }
 
-    @Test
-    public void testNegativeUpdateNonExistent() {
-        LocalDateTime now = LocalDateTime.now();
+    private Child delete(Child item) {
+        List<Child> deleted = new ArrayList<>();
+        childDbService.delete(item)
+                .doOnNext(this::logOnNextDelete)
+                .doOnNext(deleted::add)
+                .doOnError(this::logOnErrorDelete)
+                .subscribe();
+        assertEquals("deleted values size", 1, deleted.size());
+        assertEquals("deleted value", item, deleted.get(0));
+        return item;
+    }
 
-        Child child = Child.builder()
-                .name("UpdateNonExistent")
-                .birthDate(now.toLocalDate())
-                .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()))
-                .sex(Sex.FEMALE)
+    private Antropometry delete(Antropometry item) {
+        List<Antropometry> deleted = new ArrayList<>();
+        antropometryDbService.delete(item)
+                .doOnNext(this::logOnNextDelete)
+                .doOnNext(deleted::add)
+                .doOnError(this::logOnErrorDelete)
+                .subscribe();
+        assertEquals("deleted values size", 1, deleted.size());
+        assertEquals("deleted value", item, deleted.get(0));
+        return item;
+    }
+
+    private Child update(Child item) {
+        List<Child> updated = new ArrayList<>();
+        childDbService.update(item)
+                .doOnNext(this::logOnNextDelete)
+                .doOnNext(updated::add)
+                .doOnError(this::logOnErrorDelete)
+                .subscribe();
+        assertEquals("updated values size", 1, updated.size());
+        assertEquals("updated value", item, updated.get(0));
+        return item;
+    }
+
+    private Antropometry update(Antropometry item) {
+        List<Antropometry> updated = new ArrayList<>();
+        antropometryDbService.update(item)
+                .doOnNext(this::logOnNextDelete)
+                .doOnNext(updated::add)
+                .doOnError(this::logOnErrorDelete)
+                .subscribe();
+        assertEquals("updated values size", 1, updated.size());
+        assertEquals("updated value", item, updated.get(0));
+        return item;
+    }
+
+    private Child getRandomChild() {
+        LocalDateTime now = LocalDateTime.now();
+        return Child.builder()
+                .name("Child" + RANDOM.nextInt())
+                .birthDate(now.toLocalDate().minusDays(RANDOM.nextInt()))
+                .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()).minusMinutes(RANDOM.nextInt()))
+                .sex(RANDOM.nextBoolean() ? Sex.MALE : Sex.FEMALE)
                 .imageFileName(null)
                 .height(RANDOM.nextDouble())
                 .weight(RANDOM.nextDouble())
                 .build();
+    }
 
+    private Antropometry getRandomAntropometry(Child child, int j) {
+        LocalDateTime now = LocalDateTime.now();
+        return Antropometry.builder()
+                .child(child)
+                .date(now.toLocalDate().minusDays(j))
+                .height(RANDOM.nextDouble())
+                .weight(RANDOM.nextDouble())
+                .build();
+    }
+
+    private Child insertRandomChild() {
+        Child child = getRandomChild();
+        child = add(child);
+        checkInSelection(1, child);
+        return child;
+    }
+
+    private List<Antropometry> insertRandomAntropometry(Child child) {
+        LocalDateTime now = LocalDateTime.now();
+        List<Antropometry> inserted = new ArrayList<>();
+        for (int j = 0; j < ANTROPOMETRY_COUNT; ++j) {
+            Antropometry antropometry = getRandomAntropometry(child, j);
+            antropometry = add(antropometry);
+            inserted.add(antropometry);
+        }
+        assertEquals("inserted values size", ANTROPOMETRY_COUNT, inserted.size());
+        List<Antropometry> selected = checkInSelection(child, 1, inserted.toArray(new Antropometry[inserted.size()]));
+        Collections.sort(inserted, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
+        for (int i = 0; i < ANTROPOMETRY_COUNT; ++i) {
+            assertObjectEqual(inserted.get(i), selected.get(i));
+        }
+        return inserted;
+    }
+
+    @Test
+    public void testDelete() {
+        Child child = insertRandomChild();
+        List<Antropometry> selected1 = insertRandomAntropometry(child);
+        Antropometry antropometry = selected1.get(0);
+
+        delete(antropometry);
+        List<Antropometry> selected2 = checkInSelection(child, 0, antropometry);
+        assertEquals("after deletion: selected values size", selected1.size() - 1, selected2.size());
+
+        delete(child);
+        checkInSelection(0, child);
+        List<Antropometry> selected = new ArrayList<>();
+        antropometryDbService.getAll(child)
+                .doOnNext(this::logOnNextSelect)
+                .doOnNext(selected::addAll)
+                .doOnError(this::logOnErrorSelect)
+                .subscribe();
+        assertEquals("cascade delete doesn't work", 0, selected.size());
+    }
+
+    @Test
+    public void testUpdate() {
+        final String updatedName = "UpdateTestTest";
+        final double updatedHeight = 2;
+
+        Child child = insertRandomChild();
+        List<Antropometry> selected = insertRandomAntropometry(child);
+        Antropometry antropometry = selected.get(0);
+
+        Child updatedChild = Child.getBuilder(child).name(updatedName).build();
+        update(updatedChild);
+        checkInSelection(1, updatedChild);
+
+        Antropometry updatedAntropometry = Antropometry.getBuilder(antropometry).child(updatedChild).height(updatedHeight).build();
+        update(updatedAntropometry);
+        checkInSelection(updatedChild, 1, updatedAntropometry);
+    }
+
+    @Test
+    public void testNegativeUpdateNonExistent() {
+        Child child = getRandomChild();
         childDbService.update(child)
-                .doOnNext(item -> logger.debug("value inserted: " + item))
-                .doOnError(error -> logger.error("failed to insert value", error))
+                .doOnNext(this::logOnNextUpdate)
+                .doOnError(this::logOnErrorUpdate)
                 .subscribe(item -> fail(), error -> logger.debug("expected error", error));
+    }
+
+    private interface IdsComparator<T> {
+        boolean idsEqual(T item1, T item2);
+    }
+
+    private static class ChildIdsComparator implements IdsComparator<Child> {
+        @Override
+        public boolean idsEqual(Child item1, Child item2) {
+            return item1.getId() == item2.getId();
+        }
+    }
+
+    private static class AntropometryIdsComparator implements IdsComparator<Antropometry> {
+        @Override
+        public boolean idsEqual(Antropometry item1, Antropometry item2) {
+            return item1.getId() == item2.getId();
+        }
     }
 }
