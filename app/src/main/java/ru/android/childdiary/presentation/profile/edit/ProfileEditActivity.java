@@ -188,18 +188,23 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     private void fill(Child.ChildBuilder builder) {
         // TODO: validation
-        String name = editChildName.getText().toString();
-        double height = Double.parseDouble(editBirthHeight.getText().toString());
-        double weight = Double.parseDouble(editBirthWeight.getText().toString());
-        Sex sex = getSexFromSpinnerPosition();
-        String imageFileName = imageFileUri == null ? null : imageFileUri.getPath();
-        builder.name(name)
-                .birthDate(birthDate)
-                .birthTime(birthTime)
-                .sex(sex)
-                .imageFileName(imageFileName)
-                .height(height)
-                .weight(weight);
+        // необязательные параметры: время и дата рождения
+        try {
+            String name = editChildName.getText().toString();
+            double height = Double.parseDouble(editBirthHeight.getText().toString());
+            double weight = Double.parseDouble(editBirthWeight.getText().toString());
+            Sex sex = getSexFromSpinnerPosition();
+            String imageFileName = imageFileUri == null ? null : imageFileUri.getPath();
+            builder.name(name)
+                    .birthDate(birthDate)
+                    .birthTime(birthTime)
+                    .sex(sex)
+                    .imageFileName(imageFileName)
+                    .height(height)
+                    .weight(weight);
+        } catch (Exception e) {
+            logger.error("validation failed", e);
+        }
     }
 
     @Override

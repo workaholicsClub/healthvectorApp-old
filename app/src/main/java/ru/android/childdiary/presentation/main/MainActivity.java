@@ -112,13 +112,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void childAdded(Child child) {
-        // TODO
+        // TODO через презентер?
         accountHeader.addProfile(mapToProfile(child), 0);
         setActive(child);
     }
 
     private void childUpdated(Child child) {
-        // TODO
+        // TODO через презентер?
         accountHeader.updateProfile(mapToProfile(child));
     }
 
@@ -160,6 +160,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         // TODO: calculate age and print as formatted string
         return new ProfileDrawerItem()
                 .withName(child.getName())
+                .withNameShown(true)
                 .withEmail("age")
                 .withIdentifier(mapToProfileId(child))
                 .withIcon(mapToProfileIcon(child));
