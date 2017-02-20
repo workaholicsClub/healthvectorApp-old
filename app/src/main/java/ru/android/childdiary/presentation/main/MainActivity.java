@@ -42,8 +42,6 @@ import ru.android.childdiary.utils.UiUtils;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
         Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
-    private static final int REQUEST_PROFILE_EDIT = 1;
-
     private static final int PROFILE_SETTING_ADD = 1;
     private static final int PROFILE_SETTINGS_EDIT = 2;
     private static final int PROFILE_SETTINGS_USER = 10;
@@ -57,7 +55,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private AccountHeader accountHeader;
     private Drawer drawer;
 
-    public static Intent getIntent(Context context, Child lastActiveChild) {
+    public static Intent getIntent(Context context, @Nullable Child lastActiveChild) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_CHILD, lastActiveChild);
         return intent;
@@ -107,19 +105,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void editChild(@NonNull Child child) {
+    public void editChild(@Nullable Child child) {
         navigateToProfileEdit(child);
-    }
-
-    private void childAdded(Child child) {
-        // TODO через презентер?
-        accountHeader.addProfile(mapToProfile(child), 0);
-        setActive(child);
-    }
-
-    private void childUpdated(Child child) {
-        // TODO через презентер?
-        accountHeader.updateProfile(mapToProfile(child));
     }
 
     @Override
@@ -270,22 +257,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         }
     }
 
-    protected final void navigateToProfileEdit(@Nullable Child child) {
+    private void navigateToProfileEdit(@Nullable Child child) {
         Intent intent = ProfileEditActivity.getIntent(this, child);
-        startActivityForResult(intent, REQUEST_PROFILE_EDIT);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_PROFILE_EDIT) {
-            if (resultCode == ProfileEditActivity.RESULT_ADDED) {
-                Child child = data.getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-                childAdded(child);
-            } else if (resultCode == ProfileEditActivity.RESULT_UPDATED) {
-                Child child = data.getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-                childUpdated(child);
-            }
-        }
+        startActivity(intent);
     }
 }

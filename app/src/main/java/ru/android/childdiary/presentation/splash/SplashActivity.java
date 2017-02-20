@@ -33,7 +33,7 @@ public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements 
         navigateToMain(lastActiveChild);
     }
 
-    private final void navigateToMain(Child lastActiveChild) {
+    private final void navigateToMain(@Nullable Child lastActiveChild) {
         Intent intent = MainActivity.getIntent(this, lastActiveChild);
         startActivity(intent);
     }

@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
+import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -21,15 +22,21 @@ public class ChildDbService implements ChildService {
         this.dataStore = dataStore;
     }
 
-    @Override
-    public Observable<List<Child>> getAll() {
-        // TODO: make reactive
-        return dataStore.select(ChildEntity.class)
-                .orderBy(ChildEntity.NAME)
-                .get().observable()
+    private static Observable<List<Child>> mapReactiveResult(ReactiveResult<ChildEntity> reactiveResult) {
+        return reactiveResult
+                .observable()
                 .map(ChildMapper::map)
                 .toList()
                 .toObservable();
+    }
+
+    @Override
+    public Observable<List<Child>> getAll() {
+        return dataStore.select(ChildEntity.class)
+                .orderBy(ChildEntity.NAME)
+                .get()
+                .observableResult()
+                .flatMap(ChildDbService::mapReactiveResult);
     }
 
     @Override

@@ -19,8 +19,8 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Inject
     ChildInteractor childInteractor;
 
-    private Child activeChild;
     private List<Child> childList;
+    private Child activeChild;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -38,9 +38,11 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     private void onChildListLoaded(List<Child> childList) {
+        logger.debug("onChildListLoaded");
         // TODO: брать активный профиль из настроек
-        activeChild = childList.isEmpty() ? null : childList.get(0);
         this.childList = childList;
+
+        activeChild = childList.isEmpty() ? null : childList.get(0);
         getViewState().childListLoaded(activeChild, childList);
         if (childList.isEmpty()) {
             getViewState().addChild();
