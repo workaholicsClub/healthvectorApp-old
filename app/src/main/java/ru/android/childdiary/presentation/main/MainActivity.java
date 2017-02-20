@@ -87,6 +87,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                         .paddingDp(5)
                         .colorRes(R.color.material_drawer_dark_primary_text))
                 .withIdentifier(PROFILE_SETTING_ADD));
+        profiles.add(new ProfileSettingDrawerItem()
+                .withName(getString(R.string.edit_child))
+                .withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_edit)
+                        .actionBar()
+                        .paddingDp(5)
+                        .colorRes(R.color.material_drawer_dark_primary_text))
+                .withIdentifier(PROFILE_SETTINGS_EDIT));
 
         buildUi(headerColor, profiles);
     }

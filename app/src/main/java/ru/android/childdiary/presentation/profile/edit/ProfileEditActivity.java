@@ -122,11 +122,22 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             actionBar.setTitle(getString(R.string.add_child));
             buttonDone.setText(getString(R.string.add));
         } else {
-            actionBar.setTitle(getString(R.string.update_child));
+            actionBar.setTitle(getString(R.string.edit_child));
             buttonDone.setText(getString(R.string.save));
         }
 
         Icepick.restoreInstanceState(this, savedInstanceState);
+
+        if (savedInstanceState == null && child != null) {
+            String imageFileName = child.getImageFileName();
+            imageFileUri = imageFileName == null ? null : Uri.fromFile(new File(imageFileName));
+            birthDate = child.getBirthDate();
+            birthTime = child.getBirthTime();
+
+            editChildName.setText(child.getName());
+            editBirthHeight.setText(Double.toString(child.getHeight()));
+            editBirthWeight.setText(Double.toString(child.getWeight()));
+        }
 
         setupImage();
         setupDate();

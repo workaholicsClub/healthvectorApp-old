@@ -11,9 +11,9 @@
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_help">Помощь</string>
     <string name="add_child">Добавить профиль</string>
-    <string name="update_child">Редактировать профиль</string>
-    <string name="save">Сохранить</string>
+    <string name="edit_child">Редактировать профиль</string>
     <string name="add">Добавить</string>
+    <string name="save">Сохранить</string>
     <string name="sex">Пол</string>
     <string name="child_name">Имя ребенка</string>
     <string name="birth_date_and_time">Дата и время рождения</string>

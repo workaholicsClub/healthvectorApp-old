@@ -63,6 +63,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         if (child == null) {
             logger.warn("editChild: child with id=" + id + " not found");
         }
+        activeChild = child;
         getViewState().setActive(child);
     }
 }
