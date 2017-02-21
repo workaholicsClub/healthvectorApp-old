@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbar_elevation">4dp</dimen>
-    <dimen name="profile_top_panel_height">200dp</dimen>
+    <dimen name="profile_top_panel_height">170dp</dimen>
     <dimen name="profile_margin">20dp</dimen>
     <dimen name="profile_rounded_image_size">100dp</dimen>
     <dimen name="spinner_height">60dp</dimen>

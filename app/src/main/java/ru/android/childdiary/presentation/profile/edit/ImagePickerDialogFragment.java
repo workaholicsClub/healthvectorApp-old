@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.view.View;
@@ -78,7 +79,10 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
                 pickImage();
                 break;
             case 2:
-                // TODO: remove
+                dismiss();
+                if (listener != null) {
+                    listener.onSetImage(null);
+                }
                 break;
         }
     }
@@ -225,6 +229,6 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
     }
 
     public interface Listener {
-        void onSetImage(File resultFile);
+        void onSetImage(@Nullable File resultFile);
     }
 }

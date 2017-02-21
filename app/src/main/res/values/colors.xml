@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryBoy">#3F51B5</color>
-    <color name="colorPrimaryDarkBoy">#303F9F</color>
-    <color name="colorAccentBoy">#FF4081</color>
-    <color name="colorPrimaryGirl">#FF4081</color>
-    <color name="colorPrimaryDarkGirl">#303F9F</color>
-    <color name="colorAccentGirl">#3F51B5</color>
+    <color name="colorPrimaryBoy">#26A6F6</color>
+    <color name="colorPrimaryDarkBoy">#4288B4</color>
+    <color name="colorAccentBoy">#4288B4</color>
+    <color name="colorPrimaryGirl">#26A6F6</color>
+    <color name="colorPrimaryDarkGirl">#4288B4</color>
+    <color name="colorAccentGirl">#4288B4</color>
 </resources>

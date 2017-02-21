@@ -2,9 +2,9 @@
 <resources>
 
     <style name="AppTheme" parent="@style/MaterialDrawerTheme.Light">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimaryBoy</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBoy</item>
+        <item name="colorAccent">@color/colorAccentBoy</item>
     </style>
 
     <style name="AppTheme.Boy" parent="AppTheme">
@@ -20,8 +20,13 @@
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimaryBoy</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBoy</item>
+        <item name="colorAccent">@color/colorAccentBoy</item>
+    </style>
+
+    <style name="FieldDescriptionStyle">
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">12sp</item>
     </style>
 </resources>

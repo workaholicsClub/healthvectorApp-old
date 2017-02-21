@@ -24,9 +24,13 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
 import java.util.Calendar;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,6 +39,7 @@ import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -42,15 +47,20 @@ import ru.android.childdiary.utils.UiUtils;
 
 public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener {
-    public static final int RESULT_ADDED = RESULT_FIRST_USER + 1;
-    public static final int RESULT_UPDATED = RESULT_FIRST_USER + 2;
-
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
 
     @InjectPresenter
     ProfileEditPresenter presenter;
+
+    @Inject
+    @Named(ApplicationModule.DATE_FORMATTER)
+    DateTimeFormatter dateFormatter;
+
+    @Inject
+    @Named(ApplicationModule.TIME_FORMATTER)
+    DateTimeFormatter timeFormatter;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -140,6 +150,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             editChildName.setText(child.getName());
             editBirthHeight.setText(Double.toString(child.getHeight()));
             editBirthWeight.setText(Double.toString(child.getWeight()));
+
+            editChildName.setSelection(child.getName().length());
         }
 
         setupImage();
@@ -209,42 +221,34 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @Override
     public void childAdded(Child child) {
-        Intent data = new Intent();
-        data.putExtra(ExtraConstants.EXTRA_CHILD, child);
-        setResult(RESULT_ADDED, data);
         finish();
     }
 
     @Override
     public void childUpdated(Child child) {
-        Intent data = new Intent();
-        data.putExtra(ExtraConstants.EXTRA_CHILD, child);
-        setResult(RESULT_UPDATED, data);
         finish();
     }
 
     @OnClick(R.id.buttonDate)
     void onDateClick() {
-        Calendar now = Calendar.getInstance();
-        DatePickerDialog dpd = DatePickerDialog.newInstance(
-                this,
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-        );
+        Calendar calendar = Calendar.getInstance();
+        if (birthDate != null) {
+            calendar.setTime(birthDate.toDate());
+        }
+        DatePickerDialog dpd = DatePickerDialog.newInstance(this,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(false);
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
     }
 
     @OnClick(R.id.buttonTime)
     void onTimeClick() {
-        Calendar now = Calendar.getInstance();
-        TimePickerDialog tpd = TimePickerDialog.newInstance(
-                this,
-                now.get(Calendar.HOUR_OF_DAY),
-                now.get(Calendar.MINUTE),
-                DateFormat.is24HourFormat(this)
-        );
+        LocalTime time = birthTime == null ? LocalTime.now() : birthTime;
+        boolean is24HourFormat = DateFormat.is24HourFormat(this);
+        TimePickerDialog tpd = TimePickerDialog.newInstance(this,
+                time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
         tpd.vibrate(false);
         tpd.show(getFragmentManager(), TAG_TIME_PICKER);
     }
@@ -280,21 +284,29 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     @Override
-    public void onSetImage(File resultFile) {
-        imageFileUri = Uri.fromFile(resultFile);
+    public void onSetImage(@Nullable File resultFile) {
+        imageFileUri = resultFile == null ? null : Uri.fromFile(resultFile);
         setupImage();
     }
 
     private void setupDate() {
-        buttonDate.setText(birthDate == null ? getString(R.string.date) : birthDate.toString());
+        buttonDate.setText(birthDate == null
+                ? getString(R.string.date)
+                : birthDate.toString(dateFormatter));
     }
 
     private void setupTime() {
-        buttonTime.setText(birthTime == null ? getString(R.string.time) : birthTime.toString());
+        buttonTime.setText(birthTime == null
+                ? getString(R.string.time)
+                : birthTime.toString(timeFormatter));
     }
 
     private void setupImage() {
-        imageViewPhoto.setImageURI(imageFileUri);
+        if (imageFileUri == null) {
+            imageViewPhoto.setImageURI(imageFileUri);
+        } else {
+            imageViewPhoto.setImageDrawable(getResources().getDrawable(android.R.color.white));
+        }
         textViewAddPhoto.setVisibility(imageFileUri == null ? View.VISIBLE : View.GONE);
     }
 }
