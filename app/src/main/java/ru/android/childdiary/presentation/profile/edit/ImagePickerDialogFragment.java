@@ -70,7 +70,6 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        showToast(String.valueOf(position));
         switch (position) {
             case 0:
                 captureImage();

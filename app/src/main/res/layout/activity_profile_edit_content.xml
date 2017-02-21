@@ -17,7 +17,7 @@
             android:layout_height="@dimen/profile_rounded_image_size"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/profile_margin"
-            android:src="@android:color/white" />
+            android:src="@color/white" />
 
         <TextView
             android:id="@+id/textViewAddPhoto"
@@ -34,7 +34,8 @@
             android:text="@string/add_image_button_title" />
 
         <EditText
-            android:id="@+id/editChildName"
+            android:id="@+id/editTextChildName"
+            style="@style/WhiteEditTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -44,11 +45,10 @@
             android:layout_marginRight="@dimen/profile_margin"
             android:layout_toEndOf="@+id/imageViewPhoto"
             android:layout_toRightOf="@+id/imageViewPhoto"
+            android:background="@drawable/edit_text_white"
             android:hint="@string/child_name"
-            android:inputType="textPersonName|textAutoComplete"
-            android:nextFocusDown="@+id/editBirthHeight"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName|textAutoComplete" />
     </RelativeLayout>
 
     <TextView
@@ -65,7 +65,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/spinner_height"
         android:layout_marginLeft="@dimen/profile_margin"
-        android:layout_marginRight="@dimen/profile_margin" />
+        android:layout_marginRight="@dimen/profile_margin"
+        android:background="@drawable/spinner_ab_holo_light" />
 
     <TextView
         style="@style/FieldDescriptionStyle"
@@ -84,23 +85,27 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <Button
+        <TextView
             android:id="@+id/buttonDate"
             android:layout_width="0dp"
             android:layout_height="@dimen/spinner_height"
             android:layout_marginEnd="@dimen/profile_margin"
             android:layout_marginRight="@dimen/profile_margin"
             android:layout_weight="1"
+            android:background="@drawable/spinner_ab_holo_light"
             android:gravity="center_vertical"
-            android:text="@string/date" />
+            android:text="@string/date"
+            android:textAppearance="@style/DefaultTextStyle" />
 
-        <Button
+        <TextView
             android:id="@+id/buttonTime"
             android:layout_width="0dp"
             android:layout_height="@dimen/spinner_height"
             android:layout_weight="1"
+            android:background="@drawable/spinner_ab_holo_light"
             android:gravity="center_vertical"
-            android:text="@string/time" />
+            android:text="@string/time"
+            android:textAppearance="@style/DefaultTextStyle" />
     </LinearLayout>
 
     <TextView
@@ -121,22 +126,34 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editBirthHeight"
+            android:id="@+id/editTextBirthHeight"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/spinner_height"
             android:layout_marginEnd="@dimen/profile_margin"
             android:layout_marginRight="@dimen/profile_margin"
             android:layout_weight="1"
+            android:background="@drawable/spinner_ab_holo_light"
             android:hint="@string/enter_height"
+            android:imeOptions="actionNext"
             android:inputType="numberDecimal"
-            android:nextFocusDown="@+id/editBirthWeight" />
+            android:textAppearance="@style/DefaultTextStyle" />
 
         <EditText
-            android:id="@+id/editBirthWeight"
+            android:id="@+id/editTextBirthWeight"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/spinner_height"
             android:layout_weight="1"
+            android:background="@drawable/spinner_ab_holo_light"
             android:hint="@string/enter_weight"
-            android:inputType="numberDecimal" />
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:textAppearance="@style/DefaultTextStyle" />
+
+        <View
+            android:id="@+id/dummy"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
     </LinearLayout>
 </LinearLayout>

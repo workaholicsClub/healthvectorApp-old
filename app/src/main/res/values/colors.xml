@@ -6,4 +6,6 @@
     <color name="colorPrimaryGirl">#26A6F6</color>
     <color name="colorPrimaryDarkGirl">#4288B4</color>
     <color name="colorAccentGirl">#4288B4</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparentWhite">#DEFFFFFF</color>
 </resources>

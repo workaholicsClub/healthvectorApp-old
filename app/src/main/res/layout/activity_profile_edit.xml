@@ -17,6 +17,6 @@
     <Button
         android:id="@+id/buttonDone"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/spinner_height"
         android:text="@string/save" />
 </LinearLayout>

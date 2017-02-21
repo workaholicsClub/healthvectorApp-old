@@ -29,4 +29,12 @@
         <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="WhiteEditTextStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColorHint">@color/transparentWhite</item>
+    </style>
+
+    <style name="DefaultTextStyle" parent="@android:style/TextAppearance.Medium" />
 </resources>

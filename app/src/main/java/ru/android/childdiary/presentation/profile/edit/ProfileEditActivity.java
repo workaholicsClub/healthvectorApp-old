@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +45,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.utils.UiUtils;
+import ru.android.childdiary.utils.Utils;
 
 public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener {
@@ -74,23 +76,26 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @BindView(R.id.imageViewPhoto)
     ImageView imageViewPhoto;
 
-    @BindView(R.id.editChildName)
-    EditText editChildName;
+    @BindView(R.id.editTextChildName)
+    EditText editTextChildName;
 
     @BindView(R.id.buttonDate)
-    Button buttonDate;
+    TextView buttonDate;
 
     @BindView(R.id.buttonTime)
-    Button buttonTime;
+    TextView buttonTime;
 
-    @BindView(R.id.editBirthHeight)
-    EditText editBirthHeight;
+    @BindView(R.id.editTextBirthHeight)
+    EditText editTextBirthHeight;
 
-    @BindView(R.id.editBirthWeight)
-    EditText editBirthWeight;
+    @BindView(R.id.editTextBirthWeight)
+    EditText editTextBirthWeight;
 
     @BindView(R.id.spinnerSex)
     Spinner spinnerSex;
+
+    @BindView(R.id.dummy)
+    View dummy;
 
     @State
     Uri imageFileUri;
@@ -147,12 +152,32 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             birthDate = child.getBirthDate();
             birthTime = child.getBirthTime();
 
-            editChildName.setText(child.getName());
-            editBirthHeight.setText(Double.toString(child.getHeight()));
-            editBirthWeight.setText(Double.toString(child.getWeight()));
+            editTextChildName.setText(child.getName());
+            editTextBirthHeight.setText(Double.toString(child.getHeight()));
+            editTextBirthWeight.setText(Double.toString(child.getWeight()));
 
-            editChildName.setSelection(child.getName().length());
+            editTextChildName.setSelection(editTextChildName.getText().length());
         }
+
+        editTextBirthWeight.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                editTextBirthHeight.setSelection(editTextBirthHeight.getText().length());
+            }
+        });
+        editTextBirthWeight.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                editTextBirthWeight.setSelection(editTextBirthWeight.getText().length());
+            }
+        });
+        editTextBirthWeight.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                Utils.hideKeyboard(this, v);
+                v.clearFocus();
+                dummy.requestFocus();
+                return true;
+            }
+            return false;
+        });
 
         setupImage();
         setupDate();
@@ -202,9 +227,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         // TODO: validation
         // необязательные параметры: время и дата рождения
         try {
-            String name = editChildName.getText().toString();
-            double height = Double.parseDouble(editBirthHeight.getText().toString());
-            double weight = Double.parseDouble(editBirthWeight.getText().toString());
+            String name = editTextChildName.getText().toString();
+            double height = Double.parseDouble(editTextBirthHeight.getText().toString());
+            double weight = Double.parseDouble(editTextBirthWeight.getText().toString());
             Sex sex = getSexFromSpinnerPosition();
             String imageFileName = imageFileUri == null ? null : imageFileUri.getPath();
             builder.name(name)
@@ -303,9 +328,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     private void setupImage() {
         if (imageFileUri == null) {
-            imageViewPhoto.setImageURI(imageFileUri);
-        } else {
             imageViewPhoto.setImageDrawable(getResources().getDrawable(android.R.color.white));
+        } else {
+            imageViewPhoto.setImageURI(imageFileUri);
         }
         textViewAddPhoto.setVisibility(imageFileUri == null ? View.VISIBLE : View.GONE);
     }
