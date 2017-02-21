@@ -26,14 +26,12 @@ public class AntropometryDbService implements AntropometryService {
 
     @Override
     public Observable<List<Antropometry>> getAll(Child child) {
-        // TODO: make reactive
         return dataStore.select(AntropometryEntity.class)
                 .where(AntropometryEntity.CHILD_ID.eq(child.getId()))
                 .orderBy(AntropometryEntity.DATE)
-                .get().observable()
-                .map(AntropometryMapper::map)
-                .toList()
-                .toObservable();
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResult(reactiveResult, AntropometryMapper::map));
     }
 
     @Override
