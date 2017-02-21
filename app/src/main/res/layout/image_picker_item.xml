@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
-    style="?android:attr/spinnerDropDownItemStyle"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/spinner_height"
-    android:ellipsize="marquee"
-    android:gravity="center_vertical"
-    android:maxLines="1"
-    android:textAlignment="inherit"
-    android:textAppearance="@style/DefaultTextStyle" />
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@android:id/text1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_height"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingLeft="4dp"
+        android:textAlignment="inherit"
+        android:textAppearance="@style/DefaultTextAppearance" />
+</RelativeLayout>

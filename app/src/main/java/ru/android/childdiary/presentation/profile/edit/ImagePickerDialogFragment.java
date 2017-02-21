@@ -49,7 +49,6 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         ListView listView = new ListView(getActivity());
-        String[] items = getResources().getStringArray(R.array.image_picker_actions);
         ArrayAdapter adapter = new ImagePickerArrayAdapter(getActivity());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);

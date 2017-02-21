@@ -36,6 +36,7 @@
     <string name="failed_to_save_result_file">При сохранении файла произошла ошибка</string>
     <string name="crop_image_title">Обрезать фото</string>
     <string-array name="sex_variants">
+        <item>Выберите пол</item>
         <item>Мужской</item>
         <item>Женский</item>
     </string-array>

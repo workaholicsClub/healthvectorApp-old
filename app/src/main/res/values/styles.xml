@@ -26,7 +26,7 @@
     </style>
 
     <style name="FieldDescriptionStyle">
-        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textColor">@color/disabledTextColor</item>
         <item name="android:textSize">12sp</item>
     </style>
 
@@ -34,7 +34,11 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColorHint">@color/transparentWhite</item>
+        <item name="android:background">@drawable/edit_text_background</item>
+        <item name="android:paddingBottom">6dp</item>
     </style>
 
-    <style name="DefaultTextStyle" parent="@android:style/TextAppearance.Medium" />
+    <style name="DefaultTextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@color/enabledTextColor</item>
+    </style>
 </resources>

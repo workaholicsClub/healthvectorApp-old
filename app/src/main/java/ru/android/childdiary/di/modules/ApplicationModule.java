@@ -32,7 +32,7 @@ public class ApplicationModule {
     @Singleton
     @Named(DATE_FORMATTER)
     public DateTimeFormatter provideDateFormat() {
-        return DateTimeFormat.longDate();
+        return DateTimeFormat.shortDate();
     }
 
     @Provides

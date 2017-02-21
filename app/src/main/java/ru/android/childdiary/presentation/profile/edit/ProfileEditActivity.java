@@ -12,7 +12,7 @@ import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -79,11 +79,11 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @BindView(R.id.editTextChildName)
     EditText editTextChildName;
 
-    @BindView(R.id.buttonDate)
-    TextView buttonDate;
+    @BindView(R.id.textViewDate)
+    TextView textViewDate;
 
-    @BindView(R.id.buttonTime)
-    TextView buttonTime;
+    @BindView(R.id.textViewTime)
+    TextView textViewTime;
 
     @BindView(R.id.editTextBirthHeight)
     EditText editTextBirthHeight;
@@ -130,11 +130,22 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.sex_variants, R.layout.spinner_item);
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        SpinnerSexArrayAdapter adapter = new SpinnerSexArrayAdapter(this, child == null);
         spinnerSex.setAdapter(adapter);
         setSexSpinnerPosition(child);
+        spinnerSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Sex sex = getSexFromSpinnerPosition();
+                if (sex != null && adapter.hideDefault()) {
+                    setSexSpinnerPosition(Child.builder().sex(sex).build());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         if (child == null) {
             actionBar.setTitle(getString(R.string.add_child));
@@ -201,15 +212,30 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     private void setSexSpinnerPosition(Child child) {
-        int position = -1;
+        int position = 0;
         if (child != null) {
-            position = child.getSex() == Sex.MALE ? 0 : 1;
+            position = child.getSex() == Sex.MALE ? 1 : 2;
+        }
+        int count = spinnerSex.getAdapter().getCount();
+        if (count == 2) {
+            --position;
         }
         spinnerSex.setSelection(position);
     }
 
     private Sex getSexFromSpinnerPosition() {
-        return spinnerSex.getSelectedItemPosition() == 0 ? Sex.MALE : Sex.FEMALE;
+        int position = spinnerSex.getSelectedItemPosition();
+        int count = spinnerSex.getAdapter().getCount();
+        if (count == 2) {
+            ++position;
+        }
+        switch (position) {
+            case 1:
+                return Sex.MALE;
+            case 2:
+                return Sex.FEMALE;
+        }
+        return null;
     }
 
     @OnClick(R.id.buttonDone)
@@ -254,7 +280,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         finish();
     }
 
-    @OnClick(R.id.buttonDate)
+    @OnClick(R.id.textViewDate)
     void onDateClick() {
         Calendar calendar = Calendar.getInstance();
         if (birthDate != null) {
@@ -268,7 +294,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
     }
 
-    @OnClick(R.id.buttonTime)
+    @OnClick(R.id.textViewTime)
     void onTimeClick() {
         LocalTime time = birthTime == null ? LocalTime.now() : birthTime;
         boolean is24HourFormat = DateFormat.is24HourFormat(this);
@@ -315,15 +341,21 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     private void setupDate() {
-        buttonDate.setText(birthDate == null
+        textViewDate.setText(birthDate == null
                 ? getString(R.string.date)
                 : birthDate.toString(dateFormatter));
+        textViewDate.setTextColor(birthDate == null
+                ? getResources().getColor(R.color.disabledTextColor)
+                : getResources().getColor(R.color.enabledTextColor));
     }
 
     private void setupTime() {
-        buttonTime.setText(birthTime == null
+        textViewTime.setText(birthTime == null
                 ? getString(R.string.time)
                 : birthTime.toString(timeFormatter));
+        textViewTime.setTextColor(birthTime == null
+                ? getResources().getColor(R.color.disabledTextColor)
+                : getResources().getColor(R.color.enabledTextColor));
     }
 
     private void setupImage() {

@@ -8,4 +8,6 @@
     <color name="colorAccentGirl">#4288B4</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparentWhite">#DEFFFFFF</color>
+    <color name="enabledTextColor">@android:color/primary_text_light</color>
+    <color name="disabledTextColor">@android:color/darker_gray</color>
 </resources>
