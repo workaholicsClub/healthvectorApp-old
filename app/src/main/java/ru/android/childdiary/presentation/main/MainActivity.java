@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -69,6 +68,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
+    protected void setupToolbar() {
+        super.setupToolbar();
+        toolbar.setNavigationIcon(R.drawable.menu);
+        toolbar.setOverflowIcon(ThemeUtils.getDrawable(this, R.drawable.more));
+    }
+
+    @Override
     public void childListLoaded(@Nullable Child activeChild, List<Child> childList) {
         List<IProfile> profiles = Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList());
         profiles.add(new ProfileSettingDrawerItem()
@@ -119,9 +125,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    protected void themeChanged() {
-        super.themeChanged();
-        accountHeader.setBackground(ThemeUtils.getHeaderDrawable(this, sex));
+    protected void themeChangedCustom() {
+        if (accountHeader != null) {
+            accountHeader.setBackground(ThemeUtils.getHeaderDrawable(this, sex));
+        }
     }
 
     @Override
@@ -141,6 +148,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         } else if (itemId == PROFILE_SETTINGS_EDIT) {
             presenter.editChild();
         } else if (itemId == PROFILE_SETTINGS_DELETE) {
+            // TODO: confirmation alert dialog
             presenter.deleteChild();
         }
 
@@ -154,7 +162,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withNameShown(true)
                 .withEmail("age")
                 .withIdentifier(mapToProfileId(child))
-                .withIcon(mapToProfileIcon(child));
+                .withIcon(ThemeUtils.getChildIcon(this, child));
     }
 
     private long mapToProfileId(@NonNull Child child) {
@@ -163,13 +171,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     private long mapToChildId(IProfile profile) {
         return profile.getIdentifier() - PROFILE_SETTINGS_USER;
-    }
-
-    private Drawable mapToProfileIcon(@NonNull Child child) {
-        if (child.getImageFileName() == null) {
-            return ThemeUtils.getChildDefaultIcon(this, child.getSex());
-        }
-        return Drawable.createFromPath(child.getImageFileName());
     }
 
     private void buildUi(List<IProfile> profiles) {
@@ -188,7 +189,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void buildDrawer() {
-        // TODO: setup toolbar
         drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -220,6 +220,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                                 .withOnDrawerItemClickListener(this)
                 )
                 .build();
+        setupToolbar();
     }
 
     @Override

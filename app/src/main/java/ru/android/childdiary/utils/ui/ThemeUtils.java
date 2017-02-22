@@ -15,6 +15,7 @@ import java.util.Map;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 public class ThemeUtils {
     private static final Map<Sex, ThemeInfo> map = new HashMap<>();
@@ -61,28 +62,57 @@ public class ThemeUtils {
     }
 
     @ColorInt
-    public static int getColorPrimary(Context context, @Nullable Sex sex) {
+    private static int getColorPrimary(Context context, @Nullable Sex sex) {
         return getColor(context, getColorPrimaryRes(sex));
     }
 
     @ColorInt
-    public static int getColorPrimaryDark(Context context, @Nullable Sex sex) {
+    private static int getColorPrimaryDark(Context context, @Nullable Sex sex) {
         return getColor(context, getColorPrimaryDarkRes(sex));
     }
 
     @ColorInt
-    public static int getColorAccent(Context context, @Nullable Sex sex) {
+    private static int getColorAccent(Context context, @Nullable Sex sex) {
         return getColor(context, getColorAccentRes(sex));
     }
 
     @ColorInt
-    static int getColor(Context context, @ColorRes int colorResId) {
+    public static int getColor(Context context, @ColorRes int colorResId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return ContextCompat.getColor(context, colorResId);
         } else {
             //noinspection deprecation
             return context.getResources().getColor(colorResId);
         }
+    }
+
+    public static Drawable getDrawable(Context context, @DrawableRes int drawableResId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return ContextCompat.getDrawable(context, drawableResId);
+        } else {
+            //noinspection deprecation
+            return context.getResources().getDrawable(drawableResId);
+        }
+    }
+
+    @ColorInt
+    public static int getToolbarColor(Context context, @Nullable Sex sex) {
+        return getColorPrimary(context, sex);
+    }
+
+    @ColorInt
+    public static int getStatusBarColor(Context context, @Nullable Sex sex) {
+        return getColorPrimaryDark(context, sex);
+    }
+
+    public static Drawable getChildIcon(Context context, @Nullable Child child) {
+        if (child == null) {
+            return getChildDefaultIcon(context, null);
+        }
+        if (child.getImageFileName() == null) {
+            return getChildDefaultIcon(context, child.getSex());
+        }
+        return Drawable.createFromPath(child.getImageFileName());
     }
 
     public static Drawable getChildDefaultIcon(Context context, @Nullable Sex sex) {
@@ -99,12 +129,19 @@ public class ThemeUtils {
         return getColorPrimaryRes(sex);
     }
 
-    public static Drawable getDrawable(Context context, @DrawableRes int drawableResId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return ContextCompat.getDrawable(context, drawableResId);
-        } else {
-            //noinspection deprecation
-            return context.getResources().getDrawable(drawableResId);
+    @DrawableRes
+    public static int getButtonBackgroundRes(Context context, @Nullable Sex sex) {
+        if (sex == null) {
+            return R.drawable.button_background;
+        }
+
+        switch (sex) {
+            case MALE:
+                return R.drawable.button_background_boy;
+            case FEMALE:
+                return R.drawable.button_background_girl;
+            default:
+                return R.drawable.button_background;
         }
     }
 }

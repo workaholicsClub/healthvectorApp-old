@@ -27,15 +27,30 @@
         <item name="android:textColorHint">@color/transparentWhite</item>
         <item name="android:background">@drawable/name_edit_text_background</item>
         <item name="android:paddingBottom">@dimen/name_edit_text_padding_bottom</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/button_background_boy</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
+
+    <style name="ToolbarTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="PrimaryTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/primary_text</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text_size_base</item>
     </style>
 
     <style name="SecondaryTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/secondary_text</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
     </style>
 </resources>

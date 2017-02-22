@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -37,32 +36,42 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     protected Sex sex;
 
-    protected void setSex(@Nullable Child child) {
+    protected final void setSex(@Nullable Child child) {
         Sex sex = child == null ? null : child.getSex();
         setSex(sex);
     }
 
-    protected void setSex(@Nullable Sex sex) {
+    protected final void setSex(@Nullable Sex sex) {
         if (this.sex != sex) {
             this.sex = sex;
             themeChanged();
         }
     }
 
-    @CallSuper
-    protected void themeChanged() {
+    private void themeChanged() {
         if (toolbar != null) {
-            toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
+            toolbar.setBackgroundColor(ThemeUtils.getToolbarColor(this, sex));
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
+            getWindow().setStatusBarColor(ThemeUtils.getStatusBarColor(this, sex));
         }
+        themeChangedCustom();
+    }
+
+    protected void themeChangedCustom() {
+    }
+
+    protected void beforeThemeSetup() {
     }
 
     protected abstract void injectActivity(ApplicationComponent applicationComponent);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Icepick.restoreInstanceState(this, savedInstanceState);
+
+        beforeThemeSetup();
+
         if (sex == null) {
             sex = (Sex) getIntent().getSerializableExtra(ExtraConstants.EXTRA_SEX);
             if (sex == null) {
@@ -74,8 +83,6 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         setTheme(ThemeUtils.getTheme(sex));
         super.onCreate(savedInstanceState);
         logger.debug("onCreate");
-
-        Icepick.restoreInstanceState(this, savedInstanceState);
 
         setupDagger();
     }
@@ -90,7 +97,11 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
         setupToolbar();
+        themeChangedCustom();
     }
 
     private void setupDagger() {
@@ -98,19 +109,11 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         injectActivity(component);
     }
 
-    private void setupToolbar() {
+    @CallSuper
+    protected void setupToolbar() {
         if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            setupToolbar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
-            setupActionBar(actionBar);
+            toolbar.setTitleTextAppearance(this, R.style.ToolbarTextAppearance);
         }
-    }
-
-    protected void setupToolbar(Toolbar toolbar) {
-    }
-
-    protected void setupActionBar(ActionBar actionBar) {
     }
 
     @Override

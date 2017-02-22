@@ -19,8 +19,8 @@ public class WidgetUtils {
     }
 
     public static void setupCropActivityToolbar(Context context, UCrop.Options options, @Nullable Sex sex) {
-        options.setToolbarColor(ThemeUtils.getColorPrimary(context, sex));
-        options.setStatusBarColor(ThemeUtils.getColorPrimaryDark(context, sex));
+        options.setToolbarColor(ThemeUtils.getToolbarColor(context, sex));
+        options.setStatusBarColor(ThemeUtils.getStatusBarColor(context, sex));
         options.setToolbarTitle(context.getString(R.string.crop_image_title));
     }
 }

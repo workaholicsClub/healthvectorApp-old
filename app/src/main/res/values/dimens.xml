@@ -10,5 +10,10 @@
     <dimen name="name_edit_text_padding_bottom">6dp</dimen>
     <dimen name="name_edit_text_stroke_width">1dp</dimen>
     <dimen name="name_edit_text_stroke_width_negative">-2dp</dimen>
-    <dimen name="button_height">60dp</dimen>
+    <dimen name="button_height">54dp</dimen>
+    <dimen name="button_corner_radius">20dp</dimen>
+    <!-- text sizes -->
+    <dimen name="text_size_large">20sp</dimen>
+    <dimen name="text_size_base">16sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
 </resources>

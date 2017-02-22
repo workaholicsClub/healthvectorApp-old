@@ -7,6 +7,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -32,7 +35,6 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import icepick.Icepick;
 import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -113,14 +115,19 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     @Override
+    protected void beforeThemeSetup() {
+        if (editedChild != null) {
+            sex = editedChild.getSex();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
         if (savedInstanceState == null) {
             editedChild = child == null ? Child.builder().build() : Child.getBuilder(child).build();
         }
 
-        Icepick.restoreInstanceState(this, savedInstanceState);
-        sex = editedChild.getSex();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_edit);
 
@@ -134,7 +141,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             }
         });
 
-        setupTopPanel();
         setupEditTextViews();
         setupSpinnerSex();
         setupImage();
@@ -146,10 +152,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     public void onSaveInstanceState(Bundle outState) {
         editedChild = buildChild();
         super.onSaveInstanceState(outState);
-    }
-
-    private void setupTopPanel() {
-        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(this, sex));
     }
 
     private void setupEditTextViews() {
@@ -205,9 +207,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     @Override
-    protected void themeChanged() {
-        super.themeChanged();
-        setupTopPanel();
+    protected void themeChangedCustom() {
+        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(this, sex));
+        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(this, sex));
     }
 
     private void setupImage() {
@@ -324,5 +326,23 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void childUpdated(Child child) {
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_close:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
