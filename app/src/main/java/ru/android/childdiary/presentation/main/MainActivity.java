@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,7 +29,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.List;
 
-import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -38,7 +36,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
-import ru.android.childdiary.utils.UiUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
         Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
@@ -49,15 +47,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @InjectPresenter
     MainPresenter presenter;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
     private AccountHeader accountHeader;
     private Drawer drawer;
 
-    public static Intent getIntent(Context context, @Nullable Child lastActiveChild) {
+    public static Intent getIntent(Context context, @Nullable Sex sex) {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_CHILD, lastActiveChild);
+        intent.putExtra(ExtraConstants.EXTRA_SEX, sex);
         return intent;
     }
 
@@ -68,18 +63,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Child lastActiveChild = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-        setTheme(UiUtils.getPreferredTheme(lastActiveChild));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        setSupportActionBar(toolbar);
     }
 
     @Override
     public void childListLoaded(@Nullable Child activeChild, List<Child> childList) {
-        Drawable headerColor = UiUtils.getPreferredAccountHeaderColor(this, activeChild);
-
         List<IProfile> profiles = Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList());
         profiles.add(new ProfileSettingDrawerItem()
                 .withName(getString(R.string.add_child))
@@ -96,7 +85,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                         .colorRes(R.color.material_drawer_dark_primary_text))
                 .withIdentifier(PROFILE_SETTINGS_EDIT));
 
-        buildUi(headerColor, profiles);
+        buildUi(profiles);
+        setActive(activeChild);
     }
 
     @Override
@@ -111,15 +101,19 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void setActive(@Nullable Child child) {
-        // TODO: switch theme and color if needed
-        Drawable headerColor = UiUtils.getPreferredAccountHeaderColor(this, child);
-        accountHeader.setBackground(headerColor);
+        setSex(child);
         if (child == null) {
             getSupportActionBar().setTitle(R.string.app_name);
         } else {
             accountHeader.setActiveProfile(mapToProfileId(child));
             getSupportActionBar().setTitle(child.getName());
         }
+    }
+
+    @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        accountHeader.setBackground(ThemeUtils.getHeaderDrawable(this, getSex()));
     }
 
     @Override
@@ -162,36 +156,32 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private Drawable mapToProfileIcon(@NonNull Child child) {
-        // TODO: default icon for girl and boy
         if (child.getImageFileName() == null) {
-            if (child.getSex() == Sex.MALE) {
-                return getResources().getDrawable(R.color.colorPrimaryDarkBoy);
-            } else {
-                return getResources().getDrawable(R.color.colorPrimaryDarkGirl);
-            }
+            return ThemeUtils.getChildDefaultIcon(this, child.getSex());
         }
         return Drawable.createFromPath(child.getImageFileName());
     }
 
-    private void buildUi(Drawable headerColor, List<IProfile> profiles) {
-        buildHeader(headerColor, profiles);
+    private void buildUi(List<IProfile> profiles) {
+        buildHeader(profiles);
         buildDrawer();
     }
 
-    private void buildHeader(Drawable headerColor, List<IProfile> profiles) {
+    private void buildHeader(List<IProfile> profiles) {
         accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withCompactStyle(false)
                 .withOnAccountHeaderListener(this)
-                .withHeaderBackground(headerColor)
+                .withHeaderBackground(ThemeUtils.getHeaderDrawable(this, getSex()))
                 .addProfiles(profiles.toArray(new IProfile[profiles.size()]))
                 .build();
     }
 
     private void buildDrawer() {
+        // TODO: setup toolbar
         drawer = new DrawerBuilder()
                 .withActivity(this)
-                .withToolbar(toolbar)
+                .withToolbar(getToolbar())
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(
                         new PrimaryDrawerItem()

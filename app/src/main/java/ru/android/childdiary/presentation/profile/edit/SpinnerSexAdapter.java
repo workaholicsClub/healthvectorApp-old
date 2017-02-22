@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,12 +17,14 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.utils.ui.WidgetUtils;
 
-class SpinnerSexArrayAdapter extends ArrayAdapter<String> {
+class SpinnerSexAdapter extends ArrayAdapter<String> {
     private final List<String> items = new ArrayList<>();
     private boolean showDefault;
 
-    public SpinnerSexArrayAdapter(Context context, boolean showDefault) {
+    public SpinnerSexAdapter(Context context, boolean showDefault) {
         super(context, R.layout.spinner_item);
         items.addAll(Arrays.asList(context.getResources().getStringArray(R.array.sex_variants)));
         this.showDefault = showDefault;
@@ -61,8 +64,8 @@ class SpinnerSexArrayAdapter extends ArrayAdapter<String> {
         return items.get(position);
     }
 
-    @Override
     @NonNull
+    @Override
     public View getView(int position, @Nullable View contentView, @NonNull ViewGroup viewGroup) {
         return getView(position, contentView, false);
     }
@@ -81,13 +84,34 @@ class SpinnerSexArrayAdapter extends ArrayAdapter<String> {
 
         TextView textView = ButterKnife.findById(v, android.R.id.text1);
         textView.setText(getItem(position));
-
-        if (showDefault && !isDropDownView && position == 0) {
-            textView.setTextColor(getContext().getResources().getColor(R.color.disabledTextColor));
-        } else {
-            textView.setTextColor(getContext().getResources().getColor(R.color.enabledTextColor));
-        }
+        boolean disabled = showDefault && !isDropDownView && position == 0;
+        WidgetUtils.setTextEnabled(textView, !disabled);
 
         return v;
+    }
+
+    public void setSexSpinnerPosition(Spinner attachedSpinner, @Nullable Sex sex) {
+        int position = 0;
+        if (sex != null) {
+            position = sex == Sex.MALE ? 1 : 2;
+        }
+        if (!showDefault) {
+            --position;
+        }
+        attachedSpinner.setSelection(position);
+    }
+
+    public Sex getSexSpinnerPosition(Spinner attachedSpinner) {
+        int position = attachedSpinner.getSelectedItemPosition();
+        if (!showDefault) {
+            ++position;
+        }
+        switch (position) {
+            case 1:
+                return Sex.MALE;
+            case 2:
+                return Sex.FEMALE;
+        }
+        return null;
     }
 }

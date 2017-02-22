@@ -6,10 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -44,8 +41,8 @@ import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.utils.UiUtils;
-import ru.android.childdiary.utils.Utils;
+import ru.android.childdiary.utils.KeyboardUtils;
+import ru.android.childdiary.utils.ui.WidgetUtils;
 
 public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener {
@@ -63,9 +60,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Inject
     @Named(ApplicationModule.TIME_FORMATTER)
     DateTimeFormatter timeFormatter;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
 
     @BindView(R.id.buttonDone)
     Button buttonDone;
@@ -93,19 +87,15 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @BindView(R.id.spinnerSex)
     Spinner spinnerSex;
-
     @BindView(R.id.dummy)
     View dummy;
-
     @State
     Uri imageFileUri;
-
     @State
     LocalDate birthDate;
-
     @State
     LocalTime birthTime;
-
+    private SpinnerSexAdapter spinnerSexAdapter;
     private Child child;
 
     public static Intent getIntent(Context context, @Nullable Child child) {
@@ -121,37 +111,18 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-        setTheme(UiUtils.getPreferredTheme(child));
+        Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_edit);
 
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        SpinnerSexArrayAdapter adapter = new SpinnerSexArrayAdapter(this, child == null);
-        spinnerSex.setAdapter(adapter);
-        setSexSpinnerPosition(child);
-        spinnerSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Sex sex = getSexFromSpinnerPosition();
-                if (sex != null && adapter.hideDefault()) {
-                    setSexSpinnerPosition(Child.builder().sex(sex).build());
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        setupSpinnerSex();
 
         if (child == null) {
-            actionBar.setTitle(getString(R.string.add_child));
+            getSupportActionBar().setTitle(getString(R.string.add_child));
             buttonDone.setText(getString(R.string.add));
         } else {
-            actionBar.setTitle(getString(R.string.edit_child));
+            getSupportActionBar().setTitle(getString(R.string.edit_child));
             buttonDone.setText(getString(R.string.save));
         }
 
@@ -182,7 +153,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         });
         editTextBirthWeight.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                Utils.hideKeyboard(this, v);
+                KeyboardUtils.hideKeyboard(this, v);
                 v.clearFocus();
                 dummy.requestFocus();
                 return true;
@@ -195,47 +166,33 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         setupTime();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
+    private void setupSpinnerSex() {
+        spinnerSexAdapter = new SpinnerSexAdapter(this, child == null);
+        spinnerSex.setAdapter(spinnerSexAdapter);
+        spinnerSexAdapter.setSexSpinnerPosition(spinnerSex, child == null ? null : child.getSex());
+        spinnerSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Sex sex = spinnerSexAdapter.getSexSpinnerPosition(spinnerSex);
+                // hideDefault() может поменять список пунктов,
+                // поэтому надо восстановить выбранную позицию
+                if (sex != null && spinnerSexAdapter.hideDefault()) {
+                    spinnerSexAdapter.setSexSpinnerPosition(spinnerSex, sex);
+                }
+                // меняем тему, если необходимо
+                setSex(sex);
+            }
 
-        return super.onOptionsItemSelected(item);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
-    }
-
-    private void setSexSpinnerPosition(Child child) {
-        int position = 0;
-        if (child != null) {
-            position = child.getSex() == Sex.MALE ? 1 : 2;
-        }
-        int count = spinnerSex.getAdapter().getCount();
-        if (count == 2) {
-            --position;
-        }
-        spinnerSex.setSelection(position);
-    }
-
-    private Sex getSexFromSpinnerPosition() {
-        int position = spinnerSex.getSelectedItemPosition();
-        int count = spinnerSex.getAdapter().getCount();
-        if (count == 2) {
-            ++position;
-        }
-        switch (position) {
-            case 1:
-                return Sex.MALE;
-            case 2:
-                return Sex.FEMALE;
-        }
-        return null;
+    protected void themeChanged() {
+        super.themeChanged();
+        // TODO: change top panel color
     }
 
     @OnClick(R.id.buttonDone)
@@ -256,7 +213,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             String name = editTextChildName.getText().toString();
             double height = Double.parseDouble(editTextBirthHeight.getText().toString());
             double weight = Double.parseDouble(editTextBirthWeight.getText().toString());
-            Sex sex = getSexFromSpinnerPosition();
+            Sex sex = spinnerSexAdapter.getSexSpinnerPosition(spinnerSex);
             String imageFileName = imageFileUri == null ? null : imageFileUri.getPath();
             builder.name(name)
                     .birthDate(birthDate)
@@ -307,7 +264,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @OnClick(R.id.imageViewPhoto)
     void onPhotoClick() {
         ImagePickerDialogFragment imagePicker = new ImagePickerDialogFragment();
-        imagePicker.show(getSupportFragmentManager(), TAG_DATE_PICKER);
+        imagePicker.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER, getSex());
     }
 
     @Override
@@ -344,18 +301,14 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         textViewDate.setText(birthDate == null
                 ? getString(R.string.date)
                 : birthDate.toString(dateFormatter));
-        textViewDate.setTextColor(birthDate == null
-                ? getResources().getColor(R.color.disabledTextColor)
-                : getResources().getColor(R.color.enabledTextColor));
+        WidgetUtils.setTextEnabled(textViewDate, birthDate != null);
     }
 
     private void setupTime() {
         textViewTime.setText(birthTime == null
                 ? getString(R.string.time)
                 : birthTime.toString(timeFormatter));
-        textViewTime.setTextColor(birthTime == null
-                ? getResources().getColor(R.color.disabledTextColor)
-                : getResources().getColor(R.color.enabledTextColor));
+        WidgetUtils.setTextEnabled(textViewTime, birthTime != null);
     }
 
     private void setupImage() {

@@ -6,10 +6,10 @@
     <TextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/spinner_height"
+        android:layout_height="@dimen/list_item_height"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:paddingLeft="4dp"
+        android:paddingLeft="@dimen/list_item_padding_left"
         android:textAlignment="inherit"
-        android:textAppearance="@style/DefaultTextAppearance" />
+        android:textAppearance="@style/PrimaryTextAppearance" />
 </RelativeLayout>

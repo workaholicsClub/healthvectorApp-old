@@ -21,7 +21,6 @@
 
         <TextView
             android:id="@+id/textViewAddPhoto"
-            style="@style/FieldDescriptionStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/imageViewPhoto"
@@ -31,11 +30,12 @@
             android:layout_alignStart="@+id/imageViewPhoto"
             android:layout_alignTop="@+id/imageViewPhoto"
             android:gravity="center"
-            android:text="@string/add_image_button_title" />
+            android:text="@string/add_image_button_title"
+            android:textAppearance="@style/SecondaryTextAppearance" />
 
         <EditText
             android:id="@+id/editTextChildName"
-            style="@style/WhiteEditTextStyle"
+            style="@style/NameEditTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -51,30 +51,30 @@
     </RelativeLayout>
 
     <TextView
-        style="@style/FieldDescriptionStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/profile_margin"
         android:layout_marginRight="@dimen/profile_margin"
         android:layout_marginTop="@dimen/profile_margin"
-        android:text="@string/sex" />
+        android:text="@string/sex"
+        android:textAppearance="@style/SecondaryTextAppearance" />
 
     <Spinner
         android:id="@+id/spinnerSex"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/spinner_height"
+        android:layout_height="@dimen/profile_field_height"
         android:layout_marginLeft="@dimen/profile_margin"
         android:layout_marginRight="@dimen/profile_margin"
         android:background="@drawable/spinner_background" />
 
     <TextView
-        style="@style/FieldDescriptionStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/profile_margin"
         android:layout_marginRight="@dimen/profile_margin"
         android:layout_marginTop="@dimen/profile_margin"
-        android:text="@string/birth_date_and_time" />
+        android:text="@string/birth_date_and_time"
+        android:textAppearance="@style/SecondaryTextAppearance" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -87,36 +87,36 @@
         <TextView
             android:id="@+id/textViewDate"
             android:layout_width="0dp"
-            android:layout_height="@dimen/spinner_height"
+            android:layout_height="@dimen/profile_field_height"
             android:layout_marginEnd="@dimen/profile_margin"
             android:layout_marginRight="@dimen/profile_margin"
             android:layout_weight="1"
             android:background="@drawable/spinner_background"
             android:gravity="center_vertical"
             android:text="@string/date"
-            android:textAppearance="@style/DefaultTextAppearance"
-            android:textColor="@color/disabledTextColor" />
+            android:textAppearance="@style/PrimaryTextAppearance"
+            android:textColor="@color/secondary_text" />
 
         <TextView
             android:id="@+id/textViewTime"
             android:layout_width="0dp"
-            android:layout_height="@dimen/spinner_height"
+            android:layout_height="@dimen/profile_field_height"
             android:layout_weight="1"
             android:background="@drawable/spinner_background"
             android:gravity="center_vertical"
             android:text="@string/time"
-            android:textAppearance="@style/DefaultTextAppearance"
-            android:textColor="@color/disabledTextColor" />
+            android:textAppearance="@style/PrimaryTextAppearance"
+            android:textColor="@color/secondary_text" />
     </LinearLayout>
 
     <TextView
-        style="@style/FieldDescriptionStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/profile_margin"
         android:layout_marginRight="@dimen/profile_margin"
         android:layout_marginTop="@dimen/profile_margin"
-        android:text="@string/birth_height_and_weight" />
+        android:text="@string/birth_height_and_weight"
+        android:textAppearance="@style/SecondaryTextAppearance" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -129,7 +129,7 @@
         <EditText
             android:id="@+id/editTextBirthHeight"
             android:layout_width="0dp"
-            android:layout_height="@dimen/spinner_height"
+            android:layout_height="@dimen/profile_field_height"
             android:layout_marginEnd="@dimen/profile_margin"
             android:layout_marginRight="@dimen/profile_margin"
             android:layout_weight="1"
@@ -137,20 +137,20 @@
             android:hint="@string/enter_height"
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
-            android:textAppearance="@style/DefaultTextAppearance"
-            android:textColorHint="@color/disabledTextColor" />
+            android:textAppearance="@style/PrimaryTextAppearance"
+            android:textColorHint="@color/secondary_text" />
 
         <EditText
             android:id="@+id/editTextBirthWeight"
             android:layout_width="0dp"
-            android:layout_height="@dimen/spinner_height"
+            android:layout_height="@dimen/profile_field_height"
             android:layout_weight="1"
             android:background="@drawable/spinner_background"
             android:hint="@string/enter_weight"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-            android:textAppearance="@style/DefaultTextAppearance"
-            android:textColorHint="@color/disabledTextColor" />
+            android:textAppearance="@style/PrimaryTextAppearance"
+            android:textColorHint="@color/secondary_text" />
 
         <View
             android:id="@+id/dummy"

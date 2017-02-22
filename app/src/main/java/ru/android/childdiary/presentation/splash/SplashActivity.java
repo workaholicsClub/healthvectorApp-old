@@ -7,8 +7,8 @@ import android.support.annotation.Nullable;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.main.MainActivity;
 
@@ -28,13 +28,13 @@ public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements 
     }
 
     @Override
-    public void startApp(Child lastActiveChild) {
+    public void startApp(@Nullable Sex sex) {
         finish();
-        navigateToMain(lastActiveChild);
+        navigateToMain(sex);
     }
 
-    private final void navigateToMain(@Nullable Child lastActiveChild) {
-        Intent intent = MainActivity.getIntent(this, lastActiveChild);
+    private void navigateToMain(@Nullable Sex sex) {
+        Intent intent = MainActivity.getIntent(this, sex);
         startActivity(intent);
     }
 }

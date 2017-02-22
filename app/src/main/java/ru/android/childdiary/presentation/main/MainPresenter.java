@@ -39,9 +39,8 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     private void onChildListLoaded(List<Child> childList) {
         logger.debug("onChildListLoaded");
-        // TODO: брать активный профиль из настроек
+        // TODO: брать последний активный профиль из настроек
         this.childList = childList;
-
         activeChild = childList.isEmpty() ? null : childList.get(0);
         getViewState().childListLoaded(activeChild, childList);
         if (childList.isEmpty()) {

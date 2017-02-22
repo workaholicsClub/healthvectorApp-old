@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
@@ -22,9 +22,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     @Inject
     ChildInteractor childInteractor;
 
-    private boolean isTimerFinished;
-    private List<Child> childList;
-
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
@@ -34,35 +31,23 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(Observable.timer(SPLASH_TIME_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .ignoreElements()
-                .doOnComplete(() -> logger.debug("timer finished"))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> onTimerFinished(), this::onUnexpectedError));
-
-        unsubscribeOnDestroy(childInteractor.getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetChildList, this::onUnexpectedError));
-    }
-
-    private void onTimerFinished() {
-        logger.debug("onTimerFinished");
-        isTimerFinished = true;
-        next();
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        Observable
+                                .timer(SPLASH_TIME_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
+                                .doOnComplete(() -> logger.debug("timer finished")),
+                        childInteractor
+                                .getAll()
+                                .subscribeOn(Schedulers.io()),
+                        (zero, children) -> children)
+                        .subscribe(this::onGetChildList, this::onUnexpectedError));
     }
 
     private void onGetChildList(List<Child> childList) {
         logger.debug("onGetChildList");
-        this.childList = childList;
-        next();
-    }
-
-    private void next() {
-        if (childList != null && isTimerFinished) {
-            // TODO: брать активный профиль из настроек
-            Child lastActiveChild = childList.isEmpty() ? null : childList.get(0);
-            getViewState().startApp(lastActiveChild);
-        }
+        // TODO: брать последний активный профиль из настроек
+        Child lastActiveChild = childList.isEmpty() ? null : childList.get(0);
+        Sex sex = lastActiveChild == null ? null : lastActiveChild.getSex();
+        getViewState().startApp(sex);
     }
 }

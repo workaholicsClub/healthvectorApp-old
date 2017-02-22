@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbar_elevation">4dp</dimen>
-    <dimen name="profile_top_panel_height">170dp</dimen>
-    <dimen name="profile_margin">20dp</dimen>
-    <dimen name="profile_rounded_image_size">100dp</dimen>
-    <dimen name="spinner_height">60dp</dimen>
+    <dimen name="profile_top_panel_height">114dp</dimen>
+    <dimen name="profile_margin">16dp</dimen>
+    <dimen name="profile_rounded_image_size">84dp</dimen>
+    <dimen name="profile_field_height">54dp</dimen>
+    <dimen name="list_item_height">60dp</dimen>
+    <dimen name="list_item_padding_left">4dp</dimen>
+    <dimen name="name_edit_text_padding_bottom">6dp</dimen>
+    <dimen name="name_edit_text_stroke_width">1dp</dimen>
+    <dimen name="name_edit_text_stroke_width_negative">-2dp</dimen>
+    <dimen name="button_height">60dp</dimen>
 </resources>

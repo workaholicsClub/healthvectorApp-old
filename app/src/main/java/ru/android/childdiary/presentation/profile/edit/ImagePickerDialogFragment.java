@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.view.Window;
@@ -23,11 +22,11 @@ import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
 
-import icepick.Icepick;
 import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseDialogFragment;
-import ru.android.childdiary.utils.RequestPermissionInfo;
+import ru.android.childdiary.presentation.core.RequestPermissionInfo;
+import ru.android.childdiary.utils.ui.WidgetUtils;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -43,28 +42,23 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
 
     private Listener listener;
 
+    public ImagePickerDialogFragment() {
+    }
+
     @Override
     public final Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         ListView listView = new ListView(getActivity());
-        ArrayAdapter adapter = new ImagePickerArrayAdapter(getActivity());
+        ArrayAdapter adapter = new ImagePickerAdapter(getActivity());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
-
-        Icepick.restoreInstanceState(this, savedInstanceState);
 
         dialog.setContentView(listView);
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
     }
 
     @Override
@@ -175,8 +169,8 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         options.setCircleDimmedLayer(true);
         options.setCropGridColumnCount(0);
         options.setCropGridRowCount(0);
-        options.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryBoy));
-        options.setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDarkBoy));
+
+        WidgetUtils.setupCropActivityToolbar(getActivity(), options, getSex());
 
         uCrop.withOptions(options);
 

@@ -1,9 +1,12 @@
 package ru.android.childdiary.presentation.core;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -17,21 +20,44 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+import icepick.Icepick;
+import lombok.AccessLevel;
+import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.RequestPermissionInfo;
+import ru.android.childdiary.data.types.Sex;
 
 public abstract class BaseDialogFragment extends DialogFragment {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private final Map<Integer, RequestPermissionInfo> permissionInfoMap = new HashMap<>();
 
+    @Getter(AccessLevel.PROTECTED)
+    private Sex sex;
+
     public BaseDialogFragment() {
     }
 
-    public final void showAllowingStateLoss(FragmentManager manager, String tag) {
+    public final void showAllowingStateLoss(FragmentManager manager, String tag, @Nullable Sex sex) {
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ExtraConstants.EXTRA_SEX, sex);
+        setArguments(arguments);
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);
         ft.commitAllowingStateLoss();
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Icepick.restoreInstanceState(this, savedInstanceState);
+        sex = (Sex) getArguments().getSerializable(ExtraConstants.EXTRA_SEX);
+        return super.onCreateDialog(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     protected void showToast(String text) {

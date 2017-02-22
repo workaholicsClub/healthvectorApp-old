@@ -1,4 +1,4 @@
-package ru.android.childdiary.utils;
+package ru.android.childdiary.presentation.core;
 
 import lombok.Builder;
 import lombok.Value;

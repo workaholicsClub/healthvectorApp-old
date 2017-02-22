@@ -13,10 +13,10 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 
-class ImagePickerArrayAdapter extends ArrayAdapter<String> {
+class ImagePickerAdapter extends ArrayAdapter<String> {
     private final String[] items;
 
-    public ImagePickerArrayAdapter(Context context) {
+    public ImagePickerAdapter(Context context) {
         super(context, getLayoutResourceId());
         items = context.getResources().getStringArray(R.array.image_picker_actions);
     }
