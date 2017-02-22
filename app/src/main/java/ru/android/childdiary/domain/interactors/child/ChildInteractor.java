@@ -33,6 +33,7 @@ public class ChildInteractor implements Interactor, ChildRepository {
 
     @Override
     public Observable<Child> delete(Child item) {
+        // TODO: удалить фотографию
         return childRepository.delete(item);
     }
 }
