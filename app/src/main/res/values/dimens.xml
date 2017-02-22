@@ -6,7 +6,7 @@
     <dimen name="profile_rounded_image_size">84dp</dimen>
     <dimen name="profile_field_height">54dp</dimen>
     <dimen name="list_item_height">60dp</dimen>
-    <dimen name="list_item_padding_left">4dp</dimen>
+    <dimen name="list_item_padding_left">14dp</dimen>
     <dimen name="name_edit_text_padding_bottom">6dp</dimen>
     <dimen name="name_edit_text_stroke_width">1dp</dimen>
     <dimen name="name_edit_text_stroke_width_negative">-2dp</dimen>

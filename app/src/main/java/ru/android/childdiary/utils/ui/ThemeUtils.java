@@ -94,7 +94,12 @@ public class ThemeUtils {
         return getDrawable(context, getColorPrimaryRes(sex));
     }
 
-    private static Drawable getDrawable(Context context, @DrawableRes int drawableResId) {
+    @DrawableRes
+    public static int getHeaderDrawableRes(Context context, @Nullable Sex sex) {
+        return getColorPrimaryRes(sex);
+    }
+
+    public static Drawable getDrawable(Context context, @DrawableRes int drawableResId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return ContextCompat.getDrawable(context, drawableResId);
         } else {

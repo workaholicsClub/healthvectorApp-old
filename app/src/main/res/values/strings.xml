@@ -12,6 +12,7 @@
     <string name="drawer_item_help">Помощь</string>
     <string name="add_child">Добавить профиль</string>
     <string name="edit_child">Редактировать профиль</string>
+    <string name="remove_child">Удалить профиль</string>
     <string name="add">Добавить</string>
     <string name="save">Сохранить</string>
     <string name="sex">Пол</string>

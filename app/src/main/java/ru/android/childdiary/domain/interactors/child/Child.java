@@ -26,7 +26,7 @@ public class Child implements Parcelable {
         }
     };
 
-    long id;
+    Long id;
 
     String name;
 
@@ -40,11 +40,11 @@ public class Child implements Parcelable {
     // необязательный параметр
     String imageFileName;
 
-    double height;
+    Double height;
 
-    double weight;
+    Double weight;
 
-    public Child(long id, String name, LocalDate birthDate, LocalTime birthTime, Sex sex, String imageFileName, double height, double weight) {
+    private Child(Long id, String name, LocalDate birthDate, LocalTime birthTime, Sex sex, String imageFileName, Double height, Double weight) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
@@ -56,15 +56,15 @@ public class Child implements Parcelable {
     }
 
     protected Child(Parcel in) {
-        this.id = in.readLong();
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.name = in.readString();
         this.birthDate = (LocalDate) in.readSerializable();
         this.birthTime = (LocalTime) in.readSerializable();
         int tmpSex = in.readInt();
         this.sex = tmpSex == -1 ? null : Sex.values()[tmpSex];
         this.imageFileName = in.readString();
-        this.height = in.readDouble();
-        this.weight = in.readDouble();
+        this.height = (Double) in.readValue(Double.class.getClassLoader());
+        this.weight = (Double) in.readValue(Double.class.getClassLoader());
     }
 
     public static Child.ChildBuilder getBuilder(@Nullable Child child) {
@@ -86,13 +86,13 @@ public class Child implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
+        dest.writeValue(this.id);
         dest.writeString(this.name);
         dest.writeSerializable(this.birthDate);
         dest.writeSerializable(this.birthTime);
         dest.writeInt(this.sex == null ? -1 : this.sex.ordinal());
         dest.writeString(this.imageFileName);
-        dest.writeDouble(this.height);
-        dest.writeDouble(this.weight);
+        dest.writeValue(this.height);
+        dest.writeValue(this.weight);
     }
 }

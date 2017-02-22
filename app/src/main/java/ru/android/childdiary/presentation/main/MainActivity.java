@@ -42,6 +42,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
     private static final int PROFILE_SETTING_ADD = 1;
     private static final int PROFILE_SETTINGS_EDIT = 2;
+    private static final int PROFILE_SETTINGS_DELETE = 3;
     private static final int PROFILE_SETTINGS_USER = 10;
 
     @InjectPresenter
@@ -84,6 +85,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                         .paddingDp(5)
                         .colorRes(R.color.material_drawer_dark_primary_text))
                 .withIdentifier(PROFILE_SETTINGS_EDIT));
+        profiles.add(new ProfileSettingDrawerItem()
+                .withName(getString(R.string.remove_child))
+                .withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_remove)
+                        .actionBar()
+                        .paddingDp(5)
+                        .colorRes(R.color.material_drawer_dark_primary_text))
+                .withIdentifier(PROFILE_SETTINGS_DELETE));
 
         buildUi(profiles);
         setActive(activeChild);
@@ -113,7 +121,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        accountHeader.setBackground(ThemeUtils.getHeaderDrawable(this, getSex()));
+        accountHeader.setBackground(ThemeUtils.getHeaderDrawable(this, sex));
     }
 
     @Override
@@ -132,6 +140,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             presenter.addChild();
         } else if (itemId == PROFILE_SETTINGS_EDIT) {
             presenter.editChild();
+        } else if (itemId == PROFILE_SETTINGS_DELETE) {
+            presenter.deleteChild();
         }
 
         return false;
@@ -172,7 +182,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withActivity(this)
                 .withCompactStyle(false)
                 .withOnAccountHeaderListener(this)
-                .withHeaderBackground(ThemeUtils.getHeaderDrawable(this, getSex()))
+                .withHeaderBackground(ThemeUtils.getHeaderDrawable(this, sex))
                 .addProfiles(profiles.toArray(new IProfile[profiles.size()]))
                 .build();
     }
@@ -181,7 +191,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         // TODO: setup toolbar
         drawer = new DrawerBuilder()
                 .withActivity(this)
-                .withToolbar(getToolbar())
+                .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(
                         new PrimaryDrawerItem()

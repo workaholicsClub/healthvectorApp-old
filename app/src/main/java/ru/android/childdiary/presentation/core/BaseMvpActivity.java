@@ -19,8 +19,6 @@ import org.slf4j.LoggerFactory;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import icepick.Icepick;
-import lombok.AccessLevel;
-import lombok.Getter;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
 import ru.android.childdiary.app.ChildDiaryApplication;
@@ -35,31 +33,29 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     @Nullable
     @BindView(R.id.toolbar)
-    @Getter(AccessLevel.PROTECTED)
-    Toolbar toolbar;
+    protected Toolbar toolbar;
 
-    @Getter(AccessLevel.PROTECTED)
-    private Sex sex;
-
-    protected void setSex(@Nullable Sex sex) {
-        if (this.sex != sex) {
-            this.sex = sex;
-            // TODO: switch theme
-            showToast("need to change theme!");
-            themeChanged();
-        }
-    }
+    protected Sex sex;
 
     protected void setSex(@Nullable Child child) {
         Sex sex = child == null ? null : child.getSex();
         setSex(sex);
     }
 
+    protected void setSex(@Nullable Sex sex) {
+        if (this.sex != sex) {
+            this.sex = sex;
+            themeChanged();
+        }
+    }
+
     @CallSuper
     protected void themeChanged() {
-        toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, getSex()));
+        if (toolbar != null) {
+            toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, getSex()));
+            getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
         }
     }
 
@@ -67,10 +63,12 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        sex = (Sex) getIntent().getSerializableExtra(ExtraConstants.EXTRA_SEX);
         if (sex == null) {
-            Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-            sex = child == null ? null : child.getSex();
+            sex = (Sex) getIntent().getSerializableExtra(ExtraConstants.EXTRA_SEX);
+            if (sex == null) {
+                Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
+                sex = child == null ? null : child.getSex();
+            }
         }
 
         setTheme(ThemeUtils.getTheme(sex));

@@ -40,10 +40,20 @@ public class MainPresenter extends BasePresenter<MainView> {
     private void onChildListLoaded(List<Child> childList) {
         logger.debug("onChildListLoaded");
         // TODO: брать последний активный профиль из настроек
+        // TODO: сохранять в настройки последнего добавленного ребенка
+        boolean isFirstTime = this.childList == null;
         this.childList = childList;
-        activeChild = childList.isEmpty() ? null : childList.get(0);
+        if (activeChild != null) {
+            // проверяем, все еще ли элемент находится в списке
+            activeChild = Stream.of(childList)
+                    .filter(c -> c.getId() == activeChild.getId())
+                    .findFirst().orElse(null);
+        }
+        if (activeChild == null) {
+            activeChild = childList.isEmpty() ? null : childList.get(0);
+        }
         getViewState().childListLoaded(activeChild, childList);
-        if (childList.isEmpty()) {
+        if (childList.isEmpty() && isFirstTime) {
             getViewState().addChild();
         }
     }
@@ -60,11 +70,28 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void toggleChild(long id) {
-        Child child = Stream.of(childList).filter(c -> c.getId() == id).findFirst().orElse(null);
+        Child child = Stream.of(childList)
+                .filter(c -> c.getId() == id)
+                .findFirst().orElse(null);
         if (child == null) {
             logger.warn("editChild: child with id=" + id + " not found");
         }
         activeChild = child;
         getViewState().setActive(child);
+    }
+
+    public void deleteChild() {
+        if (activeChild == null) {
+            logger.warn("deleteChild: active child is null");
+            return;
+        }
+        unsubscribeOnDestroy(childInteractor.delete(activeChild)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onDeleteChild, this::onUnexpectedError));
+    }
+
+    private void onDeleteChild(Child child) {
+        logger.debug("onDeleteChild");
     }
 }

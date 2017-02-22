@@ -23,17 +23,17 @@ public class Antropometry implements Parcelable {
         }
     };
 
-    long id;
+    Long id;
 
     Child child;
 
-    double height;
+    Double height;
 
-    double weight;
+    Double weight;
 
     LocalDate date;
 
-    public Antropometry(long id, Child child, double height, double weight, LocalDate date) {
+    private Antropometry(Long id, Child child, Double height, Double weight, LocalDate date) {
         this.id = id;
         this.child = child;
         this.height = height;
@@ -42,10 +42,10 @@ public class Antropometry implements Parcelable {
     }
 
     protected Antropometry(Parcel in) {
-        this.id = in.readLong();
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.child = in.readParcelable(Child.class.getClassLoader());
-        this.height = in.readDouble();
-        this.weight = in.readDouble();
+        this.height = (Double) in.readValue(Double.class.getClassLoader());
+        this.weight = (Double) in.readValue(Double.class.getClassLoader());
         this.date = (LocalDate) in.readSerializable();
     }
 
@@ -65,10 +65,10 @@ public class Antropometry implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
+        dest.writeValue(this.id);
         dest.writeParcelable(this.child, flags);
-        dest.writeDouble(this.height);
-        dest.writeDouble(this.weight);
+        dest.writeValue(this.height);
+        dest.writeValue(this.weight);
         dest.writeSerializable(this.date);
     }
 }
