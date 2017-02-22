@@ -62,17 +62,17 @@ public class ThemeUtils {
     }
 
     @ColorInt
-    private static int getColorPrimary(Context context, @Nullable Sex sex) {
+    static int getColorPrimary(Context context, @Nullable Sex sex) {
         return getColor(context, getColorPrimaryRes(sex));
     }
 
     @ColorInt
-    private static int getColorPrimaryDark(Context context, @Nullable Sex sex) {
+    static int getColorPrimaryDark(Context context, @Nullable Sex sex) {
         return getColor(context, getColorPrimaryDarkRes(sex));
     }
 
     @ColorInt
-    private static int getColorAccent(Context context, @Nullable Sex sex) {
+    static int getColorAccent(Context context, @Nullable Sex sex) {
         return getColor(context, getColorAccentRes(sex));
     }
 

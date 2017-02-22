@@ -85,7 +85,7 @@ class SpinnerSexAdapter extends ArrayAdapter<String> {
         TextView textView = ButterKnife.findById(v, android.R.id.text1);
         textView.setText(getItem(position));
         boolean disabled = showDefault && !isDropDownView && position == 0;
-        WidgetUtils.setTextEnabled(textView, !disabled);
+        WidgetUtils.setupTextView(textView, !disabled);
 
         return v;
     }

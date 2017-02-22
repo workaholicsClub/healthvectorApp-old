@@ -227,7 +227,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         textViewDate.setText(birthDate == null
                 ? getString(R.string.date)
                 : birthDate.toString(dateFormatter));
-        WidgetUtils.setTextEnabled(textViewDate, birthDate != null);
+        WidgetUtils.setupTextView(textViewDate, birthDate != null);
     }
 
     private void setupTime() {
@@ -235,7 +235,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         textViewTime.setText(birthTime == null
                 ? getString(R.string.time)
                 : birthTime.toString(timeFormatter));
-        WidgetUtils.setTextEnabled(textViewTime, birthTime != null);
+        WidgetUtils.setupTextView(textViewTime, birthTime != null);
     }
 
     @OnClick(R.id.imageViewPhoto)
@@ -256,6 +256,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(false);
+        WidgetUtils.setupDatePicker(this, dpd, sex);
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
     }
 
@@ -267,6 +268,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         TimePickerDialog tpd = TimePickerDialog.newInstance(this,
                 time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
         tpd.vibrate(false);
+        WidgetUtils.setupTimePicker(this, tpd, sex);
         tpd.show(getFragmentManager(), TAG_TIME_PICKER);
     }
 
