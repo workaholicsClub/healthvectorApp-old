@@ -18,6 +18,9 @@ public class ChildDiaryApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // TODO: setup custom uncaught exception handler; log exception to file; for debug purposes
+        // TODO: log to external files path if available
+
         LogSystem.initLogger(this);
 
         JodaTimeAndroid.init(this);

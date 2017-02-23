@@ -70,8 +70,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     protected void setupToolbar() {
         super.setupToolbar();
-        toolbar.setNavigationIcon(R.drawable.menu);
-        toolbar.setOverflowIcon(ThemeUtils.getDrawable(this, R.drawable.more));
+        toolbar.setNavigationIcon(R.drawable.toolbar_menu);
+        toolbar.setOverflowIcon(ThemeUtils.getDrawable(this, R.drawable.toolbar_overflow));
     }
 
     @Override

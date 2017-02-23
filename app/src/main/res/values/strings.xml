@@ -46,4 +46,9 @@
         <item>Из галереи</item>
         <item>Удалить фото</item>
     </string-array>
+    <integer-array name="image_picker_drawables">
+        <item>@drawable/action_capture_image</item>
+        <item>@drawable/action_pick_image</item>
+        <item>@drawable/action_delete_image</item>
+    </integer-array>
 </resources>
