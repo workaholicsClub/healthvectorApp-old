@@ -48,7 +48,8 @@
             android:layout_toRightOf="@+id/imageViewPhoto"
             android:hint="@string/child_name"
             android:imeOptions="actionNext"
-            android:inputType="textCapWords" />
+            android:inputType="textCapWords"
+            android:textCursorDrawable="@drawable/name_edit_text_cursor" />
     </RelativeLayout>
 
     <TextView
@@ -139,7 +140,8 @@
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
             android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColorHint="@color/secondary_text" />
+            android:textColorHint="@color/secondary_text"
+            android:textCursorDrawable="@drawable/edit_text_cursor" />
 
         <EditText
             android:id="@+id/editTextBirthWeight"
@@ -151,7 +153,8 @@
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
             android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColorHint="@color/secondary_text" />
+            android:textColorHint="@color/secondary_text"
+            android:textCursorDrawable="@drawable/edit_text_cursor" />
 
         <View
             android:id="@+id/dummy"
