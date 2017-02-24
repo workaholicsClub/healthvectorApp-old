@@ -69,6 +69,14 @@ public class MainPresenter extends BasePresenter<MainView> {
         getViewState().editChild(activeChild);
     }
 
+    public void reviewChild() {
+        if (activeChild == null) {
+            logger.warn("reviewChild: active child is null");
+            return;
+        }
+        getViewState().reviewChild(activeChild);
+    }
+
     public void toggleChild(long id) {
         Child child = Stream.of(childList)
                 .filter(c -> c.getId() == id)

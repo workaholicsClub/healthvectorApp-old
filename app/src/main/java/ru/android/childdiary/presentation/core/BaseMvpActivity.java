@@ -36,12 +36,12 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     protected Sex sex;
 
-    protected final void setSex(@Nullable Child child) {
+    protected final void changeThemeIfNeeded(@Nullable Child child) {
         Sex sex = child == null ? null : child.getSex();
-        setSex(sex);
+        changeThemeIfNeeded(sex);
     }
 
-    protected final void setSex(@Nullable Sex sex) {
+    protected final void changeThemeIfNeeded(@Nullable Sex sex) {
         if (this.sex != sex) {
             this.sex = sex;
             themeChanged();
@@ -49,6 +49,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     }
 
     private void themeChanged() {
+        logger.debug("theme changed");
         if (toolbar != null) {
             toolbar.setBackgroundColor(ThemeUtils.getToolbarColor(this, sex));
         }
@@ -61,7 +62,16 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     protected void themeChangedCustom() {
     }
 
-    protected void beforeThemeSetup() {
+    private Sex extractTheme(@Nullable Bundle bundle) {
+        Sex sex = null;
+        if (bundle != null) {
+            sex = (Sex) bundle.getSerializable(ExtraConstants.EXTRA_SEX);
+            if (sex == null) {
+                Child child = bundle.getParcelable(ExtraConstants.EXTRA_CHILD);
+                sex = child == null ? null : child.getSex();
+            }
+        }
+        return sex;
     }
 
     protected abstract void injectActivity(ApplicationComponent applicationComponent);
@@ -69,28 +79,19 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Icepick.restoreInstanceState(this, savedInstanceState);
-
-        beforeThemeSetup();
-
+        sex = extractTheme(savedInstanceState);
         if (sex == null) {
-            sex = (Sex) getIntent().getSerializableExtra(ExtraConstants.EXTRA_SEX);
-            if (sex == null) {
-                Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-                sex = child == null ? null : child.getSex();
-            }
+            sex = extractTheme(getIntent().getExtras());
         }
-
         setTheme(ThemeUtils.getTheme(sex));
         super.onCreate(savedInstanceState);
         logger.debug("onCreate");
-
         setupDagger();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
+    private void setupDagger() {
+        ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
+        injectActivity(component);
     }
 
     @Override
@@ -99,21 +100,21 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         ButterKnife.bind(this);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            setupToolbar();
         }
-        setupToolbar();
         themeChangedCustom();
-    }
-
-    private void setupDagger() {
-        ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
-        injectActivity(component);
     }
 
     @CallSuper
     protected void setupToolbar() {
-        if (toolbar != null) {
-            toolbar.setTitleTextAppearance(this, R.style.ToolbarTextAppearance);
-        }
+        toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance);
+        toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleTextAppearance);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     @Override

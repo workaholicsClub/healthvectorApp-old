@@ -5,19 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.ListPopupWindow;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.PopupWindow;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -26,6 +28,8 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ru.android.childdiary.R;
@@ -38,9 +42,13 @@ import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
-        Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
-    private static final int PROFILE_SETTING_ADD = 1;
-    private static final int PROFILE_SETTINGS_EDIT = 2;
+        Drawer.OnDrawerItemClickListener,
+        AccountHeader.OnAccountHeaderProfileImageListener,
+        AdapterView.OnItemClickListener,
+        PopupWindow.OnDismissListener,
+        View.OnClickListener {
+    private static final int PROFILE_SETTINGS_EDIT = 1;
+    private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
     private static final int PROFILE_SETTINGS_USER = 10;
 
@@ -49,11 +57,20 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     private AccountHeader accountHeader;
     private Drawer drawer;
+    private ListPopupWindow popupWindow;
 
     public static Intent getIntent(Context context, @Nullable Sex sex) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_SEX, sex);
         return intent;
+    }
+
+    private static long mapToProfileId(@NonNull Child child) {
+        return child.getId() + PROFILE_SETTINGS_USER;
+    }
+
+    private static long mapToChildId(long profileId) {
+        return profileId - PROFILE_SETTINGS_USER;
     }
 
     @Override
@@ -65,6 +82,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        buildUi(Collections.emptyList());
     }
 
     @Override
@@ -76,31 +95,37 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void childListLoaded(@Nullable Child activeChild, List<Child> childList) {
-        List<IProfile> profiles = Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList());
+        List<IProfile> profiles = new ArrayList<>();
+
+        if (!childList.isEmpty()) {
+            profiles.add(new ProfileSettingDrawerItem()
+                    .withName(getString(R.string.edit_child))
+                    .withIdentifier(PROFILE_SETTINGS_EDIT));
+        }
         profiles.add(new ProfileSettingDrawerItem()
                 .withName(getString(R.string.add_child))
-                .withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add)
-                        .actionBar()
-                        .paddingDp(5)
-                        .colorRes(R.color.material_drawer_dark_primary_text))
-                .withIdentifier(PROFILE_SETTING_ADD));
-        profiles.add(new ProfileSettingDrawerItem()
-                .withName(getString(R.string.edit_child))
-                .withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_edit)
-                        .actionBar()
-                        .paddingDp(5)
-                        .colorRes(R.color.material_drawer_dark_primary_text))
-                .withIdentifier(PROFILE_SETTINGS_EDIT));
-        profiles.add(new ProfileSettingDrawerItem()
-                .withName(getString(R.string.remove_child))
-                .withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_remove)
-                        .actionBar()
-                        .paddingDp(5)
-                        .colorRes(R.color.material_drawer_dark_primary_text))
-                .withIdentifier(PROFILE_SETTINGS_DELETE));
+                .withIdentifier(PROFILE_SETTINGS_ADD));
+        if (!childList.isEmpty()) {
+            profiles.add(new ProfileSettingDrawerItem()
+                    .withName(getString(R.string.remove_child))
+                    .withIdentifier(PROFILE_SETTINGS_DELETE));
+        }
+
+        profiles.addAll(Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList()));
 
         buildUi(profiles);
         setActive(activeChild);
+    }
+
+    private IProfile mapToProfile(@NonNull Child child) {
+        // TODO: calculate age and print as formatted string
+        return new ProfileDrawerItem()
+                .withName(child.getName())
+                .withEmail("age")
+                .withNameShown(true)
+                .withTag(child)
+                .withIdentifier(mapToProfileId(child))
+                .withIcon(ThemeUtils.getChildIcon(this, child));
     }
 
     @Override
@@ -114,13 +139,20 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
+    public void reviewChild(@NonNull Child child) {
+        navigateToProfileReview(child);
+    }
+
+    @Override
     public void setActive(@Nullable Child child) {
-        setSex(child);
+        changeThemeIfNeeded(child);
         if (child == null) {
             getSupportActionBar().setTitle(R.string.app_name);
         } else {
-            accountHeader.setActiveProfile(mapToProfileId(child));
             getSupportActionBar().setTitle(child.getName());
+            if (accountHeader != null) {
+                accountHeader.setActiveProfile(mapToProfileId(child));
+            }
         }
     }
 
@@ -139,38 +171,62 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-        long itemId = profile.getIdentifier();
-        if (itemId > PROFILE_SETTINGS_USER) {
-            presenter.toggleChild(mapToChildId(profile));
-        } else if (itemId == PROFILE_SETTING_ADD) {
-            presenter.addChild();
-        } else if (itemId == PROFILE_SETTINGS_EDIT) {
-            presenter.editChild();
-        } else if (itemId == PROFILE_SETTINGS_DELETE) {
-            // TODO: confirmation alert dialog
-            presenter.deleteChild();
-        }
-
+    public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
+        presenter.reviewChild();
         return false;
     }
 
-    private IProfile mapToProfile(@NonNull Child child) {
-        // TODO: calculate age and print as formatted string
-        return new ProfileDrawerItem()
-                .withName(child.getName())
-                .withNameShown(true)
-                .withEmail("age")
-                .withIdentifier(mapToProfileId(child))
-                .withIcon(ThemeUtils.getChildIcon(this, child));
+    @Override
+    public boolean onProfileImageLongClick(View view, IProfile profile, boolean current) {
+        return false;
     }
 
-    private long mapToProfileId(@NonNull Child child) {
-        return child.getId() + PROFILE_SETTINGS_USER;
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.account_header_switcher_wrapper && accountHeader != null) {
+            dismissPopupWindow();
+            List<IProfile> profiles = accountHeader.getProfiles();
+            View anchor = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher);
+            int[] location = new int[2];
+            anchor.getLocationOnScreen(location);
+
+            popupWindow = new ListPopupWindow(this);
+            popupWindow.setWidth(getResources().getDimensionPixelSize(R.dimen.account_header_action_item_width));
+            popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+            popupWindow.setAdapter(new AccountHeaderActionAdapter(this, profiles));
+            popupWindow.setAnchorView(anchor);
+            popupWindow.setDropDownGravity(Gravity.TOP | Gravity.RIGHT);
+            popupWindow.setOnItemClickListener(this);
+            popupWindow.setOnDismissListener(this);
+            popupWindow.show();
+        }
     }
 
-    private long mapToChildId(IProfile profile) {
-        return profile.getIdentifier() - PROFILE_SETTINGS_USER;
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        dismissPopupWindow();
+        if (id > PROFILE_SETTINGS_USER) {
+            presenter.toggleChild(mapToChildId(id));
+        } else if (id == PROFILE_SETTINGS_EDIT) {
+            presenter.editChild();
+        } else if (id == PROFILE_SETTINGS_ADD) {
+            presenter.addChild();
+        } else if (id == PROFILE_SETTINGS_DELETE) {
+            // TODO: confirmation alert dialog
+            presenter.deleteChild();
+        }
+    }
+
+    @Override
+    public void onDismiss() {
+        dismissPopupWindow();
+    }
+
+    private void dismissPopupWindow() {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        }
+        popupWindow = null;
     }
 
     private void buildUi(List<IProfile> profiles) {
@@ -179,13 +235,22 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void buildHeader(List<IProfile> profiles) {
-        accountHeader = new AccountHeaderBuilder()
+        accountHeader = new CustomAccountHeaderBuilder()
                 .withActivity(this)
-                .withCompactStyle(false)
-                .withOnAccountHeaderListener(this)
+                .withCompactStyle(true)
+                .withOnAccountHeaderProfileImageListener(this)
+                .withAccountHeader(R.layout.account_header)
+                .withHeightRes(R.dimen.account_header_height)
                 .withHeaderBackground(ThemeUtils.getHeaderDrawable(this, sex))
                 .addProfiles(profiles.toArray(new IProfile[profiles.size()]))
                 .build();
+        View switcherWrapper = accountHeader.getView().findViewById(R.id.account_header_switcher_wrapper);
+        switcherWrapper.setOnClickListener(this);
+        View container = accountHeader.getView().findViewById(R.id.material_drawer_account_header);
+        container.setOnClickListener(null);
+        container.setClickable(false);
+        container.setFocusable(false);
+        container.setFocusableInTouchMode(false);
     }
 
     private void buildDrawer() {
@@ -232,21 +297,24 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO: menu
         switch (item.getItemId()) {
-            case R.id.menu_1:
+            case R.id.menu_diaper:
+                showToast(getString(R.string.event_diaper));
                 return true;
-            case R.id.menu_2:
+            case R.id.menu_sleep:
+                showToast(getString(R.string.event_sleep));
                 return true;
-            case R.id.menu_3:
+            case R.id.menu_feed:
+                showToast(getString(R.string.event_feed));
                 return true;
-            case R.id.menu_4:
+            case R.id.menu_pump:
+                showToast(getString(R.string.event_pump));
                 return true;
-            case R.id.menu_5:
+            case R.id.menu_other:
+                showToast(getString(R.string.event_other));
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -259,6 +327,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void navigateToProfileEdit(@Nullable Child child) {
+        Intent intent = ProfileEditActivity.getIntent(this, child);
+        startActivity(intent);
+    }
+
+    private void navigateToProfileReview(@NonNull Child child) {
         Intent intent = ProfileEditActivity.getIntent(this, child);
         startActivity(intent);
     }

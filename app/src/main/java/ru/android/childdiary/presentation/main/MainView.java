@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.main;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface MainView extends BaseActivityView {
     void addChild();
 
     void editChild(@Nullable Child child);
+
+    void reviewChild(@NonNull Child child);
 
     void setActive(@Nullable Child child);
 }

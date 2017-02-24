@@ -11,7 +11,7 @@
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_help">Помощь</string>
     <string name="add_child">Добавить профиль</string>
-    <string name="edit_child">Редактировать профиль</string>
+    <string name="edit_child">Редактировать</string>
     <string name="remove_child">Удалить профиль</string>
     <string name="add">Добавить</string>
     <string name="save">Сохранить</string>
@@ -36,6 +36,11 @@
     <string name="failed_to_crop_image">При обработке изобарженяия произошла ошибка</string>
     <string name="failed_to_save_result_file">При сохранении файла произошла ошибка</string>
     <string name="crop_image_title">Обрезать фото</string>
+    <string name="event_diaper">Подгузник</string>
+    <string name="event_sleep">Сон</string>
+    <string name="event_feed">Кормление</string>
+    <string name="event_pump">Сцеживание</string>
+    <string name="event_other">Другое</string>
     <string-array name="sex_variants">
         <item>Выберите пол</item>
         <item>Мужской</item>

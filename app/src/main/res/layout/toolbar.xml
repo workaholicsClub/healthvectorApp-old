@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
     android:elevation="@dimen/toolbar_elevation"
+    android:subtitleTextAppearance="@style/ToolbarSubtitleTextAppearance"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-    android:titleTextAppearance="@style/ToolbarTextAppearance"
-    app:popupTheme="@style/ThemeOverlay.AppCompat" />
+    android:titleTextAppearance="@style/ToolbarTitleTextAppearance"
+    app:popupTheme="@style/ThemeOverlay.AppCompat"
+    tools:ignore="UnusedAttribute" />

@@ -115,21 +115,14 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     @Override
-    protected void beforeThemeSetup() {
-        if (editedChild != null) {
-            sex = editedChild.getSex();
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile_edit);
+
         Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
         if (savedInstanceState == null) {
             editedChild = child == null ? Child.builder().build() : Child.getBuilder(child).build();
         }
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_edit);
 
         getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child);
         buttonDone.setText(child == null ? R.string.add : R.string.save);
@@ -191,13 +184,10 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Sex sex = spinnerSexAdapter.getSexSpinnerPosition(spinnerSex);
-                // hideDefault() может поменять список пунктов,
-                // поэтому надо восстановить выбранную позицию
                 if (sex != null && spinnerSexAdapter.hideDefault()) {
                     spinnerSexAdapter.setSexSpinnerPosition(spinnerSex, sex);
                 }
-                // меняем тему, если необходимо
-                setSex(sex);
+                changeThemeIfNeeded(sex);
             }
 
             @Override
