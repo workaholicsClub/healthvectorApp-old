@@ -18,7 +18,10 @@
             android:layout_width="@dimen/profile_rounded_image_size"
             android:layout_height="@dimen/profile_rounded_image_size"
             android:layout_centerVertical="true"
-            android:layout_margin="@dimen/profile_margin"
+            android:layout_marginBottom="@dimen/profile_margin_vertical"
+            android:layout_marginLeft="@dimen/profile_margin_horizontal"
+            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_marginTop="@dimen/profile_margin_vertical"
             android:src="@color/white" />
 
         <TextView
@@ -43,8 +46,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/profile_margin"
-            android:layout_marginRight="@dimen/profile_margin"
+            android:layout_marginEnd="@dimen/profile_margin_horizontal"
+            android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_toEndOf="@+id/imageViewPhoto"
             android:layout_toRightOf="@+id/imageViewPhoto"
             android:hint="@string/child_name"
@@ -56,9 +59,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin"
-        android:layout_marginRight="@dimen/profile_margin"
-        android:layout_marginTop="@dimen/profile_margin"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginTop="@dimen/profile_margin_vertical"
         android:text="@string/sex"
         android:textAppearance="@style/SecondaryTextAppearance" />
 
@@ -66,24 +69,24 @@
         android:id="@+id/spinnerSex"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_field_height"
-        android:layout_marginLeft="@dimen/profile_margin"
-        android:layout_marginRight="@dimen/profile_margin"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:background="@drawable/spinner_background" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin"
-        android:layout_marginRight="@dimen/profile_margin"
-        android:layout_marginTop="@dimen/profile_margin"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginTop="@dimen/profile_margin_vertical"
         android:text="@string/birth_date_and_time"
         android:textAppearance="@style/SecondaryTextAppearance" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin"
-        android:layout_marginRight="@dimen/profile_margin"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -91,8 +94,8 @@
             android:id="@+id/textViewDate"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
-            android:layout_marginEnd="@dimen/profile_margin"
-            android:layout_marginRight="@dimen/profile_margin"
+            android:layout_marginEnd="@dimen/profile_margin_horizontal"
+            android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_weight="1"
             android:background="@drawable/spinner_background"
             android:gravity="center_vertical"
@@ -115,17 +118,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin"
-        android:layout_marginRight="@dimen/profile_margin"
-        android:layout_marginTop="@dimen/profile_margin"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginTop="@dimen/profile_margin_vertical"
         android:text="@string/birth_height_and_weight"
         android:textAppearance="@style/SecondaryTextAppearance" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin"
-        android:layout_marginRight="@dimen/profile_margin"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:baselineAligned="false"
         android:orientation="horizontal">
 
@@ -133,8 +136,8 @@
             android:id="@+id/editTextBirthHeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
-            android:layout_marginEnd="@dimen/profile_margin"
-            android:layout_marginRight="@dimen/profile_margin"
+            android:layout_marginEnd="@dimen/profile_margin_horizontal"
+            android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_weight="1"
             android:background="@drawable/spinner_background"
             android:hint="@string/enter_height"

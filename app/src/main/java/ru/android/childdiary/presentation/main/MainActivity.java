@@ -102,7 +102,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
         if (!childList.isEmpty()) {
             profiles.add(new ProfileSettingDrawerItem()
-                    .withName(getString(R.string.edit_child))
+                    .withName(getString(R.string.edit_child_short))
                     .withIdentifier(PROFILE_SETTINGS_EDIT));
         }
         profiles.add(new ProfileSettingDrawerItem()

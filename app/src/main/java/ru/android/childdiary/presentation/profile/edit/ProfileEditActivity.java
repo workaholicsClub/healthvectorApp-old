@@ -124,7 +124,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             editedChild = child == null ? Child.builder().build() : Child.getBuilder(child).build();
         }
 
-        getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child);
+        getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child_long);
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
             if (child == null) {
