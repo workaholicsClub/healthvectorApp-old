@@ -300,8 +300,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         // необязательные параметры: время и дата рождения
         Child.ChildBuilder builder = Child.getBuilder(editedChild);
         String name = editTextChildName.getText().toString().trim();
-        double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
-        double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
+        Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
+        Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
         Sex sex = spinnerSexAdapter.getSexSpinnerPosition(spinnerSex);
         builder.name(name)
                 .sex(sex)

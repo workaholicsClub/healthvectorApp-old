@@ -13,6 +13,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class MainPresenter extends BasePresenter<MainView> {
@@ -46,7 +47,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         if (activeChild != null) {
             // проверяем, все еще ли элемент находится в списке
             activeChild = Stream.of(childList)
-                    .filter(c -> c.getId() == activeChild.getId())
+                    .filter(c -> ObjectUtils.equals(c.getId(), activeChild.getId()))
                     .findFirst().orElse(null);
         }
         if (activeChild == null) {
@@ -77,9 +78,9 @@ public class MainPresenter extends BasePresenter<MainView> {
         getViewState().reviewChild(activeChild);
     }
 
-    public void toggleChild(long id) {
+    public void toggleChild(Long id) {
         Child child = Stream.of(childList)
-                .filter(c -> c.getId() == id)
+                .filter(c -> ObjectUtils.equals(c.getId(), id))
                 .findFirst().orElse(null);
         if (child == null) {
             logger.warn("editChild: child with id=" + id + " not found");

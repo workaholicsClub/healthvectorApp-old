@@ -57,6 +57,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     private AccountHeader accountHeader;
     private Drawer drawer;
+    private DrawerBuilder drawerBuilder;
     private ListPopupWindow popupWindow;
 
     public static Intent getIntent(Context context, @Nullable Sex sex) {
@@ -113,6 +114,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
         profiles.addAll(Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList()));
 
+        closeDrawerWithoutAnimation();
         buildUi(profiles);
         setActive(activeChild);
     }
@@ -254,7 +256,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void buildDrawer() {
-        drawer = new DrawerBuilder()
+        drawerBuilder = new CustomDrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
@@ -283,9 +285,24 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                                 .withName(R.string.drawer_item_help)
                                 .withIcon(FontAwesome.Icon.faw_question)
                                 .withOnDrawerItemClickListener(this)
-                )
-                .build();
+                );
+        drawer = drawerBuilder.build();
         setupToolbar();
+    }
+
+    private void closeDrawerWithoutAnimation() {
+        if (drawerBuilder != null && drawer != null && drawer.isDrawerOpen()) {
+            ((CustomDrawerBuilder) drawerBuilder).closeDrawerWithoutAnimation();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer != null && drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -315,15 +332,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer != null && drawer.isDrawerOpen()) {
-            drawer.closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     private void navigateToProfileEdit(@Nullable Child child) {

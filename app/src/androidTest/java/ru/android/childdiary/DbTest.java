@@ -320,14 +320,14 @@ public class DbTest {
     private static class ChildIdsComparator implements IdsComparator<Child> {
         @Override
         public boolean idsEqual(Child item1, Child item2) {
-            return item1.getId() == item2.getId();
+            return ObjectUtils.equals(item1.getId(), item2.getId());
         }
     }
 
     private static class AntropometryIdsComparator implements IdsComparator<Antropometry> {
         @Override
         public boolean idsEqual(Antropometry item1, Antropometry item2) {
-            return item1.getId() == item2.getId();
+            return ObjectUtils.equals(item1.getId(), item2.getId());
         }
     }
 }
