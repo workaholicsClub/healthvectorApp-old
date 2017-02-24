@@ -15,13 +15,14 @@ import ru.android.childdiary.presentation.core.BaseActivityView;
 @StateStrategyType(OneExecutionStateStrategy.class)
 public interface MainView extends BaseActivityView {
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void childListLoaded(@Nullable Child activeChild, List<Child> childList);
+    void childListLoaded(List<Child> childList);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void setActive(@Nullable Child child);
 
     void addChild();
 
     void editChild(@Nullable Child child);
 
     void reviewChild(@NonNull Child child);
-
-    void setActive(@Nullable Child child);
 }

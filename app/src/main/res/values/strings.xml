@@ -13,6 +13,8 @@
     <string name="add_child">Добавить профиль</string>
     <string name="edit_child">Редактировать</string>
     <string name="remove_child">Удалить профиль</string>
+    <string name="remove_child_confirmation_title">Удалить профиль ребенка?</string>
+    <string name="remove_child_confirmation_text">Все данные по этому профилю будут удалены без возможности восстановления.</string>
     <string name="add">Добавить</string>
     <string name="save">Сохранить</string>
     <string name="sex">Пол</string>
@@ -25,6 +27,7 @@
     <string name="enter_weight">Введите вес</string>
     <string name="add_image_button_title">Добавить\nфото</string>
     <string name="OK">OK</string>
+    <string name="Yes">Да</string>
     <string name="Cancel">Отмена</string>
     <string name="request_read_external_storage_permission_title">Запрос на чтение SD-карты</string>
     <string name="request_read_external_storage_permission_text">Необходимо для чтения файлов с SD-карты.</string>

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import icepick.Icepick;
+import icepick.State;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
 import ru.android.childdiary.app.ChildDiaryApplication;
@@ -34,6 +35,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
+    @State
     protected Sex sex;
 
     protected final void changeThemeIfNeeded(@Nullable Child child) {
@@ -79,9 +81,11 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Icepick.restoreInstanceState(this, savedInstanceState);
-        sex = extractTheme(savedInstanceState);
         if (sex == null) {
-            sex = extractTheme(getIntent().getExtras());
+            sex = extractTheme(savedInstanceState);
+            if (sex == null) {
+                sex = extractTheme(getIntent().getExtras());
+            }
         }
         setTheme(ThemeUtils.getTheme(sex));
         super.onCreate(savedInstanceState);

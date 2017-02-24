@@ -1,10 +1,12 @@
 package ru.android.childdiary.presentation.main;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
 import android.view.Gravity;
 import android.view.Menu;
@@ -95,7 +97,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void childListLoaded(@Nullable Child activeChild, List<Child> childList) {
+    public void childListLoaded(List<Child> childList) {
         List<IProfile> profiles = new ArrayList<>();
 
         if (!childList.isEmpty()) {
@@ -116,7 +118,19 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
         closeDrawerWithoutAnimation();
         buildUi(profiles);
-        setActive(activeChild);
+    }
+
+    @Override
+    public void setActive(@Nullable Child child) {
+        changeThemeIfNeeded(child);
+        if (child == null) {
+            getSupportActionBar().setTitle(R.string.app_name);
+        } else {
+            getSupportActionBar().setTitle(child.getName());
+            if (accountHeader != null) {
+                accountHeader.setActiveProfile(mapToProfileId(child));
+            }
+        }
     }
 
     private IProfile mapToProfile(@NonNull Child child) {
@@ -143,19 +157,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void reviewChild(@NonNull Child child) {
         navigateToProfileReview(child);
-    }
-
-    @Override
-    public void setActive(@Nullable Child child) {
-        changeThemeIfNeeded(child);
-        if (child == null) {
-            getSupportActionBar().setTitle(R.string.app_name);
-        } else {
-            getSupportActionBar().setTitle(child.getName());
-            if (accountHeader != null) {
-                accountHeader.setActiveProfile(mapToProfileId(child));
-            }
-        }
     }
 
     @Override
@@ -214,8 +215,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         } else if (id == PROFILE_SETTINGS_ADD) {
             presenter.addChild();
         } else if (id == PROFILE_SETTINGS_DELETE) {
-            // TODO: confirmation alert dialog
-            presenter.deleteChild();
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.remove_child_confirmation_title)
+                    .setMessage(R.string.remove_child_confirmation_text)
+                    .setPositiveButton(R.string.Yes,
+                            (DialogInterface dialog, int which) -> presenter.deleteChild())
+                    .setNegativeButton(R.string.Cancel, null)
+                    .show();
         }
     }
 
@@ -234,6 +240,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private void buildUi(List<IProfile> profiles) {
         buildHeader(profiles);
         buildDrawer();
+        setupToolbar();
+        View container = accountHeader.getView().findViewById(R.id.material_drawer_account_header);
+        container.setOnClickListener(null);
+        container.setClickable(false);
+        container.setFocusable(false);
+        container.setFocusableInTouchMode(false);
+        View switcherWrapper = accountHeader.getView().findViewById(R.id.account_header_switcher_wrapper);
+        switcherWrapper.setOnClickListener(this);
     }
 
     private void buildHeader(List<IProfile> profiles) {
@@ -246,13 +260,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withHeaderBackground(ThemeUtils.getHeaderDrawable(this, sex))
                 .addProfiles(profiles.toArray(new IProfile[profiles.size()]))
                 .build();
-        View switcherWrapper = accountHeader.getView().findViewById(R.id.account_header_switcher_wrapper);
-        switcherWrapper.setOnClickListener(this);
-        View container = accountHeader.getView().findViewById(R.id.material_drawer_account_header);
-        container.setOnClickListener(null);
-        container.setClickable(false);
-        container.setFocusable(false);
-        container.setFocusableInTouchMode(false);
     }
 
     private void buildDrawer() {
@@ -287,7 +294,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                                 .withOnDrawerItemClickListener(this)
                 );
         drawer = drawerBuilder.build();
-        setupToolbar();
     }
 
     private void closeDrawerWithoutAnimation() {

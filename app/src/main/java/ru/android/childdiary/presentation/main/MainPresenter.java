@@ -53,7 +53,8 @@ public class MainPresenter extends BasePresenter<MainView> {
         if (activeChild == null) {
             activeChild = childList.isEmpty() ? null : childList.get(0);
         }
-        getViewState().childListLoaded(activeChild, childList);
+        getViewState().childListLoaded(childList);
+        getViewState().setActive(activeChild);
         if (childList.isEmpty() && isFirstTime) {
             getViewState().addChild();
         }
