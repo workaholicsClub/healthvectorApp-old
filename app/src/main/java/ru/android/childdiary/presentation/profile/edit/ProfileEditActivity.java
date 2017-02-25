@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -378,12 +379,12 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     @Override
-    public void childAdded(Child child) {
+    public void childAdded(@NonNull Child child) {
         finish();
     }
 
     @Override
-    public void childUpdated(Child child) {
+    public void childUpdated(@NonNull Child child) {
         finish();
     }
 
