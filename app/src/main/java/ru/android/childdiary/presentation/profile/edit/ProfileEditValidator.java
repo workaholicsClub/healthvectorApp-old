@@ -16,7 +16,7 @@ class ProfileEditValidator {
         this.activity = activity;
     }
 
-    public ValidationResult validate() {
+    public ValidationResult validateAll() {
         ValidationResult result = new ValidationResult();
         result.addResult(validateName(result.isValid()));
         result.addResult(validateSex(result.isValid()));

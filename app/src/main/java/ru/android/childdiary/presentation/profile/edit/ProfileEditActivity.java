@@ -108,7 +108,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @State
     boolean isValidationStarted;
 
-    private ProfileEditValidator validator = new ProfileEditValidator(this);
+    private final ProfileEditValidator validator = new ProfileEditValidator(this);
 
     public static Intent getIntent(Context context, @Nullable Child child) {
         Intent intent = new Intent(context, ProfileEditActivity.class);
@@ -135,7 +135,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
             isValidationStarted = true;
-            ValidationResult result = validator.validate();
+            ValidationResult result = validator.validateAll();
             if (result.isValid()) {
                 if (child == null) {
                     presenter.addChild(buildChild());
