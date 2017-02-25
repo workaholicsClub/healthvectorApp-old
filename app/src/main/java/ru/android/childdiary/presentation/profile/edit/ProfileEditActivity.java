@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -79,7 +81,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     TextView textViewAddPhoto;
 
     @BindView(R.id.editTextChildName)
-    EditText editTextChildName;
+    EditText editTextName;
 
     @BindView(R.id.spinnerSex)
     Spinner spinnerSex;
@@ -102,6 +104,11 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @State
     Child editedChild;
+
+    @State
+    boolean isValidationStarted;
+
+    private ProfileEditValidator validator = new ProfileEditValidator(this);
 
     public static Intent getIntent(Context context, @Nullable Child child) {
         Intent intent = new Intent(context, ProfileEditActivity.class);
@@ -127,7 +134,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child_long);
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
-            ProfileEditValidator validator = new ProfileEditValidator(this);
+            isValidationStarted = true;
             ValidationResult result = validator.validate();
             if (result.isValid()) {
                 if (child == null) {
@@ -136,7 +143,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                     presenter.updateChild(buildChild());
                 }
             } else {
-                showToast(result.getMessage());
+                showToast(result.toString());
             }
         });
 
@@ -154,8 +161,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     private void setupEditTextViews() {
-        editTextChildName.setText(editedChild.getName());
-        editTextChildName.setSelection(editTextChildName.getText().length());
+        editTextName.setText(editedChild.getName());
+        editTextName.setSelection(editTextName.getText().length());
 
         editTextBirthHeight.setText(DoubleUtils.toString(editedChild.getHeight()));
         editTextBirthWeight.setText(DoubleUtils.toString(editedChild.getWeight()));
@@ -171,6 +178,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 editTextBirthWeight.setSelection(editTextBirthWeight.getText().length());
             }
         });
+
         editTextBirthWeight.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 KeyboardUtils.hideKeyboard(this, v);
@@ -179,6 +187,55 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 return true;
             }
             return false;
+        });
+
+        editTextName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isValidationStarted) {
+                    validator.validateName(false);
+                }
+            }
+        });
+        editTextBirthHeight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isValidationStarted) {
+                    validator.validateBirthHeight(false);
+                }
+            }
+        });
+        editTextBirthWeight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isValidationStarted) {
+                    validator.validateBirthWeight(false);
+                }
+            }
         });
     }
 
@@ -194,6 +251,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                     spinnerSexAdapter.setSexSpinnerPosition(spinnerSex, sex);
                 }
                 changeThemeIfNeeded(sex);
+                if (isValidationStarted) {
+                    validator.validateSex(false);
+                }
             }
 
             @Override
@@ -224,6 +284,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 ? getString(R.string.date)
                 : birthDate.toString(dateFormatter));
         WidgetUtils.setupTextView(textViewDate, birthDate != null);
+        if (isValidationStarted) {
+            validator.validateBirthDate(false);
+        }
     }
 
     private void setupTime() {
@@ -303,7 +366,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     private Child buildChild() {
         Child.ChildBuilder builder = Child.getBuilder(editedChild);
-        String name = editTextChildName.getText().toString().trim();
+        String name = editTextName.getText().toString().trim();
         Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
         Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
         Sex sex = spinnerSexAdapter.getSexSpinnerPosition(spinnerSex);
