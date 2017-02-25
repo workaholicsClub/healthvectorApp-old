@@ -42,8 +42,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
         }
     }
 
-    @Override
-    public void showToast(String text) {
+    protected void showToast(String text) {
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 }
