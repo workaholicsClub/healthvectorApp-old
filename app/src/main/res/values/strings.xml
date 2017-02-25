@@ -45,6 +45,11 @@
     <string name="event_feed">Кормление</string>
     <string name="event_pump">Сцеживание</string>
     <string name="event_other">Другое</string>
+    <string name="validate_child_name_empty">Введите имя ребенка</string>
+    <string name="validate_child_sex_empty">Выберите пол ребенка</string>
+    <string name="validate_child_birth_date_empty">Введите дату рождения ребенка</string>
+    <string name="validate_child_birth_height_empty">Введите рост ребенка при рождении</string>
+    <string name="validate_child_birth_weight_empty">Введите вес ребенка при рождении</string>
     <string-array name="sex_variants">
         <item>Выберите пол</item>
         <item>Мужской</item>

@@ -43,6 +43,7 @@ import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.ValidationResult;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -82,6 +83,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @BindView(R.id.spinnerSex)
     Spinner spinnerSex;
+    SpinnerSexAdapter spinnerSexAdapter;
 
     @BindView(R.id.textViewDate)
     TextView textViewDate;
@@ -100,8 +102,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @State
     Child editedChild;
-
-    private SpinnerSexAdapter spinnerSexAdapter;
 
     public static Intent getIntent(Context context, @Nullable Child child) {
         Intent intent = new Intent(context, ProfileEditActivity.class);
@@ -127,10 +127,16 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child_long);
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
-            if (child == null) {
-                presenter.addChild(buildChild());
+            ProfileEditValidator validator = new ProfileEditValidator(this);
+            ValidationResult result = validator.validate();
+            if (result.isValid()) {
+                if (child == null) {
+                    presenter.addChild(buildChild());
+                } else {
+                    presenter.updateChild(buildChild());
+                }
             } else {
-                presenter.updateChild(buildChild());
+                showToast(result.getMessage());
             }
         });
 
@@ -296,8 +302,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     private Child buildChild() {
-        // TODO: validation
-        // необязательные параметры: время и дата рождения
         Child.ChildBuilder builder = Child.getBuilder(editedChild);
         String name = editTextChildName.getText().toString().trim();
         Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
