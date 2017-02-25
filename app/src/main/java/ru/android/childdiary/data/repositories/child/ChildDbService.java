@@ -27,7 +27,16 @@ public class ChildDbService implements ChildService {
                 .orderBy(ChildEntity.NAME)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResult(reactiveResult, ChildMapper::map));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, ChildMapper::map));
+    }
+
+    @Override
+    public Observable<Child> get(Long id) {
+        return dataStore.select(ChildEntity.class)
+                .where(ChildEntity.ID.eq(id))
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, ChildMapper::map));
     }
 
     @Override

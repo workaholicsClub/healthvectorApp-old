@@ -10,6 +10,7 @@
     <string name="drawer_item_medical_data">Медицинские данные</string>
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_help">Помощь</string>
+    <string name="profile">Профиль</string>
     <string name="add_child">Добавить профиль</string>
     <string name="edit_child_long">Редактировать профиль</string>
     <string name="edit_child_short">Редактировать</string>

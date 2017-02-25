@@ -25,22 +25,8 @@
             android:src="@color/white" />
 
         <TextView
-            android:id="@+id/textViewAddPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/imageViewPhoto"
-            android:layout_alignEnd="@+id/imageViewPhoto"
-            android:layout_alignLeft="@+id/imageViewPhoto"
-            android:layout_alignRight="@+id/imageViewPhoto"
-            android:layout_alignStart="@+id/imageViewPhoto"
-            android:layout_alignTop="@+id/imageViewPhoto"
-            android:gravity="center"
-            android:text="@string/add_image_button_title"
-            android:textAppearance="@style/SecondaryTextAppearance" />
-
-        <EditText
-            android:id="@+id/editTextChildName"
-            style="@style/NameEditTextStyle"
+            android:id="@+id/textViewChildName"
+            style="@style/NameTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -49,11 +35,7 @@
             android:layout_marginEnd="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_toEndOf="@+id/imageViewPhoto"
-            android:layout_toRightOf="@+id/imageViewPhoto"
-            android:hint="@string/child_name"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:textCursorDrawable="@drawable/name_edit_text_cursor" />
+            android:layout_toRightOf="@+id/imageViewPhoto" />
     </RelativeLayout>
 
     <TextView
@@ -65,13 +47,15 @@
         android:text="@string/sex"
         android:textAppearance="@style/SecondaryTextAppearance" />
 
-    <Spinner
-        android:id="@+id/spinnerSex"
+    <TextView
+        android:id="@+id/textViewSex"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_field_height"
         android:layout_marginLeft="@dimen/profile_margin_horizontal"
         android:layout_marginRight="@dimen/profile_margin_horizontal"
-        android:background="@drawable/spinner_background" />
+        android:background="@drawable/text_view_background"
+        android:gravity="center_vertical"
+        android:textAppearance="@style/PrimaryTextAppearance" />
 
     <TextView
         android:layout_width="match_parent"
@@ -96,22 +80,18 @@
             android:layout_marginEnd="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_weight="1"
-            android:background="@drawable/spinner_background"
+            android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:text="@string/date"
-            android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColor="@color/secondary_text" />
+            android:textAppearance="@style/PrimaryTextAppearance" />
 
         <TextView
             android:id="@+id/textViewTime"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
             android:layout_weight="1"
-            android:background="@drawable/spinner_background"
+            android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:text="@string/time"
-            android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColor="@color/secondary_text" />
+            android:textAppearance="@style/PrimaryTextAppearance" />
     </LinearLayout>
 
     <TextView
@@ -130,39 +110,24 @@
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/editTextBirthHeight"
+        <TextView
+            android:id="@+id/textViewBirthHeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
             android:layout_marginEnd="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_weight="1"
-            android:background="@drawable/spinner_background"
-            android:hint="@string/enter_height"
-            android:imeOptions="actionNext"
-            android:inputType="numberDecimal"
-            android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColorHint="@color/secondary_text"
-            android:textCursorDrawable="@drawable/edit_text_cursor" />
+            android:background="@drawable/text_view_background"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/PrimaryTextAppearance" />
 
-        <EditText
-            android:id="@+id/editTextBirthWeight"
+        <TextView
+            android:id="@+id/textViewBirthWeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
             android:layout_weight="1"
-            android:background="@drawable/spinner_background"
-            android:hint="@string/enter_weight"
-            android:imeOptions="actionDone"
-            android:inputType="numberDecimal"
-            android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColorHint="@color/secondary_text"
-            android:textCursorDrawable="@drawable/edit_text_cursor" />
-
-        <View
-            android:id="@+id/dummy"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
+            android:background="@drawable/text_view_background"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/PrimaryTextAppearance" />
     </LinearLayout>
 </LinearLayout>

@@ -91,11 +91,19 @@ public class DbUtils {
         throw new RuntimeException(object + " not found while updating");
     }
 
-    public static <T, E> Observable<List<T>> mapReactiveResult(ReactiveResult<E> reactiveResult, @NonNull Function<E, T> map) {
+    public static <T, E> Observable<List<T>> mapReactiveResultToListObservable(ReactiveResult<E> reactiveResult, @NonNull Function<E, T> map) {
         return reactiveResult
                 .observable()
                 .map(map)
                 .toList()
+                .toObservable();
+    }
+
+    public static <T, E> Observable<T> mapReactiveResultToObservable(ReactiveResult<E> reactiveResult, @NonNull Function<E, T> map) {
+        return reactiveResult
+                .observable()
+                .map(map)
+                .firstOrError()
                 .toObservable();
     }
 }

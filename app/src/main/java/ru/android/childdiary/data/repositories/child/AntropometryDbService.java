@@ -31,7 +31,7 @@ public class AntropometryDbService implements AntropometryService {
                 .orderBy(AntropometryEntity.DATE)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResult(reactiveResult, AntropometryMapper::map));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, AntropometryMapper::map));
     }
 
     @Override

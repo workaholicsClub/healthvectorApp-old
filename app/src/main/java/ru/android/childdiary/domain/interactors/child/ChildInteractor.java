@@ -22,6 +22,11 @@ public class ChildInteractor implements Interactor, ChildRepository {
     }
 
     @Override
+    public Observable<Child> get(Long id) {
+        return childRepository.get(id);
+    }
+
+    @Override
     public Observable<Child> add(Child item) {
         return childRepository.add(item);
     }

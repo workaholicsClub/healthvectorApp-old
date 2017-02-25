@@ -115,7 +115,7 @@ public class ThemeUtils {
         return Drawable.createFromPath(child.getImageFileName());
     }
 
-    public static Drawable getChildDefaultIcon(Context context, @Nullable Sex sex) {
+    private static Drawable getChildDefaultIcon(Context context, @Nullable Sex sex) {
         // TODO: default icon for girl and boy
         return getDrawable(context, getColorPrimaryDarkRes(sex));
     }

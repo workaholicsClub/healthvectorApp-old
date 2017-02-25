@@ -41,6 +41,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
+import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
@@ -346,7 +347,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void navigateToProfileReview(@NonNull Child child) {
-        Intent intent = ProfileEditActivity.getIntent(this, child);
+        Intent intent = ProfileReviewActivity.getIntent(this, child);
         startActivity(intent);
     }
 }
