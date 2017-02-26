@@ -25,6 +25,7 @@ public class Antropometry implements Parcelable {
 
     Long id;
 
+    // TODO: не нужно, убрать
     Child child;
 
     Double height;
