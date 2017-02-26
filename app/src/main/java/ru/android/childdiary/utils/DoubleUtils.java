@@ -19,6 +19,6 @@ public class DoubleUtils {
     }
 
     public static String toString(Double d) {
-        return d == null ? "" : Double.toString(d);
+        return d == null ? null : Double.toString(d);
     }
 }

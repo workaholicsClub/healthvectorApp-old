@@ -99,9 +99,9 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     private void setupViews(Child child) {
         imageViewPhoto.setImageDrawable(ThemeUtils.getChildIcon(this, child));
 
-        textViewName.setText(StringUtils.print(child.getName()));
+        textViewName.setText(child.getName());
 
-        // TODO: sex
+        textViewSex.setText(StringUtils.print(this, child.getSex()));
 
         textViewDate.setText(StringUtils.print(child.getBirthDate(), dateFormatter));
         textViewTime.setText(StringUtils.print(child.getBirthTime(), timeFormatter));

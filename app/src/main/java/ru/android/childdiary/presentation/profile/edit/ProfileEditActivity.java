@@ -49,6 +49,7 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.ValidationResult;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
+import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetUtils;
 
@@ -57,6 +58,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
+
+    private final ProfileEditValidator validator = new ProfileEditValidator(this);
 
     @InjectPresenter
     ProfileEditPresenter presenter;
@@ -108,8 +111,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @State
     boolean isValidationStarted;
-
-    private final ProfileEditValidator validator = new ProfileEditValidator(this);
 
     public static Intent getIntent(Context context, @Nullable Child child) {
         Intent intent = new Intent(context, ProfileEditActivity.class);
@@ -281,9 +282,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     private void setupDate() {
         LocalDate birthDate = editedChild.getBirthDate();
-        textViewDate.setText(birthDate == null
-                ? getString(R.string.date)
-                : birthDate.toString(dateFormatter));
+        textViewDate.setText(StringUtils.print(birthDate, dateFormatter, getString(R.string.date)));
         WidgetUtils.setupTextView(textViewDate, birthDate != null);
         if (isValidationStarted) {
             validator.validateBirthDate(false);
@@ -292,9 +291,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     private void setupTime() {
         LocalTime birthTime = editedChild.getBirthTime();
-        textViewTime.setText(birthTime == null
-                ? getString(R.string.time)
-                : birthTime.toString(timeFormatter));
+        textViewTime.setText(StringUtils.print(birthTime, timeFormatter, getString(R.string.time)));
         WidgetUtils.setupTextView(textViewTime, birthTime != null);
     }
 
