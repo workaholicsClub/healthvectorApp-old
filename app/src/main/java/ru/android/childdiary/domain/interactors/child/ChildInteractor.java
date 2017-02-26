@@ -1,5 +1,9 @@
 package ru.android.childdiary.domain.interactors.child;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,6 +13,8 @@ import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.domain.core.Interactor;
 
 public class ChildInteractor implements Interactor, ChildRepository {
+    private final Logger logger = LoggerFactory.getLogger(toString());
+
     private final ChildDataRepository childRepository;
 
     @Inject
@@ -38,7 +44,17 @@ public class ChildInteractor implements Interactor, ChildRepository {
 
     @Override
     public Observable<Child> delete(Child item) {
-        // TODO: удалить фотографию
-        return childRepository.delete(item);
+        return childRepository.delete(item)
+                .doOnNext(child -> {
+                    String path = child.getImageFileName();
+                    if (path != null) {
+                        boolean result = new File(path).delete();
+                        if (result) {
+                            logger.debug("file " + path + " deleted");
+                        } else {
+                            logger.error("file " + path + " not deleted");
+                        }
+                    }
+                });
     }
 }
