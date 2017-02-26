@@ -53,6 +53,8 @@
     <string name="validate_child_birth_weight_empty">Введите вес ребенка при рождении</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
+    <string name="newborn">новорождённый</string>
+    <string name="years_and_months">%1$s %2$s</string>
     <string-array name="sex_variants">
         <item>Выберите пол</item>
         <item>Мужской</item>
@@ -68,4 +70,18 @@
         <item>@drawable/action_pick_image</item>
         <item>@drawable/action_delete_image</item>
     </integer-array>
+    <plurals name="numberOfYears">
+        <item quantity="one">%d год</item>
+        <item quantity="few">%d года</item>
+        <item quantity="other">%d лет</item>
+        <item quantity="many">%d лет</item>
+        <item quantity="zero">%d лет</item>
+    </plurals>
+    <plurals name="numberOfMonths">
+        <item quantity="one">%d месяц</item>
+        <item quantity="few">%d месяца</item>
+        <item quantity="other">%d месяцев</item>
+        <item quantity="many">%d месяцев</item>
+        <item quantity="zero">%d месяцев</item>
+    </plurals>
 </resources>

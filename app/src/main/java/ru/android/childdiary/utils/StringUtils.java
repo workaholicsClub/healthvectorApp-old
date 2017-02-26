@@ -5,12 +5,50 @@ import android.support.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormatter;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 public class StringUtils {
+    @Nullable
+    public static String age(Context context, Child child) {
+        LocalDate birthDate = child.getBirthDate();
+
+        if (birthDate == null) {
+            return null;
+        }
+
+        LocalDate now = LocalDate.now();
+
+        if (birthDate.isAfter(now)) {
+            return null;
+        }
+
+        Months period = Months.monthsBetween(birthDate, now);
+        int years = period.getMonths() / 12;
+        int months = period.getMonths() % 12;
+
+        if (years == 0 && months == 0) {
+            return context.getString(R.string.newborn);
+        }
+
+        String yearsString = context.getResources().getQuantityString(R.plurals.numberOfYears, years, years);
+        String monthsString = context.getResources().getQuantityString(R.plurals.numberOfMonths, months, months);
+
+        if (years == 0) {
+            return monthsString;
+        }
+
+        if (months == 0) {
+            return yearsString;
+        }
+
+        return context.getString(R.string.years_and_months, yearsString, monthsString);
+    }
+
     @Nullable
     public static String print(Context context, Sex sex) {
         if (sex == null) {

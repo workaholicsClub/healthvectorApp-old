@@ -41,6 +41,7 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
+import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
@@ -132,10 +133,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private IProfile mapToProfile(@NonNull Child child) {
-        // TODO: calculate age and print as formatted string
         return new ProfileDrawerItem()
                 .withName(child.getName())
-                .withEmail("age")
+                .withEmail(StringUtils.age(this, child))
                 .withNameShown(true)
                 .withTag(child)
                 .withIdentifier(mapToProfileId(child))
