@@ -302,6 +302,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void onBackPressed() {
+        dismissPopupWindow();
         if (drawer != null && drawer.isDrawerOpen()) {
             drawer.closeDrawer();
         } else {
