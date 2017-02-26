@@ -53,7 +53,7 @@ public class DbTest {
     private static ChildDbService childDbService;
     private static AntropometryDbService antropometryDbService;
 
-    private final Logger logger = LoggerFactory.getLogger(DbTest.class);
+    private final Logger logger = LoggerFactory.getLogger(toString());
 
     private static Context getContext() {
         // can write only in target context
