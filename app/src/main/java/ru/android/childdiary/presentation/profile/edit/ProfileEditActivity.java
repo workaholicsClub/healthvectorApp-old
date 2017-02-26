@@ -133,7 +133,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
         Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
         if (savedInstanceState == null) {
-            editedChild = child == null ? Child.builder().build() : Child.getBuilder(child).build();
+            editedChild = Child.getBuilder(child).build();
         }
 
         getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child_long);

@@ -68,7 +68,7 @@ public class DbTest {
 
         JodaTimeAndroid.init(context);
 
-        dataStore = DbUtils.getDataStore(context, DB_NAME, DB_VERSION, true);
+        dataStore = DbUtils.getDataStore(context, DB_NAME, DB_VERSION);
 
         childDbService = new ChildDbService(dataStore);
         antropometryDbService = new AntropometryDbService(dataStore);
@@ -307,6 +307,7 @@ public class DbTest {
     @Test
     public void testNegativeUpdateNonExistent() {
         Child child = getRandomChild();
+        child = Child.getBuilder(child).id(RANDOM.nextLong()).build();
         childDbService.update(child)
                 .doOnNext(this::logOnNextUpdate)
                 .doOnError(this::logOnErrorUpdate)
