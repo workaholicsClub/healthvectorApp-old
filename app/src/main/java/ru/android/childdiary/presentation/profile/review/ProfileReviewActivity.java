@@ -106,9 +106,8 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
         textViewDate.setText(StringUtils.print(child.getBirthDate(), dateFormatter));
         textViewTime.setText(StringUtils.print(child.getBirthTime(), timeFormatter));
 
-        // TODO: форматировать "кг", "см"
-        textViewBirthHeight.setText(DoubleUtils.height(child.getHeight()));
-        textViewBirthWeight.setText(DoubleUtils.weight(child.getWeight()));
+        textViewBirthHeight.setText(DoubleUtils.heightReview(this, child.getHeight()));
+        textViewBirthWeight.setText(DoubleUtils.weightReview(this, child.getWeight()));
     }
 
     @Override

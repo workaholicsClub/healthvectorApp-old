@@ -1,11 +1,14 @@
 package ru.android.childdiary.utils;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
+
+import ru.android.childdiary.R;
 
 public class DoubleUtils {
     private static final Logger logger = LoggerFactory.getLogger(DoubleUtils.class);
@@ -25,22 +28,42 @@ public class DoubleUtils {
     };
 
     @Nullable
-    public static Double parse(String text) {
+    public static Double parseHeight(String text) {
         try {
-            return Double.parseDouble(text);
-        } catch (NumberFormatException e) {
-            logger.warn("failed to parse double", e);
+            return HEIGHT_FORMAT.get().parse(text).doubleValue();
+        } catch (Exception e) {
+            logger.warn("failed to parse height", e);
             return null;
         }
     }
 
     @Nullable
-    public static String height(Double d) {
+    public static Double parseWeight(String text) {
+        try {
+            return WEIGHT_FORMAT.get().parse(text).doubleValue();
+        } catch (Exception e) {
+            logger.warn("failed to parse weight", e);
+            return null;
+        }
+    }
+
+    @Nullable
+    public static String heightReview(Context context, Double d) {
+        return d == null ? null : context.getString(R.string.height_review, HEIGHT_FORMAT.get().format(d));
+    }
+
+    @Nullable
+    public static String weightReview(Context context, Double d) {
+        return d == null ? null : context.getString(R.string.weight_review, WEIGHT_FORMAT.get().format(d));
+    }
+
+    @Nullable
+    public static String heightEdit(Double d) {
         return d == null ? null : HEIGHT_FORMAT.get().format(d);
     }
 
     @Nullable
-    public static String weight(Double d) {
+    public static String weightEdit(Double d) {
         return d == null ? null : WEIGHT_FORMAT.get().format(d);
     }
 }

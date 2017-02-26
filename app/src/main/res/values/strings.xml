@@ -51,6 +51,8 @@
     <string name="validate_child_birth_date_empty">Введите дату рождения ребенка</string>
     <string name="validate_child_birth_height_empty">Введите рост ребенка при рождении</string>
     <string name="validate_child_birth_weight_empty">Введите вес ребенка при рождении</string>
+    <string name="height_review">%s см</string>
+    <string name="weight_review">%s кг</string>
     <string-array name="sex_variants">
         <item>Выберите пол</item>
         <item>Мужской</item>

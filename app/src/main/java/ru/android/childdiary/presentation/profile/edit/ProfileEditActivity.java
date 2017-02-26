@@ -72,6 +72,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Named(ApplicationModule.TIME_FORMATTER)
     DateTimeFormatter timeFormatter;
 
+    @BindView(R.id.rootView)
+    View rootView;
+
     @BindView(R.id.topPanel)
     View topPanel;
 
@@ -136,13 +139,14 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child_long);
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
+            hideKeyboardAndClearFocus();
             isValidationStarted = true;
             ValidationResult result = validator.validateAll();
             if (result.isValid()) {
                 if (child == null) {
-                    presenter.addChild(buildChild());
+                    presenter.addChild(editedChild);
                 } else {
-                    presenter.updateChild(buildChild());
+                    presenter.updateChild(editedChild);
                 }
             } else {
                 showToast(result.toString());
@@ -156,36 +160,44 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         setupTime();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        editedChild = buildChild();
-        super.onSaveInstanceState(outState);
-    }
-
     private void setupEditTextViews() {
         editTextName.setText(editedChild.getName());
-        editTextName.setSelection(editTextName.getText().length());
 
-        editTextBirthHeight.setText(DoubleUtils.height(editedChild.getHeight()));
-        editTextBirthWeight.setText(DoubleUtils.weight(editedChild.getWeight()));
+        editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getHeight()));
+        editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getWeight()));
 
-        // TODO: при потере фокуса форматировать "кг", "см"
+        editTextName.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                editTextName.setSelection(editTextName.getText().length());
+            } else {
+                String name = editTextName.getText().toString().trim();
+                editedChild = editedChild.getBuilder(editedChild).name(name).build();
+            }
+        });
         editTextBirthHeight.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
+                editTextBirthHeight.setText(DoubleUtils.heightEdit(editedChild.getHeight()));
                 editTextBirthHeight.setSelection(editTextBirthHeight.getText().length());
+            } else {
+                Double height = DoubleUtils.parseHeight(editTextBirthHeight.getText().toString().trim());
+                editedChild = editedChild.getBuilder(editedChild).height(height).build();
+                editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getHeight()));
             }
         });
         editTextBirthWeight.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
+                editTextBirthWeight.setText(DoubleUtils.weightEdit(editedChild.getWeight()));
                 editTextBirthWeight.setSelection(editTextBirthWeight.getText().length());
+            } else {
+                Double weight = DoubleUtils.parseWeight(editTextBirthWeight.getText().toString().trim());
+                editedChild = editedChild.getBuilder(editedChild).weight(weight).build();
+                editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getWeight()));
             }
         });
 
         editTextBirthWeight.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                KeyboardUtils.hideKeyboard(this, v);
-                v.clearFocus();
-                dummy.requestFocus();
+                hideKeyboardAndClearFocus();
                 return true;
             }
             return false;
@@ -241,6 +253,13 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         });
     }
 
+    private void hideKeyboardAndClearFocus() {
+        View focusedView = rootView.findFocus();
+        KeyboardUtils.hideKeyboard(this, focusedView);
+        focusedView.clearFocus();
+        dummy.requestFocus();
+    }
+
     private void setupSpinnerSex() {
         spinnerSexAdapter = new SpinnerSexAdapter(this, editedChild.getSex() == null);
         spinnerSex.setAdapter(spinnerSexAdapter);
@@ -252,6 +271,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 if (sex != null && spinnerSexAdapter.hideDefault()) {
                     spinnerSexAdapter.setSexSpinnerPosition(spinnerSex, sex);
                 }
+                editedChild = editedChild.getBuilder(editedChild).sex(sex).build();
                 changeThemeIfNeeded(sex);
                 if (isValidationStarted) {
                     validator.validateSex(false);
@@ -360,19 +380,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         LocalTime birthTime = new LocalTime(hourOfDay, minute);
         editedChild = Child.getBuilder(editedChild).birthTime(birthTime).build();
         setupTime();
-    }
-
-    private Child buildChild() {
-        Child.ChildBuilder builder = Child.getBuilder(editedChild);
-        String name = editTextName.getText().toString().trim();
-        Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
-        Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
-        Sex sex = spinnerSexAdapter.getSexSpinnerPosition(spinnerSex);
-        builder.name(name)
-                .sex(sex)
-                .height(height)
-                .weight(weight);
-        return builder.build();
     }
 
     @Override
