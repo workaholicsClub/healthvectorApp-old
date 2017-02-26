@@ -166,8 +166,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         editTextName.setText(editedChild.getName());
         editTextName.setSelection(editTextName.getText().length());
 
-        editTextBirthHeight.setText(DoubleUtils.toString(editedChild.getHeight()));
-        editTextBirthWeight.setText(DoubleUtils.toString(editedChild.getWeight()));
+        editTextBirthHeight.setText(DoubleUtils.height(editedChild.getHeight()));
+        editTextBirthWeight.setText(DoubleUtils.weight(editedChild.getWeight()));
 
         // TODO: при потере фокуса форматировать "кг", "см"
         editTextBirthHeight.setOnFocusChangeListener((v, hasFocus) -> {
