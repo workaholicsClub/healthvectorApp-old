@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 import ru.android.childdiary.R;
 
@@ -16,35 +17,35 @@ public class DoubleUtils {
     private static final ThreadLocal<DecimalFormat> HEIGHT_FORMAT = new ThreadLocal<DecimalFormat>() {
         @Override
         protected DecimalFormat initialValue() {
-            return new DecimalFormat("0.#");
+            DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
+            dfs.setDecimalSeparator('.');
+            return new DecimalFormat("0.#", dfs);
         }
     };
 
     private static final ThreadLocal<DecimalFormat> WEIGHT_FORMAT = new ThreadLocal<DecimalFormat>() {
         @Override
         protected DecimalFormat initialValue() {
-            return new DecimalFormat("0.###");
+            DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
+            dfs.setDecimalSeparator('.');
+            return new DecimalFormat("0.###", dfs);
         }
     };
 
     @Nullable
-    public static Double parseHeight(String text) {
-        try {
-            return HEIGHT_FORMAT.get().parse(text).doubleValue();
-        } catch (Exception e) {
-            logger.warn("failed to parse height", e);
-            return null;
+    public static Double parse(String text) {
+        String[] parts = text.split(" ");
+        for (String part : parts) {
+            try {
+                double d = Double.parseDouble(part);
+                return d;
+            } catch (Exception e) {
+                logger.warn("failed to parse double", e);
+                return null;
+            }
         }
-    }
-
-    @Nullable
-    public static Double parseWeight(String text) {
-        try {
-            return WEIGHT_FORMAT.get().parse(text).doubleValue();
-        } catch (Exception e) {
-            logger.warn("failed to parse weight", e);
-            return null;
-        }
+        logger.warn("double not found");
+        return null;
     }
 
     @Nullable

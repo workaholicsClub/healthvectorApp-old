@@ -88,7 +88,7 @@ class ProfileEditValidator {
         ValidationResult result = new ValidationResult();
 
         String birthHeightString = activity.editTextBirthHeight.getText().toString().trim();
-        Double birthHeight = DoubleUtils.parseHeight(birthHeightString);
+        Double birthHeight = DoubleUtils.parse(birthHeightString);
         if (birthHeight == null) {
             result.addMessage(activity.getString(R.string.validate_child_birth_height_empty));
         }
@@ -109,7 +109,7 @@ class ProfileEditValidator {
         ValidationResult result = new ValidationResult();
 
         String birthWeightString = activity.editTextBirthWeight.getText().toString().trim();
-        Double birthWeight = DoubleUtils.parseWeight(birthWeightString);
+        Double birthWeight = DoubleUtils.parse(birthWeightString);
         if (birthWeight == null) {
             result.addMessage(activity.getString(R.string.validate_child_birth_weight_empty));
         }

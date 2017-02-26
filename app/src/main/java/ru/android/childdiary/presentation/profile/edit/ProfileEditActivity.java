@@ -7,8 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -172,6 +170,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             } else {
                 String name = editTextName.getText().toString().trim();
                 editedChild = editedChild.getBuilder(editedChild).name(name).build();
+                if (isValidationStarted) {
+                    validator.validateName(false);
+                }
             }
         });
         editTextBirthHeight.setOnFocusChangeListener((v, hasFocus) -> {
@@ -179,9 +180,12 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 editTextBirthHeight.setText(DoubleUtils.heightEdit(editedChild.getHeight()));
                 editTextBirthHeight.setSelection(editTextBirthHeight.getText().length());
             } else {
-                Double height = DoubleUtils.parseHeight(editTextBirthHeight.getText().toString().trim());
+                Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
                 editedChild = editedChild.getBuilder(editedChild).height(height).build();
                 editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getHeight()));
+                if (isValidationStarted) {
+                    validator.validateBirthHeight(false);
+                }
             }
         });
         editTextBirthWeight.setOnFocusChangeListener((v, hasFocus) -> {
@@ -189,9 +193,12 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 editTextBirthWeight.setText(DoubleUtils.weightEdit(editedChild.getWeight()));
                 editTextBirthWeight.setSelection(editTextBirthWeight.getText().length());
             } else {
-                Double weight = DoubleUtils.parseWeight(editTextBirthWeight.getText().toString().trim());
+                Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
                 editedChild = editedChild.getBuilder(editedChild).weight(weight).build();
                 editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getWeight()));
+                if (isValidationStarted) {
+                    validator.validateBirthWeight(false);
+                }
             }
         });
 
@@ -201,55 +208,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 return true;
             }
             return false;
-        });
-
-        editTextName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (isValidationStarted) {
-                    validator.validateName(false);
-                }
-            }
-        });
-        editTextBirthHeight.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (isValidationStarted) {
-                    validator.validateBirthHeight(false);
-                }
-            }
-        });
-        editTextBirthWeight.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (isValidationStarted) {
-                    validator.validateBirthWeight(false);
-                }
-            }
         });
     }
 
