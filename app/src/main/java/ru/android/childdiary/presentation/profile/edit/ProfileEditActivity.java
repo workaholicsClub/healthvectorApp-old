@@ -153,14 +153,14 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             }
         });
 
-        setupEditTextViews();
+        setupTextViews();
         setupSpinnerSex();
         setupImage();
         setupDate();
         setupTime();
     }
 
-    private void setupEditTextViews() {
+    private void setupTextViews() {
         editTextName.setText(editedChild.getName());
 
         editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getHeight()));

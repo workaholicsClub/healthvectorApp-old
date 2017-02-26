@@ -92,8 +92,6 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
 
         getSupportActionBar().setTitle(R.string.profile);
         buttonEdit.setOnClickListener(v -> navigateToProfileEdit(child));
-
-        setupViews(child);
     }
 
     private void setupViews(Child child) {

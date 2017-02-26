@@ -31,7 +31,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import ru.android.childdiary.R;
@@ -86,8 +85,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        buildUi(Collections.emptyList());
     }
 
     @Override
