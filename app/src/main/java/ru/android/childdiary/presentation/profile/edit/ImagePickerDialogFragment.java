@@ -169,6 +169,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         options.setCircleDimmedLayer(true);
         options.setCropGridColumnCount(0);
         options.setCropGridRowCount(0);
+        options.setShowCropFrame(false);
 
         WidgetUtils.setupCropActivityToolbar(getActivity(), options, getSex());
 
