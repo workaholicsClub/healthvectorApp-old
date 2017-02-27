@@ -58,19 +58,31 @@ class AccountHeaderActionAdapter extends ArrayAdapter<IProfile> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        ViewHolder viewHolder;
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(getLayoutResourceId(), null);
+            viewHolder = new ViewHolder();
+            viewHolder.textView = ButterKnife.findById(view, android.R.id.text1);
+            viewHolder.imageView = ButterKnife.findById(view, R.id.imageViewPhoto);
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
         }
 
         IProfile profile = getItem(position);
-        TextView textView = ButterKnife.findById(view, android.R.id.text1);
-        textView.setText(profile.getName().getText());
-        ImageView imageView = ButterKnife.findById(view, R.id.imageViewPhoto);
+        String text = profile.getName().getText();
         Drawable icon = profile.getIcon() == null ? null : profile.getIcon().getIcon();
-        imageView.setVisibility(icon == null ? View.GONE : View.VISIBLE);
-        imageView.setImageDrawable(icon);
+
+        viewHolder.textView.setText(text);
+        viewHolder.imageView.setVisibility(icon == null ? View.GONE : View.VISIBLE);
+        viewHolder.imageView.setImageDrawable(icon);
 
         return view;
+    }
+
+    private static class ViewHolder {
+        TextView textView;
+        ImageView imageView;
     }
 }

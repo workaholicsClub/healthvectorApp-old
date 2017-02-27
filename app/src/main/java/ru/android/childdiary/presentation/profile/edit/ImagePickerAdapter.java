@@ -55,16 +55,27 @@ class ImagePickerAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        ViewHolder viewHolder;
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(getLayoutResourceId(), null);
+            viewHolder = new ViewHolder();
+            viewHolder.textView = ButterKnife.findById(view, android.R.id.text1);
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
         }
 
-        TextView textView = ButterKnife.findById(view, android.R.id.text1);
-        textView.setText(getItem(position));
+        String text = getItem(position);
         int drawableRes = drawables[position];
-        textView.setCompoundDrawablesWithIntrinsicBounds(drawableRes, 0, 0, 0);
+
+        viewHolder.textView.setText(text);
+        viewHolder.textView.setCompoundDrawablesWithIntrinsicBounds(drawableRes, 0, 0, 0);
 
         return view;
+    }
+
+    private static class ViewHolder {
+        TextView textView;
     }
 }

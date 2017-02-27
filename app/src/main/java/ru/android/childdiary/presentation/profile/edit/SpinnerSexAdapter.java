@@ -43,53 +43,6 @@ class SpinnerSexAdapter extends ArrayAdapter<String> {
         return R.layout.spinner_dropdown_item;
     }
 
-    public boolean hideDefault() {
-        if (showDefault) {
-            showDefault = false;
-            items.remove(0);
-            notifyDataSetChanged();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public int getCount() {
-        return items.size();
-    }
-
-    @Nullable
-    @Override
-    public String getItem(int position) {
-        return items.get(position);
-    }
-
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View contentView, @NonNull ViewGroup viewGroup) {
-        return getView(position, contentView, false);
-    }
-
-    @Override
-    public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return getView(position, convertView, true);
-    }
-
-    private View getView(int position, @Nullable View convertView, boolean isDropDownView) {
-        View view = convertView;
-        if (view == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(isDropDownView ? getDropDownLayoutResourceId() : getLayoutResourceId(), null);
-        }
-
-        TextView textView = ButterKnife.findById(view, android.R.id.text1);
-        textView.setText(getItem(position));
-        boolean disabled = showDefault && !isDropDownView && position == 0;
-        WidgetUtils.setupTextView(textView, !disabled);
-
-        return view;
-    }
-
     public void setSexSpinnerPosition(Spinner attachedSpinner, @Nullable Sex sex) {
         int position = 0;
         if (sex != null) {
@@ -113,5 +66,63 @@ class SpinnerSexAdapter extends ArrayAdapter<String> {
                 return Sex.FEMALE;
         }
         return null;
+    }
+
+    public boolean hideDefault() {
+        if (showDefault) {
+            showDefault = false;
+            items.remove(0);
+            notifyDataSetChanged();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int getCount() {
+        return items.size();
+    }
+
+    @Nullable
+    @Override
+    public String getItem(int position) {
+        return items.get(position);
+    }
+
+    @NonNull
+    @Override
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup viewGroup) {
+        return getView(position, convertView, false);
+    }
+
+    @Override
+    public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        return getView(position, convertView, true);
+    }
+
+    private View getView(int position, @Nullable View convertView, boolean isDropDownView) {
+        View view = convertView;
+        ViewHolder viewHolder;
+        if (view == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = layoutInflater.inflate(isDropDownView ? getDropDownLayoutResourceId() : getLayoutResourceId(), null);
+            viewHolder = new ViewHolder();
+            viewHolder.textView = ButterKnife.findById(view, android.R.id.text1);
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+        }
+
+        String text = getItem(position);
+
+        viewHolder.textView.setText(text);
+        boolean disabled = showDefault && !isDropDownView && position == 0;
+        WidgetUtils.setupTextView(viewHolder.textView, !disabled);
+
+        return view;
+    }
+
+    private static class ViewHolder {
+        TextView textView;
     }
 }
