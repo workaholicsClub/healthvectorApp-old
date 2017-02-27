@@ -14,17 +14,18 @@ import android.widget.TextView;
 
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 
 class AccountHeaderActionAdapter extends ArrayAdapter<IProfile> {
-    private final IProfile[] items;
+    private final List<IProfile> items;
 
     public AccountHeaderActionAdapter(Context context, List<IProfile> profiles) {
         super(context, getLayoutResourceId());
-        items = profiles.toArray(new IProfile[profiles.size()]);
+        items = Collections.unmodifiableList(profiles);
     }
 
     @LayoutRes
@@ -34,18 +35,18 @@ class AccountHeaderActionAdapter extends ArrayAdapter<IProfile> {
 
     @Override
     public int getCount() {
-        return items.length;
+        return items.size();
     }
 
     @Nullable
     @Override
     public IProfile getItem(int position) {
-        return items[position];
+        return items.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return items[position].getIdentifier();
+        return items.get(position).getIdentifier();
     }
 
     @Override
