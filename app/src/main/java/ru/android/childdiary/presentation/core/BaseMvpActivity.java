@@ -64,6 +64,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     protected void themeChangedCustom() {
     }
 
+    @Nullable
     private Sex extractTheme(@Nullable Bundle bundle) {
         Sex sex = null;
         if (bundle != null) {
