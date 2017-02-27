@@ -97,7 +97,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void childListLoaded(List<Child> childList) {
+    protected void themeChangedCustom() {
+        if (accountHeader != null) {
+            accountHeader.setBackground(ThemeUtils.getHeaderDrawable(this, sex));
+        }
+    }
+
+    @Override
+    public void showChildList(List<Child> childList) {
         List<IProfile> profiles = new ArrayList<>();
 
         if (!childList.isEmpty()) {
@@ -156,13 +163,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void reviewChild(@NonNull Child child) {
         navigateToProfileReview(child);
-    }
-
-    @Override
-    protected void themeChangedCustom() {
-        if (accountHeader != null) {
-            accountHeader.setBackground(ThemeUtils.getHeaderDrawable(this, sex));
-        }
     }
 
     @Override

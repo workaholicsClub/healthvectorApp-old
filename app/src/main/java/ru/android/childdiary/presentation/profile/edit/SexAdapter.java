@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -19,12 +19,11 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.utils.StringUtils;
 
 class SexAdapter extends ArrayAdapter<Sex> {
-    private final List<Sex> items = new ArrayList<>();
+    private final List<Sex> items;
 
     public SexAdapter(Context context) {
         super(context, R.layout.sex_item);
-        items.add(Sex.MALE);
-        items.add(Sex.FEMALE);
+        items = Arrays.asList(Sex.MALE, Sex.FEMALE);
     }
 
     @LayoutRes

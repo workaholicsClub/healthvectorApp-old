@@ -15,7 +15,7 @@ import ru.android.childdiary.presentation.core.BaseActivityView;
 @StateStrategyType(OneExecutionStateStrategy.class)
 public interface MainView extends BaseActivityView {
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void childListLoaded(List<Child> childList);
+    void showChildList(List<Child> childList);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void setActive(@Nullable Child child);

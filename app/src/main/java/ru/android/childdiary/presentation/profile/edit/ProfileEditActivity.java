@@ -164,6 +164,12 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         setupTime();
     }
 
+    @Override
+    protected void themeChangedCustom() {
+        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(this, sex));
+        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(this, sex));
+    }
+
     private void setupTextViews() {
         editTextName.setText(editedChild.getName());
 
@@ -273,12 +279,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         }
         popupWindow = null;
         return false;
-    }
-
-    @Override
-    protected void themeChangedCustom() {
-        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(this, sex));
-        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(this, sex));
     }
 
     private void setupImage() {

@@ -1,5 +1,7 @@
 package ru.android.childdiary.domain.interactors.child;
 
+import android.support.annotation.NonNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +30,7 @@ public class ChildInteractor implements Interactor, ChildRepository {
     }
 
     @Override
-    public Observable<Child> get(Long id) {
+    public Observable<Child> get(@NonNull Long id) {
         return childRepository.get(id);
     }
 

@@ -1,5 +1,7 @@
 package ru.android.childdiary.data.repositories.child;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,7 +26,7 @@ public class ChildDataRepository implements ChildRepository {
     }
 
     @Override
-    public Observable<Child> get(Long id) {
+    public Observable<Child> get(@NonNull Long id) {
         return dbService.get(id);
     }
 

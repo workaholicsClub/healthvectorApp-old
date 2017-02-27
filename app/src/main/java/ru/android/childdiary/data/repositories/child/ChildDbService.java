@@ -1,5 +1,7 @@
 package ru.android.childdiary.data.repositories.child;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,7 +33,7 @@ public class ChildDbService implements ChildService {
     }
 
     @Override
-    public Observable<Child> get(Long id) {
+    public Observable<Child> get(@NonNull Long id) {
         return dataStore.select(ChildEntity.class)
                 .where(ChildEntity.ID.eq(id))
                 .get()
