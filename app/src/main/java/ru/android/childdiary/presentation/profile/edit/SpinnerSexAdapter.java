@@ -76,18 +76,18 @@ class SpinnerSexAdapter extends ArrayAdapter<String> {
     }
 
     private View getView(int position, @Nullable View convertView, boolean isDropDownView) {
-        View v = convertView;
-        if (v == null) {
+        View view = convertView;
+        if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = layoutInflater.inflate(isDropDownView ? getDropDownLayoutResourceId() : getLayoutResourceId(), null);
+            view = layoutInflater.inflate(isDropDownView ? getDropDownLayoutResourceId() : getLayoutResourceId(), null);
         }
 
-        TextView textView = ButterKnife.findById(v, android.R.id.text1);
+        TextView textView = ButterKnife.findById(view, android.R.id.text1);
         textView.setText(getItem(position));
         boolean disabled = showDefault && !isDropDownView && position == 0;
         WidgetUtils.setupTextView(textView, !disabled);
 
-        return v;
+        return view;
     }
 
     public void setSexSpinnerPosition(Spinner attachedSpinner, @Nullable Sex sex) {
