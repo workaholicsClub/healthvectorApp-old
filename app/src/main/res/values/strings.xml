@@ -55,11 +55,9 @@
     <string name="weight_review">%s кг</string>
     <string name="newborn">новорождённый</string>
     <string name="years_and_months">%1$s %2$s</string>
-    <string-array name="sex_variants">
-        <item>Выберите пол</item>
-        <item>Мужской</item>
-        <item>Женский</item>
-    </string-array>
+    <string name="select_sex">Выберите пол</string>
+    <string name="male">Мужской</string>
+    <string name="female">Женский</string>
     <string-array name="image_picker_actions">
         <item>Сделать снимок</item>
         <item>Из галереи</item>

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 
 import com.annimon.stream.Collectors;
@@ -187,16 +188,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         if (v.getId() == R.id.account_header_switcher_wrapper && accountHeader != null) {
             dismissPopupWindow();
             List<IProfile> profiles = accountHeader.getProfiles();
+            ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles);
             View anchor = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher);
-            int[] location = new int[2];
-            anchor.getLocationOnScreen(location);
+            int width = getResources().getDimensionPixelSize(R.dimen.account_header_action_item_width);
+            int gravity = Gravity.BOTTOM | Gravity.RIGHT;
 
             popupWindow = new ListPopupWindow(this);
-            popupWindow.setWidth(getResources().getDimensionPixelSize(R.dimen.account_header_action_item_width));
+            popupWindow.setWidth(width);
             popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-            popupWindow.setAdapter(new AccountHeaderActionAdapter(this, profiles));
+            popupWindow.setAdapter(adapter);
             popupWindow.setAnchorView(anchor);
-            popupWindow.setDropDownGravity(Gravity.TOP | Gravity.RIGHT);
+            popupWindow.setDropDownGravity(gravity);
             popupWindow.setOnItemClickListener(this);
             popupWindow.setOnDismissListener(this);
             popupWindow.show();
@@ -228,11 +230,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         dismissPopupWindow();
     }
 
-    private void dismissPopupWindow() {
+    private boolean dismissPopupWindow() {
         if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
+            return true;
         }
         popupWindow = null;
+        return false;
     }
 
     private void buildUi(List<IProfile> profiles) {
@@ -240,6 +244,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         buildDrawer();
         setupToolbar();
         View container = accountHeader.getView().findViewById(R.id.material_drawer_account_header);
+        container.setOnClickListener(null);
         container.setOnClickListener(null);
         container.setClickable(false);
         container.setFocusable(false);
@@ -302,11 +307,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void onBackPressed() {
-        dismissPopupWindow();
-        if (drawer != null && drawer.isDrawerOpen()) {
-            drawer.closeDrawer();
-        } else {
-            super.onBackPressed();
+        boolean dismissed = dismissPopupWindow();
+        if (!dismissed) {
+            if (drawer != null && drawer.isDrawerOpen()) {
+                drawer.closeDrawer();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 

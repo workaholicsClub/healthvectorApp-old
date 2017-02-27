@@ -50,38 +50,42 @@ public class StringUtils {
     }
 
     @Nullable
-    public static String print(Context context, Sex sex) {
+    public static String sex(Context context, Sex sex) {
+        return sex(context, sex, null);
+    }
+
+    @Nullable
+    public static String sex(Context context, Sex sex, @Nullable String defaultValue) {
         if (sex == null) {
-            return null;
+            return defaultValue;
         }
-        String[] strings = context.getResources().getStringArray(R.array.sex_variants);
         switch (sex) {
             case MALE:
-                return strings[1];
+                return context.getString(R.string.male);
             case FEMALE:
-                return strings[2];
+                return context.getString(R.string.female);
             default:
                 return null;
         }
     }
 
     @Nullable
-    public static String print(LocalDate localDate, DateTimeFormatter dateTimeFormatter) {
-        return print(localDate, dateTimeFormatter, null);
+    public static String date(LocalDate localDate, DateTimeFormatter dateTimeFormatter) {
+        return date(localDate, dateTimeFormatter, null);
     }
 
     @Nullable
-    public static String print(LocalDate localDate, DateTimeFormatter dateTimeFormatter, String defaultValue) {
+    public static String date(LocalDate localDate, DateTimeFormatter dateTimeFormatter, @Nullable String defaultValue) {
         return localDate == null ? defaultValue : localDate.toString(dateTimeFormatter);
     }
 
     @Nullable
-    public static String print(LocalTime localTime, DateTimeFormatter dateTimeFormatter) {
-        return print(localTime, dateTimeFormatter, null);
+    public static String time(LocalTime localTime, DateTimeFormatter dateTimeFormatter) {
+        return time(localTime, dateTimeFormatter, null);
     }
 
     @Nullable
-    public static String print(LocalTime localTime, DateTimeFormatter dateTimeFormatter, String defaultValue) {
+    public static String time(LocalTime localTime, DateTimeFormatter dateTimeFormatter, @Nullable String defaultValue) {
         return localTime == null ? defaultValue : localTime.toString(dateTimeFormatter);
     }
 }

@@ -99,10 +99,10 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
 
         textViewName.setText(child.getName());
 
-        textViewSex.setText(StringUtils.print(this, child.getSex()));
+        textViewSex.setText(StringUtils.sex(this, child.getSex()));
 
-        textViewDate.setText(StringUtils.print(child.getBirthDate(), dateFormatter));
-        textViewTime.setText(StringUtils.print(child.getBirthTime(), timeFormatter));
+        textViewDate.setText(StringUtils.date(child.getBirthDate(), dateFormatter));
+        textViewTime.setText(StringUtils.time(child.getBirthTime(), timeFormatter));
 
         textViewBirthHeight.setText(DoubleUtils.heightReview(this, child.getHeight()));
         textViewBirthWeight.setText(DoubleUtils.weightReview(this, child.getWeight()));
