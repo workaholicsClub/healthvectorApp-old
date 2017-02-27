@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_top_panel_height"
+        android:background="?colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:orientation="horizontal"
+        tools:ignore="UnusedAttribute">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewPhoto"
+            android:layout_width="@dimen/profile_rounded_image_size"
+            android:layout_height="@dimen/profile_rounded_image_size"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/profile_margin_vertical"
+            android:layout_marginLeft="@dimen/profile_margin_horizontal"
+            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_marginTop="@dimen/profile_margin_vertical"
+            android:src="@color/white" />
+
+        <TextView
+            android:id="@+id/textViewChildName"
+            style="@style/NameTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/profile_margin_horizontal"
+            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_toEndOf="@+id/imageViewPhoto"
+            android:layout_toRightOf="@+id/imageViewPhoto" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginTop="@dimen/profile_margin_vertical"
+        android:text="@string/sex"
+        android:textAppearance="@style/SecondaryTextAppearance" />
+
+    <TextView
+        android:id="@+id/textViewSex"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_field_height"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:background="@drawable/text_view_background"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
+        android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+        android:textAppearance="@style/PrimaryTextAppearance" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginTop="@dimen/profile_margin_vertical"
+        android:text="@string/birth_date_and_time"
+        android:textAppearance="@style/SecondaryTextAppearance" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewDate"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/profile_field_height"
+            android:layout_marginEnd="@dimen/profile_margin_horizontal"
+            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_weight="1"
+            android:background="@drawable/text_view_background"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
+            android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+            android:textAppearance="@style/PrimaryTextAppearance" />
+
+        <TextView
+            android:id="@+id/textViewTime"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/profile_field_height"
+            android:layout_weight="1"
+            android:background="@drawable/text_view_background"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
+            android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+            android:textAppearance="@style/PrimaryTextAppearance" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginTop="@dimen/profile_margin_vertical"
+        android:text="@string/birth_height_and_weight"
+        android:textAppearance="@style/SecondaryTextAppearance" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewBirthHeight"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/profile_field_height"
+            android:layout_marginEnd="@dimen/profile_margin_horizontal"
+            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_weight="1"
+            android:background="@drawable/text_view_background"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
+            android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+            android:textAppearance="@style/PrimaryTextAppearance" />
+
+        <TextView
+            android:id="@+id/textViewBirthWeight"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/profile_field_height"
+            android:layout_weight="1"
+            android:background="@drawable/text_view_background"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
+            android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+            android:textAppearance="@style/PrimaryTextAppearance" />
+    </LinearLayout>
+</LinearLayout>

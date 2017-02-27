@@ -14,15 +14,15 @@ import io.requery.Table;
 public interface AntropometryData {
     @Key
     @Generated
-    long getId();
+    Long getId();
 
     @ForeignKey
     @ManyToOne
     ChildData getChild();
 
-    double getHeight();
+    Double getHeight();
 
-    double getWeight();
+    Double getWeight();
 
     LocalDate getDate();
 }

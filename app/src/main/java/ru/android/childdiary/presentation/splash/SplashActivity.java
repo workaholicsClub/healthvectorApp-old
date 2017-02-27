@@ -1,30 +1,20 @@
 package ru.android.childdiary.presentation.splash;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
-import javax.inject.Inject;
-
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.presentation.core.BaseActivity;
-import ru.android.childdiary.presentation.core.navigation.NavigationController;
+import ru.android.childdiary.presentation.core.BaseMvpActivity;
+import ru.android.childdiary.presentation.main.MainActivity;
 
-public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
+public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements SplashView {
     @InjectPresenter
     SplashPresenter presenter;
-
-    @Inject
-    NavigationController navigationController;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_splash);
-    }
 
     @Override
     protected void injectActivity(ApplicationComponent applicationComponent) {
@@ -32,7 +22,19 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
     }
 
     @Override
-    public void navigateToMain() {
-        navigationController.navigateToMain(this);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
+    }
+
+    @Override
+    public void startApp(@Nullable Sex sex) {
+        finish();
+        navigateToMain(sex);
+    }
+
+    private void navigateToMain(@Nullable Sex sex) {
+        Intent intent = MainActivity.getIntent(this, sex);
+        startActivity(intent);
     }
 }

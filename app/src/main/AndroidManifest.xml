@@ -3,6 +3,8 @@
     package="ru.android.childdiary"
     tools:ignore="UnusedAttribute">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".app.ChildDiaryApplication"
         android:allowBackup="true"
@@ -22,7 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.onboarding.IntroActivity" />
+        <activity
+            android:name=".presentation.onboarding.IntroActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
         <activity
             android:name=".presentation.settings.SettingsActivity"
             android:parentActivityName=".presentation.main.MainActivity">
@@ -32,7 +40,8 @@
         </activity>
         <activity
             android:name=".presentation.profile.edit.ProfileEditActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
@@ -44,6 +53,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="@string/file_provider_authorities"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 </manifest>

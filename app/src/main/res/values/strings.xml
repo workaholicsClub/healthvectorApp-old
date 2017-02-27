@@ -1,4 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- file provider authorities -->
+    <string name="file_provider_authorities" translatable="false">ru.android.childdiary</string>
+    <!-- translatable strings -->
     <string name="app_name">Развитие ребенка</string>
+    <string name="drawer_item_calendar">Календарь</string>
+    <string name="drawer_item_development_diary">Дневник развития</string>
+    <string name="drawer_item_exercises">Занятия</string>
+    <string name="drawer_item_medical_data">Медицинские данные</string>
+    <string name="drawer_item_settings">Настройки</string>
+    <string name="drawer_item_help">Помощь</string>
+    <string name="profile">Профиль</string>
+    <string name="add_child">Добавить профиль</string>
+    <string name="edit_child_long">Редактировать профиль</string>
+    <string name="edit_child_short">Редактировать</string>
+    <string name="remove_child">Удалить профиль</string>
+    <string name="remove_child_confirmation_title">Удалить профиль ребенка?</string>
+    <string name="remove_child_confirmation_text">Все данные по этому профилю будут удалены без возможности восстановления.</string>
+    <string name="add">Добавить</string>
+    <string name="save">Сохранить</string>
+    <string name="sex">Пол</string>
+    <string name="child_name">Имя ребенка</string>
+    <string name="birth_date_and_time">Дата и время рождения</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+    <string name="birth_height_and_weight">Рост и вес при рождении</string>
+    <string name="enter_height">Введите рост</string>
+    <string name="enter_weight">Введите вес</string>
+    <string name="add_image_button_title">Добавить\nфото</string>
+    <string name="OK">OK</string>
+    <string name="Yes">Да</string>
+    <string name="Cancel">Отмена</string>
+    <string name="request_read_external_storage_permission_title">Запрос на чтение SD-карты</string>
+    <string name="request_read_external_storage_permission_text">Необходимо для чтения файлов с SD-карты.</string>
+    <string name="camera_not_available">Камера не доступна</string>
+    <string name="select_image">Выберите изображение</string>
+    <string name="failed_to_create_file_for_camera">Не удалось создать файл для фотографии</string>
+    <string name="failed_to_create_file_for_crop">Не удалось создать файл для обработки</string>
+    <string name="failed_to_select_image">Не удалось загрузить выбранное изображение</string>
+    <string name="failed_to_crop_image">При обработке изобарженяия произошла ошибка</string>
+    <string name="failed_to_save_result_file">При сохранении файла произошла ошибка</string>
+    <string name="crop_image_title">Обрезать фото</string>
+    <string name="event_diaper">Подгузник</string>
+    <string name="event_sleep">Сон</string>
+    <string name="event_feed">Кормление</string>
+    <string name="event_pump">Сцеживание</string>
+    <string name="event_other">Другое</string>
+    <string name="validate_child_name_empty">Введите имя ребенка</string>
+    <string name="validate_child_sex_empty">Выберите пол ребенка</string>
+    <string name="validate_child_birth_date_empty">Введите дату рождения ребенка</string>
+    <string name="validate_child_birth_height_empty">Введите рост ребенка при рождении</string>
+    <string name="validate_child_birth_weight_empty">Введите вес ребенка при рождении</string>
+    <string name="height_review">%s см</string>
+    <string name="weight_review">%s кг</string>
+    <string name="newborn">новорождённый</string>
+    <string name="years_and_months">%1$s %2$s</string>
+    <string-array name="sex_variants">
+        <item>Выберите пол</item>
+        <item>Мужской</item>
+        <item>Женский</item>
+    </string-array>
+    <string-array name="image_picker_actions">
+        <item>Сделать снимок</item>
+        <item>Из галереи</item>
+        <item>Удалить фото</item>
+    </string-array>
+    <integer-array name="image_picker_drawables">
+        <item>@drawable/action_capture_image</item>
+        <item>@drawable/action_pick_image</item>
+        <item>@drawable/action_delete_image</item>
+    </integer-array>
+    <plurals name="numberOfYears">
+        <item quantity="one">%d год</item>
+        <item quantity="few">%d года</item>
+        <item quantity="other">%d лет</item>
+        <item quantity="many">%d лет</item>
+        <item quantity="zero">%d лет</item>
+    </plurals>
+    <plurals name="numberOfMonths">
+        <item quantity="one">%d месяц</item>
+        <item quantity="few">%d месяца</item>
+        <item quantity="other">%d месяцев</item>
+        <item quantity="many">%d месяцев</item>
+        <item quantity="zero">%d месяцев</item>
+    </plurals>
 </resources>

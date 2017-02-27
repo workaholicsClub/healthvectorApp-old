@@ -23,23 +23,31 @@ public class ChildDbService implements ChildService {
 
     @Override
     public Observable<List<Child>> getAll() {
-        // TODO: make reactive
         return dataStore.select(ChildEntity.class)
                 .orderBy(ChildEntity.NAME)
-                .get().observable()
-                .map(Mapper::map)
-                .toList()
-                .toObservable();
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, ChildMapper::map));
+    }
+
+    @Override
+    public Observable<Child> get(Long id) {
+        return dataStore.select(ChildEntity.class)
+                .where(ChildEntity.ID.eq(id))
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, ChildMapper::map));
     }
 
     @Override
     public Observable<Child> add(Child child) {
-        return dataStore.insert(Mapper.map(child)).toObservable().map(Mapper::map);
+        return dataStore.insert(ChildMapper.map(child)).toObservable().map(ChildMapper::map);
     }
 
     @Override
     public Observable<Child> update(Child child) {
-        return dataStore.update(Mapper.map(child)).toObservable().map(Mapper::map);
+        return DbUtils.updateObservable(dataStore, ChildEntity.class, child, child.getId(),
+                ChildMapper::copy, ChildMapper::map);
     }
 
     @Override

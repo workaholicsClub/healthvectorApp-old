@@ -24,6 +24,11 @@ public class ChildDataRepository implements ChildRepository {
     }
 
     @Override
+    public Observable<Child> get(Long id) {
+        return dbService.get(id);
+    }
+
+    @Override
     public Observable<Child> add(Child child) {
         return dbService.add(child);
     }

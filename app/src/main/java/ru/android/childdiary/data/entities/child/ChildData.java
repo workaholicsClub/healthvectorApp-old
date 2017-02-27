@@ -17,21 +17,23 @@ import ru.android.childdiary.data.types.Sex;
 public interface ChildData {
     @Key
     @Generated
-    long getId();
+    Long getId();
 
     String getName();
 
     LocalDate getBirthDate();
 
+    // необязательный параметр
     LocalTime getBirthTime();
 
     Sex getSex();
 
+    // необязательный параметр
     String getImageFileName();
 
-    double getHeight();
+    Double getHeight();
 
-    double getWeight();
+    Double getWeight();
 
     @OneToMany
     List<AntropometryData> getAntropometryList();
