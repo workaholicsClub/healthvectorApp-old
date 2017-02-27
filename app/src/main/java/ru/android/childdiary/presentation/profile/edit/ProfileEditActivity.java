@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.PopupWindow;
@@ -57,7 +56,8 @@ import ru.android.childdiary.utils.ui.WidgetUtils;
 
 public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener,
-        AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
+        AdapterView.OnItemClickListener, PopupWindow.OnDismissListener,
+        CustomEditText.OnKeyboardHiddenListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
@@ -91,7 +91,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     TextView textViewAddPhoto;
 
     @BindView(R.id.editTextChildName)
-    EditText editTextName;
+    CustomEditText editTextName;
 
     @BindView(R.id.textViewSex)
     TextView textViewSex;
@@ -103,10 +103,10 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     TextView textViewTime;
 
     @BindView(R.id.editTextBirthHeight)
-    EditText editTextBirthHeight;
+    CustomEditText editTextBirthHeight;
 
     @BindView(R.id.editTextBirthWeight)
-    EditText editTextBirthWeight;
+    CustomEditText editTextBirthWeight;
 
     @BindView(R.id.dummy)
     View dummy;
@@ -143,7 +143,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child_long);
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
-            hideKeyboardAndClearFocus();
+            hideKeyboardAndClearFocus(rootView.findFocus());
             isValidationStarted = true;
             ValidationResult result = validator.validateAll();
             if (result.isValid()) {
@@ -214,19 +214,27 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             }
         });
 
+        editTextName.setOnKeyboardHiddenListener(this);
+        editTextBirthHeight.setOnKeyboardHiddenListener(this);
+        editTextBirthWeight.setOnKeyboardHiddenListener(this);
+
         editTextBirthWeight.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                hideKeyboardAndClearFocus();
+                hideKeyboardAndClearFocus(v);
                 return true;
             }
             return false;
         });
     }
 
-    private void hideKeyboardAndClearFocus() {
-        View focusedView = rootView.findFocus();
-        KeyboardUtils.hideKeyboard(this, focusedView);
-        focusedView.clearFocus();
+    @Override
+    public void onKeyboardHidden(CustomEditText editText) {
+        hideKeyboardAndClearFocus(editText);
+    }
+
+    private void hideKeyboardAndClearFocus(View view) {
+        KeyboardUtils.hideKeyboard(this, view);
+        view.clearFocus();
         dummy.requestFocus();
     }
 
@@ -246,7 +254,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         ListAdapter adapter = new SexAdapter(this);
         View anchor = textViewSex;
         int width = textViewSex.getWidth();
-        int gravity = Gravity.BOTTOM | Gravity.LEFT;
+        int gravity = Gravity.BOTTOM | Gravity.START;
 
         popupWindow = new ListPopupWindow(this);
         popupWindow.setWidth(width);

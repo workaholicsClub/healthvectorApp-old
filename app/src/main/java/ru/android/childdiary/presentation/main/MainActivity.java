@@ -191,7 +191,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles);
             View anchor = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher);
             int width = getResources().getDimensionPixelSize(R.dimen.account_header_action_item_width);
-            int gravity = Gravity.BOTTOM | Gravity.RIGHT;
+            int gravity = Gravity.BOTTOM | Gravity.END;
 
             popupWindow = new ListPopupWindow(this);
             popupWindow.setWidth(width);
