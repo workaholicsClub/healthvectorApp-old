@@ -245,7 +245,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         setupToolbar();
         View container = accountHeader.getView().findViewById(R.id.material_drawer_account_header);
         container.setOnClickListener(null);
-        container.setOnClickListener(null);
         container.setClickable(false);
         container.setFocusable(false);
         container.setFocusableInTouchMode(false);
