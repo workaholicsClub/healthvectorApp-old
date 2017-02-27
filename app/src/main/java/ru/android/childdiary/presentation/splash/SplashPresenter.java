@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -35,11 +36,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 Observable.combineLatest(
                         Observable
                                 .timer(SPLASH_TIME_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
-                                .doOnComplete(() -> logger.debug("timer finished")),
+                                .doOnNext(zero -> logger.debug("timer finished")),
                         childInteractor
                                 .getAll()
+                                .doOnNext(childList -> logger.debug("data loaded"))
                                 .subscribeOn(Schedulers.io()),
-                        (zero, children) -> children)
+                        (zero, childList) -> childList)
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::onGetChildList, this::onUnexpectedError));
     }
 
