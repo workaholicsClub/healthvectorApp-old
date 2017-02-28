@@ -42,7 +42,7 @@
     <style name="NameEditTextStyle">
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColorHint">@color/transparentWhite</item>
+        <item name="android:textColorHint">@color/white_transparent</item>
         <item name="android:background">@drawable/name_edit_text_background</item>
         <item name="android:paddingBottom">@dimen/name_edit_text_padding_bottom</item>
         <item name="android:textSize">@dimen/text_size_large</item>

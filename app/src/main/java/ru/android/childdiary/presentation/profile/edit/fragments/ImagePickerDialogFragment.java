@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.edit;
+package ru.android.childdiary.presentation.profile.edit.fragments;
 
 import android.Manifest;
 import android.app.Dialog;

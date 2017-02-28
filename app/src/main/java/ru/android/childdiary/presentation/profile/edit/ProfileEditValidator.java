@@ -77,9 +77,9 @@ class ProfileEditValidator {
         }
 
         if (result.isValid()) {
-            activity.textViewDate.setBackgroundResource(R.drawable.spinner_background);
+            activity.textViewBirthDate.setBackgroundResource(R.drawable.spinner_background);
         } else {
-            activity.textViewDate.setBackgroundResource(R.drawable.spinner_background_error);
+            activity.textViewBirthDate.setBackgroundResource(R.drawable.spinner_background_error);
         }
 
         return result;

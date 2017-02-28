@@ -10,6 +10,8 @@ import ru.android.childdiary.presentation.core.BaseActivityView;
 
 @StateStrategyType(OneExecutionStateStrategy.class)
 public interface ProfileEditView extends BaseActivityView {
+    void setButtonDoneEnabled(boolean enabled);
+
     void childAdded(@NonNull Child child);
 
     void childUpdated(@NonNull Child child);

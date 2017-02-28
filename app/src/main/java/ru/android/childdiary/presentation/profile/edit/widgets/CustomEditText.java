@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.edit;
+package ru.android.childdiary.presentation.profile.edit.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;

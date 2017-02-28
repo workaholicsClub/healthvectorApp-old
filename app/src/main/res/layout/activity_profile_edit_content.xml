@@ -26,7 +26,7 @@
             android:src="@color/white" />
 
         <TextView
-            android:id="@+id/textViewAddPhoto"
+            android:id="@+id/textViewPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/imageViewPhoto"
@@ -39,7 +39,7 @@
             android:text="@string/add_image_button_title"
             android:textAppearance="@style/SecondaryTextAppearance" />
 
-        <ru.android.childdiary.presentation.profile.edit.CustomEditText
+        <ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText
             android:id="@+id/editTextChildName"
             style="@style/NameEditTextStyle"
             android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:orientation="horizontal">
 
-        <ru.android.childdiary.presentation.profile.edit.CustomEditText
+        <ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText
             android:id="@+id/editTextBirthHeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
@@ -150,7 +150,7 @@
             android:textColorHint="@color/secondary_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
 
-        <ru.android.childdiary.presentation.profile.edit.CustomEditText
+        <ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText
             android:id="@+id/editTextBirthWeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"

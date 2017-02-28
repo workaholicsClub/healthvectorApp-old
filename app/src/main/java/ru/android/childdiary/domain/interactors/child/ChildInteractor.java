@@ -2,6 +2,7 @@ package ru.android.childdiary.domain.interactors.child;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,5 +103,15 @@ public class ChildInteractor implements Interactor, ChildRepository {
             preferences.setActiveChildId(child.getId());
             return child;
         });
+    }
+
+    public Observable<Boolean> controlDoneButton(@NonNull Observable<Child> childObservable) {
+        return childObservable.map(child ->
+                !TextUtils.isEmpty(child.getName())
+                        && child.getSex() != null
+                        && child.getBirthDate() != null
+                        && child.getHeight() != null
+                        && child.getWeight() != null)
+                .distinctUntilChanged();
     }
 }

@@ -1,9 +1,12 @@
 package ru.android.childdiary.presentation.profile.edit;
 
+import android.support.annotation.NonNull;
+
 import com.arellomobile.mvp.InjectViewState;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -19,6 +22,13 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
+    }
+
+    public void listenForUpdate(@NonNull Observable<Child> childObservable) {
+        unsubscribeOnDestroy(childInteractor.controlDoneButton(childObservable)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(enabled -> getViewState().setButtonDoneEnabled(enabled), this::onUnexpectedError));
     }
 
     public void addChild(Child child) {
