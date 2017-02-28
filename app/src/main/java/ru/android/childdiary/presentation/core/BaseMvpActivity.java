@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -160,7 +161,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
-            showToast(e.toString());
+            new AlertDialog.Builder(this, ThemeUtils.getThemeDialog(sex))
+                    .setMessage(e.toString())
+                    .setPositiveButton(R.string.OK, null)
+                    .show();
         }
     }
 
