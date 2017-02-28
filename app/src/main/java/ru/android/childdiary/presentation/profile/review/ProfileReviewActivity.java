@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.di.modules.ApplicationModule;
@@ -89,23 +90,12 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
 
         Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
         presenter.loadChild(child.getId());
-
-        getSupportActionBar().setTitle(R.string.profile);
-        buttonEdit.setOnClickListener(v -> navigateToProfileEdit(child));
     }
 
-    private void setupViews(Child child) {
-        imageViewPhoto.setImageDrawable(ThemeUtils.getChildIcon(this, child));
-
-        textViewName.setText(child.getName());
-
-        textViewSex.setText(StringUtils.print(this, child.getSex()));
-
-        textViewDate.setText(StringUtils.print(child.getBirthDate(), dateFormatter));
-        textViewTime.setText(StringUtils.print(child.getBirthTime(), timeFormatter));
-
-        textViewBirthHeight.setText(DoubleUtils.heightReview(this, child.getHeight()));
-        textViewBirthWeight.setText(DoubleUtils.weightReview(this, child.getWeight()));
+    @Override
+    protected void setupToolbar() {
+        super.setupToolbar();
+        getSupportActionBar().setTitle(R.string.profile);
     }
 
     @Override
@@ -114,10 +104,34 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
         buttonEdit.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(this, sex));
     }
 
+    private void setupViews(@NonNull Child child) {
+        imageViewPhoto.setImageDrawable(ThemeUtils.getChildIcon(this, child));
+
+        textViewName.setText(child.getName());
+
+        textViewSex.setText(StringUtils.sex(this, child.getSex()));
+
+        textViewDate.setText(StringUtils.date(child.getBirthDate(), dateFormatter));
+        textViewTime.setText(StringUtils.time(child.getBirthTime(), timeFormatter));
+
+        textViewBirthHeight.setText(DoubleUtils.heightReview(this, child.getHeight()));
+        textViewBirthWeight.setText(DoubleUtils.weightReview(this, child.getWeight()));
+    }
+
     @Override
-    public void childLoaded(@NonNull Child child) {
+    public void showChild(@NonNull Child child) {
         changeThemeIfNeeded(child);
         setupViews(child);
+    }
+
+    @Override
+    public void editChild(@NonNull Child child) {
+        navigateToProfileEdit(child);
+    }
+
+    @OnClick(R.id.buttonEdit)
+    void onButtonEditClick() {
+        presenter.editChild();
     }
 
     @Override

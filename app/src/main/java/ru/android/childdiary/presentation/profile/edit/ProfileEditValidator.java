@@ -9,6 +9,7 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.ValidationResult;
 import ru.android.childdiary.utils.DoubleUtils;
 
+// TODO: переделать
 class ProfileEditValidator {
     private ProfileEditActivity activity;
 
@@ -53,15 +54,15 @@ class ProfileEditValidator {
     public ValidationResult validateSex(boolean shouldFocus) {
         ValidationResult result = new ValidationResult();
 
-        Sex sex = activity.spinnerSexAdapter.getSexSpinnerPosition(activity.spinnerSex);
+        Sex sex = activity.editedChild.getSex();
         if (sex == null) {
             result.addMessage(activity.getString(R.string.validate_child_sex_empty));
         }
 
         if (result.isValid()) {
-            activity.spinnerSex.setBackgroundResource(R.drawable.spinner_background);
+            activity.textViewSex.setBackgroundResource(R.drawable.spinner_background);
         } else {
-            activity.spinnerSex.setBackgroundResource(R.drawable.spinner_background_error);
+            activity.textViewSex.setBackgroundResource(R.drawable.spinner_background_error);
         }
 
         return result;

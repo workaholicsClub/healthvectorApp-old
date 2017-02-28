@@ -1,5 +1,7 @@
 package ru.android.childdiary.presentation.profile.review;
 
+import android.support.annotation.NonNull;
+
 import com.arellomobile.mvp.InjectViewState;
 
 import javax.inject.Inject;
@@ -16,20 +18,31 @@ public class ProfileReviewPresenter extends BasePresenter<ProfileReviewView> {
     @Inject
     ChildInteractor childInteractor;
 
+    private Child child;
+
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
     }
 
-    public void loadChild(Long id) {
+    public void loadChild(@NonNull Long id) {
         unsubscribeOnDestroy(childInteractor.get(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onChildLoaded, this::onUnexpectedError));
+                .subscribe(this::onGetChild, this::onUnexpectedError));
     }
 
-    private void onChildLoaded(Child child) {
-        logger.debug("onChildLoaded");
-        getViewState().childLoaded(child);
+    private void onGetChild(@NonNull Child child) {
+        logger.debug("onGetChild");
+        this.child = child;
+        getViewState().showChild(child);
+    }
+
+    public void editChild() {
+        if (child == null) {
+            logger.warn("editChild: child is null");
+            return;
+        }
+        getViewState().editChild(child);
     }
 }

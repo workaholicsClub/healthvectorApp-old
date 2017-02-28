@@ -35,11 +35,11 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(childInteractor.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onChildListLoaded, this::onUnexpectedError));
+                .subscribe(this::onGetChildList, this::onUnexpectedError));
     }
 
-    private void onChildListLoaded(List<Child> childList) {
-        logger.debug("onChildListLoaded");
+    private void onGetChildList(List<Child> childList) {
+        logger.debug("onGetChildList");
         // TODO: брать последний активный профиль из настроек
         // TODO: сохранять в настройки последнего добавленного ребенка
         boolean isFirstTime = this.childList == null;
@@ -53,7 +53,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         if (activeChild == null) {
             activeChild = childList.isEmpty() ? null : childList.get(0);
         }
-        getViewState().childListLoaded(childList);
+        getViewState().showChildList(childList);
         getViewState().setActive(activeChild);
         if (childList.isEmpty() && isFirstTime) {
             getViewState().addChild();

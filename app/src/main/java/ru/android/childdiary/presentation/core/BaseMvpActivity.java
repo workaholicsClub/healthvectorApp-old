@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -81,6 +82,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Icepick.restoreInstanceState(this, savedInstanceState);
         if (sex == null) {
             sex = extractTheme(savedInstanceState);
@@ -117,9 +119,9 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
+    protected void onStart() {
+        super.onStart();
+        logger.debug("onStart");
     }
 
     @Override
@@ -132,6 +134,19 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     protected void onPause() {
         super.onPause();
         logger.debug("onPause");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        logger.debug("onSaveInstanceState");
+        Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        logger.debug("onStop");
     }
 
     @Override

@@ -41,13 +41,13 @@ public class ApplicationModule {
     @Singleton
     @Named(DATE_FORMATTER)
     public DateTimeFormatter provideDateFormat() {
-        return DateTimeFormat.shortDate();
+        return DateTimeFormat.forPattern("dd.MM.yyyy");
     }
 
     @Provides
     @Singleton
     @Named(TIME_FORMATTER)
     public DateTimeFormatter provideTimeFormat() {
-        return DateTimeFormat.shortTime();
+        return DateTimeFormat.forPattern("HH:mm");
     }
 }

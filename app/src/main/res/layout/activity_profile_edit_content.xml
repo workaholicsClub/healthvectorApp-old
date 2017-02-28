@@ -39,7 +39,7 @@
             android:text="@string/add_image_button_title"
             android:textAppearance="@style/SecondaryTextAppearance" />
 
-        <EditText
+        <ru.android.childdiary.presentation.profile.edit.CustomEditText
             android:id="@+id/editTextChildName"
             style="@style/NameEditTextStyle"
             android:layout_width="wrap_content"
@@ -66,13 +66,17 @@
         android:text="@string/sex"
         android:textAppearance="@style/SecondaryTextAppearance" />
 
-    <Spinner
-        android:id="@+id/spinnerSex"
+    <TextView
+        android:id="@+id/textViewSex"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_field_height"
         android:layout_marginLeft="@dimen/profile_margin_horizontal"
         android:layout_marginRight="@dimen/profile_margin_horizontal"
-        android:background="@drawable/spinner_background" />
+        android:background="@drawable/spinner_background"
+        android:gravity="center_vertical"
+        android:text="@string/select_sex"
+        android:textAppearance="@style/PrimaryTextAppearance"
+        android:textColor="@color/secondary_text" />
 
     <TextView
         android:layout_width="match_parent"
@@ -131,7 +135,7 @@
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:orientation="horizontal">
 
-        <EditText
+        <ru.android.childdiary.presentation.profile.edit.CustomEditText
             android:id="@+id/editTextBirthHeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
@@ -146,7 +150,7 @@
             android:textColorHint="@color/secondary_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
 
-        <EditText
+        <ru.android.childdiary.presentation.profile.edit.CustomEditText
             android:id="@+id/editTextBirthWeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
@@ -164,6 +168,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:focusable="true"
-            android:focusableInTouchMode="true" />
+            android:focusableInTouchMode="true">
+
+            <requestFocus />
+        </View>
     </LinearLayout>
 </LinearLayout>
