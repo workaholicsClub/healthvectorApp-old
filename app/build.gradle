@@ -6,6 +6,8 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
+    applicationVariants.all { variant -> renameArtifact(variant, defaultConfig) }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -29,6 +31,16 @@ android {
             minifyEnabled false
             proguardFiles 'proguard-rules.pro'
         }
+    }
+}
+
+def renameArtifact(variant, defaultConfig) {
+    variant.outputs.each { output ->
+        def formattedDate = new Date().format('dd.MM.yyyy')
+        def fileName = applicationName + "_" + formattedDate + "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ")_" + variant.name + ".apk"
+
+        def file = output.packageApplication.outputFile
+        output.packageApplication.outputFile = new File(file.parent, fileName)
     }
 }
 
