@@ -26,8 +26,7 @@
         </activity>
         <activity
             android:name=".presentation.onboarding.IntroActivity"
-            android:parentActivityName=".presentation.main.MainActivity"
-            android:screenOrientation="portrait">
+            android:parentActivityName=".presentation.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
@@ -55,8 +54,7 @@
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
+            android:name=".presentation.profile.edit.fragments.CropActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <provider

@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -30,29 +31,26 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
         applicationComponent.inject(this);
     }
 
-    public void listenForUpdate(@NonNull Observable<Child> childObservable) {
-        unsubscribeOnDestroy(childInteractor.controlDoneButton(childObservable)
-                .subscribe(enabled -> getViewState().setButtonDoneEnabled(enabled), this::onUnexpectedError));
+    public Disposable listenForDoneButtonUpdate(@NonNull Observable<Child> childObservable) {
+        return childInteractor.controlDoneButton(childObservable)
+                .subscribe(enabled -> getViewState().setButtonDoneEnabled(enabled), this::onUnexpectedError);
     }
 
-    public void addChild(Child child) {
-        unsubscribeOnDestroy(childInteractor.add(child)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onAddChild, this::onUnexpectedError));
+    public Disposable listenForFieldsUpdate(@NonNull Observable<Child> childObservable) {
+        return childInteractor.controlFields(childObservable)
+                .subscribe(this::handleValidationResult, this::onUnexpectedError);
     }
 
     @Override
     public void onUnexpectedError(Throwable e) {
         if (e instanceof ChildValidationException) {
-            handleValidationResult((ChildValidationException) e);
+            handleValidationResult(((ChildValidationException) e).getValidationResults());
         } else {
             super.onUnexpectedError(e);
         }
     }
 
-    private void handleValidationResult(ChildValidationException e) {
-        List<ChildValidationResult> results = e.getValidationResults();
+    private void handleValidationResult(List<ChildValidationResult> results) {
         if (!results.isEmpty()) {
             String msg = Stream.of(results).map(ChildValidationResult::toString).collect(Collectors.joining("\n"));
             getViewState().showValidationErrorMessage(msg);
@@ -88,6 +86,13 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
                 }
             }
         }
+    }
+
+    public void addChild(Child child) {
+        unsubscribeOnDestroy(childInteractor.add(child)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onAddChild, this::onUnexpectedError));
     }
 
     private void onAddChild(Child child) {

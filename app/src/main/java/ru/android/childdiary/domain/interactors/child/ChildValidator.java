@@ -34,34 +34,6 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
         return results;
     }
 
-    public ChildValidationResult validateImage(Child child) {
-        return validateField(new ChildValidationResult(ChildFieldType.IMAGE), child);
-    }
-
-    public ChildValidationResult validateName(Child child) {
-        return validateField(new ChildValidationResult(ChildFieldType.NAME), child);
-    }
-
-    public ChildValidationResult validateSex(Child child) {
-        return validateField(new ChildValidationResult(ChildFieldType.SEX), child);
-    }
-
-    public ChildValidationResult validateBirthDate(Child child) {
-        return validateField(new ChildValidationResult(ChildFieldType.BIRTH_DATE), child);
-    }
-
-    public ChildValidationResult validateBirthTime(Child child) {
-        return validateField(new ChildValidationResult(ChildFieldType.BIRTH_TIME), child);
-    }
-
-    public ChildValidationResult validateBirthHeight(Child child) {
-        return validateField(new ChildValidationResult(ChildFieldType.BIRTH_HEIGHT), child);
-    }
-
-    public ChildValidationResult validateBirthWeight(Child child) {
-        return validateField(new ChildValidationResult(ChildFieldType.BIRTH_WEIGHT), child);
-    }
-
     private ChildValidationResult validateField(ChildValidationResult result, Child child) {
         switch (result.getFieldType()) {
             case IMAGE:

@@ -24,7 +24,7 @@ class ChildObservable extends Observable<Child> {
         private ProfileEditActivity activity;
 
         public Listener(ProfileEditActivity activity, Observer<? super Child> observer) {
-            activity.onUpdateChildListener = this;
+            activity.addOnUpdateChildListener(this);
             this.activity = activity;
             this.observer = observer;
             observer.onSubscribe(this);
@@ -38,7 +38,7 @@ class ChildObservable extends Observable<Child> {
 
         @Override
         protected void onDispose() {
-            activity.onUpdateChildListener = null;
+            activity.removeOnUpdateChildListener(this);
             activity = null;
             observer = null;
         }

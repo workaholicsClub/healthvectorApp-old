@@ -9,10 +9,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.android.childdiary.app.ChildDiaryPreferences;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.domain.core.Interactor;
@@ -109,13 +111,15 @@ public class ChildInteractor implements Interactor, ChildRepository {
     }
 
     public Observable<Boolean> controlDoneButton(@NonNull Observable<Child> childObservable) {
-        return childObservable.map(child ->
-                !TextUtils.isEmpty(child.getName())
-                        && child.getSex() != null
-                        && child.getBirthDate() != null
-                        && child.getBirthHeight() != null
-                        && child.getBirthWeight() != null)
+        return childObservable
+                .map(child -> !TextUtils.isEmpty(child.getName()))
                 .distinctUntilChanged();
+    }
+
+    public Observable<List<ChildValidationResult>> controlFields(@NonNull Observable<Child> childObservable) {
+        return childObservable
+                .debounce(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .map(childValidator::validate);
     }
 
     private Observable<Child> validate(Child item) {

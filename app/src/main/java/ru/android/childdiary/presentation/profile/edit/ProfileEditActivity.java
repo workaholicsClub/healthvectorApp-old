@@ -24,6 +24,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -32,7 +34,9 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -62,6 +66,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
+
+    private final List<OnUpdateChildListener> onUpdateChildListeners = new ArrayList<>();
 
     @InjectPresenter
     ProfileEditPresenter presenter;
@@ -113,14 +119,20 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @State
     Child editedChild = Child.NULL;
 
-    OnUpdateChildListener onUpdateChildListener;
-
     private ListPopupWindow popupWindow;
 
     public static Intent getIntent(Context context, @Nullable Child child) {
         Intent intent = new Intent(context, ProfileEditActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_CHILD, child);
         return intent;
+    }
+
+    void addOnUpdateChildListener(OnUpdateChildListener listener) {
+        onUpdateChildListeners.add(listener);
+    }
+
+    void removeOnUpdateChildListener(OnUpdateChildListener listener) {
+        onUpdateChildListeners.remove(listener);
     }
 
     @Override
@@ -155,7 +167,13 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         setupDate();
         setupTime();
 
-        presenter.listenForUpdate(new ChildObservable(this));
+        unsubscribeOnDestroy(presenter.listenForDoneButtonUpdate(new ChildObservable(this)));
+    }
+
+    @Override
+    protected void themeChangedCustom() {
+        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(this, sex));
+        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(this, sex));
     }
 
     @Override
@@ -166,63 +184,58 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     private void updateChild(Child child) {
         editedChild = child;
-        if (onUpdateChildListener != null) {
-            onUpdateChildListener.onUpdateChild(child);
+        for (OnUpdateChildListener listener : onUpdateChildListeners) {
+            listener.onUpdateChild(child);
         }
-    }
-
-    @Override
-    protected void themeChangedCustom() {
-        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(this, sex));
-        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(this, sex));
     }
 
     private void setupTextViews() {
         editTextName.setText(editedChild.getName());
-
         editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getBirthHeight()));
         editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getBirthWeight()));
 
-        editTextName.setOnFocusChangeListener((v, hasFocus) -> {
+        unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextName).subscribe(textViewAfterTextChangeEvent -> {
+            String name = editTextName.getText().toString();
+            updateChild(Child.getBuilder(editedChild).name(name).build());
+        }));
+        unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthHeight).subscribe(textViewAfterTextChangeEvent -> {
+            Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
+            updateChild(Child.getBuilder(editedChild).birthHeight(height).build());
+        }));
+        unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthWeight).subscribe(textViewAfterTextChangeEvent -> {
+            Double height = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
+            updateChild(Child.getBuilder(editedChild).birthHeight(height).build());
+        }));
+
+        unsubscribeOnDestroy(RxView.focusChanges(editTextName).subscribe((hasFocus) -> {
             if (hasFocus) {
                 editTextName.setSelection(editTextName.getText().length());
-            } else {
-                String name = editTextName.getText().toString().trim();
-                updateChild(Child.getBuilder(editedChild).name(name).build());
             }
-        });
-        editTextBirthHeight.setOnFocusChangeListener((v, hasFocus) -> {
+        }));
+        unsubscribeOnDestroy(RxView.focusChanges(editTextBirthHeight).subscribe(hasFocus -> {
             if (hasFocus) {
                 editTextBirthHeight.setText(DoubleUtils.heightEdit(editedChild.getBirthHeight()));
                 editTextBirthHeight.setSelection(editTextBirthHeight.getText().length());
             } else {
-                Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
-                updateChild(Child.getBuilder(editedChild).birthHeight(height).build());
                 editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getBirthHeight()));
             }
-        });
-        editTextBirthWeight.setOnFocusChangeListener((v, hasFocus) -> {
+        }));
+        unsubscribeOnDestroy(RxView.focusChanges(editTextBirthWeight).subscribe(hasFocus -> {
             if (hasFocus) {
                 editTextBirthWeight.setText(DoubleUtils.weightEdit(editedChild.getBirthWeight()));
                 editTextBirthWeight.setSelection(editTextBirthWeight.getText().length());
             } else {
-                Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
-                updateChild(Child.getBuilder(editedChild).birthWeight(weight).build());
                 editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getBirthWeight()));
             }
-        });
-
+        }));
+        unsubscribeOnDestroy(RxTextView.editorActionEvents(editTextBirthWeight).subscribe(textViewEditorActionEvent -> {
+            if (textViewEditorActionEvent.actionId() == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboardAndClearFocus(editTextBirthWeight);
+            }
+        }));
         editTextName.setOnKeyboardHiddenListener(this);
         editTextBirthHeight.setOnKeyboardHiddenListener(this);
         editTextBirthWeight.setOnKeyboardHiddenListener(this);
-
-        editTextBirthWeight.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                hideKeyboardAndClearFocus(v);
-                return true;
-            }
-            return false;
-        });
     }
 
     @Override
@@ -388,6 +401,12 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void childUpdated(@NonNull Child child) {
         finish();
+    }
+
+    @Override
+    public void validationFailed() {
+        // TODO: dispose previous
+        unsubscribeOnDestroy(presenter.listenForFieldsUpdate(new ChildObservable(this)));
     }
 
     @Override

@@ -14,6 +14,9 @@ public interface ProfileEditView extends BaseActivityView {
     void setButtonDoneEnabled(boolean enabled);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
+    void validationFailed();
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void showValidationErrorMessage(String msg);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
