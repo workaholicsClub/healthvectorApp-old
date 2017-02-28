@@ -21,13 +21,15 @@ import ru.android.childdiary.utils.ObjectUtils;
 public class ChildInteractor implements Interactor, ChildRepository {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
-    private final ChildDataRepository childRepository;
     private final ChildDiaryPreferences preferences;
+    private final ChildDataRepository childRepository;
+    private final ChildValidator childValidator;
 
     @Inject
-    public ChildInteractor(ChildDataRepository childRepository, ChildDiaryPreferences preferences) {
-        this.childRepository = childRepository;
+    public ChildInteractor(ChildDiaryPreferences preferences, ChildDataRepository childRepository, ChildValidator childValidator) {
         this.preferences = preferences;
+        this.childRepository = childRepository;
+        this.childValidator = childValidator;
     }
 
     @Override
@@ -42,7 +44,8 @@ public class ChildInteractor implements Interactor, ChildRepository {
 
     @Override
     public Observable<Child> add(Child item) {
-        return childRepository.add(item)
+        return validate(item)
+                .flatMap(childRepository::add)
                 .flatMap(this::setActiveChild);
     }
 
@@ -110,8 +113,19 @@ public class ChildInteractor implements Interactor, ChildRepository {
                 !TextUtils.isEmpty(child.getName())
                         && child.getSex() != null
                         && child.getBirthDate() != null
-                        && child.getHeight() != null
-                        && child.getWeight() != null)
+                        && child.getBirthHeight() != null
+                        && child.getBirthWeight() != null)
                 .distinctUntilChanged();
+    }
+
+    private Observable<Child> validate(Child item) {
+        return Observable.just(item)
+                .flatMap(child -> {
+                    List<ChildValidationResult> errors = childValidator.validate(child);
+                    if (!errors.isEmpty()) {
+                        return Observable.error(new ChildValidationException(errors));
+                    }
+                    return Observable.just(child);
+                });
     }
 }

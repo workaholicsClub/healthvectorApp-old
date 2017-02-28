@@ -47,7 +47,6 @@ import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.ValidationResult;
 import ru.android.childdiary.presentation.profile.edit.fragments.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText;
 import ru.android.childdiary.utils.DoubleUtils;
@@ -63,8 +62,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
-
-    private final ProfileEditValidator validator = new ProfileEditValidator(this);
 
     @InjectPresenter
     ProfileEditPresenter presenter;
@@ -114,9 +111,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     View dummy;
 
     @State
-    boolean isValidationStarted;
-
-    @State
     Child editedChild = Child.NULL;
 
     OnUpdateChildListener onUpdateChildListener;
@@ -148,16 +142,10 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
             hideKeyboardAndClearFocus(rootView.findFocus());
-            isValidationStarted = true;
-            ValidationResult result = validator.validateAll();
-            if (result.isValid()) {
-                if (child == null) {
-                    presenter.addChild(editedChild);
-                } else {
-                    presenter.updateChild(editedChild);
-                }
+            if (child == null) {
+                presenter.addChild(editedChild);
             } else {
-                showToast(result.toString());
+                presenter.updateChild(editedChild);
             }
         });
 
@@ -192,44 +180,35 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     private void setupTextViews() {
         editTextName.setText(editedChild.getName());
 
-        editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getHeight()));
-        editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getWeight()));
+        editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getBirthHeight()));
+        editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getBirthWeight()));
 
         editTextName.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 editTextName.setSelection(editTextName.getText().length());
             } else {
                 String name = editTextName.getText().toString().trim();
-                updateChild(editedChild.getBuilder(editedChild).name(name).build());
-                if (isValidationStarted) {
-                    validator.validateName(false);
-                }
+                updateChild(Child.getBuilder(editedChild).name(name).build());
             }
         });
         editTextBirthHeight.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                editTextBirthHeight.setText(DoubleUtils.heightEdit(editedChild.getHeight()));
+                editTextBirthHeight.setText(DoubleUtils.heightEdit(editedChild.getBirthHeight()));
                 editTextBirthHeight.setSelection(editTextBirthHeight.getText().length());
             } else {
                 Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
-                updateChild(editedChild.getBuilder(editedChild).height(height).build());
-                editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getHeight()));
-                if (isValidationStarted) {
-                    validator.validateBirthHeight(false);
-                }
+                updateChild(Child.getBuilder(editedChild).birthHeight(height).build());
+                editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getBirthHeight()));
             }
         });
         editTextBirthWeight.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                editTextBirthWeight.setText(DoubleUtils.weightEdit(editedChild.getWeight()));
+                editTextBirthWeight.setText(DoubleUtils.weightEdit(editedChild.getBirthWeight()));
                 editTextBirthWeight.setSelection(editTextBirthWeight.getText().length());
             } else {
                 Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
-                updateChild(editedChild.getBuilder(editedChild).weight(weight).build());
-                editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getWeight()));
-                if (isValidationStarted) {
-                    validator.validateBirthWeight(false);
-                }
+                updateChild(Child.getBuilder(editedChild).birthWeight(weight).build());
+                editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getBirthWeight()));
             }
         });
 
@@ -262,9 +241,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         changeThemeIfNeeded(sex);
         textViewSex.setText(StringUtils.sex(this, sex, getString(R.string.select_sex)));
         WidgetUtils.setupTextView(textViewSex, sex != null);
-        if (isValidationStarted) {
-            validator.validateSex(false);
-        }
     }
 
     @OnClick(R.id.textViewSex)
@@ -322,9 +298,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         LocalDate birthDate = editedChild.getBirthDate();
         textViewBirthDate.setText(StringUtils.date(birthDate, dateFormatter, getString(R.string.date)));
         WidgetUtils.setupTextView(textViewBirthDate, birthDate != null);
-        if (isValidationStarted) {
-            validator.validateBirthDate(false);
-        }
     }
 
     private void setupTime() {
@@ -415,6 +388,69 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void childUpdated(@NonNull Child child) {
         finish();
+    }
+
+    @Override
+    public void showValidationErrorMessage(String msg) {
+        showToast(msg);
+    }
+
+    @Override
+    public void nameValidated(boolean valid, boolean shouldFocus) {
+        if (valid) {
+            editTextName.setBackgroundResource(R.drawable.name_edit_text_background);
+            int bottom = getResources().getDimensionPixelSize(R.dimen.name_edit_text_padding_bottom);
+            editTextName.setPadding(0, 0, 0, bottom);
+        } else {
+            editTextName.setBackgroundResource(R.drawable.name_edit_text_background_error);
+            int bottom = getResources().getDimensionPixelSize(R.dimen.name_edit_text_padding_bottom);
+            editTextName.setPadding(0, 0, 0, bottom);
+            if (shouldFocus) {
+                editTextName.requestFocus();
+            }
+        }
+    }
+
+    @Override
+    public void sexValidated(boolean valid, boolean shouldFocus) {
+        if (valid) {
+            textViewSex.setBackgroundResource(R.drawable.spinner_background);
+        } else {
+            textViewSex.setBackgroundResource(R.drawable.spinner_background_error);
+        }
+    }
+
+    @Override
+    public void birthDateValidated(boolean valid, boolean shouldFocus) {
+        if (valid) {
+            textViewBirthDate.setBackgroundResource(R.drawable.spinner_background);
+        } else {
+            textViewBirthDate.setBackgroundResource(R.drawable.spinner_background_error);
+        }
+    }
+
+    @Override
+    public void birthHeightValidated(boolean valid, boolean shouldFocus) {
+        if (valid) {
+            editTextBirthHeight.setBackgroundResource(R.drawable.spinner_background);
+        } else {
+            editTextBirthHeight.setBackgroundResource(R.drawable.spinner_background_error);
+            if (shouldFocus) {
+                editTextBirthHeight.requestFocus();
+            }
+        }
+    }
+
+    @Override
+    public void birthWeightValidated(boolean valid, boolean shouldFocus) {
+        if (valid) {
+            editTextBirthWeight.setBackgroundResource(R.drawable.spinner_background);
+        } else {
+            editTextBirthWeight.setBackgroundResource(R.drawable.spinner_background_error);
+            if (shouldFocus) {
+                editTextBirthWeight.requestFocus();
+            }
+        }
     }
 
     @Override

@@ -31,9 +31,9 @@ public interface ChildData {
     // необязательный параметр
     String getImageFileName();
 
-    Double getHeight();
+    Double getBirthHeight();
 
-    Double getWeight();
+    Double getBirthWeight();
 
     @OneToMany
     List<AntropometryData> getAntropometryList();

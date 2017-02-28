@@ -226,8 +226,8 @@ public class DbTest {
                 .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()).minusMinutes(RANDOM.nextInt()))
                 .sex(RANDOM.nextBoolean() ? Sex.MALE : Sex.FEMALE)
                 .imageFileName(null)
-                .height(RANDOM.nextDouble())
-                .weight(RANDOM.nextDouble())
+                .birthHeight(RANDOM.nextDouble())
+                .birthWeight(RANDOM.nextDouble())
                 .build();
     }
 

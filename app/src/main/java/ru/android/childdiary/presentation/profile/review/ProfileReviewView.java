@@ -9,10 +9,10 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseActivityView;
 
-@StateStrategyType(OneExecutionStateStrategy.class)
 public interface ProfileReviewView extends BaseActivityView {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showChild(@NonNull Child child);
 
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void editChild(@NonNull Child child);
 }

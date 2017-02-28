@@ -13,8 +13,8 @@ class ChildMapper {
                 .birthTime(childData.getBirthTime())
                 .sex(childData.getSex())
                 .imageFileName(childData.getImageFileName())
-                .height(childData.getHeight())
-                .weight(childData.getWeight())
+                .birthHeight(childData.getBirthHeight())
+                .birthWeight(childData.getBirthWeight())
                 .build();
     }
 
@@ -28,8 +28,8 @@ class ChildMapper {
         toChildEntity.setBirthTime(fromChild.getBirthTime());
         toChildEntity.setSex(fromChild.getSex());
         toChildEntity.setImageFileName(fromChild.getImageFileName());
-        toChildEntity.setHeight(fromChild.getHeight());
-        toChildEntity.setWeight(fromChild.getWeight());
+        toChildEntity.setBirthHeight(fromChild.getBirthHeight());
+        toChildEntity.setBirthWeight(fromChild.getBirthWeight());
         return toChildEntity;
     }
 }

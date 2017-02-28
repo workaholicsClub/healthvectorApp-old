@@ -12,7 +12,6 @@ import java.util.List;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseActivityView;
 
-@StateStrategyType(OneExecutionStateStrategy.class)
 public interface MainView extends BaseActivityView {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showChildList(List<Child> childList);
@@ -20,9 +19,12 @@ public interface MainView extends BaseActivityView {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void setActive(@Nullable Child child);
 
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void addChild();
 
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void editChild(@Nullable Child child);
 
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void reviewChild(@NonNull Child child);
 }

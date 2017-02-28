@@ -114,8 +114,8 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
         textViewDate.setText(StringUtils.date(child.getBirthDate(), dateFormatter));
         textViewTime.setText(StringUtils.time(child.getBirthTime(), timeFormatter));
 
-        textViewBirthHeight.setText(DoubleUtils.heightReview(this, child.getHeight()));
-        textViewBirthWeight.setText(DoubleUtils.weightReview(this, child.getWeight()));
+        textViewBirthHeight.setText(DoubleUtils.heightReview(this, child.getBirthHeight()));
+        textViewBirthWeight.setText(DoubleUtils.weightReview(this, child.getBirthWeight()));
     }
 
     @Override
