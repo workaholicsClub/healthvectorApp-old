@@ -125,9 +125,9 @@ public class ChildInteractor implements Interactor, ChildRepository {
     private Observable<Child> validate(Child item) {
         return Observable.just(item)
                 .flatMap(child -> {
-                    List<ChildValidationResult> errors = childValidator.validate(child);
-                    if (!errors.isEmpty()) {
-                        return Observable.error(new ChildValidationException(errors));
+                    List<ChildValidationResult> results = childValidator.validate(child);
+                    if (!childValidator.isValid(results)) {
+                        return Observable.error(new ChildValidationException(results));
                     }
                     return Observable.just(child);
                 });

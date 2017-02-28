@@ -15,6 +15,10 @@ public abstract class ValidationResult {
         return messages.isEmpty();
     }
 
+    public boolean notValid() {
+        return !isValid();
+    }
+
     public void addMessage(@NonNull String message) {
         messages.add(message);
     }

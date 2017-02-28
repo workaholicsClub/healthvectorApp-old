@@ -51,39 +51,45 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
     }
 
     private void handleValidationResult(List<ChildValidationResult> results) {
-        if (!results.isEmpty()) {
-            String msg = Stream.of(results).map(ChildValidationResult::toString).collect(Collectors.joining("\n"));
-            getViewState().showValidationErrorMessage(msg);
-            boolean shouldFocus = true;
-            for (int i = 0; i < results.size(); ++i) {
-                ChildValidationResult result = results.get(i);
-                boolean valid = result.isValid();
-                switch (result.getFieldType()) {
-                    case IMAGE:
-                        // необязательное поле
-                        break;
-                    case NAME:
-                        getViewState().nameValidated(valid, shouldFocus);
-                        shouldFocus = false;
-                        break;
-                    case SEX:
-                        getViewState().sexValidated(valid, shouldFocus);
-                        break;
-                    case BIRTH_DATE:
-                        getViewState().birthDateValidated(valid, shouldFocus);
-                        break;
-                    case BIRTH_TIME:
-                        // необязательное поле
-                        break;
-                    case BIRTH_HEIGHT:
-                        getViewState().birthHeightValidated(valid, shouldFocus);
-                        shouldFocus = false;
-                        break;
-                    case BIRTH_WEIGHT:
-                        getViewState().birthWeightValidated(valid, shouldFocus);
-                        shouldFocus = false;
-                        break;
-                }
+        if (results.isEmpty()) {
+            logger.error("child validation results empty");
+            return;
+        }
+
+        getViewState().validationFailed();
+        String msg = Stream.of(results)
+                .filter(ChildValidationResult::notValid)
+                .map(ChildValidationResult::toString)
+                .collect(Collectors.joining("\n"));
+        getViewState().showValidationErrorMessage(msg);
+        boolean shouldFocus = true;
+        for (ChildValidationResult result : results) {
+            boolean valid = result.isValid();
+            switch (result.getFieldType()) {
+                case IMAGE:
+                    // необязательное поле
+                    break;
+                case NAME:
+                    getViewState().nameValidated(valid, shouldFocus);
+                    shouldFocus = false;
+                    break;
+                case SEX:
+                    getViewState().sexValidated(valid, shouldFocus);
+                    break;
+                case BIRTH_DATE:
+                    getViewState().birthDateValidated(valid, shouldFocus);
+                    break;
+                case BIRTH_TIME:
+                    // необязательное поле
+                    break;
+                case BIRTH_HEIGHT:
+                    getViewState().birthHeightValidated(valid, shouldFocus);
+                    shouldFocus = false;
+                    break;
+                case BIRTH_WEIGHT:
+                    getViewState().birthWeightValidated(valid, shouldFocus);
+                    shouldFocus = false;
+                    break;
             }
         }
     }

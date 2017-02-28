@@ -28,7 +28,7 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
         for (ChildFieldType field : ChildFieldType.values()) {
             ChildValidationResult result = new ChildValidationResult(field);
             validateField(result, child);
-            addResult(results, result);
+            results.add(result);
         }
 
         return results;

@@ -5,11 +5,14 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 public abstract class Validator<T, VR extends ValidationResult> {
-    public abstract List<VR> validate(@NonNull T item);
-
-    protected void addResult(@NonNull List<VR> results, @NonNull VR result) {
-        if (!result.isValid()) {
-            results.add(result);
+    public boolean isValid(List<VR> results) {
+        for (VR result : results) {
+            if (!result.isValid()) {
+                return false;
+            }
         }
+        return true;
     }
+
+    public abstract List<VR> validate(@NonNull T item);
 }
