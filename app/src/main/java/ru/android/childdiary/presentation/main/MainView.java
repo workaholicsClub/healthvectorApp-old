@@ -23,7 +23,7 @@ public interface MainView extends BaseActivityView {
     void addChild();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void editChild(@Nullable Child child);
+    void editChild(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void reviewChild(@NonNull Child child);

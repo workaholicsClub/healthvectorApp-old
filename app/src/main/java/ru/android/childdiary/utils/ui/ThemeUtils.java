@@ -133,12 +133,12 @@ public class ThemeUtils {
     }
 
     @DrawableRes
-    public static int getHeaderDrawableRes(Context context, @Nullable Sex sex) {
+    public static int getHeaderDrawableRes(@Nullable Sex sex) {
         return getColorPrimaryRes(sex);
     }
 
     @DrawableRes
-    public static int getButtonBackgroundRes(Context context, @Nullable Sex sex) {
+    public static int getButtonBackgroundRes(@Nullable Sex sex) {
         if (sex == null) {
             return R.drawable.button_background;
         }

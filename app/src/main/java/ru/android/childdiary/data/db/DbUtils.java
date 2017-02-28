@@ -53,6 +53,7 @@ public class DbUtils {
         return Observable.fromCallable(() -> update(dataStore, entityClass, object, objectId, copy, map));
     }
 
+    @SuppressWarnings("unchecked")
     private static <T, E> T update(EntityStore dataStore, Class<E> entityClass, T object, long objectId,
                                    @NonNull BiFunction<E, T, E> copy,
                                    @NonNull Function<E, T> map) {

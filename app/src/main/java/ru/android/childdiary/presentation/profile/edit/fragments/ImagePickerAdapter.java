@@ -53,7 +53,7 @@ class ImagePickerAdapter extends ArrayAdapter<String> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
         ViewHolder viewHolder;
         if (view == null) {

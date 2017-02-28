@@ -106,6 +106,6 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     private void onDeleteChild(Child child) {
-        logger.debug("onDeleteChild");
+        logger.debug("onDeleteChild: " + child);
     }
 }

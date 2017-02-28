@@ -58,6 +58,7 @@
     <string name="select_sex">Выберите пол</string>
     <string name="male">Мужской</string>
     <string name="female">Женский</string>
+    <string name="close">Закрыть</string>
     <string-array name="image_picker_actions">
         <item>Сделать снимок</item>
         <item>Из галереи</item>

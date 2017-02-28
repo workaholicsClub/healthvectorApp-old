@@ -349,7 +349,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     void onTimeClick() {
         LocalTime birthTime = editedChild.getBirthTime();
         LocalTime time = birthTime == null ? LocalTime.now() : birthTime;
-        boolean is24HourFormat = DateFormat.is24HourFormat(this);
         TimePickerDialog tpd = TimePickerDialog.newInstance(this,
                 time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
         tpd.vibrate(false);

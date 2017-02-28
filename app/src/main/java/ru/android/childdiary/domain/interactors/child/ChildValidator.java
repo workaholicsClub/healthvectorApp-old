@@ -35,7 +35,7 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
         return results;
     }
 
-    private ChildValidationResult validateField(@NonNull ChildValidationResult result, @NonNull Child child) {
+    private void validateField(@NonNull ChildValidationResult result, @NonNull Child child) {
         switch (result.getFieldType()) {
             case IMAGE:
                 // необязательное поле
@@ -70,6 +70,5 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
                 break;
 
         }
-        return result;
     }
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -46,6 +47,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
     }
 
     @Override
+    @NonNull
     public final Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -68,7 +70,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
                 captureImage();
                 break;
             case 1:
-                pickImage();
+                requestPermissionAndPickImage();
                 break;
             case 2:
                 dismiss();
@@ -79,25 +81,33 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         }
     }
 
-    private void pickImage() {
-        RequestPermissionInfo permissionInfo = RequestPermissionInfo.builder()
-                .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .requestCode(REQUEST_STORAGE_READ_ACCESS_PERMISSION)
-                .titleResourceId(R.string.request_read_external_storage_permission_title)
-                .textResourceId(R.string.request_read_external_storage_permission_text)
-                .build();
-        requestPermission(permissionInfo);
+    private void requestPermissionAndPickImage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            RequestPermissionInfo permissionInfo = RequestPermissionInfo.builder()
+                    .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    .requestCode(REQUEST_STORAGE_READ_ACCESS_PERMISSION)
+                    .titleResourceId(R.string.request_read_external_storage_permission_title)
+                    .textResourceId(R.string.request_read_external_storage_permission_text)
+                    .build();
+            requestPermission(permissionInfo);
+        } else {
+            pickImage();
+        }
     }
 
     @Override
     protected void permissionGranted(RequestPermissionInfo permissionInfo) {
         if (permissionInfo.getRequestCode() == REQUEST_STORAGE_READ_ACCESS_PERMISSION) {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), REQUEST_PICK_IMAGE);
+            pickImage();
         }
+    }
+
+    private void pickImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), REQUEST_PICK_IMAGE);
     }
 
     private void captureImage() {

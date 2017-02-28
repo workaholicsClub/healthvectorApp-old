@@ -17,16 +17,20 @@ class ChildObservable extends Observable<Child> {
     @Override
     protected void subscribeActual(Observer<? super Child> observer) {
         Listener listener = new Listener(activity, observer);
+        listener.subscribe();
     }
 
     private static class Listener extends MainThreadDisposable implements OnUpdateChildListener {
-        private Observer<? super Child> observer;
-        private ProfileEditActivity activity;
+        private final Observer<? super Child> observer;
+        private final ProfileEditActivity activity;
 
         public Listener(ProfileEditActivity activity, Observer<? super Child> observer) {
-            activity.addOnUpdateChildListener(this);
             this.activity = activity;
             this.observer = observer;
+        }
+
+        public void subscribe() {
+            activity.addOnUpdateChildListener(this);
             observer.onSubscribe(this);
             observer.onNext(activity.editedChild);
         }
@@ -39,8 +43,6 @@ class ChildObservable extends Observable<Child> {
         @Override
         protected void onDispose() {
             activity.removeOnUpdateChildListener(this);
-            activity = null;
-            observer = null;
         }
     }
 }
