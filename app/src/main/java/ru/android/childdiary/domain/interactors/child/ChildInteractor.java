@@ -21,13 +21,12 @@ public class ChildInteractor implements Interactor, ChildRepository {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final ChildDataRepository childRepository;
+    private final ChildDiaryPreferences preferences;
 
     @Inject
-    ChildDiaryPreferences preferences;
-
-    @Inject
-    public ChildInteractor(ChildDataRepository childRepository) {
+    public ChildInteractor(ChildDataRepository childRepository, ChildDiaryPreferences preferences) {
         this.childRepository = childRepository;
+        this.preferences = preferences;
     }
 
     @Override
