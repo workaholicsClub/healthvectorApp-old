@@ -78,7 +78,7 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
                 }
                 break;
             case BIRTH_DATE:
-                if (child.getBirthDate() != null) {
+                if (child.getBirthDate() == null) {
                     result.addMessage(context.getString(R.string.validate_child_birth_date_empty));
                 }
                 break;
@@ -86,12 +86,12 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
                 // необязательное поле
                 break;
             case BIRTH_HEIGHT:
-                if (child.getBirthHeight() != null) {
+                if (child.getBirthHeight() == null) {
                     result.addMessage(context.getString(R.string.validate_child_birth_height_empty));
                 }
                 break;
             case BIRTH_WEIGHT:
-                if (child.getBirthHeight() != null) {
+                if (child.getBirthWeight() == null) {
                     result.addMessage(context.getString(R.string.validate_child_birth_weight_empty));
                 }
                 break;
