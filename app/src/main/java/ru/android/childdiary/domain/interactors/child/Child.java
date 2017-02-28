@@ -14,6 +14,8 @@ import ru.android.childdiary.data.types.Sex;
 @Value
 @Builder
 public class Child implements Parcelable {
+    public static final Child NULL = Child.builder().build();
+
     public static final Parcelable.Creator<Child> CREATOR = new Parcelable.Creator<Child>() {
         @Override
         public Child createFromParcel(Parcel source) {

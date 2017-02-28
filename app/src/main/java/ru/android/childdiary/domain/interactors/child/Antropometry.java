@@ -11,6 +11,8 @@ import lombok.Value;
 @Value
 @Builder
 public class Antropometry implements Parcelable {
+    public static final Antropometry NULL = Antropometry.builder().build();
+
     public static final Parcelable.Creator<Antropometry> CREATOR = new Parcelable.Creator<Antropometry>() {
         @Override
         public Antropometry createFromParcel(Parcel source) {

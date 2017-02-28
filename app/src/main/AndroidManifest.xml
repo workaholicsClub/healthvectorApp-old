@@ -26,7 +26,8 @@
         </activity>
         <activity
             android:name=".presentation.onboarding.IntroActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />

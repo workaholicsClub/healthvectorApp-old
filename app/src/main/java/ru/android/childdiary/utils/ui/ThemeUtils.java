@@ -23,18 +23,21 @@ public class ThemeUtils {
     static {
         map.put(null, ThemeInfo.builder()
                 .themeResourceId(R.style.AppTheme)
+                .themeDialogResourceId(R.style.AppThemeDialog)
                 .colorPrimary(R.color.primary_boy)
                 .colorPrimaryDark(R.color.primary_dark_boy)
                 .colorAccent(R.color.accent_boy)
                 .build());
         map.put(Sex.MALE, ThemeInfo.builder()
                 .themeResourceId(R.style.AppTheme_Boy)
+                .themeDialogResourceId(R.style.AppThemeDialog_Boy)
                 .colorPrimary(R.color.primary_boy)
                 .colorPrimaryDark(R.color.primary_dark_boy)
                 .colorAccent(R.color.accent_boy)
                 .build());
         map.put(Sex.FEMALE, ThemeInfo.builder()
                 .themeResourceId(R.style.AppTheme_Girl)
+                .themeDialogResourceId(R.style.AppThemeDialog_Girl)
                 .colorPrimary(R.color.primary_girl)
                 .colorPrimaryDark(R.color.primary_dark_girl)
                 .colorAccent(R.color.accent_girl)
@@ -44,6 +47,11 @@ public class ThemeUtils {
     @StyleRes
     public static int getTheme(@Nullable Sex sex) {
         return map.get(sex).getThemeResourceId();
+    }
+
+    @StyleRes
+    public static int getThemeDialog(@Nullable Sex sex) {
+        return map.get(sex).getThemeDialogResourceId();
     }
 
     @ColorRes

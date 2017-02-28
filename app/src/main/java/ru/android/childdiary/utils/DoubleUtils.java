@@ -39,7 +39,7 @@ public class DoubleUtils {
             try {
                 double d = Double.parseDouble(part);
                 return d;
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 logger.warn("failed to parse double", e);
                 return null;
             }

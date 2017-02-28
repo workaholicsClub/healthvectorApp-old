@@ -1,6 +1,8 @@
 package ru.android.childdiary.presentation.main;
 
-import com.annimon.stream.Stream;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.arellomobile.mvp.InjectViewState;
 
 import java.util.List;
@@ -13,7 +15,6 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
-import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class MainPresenter extends BasePresenter<MainView> {
@@ -40,24 +41,36 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     private void onGetChildList(List<Child> childList) {
         logger.debug("onGetChildList");
-        // TODO: брать последний активный профиль из настроек
-        // TODO: сохранять в настройки последнего добавленного ребенка
         boolean isFirstTime = this.childList == null;
         this.childList = childList;
-        if (activeChild != null) {
-            // проверяем, все еще ли элемент находится в списке
-            activeChild = Stream.of(childList)
-                    .filter(c -> ObjectUtils.equals(c.getId(), activeChild.getId()))
-                    .findFirst().orElse(null);
-        }
-        if (activeChild == null) {
-            activeChild = childList.isEmpty() ? null : childList.get(0);
-        }
         getViewState().showChildList(childList);
-        getViewState().setActive(activeChild);
         if (childList.isEmpty() && isFirstTime) {
             getViewState().addChild();
         }
+    }
+
+    public void requestActiveChild() {
+        unsubscribeOnDestroy(childInteractor.getActiveChild(childList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setActiveChild, this::onUnexpectedError));
+    }
+
+    public void toggleChild(@Nullable Long id) {
+        unsubscribeOnDestroy(childInteractor.setActiveChild(childList, id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setActiveChild, this::onUnexpectedError));
+    }
+
+    private void setActiveChild(@NonNull Child child) {
+        logger.debug("setActiveChild");
+        if (child == Child.NULL) {
+            activeChild = null;
+        } else {
+            activeChild = child;
+        }
+        getViewState().setActive(activeChild);
     }
 
     public void addChild() {
@@ -67,6 +80,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void editChild() {
         if (activeChild == null) {
             logger.warn("editChild: active child is null");
+            return;
         }
         getViewState().editChild(activeChild);
     }
@@ -77,17 +91,6 @@ public class MainPresenter extends BasePresenter<MainView> {
             return;
         }
         getViewState().reviewChild(activeChild);
-    }
-
-    public void toggleChild(Long id) {
-        Child child = Stream.of(childList)
-                .filter(c -> ObjectUtils.equals(c.getId(), id))
-                .findFirst().orElse(null);
-        if (child == null) {
-            logger.warn("editChild: child with id=" + id + " not found");
-        }
-        activeChild = child;
-        getViewState().setActive(child);
     }
 
     public void deleteChild() {
