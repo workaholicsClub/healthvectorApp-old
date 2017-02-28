@@ -1,6 +1,7 @@
 package ru.android.childdiary.domain.interactors.child;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
     }
 
     @Override
-    public List<ChildValidationResult> validate(Child child) {
+    public List<ChildValidationResult> validate(@NonNull Child child) {
         List<ChildValidationResult> results = new ArrayList<>();
 
         for (ChildFieldType field : ChildFieldType.values()) {
@@ -34,7 +35,7 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
         return results;
     }
 
-    private ChildValidationResult validateField(ChildValidationResult result, Child child) {
+    private ChildValidationResult validateField(@NonNull ChildValidationResult result, @NonNull Child child) {
         switch (result.getFieldType()) {
             case IMAGE:
                 // необязательное поле

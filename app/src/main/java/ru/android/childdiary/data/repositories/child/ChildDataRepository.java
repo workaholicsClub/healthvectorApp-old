@@ -31,17 +31,17 @@ public class ChildDataRepository implements ChildRepository {
     }
 
     @Override
-    public Observable<Child> add(Child child) {
+    public Observable<Child> add(@NonNull Child child) {
         return dbService.add(child);
     }
 
     @Override
-    public Observable<Child> update(Child child) {
+    public Observable<Child> update(@NonNull Child child) {
         return dbService.update(child);
     }
 
     @Override
-    public Observable<Child> delete(Child child) {
+    public Observable<Child> delete(@NonNull Child child) {
         return dbService.delete(child);
     }
 }

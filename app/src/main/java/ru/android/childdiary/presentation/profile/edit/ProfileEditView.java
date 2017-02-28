@@ -20,19 +20,19 @@ public interface ProfileEditView extends BaseActivityView {
     void showValidationErrorMessage(String msg);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void nameValidated(boolean valid, boolean shouldFocus);
+    void nameValidated(boolean valid);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void sexValidated(boolean valid, boolean shouldFocus);
+    void sexValidated(boolean valid);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void birthDateValidated(boolean valid, boolean shouldFocus);
+    void birthDateValidated(boolean valid);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void birthHeightValidated(boolean valid, boolean shouldFocus);
+    void birthHeightValidated(boolean valid);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void birthWeightValidated(boolean valid, boolean shouldFocus);
+    void birthWeightValidated(boolean valid);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void childAdded(@NonNull Child child);

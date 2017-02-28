@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ListPopupWindow;
@@ -119,6 +120,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @State
     Child editedChild = Child.NULL;
 
+    private boolean isValidationStarted;
+
     private ListPopupWindow popupWindow;
 
     public static Intent getIntent(Context context, @Nullable Child child) {
@@ -203,8 +206,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             updateChild(Child.getBuilder(editedChild).birthHeight(height).build());
         }));
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthWeight).subscribe(textViewAfterTextChangeEvent -> {
-            Double height = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
-            updateChild(Child.getBuilder(editedChild).birthHeight(height).build());
+            Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
+            updateChild(Child.getBuilder(editedChild).birthWeight(weight).build());
         }));
 
         unsubscribeOnDestroy(RxView.focusChanges(editTextName).subscribe((hasFocus) -> {
@@ -405,8 +408,10 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @Override
     public void validationFailed() {
-        // TODO: dispose previous
-        unsubscribeOnDestroy(presenter.listenForFieldsUpdate(new ChildObservable(this)));
+        if (!isValidationStarted) {
+            isValidationStarted = true;
+            unsubscribeOnDestroy(presenter.listenForFieldsUpdate(new ChildObservable(this)));
+        }
     }
 
     @Override
@@ -415,61 +420,40 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     @Override
-    public void nameValidated(boolean valid, boolean shouldFocus) {
-        if (valid) {
-            editTextName.setBackgroundResource(R.drawable.name_edit_text_background);
-            int bottom = getResources().getDimensionPixelSize(R.dimen.name_edit_text_padding_bottom);
-            editTextName.setPadding(0, 0, 0, bottom);
-        } else {
-            editTextName.setBackgroundResource(R.drawable.name_edit_text_background_error);
-            int bottom = getResources().getDimensionPixelSize(R.dimen.name_edit_text_padding_bottom);
-            editTextName.setPadding(0, 0, 0, bottom);
-            if (shouldFocus) {
-                editTextName.requestFocus();
-            }
-        }
+    public void nameValidated(boolean valid) {
+        viewValidated(editTextName, valid,
+                R.drawable.name_edit_text_background, R.drawable.name_edit_text_background_error);
+        int bottom = getResources().getDimensionPixelSize(R.dimen.name_edit_text_padding_bottom);
+        editTextName.setPadding(0, 0, 0, bottom);
     }
 
     @Override
-    public void sexValidated(boolean valid, boolean shouldFocus) {
-        if (valid) {
-            textViewSex.setBackgroundResource(R.drawable.spinner_background);
-        } else {
-            textViewSex.setBackgroundResource(R.drawable.spinner_background_error);
-        }
+    public void sexValidated(boolean valid) {
+        viewValidated(textViewSex, valid);
     }
 
     @Override
-    public void birthDateValidated(boolean valid, boolean shouldFocus) {
-        if (valid) {
-            textViewBirthDate.setBackgroundResource(R.drawable.spinner_background);
-        } else {
-            textViewBirthDate.setBackgroundResource(R.drawable.spinner_background_error);
-        }
+    public void birthDateValidated(boolean valid) {
+        viewValidated(textViewBirthDate, valid);
     }
 
     @Override
-    public void birthHeightValidated(boolean valid, boolean shouldFocus) {
-        if (valid) {
-            editTextBirthHeight.setBackgroundResource(R.drawable.spinner_background);
-        } else {
-            editTextBirthHeight.setBackgroundResource(R.drawable.spinner_background_error);
-            if (shouldFocus) {
-                editTextBirthHeight.requestFocus();
-            }
-        }
+    public void birthHeightValidated(boolean valid) {
+        viewValidated(editTextBirthHeight, valid);
     }
 
     @Override
-    public void birthWeightValidated(boolean valid, boolean shouldFocus) {
-        if (valid) {
-            editTextBirthWeight.setBackgroundResource(R.drawable.spinner_background);
-        } else {
-            editTextBirthWeight.setBackgroundResource(R.drawable.spinner_background_error);
-            if (shouldFocus) {
-                editTextBirthWeight.requestFocus();
-            }
-        }
+    public void birthWeightValidated(boolean valid) {
+        viewValidated(editTextBirthWeight, valid);
+    }
+
+    private void viewValidated(View view, boolean valid) {
+        viewValidated(view, valid, R.drawable.spinner_background, R.drawable.spinner_background_error);
+    }
+
+    private void viewValidated(View view, boolean valid,
+                               @DrawableRes int background, @DrawableRes int backgroundError) {
+        view.setBackgroundResource(valid ? background : backgroundError);
     }
 
     @Override

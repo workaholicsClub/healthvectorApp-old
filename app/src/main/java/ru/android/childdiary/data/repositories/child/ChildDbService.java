@@ -42,18 +42,18 @@ public class ChildDbService implements ChildService {
     }
 
     @Override
-    public Observable<Child> add(Child child) {
+    public Observable<Child> add(@NonNull Child child) {
         return dataStore.insert(ChildMapper.map(child)).toObservable().map(ChildMapper::map);
     }
 
     @Override
-    public Observable<Child> update(Child child) {
+    public Observable<Child> update(@NonNull Child child) {
         return DbUtils.updateObservable(dataStore, ChildEntity.class, child, child.getId(),
                 ChildMapper::copy, ChildMapper::map);
     }
 
     @Override
-    public Observable<Child> delete(Child child) {
+    public Observable<Child> delete(@NonNull Child child) {
         return DbUtils.deleteObservable(dataStore, ChildEntity.class, child, child.getId());
     }
 }

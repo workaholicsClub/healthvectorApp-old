@@ -1,5 +1,7 @@
 package ru.android.childdiary.domain.interactors.child;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,22 +19,22 @@ public class AntropometryInteractor implements Interactor, AntropometryRepositor
     }
 
     @Override
-    public Observable<List<Antropometry>> getAll(Child child) {
+    public Observable<List<Antropometry>> getAll(@NonNull Child child) {
         return antropometryRepository.getAll(child);
     }
 
     @Override
-    public Observable<Antropometry> add(Antropometry item) {
+    public Observable<Antropometry> add(@NonNull Antropometry item) {
         return antropometryRepository.add(item);
     }
 
     @Override
-    public Observable<Antropometry> update(Antropometry item) {
+    public Observable<Antropometry> update(@NonNull Antropometry item) {
         return antropometryRepository.update(item);
     }
 
     @Override
-    public Observable<Antropometry> delete(Antropometry item) {
+    public Observable<Antropometry> delete(@NonNull Antropometry item) {
         return antropometryRepository.update(item);
     }
 }

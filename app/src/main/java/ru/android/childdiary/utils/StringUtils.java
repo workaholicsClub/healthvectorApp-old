@@ -8,6 +8,9 @@ import org.joda.time.LocalTime;
 import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.Arrays;
+import java.util.List;
+
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -87,5 +90,11 @@ public class StringUtils {
     @Nullable
     public static String time(LocalTime localTime, DateTimeFormatter dateTimeFormatter, @Nullable String defaultValue) {
         return localTime == null ? defaultValue : localTime.toString(dateTimeFormatter);
+    }
+
+    public static String toString(@Nullable List<Child> childList) {
+        return childList == null
+                ? "null"
+                : Arrays.toString(childList.toArray(new Child[childList.size()]));
     }
 }

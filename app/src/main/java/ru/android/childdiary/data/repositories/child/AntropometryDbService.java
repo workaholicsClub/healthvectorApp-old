@@ -1,5 +1,7 @@
 package ru.android.childdiary.data.repositories.child;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,7 +27,7 @@ public class AntropometryDbService implements AntropometryService {
     }
 
     @Override
-    public Observable<List<Antropometry>> getAll(Child child) {
+    public Observable<List<Antropometry>> getAll(@NonNull Child child) {
         return dataStore.select(AntropometryEntity.class)
                 .where(AntropometryEntity.CHILD_ID.eq(child.getId()))
                 .orderBy(AntropometryEntity.DATE)
@@ -35,7 +37,7 @@ public class AntropometryDbService implements AntropometryService {
     }
 
     @Override
-    public Observable<Antropometry> add(Antropometry antropometry) {
+    public Observable<Antropometry> add(@NonNull Antropometry antropometry) {
         // TODO: обобщить
         return Observable.fromCallable(() -> {
             BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
@@ -51,13 +53,13 @@ public class AntropometryDbService implements AntropometryService {
     }
 
     @Override
-    public Observable<Antropometry> update(Antropometry antropometry) {
+    public Observable<Antropometry> update(@NonNull Antropometry antropometry) {
         return DbUtils.updateObservable(dataStore, AntropometryEntity.class, antropometry, antropometry.getId(),
                 AntropometryMapper::copy, AntropometryMapper::map);
     }
 
     @Override
-    public Observable<Antropometry> delete(Antropometry antropometry) {
+    public Observable<Antropometry> delete(@NonNull Antropometry antropometry) {
         return DbUtils.deleteObservable(dataStore, AntropometryEntity.class, antropometry, antropometry.getId());
     }
 }
