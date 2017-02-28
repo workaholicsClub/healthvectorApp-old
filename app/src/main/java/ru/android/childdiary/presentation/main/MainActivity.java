@@ -51,6 +51,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
         View.OnClickListener {
+    private static final int REQUEST_EDIT = 1;
+    private static final int REQUEST_ADD = 2;
+    private static final int REQUEST_REVIEW = 3;
+
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
@@ -104,6 +108,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ADD) {
+            presenter.requestActiveChild();
+        }
+    }
+
+    @Override
     public void showChildList(List<Child> childList) {
         List<IProfile> profiles = new ArrayList<>();
 
@@ -125,6 +137,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
         closeDrawerWithoutAnimation();
         buildUi(profiles);
+
+        presenter.requestActiveChild();
     }
 
     @Override
@@ -152,7 +166,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void addChild() {
-        navigateToProfileEdit(null);
+        navigateToProfileAdd();
     }
 
     @Override
@@ -215,7 +229,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         } else if (id == PROFILE_SETTINGS_ADD) {
             presenter.addChild();
         } else if (id == PROFILE_SETTINGS_DELETE) {
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this, ThemeUtils.getThemeDialog(sex))
                     .setTitle(R.string.remove_child_confirmation_title)
                     .setMessage(R.string.remove_child_confirmation_text)
                     .setPositiveButton(R.string.Yes,
@@ -345,13 +359,18 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         return super.onOptionsItemSelected(item);
     }
 
-    private void navigateToProfileEdit(@Nullable Child child) {
+    private void navigateToProfileEdit(@NonNull Child child) {
         Intent intent = ProfileEditActivity.getIntent(this, child);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_EDIT);
+    }
+
+    private void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(this, null);
+        startActivityForResult(intent, REQUEST_ADD);
     }
 
     private void navigateToProfileReview(@NonNull Child child) {
         Intent intent = ProfileReviewActivity.getIntent(this, child);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_REVIEW);
     }
 }

@@ -25,6 +25,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseDialogFragment extends DialogFragment {
     protected final Logger logger = LoggerFactory.getLogger(toString());
@@ -71,7 +72,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 != PackageManager.PERMISSION_GRANTED) {
             permissionInfoMap.put(permissionInfo.getRequestCode(), permissionInfo);
             if (shouldShowRequestPermissionRationale(permission)) {
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(sex))
                         .setTitle(permissionInfo.getTitleResourceId())
                         .setMessage(permissionInfo.getTextResourceId())
                         .setPositiveButton(R.string.OK,

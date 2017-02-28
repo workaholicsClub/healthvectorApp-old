@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.main.MainActivity;
 
@@ -28,9 +29,9 @@ public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements 
     }
 
     @Override
-    public void startApp(@Nullable Sex sex) {
+    public void startApp(@Nullable Child child) {
         finish();
-        navigateToMain(sex);
+        navigateToMain(child == null ? null : child.getSex());
     }
 
     private void navigateToMain(@Nullable Sex sex) {

@@ -1,8 +1,9 @@
 package ru.android.childdiary.presentation.splash;
 
+import android.support.annotation.NonNull;
+
 import com.arellomobile.mvp.InjectViewState;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -10,7 +11,6 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
@@ -39,18 +39,28 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                                 .doOnNext(zero -> logger.debug("timer finished")),
                         childInteractor
                                 .getAll()
-                                .doOnNext(childList -> logger.debug("data loaded"))
-                                .subscribeOn(Schedulers.io()),
+                                .doOnNext(childList -> logger.debug("data loaded")),
                         (zero, childList) -> childList)
+                        .doOnNext(childList -> logger.debug("combine latest"))
+                        .flatMap(childList -> childInteractor.getActiveChild(childList))
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::onGetChildList, this::onUnexpectedError));
+                        .subscribe(child -> {
+                            if (child == Child.NULL) {
+                                startAppWithDefaultTheme();
+                            } else {
+                                startApp(child);
+                            }
+                        }, this::onUnexpectedError));
     }
 
-    private void onGetChildList(List<Child> childList) {
-        logger.debug("onGetChildList");
-        // TODO: брать последний активный профиль из настроек
-        Child lastActiveChild = childList.isEmpty() ? null : childList.get(0);
-        Sex sex = lastActiveChild == null ? null : lastActiveChild.getSex();
-        getViewState().startApp(sex);
+    private void startApp(@NonNull Child child) {
+        logger.debug("startApp");
+        getViewState().startApp(child);
+    }
+
+    private void startAppWithDefaultTheme() {
+        logger.debug("startAppWithDefaultTheme");
+        getViewState().startApp(null);
     }
 }

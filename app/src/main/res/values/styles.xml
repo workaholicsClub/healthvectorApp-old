@@ -7,13 +7,31 @@
         <item name="colorAccent">@color/accent_boy</item>
     </style>
 
-    <style name="AppTheme.Boy" parent="AppTheme">
+    <style name="AppTheme.Boy">
         <item name="colorPrimary">@color/primary_boy</item>
         <item name="colorPrimaryDark">@color/primary_dark_boy</item>
         <item name="colorAccent">@color/accent_boy</item>
     </style>
 
-    <style name="AppTheme.Girl" parent="AppTheme">
+    <style name="AppTheme.Girl">
+        <item name="colorPrimary">@color/primary_girl</item>
+        <item name="colorPrimaryDark">@color/primary_dark_girl</item>
+        <item name="colorAccent">@color/accent_girl</item>
+    </style>
+
+    <style name="AppThemeDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/primary_boy</item>
+        <item name="colorPrimaryDark">@color/primary_dark_boy</item>
+        <item name="colorAccent">@color/accent_boy</item>
+    </style>
+
+    <style name="AppThemeDialog.Boy">
+        <item name="colorPrimary">@color/primary_boy</item>
+        <item name="colorPrimaryDark">@color/primary_dark_boy</item>
+        <item name="colorAccent">@color/accent_boy</item>
+    </style>
+
+    <style name="AppThemeDialog.Girl">
         <item name="colorPrimary">@color/primary_girl</item>
         <item name="colorPrimaryDark">@color/primary_dark_girl</item>
         <item name="colorAccent">@color/accent_girl</item>

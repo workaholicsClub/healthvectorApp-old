@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -116,6 +117,12 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     protected void setupToolbar() {
         toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance);
         toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleTextAppearance);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        logger.debug("onActivityResult");
     }
 
     @Override
