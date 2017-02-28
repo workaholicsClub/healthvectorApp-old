@@ -16,7 +16,7 @@ public interface ProfileEditView extends BaseActivityView {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void validationFailed();
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showValidationErrorMessage(String msg);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
