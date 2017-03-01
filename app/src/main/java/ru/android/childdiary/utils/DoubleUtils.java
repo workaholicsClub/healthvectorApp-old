@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
@@ -19,7 +20,9 @@ public class DoubleUtils {
         protected DecimalFormat initialValue() {
             DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
             dfs.setDecimalSeparator('.');
-            return new DecimalFormat("0.#", dfs);
+            DecimalFormat df = new DecimalFormat("0.#", dfs);
+            df.setRoundingMode(RoundingMode.HALF_UP);
+            return df;
         }
     };
 
@@ -28,7 +31,9 @@ public class DoubleUtils {
         protected DecimalFormat initialValue() {
             DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
             dfs.setDecimalSeparator('.');
-            return new DecimalFormat("0.###", dfs);
+            DecimalFormat df = new DecimalFormat("0.###", dfs);
+            df.setRoundingMode(RoundingMode.HALF_UP);
+            return df;
         }
     };
 
