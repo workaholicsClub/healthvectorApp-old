@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.core;
+package ru.android.childdiary.domain.core;
 
 import android.support.annotation.NonNull;
 
@@ -8,19 +8,19 @@ import com.annimon.stream.Stream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValidationResult {
+public abstract class ValidationResult {
     private final List<String> messages = new ArrayList<>();
 
     public boolean isValid() {
         return messages.isEmpty();
     }
 
-    public void addMessage(@NonNull String message) {
-        messages.add(message);
+    public boolean notValid() {
+        return !isValid();
     }
 
-    public void addResult(@NonNull ValidationResult result) {
-        messages.addAll(result.messages);
+    public void addMessage(@NonNull String message) {
+        messages.add(message);
     }
 
     @Override

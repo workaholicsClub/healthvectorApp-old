@@ -47,8 +47,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
         ft.commitAllowingStateLoss();
     }
 
-    @NonNull
     @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Icepick.restoreInstanceState(this, savedInstanceState);
         sex = (Sex) getArguments().getSerializable(ExtraConstants.EXTRA_SEX);

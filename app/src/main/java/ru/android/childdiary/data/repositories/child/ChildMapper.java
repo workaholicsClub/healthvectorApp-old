@@ -1,11 +1,13 @@
 package ru.android.childdiary.data.repositories.child;
 
+import android.support.annotation.NonNull;
+
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 class ChildMapper {
-    public static Child map(ChildData childData) {
+    public static Child map(@NonNull ChildData childData) {
         return Child.builder()
                 .id(childData.getId())
                 .name(childData.getName())
@@ -13,23 +15,23 @@ class ChildMapper {
                 .birthTime(childData.getBirthTime())
                 .sex(childData.getSex())
                 .imageFileName(childData.getImageFileName())
-                .height(childData.getHeight())
-                .weight(childData.getWeight())
+                .birthHeight(childData.getBirthHeight())
+                .birthWeight(childData.getBirthWeight())
                 .build();
     }
 
-    public static ChildEntity map(Child child) {
+    public static ChildEntity map(@NonNull Child child) {
         return copy(new ChildEntity(), child);
     }
 
-    public static ChildEntity copy(ChildEntity toChildEntity, Child fromChild) {
+    public static ChildEntity copy(@NonNull ChildEntity toChildEntity, @NonNull Child fromChild) {
         toChildEntity.setName(fromChild.getName());
         toChildEntity.setBirthDate(fromChild.getBirthDate());
         toChildEntity.setBirthTime(fromChild.getBirthTime());
         toChildEntity.setSex(fromChild.getSex());
         toChildEntity.setImageFileName(fromChild.getImageFileName());
-        toChildEntity.setHeight(fromChild.getHeight());
-        toChildEntity.setWeight(fromChild.getWeight());
+        toChildEntity.setBirthHeight(fromChild.getBirthHeight());
+        toChildEntity.setBirthWeight(fromChild.getBirthWeight());
         return toChildEntity;
     }
 }

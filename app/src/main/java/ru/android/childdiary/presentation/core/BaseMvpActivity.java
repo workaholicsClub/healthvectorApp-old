@@ -2,12 +2,13 @@ package ru.android.childdiary.presentation.core;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -21,17 +22,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import icepick.Icepick;
 import icepick.State;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
 import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 @SuppressLint("Registered")
 public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseActivityView {
     protected final Logger logger = LoggerFactory.getLogger(toString());
+
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Nullable
     @BindView(R.id.toolbar)
@@ -39,6 +45,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     @State
     protected Sex sex;
+
+    protected void unsubscribeOnDestroy(@NonNull Disposable disposable) {
+        compositeDisposable.add(disposable);
+    }
 
     protected final void changeThemeIfNeeded(@Nullable Child child) {
         Sex sex = child == null ? null : child.getSex();
@@ -83,7 +93,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        ConfigUtils.setupOrientation(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
         if (sex == null) {
             sex = extractTheme(savedInstanceState);
@@ -157,10 +167,20 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        logger.debug("onDestroy");
+        compositeDisposable.dispose();
+    }
+
+    @Override
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
-            showToast(e.toString());
+            new AlertDialog.Builder(this, ThemeUtils.getThemeDialog(sex))
+                    .setMessage(e.toString())
+                    .setPositiveButton(R.string.OK, null)
+                    .show();
         }
     }
 

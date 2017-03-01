@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ListPopupWindow;
@@ -24,6 +25,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -32,7 +35,9 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,7 +52,8 @@ import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.ValidationResult;
+import ru.android.childdiary.presentation.profile.edit.fragments.ImagePickerDialogFragment;
+import ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.StringUtils;
@@ -62,7 +68,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
 
-    private final ProfileEditValidator validator = new ProfileEditValidator(this);
+    private final List<OnUpdateChildListener> onUpdateChildListeners = new ArrayList<>();
 
     @InjectPresenter
     ProfileEditPresenter presenter;
@@ -87,8 +93,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @BindView(R.id.imageViewPhoto)
     ImageView imageViewPhoto;
 
-    @BindView(R.id.textViewAddPhoto)
-    TextView textViewAddPhoto;
+    @BindView(R.id.textViewPhoto)
+    TextView textViewPhoto;
 
     @BindView(R.id.editTextChildName)
     CustomEditText editTextName;
@@ -97,10 +103,10 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     TextView textViewSex;
 
     @BindView(R.id.textViewDate)
-    TextView textViewDate;
+    TextView textViewBirthDate;
 
     @BindView(R.id.textViewTime)
-    TextView textViewTime;
+    TextView textViewBirthTime;
 
     @BindView(R.id.editTextBirthHeight)
     CustomEditText editTextBirthHeight;
@@ -112,10 +118,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     View dummy;
 
     @State
-    Child editedChild;
+    Child editedChild = Child.NULL;
 
-    @State
-    boolean isValidationStarted;
+    private boolean isValidationStarted;
 
     private ListPopupWindow popupWindow;
 
@@ -123,6 +128,14 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         Intent intent = new Intent(context, ProfileEditActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_CHILD, child);
         return intent;
+    }
+
+    void addOnUpdateChildListener(OnUpdateChildListener listener) {
+        onUpdateChildListeners.add(listener);
+    }
+
+    void removeOnUpdateChildListener(OnUpdateChildListener listener) {
+        onUpdateChildListeners.remove(listener);
     }
 
     @Override
@@ -144,16 +157,10 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
             hideKeyboardAndClearFocus(rootView.findFocus());
-            isValidationStarted = true;
-            ValidationResult result = validator.validateAll();
-            if (result.isValid()) {
-                if (child == null) {
-                    presenter.addChild(editedChild);
-                } else {
-                    presenter.updateChild(editedChild);
-                }
+            if (child == null) {
+                presenter.addChild(editedChild);
             } else {
-                showToast(result.toString());
+                presenter.updateChild(editedChild);
             }
         });
 
@@ -162,69 +169,76 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         setupImage();
         setupDate();
         setupTime();
+
+        unsubscribeOnDestroy(presenter.listenForDoneButtonUpdate(new ChildObservable(this)));
     }
 
     @Override
     protected void themeChangedCustom() {
-        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(this, sex));
-        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(this, sex));
+        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(sex));
+        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideKeyboardAndClearFocus(rootView.findFocus());
+    }
+
+    private void updateChild(Child child) {
+        editedChild = child;
+        for (OnUpdateChildListener listener : onUpdateChildListeners) {
+            listener.onUpdateChild(child);
+        }
     }
 
     private void setupTextViews() {
         editTextName.setText(editedChild.getName());
+        editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getBirthHeight()));
+        editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getBirthWeight()));
 
-        editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getHeight()));
-        editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getWeight()));
+        unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextName).subscribe(textViewAfterTextChangeEvent -> {
+            String name = editTextName.getText().toString();
+            updateChild(Child.getBuilder(editedChild).name(name).build());
+        }));
+        unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthHeight).subscribe(textViewAfterTextChangeEvent -> {
+            Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
+            updateChild(Child.getBuilder(editedChild).birthHeight(height).build());
+        }));
+        unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthWeight).subscribe(textViewAfterTextChangeEvent -> {
+            Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
+            updateChild(Child.getBuilder(editedChild).birthWeight(weight).build());
+        }));
 
-        editTextName.setOnFocusChangeListener((v, hasFocus) -> {
+        unsubscribeOnDestroy(RxView.focusChanges(editTextName).subscribe((hasFocus) -> {
             if (hasFocus) {
                 editTextName.setSelection(editTextName.getText().length());
-            } else {
-                String name = editTextName.getText().toString().trim();
-                editedChild = editedChild.getBuilder(editedChild).name(name).build();
-                if (isValidationStarted) {
-                    validator.validateName(false);
-                }
             }
-        });
-        editTextBirthHeight.setOnFocusChangeListener((v, hasFocus) -> {
+        }));
+        unsubscribeOnDestroy(RxView.focusChanges(editTextBirthHeight).subscribe(hasFocus -> {
             if (hasFocus) {
-                editTextBirthHeight.setText(DoubleUtils.heightEdit(editedChild.getHeight()));
+                editTextBirthHeight.setText(DoubleUtils.heightEdit(editedChild.getBirthHeight()));
                 editTextBirthHeight.setSelection(editTextBirthHeight.getText().length());
             } else {
-                Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
-                editedChild = editedChild.getBuilder(editedChild).height(height).build();
-                editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getHeight()));
-                if (isValidationStarted) {
-                    validator.validateBirthHeight(false);
-                }
+                editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getBirthHeight()));
             }
-        });
-        editTextBirthWeight.setOnFocusChangeListener((v, hasFocus) -> {
+        }));
+        unsubscribeOnDestroy(RxView.focusChanges(editTextBirthWeight).subscribe(hasFocus -> {
             if (hasFocus) {
-                editTextBirthWeight.setText(DoubleUtils.weightEdit(editedChild.getWeight()));
+                editTextBirthWeight.setText(DoubleUtils.weightEdit(editedChild.getBirthWeight()));
                 editTextBirthWeight.setSelection(editTextBirthWeight.getText().length());
             } else {
-                Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
-                editedChild = editedChild.getBuilder(editedChild).weight(weight).build();
-                editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getWeight()));
-                if (isValidationStarted) {
-                    validator.validateBirthWeight(false);
-                }
+                editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getBirthWeight()));
             }
-        });
-
+        }));
+        unsubscribeOnDestroy(RxTextView.editorActionEvents(editTextBirthWeight).subscribe(textViewEditorActionEvent -> {
+            if (textViewEditorActionEvent.actionId() == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboardAndClearFocus(editTextBirthWeight);
+            }
+        }));
         editTextName.setOnKeyboardHiddenListener(this);
         editTextBirthHeight.setOnKeyboardHiddenListener(this);
         editTextBirthWeight.setOnKeyboardHiddenListener(this);
-
-        editTextBirthWeight.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                hideKeyboardAndClearFocus(v);
-                return true;
-            }
-            return false;
-        });
     }
 
     @Override
@@ -243,9 +257,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         changeThemeIfNeeded(sex);
         textViewSex.setText(StringUtils.sex(this, sex, getString(R.string.select_sex)));
         WidgetUtils.setupTextView(textViewSex, sex != null);
-        if (isValidationStarted) {
-            validator.validateSex(false);
-        }
     }
 
     @OnClick(R.id.textViewSex)
@@ -271,7 +282,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         dismissPopupWindow();
         Sex sex = ((SexAdapter) parent.getAdapter()).getItem(position);
-        editedChild = Child.getBuilder(editedChild).sex(sex).build();
+        updateChild(Child.getBuilder(editedChild).sex(sex).build());
         setupSex();
     }
 
@@ -296,22 +307,19 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         } else {
             imageViewPhoto.setImageDrawable(Drawable.createFromPath(imageFileName));
         }
-        textViewAddPhoto.setVisibility(imageFileName == null ? View.VISIBLE : View.GONE);
+        textViewPhoto.setVisibility(imageFileName == null ? View.VISIBLE : View.GONE);
     }
 
     private void setupDate() {
         LocalDate birthDate = editedChild.getBirthDate();
-        textViewDate.setText(StringUtils.date(birthDate, dateFormatter, getString(R.string.date)));
-        WidgetUtils.setupTextView(textViewDate, birthDate != null);
-        if (isValidationStarted) {
-            validator.validateBirthDate(false);
-        }
+        textViewBirthDate.setText(StringUtils.date(birthDate, dateFormatter, getString(R.string.date)));
+        WidgetUtils.setupTextView(textViewBirthDate, birthDate != null);
     }
 
     private void setupTime() {
         LocalTime birthTime = editedChild.getBirthTime();
-        textViewTime.setText(StringUtils.time(birthTime, timeFormatter, getString(R.string.time)));
-        WidgetUtils.setupTextView(textViewTime, birthTime != null);
+        textViewBirthTime.setText(StringUtils.time(birthTime, timeFormatter, getString(R.string.time)));
+        WidgetUtils.setupTextView(textViewBirthTime, birthTime != null);
     }
 
     @OnClick(R.id.imageViewPhoto)
@@ -334,18 +342,19 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         dpd.vibrate(false);
         WidgetUtils.setupDatePicker(this, dpd, sex);
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @OnClick(R.id.textViewTime)
     void onTimeClick() {
         LocalTime birthTime = editedChild.getBirthTime();
         LocalTime time = birthTime == null ? LocalTime.now() : birthTime;
-        boolean is24HourFormat = DateFormat.is24HourFormat(this);
         TimePickerDialog tpd = TimePickerDialog.newInstance(this,
                 time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
         tpd.vibrate(false);
         WidgetUtils.setupTimePicker(this, tpd, sex);
         tpd.show(getFragmentManager(), TAG_TIME_PICKER);
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
@@ -361,7 +370,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void onSetImage(@Nullable File resultFile) {
         String imageFileName = resultFile == null ? null : resultFile.getAbsolutePath();
-        editedChild = Child.getBuilder(editedChild).imageFileName(imageFileName).build();
+        updateChild(Child.getBuilder(editedChild).imageFileName(imageFileName).build());
         setupImage();
     }
 
@@ -370,15 +379,20 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, monthOfYear, dayOfMonth);
         LocalDate birthDate = LocalDate.fromCalendarFields(calendar);
-        editedChild = Child.getBuilder(editedChild).birthDate(birthDate).build();
+        updateChild(Child.getBuilder(editedChild).birthDate(birthDate).build());
         setupDate();
     }
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         LocalTime birthTime = new LocalTime(hourOfDay, minute);
-        editedChild = Child.getBuilder(editedChild).birthTime(birthTime).build();
+        updateChild(Child.getBuilder(editedChild).birthTime(birthTime).build());
         setupTime();
+    }
+
+    @Override
+    public void setButtonDoneEnabled(boolean enabled) {
+        buttonDone.setEnabled(enabled);
     }
 
     @Override
@@ -389,6 +403,56 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void childUpdated(@NonNull Child child) {
         finish();
+    }
+
+    @Override
+    public void validationFailed() {
+        if (!isValidationStarted) {
+            isValidationStarted = true;
+            unsubscribeOnDestroy(presenter.listenForFieldsUpdate(new ChildObservable(this)));
+        }
+    }
+
+    @Override
+    public void showValidationErrorMessage(String msg) {
+        showToast(msg);
+    }
+
+    @Override
+    public void nameValidated(boolean valid) {
+        viewValidated(editTextName, valid,
+                R.drawable.name_edit_text_background, R.drawable.name_edit_text_background_error);
+        int bottom = getResources().getDimensionPixelSize(R.dimen.name_edit_text_padding_bottom);
+        editTextName.setPadding(0, 0, 0, bottom);
+    }
+
+    @Override
+    public void sexValidated(boolean valid) {
+        viewValidated(textViewSex, valid);
+    }
+
+    @Override
+    public void birthDateValidated(boolean valid) {
+        viewValidated(textViewBirthDate, valid);
+    }
+
+    @Override
+    public void birthHeightValidated(boolean valid) {
+        viewValidated(editTextBirthHeight, valid);
+    }
+
+    @Override
+    public void birthWeightValidated(boolean valid) {
+        viewValidated(editTextBirthWeight, valid);
+    }
+
+    private void viewValidated(View view, boolean valid) {
+        viewValidated(view, valid, R.drawable.spinner_background, R.drawable.spinner_background_error);
+    }
+
+    private void viewValidated(View view, boolean valid,
+                               @DrawableRes int background, @DrawableRes int backgroundError) {
+        view.setBackgroundResource(valid ? background : backgroundError);
     }
 
     @Override

@@ -170,7 +170,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void editChild(@Nullable Child child) {
+    public void editChild(@NonNull Child child) {
         navigateToProfileEdit(child);
     }
 

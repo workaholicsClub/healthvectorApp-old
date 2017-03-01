@@ -137,9 +137,9 @@ public class DbTest {
         return selected;
     }
 
-    private <T> void selectedContainInserted(IdsComparator<T> idsEqual, List<T> selected, int count, T... items) {
-        for (int i = 0; i < items.length; ++i) {
-            T insertedItem = items[i];
+    @SafeVarargs
+    private final <T> void selectedContainInserted(IdsComparator<T> idsEqual, List<T> selected, int count, T... items) {
+        for (T insertedItem : items) {
             long found;
             found = Stream.of(selected).filter(item -> item.equals(insertedItem)).count();
             assertEquals("item value found in selection", count, found);
@@ -226,8 +226,8 @@ public class DbTest {
                 .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()).minusMinutes(RANDOM.nextInt()))
                 .sex(RANDOM.nextBoolean() ? Sex.MALE : Sex.FEMALE)
                 .imageFileName(null)
-                .height(RANDOM.nextDouble())
-                .weight(RANDOM.nextDouble())
+                .birthHeight(RANDOM.nextDouble())
+                .birthWeight(RANDOM.nextDouble())
                 .build();
     }
 
@@ -249,7 +249,6 @@ public class DbTest {
     }
 
     private List<Antropometry> insertRandomAntropometry(Child child) {
-        LocalDateTime now = LocalDateTime.now();
         List<Antropometry> inserted = new ArrayList<>();
         for (int j = 0; j < ANTROPOMETRY_COUNT; ++j) {
             Antropometry antropometry = getRandomAntropometry(child, j);

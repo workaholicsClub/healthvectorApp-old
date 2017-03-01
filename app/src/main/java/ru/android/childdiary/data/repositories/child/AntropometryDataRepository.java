@@ -1,5 +1,7 @@
 package ru.android.childdiary.data.repositories.child;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,22 +22,22 @@ public class AntropometryDataRepository implements AntropometryRepository {
     }
 
     @Override
-    public Observable<List<Antropometry>> getAll(Child child) {
+    public Observable<List<Antropometry>> getAll(@NonNull Child child) {
         return dbService.getAll(child);
     }
 
     @Override
-    public Observable<Antropometry> add(Antropometry antropometry) {
+    public Observable<Antropometry> add(@NonNull Antropometry antropometry) {
         return dbService.add(antropometry);
     }
 
     @Override
-    public Observable<Antropometry> update(Antropometry antropometry) {
+    public Observable<Antropometry> update(@NonNull Antropometry antropometry) {
         return dbService.update(antropometry);
     }
 
     @Override
-    public Observable<Antropometry> delete(Antropometry antropometry) {
+    public Observable<Antropometry> delete(@NonNull Antropometry antropometry) {
         return dbService.delete(antropometry);
     }
 }

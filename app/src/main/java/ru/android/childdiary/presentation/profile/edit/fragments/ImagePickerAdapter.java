@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.edit;
+package ru.android.childdiary.presentation.profile.edit.fragments;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -53,7 +53,7 @@ class ImagePickerAdapter extends ArrayAdapter<String> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
         ViewHolder viewHolder;
         if (view == null) {

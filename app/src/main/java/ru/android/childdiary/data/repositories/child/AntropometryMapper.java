@@ -1,12 +1,14 @@
 package ru.android.childdiary.data.repositories.child;
 
+import android.support.annotation.NonNull;
+
 import ru.android.childdiary.data.entities.child.AntropometryData;
 import ru.android.childdiary.data.entities.child.AntropometryEntity;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 
 // TODO: foreign key mapper
 class AntropometryMapper {
-    public static Antropometry map(AntropometryData antropometryData) {
+    public static Antropometry map(@NonNull AntropometryData antropometryData) {
         return Antropometry.builder()
                 .id(antropometryData.getId())
                 .child(ChildMapper.map(antropometryData.getChild()))
@@ -16,11 +18,11 @@ class AntropometryMapper {
                 .build();
     }
 
-    public static AntropometryEntity map(Antropometry antropometry) {
+    public static AntropometryEntity map(@NonNull Antropometry antropometry) {
         return copy(new AntropometryEntity(), antropometry);
     }
 
-    public static AntropometryEntity copy(AntropometryEntity toAntropometryEntity, Antropometry fromAntropometry) {
+    public static AntropometryEntity copy(@NonNull AntropometryEntity toAntropometryEntity, @NonNull Antropometry fromAntropometry) {
         toAntropometryEntity.setHeight(fromAntropometry.getHeight());
         toAntropometryEntity.setWeight(fromAntropometry.getWeight());
         toAntropometryEntity.setDate(fromAntropometry.getDate());

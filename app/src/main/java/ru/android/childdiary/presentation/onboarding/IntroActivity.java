@@ -6,9 +6,12 @@ import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro;
 
+import ru.android.childdiary.utils.ui.ConfigUtils;
+
 public class IntroActivity extends AppIntro {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        ConfigUtils.setupOrientation(this);
         super.onCreate(savedInstanceState);
 
         // Note here that we DO NOT use setContentView();

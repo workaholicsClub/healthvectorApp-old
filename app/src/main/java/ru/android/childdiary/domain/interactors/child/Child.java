@@ -42,19 +42,19 @@ public class Child implements Parcelable {
     // необязательный параметр
     String imageFileName;
 
-    Double height;
+    Double birthHeight;
 
-    Double weight;
+    Double birthWeight;
 
-    private Child(Long id, String name, LocalDate birthDate, LocalTime birthTime, Sex sex, String imageFileName, Double height, Double weight) {
+    private Child(Long id, String name, LocalDate birthDate, LocalTime birthTime, Sex sex, String imageFileName, Double birthHeight, Double birthWeight) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
         this.birthTime = birthTime;
         this.sex = sex;
         this.imageFileName = imageFileName;
-        this.height = height;
-        this.weight = weight;
+        this.birthHeight = birthHeight;
+        this.birthWeight = birthWeight;
     }
 
     protected Child(Parcel in) {
@@ -65,8 +65,8 @@ public class Child implements Parcelable {
         int tmpSex = in.readInt();
         this.sex = tmpSex == -1 ? null : Sex.values()[tmpSex];
         this.imageFileName = in.readString();
-        this.height = (Double) in.readValue(Double.class.getClassLoader());
-        this.weight = (Double) in.readValue(Double.class.getClassLoader());
+        this.birthHeight = (Double) in.readValue(Double.class.getClassLoader());
+        this.birthWeight = (Double) in.readValue(Double.class.getClassLoader());
     }
 
     public static Child.ChildBuilder getBuilder(@Nullable Child child) {
@@ -77,8 +77,8 @@ public class Child implements Parcelable {
                 .birthTime(child.birthTime)
                 .sex(child.sex)
                 .imageFileName(child.imageFileName)
-                .height(child.height)
-                .weight(child.weight);
+                .birthHeight(child.birthHeight)
+                .birthWeight(child.birthWeight);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class Child implements Parcelable {
         dest.writeSerializable(this.birthTime);
         dest.writeInt(this.sex == null ? -1 : this.sex.ordinal());
         dest.writeString(this.imageFileName);
-        dest.writeValue(this.height);
-        dest.writeValue(this.weight);
+        dest.writeValue(this.birthHeight);
+        dest.writeValue(this.birthWeight);
     }
 }

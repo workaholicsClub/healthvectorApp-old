@@ -15,6 +15,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.utils.StringUtils;
 
 @InjectViewState
 public class MainPresenter extends BasePresenter<MainView> {
@@ -39,8 +40,8 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribe(this::onGetChildList, this::onUnexpectedError));
     }
 
-    private void onGetChildList(List<Child> childList) {
-        logger.debug("onGetChildList");
+    private void onGetChildList(@NonNull List<Child> childList) {
+        logger.debug("onGetChildList: " + StringUtils.toString(childList));
         boolean isFirstTime = this.childList == null;
         this.childList = childList;
         getViewState().showChildList(childList);
@@ -105,6 +106,6 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     private void onDeleteChild(Child child) {
-        logger.debug("onDeleteChild");
+        logger.debug("onDeleteChild: " + child);
     }
 }
