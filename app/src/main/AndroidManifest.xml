@@ -15,9 +15,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name=".presentation.main.MainActivity" />
-        <activity
-            android:name=".presentation.splash.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".presentation.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,9 +51,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
-        <activity
-            android:name=".presentation.profile.edit.image.CropActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".presentation.profile.edit.image.CropActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

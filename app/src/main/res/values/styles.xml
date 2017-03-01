@@ -37,8 +37,6 @@
         <item name="colorAccent">@color/accent_girl</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" />
-
     <style name="NameEditTextStyle">
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
