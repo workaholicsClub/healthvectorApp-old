@@ -62,6 +62,7 @@
     <string name="action_capture_image">Сделать снимок</string>
     <string name="action_pick_image">Из галереи</string>
     <string name="action_delete_image">Удалить фото</string>
+    <string name="rotate">Повернуть</string>
     <plurals name="numberOfYears">
         <item quantity="one">%d год</item>
         <item quantity="few">%d года</item>

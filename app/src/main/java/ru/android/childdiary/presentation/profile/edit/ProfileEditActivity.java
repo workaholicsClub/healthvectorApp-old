@@ -52,7 +52,7 @@ import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.profile.edit.fragments.ImagePickerDialogFragment;
+import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
