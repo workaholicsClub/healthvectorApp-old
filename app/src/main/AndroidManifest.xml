@@ -54,7 +54,8 @@
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
-            android:name=".presentation.profile.edit.fragments.CropActivity"
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <provider

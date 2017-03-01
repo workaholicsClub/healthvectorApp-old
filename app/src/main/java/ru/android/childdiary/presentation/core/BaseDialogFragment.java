@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +23,7 @@ import icepick.Icepick;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseDialogFragment extends DialogFragment {
@@ -33,14 +32,14 @@ public abstract class BaseDialogFragment extends DialogFragment {
     private final Map<Integer, RequestPermissionInfo> permissionInfoMap = new HashMap<>();
 
     @Getter(AccessLevel.PROTECTED)
-    private Sex sex;
+    private Child child;
 
     public BaseDialogFragment() {
     }
 
-    public final void showAllowingStateLoss(FragmentManager manager, String tag, @Nullable Sex sex) {
+    public void showAllowingStateLoss(FragmentManager manager, String tag, @NonNull Child child) {
         Bundle arguments = new Bundle();
-        arguments.putSerializable(ExtraConstants.EXTRA_SEX, sex);
+        arguments.putParcelable(ExtraConstants.EXTRA_CHILD, child);
         setArguments(arguments);
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);
@@ -50,8 +49,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        child = getArguments().getParcelable(ExtraConstants.EXTRA_CHILD);
         Icepick.restoreInstanceState(this, savedInstanceState);
-        sex = (Sex) getArguments().getSerializable(ExtraConstants.EXTRA_SEX);
         return super.onCreateDialog(savedInstanceState);
     }
 
@@ -72,7 +71,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 != PackageManager.PERMISSION_GRANTED) {
             permissionInfoMap.put(permissionInfo.getRequestCode(), permissionInfo);
             if (shouldShowRequestPermissionRationale(permission)) {
-                new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(sex))
+                new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(getChild().getSex()))
                         .setTitle(permissionInfo.getTitleResourceId())
                         .setMessage(permissionInfo.getTextResourceId())
                         .setPositiveButton(R.string.OK,

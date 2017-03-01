@@ -22,6 +22,8 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import icepick.State;
 import ru.android.childdiary.R;
@@ -52,8 +54,27 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
+        List<ImagePickerAction> actions = new ArrayList<>();
+        actions.add(ImagePickerAction.builder()
+                .type(ImagePickerActionType.CAPTURE)
+                .titleResourceId(R.string.action_capture_image)
+                .iconResourceId(R.drawable.action_capture_image)
+                .build());
+        actions.add(ImagePickerAction.builder()
+                .type(ImagePickerActionType.PICK)
+                .titleResourceId(R.string.action_pick_image)
+                .iconResourceId(R.drawable.action_pick_image)
+                .build());
+        if (getChild().getImageFileName() != null) {
+            actions.add(ImagePickerAction.builder()
+                    .type(ImagePickerActionType.DELETE)
+                    .titleResourceId(R.string.action_delete_image)
+                    .iconResourceId(R.drawable.action_delete_image)
+                    .build());
+        }
+
         ListView listView = new ListView(getActivity());
-        ArrayAdapter adapter = new ImagePickerAdapter(getActivity());
+        ArrayAdapter adapter = new ImagePickerAdapter(getActivity(), actions);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
@@ -65,14 +86,15 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        switch (position) {
-            case 0:
+        ImagePickerAction action = ((ImagePickerAdapter) parent.getAdapter()).getItem(position);
+        switch (action.getType()) {
+            case CAPTURE:
                 captureImage();
                 break;
-            case 1:
+            case PICK:
                 requestPermissionAndPickImage();
                 break;
-            case 2:
+            case DELETE:
                 dismiss();
                 if (listener != null) {
                     listener.onSetImage(null);
@@ -181,7 +203,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         options.setCropGridRowCount(0);
         options.setShowCropFrame(false);
 
-        WidgetUtils.setupCropActivityToolbar(getActivity(), options, getSex());
+        WidgetUtils.setupCropActivityToolbar(getActivity(), options, getChild().getSex());
 
         uCrop.withOptions(options);
 
