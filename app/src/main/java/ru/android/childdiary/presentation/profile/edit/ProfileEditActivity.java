@@ -176,7 +176,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     protected void themeChangedCustom() {
         topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(sex));
-        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex));
     }
 
     @Override
@@ -391,11 +390,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     @Override
-    public void setButtonDoneEnabled(boolean enabled) {
-        buttonDone.setEnabled(enabled);
-    }
-
-    @Override
     public void childAdded(@NonNull Child child) {
         finish();
     }
@@ -403,6 +397,11 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void childUpdated(@NonNull Child child) {
         finish();
+    }
+
+    @Override
+    public void setButtonDoneEnabled(boolean enabled) {
+        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, enabled));
     }
 
     @Override

@@ -138,18 +138,18 @@ public class ThemeUtils {
     }
 
     @DrawableRes
-    public static int getButtonBackgroundRes(@Nullable Sex sex) {
+    public static int getButtonBackgroundRes(@Nullable Sex sex, boolean enabled) {
         if (sex == null) {
-            return R.drawable.button_background;
+            return enabled ? R.drawable.button_background : R.drawable.button_background_disabled;
         }
 
         switch (sex) {
             case MALE:
-                return R.drawable.button_background_boy;
+                return enabled ? R.drawable.button_background_boy : R.drawable.button_background_boy_disabled;
             case FEMALE:
-                return R.drawable.button_background_girl;
+                return enabled ? R.drawable.button_background_girl : R.drawable.button_background_girl_disabled;
             default:
-                return R.drawable.button_background;
+                return enabled ? R.drawable.button_background : R.drawable.button_background_disabled;
         }
     }
 }

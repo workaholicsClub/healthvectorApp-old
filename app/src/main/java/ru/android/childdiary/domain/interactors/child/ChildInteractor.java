@@ -51,7 +51,8 @@ public class ChildInteractor implements Interactor, ChildRepository {
 
     @Override
     public Observable<Child> update(@NonNull Child item) {
-        return childRepository.update(item);
+        return validate(item)
+                .flatMap(childRepository::update);
     }
 
     @Override
@@ -106,7 +107,11 @@ public class ChildInteractor implements Interactor, ChildRepository {
 
     public Observable<Boolean> controlDoneButton(@NonNull Observable<Child> childObservable) {
         return childObservable
-                .map(child -> !TextUtils.isEmpty(child.getName()))
+                .map(child -> !TextUtils.isEmpty(child.getName())
+                        && child.getSex() != null
+                        && child.getBirthDate() != null
+                        && child.getBirthHeight() != null
+                        && child.getBirthWeight() != null)
                 .distinctUntilChanged();
     }
 
