@@ -210,7 +210,6 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         Intent intent = uCrop.getIntent(getActivity());
         intent.setClass(getActivity(), CropActivity.class);
         startActivityForResult(intent, REQUEST_CROP_IMAGE);
-        //uCrop.start(getActivity(), this, REQUEST_CROP_IMAGE);
     }
 
     private void handleCropResult(@NonNull Intent result) {
