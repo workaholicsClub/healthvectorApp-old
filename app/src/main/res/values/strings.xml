@@ -59,16 +59,9 @@
     <string name="male">Мужской</string>
     <string name="female">Женский</string>
     <string name="close">Закрыть</string>
-    <string-array name="image_picker_actions">
-        <item>Сделать снимок</item>
-        <item>Из галереи</item>
-        <item>Удалить фото</item>
-    </string-array>
-    <integer-array name="image_picker_drawables">
-        <item>@drawable/action_capture_image</item>
-        <item>@drawable/action_pick_image</item>
-        <item>@drawable/action_delete_image</item>
-    </integer-array>
+    <string name="action_capture_image">Сделать снимок</string>
+    <string name="action_pick_image">Из галереи</string>
+    <string name="action_delete_image">Удалить фото</string>
     <plurals name="numberOfYears">
         <item quantity="one">%d год</item>
         <item quantity="few">%d года</item>

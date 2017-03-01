@@ -325,7 +325,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @OnClick(R.id.imageViewPhoto)
     void onPhotoClick() {
         ImagePickerDialogFragment imagePicker = new ImagePickerDialogFragment();
-        imagePicker.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER, sex);
+        imagePicker.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER, editedChild);
     }
 
     @OnClick(R.id.textViewDate)

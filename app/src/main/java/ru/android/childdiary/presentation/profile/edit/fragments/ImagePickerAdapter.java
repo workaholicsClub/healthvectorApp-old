@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.profile.edit.fragments;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,28 +10,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 
-class ImagePickerAdapter extends ArrayAdapter<String> {
-    private final String[] items;
-    private final int[] drawables;
+class ImagePickerAdapter extends ArrayAdapter<ImagePickerAction> {
+    private final List<ImagePickerAction> actions;
 
-    public ImagePickerAdapter(Context context) {
+    public ImagePickerAdapter(Context context, List<ImagePickerAction> actions) {
         super(context, getLayoutResourceId());
-        items = context.getResources().getStringArray(R.array.image_picker_actions);
-
-        TypedArray array = context.getResources().obtainTypedArray(R.array.image_picker_drawables);
-        int count = array.length();
-        drawables = new int[count];
-        for (int i = 0; i < count; ++i) {
-            drawables[i] = array.getResourceId(i, 0);
-        }
-        array.recycle();
-
-        if (items.length != count) {
-            throw new RuntimeException("invalid resources: image picker drawables");
-        }
+        this.actions = Collections.unmodifiableList(actions);
     }
 
     @LayoutRes
@@ -42,13 +31,13 @@ class ImagePickerAdapter extends ArrayAdapter<String> {
 
     @Override
     public int getCount() {
-        return items.length;
+        return actions.size();
     }
 
     @Nullable
     @Override
-    public String getItem(int position) {
-        return items[position];
+    public ImagePickerAction getItem(int position) {
+        return actions.get(position);
     }
 
     @NonNull
@@ -66,11 +55,10 @@ class ImagePickerAdapter extends ArrayAdapter<String> {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        String text = getItem(position);
-        int drawableRes = drawables[position];
+        ImagePickerAction action = getItem(position);
 
-        viewHolder.textView.setText(text);
-        viewHolder.textView.setCompoundDrawablesWithIntrinsicBounds(drawableRes, 0, 0, 0);
+        viewHolder.textView.setText(action.getTitleResourceId());
+        viewHolder.textView.setCompoundDrawablesWithIntrinsicBounds(action.getIconResourceId(), 0, 0, 0);
 
         return view;
     }
