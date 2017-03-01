@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="numberOfYears">
+        <item quantity="one">%d год</item>
+        <item quantity="few">%d года</item>
+        <item quantity="other">%d лет</item>
+        <item quantity="many">%d лет</item>
+        <item quantity="zero">%d лет</item>
+    </plurals>
+    <plurals name="numberOfMonths">
+        <item quantity="one">%d месяц</item>
+        <item quantity="few">%d месяца</item>
+        <item quantity="other">%d месяцев</item>
+        <item quantity="many">%d месяцев</item>
+        <item quantity="zero">%d месяцев</item>
+    </plurals>
+</resources>
