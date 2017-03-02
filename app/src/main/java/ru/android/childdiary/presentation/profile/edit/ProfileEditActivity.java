@@ -118,6 +118,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     View dummy;
 
     @State
+    boolean isButtonDoneEnabled;
+
+    @State
     Child editedChild = Child.NULL;
 
     private boolean isValidationStarted;
@@ -176,6 +179,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     protected void themeChangedCustom() {
         topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(sex));
+        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
     }
 
     @Override
@@ -401,7 +405,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @Override
     public void setButtonDoneEnabled(boolean enabled) {
-        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, enabled));
+        isButtonDoneEnabled = enabled;
+        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
     }
 
     @Override
