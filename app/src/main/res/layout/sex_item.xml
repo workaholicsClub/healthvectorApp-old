@@ -6,12 +6,12 @@
     <TextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_height"
+        android:layout_height="@dimen/sex_item_height"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:paddingLeft="@dimen/list_item_padding_horizontal"
-        android:paddingRight="@dimen/list_item_padding_horizontal"
+        android:paddingLeft="@dimen/sex_item_text_padding_horizontal"
+        android:paddingRight="@dimen/sex_item_text_padding_horizontal"
         android:textAlignment="inherit"
         android:textAppearance="@style/PrimaryTextAppearance" />
 </RelativeLayout>

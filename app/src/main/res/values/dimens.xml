@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbar_elevation">4dp</dimen>
+    <!-- profile -->
     <dimen name="profile_top_panel_height">114dp</dimen>
+    <dimen name="profile_image_size">84dp</dimen>
     <dimen name="profile_margin_horizontal">16dp</dimen>
     <dimen name="profile_margin_vertical">12dp</dimen>
-    <dimen name="profile_rounded_image_size">84dp</dimen>
     <dimen name="profile_field_height">54dp</dimen>
-    <dimen name="profile_review_text_view_padding_horizontal">5dp</dimen>
-    <dimen name="list_item_height">60dp</dimen>
-    <dimen name="list_item_padding_horizontal">14dp</dimen>
-    <dimen name="list_item_drawable_padding">14dp</dimen>
+    <dimen name="profile_review_text_padding_horizontal">5dp</dimen>
     <dimen name="name_edit_text_padding_bottom">6dp</dimen>
     <dimen name="name_edit_text_stroke_width">1dp</dimen>
     <dimen name="name_edit_text_stroke_width_negative">-2dp</dimen>
+    <dimen name="sex_item_text_padding_horizontal">10dp</dimen>
+    <dimen name="sex_item_height">54dp</dimen>
     <dimen name="button_height">54dp</dimen>
     <dimen name="button_corner_radius">20dp</dimen>
+    <!-- account header -->
     <dimen name="account_header_image_size">44dp</dimen>
     <dimen name="account_header_height">80dp</dimen>
-    <dimen name="account_header_action_item_image_size">@dimen/account_header_image_size</dimen>
-    <dimen name="account_header_action_item_margin">10dp</dimen>
-    <dimen name="account_header_action_item_width">200dp</dimen>
+    <dimen name="account_header_action_item_image_size">44dp</dimen>
+    <dimen name="account_header_action_item_image_margin_horizontal">20dp</dimen>
+    <dimen name="account_header_action_item_text_padding_horizontal">20dp</dimen>
+    <dimen name="account_header_action_item_height">54dp</dimen>
+    <dimen name="account_header_action_item_width_wide">240dp</dimen>
+    <dimen name="account_header_action_item_width_narrow">200dp</dimen>
+    <!-- image picker -->
+    <dimen name="image_picker_item_drawable_padding_horizontal">20dp</dimen>
+    <dimen name="image_picker_item_text_padding_horizontal">20dp</dimen>
+    <dimen name="image_picker_item_height">54dp</dimen>
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>

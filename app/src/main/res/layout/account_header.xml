@@ -15,6 +15,7 @@
         android:id="@+id/material_drawer_account_header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/material_drawer_account_header_height_compact"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <com.mikepenz.materialdrawer.view.BezelImageView
@@ -39,7 +40,6 @@
             android:id="@+id/material_drawer_account_header_current"
             android:layout_width="@dimen/account_header_image_size"
             android:layout_height="@dimen/account_header_image_size"
-            android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/material_drawer_vertical_padding"
             android:layout_marginLeft="@dimen/material_drawer_vertical_padding"
             android:layout_marginRight="@dimen/material_drawer_vertical_padding"
@@ -50,7 +50,6 @@
             android:id="@+id/material_drawer_account_header_text_section"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="vertical">
@@ -75,20 +74,23 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/account_header_switcher_wrapper"
+            android:id="@+id/material_drawer_account_header_text_switcher_wrapper"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/account_header_selector"
-            android:paddingEnd="@dimen/material_drawer_vertical_padding"
-            android:paddingLeft="@dimen/material_drawer_vertical_padding"
-            android:paddingRight="@dimen/material_drawer_vertical_padding"
-            android:paddingStart="@dimen/material_drawer_vertical_padding">
+            android:layout_height="@dimen/account_header_action_item_height"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/account_header_selector">
 
             <ImageView
                 android:id="@+id/material_drawer_account_header_text_switcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="@dimen/account_header_action_item_image_margin_horizontal"
+                android:layout_marginLeft="@dimen/account_header_action_item_image_margin_horizontal"
+                android:layout_marginRight="@dimen/account_header_action_item_image_margin_horizontal"
+                android:layout_marginStart="@dimen/account_header_action_item_image_margin_horizontal"
+                android:scaleType="center"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
     </LinearLayout>
