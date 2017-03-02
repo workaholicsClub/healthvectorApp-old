@@ -179,7 +179,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @Override
     protected void themeChangedCustom() {
-        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(sex));
+        topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(sex));
         buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
     }
 

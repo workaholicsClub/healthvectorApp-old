@@ -65,10 +65,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     private void themeChanged() {
         logger.debug("theme changed");
         if (toolbar != null) {
-            toolbar.setBackgroundColor(ThemeUtils.getToolbarColor(this, sex));
+            toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ThemeUtils.getStatusBarColor(this, sex));
+            getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
         }
         themeChangedCustom();
     }

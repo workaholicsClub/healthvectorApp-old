@@ -123,6 +123,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         adapter.addFragment(new WeekFragment(), getString(R.string.week));
         adapter.addFragment(new MonthFragment(), getString(R.string.month));
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(2);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -135,7 +136,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     protected void themeChangedCustom() {
         if (accountHeader != null) {
-            accountHeader.setBackground(ThemeUtils.getHeaderDrawable(this, sex));
+            accountHeader.setBackground(ThemeUtils.getColorPrimaryDrawable(this, sex));
         }
     }
 
@@ -329,7 +330,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withOnAccountHeaderProfileImageListener(this)
                 .withAccountHeader(R.layout.account_header)
                 .withHeightRes(R.dimen.account_header_height)
-                .withHeaderBackground(ThemeUtils.getHeaderDrawable(this, sex))
+                .withHeaderBackground(ThemeUtils.getColorPrimaryDrawable(this, sex))
                 .addProfiles(profiles.toArray(new IProfile[profiles.size()]))
                 .build();
     }
