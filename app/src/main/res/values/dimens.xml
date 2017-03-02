@@ -24,6 +24,8 @@
     <dimen name="account_header_action_item_height">54dp</dimen>
     <dimen name="account_header_action_item_width_wide">240dp</dimen>
     <dimen name="account_header_action_item_width_narrow">200dp</dimen>
+    <!-- tabs -->
+    <dimen name="selected_tab_indicator_height">2dp</dimen>
     <!-- image picker -->
     <dimen name="image_picker_item_drawable_padding_horizontal">20dp</dimen>
     <dimen name="image_picker_item_text_padding_horizontal">20dp</dimen>
