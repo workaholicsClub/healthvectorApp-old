@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.edit.fragments;
+package ru.android.childdiary.presentation.profile.edit.image;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -207,7 +207,9 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
 
         uCrop.withOptions(options);
 
-        uCrop.start(getActivity(), this, REQUEST_CROP_IMAGE);
+        Intent intent = uCrop.getIntent(getActivity());
+        intent.setClass(getActivity(), CropActivity.class);
+        startActivityForResult(intent, REQUEST_CROP_IMAGE);
     }
 
     private void handleCropResult(@NonNull Intent result) {

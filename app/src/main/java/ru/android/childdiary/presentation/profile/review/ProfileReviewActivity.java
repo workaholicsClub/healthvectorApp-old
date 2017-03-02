@@ -101,7 +101,7 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     @Override
     protected void themeChangedCustom() {
         topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(sex));
-        buttonEdit.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex));
+        buttonEdit.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, true));
     }
 
     private void setupViews(@NonNull Child child) {

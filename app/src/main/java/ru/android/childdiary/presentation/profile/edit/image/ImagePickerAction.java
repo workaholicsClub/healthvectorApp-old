@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.edit.fragments;
+package ru.android.childdiary.presentation.profile.edit.image;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;

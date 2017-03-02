@@ -38,6 +38,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
+            // TODO: show alert dialog with custom theme
             showToast(e.toString());
         }
     }
