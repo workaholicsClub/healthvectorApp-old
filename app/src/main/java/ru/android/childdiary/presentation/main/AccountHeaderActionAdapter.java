@@ -64,7 +64,8 @@ class AccountHeaderActionAdapter extends ArrayAdapter<IProfile> {
             view = layoutInflater.inflate(getLayoutResourceId(), null);
             viewHolder = new ViewHolder();
             viewHolder.textView = ButterKnife.findById(view, android.R.id.text1);
-            viewHolder.imageView = ButterKnife.findById(view, R.id.imageViewPhoto);
+            viewHolder.imageViewPhoto = ButterKnife.findById(view, R.id.imageViewPhoto);
+            viewHolder.imageViewDropdown = ButterKnife.findById(view, R.id.imageViewDropdown);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -74,15 +75,17 @@ class AccountHeaderActionAdapter extends ArrayAdapter<IProfile> {
         String text = profile.getName().getText();
         Drawable icon = profile.getIcon() == null ? null : profile.getIcon().getIcon();
 
+        viewHolder.imageViewPhoto.setVisibility(icon == null ? View.GONE : View.VISIBLE);
+        viewHolder.imageViewPhoto.setImageDrawable(icon);
         viewHolder.textView.setText(text);
-        viewHolder.imageView.setVisibility(icon == null ? View.GONE : View.VISIBLE);
-        viewHolder.imageView.setImageDrawable(icon);
+        viewHolder.imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
 
         return view;
     }
 
     private static class ViewHolder {
+        ImageView imageViewPhoto;
         TextView textView;
-        ImageView imageView;
+        View imageViewDropdown;
     }
 }

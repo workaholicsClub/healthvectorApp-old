@@ -5,11 +5,11 @@
     <item
         android:id="@+id/menu_rotate"
         android:icon="@drawable/toolbar_replay"
-        android:title="@string/rotate"
+        android:title="@string/empty"
         app:showAsAction="always" />
     <item
         android:id="@+id/menu_crop"
         android:icon="@drawable/toolbar_done"
-        android:title="@string/crop_image_title"
+        android:title="@string/empty"
         app:showAsAction="always" />
 </menu>

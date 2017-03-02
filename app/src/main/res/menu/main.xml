@@ -3,23 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_diaper"
-        android:title="@string/event_diaper"
-        app:showAsAction="never" />
+        android:id="@+id/menu_filter"
+        android:icon="@drawable/toolbar_sort"
+        android:title="@string/empty"
+        app:showAsAction="always" />
     <item
-        android:id="@+id/menu_sleep"
-        android:title="@string/event_sleep"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_feed"
-        android:title="@string/event_feed"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_pump"
-        android:title="@string/event_pump"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_other"
-        android:title="@string/event_other"
-        app:showAsAction="never" />
+        android:id="@+id/menu_overflow"
+        android:icon="@drawable/toolbar_overflow"
+        android:title="@string/empty"
+        app:showAsAction="always" />
 </menu>

@@ -6,13 +6,13 @@
     <TextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_height"
-        android:drawablePadding="@dimen/list_item_drawable_padding"
+        android:layout_height="@dimen/image_picker_item_height"
+        android:drawablePadding="@dimen/image_picker_item_drawable_padding_horizontal"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:paddingLeft="@dimen/list_item_padding_horizontal"
-        android:paddingRight="@dimen/list_item_padding_horizontal"
+        android:paddingLeft="@dimen/image_picker_item_text_padding_horizontal"
+        android:paddingRight="@dimen/image_picker_item_text_padding_horizontal"
         android:textAlignment="inherit"
         android:textAppearance="@style/PrimaryTextAppearance" />
 </RelativeLayout>

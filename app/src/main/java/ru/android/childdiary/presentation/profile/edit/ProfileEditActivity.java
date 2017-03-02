@@ -259,12 +259,12 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     @OnClick(R.id.textViewSex)
-    void onSexClick() {
+    void onSexClick(View v) {
         dismissPopupWindow();
         ListAdapter adapter = new SexAdapter(this);
-        View anchor = textViewSex;
+        View anchor = v;
         int width = textViewSex.getWidth();
-        int gravity = Gravity.BOTTOM | Gravity.START;
+        int gravity = Gravity.START;
 
         popupWindow = new ListPopupWindow(this);
         popupWindow.setWidth(width);

@@ -15,8 +15,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageViewPhoto"
-            android:layout_width="@dimen/profile_rounded_image_size"
-            android:layout_height="@dimen/profile_rounded_image_size"
+            android:layout_width="@dimen/profile_image_size"
+            android:layout_height="@dimen/profile_image_size"
             android:layout_centerVertical="true"
             android:layout_marginBottom="@dimen/profile_margin_vertical"
             android:layout_marginLeft="@dimen/profile_margin_horizontal"
@@ -55,8 +55,8 @@
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:background="@drawable/text_view_background"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
-        android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+        android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
+        android:paddingRight="@dimen/profile_review_text_padding_horizontal"
         android:textAppearance="@style/PrimaryTextAppearance" />
 
     <TextView
@@ -84,8 +84,8 @@
             android:layout_weight="1"
             android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
-            android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+            android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
+            android:paddingRight="@dimen/profile_review_text_padding_horizontal"
             android:textAppearance="@style/PrimaryTextAppearance" />
 
         <TextView
@@ -95,8 +95,8 @@
             android:layout_weight="1"
             android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
-            android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+            android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
+            android:paddingRight="@dimen/profile_review_text_padding_horizontal"
             android:textAppearance="@style/PrimaryTextAppearance" />
     </LinearLayout>
 
@@ -125,8 +125,8 @@
             android:layout_weight="1"
             android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
-            android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+            android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
+            android:paddingRight="@dimen/profile_review_text_padding_horizontal"
             android:textAppearance="@style/PrimaryTextAppearance" />
 
         <TextView
@@ -136,8 +136,8 @@
             android:layout_weight="1"
             android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/profile_review_text_view_padding_horizontal"
-            android:paddingRight="@dimen/profile_review_text_view_padding_horizontal"
+            android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
+            android:paddingRight="@dimen/profile_review_text_padding_horizontal"
             android:textAppearance="@style/PrimaryTextAppearance" />
     </LinearLayout>
 </LinearLayout>

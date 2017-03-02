@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
+import android.support.v7.widget.PopupMenu;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 
@@ -34,6 +37,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -50,7 +54,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         AccountHeader.OnAccountHeaderProfileImageListener,
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
-        View.OnClickListener {
+        View.OnClickListener,
+        PopupMenu.OnMenuItemClickListener {
     private static final int REQUEST_EDIT = 1;
     private static final int REQUEST_ADD = 2;
     private static final int REQUEST_REVIEW = 3;
@@ -66,6 +71,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private AccountHeader accountHeader;
     private Drawer drawer;
     private DrawerBuilder drawerBuilder;
+    private ImageView switcherImage;
     private ListPopupWindow popupWindow;
 
     public static Intent getIntent(Context context, @Nullable Sex sex) {
@@ -97,7 +103,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void setupToolbar() {
         super.setupToolbar();
         toolbar.setNavigationIcon(R.drawable.toolbar_menu);
-        toolbar.setOverflowIcon(ThemeUtils.getDrawable(this, R.drawable.toolbar_overflow));
     }
 
     @Override
@@ -199,15 +204,18 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.account_header_switcher_wrapper && accountHeader != null) {
+        if (v.getId() == R.id.material_drawer_account_header_text_switcher_wrapper && accountHeader != null) {
             dismissPopupWindow();
+            animateSwitcherIn();
             List<IProfile> profiles = accountHeader.getProfiles();
             ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles);
-            View anchor = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher);
-            int width = getResources().getDimensionPixelSize(R.dimen.account_header_action_item_width);
-            int gravity = Gravity.BOTTOM | Gravity.END;
+            View anchor = v;
+            int width = profiles.size() == 1
+                    ? getResources().getDimensionPixelSize(R.dimen.account_header_action_item_width_wide)
+                    : getResources().getDimensionPixelSize(R.dimen.account_header_action_item_width_narrow);
+            int gravity = Gravity.END;
 
-            popupWindow = new ListPopupWindow(this);
+            popupWindow = new ListPopupWindow(this, null, R.attr.actionOverflowMenuStyle, R.style.OverflowMenu);
             popupWindow.setWidth(width);
             popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
             popupWindow.setAdapter(adapter);
@@ -241,6 +249,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void onDismiss() {
+        animateSwitcherOut();
         dismissPopupWindow();
     }
 
@@ -256,14 +265,34 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private void buildUi(List<IProfile> profiles) {
         buildHeader(profiles);
         buildDrawer();
+
         setupToolbar();
+
         View container = accountHeader.getView().findViewById(R.id.material_drawer_account_header);
-        container.setOnClickListener(null);
-        container.setClickable(false);
-        container.setFocusable(false);
-        container.setFocusableInTouchMode(false);
-        View switcherWrapper = accountHeader.getView().findViewById(R.id.account_header_switcher_wrapper);
+        setUnclickable(container);
+
+        View switcherWrapper = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher_wrapper);
         switcherWrapper.setOnClickListener(this);
+
+        switcherImage = ButterKnife.findById(accountHeader.getView(), R.id.material_drawer_account_header_text_switcher);
+        switcherImage.setImageResource(R.drawable.switcher);
+    }
+
+    private void setUnclickable(View view) {
+        view.setOnClickListener(null);
+        view.setClickable(false);
+        view.setFocusable(false);
+        view.setFocusableInTouchMode(false);
+    }
+
+    private void animateSwitcherIn() {
+        switcherImage.clearAnimation();
+        ViewCompat.animate(switcherImage).rotation(180).start();
+    }
+
+    private void animateSwitcherOut() {
+        switcherImage.clearAnimation();
+        ViewCompat.animate(switcherImage).rotation(0).start();
     }
 
     private void buildHeader(List<IProfile> profiles) {
@@ -340,6 +369,22 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_filter:
+                View menuItemView = findViewById(R.id.menu_filter);
+                PopupMenu popupMenu = new PopupMenu(this, menuItemView, Gravity.END, R.attr.actionOverflowMenuStyle, R.style.OverflowMenu);
+                popupMenu.inflate(R.menu.filter);
+                popupMenu.setOnMenuItemClickListener(this);
+                popupMenu.show();
+                break;
+            case R.id.menu_overflow:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.menu_diaper:
                 showToast(getString(R.string.event_diaper));
                 return true;
@@ -356,7 +401,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 showToast(getString(R.string.event_other));
                 return true;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     private void navigateToProfileEdit(@NonNull Child child) {
