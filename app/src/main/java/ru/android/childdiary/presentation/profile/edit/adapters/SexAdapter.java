@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.edit;
+package ru.android.childdiary.presentation.profile.edit.adapters;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -18,7 +18,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.utils.StringUtils;
 
-class SexAdapter extends ArrayAdapter<Sex> {
+public class SexAdapter extends ArrayAdapter<Sex> {
     private final List<Sex> items;
 
     public SexAdapter(Context context) {

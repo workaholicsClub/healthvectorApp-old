@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.PopupMenu;
@@ -37,6 +39,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -44,6 +47,13 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.main.calendar.DayFragment;
+import ru.android.childdiary.presentation.main.calendar.MonthFragment;
+import ru.android.childdiary.presentation.main.calendar.ViewPagerAdapter;
+import ru.android.childdiary.presentation.main.calendar.WeekFragment;
+import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
+import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
+import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.utils.StringUtils;
@@ -67,6 +77,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @InjectPresenter
     MainPresenter presenter;
+
+    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
 
     private AccountHeader accountHeader;
     private Drawer drawer;
@@ -97,6 +113,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setupViewPager();
+    }
+
+    private void setupViewPager() {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new DayFragment(), getString(R.string.day));
+        adapter.addFragment(new WeekFragment(), getString(R.string.week));
+        adapter.addFragment(new MonthFragment(), getString(R.string.month));
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override

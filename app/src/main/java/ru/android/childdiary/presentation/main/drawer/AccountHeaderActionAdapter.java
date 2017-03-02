@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main;
+package ru.android.childdiary.presentation.main.drawer;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 
-class AccountHeaderActionAdapter extends ArrayAdapter<IProfile> {
+public class AccountHeaderActionAdapter extends ArrayAdapter<IProfile> {
     private final List<IProfile> items;
 
     public AccountHeaderActionAdapter(Context context, List<IProfile> profiles) {
