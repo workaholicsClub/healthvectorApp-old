@@ -6,10 +6,10 @@
         android:id="@+id/menu_filter"
         android:icon="@drawable/toolbar_sort"
         android:title="@string/empty"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_overflow"
         android:icon="@drawable/toolbar_overflow"
         android:title="@string/empty"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

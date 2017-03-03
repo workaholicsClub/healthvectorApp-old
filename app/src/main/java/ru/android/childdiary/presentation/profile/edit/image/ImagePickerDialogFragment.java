@@ -45,9 +45,6 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
 
     private Listener listener;
 
-    public ImagePickerDialogFragment() {
-    }
-
     @Override
     @NonNull
     public final Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -74,7 +71,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         }
 
         ListView listView = new ListView(getActivity());
-        ArrayAdapter adapter = new ImagePickerAdapter(getActivity(), actions);
+        ArrayAdapter adapter = new ImagePickerActionAdapter(getActivity(), actions);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
@@ -86,7 +83,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ImagePickerAction action = ((ImagePickerAdapter) parent.getAdapter()).getItem(position);
+        ImagePickerAction action = ((ImagePickerActionAdapter) parent.getAdapter()).getItem(position);
         switch (action.getType()) {
             case CAPTURE:
                 captureImage();

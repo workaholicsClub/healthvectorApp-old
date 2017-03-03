@@ -62,6 +62,9 @@
     <string name="action_pick_image">Из галереи</string>
     <string name="action_delete_image">Удалить фото</string>
     <string name="empty" />
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
     <plurals name="numberOfYears">
         <item quantity="one">%d год</item>
         <item quantity="few">%d года</item>

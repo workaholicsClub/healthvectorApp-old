@@ -1,10 +1,10 @@
-package ru.android.childdiary.presentation.main;
+package ru.android.childdiary.presentation.main.drawer;
 
 import android.content.Context;
 
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 
-class CustomAccountHeaderBuilder extends AccountHeaderBuilder {
+public class CustomAccountHeaderBuilder extends AccountHeaderBuilder {
     @Override
     protected void toggleSelectionList(Context ctx) {
     }

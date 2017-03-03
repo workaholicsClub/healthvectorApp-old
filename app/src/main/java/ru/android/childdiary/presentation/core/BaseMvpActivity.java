@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -66,10 +65,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     private void themeChanged() {
         logger.debug("theme changed");
         if (toolbar != null) {
-            toolbar.setBackgroundColor(ThemeUtils.getToolbarColor(this, sex));
+            toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ThemeUtils.getStatusBarColor(this, sex));
+            getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
         }
         themeChangedCustom();
     }

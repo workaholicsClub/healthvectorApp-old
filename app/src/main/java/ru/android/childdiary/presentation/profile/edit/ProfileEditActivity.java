@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.format.DateFormat;
 import android.view.Gravity;
@@ -52,6 +53,7 @@ import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
 import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText;
 import ru.android.childdiary.utils.DoubleUtils;
@@ -118,6 +120,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     View dummy;
 
     @State
+    boolean isButtonDoneEnabled;
+
+    @State
     Child editedChild = Child.NULL;
 
     private boolean isValidationStarted;
@@ -175,7 +180,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @Override
     protected void themeChangedCustom() {
-        topPanel.setBackgroundResource(ThemeUtils.getHeaderDrawableRes(sex));
+        topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(sex));
+        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
     }
 
     @Override
@@ -302,7 +308,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     private void setupImage() {
         String imageFileName = editedChild.getImageFileName();
         if (imageFileName == null) {
-            imageViewPhoto.setImageDrawable(ThemeUtils.getDrawable(this, R.color.white));
+            imageViewPhoto.setImageDrawable(ContextCompat.getDrawable(this, R.color.white));
         } else {
             imageViewPhoto.setImageDrawable(Drawable.createFromPath(imageFileName));
         }
@@ -401,7 +407,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @Override
     public void setButtonDoneEnabled(boolean enabled) {
-        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, enabled));
+        isButtonDoneEnabled = enabled;
+        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
     }
 
     @Override
