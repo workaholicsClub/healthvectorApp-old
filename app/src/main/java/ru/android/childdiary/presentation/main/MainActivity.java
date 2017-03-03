@@ -48,10 +48,10 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.main.calendar.DayFragment;
-import ru.android.childdiary.presentation.main.calendar.MonthFragment;
-import ru.android.childdiary.presentation.main.calendar.ViewPagerAdapter;
-import ru.android.childdiary.presentation.main.calendar.WeekFragment;
+import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
+import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
+import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
+import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
 import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
@@ -114,15 +114,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        setupViewPager();
     }
 
-    private void setupViewPager() {
+    private void setupViewPager(Child child) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new DayFragment(), getString(R.string.day));
-        adapter.addFragment(new WeekFragment(), getString(R.string.week));
-        adapter.addFragment(new MonthFragment(), getString(R.string.month));
+        adapter.addFragment(DayFragment.newInstance(child), getString(R.string.day));
+        adapter.addFragment(WeekFragment.newInstance(child), getString(R.string.week));
+        adapter.addFragment(MonthFragment.newInstance(child), getString(R.string.month));
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(2);
         tabLayout.setupWithViewPager(viewPager);
@@ -190,6 +188,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 accountHeader.setActiveProfile(mapToProfileId(child));
             }
         }
+        setupViewPager(child);
     }
 
     private IProfile mapToProfile(@NonNull Child child) {

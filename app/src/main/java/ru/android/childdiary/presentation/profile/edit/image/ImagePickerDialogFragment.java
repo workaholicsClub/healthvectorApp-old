@@ -62,7 +62,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
                 .titleResourceId(R.string.action_pick_image)
                 .iconResourceId(R.drawable.action_pick_image)
                 .build());
-        if (getChild().getImageFileName() != null) {
+        if (child != null && child.getImageFileName() != null) {
             actions.add(ImagePickerAction.builder()
                     .type(ImagePickerActionType.DELETE)
                     .titleResourceId(R.string.action_delete_image)
@@ -200,7 +200,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         options.setCropGridRowCount(0);
         options.setShowCropFrame(false);
 
-        WidgetUtils.setupCropActivityToolbar(getActivity(), options, getChild().getSex());
+        WidgetUtils.setupCropActivityToolbar(getActivity(), options, sex);
 
         uCrop.withOptions(options);
 

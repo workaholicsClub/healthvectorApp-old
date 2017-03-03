@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main.calendar;
+package ru.android.childdiary.presentation.core.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
