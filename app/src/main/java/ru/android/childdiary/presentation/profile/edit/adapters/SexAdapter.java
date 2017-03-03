@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -22,7 +23,7 @@ public class SexAdapter extends ArrayAdapter<Sex> {
     private final List<Sex> items;
 
     public SexAdapter(Context context) {
-        super(context, R.layout.sex_item);
+        super(context, getLayoutResourceId());
         items = Arrays.asList(Sex.MALE, Sex.FEMALE);
     }
 
@@ -50,22 +51,30 @@ public class SexAdapter extends ArrayAdapter<Sex> {
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(getLayoutResourceId(), null);
-            viewHolder = new ViewHolder();
-            viewHolder.textView = ButterKnife.findById(view, android.R.id.text1);
+            viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
 
         Sex sex = getItem(position);
-        String text = StringUtils.sex(getContext(), sex);
-
-        viewHolder.textView.setText(text);
+        viewHolder.bind(position, sex);
 
         return view;
     }
 
-    private static class ViewHolder {
+    static class ViewHolder {
+        @BindView(android.R.id.text1)
         TextView textView;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        void bind(int position, Sex sex) {
+            Context context = textView.getContext();
+            String text = StringUtils.sex(context, sex);
+            textView.setText(text);
+        }
     }
 }

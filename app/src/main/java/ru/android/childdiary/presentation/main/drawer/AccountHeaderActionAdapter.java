@@ -17,6 +17,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 
@@ -62,30 +63,37 @@ public class AccountHeaderActionAdapter extends ArrayAdapter<IProfile> {
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(getLayoutResourceId(), null);
-            viewHolder = new ViewHolder();
-            viewHolder.textView = ButterKnife.findById(view, android.R.id.text1);
-            viewHolder.imageViewPhoto = ButterKnife.findById(view, R.id.imageViewPhoto);
-            viewHolder.imageViewDropdown = ButterKnife.findById(view, R.id.imageViewDropdown);
+            viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
 
         IProfile profile = getItem(position);
-        String text = profile.getName().getText();
-        Drawable icon = profile.getIcon() == null ? null : profile.getIcon().getIcon();
-
-        viewHolder.imageViewPhoto.setVisibility(icon == null ? View.GONE : View.VISIBLE);
-        viewHolder.imageViewPhoto.setImageDrawable(icon);
-        viewHolder.textView.setText(text);
-        viewHolder.imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+        viewHolder.bind(position, profile);
 
         return view;
     }
 
-    private static class ViewHolder {
+    static class ViewHolder {
+        @BindView(R.id.imageViewPhoto)
         ImageView imageViewPhoto;
+        @BindView(android.R.id.text1)
         TextView textView;
+        @BindView(R.id.imageViewDropdown)
         View imageViewDropdown;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        void bind(int position, IProfile profile) {
+            String text = profile.getName().getText();
+            Drawable icon = profile.getIcon() == null ? null : profile.getIcon().getIcon();
+            imageViewPhoto.setVisibility(icon == null ? View.GONE : View.VISIBLE);
+            imageViewPhoto.setImageDrawable(icon);
+            textView.setText(text);
+            imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+        }
     }
 }

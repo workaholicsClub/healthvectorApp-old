@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 
@@ -48,22 +49,29 @@ class ImagePickerAdapter extends ArrayAdapter<ImagePickerAction> {
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(getLayoutResourceId(), null);
-            viewHolder = new ViewHolder();
-            viewHolder.textView = ButterKnife.findById(view, android.R.id.text1);
+            viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
 
         ImagePickerAction action = getItem(position);
-
-        viewHolder.textView.setText(action.getTitleResourceId());
-        viewHolder.textView.setCompoundDrawablesWithIntrinsicBounds(action.getIconResourceId(), 0, 0, 0);
+        viewHolder.bind(position, action);
 
         return view;
     }
 
-    private static class ViewHolder {
+    static class ViewHolder {
+        @BindView(android.R.id.text1)
         TextView textView;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        void bind(int position, ImagePickerAction action) {
+            textView.setText(action.getTitleResourceId());
+            textView.setCompoundDrawablesWithIntrinsicBounds(action.getIconResourceId(), 0, 0, 0);
+        }
     }
 }
