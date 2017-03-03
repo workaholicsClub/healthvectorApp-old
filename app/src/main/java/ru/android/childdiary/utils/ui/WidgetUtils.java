@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -16,7 +17,7 @@ import ru.android.childdiary.data.types.Sex;
 public class WidgetUtils {
     public static void setupTextView(TextView textView, boolean enabled) {
         @ColorRes int colorRes = enabled ? R.color.primary_text : R.color.secondary_text;
-        @ColorInt int color = ThemeUtils.getColor(textView.getContext(), colorRes);
+        @ColorInt int color = ContextCompat.getColor(textView.getContext(), colorRes);
         textView.setTextColor(color);
     }
 

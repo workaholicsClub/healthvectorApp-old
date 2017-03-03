@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.format.DateFormat;
 import android.view.Gravity;
@@ -307,7 +308,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     private void setupImage() {
         String imageFileName = editedChild.getImageFileName();
         if (imageFileName == null) {
-            imageViewPhoto.setImageDrawable(ThemeUtils.getDrawable(this, R.color.white));
+            imageViewPhoto.setImageDrawable(ContextCompat.getDrawable(this, R.color.white));
         } else {
             imageViewPhoto.setImageDrawable(Drawable.createFromPath(imageFileName));
         }

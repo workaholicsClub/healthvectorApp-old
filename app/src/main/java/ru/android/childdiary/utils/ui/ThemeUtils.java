@@ -2,7 +2,6 @@ package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -71,48 +70,29 @@ public class ThemeUtils {
 
     @ColorInt
     public static int getColorPrimary(Context context, @Nullable Sex sex) {
-        return getColor(context, getColorPrimaryRes(sex));
+        return ContextCompat.getColor(context, getColorPrimaryRes(sex));
     }
 
     @ColorInt
     public static int getColorPrimaryDark(Context context, @Nullable Sex sex) {
-        return getColor(context, getColorPrimaryDarkRes(sex));
+        return ContextCompat.getColor(context, getColorPrimaryDarkRes(sex));
     }
 
     @ColorInt
     public static int getColorAccent(Context context, @Nullable Sex sex) {
-        return getColor(context, getColorAccentRes(sex));
+        return ContextCompat.getColor(context, getColorAccentRes(sex));
     }
 
     public static Drawable getColorPrimaryDrawable(Context context, @Nullable Sex sex) {
-        return getDrawable(context, getColorPrimaryRes(sex));
+        return ContextCompat.getDrawable(context, getColorPrimaryRes(sex));
     }
 
     public static Drawable getColorPrimaryDarkDrawable(Context context, @Nullable Sex sex) {
-        return getDrawable(context, getColorPrimaryDarkRes(sex));
+        return ContextCompat.getDrawable(context, getColorPrimaryDarkRes(sex));
     }
 
     public static Drawable getColorAccentDrawable(Context context, @Nullable Sex sex) {
-        return getDrawable(context, getColorAccentRes(sex));
-    }
-
-    @ColorInt
-    public static int getColor(Context context, @ColorRes int colorResId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return ContextCompat.getColor(context, colorResId);
-        } else {
-            //noinspection deprecation
-            return context.getResources().getColor(colorResId);
-        }
-    }
-
-    public static Drawable getDrawable(Context context, @DrawableRes int drawableResId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return ContextCompat.getDrawable(context, drawableResId);
-        } else {
-            //noinspection deprecation
-            return context.getResources().getDrawable(drawableResId);
-        }
+        return ContextCompat.getDrawable(context, getColorAccentRes(sex));
     }
 
     public static Drawable getChildIcon(Context context, @Nullable Child child) {
@@ -127,7 +107,7 @@ public class ThemeUtils {
 
     private static Drawable getChildDefaultIcon(Context context, @Nullable Sex sex) {
         // TODO: default icon for girl and boy
-        return getColorPrimaryDarkDrawable(context,sex);
+        return getColorPrimaryDarkDrawable(context, sex);
     }
 
     @DrawableRes
