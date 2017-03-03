@@ -45,9 +45,6 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
 
     private Listener listener;
 
-    public ImagePickerDialogFragment() {
-    }
-
     @Override
     @NonNull
     public final Dialog onCreateDialog(Bundle savedInstanceState) {

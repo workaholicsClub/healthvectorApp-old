@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import ru.android.childdiary.R;
 
 public class DayFragment extends Fragment {
-    public DayFragment() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
