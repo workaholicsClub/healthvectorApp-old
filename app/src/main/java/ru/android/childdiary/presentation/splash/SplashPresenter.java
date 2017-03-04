@@ -1,7 +1,5 @@
 package ru.android.childdiary.presentation.splash;
 
-import android.support.annotation.NonNull;
-
 import com.arellomobile.mvp.InjectViewState;
 
 import java.util.concurrent.TimeUnit;
@@ -12,9 +10,9 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.utils.StringUtils;
 
 @InjectViewState
 public class SplashPresenter extends BasePresenter<SplashView> {
@@ -39,28 +37,17 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                                 .doOnNext(zero -> logger.debug("timer finished")),
                         childInteractor
                                 .getAll()
-                                .doOnNext(childList -> logger.debug("data loaded")),
+                                .doOnNext(childList -> logger.debug("data loaded: " + StringUtils.toString(childList))),
                         (zero, childList) -> childList)
-                        .doOnNext(childList -> logger.debug("combine latest"))
-                        .flatMap(childList -> childInteractor.getActiveChild(childList))
+                        .flatMap(childInteractor::getActiveChild)
+                        .doOnNext(child -> logger.debug("active child: " + child))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(child -> {
-                            if (child == Child.NULL) {
-                                startAppWithDefaultTheme();
-                            } else {
-                                startApp(child);
-                            }
-                        }, this::onUnexpectedError));
+                        .subscribe(child -> startApp(), this::onUnexpectedError));
     }
 
-    private void startApp(@NonNull Child child) {
+    private void startApp() {
         logger.debug("startApp");
-        getViewState().startApp(child);
-    }
-
-    private void startAppWithDefaultTheme() {
-        logger.debug("startAppWithDefaultTheme");
-        getViewState().startApp(null);
+        getViewState().startApp();
     }
 }

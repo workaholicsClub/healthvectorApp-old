@@ -33,7 +33,7 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
 
     public Disposable listenForDoneButtonUpdate(@NonNull Observable<Child> childObservable) {
         return childInteractor.controlDoneButton(childObservable)
-                .subscribe(enabled -> getViewState().setButtonDoneEnabled(enabled), this::onUnexpectedError);
+                .subscribe(getViewState()::setButtonDoneEnabled, this::onUnexpectedError);
     }
 
     public Disposable listenForFieldsUpdate(@NonNull Observable<Child> childObservable) {

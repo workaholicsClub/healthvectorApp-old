@@ -34,7 +34,7 @@ import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 @SuppressLint("Registered")
-public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseActivityView {
+public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseView {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -50,58 +50,12 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         compositeDisposable.add(disposable);
     }
 
-    protected final void changeThemeIfNeeded(@Nullable Child child) {
-        Sex sex = child == null ? null : child.getSex();
-        changeThemeIfNeeded(sex);
-    }
-
-    protected final void changeThemeIfNeeded(@Nullable Sex sex) {
-        if (this.sex != sex) {
-            this.sex = sex;
-            themeChanged();
-        }
-    }
-
-    private void themeChanged() {
-        logger.debug("theme changed");
-        if (toolbar != null) {
-            toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
-        }
-        themeChangedCustom();
-    }
-
-    protected void themeChangedCustom() {
-    }
-
-    @Nullable
-    private Sex extractTheme(@Nullable Bundle bundle) {
-        Sex sex = null;
-        if (bundle != null) {
-            sex = (Sex) bundle.getSerializable(ExtraConstants.EXTRA_SEX);
-            if (sex == null) {
-                Child child = bundle.getParcelable(ExtraConstants.EXTRA_CHILD);
-                sex = child == null ? null : child.getSex();
-            }
-        }
-        return sex;
-    }
-
     protected abstract void injectActivity(ApplicationComponent applicationComponent);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ConfigUtils.setupOrientation(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
-        if (sex == null) {
-            sex = extractTheme(savedInstanceState);
-            if (sex == null) {
-                sex = extractTheme(getIntent().getExtras());
-            }
-        }
-        setTheme(ThemeUtils.getTheme(sex));
         super.onCreate(savedInstanceState);
         logger.debug("onCreate");
         setupDagger();
@@ -120,13 +74,37 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
             setSupportActionBar(toolbar);
             setupToolbar();
         }
-        themeChangedCustom();
+        themeChanged();
     }
+
 
     @CallSuper
     protected void setupToolbar() {
         toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance);
         toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleTextAppearance);
+    }
+
+    @CallSuper
+    protected void themeChanged() {
+        logger.debug("theme changed");
+        if (toolbar != null) {
+            toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
+        }
+    }
+
+    protected final void changeThemeIfNeeded(@Nullable Child child) {
+        Sex sex = child == null ? null : child.getSex();
+        changeThemeIfNeeded(sex);
+    }
+
+    protected final void changeThemeIfNeeded(@Nullable Sex sex) {
+        if (this.sex != sex) {
+            this.sex = sex;
+            themeChanged();
+        }
     }
 
     @Override

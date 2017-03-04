@@ -19,22 +19,16 @@ import butterknife.Unbinder;
 import icepick.Icepick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCompatFragment implements BaseFragmentView {
+public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCompatFragment implements BaseView {
     protected final Logger logger = LoggerFactory.getLogger(toString());
-
-    protected Child child;
-    protected Sex sex;
 
     private Unbinder unbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        child = getArguments().getParcelable(ExtraConstants.EXTRA_CHILD);
-        sex = child == null ? null : child.getSex();
         Icepick.restoreInstanceState(this, savedInstanceState);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -61,7 +55,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
-            new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(sex))
+            new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(getSex()))
                     .setMessage(e.toString())
                     .setPositiveButton(R.string.OK, null)
                     .show();
@@ -71,4 +65,6 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
     protected void showToast(String text) {
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
+
+    protected abstract Sex getSex();
 }

@@ -99,7 +99,8 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     }
 
     @Override
-    protected void themeChangedCustom() {
+    protected void themeChanged() {
+        super.themeChanged();
         topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(sex));
         buttonEdit.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, true));
     }

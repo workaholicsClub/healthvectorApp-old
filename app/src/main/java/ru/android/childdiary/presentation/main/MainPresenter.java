@@ -44,6 +44,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         logger.debug("onGetChildList: " + StringUtils.toString(childList));
         boolean isFirstTime = this.childList == null;
         this.childList = childList;
+        requestActiveChild();
         getViewState().showChildList(childList);
         if (childList.isEmpty() && isFirstTime) {
             getViewState().addChild();

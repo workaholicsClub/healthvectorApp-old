@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
-import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.main.calendar.CalendarView;
 
@@ -19,12 +18,9 @@ public class DayFragment extends BaseMvpFragment<CalendarPresenter> implements C
     @InjectPresenter
     CalendarPresenter presenter;
 
-    public static DayFragment newInstance(Child child) {
-        DayFragment fragment = new DayFragment();
-        Bundle arguments = new Bundle();
-        arguments.putParcelable(ExtraConstants.EXTRA_CHILD, child);
-        fragment.setArguments(arguments);
-        return fragment;
+    @Override
+    protected Sex getSex() {
+        return null;
     }
 
     @Nullable

@@ -10,9 +10,9 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import java.util.List;
 
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.core.BaseActivityView;
+import ru.android.childdiary.presentation.core.BaseView;
 
-public interface MainView extends BaseActivityView {
+public interface MainView extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showChildList(List<Child> childList);
 

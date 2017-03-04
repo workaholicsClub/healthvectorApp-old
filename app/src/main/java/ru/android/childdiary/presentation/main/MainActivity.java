@@ -43,11 +43,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
-import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
@@ -91,10 +89,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
 
-    public static Intent getIntent(Context context, @Nullable Sex sex) {
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_SEX, sex);
-        return intent;
+    public static Intent getIntent(Context context) {
+        return new Intent(context, MainActivity.class);
     }
 
     private static long mapToProfileId(@NonNull Child child) {
@@ -114,15 +110,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupViewPager();
     }
 
-    private void setupViewPager(Child child) {
+    private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(DayFragment.newInstance(child), getString(R.string.day));
-        adapter.addFragment(WeekFragment.newInstance(child), getString(R.string.week));
-        adapter.addFragment(MonthFragment.newInstance(child), getString(R.string.month));
+        adapter.addFragment(new DayFragment(), getString(R.string.day));
+        adapter.addFragment(new WeekFragment(), getString(R.string.week));
+        adapter.addFragment(new MonthFragment(), getString(R.string.month));
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(2);
+        viewPager.setCurrentItem(2, false);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.white_transparent), ContextCompat.getColor(this, R.color.white));
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white));
@@ -136,7 +133,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    protected void themeChangedCustom() {
+    protected void themeChanged() {
+        super.themeChanged();
         tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
         if (accountHeader != null) {
             accountHeader.setBackground(ThemeUtils.getColorPrimaryDrawable(this, sex));
@@ -147,7 +145,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ADD) {
-            presenter.requestActiveChild();
+            if (resultCode == RESULT_OK) {
+                presenter.requestActiveChild();
+            }
         }
     }
 
@@ -173,8 +173,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
         closeDrawerWithoutAnimation();
         buildUi(profiles);
-
-        presenter.requestActiveChild();
     }
 
     @Override
@@ -188,7 +186,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 accountHeader.setActiveProfile(mapToProfileId(child));
             }
         }
-        setupViewPager(child);
     }
 
     private IProfile mapToProfile(@NonNull Child child) {
