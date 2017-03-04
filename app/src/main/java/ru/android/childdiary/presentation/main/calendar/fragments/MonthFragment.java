@@ -10,12 +10,15 @@ import android.widget.GridView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import org.joda.time.LocalDate;
+
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.main.calendar.CalendarView;
+import ru.android.childdiary.presentation.main.calendar.adapters.MonthViewAdapter;
 
 public class MonthFragment extends BaseMvpFragment<CalendarPresenter> implements CalendarView,
         AdapterView.OnItemClickListener {
@@ -40,12 +43,16 @@ public class MonthFragment extends BaseMvpFragment<CalendarPresenter> implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //gridViewCalendar.setAdapter(new MonthViewAdapter(getActivity()));
-        //gridViewCalendar.setOnItemClickListener(this);
+        gridViewCalendar.setAdapter(new MonthViewAdapter(getActivity()));
+        gridViewCalendar.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        showToast(String.valueOf(position));
+        MonthViewAdapter adapter = (MonthViewAdapter) parent.getAdapter();
+        if (adapter.getItem(position) instanceof LocalDate) {
+            LocalDate date = (LocalDate) adapter.getItem(position);
+            adapter.setSelectedDate(date);
+        }
     }
 }

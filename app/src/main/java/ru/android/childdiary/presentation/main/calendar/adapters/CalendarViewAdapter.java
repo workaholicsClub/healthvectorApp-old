@@ -23,8 +23,8 @@ public abstract class CalendarViewAdapter extends BaseAdapter {
     public static final int DAYS_IN_WEEK = 7;
     private static final List<String> DAY_OF_WEEK_LIST;
     private static final List<Integer> DAY_OF_WEEK_INDEXES;
-    private static final int DAY_OF_WEEK_TYPE = 1;
-    private static final int DAY_OF_MONTH_TYPE = 2;
+    private static final int DAY_OF_WEEK_TYPE = 0;
+    private static final int DAY_OF_MONTH_TYPE = 1;
 
     static {
         String[] dayOfWeekArray = new DateFormatSymbols().getShortWeekdays();
@@ -86,7 +86,7 @@ public abstract class CalendarViewAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return position < DAYS_IN_WEEK ? 1 : 2;
+        return position < DAYS_IN_WEEK ? DAY_OF_WEEK_TYPE : DAY_OF_MONTH_TYPE;
     }
 
     @Override
@@ -117,6 +117,7 @@ public abstract class CalendarViewAdapter extends BaseAdapter {
 
             LocalDate item = (LocalDate) getItem(position);
             viewHolder.bind(context, position, item);
+            viewHolder.select(context, selectedDate.isEqual(item));
         }
 
         return view;

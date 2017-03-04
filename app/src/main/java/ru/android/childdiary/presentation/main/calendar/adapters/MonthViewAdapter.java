@@ -32,13 +32,14 @@ public class MonthViewAdapter extends CalendarViewAdapter {
         // отображаем календарь на 6 строчках
         // в случае, когда месяц занимает минимально возможное количество строчек, равное 4,
         // располагаем месяц "посередине" для красоты
-        int trailing = indexOfDayOfWeek(date);
         int daysInCurrentMonth = date.dayOfMonth().getMaximumValue();
-        if (trailing == 0 && daysInCurrentMonth == 28) {
+        LocalDate firstDayOfMonth = new LocalDate(year, month, 1);
+        int trailing = indexOfDayOfWeek(firstDayOfMonth);
+        if (daysInCurrentMonth == 28 && trailing == 0) {
             // февраль 2021 года
             trailing = DAYS_IN_WEEK;
         }
-        LocalDate current = date.minusDays(trailing);
+        LocalDate current = firstDayOfMonth.minusDays(trailing);
         for (int i = 0; i < DAYS_IN_WEEK * 6; ++i) {
             dates.add(current);
             current = current.plusDays(1);
