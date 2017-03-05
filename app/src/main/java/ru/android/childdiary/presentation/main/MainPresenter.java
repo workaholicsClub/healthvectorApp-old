@@ -100,7 +100,11 @@ public class MainPresenter extends BasePresenter<MainView> {
             logger.warn("deleteChild: active child is null");
             return;
         }
-        unsubscribeOnDestroy(childInteractor.delete(activeChild)
+        getViewState().confirmDeleteChild(activeChild);
+    }
+
+    public void deleteChild(@NonNull Child child) {
+        unsubscribeOnDestroy(childInteractor.delete(child)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onDeleteChild, this::onUnexpectedError));

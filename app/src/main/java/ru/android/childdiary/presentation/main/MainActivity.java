@@ -214,6 +214,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
+    public void confirmDeleteChild(@NonNull Child child) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialog(sex))
+                .setTitle(getString(R.string.remove_child_confirmation_title, child.getName()))
+                .setMessage(R.string.remove_child_confirmation_text)
+                .setPositiveButton(R.string.Yes,
+                        (DialogInterface dialog, int which) -> presenter.deleteChild(child))
+                .setNegativeButton(R.string.Cancel, null)
+                .show();
+    }
+
+    @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
         // TODO: navigation
         showToast(((PrimaryDrawerItem) drawerItem).getName().getText());
@@ -266,13 +277,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         } else if (id == PROFILE_SETTINGS_ADD) {
             presenter.addChild();
         } else if (id == PROFILE_SETTINGS_DELETE) {
-            new AlertDialog.Builder(this, ThemeUtils.getThemeDialog(sex))
-                    .setTitle(R.string.remove_child_confirmation_title)
-                    .setMessage(R.string.remove_child_confirmation_text)
-                    .setPositiveButton(R.string.Yes,
-                            (DialogInterface dialog, int which) -> presenter.deleteChild())
-                    .setNegativeButton(R.string.Cancel, null)
-                    .show();
+            presenter.deleteChild();
         }
     }
 

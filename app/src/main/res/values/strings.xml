@@ -15,8 +15,8 @@
     <string name="edit_child_long">Редактировать профиль</string>
     <string name="edit_child_short">Редактировать</string>
     <string name="remove_child">Удалить профиль</string>
-    <string name="remove_child_confirmation_title">Удалить профиль ребенка?</string>
-    <string name="remove_child_confirmation_text">Все данные по этому профилю будут удалены без возможности восстановления.</string>
+    <string name="remove_child_confirmation_title">Удалить профиль %s?</string>
+    <string name="remove_child_confirmation_text">Все данные профиля будут удалены без возможности восстановления.</string>
     <string name="add">Добавить</string>
     <string name="save">Сохранить</string>
     <string name="sex">Пол</string>
