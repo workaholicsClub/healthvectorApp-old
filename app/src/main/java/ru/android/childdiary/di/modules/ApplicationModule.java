@@ -2,6 +2,8 @@ package ru.android.childdiary.di.modules;
 
 import android.content.Context;
 
+import com.squareup.otto.Bus;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -49,5 +51,11 @@ public class ApplicationModule {
     @Named(TIME_FORMATTER)
     public DateTimeFormatter provideTimeFormat() {
         return DateTimeFormat.forPattern("HH:mm");
+    }
+
+    @Provides
+    @Singleton
+    public Bus provideBus() {
+        return new Bus();
     }
 }

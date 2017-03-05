@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import lombok.NonNull;
+import ru.android.childdiary.data.types.Sex;
 
 public abstract class CalendarViewAdapter extends BaseAdapter {
     public static final int DAYS_IN_WEEK = 7;
@@ -39,10 +40,19 @@ public abstract class CalendarViewAdapter extends BaseAdapter {
     private final Context context;
     private LocalDate selectedDate, today;
 
+    private Sex sex;
+
     public CalendarViewAdapter(Context context) {
         this.context = context;
         selectedDate = today = LocalDate.now();
         initCalendar(selectedDate);
+    }
+
+    public void setSex(Sex sex) {
+        if (this.sex != sex) {
+            this.sex = sex;
+            notifyDataSetChanged();
+        }
     }
 
     public final LocalDate getSelectedDate() {
@@ -117,7 +127,7 @@ public abstract class CalendarViewAdapter extends BaseAdapter {
 
             LocalDate item = (LocalDate) getItem(position);
             viewHolder.bind(context, position, item);
-            viewHolder.select(context, selectedDate.isEqual(item));
+            viewHolder.select(context, sex, selectedDate.isEqual(item));
         }
 
         return view;

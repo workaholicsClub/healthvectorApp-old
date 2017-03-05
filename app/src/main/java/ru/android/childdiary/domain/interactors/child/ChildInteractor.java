@@ -71,6 +71,10 @@ public class ChildInteractor implements Interactor, ChildRepository {
                 });
     }
 
+    public Observable<Child> getActiveChild() {
+        return getAll().flatMap(this::getActiveChild);
+    }
+
     public Observable<Child> getActiveChild(@NonNull List<Child> childList) {
         if (childList.isEmpty()) {
             return Observable.just(Child.NULL);

@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -25,9 +26,9 @@ class DayOfMonthViewHolder extends BaseViewHolder<LocalDate> {
         textViewDayOfMonth.setText(String.valueOf(item.getDayOfMonth()));
     }
 
-    public void select(Context context, boolean isSelected) {
+    public void select(Context context, Sex sex, boolean isSelected) {
         textViewDayOfMonth.setBackgroundColor(isSelected
-                ? ThemeUtils.getColorAccent(context, null)
+                ? ThemeUtils.getColorAccent(context, sex)
                 : ContextCompat.getColor(context, R.color.white));
     }
 }
