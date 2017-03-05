@@ -294,11 +294,11 @@ public class DbTest {
         List<Antropometry> selected = insertRandomAntropometry(child);
         Antropometry antropometry = selected.get(0);
 
-        Child updatedChild = Child.getBuilder(child).name(updatedName).build();
+        Child updatedChild = child.getBuilder().name(updatedName).build();
         update(updatedChild);
         checkInSelection(1, updatedChild);
 
-        Antropometry updatedAntropometry = Antropometry.getBuilder(antropometry).child(updatedChild).height(updatedHeight).build();
+        Antropometry updatedAntropometry = antropometry.getBuilder().child(updatedChild).height(updatedHeight).build();
         update(updatedAntropometry);
         checkInSelection(updatedChild, 1, updatedAntropometry);
     }
@@ -306,7 +306,7 @@ public class DbTest {
     @Test
     public void testNegativeUpdateNonExistent() {
         Child child = getRandomChild();
-        child = Child.getBuilder(child).id(RANDOM.nextLong()).build();
+        child = child.getBuilder().id(RANDOM.nextLong()).build();
         childDbService.update(child)
                 .doOnNext(this::logOnNextUpdate)
                 .doOnError(this::logOnErrorUpdate)

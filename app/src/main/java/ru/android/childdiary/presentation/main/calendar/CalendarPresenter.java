@@ -69,6 +69,7 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
                 activeChild = child;
             }
             getViewState().setActive(activeChild);
+            // TODO: загрузить события календаря выбранного ребенка
         }
     }
 }

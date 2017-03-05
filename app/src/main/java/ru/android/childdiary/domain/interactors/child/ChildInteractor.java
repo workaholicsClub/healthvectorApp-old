@@ -21,7 +21,7 @@ import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.core.events.ActiveChildChangedEvent;
 import ru.android.childdiary.utils.ObjectUtils;
 
-public class ChildInteractor implements Interactor, ChildRepository {
+public class ChildInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final EventBus bus;
@@ -37,30 +37,30 @@ public class ChildInteractor implements Interactor, ChildRepository {
         this.childValidator = childValidator;
     }
 
-    @Override
-    public Observable<List<Child>> getAll() {
-        return childRepository.getAll();
+    public Observable<ChildResponse> getAll() {
+        return childRepository.getAll()
+                .map(childList -> ChildResponse.builder().childList(childList).build())
+                .flatMap(response ->
+                        getActiveChild(response.getChildList())
+                                .map(child -> response.getBuilder().activeChild(child).build())
+                );
     }
 
-    @Override
     public Observable<Child> get(@NonNull Long id) {
         return childRepository.get(id);
     }
 
-    @Override
     public Observable<Child> add(@NonNull Child item) {
         return validate(item)
                 .flatMap(childRepository::add)
                 .flatMap(this::setActiveChild);
     }
 
-    @Override
     public Observable<Child> update(@NonNull Child item) {
         return validate(item)
                 .flatMap(childRepository::update);
     }
 
-    @Override
     public Observable<Child> delete(@NonNull Child item) {
         return childRepository.delete(item)
                 .doOnNext(child -> {
@@ -77,10 +77,10 @@ public class ChildInteractor implements Interactor, ChildRepository {
     }
 
     public Observable<Child> getActiveChild() {
-        return getAll().flatMap(this::getActiveChild);
+        return childRepository.getAll().flatMap(this::getActiveChild);
     }
 
-    public Observable<Child> getActiveChild(@NonNull List<Child> childList) {
+    private Observable<Child> getActiveChild(@NonNull List<Child> childList) {
         if (childList.isEmpty()) {
             return Observable.just(Child.NULL);
         } else {
@@ -93,7 +93,7 @@ public class ChildInteractor implements Interactor, ChildRepository {
     }
 
     public Observable<Child> setActiveChild(@Nullable Long id) {
-        return getAll()
+        return childRepository.getAll()
                 .first(Collections.emptyList())
                 .flatMapObservable(Observable::fromIterable)
                 .filter(child -> ObjectUtils.equals(child.getId(), id))

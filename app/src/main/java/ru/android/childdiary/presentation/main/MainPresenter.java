@@ -45,7 +45,10 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(childInteractor.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetChildList, this::onUnexpectedError));
+                .subscribe(childResponse -> {
+                    onGetChildList(childResponse.getChildList());
+                    setActiveChild(childResponse.getActiveChild());
+                }, this::onUnexpectedError));
         bus.register(this);
     }
 
@@ -53,24 +56,6 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void onDestroy() {
         super.onDestroy();
         bus.unregister(this);
-    }
-
-    private void onGetChildList(@NonNull List<Child> childList) {
-        logger.debug("onGetChildList: " + StringUtils.toString(childList));
-        boolean isFirstTime = this.childList == null;
-        this.childList = childList;
-        requestActiveChild();
-        getViewState().showChildList(childList);
-        if (childList.isEmpty() && isFirstTime) {
-            getViewState().addChild();
-        }
-    }
-
-    private void requestActiveChild() {
-        unsubscribeOnDestroy(childInteractor.getActiveChild(childList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setActiveChild, this::onUnexpectedError));
     }
 
     public void toggleChild(@Nullable Long id) {
@@ -83,6 +68,16 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setActiveChild(ActiveChildChangedEvent event) {
         setActiveChild(event.getChild());
+    }
+
+    private void onGetChildList(@NonNull List<Child> childList) {
+        logger.debug("onGetChildList: " + StringUtils.toString(childList));
+        boolean isFirstTime = this.childList == null;
+        this.childList = childList;
+        getViewState().showChildList(childList);
+        if (childList.isEmpty() && isFirstTime) {
+            getViewState().addChild();
+        }
     }
 
     private void setActiveChild(@NonNull Child child) {

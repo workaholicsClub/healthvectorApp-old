@@ -52,13 +52,13 @@ public class Antropometry implements Parcelable {
         this.date = (LocalDate) in.readSerializable();
     }
 
-    public static Antropometry.AntropometryBuilder getBuilder(Antropometry antropometry) {
-        return antropometry == null ? Antropometry.builder() : Antropometry.builder()
-                .id(antropometry.getId())
-                .child(antropometry.getChild())
-                .height(antropometry.getHeight())
-                .weight(antropometry.getWeight())
-                .date(antropometry.getDate());
+    public Antropometry.AntropometryBuilder getBuilder() {
+        return Antropometry.builder()
+                .id(id)
+                .child(child)
+                .height(height)
+                .weight(weight)
+                .date(date);
     }
 
     @Override
