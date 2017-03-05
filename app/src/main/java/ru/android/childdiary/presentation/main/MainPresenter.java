@@ -5,6 +5,10 @@ import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -12,6 +16,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.core.events.ActiveChildChangedEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -21,6 +26,9 @@ import ru.android.childdiary.utils.StringUtils;
 public class MainPresenter extends BasePresenter<MainView> {
     @Inject
     ChildInteractor childInteractor;
+
+    @Inject
+    EventBus bus;
 
     private List<Child> childList;
     private Child activeChild;
@@ -38,6 +46,13 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetChildList, this::onUnexpectedError));
+        bus.register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
     }
 
     private void onGetChildList(@NonNull List<Child> childList) {
@@ -51,7 +66,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
     }
 
-    public void requestActiveChild() {
+    private void requestActiveChild() {
         unsubscribeOnDestroy(childInteractor.getActiveChild(childList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -59,20 +74,28 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void toggleChild(@Nullable Long id) {
-        unsubscribeOnDestroy(childInteractor.setActiveChild(childList, id)
+        unsubscribeOnDestroy(childInteractor.setActiveChild(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::setActiveChild, this::onUnexpectedError));
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setActiveChild(ActiveChildChangedEvent event) {
+        setActiveChild(event.getChild());
+    }
+
     private void setActiveChild(@NonNull Child child) {
-        logger.debug("setActiveChild");
-        if (child == Child.NULL) {
-            activeChild = null;
-        } else {
-            activeChild = child;
+        logger.debug("setActiveChild: " + child);
+        if (!child.equals(activeChild)) {
+            logger.debug("active child changed");
+            if (child == Child.NULL) {
+                activeChild = null;
+            } else {
+                activeChild = child;
+            }
+            getViewState().setActive(activeChild);
         }
-        getViewState().setActive(activeChild);
     }
 
     public void addChild() {

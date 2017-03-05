@@ -37,10 +37,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                                 .doOnNext(zero -> logger.debug("timer finished")),
                         childInteractor
                                 .getAll()
-                                .doOnNext(childList -> logger.debug("data loaded: " + StringUtils.toString(childList))),
-                        (zero, childList) -> childList)
-                        .flatMap(childInteractor::getActiveChild)
-                        .doOnNext(child -> logger.debug("active child: " + child))
+                                .doOnNext(childList -> logger.debug("data loaded: " + StringUtils.toString(childList)))
+                                .flatMap(childInteractor::getActiveChild)
+                                .doOnNext(child -> logger.debug("active child: " + child)),
+                        (zero, child) -> child)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(child -> startApp(), this::onUnexpectedError));

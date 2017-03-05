@@ -398,13 +398,11 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @Override
     public void childAdded(@NonNull Child child) {
-        setResult(RESULT_OK);
         finish();
     }
 
     @Override
     public void childUpdated(@NonNull Child child) {
-        setResult(RESULT_OK);
         finish();
     }
 

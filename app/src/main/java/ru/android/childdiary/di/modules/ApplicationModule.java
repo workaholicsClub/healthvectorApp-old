@@ -2,8 +2,7 @@ package ru.android.childdiary.di.modules;
 
 import android.content.Context;
 
-import com.squareup.otto.Bus;
-
+import org.greenrobot.eventbus.EventBus;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -55,7 +54,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public Bus provideBus() {
-        return new Bus();
+    public EventBus provideBus() {
+        return EventBus.getDefault();
     }
 }

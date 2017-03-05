@@ -65,10 +65,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         PopupWindow.OnDismissListener,
         View.OnClickListener,
         PopupMenu.OnMenuItemClickListener {
-    private static final int REQUEST_EDIT = 1;
-    private static final int REQUEST_ADD = 2;
-    private static final int REQUEST_REVIEW = 3;
-
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
@@ -138,16 +134,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
         if (accountHeader != null) {
             accountHeader.setBackground(ThemeUtils.getColorPrimaryDrawable(this, sex));
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ADD) {
-            if (resultCode == RESULT_OK) {
-                presenter.requestActiveChild();
-            }
         }
     }
 
@@ -440,16 +426,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     private void navigateToProfileEdit(@NonNull Child child) {
         Intent intent = ProfileEditActivity.getIntent(this, child);
-        startActivityForResult(intent, REQUEST_EDIT);
+        startActivity(intent);
     }
 
     private void navigateToProfileAdd() {
         Intent intent = ProfileEditActivity.getIntent(this, null);
-        startActivityForResult(intent, REQUEST_ADD);
+        startActivity(intent);
     }
 
     private void navigateToProfileReview(@NonNull Child child) {
         Intent intent = ProfileReviewActivity.getIntent(this, child);
-        startActivityForResult(intent, REQUEST_REVIEW);
+        startActivity(intent);
     }
 }
