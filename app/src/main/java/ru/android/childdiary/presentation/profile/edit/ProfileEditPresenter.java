@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.profile.edit;
 
 import android.support.annotation.NonNull;
 
-import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.arellomobile.mvp.InjectViewState;
 
@@ -54,7 +53,7 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
             String msg = Stream.of(results)
                     .filter(ChildValidationResult::notValid)
                     .map(ChildValidationResult::toString)
-                    .collect(Collectors.joining("\n"));
+                    .findFirst().orElse(null);
             getViewState().showValidationErrorMessage(msg);
             handleValidationResult(results);
         } else {
