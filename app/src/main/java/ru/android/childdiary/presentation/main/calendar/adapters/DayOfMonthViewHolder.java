@@ -1,14 +1,13 @@
 package ru.android.childdiary.presentation.main.calendar.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.TextView;
 
 import org.joda.time.LocalDate;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -16,9 +15,8 @@ class DayOfMonthViewHolder extends BaseViewHolder<LocalDate> {
     @BindView(R.id.textViewDayOfMonth)
     TextView textViewDayOfMonth;
 
-    @Override
-    protected int getLayoutResourceId() {
-        return R.layout.grid_cell_day_of_month;
+    public DayOfMonthViewHolder(View view) {
+        super(view);
     }
 
     @Override
@@ -26,9 +24,10 @@ class DayOfMonthViewHolder extends BaseViewHolder<LocalDate> {
         textViewDayOfMonth.setText(String.valueOf(item.getDayOfMonth()));
     }
 
-    public void select(Context context, Sex sex, boolean isSelected) {
+    public void select(CalendarViewAdapter adapter, LocalDate item) {
+        boolean isSelected = adapter.getSelectedDate().isEqual(item);
         textViewDayOfMonth.setBackgroundColor(isSelected
-                ? ThemeUtils.getColorAccent(context, sex)
-                : ContextCompat.getColor(context, R.color.white));
+                ? ThemeUtils.getColorAccent(adapter.getContext(), adapter.getSex())
+                : 0);
     }
 }

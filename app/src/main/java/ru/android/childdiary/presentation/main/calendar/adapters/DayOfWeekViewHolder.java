@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.main.calendar.adapters;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -11,9 +12,8 @@ class DayOfWeekViewHolder extends BaseViewHolder<String> {
     @BindView(R.id.textViewDayOfWeek)
     TextView textViewDayOfWeek;
 
-    @Override
-    protected int getLayoutResourceId() {
-        return R.layout.grid_cell_day_of_week;
+    public DayOfWeekViewHolder(View view) {
+        super(view);
     }
 
     @Override

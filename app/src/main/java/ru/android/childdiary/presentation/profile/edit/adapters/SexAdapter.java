@@ -1,6 +1,8 @@
 package ru.android.childdiary.presentation.profile.edit.adapters;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -18,17 +20,22 @@ public class SexAdapter extends BaseArrayAdapter<Sex, SexAdapter.ViewHolder> {
     }
 
     @Override
-    protected ViewHolder createViewHolder() {
-        return new ViewHolder();
+    @LayoutRes
+    protected int getLayoutResourceId() {
+        return R.layout.sex_item;
+    }
+
+    @Override
+    protected ViewHolder createViewHolder(View view) {
+        return new ViewHolder(view);
     }
 
     static class ViewHolder extends BaseViewHolder<Sex> {
         @BindView(android.R.id.text1)
         TextView textView;
 
-        @Override
-        protected int getLayoutResourceId() {
-            return R.layout.sex_item;
+        public ViewHolder(View view) {
+            super(view);
         }
 
         @Override
