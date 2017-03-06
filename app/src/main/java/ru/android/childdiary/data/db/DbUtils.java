@@ -18,7 +18,7 @@ import io.requery.reactivex.ReactiveSupport;
 import io.requery.sql.EntityDataStore;
 import lombok.val;
 import ru.android.childdiary.BuildConfig;
-import ru.android.childdiary.data.entities.child.Models;
+import ru.android.childdiary.data.entities.Models;
 
 public class DbUtils {
     public static ReactiveEntityStore<Persistable> getDataStore(Context appContext) {
