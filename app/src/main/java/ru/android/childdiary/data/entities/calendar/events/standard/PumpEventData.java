@@ -6,7 +6,7 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.OneToOne;
 import io.requery.Table;
-import ru.android.childdiary.data.entities.calendar.events.MasterEvent;
+import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.types.Breast;
 
 @Table(name = "pump_event")
@@ -18,9 +18,9 @@ public interface PumpEventData {
 
     @ForeignKey
     @OneToOne
-    MasterEvent getMasterEvent();
+    MasterEventData getMasterEvent();
 
     Breast getBreast();
 
-    int getDurationInMinutes();
+    Integer getDurationInMinutes();
 }

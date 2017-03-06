@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
@@ -33,29 +32,19 @@ public class AntropometryDbService implements AntropometryService {
                 .orderBy(AntropometryEntity.DATE)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, AntropometryMapper::map));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, AntropometryMapper::mapToPlainObject));
     }
 
     @Override
-    public Observable<Antropometry> add(@NonNull Antropometry antropometry) {
-        // TODO: обобщить
-        return Observable.fromCallable(() -> {
-            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-            ChildEntity childEntity = (ChildEntity) blockingEntityStore.findByKey(ChildEntity.class, antropometry.getChild().getId());
-            if (childEntity != null) {
-                AntropometryEntity antropometryEntity = AntropometryMapper.map(antropometry);
-                antropometryEntity.setChild(childEntity);
-                antropometryEntity = (AntropometryEntity) blockingEntityStore.insert(antropometryEntity);
-                return AntropometryMapper.map(antropometryEntity);
-            }
-            throw new RuntimeException("child not found while inserting antropometry");
-        });
+    public Observable<Antropometry> add(@NonNull Child child, @NonNull Antropometry antropometry) {
+        return DbUtils.addObservable(dataStore, ChildEntity.class, child.getId(), antropometry,
+                AntropometryMapper::mapToEntity, AntropometryMapper::mapToPlainObject);
     }
 
     @Override
     public Observable<Antropometry> update(@NonNull Antropometry antropometry) {
         return DbUtils.updateObservable(dataStore, AntropometryEntity.class, antropometry, antropometry.getId(),
-                AntropometryMapper::copy, AntropometryMapper::map);
+                AntropometryMapper::updateEntityWithPlainObject, AntropometryMapper::mapToPlainObject);
     }
 
     @Override

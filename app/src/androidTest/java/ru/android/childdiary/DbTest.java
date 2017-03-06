@@ -159,9 +159,9 @@ public class DbTest {
         return inserted.get(0);
     }
 
-    private Antropometry add(Antropometry item) {
+    private Antropometry add(Child child, Antropometry item) {
         List<Antropometry> inserted = new ArrayList<>();
-        antropometryDbService.add(item)
+        antropometryDbService.add(child, item)
                 .doOnNext(this::logOnNextInsert)
                 .doOnNext(inserted::add)
                 .doOnError(this::logOnErrorInsert)
@@ -231,10 +231,9 @@ public class DbTest {
                 .build();
     }
 
-    private Antropometry getRandomAntropometry(Child child, int j) {
+    private Antropometry getRandomAntropometry(int j) {
         LocalDateTime now = LocalDateTime.now();
         return Antropometry.builder()
-                .child(child)
                 .date(now.toLocalDate().minusDays(j))
                 .height(RANDOM.nextDouble())
                 .weight(RANDOM.nextDouble())
@@ -251,8 +250,8 @@ public class DbTest {
     private List<Antropometry> insertRandomAntropometry(Child child) {
         List<Antropometry> inserted = new ArrayList<>();
         for (int j = 0; j < ANTROPOMETRY_COUNT; ++j) {
-            Antropometry antropometry = getRandomAntropometry(child, j);
-            antropometry = add(antropometry);
+            Antropometry antropometry = getRandomAntropometry(j);
+            antropometry = add(child, antropometry);
             inserted.add(antropometry);
         }
         assertEquals("inserted values size", ANTROPOMETRY_COUNT, inserted.size());
@@ -298,7 +297,7 @@ public class DbTest {
         update(updatedChild);
         checkInSelection(1, updatedChild);
 
-        Antropometry updatedAntropometry = antropometry.getBuilder().child(updatedChild).height(updatedHeight).build();
+        Antropometry updatedAntropometry = antropometry.getBuilder().height(updatedHeight).build();
         update(updatedAntropometry);
         checkInSelection(updatedChild, 1, updatedAntropometry);
     }

@@ -8,7 +8,7 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.OneToOne;
 import io.requery.Table;
-import ru.android.childdiary.data.entities.calendar.events.MasterEvent;
+import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 
 @Table(name = "sleep_event")
 @Entity(name = "SleepEventEntity")
@@ -19,7 +19,7 @@ public interface SleepEventData {
 
     @ForeignKey
     @OneToOne
-    MasterEvent getMasterEvent();
+    MasterEventData getMasterEvent();
 
     DateTime getAwakeTime();
 }

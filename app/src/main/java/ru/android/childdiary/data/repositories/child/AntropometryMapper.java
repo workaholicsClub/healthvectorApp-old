@@ -4,28 +4,33 @@ import android.support.annotation.NonNull;
 
 import ru.android.childdiary.data.entities.child.AntropometryData;
 import ru.android.childdiary.data.entities.child.AntropometryEntity;
+import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 
-// TODO: foreign key mapper
 class AntropometryMapper {
-    public static Antropometry map(@NonNull AntropometryData antropometryData) {
+    public static Antropometry mapToPlainObject(@NonNull AntropometryData antropometryData) {
         return Antropometry.builder()
                 .id(antropometryData.getId())
-                .child(ChildMapper.map(antropometryData.getChild()))
                 .height(antropometryData.getHeight())
                 .weight(antropometryData.getWeight())
                 .date(antropometryData.getDate())
                 .build();
     }
 
-    public static AntropometryEntity map(@NonNull Antropometry antropometry) {
-        return copy(new AntropometryEntity(), antropometry);
+    public static AntropometryEntity mapToEntity(@NonNull Antropometry antropometry) {
+        return updateEntityWithPlainObject(new AntropometryEntity(), antropometry);
     }
 
-    public static AntropometryEntity copy(@NonNull AntropometryEntity toAntropometryEntity, @NonNull Antropometry fromAntropometry) {
-        toAntropometryEntity.setHeight(fromAntropometry.getHeight());
-        toAntropometryEntity.setWeight(fromAntropometry.getWeight());
-        toAntropometryEntity.setDate(fromAntropometry.getDate());
-        return toAntropometryEntity;
+    public static AntropometryEntity mapToEntity(@NonNull Antropometry antropometry, @NonNull ChildEntity childEntity) {
+        AntropometryEntity antropometryEntity = updateEntityWithPlainObject(new AntropometryEntity(), antropometry);
+        antropometryEntity.setChild(childEntity);
+        return antropometryEntity;
+    }
+
+    public static AntropometryEntity updateEntityWithPlainObject(@NonNull AntropometryEntity to, @NonNull Antropometry from) {
+        to.setHeight(from.getHeight());
+        to.setWeight(from.getWeight());
+        to.setDate(from.getDate());
+        return to;
     }
 }

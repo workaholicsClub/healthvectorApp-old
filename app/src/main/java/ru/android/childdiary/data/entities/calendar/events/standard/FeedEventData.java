@@ -6,7 +6,7 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.OneToOne;
 import io.requery.Table;
-import ru.android.childdiary.data.entities.calendar.events.MasterEvent;
+import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.FoodMeasure;
@@ -20,17 +20,17 @@ public interface FeedEventData {
 
     @ForeignKey
     @OneToOne
-    MasterEvent getMasterEvent();
+    MasterEventData getMasterEvent();
 
     FeedType getFeedType();
 
     Breast getBreast();
 
-    int getDurationInMinutes();
+    Integer getDurationInMinutes();
 
-    int getMilkAmountImMilliliters();
+    Integer getMilkAmountImMilliliters();
 
-    int getFoodAmount();
+    Integer getFoodAmount();
 
     FoodMeasure getFoodMeasure();
 }
