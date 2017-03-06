@@ -66,5 +66,6 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
+    @Nullable
     protected abstract Sex getSex();
 }

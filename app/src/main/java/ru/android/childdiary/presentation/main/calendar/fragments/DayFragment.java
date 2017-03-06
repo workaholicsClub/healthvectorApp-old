@@ -20,6 +20,7 @@ public class DayFragment extends BaseMvpFragment<CalendarPresenter> implements C
     CalendarPresenter presenter;
 
     @Override
+    @Nullable
     protected Sex getSex() {
         return null;
     }

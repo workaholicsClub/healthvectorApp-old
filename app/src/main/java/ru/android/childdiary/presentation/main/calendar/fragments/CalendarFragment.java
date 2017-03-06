@@ -37,6 +37,7 @@ public abstract class CalendarFragment extends BaseMvpFragment<CalendarPresenter
     private Sex sex;
 
     @Override
+    @Nullable
     protected Sex getSex() {
         return sex;
     }
