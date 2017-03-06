@@ -20,9 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import icepick.Icepick;
-import lombok.AccessLevel;
-import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -31,11 +30,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     private final Map<Integer, RequestPermissionInfo> permissionInfoMap = new HashMap<>();
 
-    @Getter(AccessLevel.PROTECTED)
-    private Child child;
-
-    public BaseDialogFragment() {
-    }
+    protected Child child;
+    protected Sex sex;
 
     public void showAllowingStateLoss(FragmentManager manager, String tag, @NonNull Child child) {
         Bundle arguments = new Bundle();
@@ -50,6 +46,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         child = getArguments().getParcelable(ExtraConstants.EXTRA_CHILD);
+        sex = child == null ? null : child.getSex();
         Icepick.restoreInstanceState(this, savedInstanceState);
         return super.onCreateDialog(savedInstanceState);
     }
@@ -71,7 +68,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 != PackageManager.PERMISSION_GRANTED) {
             permissionInfoMap.put(permissionInfo.getRequestCode(), permissionInfo);
             if (shouldShowRequestPermissionRationale(permission)) {
-                new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(getChild().getSex()))
+                new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(sex))
                         .setTitle(permissionInfo.getTitleResourceId())
                         .setMessage(permissionInfo.getTextResourceId())
                         .setPositiveButton(R.string.OK,

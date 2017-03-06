@@ -13,7 +13,7 @@ import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.utils.log.LogSystem;
 
-public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> implements ErrorHandler {
+public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -31,8 +31,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         compositeDisposable.add(disposable);
     }
 
-    @Override
-    public void onUnexpectedError(Throwable e) {
+    protected void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
         getViewState().onUnexpectedError(e);
     }

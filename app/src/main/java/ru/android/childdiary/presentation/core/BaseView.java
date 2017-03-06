@@ -1,6 +1,10 @@
 package ru.android.childdiary.presentation.core;
 
 import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-interface BaseView extends MvpView, ErrorHandler {
+public interface BaseView extends MvpView {
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void onUnexpectedError(Throwable e);
 }

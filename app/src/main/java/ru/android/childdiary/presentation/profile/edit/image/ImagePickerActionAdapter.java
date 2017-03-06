@@ -1,6 +1,8 @@
 package ru.android.childdiary.presentation.profile.edit.image;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,17 +18,22 @@ class ImagePickerActionAdapter extends BaseArrayAdapter<ImagePickerAction, Image
     }
 
     @Override
-    protected ViewHolder createViewHolder() {
-        return new ViewHolder();
+    @LayoutRes
+    protected int getLayoutResourceId() {
+        return R.layout.image_picker_item;
+    }
+
+    @Override
+    protected ViewHolder createViewHolder(View view) {
+        return new ViewHolder(view);
     }
 
     static class ViewHolder extends BaseViewHolder<ImagePickerAction> {
         @BindView(android.R.id.text1)
         TextView textView;
 
-        @Override
-        protected int getLayoutResourceId() {
-            return R.layout.image_picker_item;
+        public ViewHolder(View view) {
+            super(view);
         }
 
         @Override

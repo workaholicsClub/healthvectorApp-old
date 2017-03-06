@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.main.drawer;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,8 +22,14 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
     }
 
     @Override
-    protected ViewHolder createViewHolder() {
-        return new ViewHolder();
+    @LayoutRes
+    protected int getLayoutResourceId() {
+        return R.layout.account_header_action_item;
+    }
+
+    @Override
+    protected ViewHolder createViewHolder(View view) {
+        return new ViewHolder(view);
     }
 
     @Override
@@ -43,9 +50,8 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
         @BindView(R.id.imageViewDropdown)
         View imageViewDropdown;
 
-        @Override
-        protected int getLayoutResourceId() {
-            return R.layout.account_header_action_item;
+        public ViewHolder(View view) {
+            super(view);
         }
 
         @Override

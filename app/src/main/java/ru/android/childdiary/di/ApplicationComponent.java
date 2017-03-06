@@ -9,6 +9,7 @@ import ru.android.childdiary.domain.interactors.child.AntropometryInteractor;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.main.MainPresenter;
+import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditPresenter;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
@@ -31,6 +32,8 @@ public interface ApplicationComponent {
     void inject(ProfileEditPresenter presenter);
 
     void inject(ProfileReviewPresenter presenter);
+
+    void inject(CalendarPresenter presenter);
 
     // activities
     void inject(SplashActivity activity);

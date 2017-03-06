@@ -2,7 +2,6 @@ package ru.android.childdiary.domain.interactors.child;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -69,16 +68,16 @@ public class Child implements Parcelable {
         this.birthWeight = (Double) in.readValue(Double.class.getClassLoader());
     }
 
-    public static Child.ChildBuilder getBuilder(@Nullable Child child) {
-        return child == null ? Child.builder() : Child.builder()
-                .id(child.id)
-                .name(child.name)
-                .birthDate(child.birthDate)
-                .birthTime(child.birthTime)
-                .sex(child.sex)
-                .imageFileName(child.imageFileName)
-                .birthHeight(child.birthHeight)
-                .birthWeight(child.birthWeight);
+    public Child.ChildBuilder getBuilder() {
+        return Child.builder()
+                .id(id)
+                .name(name)
+                .birthDate(birthDate)
+                .birthTime(birthTime)
+                .sex(sex)
+                .imageFileName(imageFileName)
+                .birthHeight(birthHeight)
+                .birthWeight(birthWeight);
     }
 
     @Override

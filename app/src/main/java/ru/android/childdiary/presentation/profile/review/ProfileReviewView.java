@@ -7,9 +7,9 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.core.BaseActivityView;
+import ru.android.childdiary.presentation.core.BaseView;
 
-public interface ProfileReviewView extends BaseActivityView {
+public interface ProfileReviewView extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showChild(@NonNull Child child);
 
