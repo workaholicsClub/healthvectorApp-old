@@ -93,7 +93,6 @@ public abstract class BaseTwoTypesAdapter<VH0 extends BaseViewHolder<T0>, T0, VH
         viewHolder.bind(getContext(), position, item);
     }
 
-
     protected abstract boolean isItemOfFirstType(int position);
 
     protected abstract T0 getFirstTypeItem(int position);
