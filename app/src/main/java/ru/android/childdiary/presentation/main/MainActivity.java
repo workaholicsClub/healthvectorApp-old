@@ -125,7 +125,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     protected void setupToolbar() {
         super.setupToolbar();
-        toolbar.setNavigationIcon(R.drawable.toolbar_menu);
+        toolbar.setNavigationIcon(R.drawable.toolbar_action_navigation_drawer);
     }
 
     @Override
@@ -295,7 +295,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         switcherWrapper.setOnClickListener(this);
 
         switcherImage = ButterKnife.findById(accountHeader.getView(), R.id.material_drawer_account_header_text_switcher);
-        switcherImage.setImageResource(R.drawable.switcher);
+        switcherImage.setImageResource(R.drawable.arrow_down_white);
     }
 
     private void setUnclickable(View view) {

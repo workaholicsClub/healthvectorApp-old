@@ -34,6 +34,6 @@
         android:layout_marginEnd="@dimen/account_header_action_item_image_margin_horizontal"
         android:layout_marginRight="@dimen/account_header_action_item_image_margin_horizontal"
         android:scaleType="center"
-        android:src="@drawable/dropdown"
+        android:src="@drawable/arrow_up_black"
         tools:ignore="ContentDescription" />
 </LinearLayout>

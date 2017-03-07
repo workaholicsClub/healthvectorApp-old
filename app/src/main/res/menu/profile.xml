@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_close"
-        android:icon="@drawable/toolbar_close"
+        android:icon="@drawable/toolbar_action_close"
         android:title="@string/empty"
         app:showAsAction="always" />
 </menu>

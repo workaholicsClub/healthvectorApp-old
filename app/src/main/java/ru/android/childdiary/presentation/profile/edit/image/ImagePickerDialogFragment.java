@@ -55,18 +55,18 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         actions.add(ImagePickerAction.builder()
                 .type(ImagePickerActionType.CAPTURE)
                 .titleResourceId(R.string.action_capture_image)
-                .iconResourceId(R.drawable.action_capture_image)
+                .iconResourceId(R.drawable.image_picker_action_capture_image)
                 .build());
         actions.add(ImagePickerAction.builder()
                 .type(ImagePickerActionType.PICK)
                 .titleResourceId(R.string.action_pick_image)
-                .iconResourceId(R.drawable.action_pick_image)
+                .iconResourceId(R.drawable.image_picker_action_pick_image)
                 .build());
         if (child != null && child.getImageFileName() != null) {
             actions.add(ImagePickerAction.builder()
                     .type(ImagePickerActionType.DELETE)
                     .titleResourceId(R.string.action_delete_image)
-                    .iconResourceId(R.drawable.action_delete_image)
+                    .iconResourceId(R.drawable.image_picker_action_delete_image)
                     .build());
         }
 
