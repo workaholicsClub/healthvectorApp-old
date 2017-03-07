@@ -7,7 +7,7 @@ import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 class ChildMapper {
-    public static Child map(@NonNull ChildData childData) {
+    public static Child mapToPlainObject(@NonNull ChildData childData) {
         return Child.builder()
                 .id(childData.getId())
                 .name(childData.getName())
@@ -20,18 +20,18 @@ class ChildMapper {
                 .build();
     }
 
-    public static ChildEntity map(@NonNull Child child) {
-        return copy(new ChildEntity(), child);
+    public static ChildEntity mapToEntity(@NonNull Child child) {
+        return updateEntityWithPlainObject(new ChildEntity(), child);
     }
 
-    public static ChildEntity copy(@NonNull ChildEntity toChildEntity, @NonNull Child fromChild) {
-        toChildEntity.setName(fromChild.getName());
-        toChildEntity.setBirthDate(fromChild.getBirthDate());
-        toChildEntity.setBirthTime(fromChild.getBirthTime());
-        toChildEntity.setSex(fromChild.getSex());
-        toChildEntity.setImageFileName(fromChild.getImageFileName());
-        toChildEntity.setBirthHeight(fromChild.getBirthHeight());
-        toChildEntity.setBirthWeight(fromChild.getBirthWeight());
-        return toChildEntity;
+    public static ChildEntity updateEntityWithPlainObject(@NonNull ChildEntity to, @NonNull Child from) {
+        to.setName(from.getName());
+        to.setBirthDate(from.getBirthDate());
+        to.setBirthTime(from.getBirthTime());
+        to.setSex(from.getSex());
+        to.setImageFileName(from.getImageFileName());
+        to.setBirthHeight(from.getBirthHeight());
+        to.setBirthWeight(from.getBirthWeight());
+        return to;
     }
 }

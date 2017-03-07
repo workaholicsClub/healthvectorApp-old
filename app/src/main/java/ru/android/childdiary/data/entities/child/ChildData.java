@@ -10,6 +10,7 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.OneToMany;
 import io.requery.Table;
+import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.types.Sex;
 
 @Table(name = "child")
@@ -37,4 +38,7 @@ public interface ChildData {
 
     @OneToMany
     List<AntropometryData> getAntropometryList();
+
+    @OneToMany
+    List<MasterEventData> getEvents();
 }

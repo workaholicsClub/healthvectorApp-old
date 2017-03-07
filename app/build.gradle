@@ -36,7 +36,7 @@ android {
 
 def renameArtifact(variant, defaultConfig) {
     variant.outputs.each { output ->
-        def formattedDate = new Date().format('dd.MM.yyyy_HH-mm')
+        def formattedDate = new Date().format("yyyy.MM.dd.HH.mm")
         def fileName = applicationName + "_" + formattedDate + "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ")_" + variant.name + ".apk"
 
         def file = output.packageApplication.outputFile

@@ -24,8 +24,8 @@ public class AntropometryInteractor implements Interactor, AntropometryRepositor
     }
 
     @Override
-    public Observable<Antropometry> add(@NonNull Antropometry item) {
-        return antropometryRepository.add(item);
+    public Observable<Antropometry> add(@NonNull Child child, @NonNull Antropometry item) {
+        return antropometryRepository.add(child, item);
     }
 
     @Override

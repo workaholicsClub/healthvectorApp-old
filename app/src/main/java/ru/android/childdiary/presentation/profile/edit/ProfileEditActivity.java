@@ -155,7 +155,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
         Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
         if (savedInstanceState == null && child != null) {
-            editedChild = child.getBuilder().build();
+            editedChild = child.toBuilder().build();
         }
 
         getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child_long);
@@ -209,15 +209,15 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextName).subscribe(textViewAfterTextChangeEvent -> {
             String name = editTextName.getText().toString();
-            updateChild(editedChild.getBuilder().name(name).build());
+            updateChild(editedChild.toBuilder().name(name).build());
         }));
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthHeight).subscribe(textViewAfterTextChangeEvent -> {
             Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
-            updateChild(editedChild.getBuilder().birthHeight(height).build());
+            updateChild(editedChild.toBuilder().birthHeight(height).build());
         }));
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthWeight).subscribe(textViewAfterTextChangeEvent -> {
             Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
-            updateChild(editedChild.getBuilder().birthWeight(weight).build());
+            updateChild(editedChild.toBuilder().birthWeight(weight).build());
         }));
 
         unsubscribeOnDestroy(RxView.focusChanges(editTextName).subscribe((hasFocus) -> {
@@ -292,7 +292,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         dismissPopupWindow();
         Sex sex = ((SexAdapter) parent.getAdapter()).getItem(position);
-        updateChild(editedChild.getBuilder().sex(sex).build());
+        updateChild(editedChild.toBuilder().sex(sex).build());
         setupSex();
     }
 
@@ -380,7 +380,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void onSetImage(@Nullable File resultFile) {
         String imageFileName = resultFile == null ? null : resultFile.getAbsolutePath();
-        updateChild(editedChild.getBuilder().imageFileName(imageFileName).build());
+        updateChild(editedChild.toBuilder().imageFileName(imageFileName).build());
         setupImage();
     }
 
@@ -389,14 +389,14 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, monthOfYear, dayOfMonth);
         LocalDate birthDate = LocalDate.fromCalendarFields(calendar);
-        updateChild(editedChild.getBuilder().birthDate(birthDate).build());
+        updateChild(editedChild.toBuilder().birthDate(birthDate).build());
         setupDate();
     }
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         LocalTime birthTime = new LocalTime(hourOfDay, minute);
-        updateChild(editedChild.getBuilder().birthTime(birthTime).build());
+        updateChild(editedChild.toBuilder().birthTime(birthTime).build());
         setupTime();
     }
 

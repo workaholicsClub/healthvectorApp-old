@@ -11,7 +11,7 @@ import lombok.Value;
 import ru.android.childdiary.data.types.Sex;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class Child implements Parcelable {
     public static final Child NULL = Child.builder().build();
 
@@ -66,18 +66,6 @@ public class Child implements Parcelable {
         this.imageFileName = in.readString();
         this.birthHeight = (Double) in.readValue(Double.class.getClassLoader());
         this.birthWeight = (Double) in.readValue(Double.class.getClassLoader());
-    }
-
-    public Child.ChildBuilder getBuilder() {
-        return Child.builder()
-                .id(id)
-                .name(name)
-                .birthDate(birthDate)
-                .birthTime(birthTime)
-                .sex(sex)
-                .imageFileName(imageFileName)
-                .birthHeight(birthHeight)
-                .birthWeight(birthWeight);
     }
 
     @Override

@@ -27,8 +27,8 @@ public class AntropometryDataRepository implements AntropometryRepository {
     }
 
     @Override
-    public Observable<Antropometry> add(@NonNull Antropometry antropometry) {
-        return dbService.add(antropometry);
+    public Observable<Antropometry> add(@NonNull Child child, @NonNull Antropometry antropometry) {
+        return dbService.add(child, antropometry);
     }
 
     @Override

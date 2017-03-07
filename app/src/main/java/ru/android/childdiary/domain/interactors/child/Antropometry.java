@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Value;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class Antropometry implements Parcelable {
     public static final Antropometry NULL = Antropometry.builder().build();
 
@@ -27,18 +27,14 @@ public class Antropometry implements Parcelable {
 
     Long id;
 
-    // TODO: не нужно, убрать
-    Child child;
-
     Double height;
 
     Double weight;
 
     LocalDate date;
 
-    private Antropometry(Long id, Child child, Double height, Double weight, LocalDate date) {
+    private Antropometry(Long id, Double height, Double weight, LocalDate date) {
         this.id = id;
-        this.child = child;
         this.height = height;
         this.weight = weight;
         this.date = date;
@@ -46,19 +42,9 @@ public class Antropometry implements Parcelable {
 
     protected Antropometry(Parcel in) {
         this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.child = in.readParcelable(Child.class.getClassLoader());
         this.height = (Double) in.readValue(Double.class.getClassLoader());
         this.weight = (Double) in.readValue(Double.class.getClassLoader());
         this.date = (LocalDate) in.readSerializable();
-    }
-
-    public Antropometry.AntropometryBuilder getBuilder() {
-        return Antropometry.builder()
-                .id(id)
-                .child(child)
-                .height(height)
-                .weight(weight)
-                .date(date);
     }
 
     @Override
@@ -69,7 +55,6 @@ public class Antropometry implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.id);
-        dest.writeParcelable(this.child, flags);
         dest.writeValue(this.height);
         dest.writeValue(this.weight);
         dest.writeSerializable(this.date);

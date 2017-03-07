@@ -29,7 +29,7 @@ public class ChildDbService implements ChildService {
                 .orderBy(ChildEntity.NAME)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, ChildMapper::map));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, ChildMapper::mapToPlainObject));
     }
 
     @Override
@@ -38,18 +38,18 @@ public class ChildDbService implements ChildService {
                 .where(ChildEntity.ID.eq(id))
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, ChildMapper::map));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, ChildMapper::mapToPlainObject));
     }
 
     @Override
     public Observable<Child> add(@NonNull Child child) {
-        return dataStore.insert(ChildMapper.map(child)).toObservable().map(ChildMapper::map);
+        return dataStore.insert(ChildMapper.mapToEntity(child)).toObservable().map(ChildMapper::mapToPlainObject);
     }
 
     @Override
     public Observable<Child> update(@NonNull Child child) {
         return DbUtils.updateObservable(dataStore, ChildEntity.class, child, child.getId(),
-                ChildMapper::copy, ChildMapper::map);
+                ChildMapper::updateEntityWithPlainObject, ChildMapper::mapToPlainObject);
     }
 
     @Override
