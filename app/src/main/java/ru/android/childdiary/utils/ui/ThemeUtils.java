@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
@@ -14,7 +13,6 @@ import java.util.Map;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.child.Child;
 
 public class ThemeUtils {
     private static final Map<Sex, ThemeInfo> map = new HashMap<>();
@@ -93,36 +91,5 @@ public class ThemeUtils {
 
     public static Drawable getColorAccentDrawable(Context context, @Nullable Sex sex) {
         return ContextCompat.getDrawable(context, getColorAccentRes(sex));
-    }
-
-    public static Drawable getChildIcon(Context context, @Nullable Child child) {
-        if (child == null) {
-            return getChildDefaultIcon(context, null);
-        }
-        if (child.getImageFileName() == null) {
-            return getChildDefaultIcon(context, child.getSex());
-        }
-        return Drawable.createFromPath(child.getImageFileName());
-    }
-
-    private static Drawable getChildDefaultIcon(Context context, @Nullable Sex sex) {
-        // TODO: default icon for girl and boy
-        return getColorPrimaryDarkDrawable(context, sex);
-    }
-
-    @DrawableRes
-    public static int getButtonBackgroundRes(@Nullable Sex sex, boolean enabled) {
-        if (sex == null) {
-            return enabled ? R.drawable.button_background : R.drawable.button_background_disabled;
-        }
-
-        switch (sex) {
-            case MALE:
-                return enabled ? R.drawable.button_background_boy : R.drawable.button_background_boy_disabled;
-            case FEMALE:
-                return enabled ? R.drawable.button_background_girl : R.drawable.button_background_girl_disabled;
-            default:
-                return enabled ? R.drawable.button_background : R.drawable.button_background_disabled;
-        }
     }
 }

@@ -31,6 +31,7 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresenter> implements ProfileReviewView {
@@ -102,11 +103,11 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     protected void themeChanged() {
         super.themeChanged();
         topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(sex));
-        buttonEdit.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, true));
+        buttonEdit.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(sex, true));
     }
 
     private void setupViews(@NonNull Child child) {
-        imageViewPhoto.setImageDrawable(ThemeUtils.getChildIcon(this, child));
+        imageViewPhoto.setImageDrawable(ResourcesUtils.getChildIcon(this, child));
 
         textViewName.setText(child.getName());
 

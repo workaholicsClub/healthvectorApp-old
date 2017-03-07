@@ -59,8 +59,9 @@ import ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
-import ru.android.childdiary.utils.ui.WidgetUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener,
@@ -186,7 +187,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     protected void themeChanged() {
         super.themeChanged();
         topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(sex));
-        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
+        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
     }
 
     @Override
@@ -266,7 +267,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         Sex sex = editedChild.getSex();
         changeThemeIfNeeded(sex);
         textViewSex.setText(StringUtils.sex(this, sex, getString(R.string.select_sex)));
-        WidgetUtils.setupTextView(textViewSex, sex != null);
+        WidgetsUtils.setupTextView(textViewSex, sex != null);
     }
 
     @OnClick(R.id.textViewSex)
@@ -323,13 +324,13 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     private void setupDate() {
         LocalDate birthDate = editedChild.getBirthDate();
         textViewBirthDate.setText(StringUtils.date(birthDate, dateFormatter, getString(R.string.date)));
-        WidgetUtils.setupTextView(textViewBirthDate, birthDate != null);
+        WidgetsUtils.setupTextView(textViewBirthDate, birthDate != null);
     }
 
     private void setupTime() {
         LocalTime birthTime = editedChild.getBirthTime();
         textViewBirthTime.setText(StringUtils.time(birthTime, timeFormatter, getString(R.string.time)));
-        WidgetUtils.setupTextView(textViewBirthTime, birthTime != null);
+        WidgetsUtils.setupTextView(textViewBirthTime, birthTime != null);
     }
 
     @OnClick(R.id.imageViewPhoto)
@@ -350,7 +351,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(false);
-        WidgetUtils.setupDatePicker(this, dpd, sex);
+        WidgetsUtils.setupDatePicker(this, dpd, sex);
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
@@ -362,7 +363,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         TimePickerDialog tpd = TimePickerDialog.newInstance(this,
                 time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
         tpd.vibrate(false);
-        WidgetUtils.setupTimePicker(this, tpd, sex);
+        WidgetsUtils.setupTimePicker(this, tpd, sex);
         tpd.show(getFragmentManager(), TAG_TIME_PICKER);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
@@ -413,7 +414,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void setButtonDoneEnabled(boolean enabled) {
         isButtonDoneEnabled = enabled;
-        buttonDone.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
+        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
     }
 
     @Override

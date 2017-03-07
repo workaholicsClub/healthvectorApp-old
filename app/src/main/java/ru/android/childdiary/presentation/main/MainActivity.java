@@ -57,6 +57,7 @@ import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
@@ -88,7 +89,26 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private DrawerBuilder drawerBuilder;
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
-    private boolean isFabToolbarVisible;
+    private PrimaryDrawerItem[] drawerItems = new PrimaryDrawerItem[]{
+            new PrimaryDrawerItem()
+                    .withName(R.string.drawer_item_calendar)
+                    .withOnDrawerItemClickListener(this),
+            new PrimaryDrawerItem()
+                    .withName(R.string.drawer_item_development_diary)
+                    .withOnDrawerItemClickListener(this),
+            new PrimaryDrawerItem()
+                    .withName(R.string.drawer_item_exercises)
+                    .withOnDrawerItemClickListener(this),
+            new PrimaryDrawerItem()
+                    .withName(R.string.drawer_item_medical_data)
+                    .withOnDrawerItemClickListener(this),
+            new PrimaryDrawerItem()
+                    .withName(R.string.drawer_item_settings)
+                    .withOnDrawerItemClickListener(this),
+            new PrimaryDrawerItem()
+                    .withName(R.string.drawer_item_help)
+                    .withOnDrawerItemClickListener(this)
+    };
 
     public static Intent getIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -141,6 +161,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         if (accountHeader != null) {
             accountHeader.setBackground(ThemeUtils.getColorPrimaryDrawable(this, sex));
         }
+        updateDrawerItems(true);
+    }
+
+    private void updateDrawerItems(boolean notify) {
+        int[] icons = ResourcesUtils.getNavigationDrawerItemResources(sex);
+        for (int i = 0; i < Math.min(icons.length, drawerItems.length); ++i) {
+            drawerItems[i].withIcon(icons[i]);
+        }
+        if (notify && drawer != null) {
+            drawer.getAdapter().notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -187,7 +218,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withNameShown(true)
                 .withTag(child)
                 .withIdentifier(mapToProfileId(child))
-                .withIcon(ThemeUtils.getChildIcon(this, child));
+                .withIcon(ResourcesUtils.getChildIcon(this, child));
     }
 
     @Override
@@ -334,36 +365,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void buildDrawer() {
+        updateDrawerItems(false);
         drawerBuilder = new CustomDrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
-                .addDrawerItems(
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_calendar)
-                                .withIcon(R.drawable.navigation_drawer_item_calendar_boy)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_development_diary)
-                                .withIcon(R.drawable.navigation_drawer_item_development_diary_boy)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_exercises)
-                                .withIcon(R.drawable.navigation_drawer_item_exercises_boy)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_medical_data)
-                                .withIcon(R.drawable.navigation_drawer_item_medical_data_boy)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_settings)
-                                .withIcon(R.drawable.navigation_drawer_item_settings_boy)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_help)
-                                .withIcon(R.drawable.navigation_drawer_item_help_boy)
-                                .withOnDrawerItemClickListener(this)
-                );
+                .addDrawerItems(drawerItems);
         drawer = drawerBuilder.build();
     }
 
