@@ -43,7 +43,7 @@ public class CropActivity extends UCropActivity {
         super.onCreate(savedInstanceState);
 
         final Toolbar toolbar = ButterKnife.findById(this, com.yalantis.ucrop.R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.toolbar_back);
+        toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
 
         final TextView toolbarTitle = ButterKnife.findById(this, com.yalantis.ucrop.R.id.toolbar_title);
         toolbarTitle.setText(null);

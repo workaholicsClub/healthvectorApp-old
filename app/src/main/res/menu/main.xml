@@ -4,12 +4,12 @@
 
     <item
         android:id="@+id/menu_filter"
-        android:icon="@drawable/toolbar_sort"
+        android:icon="@drawable/toolbar_action_filter"
         android:title="@string/empty"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_overflow"
-        android:icon="@drawable/toolbar_overflow"
+        android:icon="@drawable/toolbar_action_overflow"
         android:title="@string/empty"
         app:showAsAction="ifRoom" />
 </menu>
