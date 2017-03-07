@@ -9,8 +9,8 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 
 class MasterEventMapper {
     public static MasterEvent mapToPlainObject(@NonNull MasterEventData masterEventData) {
-        return MasterEvent.builder()
-                .id(masterEventData.getId())
+        return MasterEvent.masterBuilder()
+                .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .description(masterEventData.getDescription())
                 .dateTime(masterEventData.getDateTime())

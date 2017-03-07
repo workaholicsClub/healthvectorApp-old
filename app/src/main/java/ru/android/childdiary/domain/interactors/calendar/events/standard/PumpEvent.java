@@ -1,18 +1,38 @@
 package ru.android.childdiary.domain.interactors.calendar.events.standard;
 
+import org.joda.time.DateTime;
+
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Value;
-import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.types.Breast;
+import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 
 @Value
-@Builder
-public class PumpEvent {
+@EqualsAndHashCode(callSuper = true)
+public class PumpEvent extends MasterEvent {
     Long id;
-
-    MasterEventData masterEvent;
 
     Breast breast;
 
     Integer durationInMinutes;
+
+    @Builder(toBuilder = true)
+    private PumpEvent(Long masterEventId,
+                      EventType eventType,
+                      String description,
+                      DateTime dateTime,
+                      Integer notifyTimeInMinutes,
+                      String note,
+                      Boolean isDone,
+                      Boolean isDeleted,
+                      Long id,
+                      Breast breast,
+                      Integer durationInMinutes) {
+        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
+        this.id = id;
+        this.breast = breast;
+        this.durationInMinutes = durationInMinutes;
+    }
 }

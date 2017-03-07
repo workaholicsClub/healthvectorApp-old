@@ -6,12 +6,8 @@ import lombok.Builder;
 import lombok.Value;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class ChildResponse {
     List<Child> childList;
     Child activeChild;
-
-    public ChildResponse.ChildResponseBuilder getBuilder() {
-        return ChildResponse.builder().childList(childList).activeChild(activeChild);
-    }
 }

@@ -2,28 +2,37 @@ package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
 
+import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.DiaperEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.DiaperEventEntity;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 
-public class DiaperEventMapper {
-    public static DiaperEvent mapToPlainObject(@NonNull DiaperEventData diaperEventData) {
+class DiaperEventMapper {
+    public static DiaperEvent mapToPlainObject(@NonNull DiaperEventData eventData) {
+        MasterEventData masterEventData = eventData.getMasterEvent();
         return DiaperEvent.builder()
-                .id(diaperEventData.getId())
-                .masterEvent(MasterEventMapper.mapToPlainObject(diaperEventData.getMasterEvent()))
-                .diaperState(diaperEventData.getDiaperState())
+                .id(eventData.getId())
+                .masterEventId(masterEventData.getId())
+                .eventType(masterEventData.getEventType())
+                .description(masterEventData.getDescription())
+                .dateTime(masterEventData.getDateTime())
+                .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
+                .note(masterEventData.getNote())
+                .isDone(masterEventData.isDone())
+                .isDeleted(masterEventData.isDeleted())
+                .diaperState(eventData.getDiaperState())
                 .build();
     }
 
-    public static DiaperEventEntity mapToEntity(@NonNull DiaperEvent diaperEvent) {
-        return updateEntityWithPlainObject(new DiaperEventEntity(), diaperEvent);
+    public static DiaperEventEntity mapToEntity(@NonNull DiaperEvent event) {
+        return updateEntityWithPlainObject(new DiaperEventEntity(), event);
     }
 
-    public static DiaperEventEntity mapToEntity(@NonNull DiaperEvent diaperEvent, @NonNull MasterEventEntity masterEventEntity) {
-        DiaperEventEntity diaperEventEntity = updateEntityWithPlainObject(new DiaperEventEntity(), diaperEvent);
-        diaperEventEntity.setMasterEvent(masterEventEntity);
-        return diaperEventEntity;
+    public static DiaperEventEntity mapToEntity(@NonNull DiaperEvent event, @NonNull MasterEventEntity masterEventEntity) {
+        DiaperEventEntity eventEntity = updateEntityWithPlainObject(new DiaperEventEntity(), event);
+        eventEntity.setMasterEvent(masterEventEntity);
+        return eventEntity;
     }
 
     public static DiaperEventEntity updateEntityWithPlainObject(@NonNull DiaperEventEntity to, @NonNull DiaperEvent from) {

@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Value;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class Antropometry implements Parcelable {
     public static final Antropometry NULL = Antropometry.builder().build();
 
@@ -45,14 +45,6 @@ public class Antropometry implements Parcelable {
         this.height = (Double) in.readValue(Double.class.getClassLoader());
         this.weight = (Double) in.readValue(Double.class.getClassLoader());
         this.date = (LocalDate) in.readSerializable();
-    }
-
-    public Antropometry.AntropometryBuilder getBuilder() {
-        return Antropometry.builder()
-                .id(id)
-                .height(height)
-                .weight(weight)
-                .date(date);
     }
 
     @Override

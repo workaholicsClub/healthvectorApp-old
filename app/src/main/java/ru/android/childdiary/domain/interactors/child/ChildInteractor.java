@@ -42,7 +42,7 @@ public class ChildInteractor implements Interactor {
                 .map(childList -> ChildResponse.builder().childList(childList).build())
                 .flatMap(response ->
                         getActiveChild(response.getChildList())
-                                .map(child -> response.getBuilder().activeChild(child).build())
+                                .map(child -> response.toBuilder().activeChild(child).build())
                 );
     }
 
