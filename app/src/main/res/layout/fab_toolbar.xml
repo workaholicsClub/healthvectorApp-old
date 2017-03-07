@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add_white_24dp" />
+
+    <LinearLayout
+        android:id="@+id/bottomPanel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fab_toolbar_height"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/addDiaperEvent"
+                android:layout_width="@dimen/fab_toolbar_height"
+                android:layout_height="@dimen/fab_toolbar_height"
+                android:background="@drawable/background_clickable"
+                android:scaleType="center"
+                android:src="@drawable/calendar_action_add_diaper" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/addSleepEvent"
+                android:layout_width="@dimen/fab_toolbar_height"
+                android:layout_height="@dimen/fab_toolbar_height"
+                android:background="@drawable/background_clickable"
+                android:scaleType="center"
+                android:src="@drawable/calendar_action_add_sleep" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/addFeedEvent"
+                android:layout_width="@dimen/fab_toolbar_height"
+                android:layout_height="@dimen/fab_toolbar_height"
+                android:background="@drawable/background_clickable"
+                android:scaleType="center"
+                android:src="@drawable/calendar_action_add_feed" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/addPumpEvent"
+                android:layout_width="@dimen/fab_toolbar_height"
+                android:layout_height="@dimen/fab_toolbar_height"
+                android:background="@drawable/background_clickable"
+                android:scaleType="center"
+                android:src="@drawable/calendar_action_add_pump" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/addOtherEvent"
+                android:layout_width="@dimen/fab_toolbar_height"
+                android:layout_height="@dimen/fab_toolbar_height"
+                android:background="@drawable/background_clickable"
+                android:scaleType="center"
+                android:src="@drawable/calendar_action_add_other" />
+        </FrameLayout>
+    </LinearLayout>
+</merge>

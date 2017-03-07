@@ -469,9 +469,11 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void onBackPressed() {
         boolean processed = dismissPopupWindow();
-        if (!processed) {
-            super.onBackPressed();
+        if (processed) {
+            return;
         }
+
+        super.onBackPressed();
     }
 
     @Override

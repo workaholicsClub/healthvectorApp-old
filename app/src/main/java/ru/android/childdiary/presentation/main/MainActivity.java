@@ -27,8 +27,6 @@ import android.widget.PopupWindow;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.github.alexkolpa.fabtoolbar.FabToolbar;
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -43,6 +41,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -54,6 +53,7 @@ import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
 import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
+import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.utils.StringUtils;
@@ -125,10 +125,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.white_transparent), ContextCompat.getColor(this, R.color.white));
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white));
         tabLayout.setSelectedTabIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.selected_tab_indicator_height));
-    }
-
-    private void setupFabToolbar() {
-        // TODO: test on click, is hidden, recycler view
     }
 
     @Override
@@ -345,30 +341,55 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .addDrawerItems(
                         new PrimaryDrawerItem()
                                 .withName(R.string.drawer_item_calendar)
-                                .withIcon(FontAwesome.Icon.faw_cart_plus)
+                                .withIcon(R.drawable.navigation_drawer_item_calendar_boy)
                                 .withOnDrawerItemClickListener(this),
                         new PrimaryDrawerItem()
                                 .withName(R.string.drawer_item_development_diary)
-                                .withIcon(FontAwesome.Icon.faw_database)
+                                .withIcon(R.drawable.navigation_drawer_item_development_diary_boy)
                                 .withOnDrawerItemClickListener(this),
                         new PrimaryDrawerItem()
                                 .withName(R.string.drawer_item_exercises)
-                                .withIcon(FontAwesome.Icon.faw_github)
+                                .withIcon(R.drawable.navigation_drawer_item_exercises_boy)
                                 .withOnDrawerItemClickListener(this),
                         new PrimaryDrawerItem()
                                 .withName(R.string.drawer_item_medical_data)
-                                .withIcon(FontAwesome.Icon.faw_amazon)
+                                .withIcon(R.drawable.navigation_drawer_item_medical_data_boy)
                                 .withOnDrawerItemClickListener(this),
                         new PrimaryDrawerItem()
                                 .withName(R.string.drawer_item_settings)
-                                .withIcon(FontAwesome.Icon.faw_cog)
+                                .withIcon(R.drawable.navigation_drawer_item_settings_boy)
                                 .withOnDrawerItemClickListener(this),
                         new PrimaryDrawerItem()
                                 .withName(R.string.drawer_item_help)
-                                .withIcon(FontAwesome.Icon.faw_question)
+                                .withIcon(R.drawable.navigation_drawer_item_help_boy)
                                 .withOnDrawerItemClickListener(this)
                 );
         drawer = drawerBuilder.build();
+    }
+
+    @OnClick(R.id.addDiaperEvent)
+    void onAddDiaperEventClick() {
+
+    }
+
+    @OnClick(R.id.addSleepEvent)
+    void onAddSleepEventClick() {
+
+    }
+
+    @OnClick(R.id.addFeedEvent)
+    void onAddFeedEventClick() {
+
+    }
+
+    @OnClick(R.id.addPumpEvent)
+    void onAddPumpEventClick() {
+
+    }
+
+    @OnClick(R.id.addOtherEvent)
+    void onAddOtherEventClick() {
+
     }
 
     private void closeDrawerWithoutAnimation() {
@@ -377,16 +398,32 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         }
     }
 
+    private boolean closeDrawer() {
+        if (drawer != null && drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void onBackPressed() {
         boolean processed = dismissPopupWindow();
-        if (!processed) {
-            if (drawer != null && drawer.isDrawerOpen()) {
-                drawer.closeDrawer();
-            } else {
-                super.onBackPressed();
-            }
+        if (processed) {
+            return;
         }
+
+        processed = closeDrawer();
+        if (processed) {
+            return;
+        }
+
+        processed = fabToolbar.hide();
+        if (processed) {
+            return;
+        }
+
+        super.onBackPressed();
     }
 
     @Override

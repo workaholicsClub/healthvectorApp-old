@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.mikepenz.materialdrawer.view.BezelImageView
         android:id="@+id/imageViewPhoto"
         android:layout_width="@dimen/account_header_image_size"
         android:layout_height="@dimen/account_header_image_size"
         android:layout_marginLeft="@dimen/account_header_action_item_image_margin_horizontal"
         android:layout_marginStart="@dimen/account_header_action_item_image_margin_horizontal"
-        android:src="@color/white" />
+        android:src="@color/white"
+        app:biv_selectorOnPress="@android:color/transparent" />
 
     <TextView
         android:id="@android:id/text1"

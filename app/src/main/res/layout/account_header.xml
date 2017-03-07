@@ -79,7 +79,7 @@
             android:layout_height="@dimen/account_header_action_item_height"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/account_header_selector">
+            android:background="@drawable/background_clickable">
 
             <ImageView
                 android:id="@+id/material_drawer_account_header_text_switcher"
