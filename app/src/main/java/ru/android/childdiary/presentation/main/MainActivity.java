@@ -27,6 +27,7 @@ import android.widget.PopupWindow;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.github.alexkolpa.fabtoolbar.FabToolbar;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.Drawer;
@@ -79,11 +80,15 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
+    @BindView(R.id.fabToolbar)
+    FabToolbar fabToolbar;
+
     private AccountHeader accountHeader;
     private Drawer drawer;
     private DrawerBuilder drawerBuilder;
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
+    private boolean isFabToolbarVisible;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -122,6 +127,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         tabLayout.setSelectedTabIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.selected_tab_indicator_height));
     }
 
+    private void setupFabToolbar() {
+        // TODO: test on click, is hidden, recycler view
+    }
+
     @Override
     protected void setupToolbar() {
         super.setupToolbar();
@@ -132,6 +141,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void themeChanged() {
         super.themeChanged();
         tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
+        fabToolbar.setColor(ThemeUtils.getColorAccent(this, sex));
         if (accountHeader != null) {
             accountHeader.setBackground(ThemeUtils.getColorPrimaryDrawable(this, sex));
         }
@@ -369,8 +379,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void onBackPressed() {
-        boolean dismissed = dismissPopupWindow();
-        if (!dismissed) {
+        boolean processed = dismissPopupWindow();
+        if (!processed) {
             if (drawer != null && drawer.isDrawerOpen()) {
                 drawer.closeDrawer();
             } else {

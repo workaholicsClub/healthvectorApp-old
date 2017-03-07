@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tb="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -24,4 +25,50 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <!-- TODO -->
+    <com.github.alexkolpa.fabtoolbar.FabToolbar
+        android:id="@+id/fabToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom"
+        tb:tb_anim_duration="500"
+        tb:tb_button_gravity="end"
+        tb:tb_container_gravity="center">
+
+        <ImageView
+            android:id="@+id/addDiaperEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/calendar_action_add_diaper" />
+
+        <ImageView
+            android:id="@+id/addSleepEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/calendar_action_add_sleep" />
+
+        <ImageView
+            android:id="@+id/addFeedEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/calendar_action_add_feed" />
+
+        <ImageView
+            android:id="@+id/addPumpEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/calendar_action_add_pump" />
+
+        <ImageView
+            android:id="@+id/addOtherEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/calendar_action_add_other" />
+    </com.github.alexkolpa.fabtoolbar.FabToolbar>
 </android.support.design.widget.CoordinatorLayout>

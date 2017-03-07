@@ -36,7 +36,7 @@ android {
 
 def renameArtifact(variant, defaultConfig) {
     variant.outputs.each { output ->
-        def formattedDate = new Date().format("yyyy.MM.dd.HH.mm")
+        def formattedDate = new Date().format("yyyy.MM.dd")
         def fileName = applicationName + "_" + formattedDate + "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ")_" + variant.name + ".apk"
 
         def file = output.packageApplication.outputFile
@@ -64,7 +64,7 @@ dependencies {
     })
     testCompile "junit:junit:4.12"
 
-    def androidSupportVersion = '25.1.1'
+    def androidSupportVersion = '25.2.0'
     compile "com.android.support:support-v4:$androidSupportVersion"
     compile "com.android.support:appcompat-v7:$androidSupportVersion"
     compile "com.android.support:design:$androidSupportVersion"
@@ -134,4 +134,6 @@ dependencies {
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0-SNAPSHOT'
 
     compile 'org.greenrobot:eventbus:3.0.0'
+
+    compile 'com.github.alexkolpa:floating-action-button-toolbar:0.5.1'
 }
