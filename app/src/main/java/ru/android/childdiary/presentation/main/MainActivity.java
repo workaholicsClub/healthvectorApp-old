@@ -53,6 +53,7 @@ import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
 import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
+import ru.android.childdiary.presentation.main.drawer.CustomPrimaryDrawerItem;
 import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
@@ -90,22 +91,22 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
     private PrimaryDrawerItem[] drawerItems = new PrimaryDrawerItem[]{
-            new PrimaryDrawerItem()
+            new CustomPrimaryDrawerItem()
                     .withName(R.string.drawer_item_calendar)
                     .withOnDrawerItemClickListener(this),
-            new PrimaryDrawerItem()
+            new CustomPrimaryDrawerItem()
                     .withName(R.string.drawer_item_development_diary)
                     .withOnDrawerItemClickListener(this),
-            new PrimaryDrawerItem()
+            new CustomPrimaryDrawerItem()
                     .withName(R.string.drawer_item_exercises)
                     .withOnDrawerItemClickListener(this),
-            new PrimaryDrawerItem()
+            new CustomPrimaryDrawerItem()
                     .withName(R.string.drawer_item_medical_data)
                     .withOnDrawerItemClickListener(this),
-            new PrimaryDrawerItem()
+            new CustomPrimaryDrawerItem()
                     .withName(R.string.drawer_item_settings)
                     .withOnDrawerItemClickListener(this),
-            new PrimaryDrawerItem()
+            new CustomPrimaryDrawerItem()
                     .withName(R.string.drawer_item_help)
                     .withOnDrawerItemClickListener(this)
     };
@@ -325,21 +326,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
         setupToolbar();
 
-        View container = accountHeader.getView().findViewById(R.id.material_drawer_account_header);
-        setUnclickable(container);
-
         View switcherWrapper = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher_wrapper);
         switcherWrapper.setOnClickListener(this);
 
         switcherImage = ButterKnife.findById(accountHeader.getView(), R.id.material_drawer_account_header_text_switcher);
         switcherImage.setImageResource(R.drawable.arrow_down_white);
-    }
-
-    private void setUnclickable(View view) {
-        view.setOnClickListener(null);
-        view.setClickable(false);
-        view.setFocusable(false);
-        view.setFocusableInTouchMode(false);
     }
 
     private void animateSwitcherIn() {

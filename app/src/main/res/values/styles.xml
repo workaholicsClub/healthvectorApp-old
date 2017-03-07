@@ -64,7 +64,7 @@
 
     <style name="DrawerItemTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/black_text</item>
-        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textSize">@dimen/text_size_base</item>
         <item name="android:textStyle">bold</item>
     </style>
 
