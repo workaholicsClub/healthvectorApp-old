@@ -45,7 +45,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
-import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
@@ -112,10 +111,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
 
-    public static Intent getIntent(Context context, @Nullable Child child) {
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_CHILD, child);
-        return intent;
+    public static Intent getIntent(Context context) {
+        return new Intent(context, MainActivity.class);
     }
 
     private static long mapToProfileId(@NonNull Child child) {

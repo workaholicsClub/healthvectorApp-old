@@ -1,7 +1,5 @@
 package ru.android.childdiary.presentation.splash;
 
-import android.support.annotation.NonNull;
-
 import com.arellomobile.mvp.InjectViewState;
 
 import java.util.concurrent.TimeUnit;
@@ -12,8 +10,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.interactors.child.ChildResponse;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.StringUtils;
 
@@ -42,14 +40,14 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                                 .getAll()
                                 .doOnNext(childResponse -> logger.debug("data loaded: " + StringUtils.childList(childResponse.getChildList())))
                                 .doOnNext(childResponse -> logger.debug("active child: " + childResponse.getActiveChild())),
-                        (zero, childResponse) -> childResponse.getActiveChild())
+                        (zero, childResponse) -> childResponse)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::startApp, this::onUnexpectedError));
     }
 
-    private void startApp(@NonNull Child child) {
+    private void startApp(ChildResponse childResponse) {
         logger.debug("startApp");
-        getViewState().startApp(child == Child.NULL ? null : child);
+        getViewState().startApp();
     }
 }
