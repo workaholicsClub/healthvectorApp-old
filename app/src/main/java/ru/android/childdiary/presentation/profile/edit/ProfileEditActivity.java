@@ -33,15 +33,11 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -49,13 +45,13 @@ import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
 import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText;
+import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.StringUtils;
@@ -75,14 +71,6 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @InjectPresenter
     ProfileEditPresenter presenter;
-
-    @Inject
-    @Named(ApplicationModule.DATE_FORMATTER)
-    DateTimeFormatter dateFormatter;
-
-    @Inject
-    @Named(ApplicationModule.TIME_FORMATTER)
-    DateTimeFormatter timeFormatter;
 
     @BindView(R.id.rootView)
     View rootView;
@@ -323,13 +311,13 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     private void setupDate() {
         LocalDate birthDate = editedChild.getBirthDate();
-        textViewBirthDate.setText(StringUtils.date(birthDate, dateFormatter, getString(R.string.date)));
+        textViewBirthDate.setText(DateUtils.date(birthDate, getString(R.string.date)));
         WidgetsUtils.setupTextView(textViewBirthDate, birthDate != null);
     }
 
     private void setupTime() {
         LocalTime birthTime = editedChild.getBirthTime();
-        textViewBirthTime.setText(StringUtils.time(birthTime, timeFormatter, getString(R.string.time)));
+        textViewBirthTime.setText(DateUtils.time(birthTime, getString(R.string.time)));
         WidgetsUtils.setupTextView(textViewBirthTime, birthTime != null);
     }
 

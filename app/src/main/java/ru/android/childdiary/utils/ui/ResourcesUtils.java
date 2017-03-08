@@ -3,6 +3,7 @@ package ru.android.childdiary.utils.ui;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
@@ -11,6 +12,13 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class ResourcesUtils {
+    public static Drawable getChildIcon(Context context, @NonNull Child child) {
+        if (child.getImageFileName() == null) {
+            return ContextCompat.getDrawable(context, R.drawable.child_profile_placeholder);
+        }
+        return Drawable.createFromPath(child.getImageFileName());
+    }
+
     public static int[] getNavigationDrawerItemResources(Sex sex) {
         if (sex == null || sex == Sex.MALE) {
             return new int[]{
@@ -33,33 +41,21 @@ public class ResourcesUtils {
         }
     }
 
-    public static Drawable getChildIcon(Context context, @Nullable Child child) {
-        if (child == null) {
-            return getChildDefaultIcon(context, null);
+    @DrawableRes
+    public static int getButtonBackgroundRes(@Nullable Sex sex, boolean enabled) {
+        if (sex == null || sex == Sex.MALE) {
+            return enabled ? R.drawable.button_background_boy : R.drawable.button_background_boy_disabled;
+        } else {
+            return enabled ? R.drawable.button_background_girl : R.drawable.button_background_girl_disabled;
         }
-        if (child.getImageFileName() == null) {
-            return getChildDefaultIcon(context, child.getSex());
-        }
-        return Drawable.createFromPath(child.getImageFileName());
-    }
-
-    private static Drawable getChildDefaultIcon(Context context, @Nullable Sex sex) {
-        return ContextCompat.getDrawable(context, R.drawable.child_profile_placeholder);
     }
 
     @DrawableRes
-    public static int getButtonBackgroundRes(@Nullable Sex sex, boolean enabled) {
-        if (sex == null) {
-            return enabled ? R.drawable.button_background : R.drawable.button_background_disabled;
-        }
-
-        switch (sex) {
-            case MALE:
-                return enabled ? R.drawable.button_background_boy : R.drawable.button_background_boy_disabled;
-            case FEMALE:
-                return enabled ? R.drawable.button_background_girl : R.drawable.button_background_girl_disabled;
-            default:
-                return enabled ? R.drawable.button_background : R.drawable.button_background_disabled;
+    public static int getSelectedDateBackground(@Nullable Sex sex) {
+        if (sex == null || sex == Sex.MALE) {
+            return R.drawable.calendar_cell_background_selected_boy;
+        } else {
+            return R.drawable.calendar_cell_background_selected_girl;
         }
     }
 }

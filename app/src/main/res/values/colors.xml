@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="background">#EEF1F3</color>
     <color name="primary_boy">#26A6F6</color>
     <color name="primary_dark_boy">#4288B4</color>
     <color name="accent_boy">#4288B4</color>
@@ -11,6 +12,7 @@
     <color name="red">#FF0000</color>
     <color name="white">#FFFFFF</color>
     <color name="white_transparent">#B2FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="black_text">#DD000000</color>
     <color name="primary_text">@android:color/primary_text_light</color>
     <color name="secondary_text">@android:color/darker_gray</color>

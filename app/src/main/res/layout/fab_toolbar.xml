@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/fab_toolbar_height"
         android:layout_gravity="bottom"
+        android:baselineAligned="true"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="gone">
@@ -28,6 +29,7 @@
                 android:layout_width="@dimen/fab_toolbar_height"
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:background="@drawable/background_clickable"
+                android:contentDescription="@string/event_diaper"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_diaper" />
         </FrameLayout>
@@ -42,6 +44,7 @@
                 android:layout_width="@dimen/fab_toolbar_height"
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:background="@drawable/background_clickable"
+                android:contentDescription="@string/event_sleep"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_sleep" />
         </FrameLayout>
@@ -56,6 +59,7 @@
                 android:layout_width="@dimen/fab_toolbar_height"
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:background="@drawable/background_clickable"
+                android:contentDescription="@string/event_feed"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_feed" />
         </FrameLayout>
@@ -70,6 +74,7 @@
                 android:layout_width="@dimen/fab_toolbar_height"
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:background="@drawable/background_clickable"
+                android:contentDescription="@string/event_pump"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_pump" />
         </FrameLayout>
@@ -84,6 +89,7 @@
                 android:layout_width="@dimen/fab_toolbar_height"
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:background="@drawable/background_clickable"
+                android:contentDescription="@string/event_other"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_other" />
         </FrameLayout>

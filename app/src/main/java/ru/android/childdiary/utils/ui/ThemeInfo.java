@@ -10,8 +10,6 @@ import lombok.Value;
 @Builder
 class ThemeInfo {
     @StyleRes
-    int themeResourceId;
-    @StyleRes
     int themeDialogResourceId;
     @ColorRes
     int colorPrimary;

@@ -1,11 +1,24 @@
 package ru.android.childdiary.presentation.main.calendar.fragments;
 
-import ru.android.childdiary.presentation.main.calendar.adapters.CalendarViewAdapter;
-import ru.android.childdiary.presentation.main.calendar.adapters.MonthViewAdapter;
+import android.content.Context;
 
-public class MonthFragment extends CalendarFragment {
+import ru.android.childdiary.R;
+import ru.android.childdiary.presentation.main.calendar.adapters.MonthViewAdapter;
+import ru.android.childdiary.utils.DateUtils;
+
+public class MonthFragment extends CalendarFragment<MonthViewAdapter> {
     @Override
-    protected CalendarViewAdapter getCalendarViewAdapter() {
-        return new MonthViewAdapter(getActivity());
+    protected MonthViewAdapter getCalendarViewAdapter() {
+        return new MonthViewAdapter(getActivity(), this);
+    }
+
+    @Override
+    protected void updateTitle(MonthViewAdapter adapter) {
+        Context context = adapter.getContext();
+        int month = adapter.getMonth();
+        int year = adapter.getYear();
+        String monthString = DateUtils.monthNominativeName(context, month);
+        String text = context.getString(R.string.calendar_month_title, monthString, year);
+        calendarTitle.setText(text);
     }
 }

@@ -56,6 +56,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ConfigUtils.setupOrientation(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
+        if (sex == null) {
+            Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
+            sex = child == null ? null : child.getSex();
+        }
         super.onCreate(savedInstanceState);
         logger.debug("onCreate");
         setupDagger();

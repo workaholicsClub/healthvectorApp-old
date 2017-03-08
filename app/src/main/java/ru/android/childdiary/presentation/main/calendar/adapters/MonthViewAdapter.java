@@ -10,16 +10,16 @@ public class MonthViewAdapter extends CalendarViewAdapter {
     @Getter
     private int month, year;
 
-    public MonthViewAdapter(Context context) {
-        super(context);
+    public MonthViewAdapter(Context context, OnSelectedDateChanged onSelectedDateChanged) {
+        super(context, onSelectedDateChanged);
     }
 
     @Override
     protected void selectedDateChanged() {
-        int year = getSelectedDate().getYear();
-        int month = getSelectedDate().getMonthOfYear();
+        int year = selectedDate.getYear();
+        int month = selectedDate.getMonthOfYear();
         if (this.year != year || this.month != month) {
-            initCalendar(getSelectedDate());
+            initCalendar(selectedDate);
         }
     }
 
@@ -44,5 +44,17 @@ public class MonthViewAdapter extends CalendarViewAdapter {
             dates.add(current);
             current = current.plusDays(1);
         }
+    }
+
+    @Override
+    public void moveLeft() {
+        LocalDate date = selectedDate.minusMonths(1).withDayOfMonth(1);
+        setSelectedDate(date);
+    }
+
+    @Override
+    public void moveRight() {
+        LocalDate date = selectedDate.plusMonths(1).withDayOfMonth(1);
+        setSelectedDate(date);
     }
 }

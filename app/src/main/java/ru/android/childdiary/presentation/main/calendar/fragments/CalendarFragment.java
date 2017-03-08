@@ -14,6 +14,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import org.joda.time.LocalDate;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -22,8 +23,11 @@ import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.main.calendar.CalendarView;
 import ru.android.childdiary.presentation.main.calendar.adapters.CalendarViewAdapter;
 
-public abstract class CalendarFragment extends BaseMvpFragment<CalendarPresenter> implements CalendarView,
-        AdapterView.OnItemClickListener {
+public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> extends BaseMvpFragment<CalendarPresenter> implements CalendarView,
+        AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged {
+    @BindView(R.id.calendarTitle)
+    protected TextView calendarTitle;
+
     @InjectPresenter
     CalendarPresenter presenter;
 
@@ -33,7 +37,7 @@ public abstract class CalendarFragment extends BaseMvpFragment<CalendarPresenter
     @BindView(R.id.gridViewCalendar)
     GridView gridViewCalendar;
 
-    private CalendarViewAdapter adapter;
+    private Adapter adapter;
     private Sex sex;
 
     @Override
@@ -55,6 +59,7 @@ public abstract class CalendarFragment extends BaseMvpFragment<CalendarPresenter
         gridViewCalendar.setOnItemClickListener(this);
         adapter = getCalendarViewAdapter();
         gridViewCalendar.setAdapter(adapter);
+        updateTitle(adapter);
     }
 
     @Override
@@ -72,5 +77,22 @@ public abstract class CalendarFragment extends BaseMvpFragment<CalendarPresenter
         adapter.setSex(sex);
     }
 
-    protected abstract CalendarViewAdapter getCalendarViewAdapter();
+    protected abstract Adapter getCalendarViewAdapter();
+
+    @OnClick(R.id.left)
+    void moveLeft() {
+        adapter.moveLeft();
+    }
+
+    @OnClick(R.id.right)
+    void moveRight() {
+        adapter.moveRight();
+    }
+
+    @Override
+    public final void onSelectedDateChanged() {
+        updateTitle(adapter);
+    }
+
+    protected abstract void updateTitle(Adapter adapter);
 }

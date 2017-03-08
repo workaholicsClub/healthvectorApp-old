@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.main.MainActivity;
 
@@ -27,13 +28,13 @@ public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements 
     }
 
     @Override
-    public void startApp() {
+    public void startApp(@Nullable Child child) {
         finish();
-        navigateToMain();
+        navigateToMain(child);
     }
 
-    private void navigateToMain() {
-        Intent intent = MainActivity.getIntent(this);
+    private void navigateToMain(@Nullable Child child) {
+        Intent intent = MainActivity.getIntent(this, child);
         startActivity(intent);
     }
 }

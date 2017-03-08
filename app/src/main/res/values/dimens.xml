@@ -34,8 +34,19 @@
     <dimen name="image_picker_item_drawable_padding_horizontal">20dp</dimen>
     <dimen name="image_picker_item_text_padding_horizontal">20dp</dimen>
     <dimen name="image_picker_item_height">54dp</dimen>
+    <!-- calendar -->
+    <dimen name="calendar_title_height">54dp</dimen>
+    <dimen name="calendar_header_margin_horizontal">16dp</dimen>
+    <dimen name="calendar_header_margin_vertical">8dp</dimen>
+    <dimen name="calendar_grid_view_margin_horizontal">6dp</dimen>
+    <dimen name="calendar_horizontal_spacing">1dp</dimen>
+    <dimen name="calendar_vertical_spacing">1dp</dimen>
+    <dimen name="calendar_cell_size">32dp</dimen>
+    <!-- calendar grid view height: 7 * 32dp + 6 * 1dp = 230dp -->
+    <dimen name="calendar_grid_view_height">230dp</dimen>
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>
+    <dimen name="text_size_calendar">14sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
 </resources>

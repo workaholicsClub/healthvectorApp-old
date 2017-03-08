@@ -20,7 +20,7 @@ class ImagePickerActionAdapter extends BaseArrayAdapter<ImagePickerAction, Image
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.image_picker_item;
+        return R.layout.image_picker_action_item;
     }
 
     @Override
