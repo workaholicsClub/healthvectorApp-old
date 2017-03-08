@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -147,9 +146,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(2, false);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.white_transparent), ContextCompat.getColor(this, R.color.white));
-        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white));
-        tabLayout.setSelectedTabIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.selected_tab_indicator_height));
     }
 
     @Override
