@@ -38,7 +38,7 @@
             android:layout_alignTop="@+id/imageViewPhoto"
             android:gravity="center"
             android:text="@string/add_image_button_title"
-            android:textAppearance="@style/SecondaryTextAppearance" />
+            android:textAppearance="@style/PlaceholderTextAppearance" />
 
         <ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText
             android:id="@+id/editTextChildName"
@@ -65,7 +65,7 @@
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:layout_marginTop="@dimen/profile_margin_vertical"
         android:text="@string/sex"
-        android:textAppearance="@style/SecondaryTextAppearance" />
+        android:textAppearance="@style/PlaceholderTextAppearance" />
 
     <TextView
         android:id="@+id/textViewSex"
@@ -77,7 +77,7 @@
         android:gravity="center_vertical"
         android:text="@string/select_sex"
         android:textAppearance="@style/PrimaryTextAppearance"
-        android:textColor="@color/secondary_text" />
+        android:textColor="@color/placeholder_text" />
 
     <TextView
         android:layout_width="match_parent"
@@ -86,7 +86,7 @@
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:layout_marginTop="@dimen/profile_margin_vertical"
         android:text="@string/birth_date_and_time"
-        android:textAppearance="@style/SecondaryTextAppearance" />
+        android:textAppearance="@style/PlaceholderTextAppearance" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -106,7 +106,7 @@
             android:gravity="center_vertical"
             android:text="@string/date"
             android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColor="@color/secondary_text" />
+            android:textColor="@color/placeholder_text" />
 
         <TextView
             android:id="@+id/textViewTime"
@@ -117,7 +117,7 @@
             android:gravity="center_vertical"
             android:text="@string/time"
             android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColor="@color/secondary_text" />
+            android:textColor="@color/placeholder_text" />
     </LinearLayout>
 
     <TextView
@@ -127,7 +127,7 @@
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:layout_marginTop="@dimen/profile_margin_vertical"
         android:text="@string/birth_height_and_weight"
-        android:textAppearance="@style/SecondaryTextAppearance" />
+        android:textAppearance="@style/PlaceholderTextAppearance" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -148,7 +148,7 @@
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
             android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColorHint="@color/secondary_text"
+            android:textColorHint="@color/placeholder_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
 
         <ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText
@@ -161,7 +161,7 @@
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
             android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColorHint="@color/secondary_text"
+            android:textColorHint="@color/placeholder_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
 
         <View

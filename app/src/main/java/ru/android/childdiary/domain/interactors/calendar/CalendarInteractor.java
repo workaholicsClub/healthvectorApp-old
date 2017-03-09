@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -59,26 +60,31 @@ public class CalendarInteractor implements Interactor, CalendarRepository {
 
     @Override
     public Observable<DiaperEvent> add(@NonNull Child child, @NonNull DiaperEvent event) {
+        event = event.toBuilder().eventType(EventType.DIAPER).build();
         return calendarRepository.add(child, event);
     }
 
     @Override
     public Observable<FeedEvent> add(@NonNull Child child, @NonNull FeedEvent event) {
+        event = event.toBuilder().eventType(EventType.FEED).build();
         return calendarRepository.add(child, event);
     }
 
     @Override
     public Observable<OtherEvent> add(@NonNull Child child, @NonNull OtherEvent event) {
+        event = event.toBuilder().eventType(EventType.OTHER).build();
         return calendarRepository.add(child, event);
     }
 
     @Override
     public Observable<PumpEvent> add(@NonNull Child child, @NonNull PumpEvent event) {
+        event = event.toBuilder().eventType(EventType.PUMP).build();
         return calendarRepository.add(child, event);
     }
 
     @Override
     public Observable<SleepEvent> add(@NonNull Child child, @NonNull SleepEvent event) {
+        event = event.toBuilder().eventType(EventType.SLEEP).build();
         return calendarRepository.add(child, event);
     }
 

@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.main.calendar.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,11 @@ import android.view.ViewGroup;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import java.util.List;
+
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
@@ -34,5 +38,9 @@ public class DayFragment extends BaseMvpFragment<CalendarPresenter> implements C
 
     @Override
     public void setActive(@Nullable Child child) {
+    }
+
+    @Override
+    public void showEvents(@NonNull List<MasterEvent> events) {
     }
 }

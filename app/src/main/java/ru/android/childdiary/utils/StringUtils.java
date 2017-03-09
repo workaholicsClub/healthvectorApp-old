@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Child;
 
@@ -74,5 +75,26 @@ public class StringUtils {
         return childList == null
                 ? "null"
                 : Arrays.toString(childList.toArray(new Child[childList.size()]));
+    }
+
+    @Nullable
+    public static String eventType(Context context, @Nullable EventType eventType) {
+        if (eventType == null) {
+            return null;
+        }
+        switch (eventType) {
+            case DIAPER:
+                return context.getString(R.string.event_diaper);
+            case SLEEP:
+                return context.getString(R.string.event_sleep);
+            case FEED:
+                return context.getString(R.string.event_feed);
+            case PUMP:
+                return context.getString(R.string.event_pump);
+            case OTHER:
+                return context.getString(R.string.event_other);
+            default:
+                return null;
+        }
     }
 }

@@ -39,7 +39,7 @@ public class ThemeUtils {
     }
 
     @StyleRes
-    public static int getThemeDialog(@Nullable Sex sex) {
+    public static int getThemeDialogRes(@Nullable Sex sex) {
         return map.get(sex).getThemeDialogResourceId();
     }
 

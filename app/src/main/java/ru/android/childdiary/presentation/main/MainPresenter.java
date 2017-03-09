@@ -8,6 +8,8 @@ import com.arellomobile.mvp.InjectViewState;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 import java.util.List;
 
@@ -17,6 +19,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.core.events.ActiveChildChangedEvent;
+import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -26,6 +35,9 @@ import ru.android.childdiary.utils.StringUtils;
 public class MainPresenter extends BasePresenter<MainView> {
     @Inject
     ChildInteractor childInteractor;
+
+    @Inject
+    CalendarInteractor calendarInteractor;
 
     @Inject
     EventBus bus;
@@ -130,5 +142,44 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     private void onDeleteChild(Child child) {
         logger.debug("onDeleteChild: " + child);
+    }
+
+    public void addDiaperEvent() {
+        unsubscribeOnDestroy(calendarInteractor.add(activeChild, DiaperEvent.builder().dateTime(DateTime.now()).build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onEventAdded, this::onUnexpectedError));
+    }
+
+    public void addSleepEvent() {
+        unsubscribeOnDestroy(calendarInteractor.add(activeChild, SleepEvent.builder().dateTime(DateTime.now()).build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onEventAdded, this::onUnexpectedError));
+    }
+
+    public void addFeedEvent() {
+        unsubscribeOnDestroy(calendarInteractor.add(activeChild, FeedEvent.builder().dateTime(DateTime.now()).build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onEventAdded, this::onUnexpectedError));
+    }
+
+    public void addPumpEventClick() {
+        unsubscribeOnDestroy(calendarInteractor.add(activeChild, PumpEvent.builder().dateTime(DateTime.now()).build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onEventAdded, this::onUnexpectedError));
+    }
+
+    public void addOtherEventClick() {
+        unsubscribeOnDestroy(calendarInteractor.add(activeChild, OtherEvent.builder().dateTime(DateTime.now()).build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onEventAdded, this::onUnexpectedError));
+    }
+
+    private void onEventAdded(MasterEvent event) {
+        logger.debug("onEventAdded: " + event);
     }
 }

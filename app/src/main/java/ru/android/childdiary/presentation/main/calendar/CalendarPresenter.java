@@ -7,6 +7,9 @@ import com.arellomobile.mvp.InjectViewState;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.joda.time.LocalDate;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -14,6 +17,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.core.events.ActiveChildChangedEvent;
+import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -22,6 +27,9 @@ import ru.android.childdiary.presentation.core.BasePresenter;
 public class CalendarPresenter extends BasePresenter<CalendarView> {
     @Inject
     ChildInteractor childInteractor;
+
+    @Inject
+    CalendarInteractor calendarInteractor;
 
     @Inject
     EventBus bus;
@@ -69,7 +77,21 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
                 activeChild = child;
             }
             getViewState().setActive(activeChild);
-            // TODO: загрузить события календаря выбранного ребенка
         }
+    }
+
+    public void getCalendarEvents(LocalDate date) {
+        if (activeChild == null) {
+            logger.warn("getCalendarEvents: active child is null");
+            return;
+        }
+        unsubscribeOnDestroy(calendarInteractor.getAll(activeChild, LocalDate.now())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGetCalendarEvents, this::onUnexpectedError));
+    }
+
+    private void onGetCalendarEvents(@NonNull List<MasterEvent> events) {
+        getViewState().showEvents(events);
     }
 }

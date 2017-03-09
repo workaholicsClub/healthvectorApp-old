@@ -34,7 +34,7 @@
         android:background="@color/background">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/events"
+            android:id="@+id/recyclerViewEvents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/calendar_header_margin_vertical" />

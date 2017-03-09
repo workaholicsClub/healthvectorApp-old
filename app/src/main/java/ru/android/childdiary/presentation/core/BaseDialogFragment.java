@@ -69,7 +69,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 != PackageManager.PERMISSION_GRANTED) {
             permissionInfoMap.put(permissionInfo.getRequestCode(), permissionInfo);
             if (shouldShowRequestPermissionRationale(permission)) {
-                new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(sex))
+                new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialogRes(sex))
                         .setTitle(permissionInfo.getTitleResourceId())
                         .setMessage(permissionInfo.getTextResourceId())
                         .setPositiveButton(R.string.OK,

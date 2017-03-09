@@ -55,7 +55,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
-            new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(getSex()))
+            new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialogRes(getSex()))
                     .setMessage(e.toString())
                     .setPositiveButton(R.string.OK, null)
                     .show();

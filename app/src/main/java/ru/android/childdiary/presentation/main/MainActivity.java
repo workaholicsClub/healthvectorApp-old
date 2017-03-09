@@ -173,7 +173,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void showChildList(List<Child> childList) {
+    public void showChildList(@NonNull List<Child> childList) {
         List<IProfile> profiles = new ArrayList<>();
 
         if (!childList.isEmpty()) {
@@ -236,7 +236,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void confirmDeleteChild(@NonNull Child child) {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialog(sex))
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(sex))
                 .setTitle(getString(R.string.remove_child_confirmation_title, child.getName()))
                 .setMessage(R.string.remove_child_confirmation_text)
                 .setPositiveButton(R.string.Yes,
@@ -364,27 +364,27 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @OnClick(R.id.addDiaperEvent)
     void onAddDiaperEventClick() {
-
+        presenter.addDiaperEvent();
     }
 
     @OnClick(R.id.addSleepEvent)
     void onAddSleepEventClick() {
-
+        presenter.addSleepEvent();
     }
 
     @OnClick(R.id.addFeedEvent)
     void onAddFeedEventClick() {
-
+        presenter.addFeedEvent();
     }
 
     @OnClick(R.id.addPumpEvent)
     void onAddPumpEventClick() {
-
+        presenter.addPumpEventClick();
     }
 
     @OnClick(R.id.addOtherEvent)
     void onAddOtherEventClick() {
-
+        presenter.addOtherEventClick();
     }
 
     private void closeDrawerWithoutAnimation() {

@@ -16,7 +16,7 @@ import ru.android.childdiary.data.types.Sex;
 
 public class WidgetsUtils {
     public static void setupTextView(TextView textView, boolean enabled) {
-        @ColorRes int colorRes = enabled ? R.color.primary_text : R.color.secondary_text;
+        @ColorRes int colorRes = enabled ? R.color.primary_text : R.color.placeholder_text;
         @ColorInt int color = ContextCompat.getColor(textView.getContext(), colorRes);
         textView.setTextColor(color);
     }

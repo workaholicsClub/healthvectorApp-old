@@ -44,6 +44,9 @@
     <dimen name="calendar_cell_size">32dp</dimen>
     <!-- calendar grid view height: 7 * 32dp + 6 * 1dp = 230dp -->
     <dimen name="calendar_grid_view_height">230dp</dimen>
+    <!-- event row -->
+    <dimen name="event_row_height">42dp</dimen>
+    <dimen name="event_row_padding_horizontal">8dp</dimen>
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>
