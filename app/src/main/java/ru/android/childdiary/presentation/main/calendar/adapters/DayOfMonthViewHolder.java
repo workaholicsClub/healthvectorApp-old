@@ -9,7 +9,7 @@ import org.joda.time.LocalDate;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
-import ru.android.childdiary.utils.ui.ThemeUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 class DayOfMonthViewHolder extends BaseViewHolder<LocalDate> {
     @BindView(R.id.textViewDayOfMonth)
@@ -26,8 +26,12 @@ class DayOfMonthViewHolder extends BaseViewHolder<LocalDate> {
 
     public void select(CalendarViewAdapter adapter, LocalDate item) {
         boolean isSelected = adapter.getSelectedDate().isEqual(item);
-        textViewDayOfMonth.setBackgroundColor(isSelected
-                ? ThemeUtils.getColorAccent(adapter.getContext(), adapter.getSex())
-                : 0);
+        textViewDayOfMonth.setBackgroundResource(isSelected
+                ? ResourcesUtils.getSelectedDateBackground(adapter.getSex())
+                : R.drawable.calendar_cell_background);
+        //noinspection deprecation
+        textViewDayOfMonth.setTextAppearance(adapter.getContext(), isSelected
+                ? R.style.CalendarDayOfMonthSelectedTextAppearance
+                : R.style.CalendarDayOfMonthTextAppearance);
     }
 }

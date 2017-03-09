@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,12 +10,11 @@
         android:id="@+id/topPanel"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_top_panel_height"
-        android:background="?colorPrimary"
         android:elevation="@dimen/toolbar_elevation"
         android:orientation="horizontal"
         tools:ignore="UnusedAttribute">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.mikepenz.materialdrawer.view.BezelImageView
             android:id="@+id/imageViewPhoto"
             android:layout_width="@dimen/profile_image_size"
             android:layout_height="@dimen/profile_image_size"
@@ -23,7 +23,8 @@
             android:layout_marginLeft="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_marginTop="@dimen/profile_margin_vertical"
-            android:src="@color/white" />
+            android:src="@color/white"
+            app:biv_selectorOnPress="@android:color/transparent" />
 
         <TextView
             android:id="@+id/textViewPhoto"

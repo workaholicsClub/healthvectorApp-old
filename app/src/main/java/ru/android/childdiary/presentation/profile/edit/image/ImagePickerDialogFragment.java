@@ -29,7 +29,7 @@ import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseDialogFragment;
 import ru.android.childdiary.presentation.core.RequestPermissionInfo;
-import ru.android.childdiary.utils.ui.WidgetUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -200,7 +200,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         options.setCropGridRowCount(0);
         options.setShowCropFrame(false);
 
-        WidgetUtils.setupCropActivityToolbar(getActivity(), options, sex);
+        WidgetsUtils.setupCropActivityToolbar(getActivity(), options, sex);
 
         uCrop.withOptions(options);
 

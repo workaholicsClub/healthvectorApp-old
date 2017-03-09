@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -27,7 +26,6 @@ import android.widget.PopupWindow;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -42,6 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -53,9 +52,12 @@ import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
 import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
+import ru.android.childdiary.presentation.main.drawer.CustomPrimaryDrawerItem;
+import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
@@ -70,6 +72,27 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private static final int PROFILE_SETTINGS_DELETE = 3;
     private static final int PROFILE_SETTINGS_USER = 10;
 
+    private final PrimaryDrawerItem[] drawerItems = new PrimaryDrawerItem[]{
+            new CustomPrimaryDrawerItem()
+                    .withName(R.string.drawer_item_calendar)
+                    .withOnDrawerItemClickListener(this),
+            new CustomPrimaryDrawerItem()
+                    .withName(R.string.drawer_item_development_diary)
+                    .withOnDrawerItemClickListener(this),
+            new CustomPrimaryDrawerItem()
+                    .withName(R.string.drawer_item_exercises)
+                    .withOnDrawerItemClickListener(this),
+            new CustomPrimaryDrawerItem()
+                    .withName(R.string.drawer_item_medical_data)
+                    .withOnDrawerItemClickListener(this),
+            new CustomPrimaryDrawerItem()
+                    .withName(R.string.drawer_item_settings)
+                    .withOnDrawerItemClickListener(this),
+            new CustomPrimaryDrawerItem()
+                    .withName(R.string.drawer_item_help)
+                    .withOnDrawerItemClickListener(this)
+    };
+
     @InjectPresenter
     MainPresenter presenter;
 
@@ -78,6 +101,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @BindView(R.id.viewPager)
     ViewPager viewPager;
+
+    @BindView(R.id.fabToolbar)
+    FabToolbar fabToolbar;
 
     private AccountHeader accountHeader;
     private Drawer drawer;
@@ -117,9 +143,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(2, false);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.white_transparent), ContextCompat.getColor(this, R.color.white));
-        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white));
-        tabLayout.setSelectedTabIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.selected_tab_indicator_height));
     }
 
     @Override
@@ -132,8 +155,20 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void themeChanged() {
         super.themeChanged();
         tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
+        fabToolbar.setColor(ThemeUtils.getColorAccent(this, sex));
         if (accountHeader != null) {
             accountHeader.setBackground(ThemeUtils.getColorPrimaryDrawable(this, sex));
+        }
+        updateDrawerItems(true);
+    }
+
+    private void updateDrawerItems(boolean notify) {
+        int[] icons = ResourcesUtils.getNavigationDrawerItemResources(sex);
+        for (int i = 0; i < Math.min(icons.length, drawerItems.length); ++i) {
+            drawerItems[i].withIcon(icons[i]);
+        }
+        if (notify && drawer != null) {
+            drawer.getAdapter().notifyDataSetChanged();
         }
     }
 
@@ -181,7 +216,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withNameShown(true)
                 .withTag(child)
                 .withIdentifier(mapToProfileId(child))
-                .withIcon(ThemeUtils.getChildIcon(this, child));
+                .withIcon(ResourcesUtils.getChildIcon(this, child));
     }
 
     @Override
@@ -288,21 +323,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
         setupToolbar();
 
-        View container = accountHeader.getView().findViewById(R.id.material_drawer_account_header);
-        setUnclickable(container);
-
         View switcherWrapper = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher_wrapper);
         switcherWrapper.setOnClickListener(this);
 
         switcherImage = ButterKnife.findById(accountHeader.getView(), R.id.material_drawer_account_header_text_switcher);
         switcherImage.setImageResource(R.drawable.arrow_down_white);
-    }
-
-    private void setUnclickable(View view) {
-        view.setOnClickListener(null);
-        view.setClickable(false);
-        view.setFocusable(false);
-        view.setFocusableInTouchMode(false);
     }
 
     private void animateSwitcherIn() {
@@ -328,37 +353,38 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void buildDrawer() {
+        updateDrawerItems(false);
         drawerBuilder = new CustomDrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
-                .addDrawerItems(
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_calendar)
-                                .withIcon(FontAwesome.Icon.faw_cart_plus)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_development_diary)
-                                .withIcon(FontAwesome.Icon.faw_database)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_exercises)
-                                .withIcon(FontAwesome.Icon.faw_github)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_medical_data)
-                                .withIcon(FontAwesome.Icon.faw_amazon)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_settings)
-                                .withIcon(FontAwesome.Icon.faw_cog)
-                                .withOnDrawerItemClickListener(this),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_item_help)
-                                .withIcon(FontAwesome.Icon.faw_question)
-                                .withOnDrawerItemClickListener(this)
-                );
+                .addDrawerItems(drawerItems);
         drawer = drawerBuilder.build();
+    }
+
+    @OnClick(R.id.addDiaperEvent)
+    void onAddDiaperEventClick() {
+
+    }
+
+    @OnClick(R.id.addSleepEvent)
+    void onAddSleepEventClick() {
+
+    }
+
+    @OnClick(R.id.addFeedEvent)
+    void onAddFeedEventClick() {
+
+    }
+
+    @OnClick(R.id.addPumpEvent)
+    void onAddPumpEventClick() {
+
+    }
+
+    @OnClick(R.id.addOtherEvent)
+    void onAddOtherEventClick() {
+
     }
 
     private void closeDrawerWithoutAnimation() {
@@ -367,16 +393,32 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         }
     }
 
+    private boolean closeDrawer() {
+        if (drawer != null && drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void onBackPressed() {
-        boolean dismissed = dismissPopupWindow();
-        if (!dismissed) {
-            if (drawer != null && drawer.isDrawerOpen()) {
-                drawer.closeDrawer();
-            } else {
-                super.onBackPressed();
-            }
+        boolean processed = dismissPopupWindow();
+        if (processed) {
+            return;
         }
+
+        processed = closeDrawer();
+        if (processed) {
+            return;
+        }
+
+        processed = fabToolbar.hide();
+        if (processed) {
+            return;
+        }
+
+        super.onBackPressed();
     }
 
     @Override

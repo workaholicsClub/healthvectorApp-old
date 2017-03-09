@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,35 +14,23 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
-import org.joda.time.format.DateTimeFormatter;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
+import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresenter> implements ProfileReviewView {
     @InjectPresenter
     ProfileReviewPresenter presenter;
-
-    @Inject
-    @Named(ApplicationModule.DATE_FORMATTER)
-    DateTimeFormatter dateFormatter;
-
-    @Inject
-    @Named(ApplicationModule.TIME_FORMATTER)
-    DateTimeFormatter timeFormatter;
 
     @BindView(R.id.topPanel)
     View topPanel;
@@ -102,18 +89,18 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     protected void themeChanged() {
         super.themeChanged();
         topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(sex));
-        buttonEdit.setBackgroundResource(ThemeUtils.getButtonBackgroundRes(sex, true));
+        buttonEdit.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(sex, true));
     }
 
     private void setupViews(@NonNull Child child) {
-        imageViewPhoto.setImageDrawable(ThemeUtils.getChildIcon(this, child));
+        imageViewPhoto.setImageDrawable(ResourcesUtils.getChildIcon(this, child));
 
         textViewName.setText(child.getName());
 
         textViewSex.setText(StringUtils.sex(this, child.getSex()));
 
-        textViewDate.setText(StringUtils.date(child.getBirthDate(), dateFormatter));
-        textViewTime.setText(StringUtils.time(child.getBirthTime(), timeFormatter));
+        textViewDate.setText(DateUtils.date(child.getBirthDate()));
+        textViewTime.setText(DateUtils.time(child.getBirthTime()));
 
         textViewBirthHeight.setText(DoubleUtils.heightReview(this, child.getBirthHeight()));
         textViewBirthWeight.setText(DoubleUtils.weightReview(this, child.getBirthWeight()));
@@ -153,7 +140,7 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
         }
     }
 
-    private void navigateToProfileEdit(@Nullable Child child) {
+    private void navigateToProfileEdit(@NonNull Child child) {
         Intent intent = ProfileEditActivity.getIntent(this, child);
         startActivity(intent);
     }

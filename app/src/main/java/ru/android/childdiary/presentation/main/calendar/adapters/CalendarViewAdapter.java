@@ -44,9 +44,11 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
     protected LocalDate selectedDate;
     @Getter
     protected Sex sex;
+    private OnSelectedDateChanged onSelectedDateChanged;
 
-    public CalendarViewAdapter(Context context) {
+    public CalendarViewAdapter(Context context, OnSelectedDateChanged onSelectedDateChanged) {
         super(context);
+        this.onSelectedDateChanged = onSelectedDateChanged;
         selectedDate = today = LocalDate.now();
         initCalendar(selectedDate);
     }
@@ -70,6 +72,9 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
             selectedDate = value;
             selectedDateChanged();
             notifyDataSetChanged();
+            if (onSelectedDateChanged != null) {
+                onSelectedDateChanged.onSelectedDateChanged();
+            }
         }
     }
 
@@ -129,5 +134,13 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
     protected void bindSecond(int position, LocalDate item, DayOfMonthViewHolder viewHolder) {
         super.bindSecond(position, item, viewHolder);
         viewHolder.select(this, item);
+    }
+
+    public abstract void moveLeft();
+
+    public abstract void moveRight();
+
+    public interface OnSelectedDateChanged {
+        void onSelectedDateChanged();
     }
 }

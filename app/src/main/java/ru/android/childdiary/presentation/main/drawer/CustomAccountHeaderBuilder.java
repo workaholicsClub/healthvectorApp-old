@@ -6,6 +6,6 @@ import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 
 public class CustomAccountHeaderBuilder extends AccountHeaderBuilder {
     @Override
-    protected void toggleSelectionList(Context ctx) {
+    protected void toggleSelectionList(Context context) {
     }
 }

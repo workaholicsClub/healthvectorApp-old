@@ -14,7 +14,7 @@ import com.yalantis.ucrop.UCrop;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 
-public class WidgetUtils {
+public class WidgetsUtils {
     public static void setupTextView(TextView textView, boolean enabled) {
         @ColorRes int colorRes = enabled ? R.color.primary_text : R.color.secondary_text;
         @ColorInt int color = ContextCompat.getColor(textView.getContext(), colorRes);
