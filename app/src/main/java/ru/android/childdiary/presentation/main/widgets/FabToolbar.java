@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.main.widgets;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
@@ -26,7 +27,8 @@ public class FabToolbar extends RevealFrameLayout {
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
-    private float screenWidth;
+    private int cx, cy;
+    private int screenWidth;
 
     public FabToolbar(Context context) {
         super(context);
@@ -45,6 +47,17 @@ public class FabToolbar extends RevealFrameLayout {
 
     private void init() {
         screenWidth = getResources().getDisplayMetrics().widthPixels;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int fabSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
+            int fabMargin = getResources().getDimensionPixelSize(R.dimen.fab_margin);
+            int distanceFromScreenEdge = fabSize / 2 + fabMargin;
+            int toolbarHeight = getResources().getDimensionPixelSize(R.dimen.fab_toolbar_height);
+            cx = screenWidth - distanceFromScreenEdge;
+            cx = cx < 0 ? 0 : cx;
+            cy = toolbarHeight - distanceFromScreenEdge;
+            cy = cy < 0 ? 0 : cy;
+        }
+
         inflate(getContext(), R.layout.fab_toolbar, this);
         ButterKnife.bind(this);
         fab.setOnClickListener(onFabClickListener);
@@ -56,6 +69,11 @@ public class FabToolbar extends RevealFrameLayout {
     }
 
     public void show() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            cx = (fab.getLeft() + fab.getRight()) / 2;
+            cy = (fab.getTop() + fab.getBottom()) / 2;
+        }
+
         fab.setOnClickListener(null);
         fab.hide();
         bottomPanel.setVisibility(VISIBLE);
@@ -72,9 +90,6 @@ public class FabToolbar extends RevealFrameLayout {
     }
 
     private void animateCircle(float startRadius, float endRadius, SupportAnimator.AnimatorListener listener) {
-        int cx = (fab.getLeft() + fab.getRight()) / 2;
-        int cy = (fab.getTop() + fab.getBottom()) / 2;
-
         SupportAnimator animator = ViewAnimationUtils.createCircularReveal(bottomPanel, cx, cy, startRadius, endRadius);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(ANIMATION_DURATION);
