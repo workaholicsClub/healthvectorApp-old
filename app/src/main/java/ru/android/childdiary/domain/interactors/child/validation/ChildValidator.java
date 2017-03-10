@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.interactors.child;
+package ru.android.childdiary.domain.interactors.child.validation;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.Validator;
+import ru.android.childdiary.domain.interactors.child.Child;
 
-@Singleton
 public class ChildValidator extends Validator<Child, ChildValidationResult> {
     private final Context context;
 

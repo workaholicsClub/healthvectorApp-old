@@ -26,7 +26,7 @@ public interface MainView extends BaseView {
     void editChild(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void reviewChild(@NonNull Child child);
+    void reviewChild();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void confirmDeleteChild(@NonNull Child child);

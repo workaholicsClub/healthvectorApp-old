@@ -10,8 +10,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
-import ru.android.childdiary.domain.interactors.child.ChildResponse;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.StringUtils;
 
@@ -38,15 +38,16 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                                 .doOnNext(zero -> logger.debug("timer finished")),
                         childInteractor
                                 .getAll()
-                                .doOnNext(childResponse -> logger.debug("data loaded: " + StringUtils.childList(childResponse.getChildList())))
-                                .doOnNext(childResponse -> logger.debug("active child: " + childResponse.getActiveChild())),
+                                .doOnNext(childList -> logger.debug("data loaded: " + StringUtils.childList(childList)))
+                                .flatMap(childList -> childInteractor.getActiveChild())
+                                .doOnNext(child -> logger.debug("active child: " + child)),
                         (zero, childResponse) -> childResponse)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::startApp, this::onUnexpectedError));
     }
 
-    private void startApp(ChildResponse childResponse) {
+    private void startApp(Child child) {
         logger.debug("startApp");
         getViewState().startApp();
     }

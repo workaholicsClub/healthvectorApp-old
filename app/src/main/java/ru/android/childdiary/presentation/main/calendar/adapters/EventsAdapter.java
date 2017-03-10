@@ -1,6 +1,8 @@
 package ru.android.childdiary.presentation.main.calendar.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +18,26 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     private final Context context;
     private final LayoutInflater inflater;
-    private final Sex sex;
-    private final List<MasterEvent> events;
+    private Sex sex;
+    private List<MasterEvent> events;
 
-    public EventsAdapter(Context context, Sex sex, List<MasterEvent> events) {
+    public EventsAdapter(Context context, @NonNull List<MasterEvent> events) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
-        this.sex = sex;
         this.events = Collections.unmodifiableList(events);
+    }
+
+    public void setSex(@Nullable Sex sex) {
+        if (this.sex != sex) {
+            this.sex = sex;
+            notifyDataSetChanged();
+        }
+    }
+
+    public void setEvents(@NonNull List<MasterEvent> events) {
+        // TODO: здесь можно рассчитать разницу
+        this.events = Collections.unmodifiableList(events);
+        notifyDataSetChanged();
     }
 
     @Override

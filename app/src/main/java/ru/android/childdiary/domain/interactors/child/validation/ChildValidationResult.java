@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.interactors.child;
+package ru.android.childdiary.domain.interactors.child.validation;
 
 import lombok.Getter;
 import ru.android.childdiary.domain.core.ValidationResult;

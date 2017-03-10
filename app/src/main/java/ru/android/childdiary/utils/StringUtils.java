@@ -10,8 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Breast;
+import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.data.types.FeedType;
+import ru.android.childdiary.data.types.FoodMeasure;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class StringUtils {
@@ -71,10 +76,50 @@ public class StringUtils {
         }
     }
 
-    public static String childList(@Nullable List<Child> childList) {
-        return childList == null
+    public static String childList(@Nullable List<Child> list) {
+        return list == null
                 ? "null"
-                : Arrays.toString(childList.toArray(new Child[childList.size()]));
+                : Arrays.toString(list.toArray(new Child[list.size()]));
+    }
+
+    public static String eventsList(@Nullable List<MasterEvent> list) {
+        return list == null
+                ? "null"
+                : Arrays.toString(list.toArray(new MasterEvent[list.size()]));
+    }
+
+    @Nullable
+    public static String breast(Context context, @Nullable Breast breast) {
+        if (breast == null) {
+            return null;
+        }
+        switch (breast) {
+            case LEFT:
+                return context.getString(R.string.breast_left);
+            case RIGHT:
+                return context.getString(R.string.breast_right);
+            default:
+                return null;
+        }
+    }
+
+    @Nullable
+    public static String diaperState(Context context, @Nullable DiaperState diaperState) {
+        if (diaperState == null) {
+            return null;
+        }
+        switch (diaperState) {
+            case DIRTY:
+                return context.getString(R.string.diaper_state_dirty);
+            case DRY:
+                return context.getString(R.string.diaper_state_dry);
+            case MIXED:
+                return context.getString(R.string.diaper_state_mixed);
+            case WET:
+                return context.getString(R.string.diaper_state_wet);
+            default:
+                return null;
+        }
     }
 
     @Nullable
@@ -93,6 +138,42 @@ public class StringUtils {
                 return context.getString(R.string.event_pump);
             case OTHER:
                 return context.getString(R.string.event_other);
+            default:
+                return null;
+        }
+    }
+
+    @Nullable
+    public static String feedType(Context context, @Nullable FeedType feedType) {
+        if (feedType == null) {
+            return null;
+        }
+        switch (feedType) {
+            case BREAST_MILK:
+                return context.getString(R.string.feed_type_breast_milk);
+            case PUMPED_MILK:
+                return context.getString(R.string.feed_type_pumped_milk);
+            case MILK_FORMULA:
+                return context.getString(R.string.feed_type_milk_formula);
+            case FOOD:
+                return context.getString(R.string.feed_type_food);
+            default:
+                return null;
+        }
+    }
+
+    @Nullable
+    public static String foodMeasure(Context context, @Nullable FoodMeasure foodMeasure) {
+        if (foodMeasure == null) {
+            return null;
+        }
+        switch (foodMeasure) {
+            case GRAMS:
+                return context.getString(R.string.food_measure_grams);
+            case MILLILITRES:
+                return context.getString(R.string.food_measure_millilitres);
+            case OTHER:
+                return context.getString(R.string.food_measure_other);
             default:
                 return null;
         }

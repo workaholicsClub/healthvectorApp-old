@@ -110,6 +110,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     protected final void changeThemeIfNeeded(@Nullable Sex sex) {
         if (this.sex != sex) {
+            logger.debug("theme switched");
             this.sex = sex;
             setupToolbarColor();
             themeChanged();

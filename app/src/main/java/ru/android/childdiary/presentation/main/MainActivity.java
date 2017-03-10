@@ -133,6 +133,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupViewPager();
+        buildUi();
     }
 
     private void setupViewPager() {
@@ -142,6 +143,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         adapter.addFragment(new MonthFragment(), getString(R.string.month));
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(2, false);
+        viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -174,6 +176,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void showChildList(@NonNull List<Child> childList) {
+        logger.debug("showChildList: " + StringUtils.childList(childList));
+
         List<IProfile> profiles = new ArrayList<>();
 
         if (!childList.isEmpty()) {
@@ -193,11 +197,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         profiles.addAll(Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList()));
 
         closeDrawerWithoutAnimation();
-        buildUi(profiles);
+        if (accountHeader != null) {
+            accountHeader.setProfiles(profiles);
+        }
     }
 
     @Override
     public void setActive(@Nullable Child child) {
+        logger.debug("setActive: " + child);
         changeThemeIfNeeded(child);
         if (child == null) {
             getSupportActionBar().setTitle(R.string.app_name);
@@ -230,8 +237,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void reviewChild(@NonNull Child child) {
-        navigateToProfileReview(child);
+    public void reviewChild() {
+        navigateToProfileReview();
     }
 
     @Override
@@ -291,14 +298,18 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         dismissPopupWindow();
-        if (id > PROFILE_SETTINGS_USER) {
-            presenter.toggleChild(mapToChildId(id));
-        } else if (id == PROFILE_SETTINGS_EDIT) {
-            presenter.editChild();
-        } else if (id == PROFILE_SETTINGS_ADD) {
-            presenter.addChild();
-        } else if (id == PROFILE_SETTINGS_DELETE) {
-            presenter.deleteChild();
+        IProfile profile = accountHeader.getProfiles().get(position);
+        if (profile instanceof ProfileDrawerItem) {
+            Child child = (Child) ((ProfileDrawerItem) profile).getTag();
+            presenter.toggleChild(child);
+        } else if (profile instanceof ProfileSettingDrawerItem) {
+            if (id == PROFILE_SETTINGS_EDIT) {
+                presenter.editChild();
+            } else if (id == PROFILE_SETTINGS_ADD) {
+                presenter.addChild();
+            } else if (id == PROFILE_SETTINGS_DELETE) {
+                presenter.deleteChild();
+            }
         }
     }
 
@@ -317,8 +328,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         return false;
     }
 
-    private void buildUi(List<IProfile> profiles) {
-        buildHeader(profiles);
+    private void buildUi() {
+        buildHeader();
         buildDrawer();
 
         setupToolbar();
@@ -340,7 +351,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         ViewCompat.animate(switcherImage).rotation(0).start();
     }
 
-    private void buildHeader(List<IProfile> profiles) {
+    private void buildHeader() {
         accountHeader = new CustomAccountHeaderBuilder()
                 .withActivity(this)
                 .withCompactStyle(true)
@@ -348,7 +359,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withAccountHeader(R.layout.account_header)
                 .withHeightRes(R.dimen.account_header_height)
                 .withHeaderBackground(ThemeUtils.getColorPrimaryDrawable(this, sex))
-                .addProfiles(profiles.toArray(new IProfile[profiles.size()]))
                 .build();
     }
 
@@ -476,8 +486,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         startActivity(intent);
     }
 
-    private void navigateToProfileReview(@NonNull Child child) {
-        Intent intent = ProfileReviewActivity.getIntent(this, child);
+    private void navigateToProfileReview() {
+        Intent intent = ProfileReviewActivity.getIntent(this);
         startActivity(intent);
     }
 }

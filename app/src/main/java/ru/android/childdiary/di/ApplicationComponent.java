@@ -45,9 +45,4 @@ public interface ApplicationComponent {
     void inject(ProfileEditActivity activity);
 
     void inject(ProfileReviewActivity activity);
-
-    // interactors
-    void inject(ChildInteractor interactor);
-
-    void inject(AntropometryInteractor interactor);
 }

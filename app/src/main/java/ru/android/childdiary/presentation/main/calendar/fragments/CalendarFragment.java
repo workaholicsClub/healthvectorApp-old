@@ -16,6 +16,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import org.joda.time.LocalDate;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,6 +30,7 @@ import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.main.calendar.CalendarView;
 import ru.android.childdiary.presentation.main.calendar.adapters.CalendarViewAdapter;
 import ru.android.childdiary.presentation.main.calendar.adapters.EventsAdapter;
+import ru.android.childdiary.utils.StringUtils;
 
 public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> extends BaseMvpFragment<CalendarPresenter> implements CalendarView,
         AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged {
@@ -47,7 +49,8 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @BindView(R.id.recyclerViewEvents)
     RecyclerView recyclerViewEvents;
 
-    private Adapter adapter;
+    private Adapter calendarAdapter;
+    private EventsAdapter eventsAdapter;
     private Sex sex;
 
     @Override
@@ -67,51 +70,62 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         gridViewCalendar.setOnItemClickListener(this);
-        adapter = getCalendarViewAdapter();
-        gridViewCalendar.setAdapter(adapter);
-        updateTitle(adapter);
+        calendarAdapter = getCalendarViewAdapter();
+        gridViewCalendar.setAdapter(calendarAdapter);
+        updateTitle(calendarAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewEvents.setLayoutManager(layoutManager);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (adapter.getItem(position) instanceof LocalDate) {
-            LocalDate date = (LocalDate) adapter.getItem(position);
-            adapter.setSelectedDate(date);
-        }
-    }
-
-    @Override
-    public void setActive(@Nullable Child child) {
-        textView.setText(child == null ? "no active child" : child.getName());
-        sex = child == null ? null : child.getSex();
-        adapter.setSex(sex);
-        presenter.getCalendarEvents(adapter.getSelectedDate());
-    }
-
-    @Override
-    public void showEvents(@NonNull List<MasterEvent> events) {
-        EventsAdapter eventsAdapter = new EventsAdapter(getActivity(), sex, events);
+        updateTitle(calendarAdapter);
+        eventsAdapter = new EventsAdapter(getActivity(), Collections.emptyList());
         recyclerViewEvents.setAdapter(eventsAdapter);
     }
 
     protected abstract Adapter getCalendarViewAdapter();
 
+    protected abstract void updateTitle(Adapter adapter);
+
     @OnClick(R.id.left)
     void moveLeft() {
-        adapter.moveLeft();
+        calendarAdapter.moveLeft();
     }
 
     @OnClick(R.id.right)
     void moveRight() {
-        adapter.moveRight();
+        calendarAdapter.moveRight();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (calendarAdapter.getItem(position) instanceof LocalDate) {
+            LocalDate date = (LocalDate) calendarAdapter.getItem(position);
+            calendarAdapter.setSelectedDate(date);
+        }
     }
 
     @Override
     public final void onSelectedDateChanged() {
-        updateTitle(adapter);
+        updateTitle(calendarAdapter);
+        presenter.switchDate(calendarAdapter.getSelectedDate());
     }
 
-    protected abstract void updateTitle(Adapter adapter);
+    @Override
+    public void setActive(@Nullable Child child) {
+        logger.debug("setActive: " + child);
+        textView.setText(child == null ? "no active child" : child.getName());
+        sex = child == null ? null : child.getSex();
+        calendarAdapter.setSex(sex);
+        eventsAdapter.setSex(sex);
+    }
+
+    @Override
+    public void setSelected(@NonNull LocalDate date) {
+        logger.debug("setSelected: " + date);
+        calendarAdapter.setSelectedDate(date, false);
+    }
+
+    @Override
+    public void showEvents(@NonNull List<MasterEvent> events) {
+        logger.debug("showEvents: " + StringUtils.eventsList(events));
+        eventsAdapter.setEvents(events);
+    }
 }

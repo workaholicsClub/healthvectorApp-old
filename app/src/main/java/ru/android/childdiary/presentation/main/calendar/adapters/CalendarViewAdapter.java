@@ -68,11 +68,15 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
     protected abstract void initCalendar(LocalDate date);
 
     public final void setSelectedDate(@NonNull LocalDate value) {
+        setSelectedDate(value, true);
+    }
+
+    public final void setSelectedDate(@NonNull LocalDate value, boolean fire) {
         if (!value.isEqual(selectedDate)) {
             selectedDate = value;
             selectedDateChanged();
             notifyDataSetChanged();
-            if (onSelectedDateChanged != null) {
+            if (fire && onSelectedDateChanged != null) {
                 onSelectedDateChanged.onSelectedDateChanged();
             }
         }

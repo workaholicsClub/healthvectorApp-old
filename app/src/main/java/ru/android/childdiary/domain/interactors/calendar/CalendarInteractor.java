@@ -2,7 +2,10 @@ package ru.android.childdiary.domain.interactors.calendar;
 
 import android.support.annotation.NonNull;
 
+import org.greenrobot.eventbus.EventBus;
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -12,6 +15,7 @@ import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.Interactor;
+import ru.android.childdiary.domain.core.events.SelectedDateChangedEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -21,11 +25,22 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class CalendarInteractor implements Interactor, CalendarRepository {
+    private final Logger logger = LoggerFactory.getLogger(toString());
+
+    private final EventBus bus;
     private final CalendarDataRepository calendarRepository;
 
     @Inject
-    public CalendarInteractor(CalendarDataRepository calendarRepository) {
+    public CalendarInteractor(EventBus bus, CalendarDataRepository calendarRepository) {
+        this.bus = bus;
         this.calendarRepository = calendarRepository;
+    }
+
+    public Observable<LocalDate> setSelectedDate(@NonNull LocalDate date) {
+        return Observable.fromCallable(() -> {
+            bus.post(SelectedDateChangedEvent.builder().date(date).build());
+            return date;
+        });
     }
 
     @Override

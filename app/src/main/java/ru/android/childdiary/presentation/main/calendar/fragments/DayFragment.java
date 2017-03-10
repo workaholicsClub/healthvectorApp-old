@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 import ru.android.childdiary.R;
@@ -38,6 +40,10 @@ public class DayFragment extends BaseMvpFragment<CalendarPresenter> implements C
 
     @Override
     public void setActive(@Nullable Child child) {
+    }
+
+    @Override
+    public void setSelected(@NonNull LocalDate date) {
     }
 
     @Override

@@ -18,31 +18,43 @@ public class ProfileReviewPresenter extends BasePresenter<ProfileReviewView> {
     @Inject
     ChildInteractor childInteractor;
 
-    private Child child;
+    private Child activeChild;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
     }
 
-    public void loadChild(@NonNull Long id) {
-        unsubscribeOnDestroy(childInteractor.get(id)
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+
+        unsubscribeOnDestroy(childInteractor.getActiveChild()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetChild, this::onUnexpectedError));
+                .subscribe(this::setActiveChild, this::onUnexpectedError));
     }
 
-    private void onGetChild(@NonNull Child child) {
-        logger.debug("onGetChild");
-        this.child = child;
-        getViewState().showChild(child);
+    private void setActiveChild(@NonNull Child child) {
+        logger.debug("setActiveChild: " + child);
+        if (!child.equals(activeChild)) {
+            logger.debug("child changed");
+            if (child == Child.NULL) {
+                activeChild = null;
+                logger.error("active child is null");
+                return;
+            } else {
+                activeChild = child;
+            }
+            getViewState().showChild(activeChild);
+        }
     }
 
     public void editChild() {
-        if (child == null) {
-            logger.warn("editChild: child is null");
+        if (activeChild == null) {
+            logger.warn("editChild: active child is null");
             return;
         }
-        getViewState().editChild(child);
+        getViewState().editChild(activeChild);
     }
 }

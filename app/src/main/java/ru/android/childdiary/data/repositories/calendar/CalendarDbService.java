@@ -2,7 +2,9 @@ package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import java.util.List;
 
@@ -37,10 +39,20 @@ public class CalendarDbService implements CalendarService {
         this.dataStore = dataStore;
     }
 
+    private static DateTime midnight(LocalDate date) {
+        return date.toDateTime(LocalTime.MIDNIGHT);
+    }
+
+    private static DateTime nextDayMidnight(LocalDate date) {
+        return date.plusDays(1).toDateTime(LocalTime.MIDNIGHT);
+    }
+
     @Override
     public Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate) {
         return dataStore.select(MasterEventEntity.class)
                 .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
+                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
+                .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
                 .orderBy(MasterEventEntity.DATE_TIME)
                 .get()
                 .observableResult()

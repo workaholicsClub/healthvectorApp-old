@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.main;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.InjectViewState;
 
@@ -9,7 +8,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 
 import java.util.List;
 
@@ -57,10 +55,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(childInteractor.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(childResponse -> {
-                    onGetChildList(childResponse.getChildList());
-                    setActiveChild(childResponse.getActiveChild());
-                }, this::onUnexpectedError));
+                .subscribe(this::onGetChildList, this::onUnexpectedError));
         bus.register(this);
     }
 
@@ -70,26 +65,36 @@ public class MainPresenter extends BasePresenter<MainView> {
         bus.unregister(this);
     }
 
-    public void toggleChild(@Nullable Long id) {
-        unsubscribeOnDestroy(childInteractor.setActiveChild(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setActiveChild, this::onUnexpectedError));
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setActiveChild(ActiveChildChangedEvent event) {
-        setActiveChild(event.getChild());
-    }
-
     private void onGetChildList(@NonNull List<Child> childList) {
         logger.debug("onGetChildList: " + StringUtils.childList(childList));
         boolean isFirstTime = this.childList == null;
         this.childList = childList;
         getViewState().showChildList(childList);
-        if (childList.isEmpty() && isFirstTime) {
-            getViewState().addChild();
+        if (childList.isEmpty()) {
+            if (isFirstTime) {
+                getViewState().addChild();
+            }
+        } else {
+            unsubscribeOnDestroy(childInteractor.getActiveChild(childList)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::setActiveChild, this::onUnexpectedError));
         }
+    }
+
+    public void toggleChild(@NonNull Child child) {
+        logger.debug("user toggle child: " + child);
+        unsubscribeOnDestroy(childInteractor.setActiveChild(child)
+                .ignoreElements()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                }, this::onUnexpectedError));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setActiveChild(ActiveChildChangedEvent event) {
+        setActiveChild(event.getChild());
     }
 
     private void setActiveChild(@NonNull Child child) {
@@ -118,11 +123,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void reviewChild() {
-        if (activeChild == null) {
-            logger.warn("reviewChild: active child is null");
-            return;
-        }
-        getViewState().reviewChild(activeChild);
+        getViewState().reviewChild();
     }
 
     public void deleteChild() {
@@ -145,6 +146,10 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void addDiaperEvent() {
+        if (activeChild == null) {
+            logger.warn("add event: active child is null");
+            return;
+        }
         unsubscribeOnDestroy(calendarInteractor.add(activeChild, DiaperEvent.builder().dateTime(DateTime.now()).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -152,6 +157,10 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void addSleepEvent() {
+        if (activeChild == null) {
+            logger.warn("add event: active child is null");
+            return;
+        }
         unsubscribeOnDestroy(calendarInteractor.add(activeChild, SleepEvent.builder().dateTime(DateTime.now()).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -159,6 +168,10 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void addFeedEvent() {
+        if (activeChild == null) {
+            logger.warn("add event: active child is null");
+            return;
+        }
         unsubscribeOnDestroy(calendarInteractor.add(activeChild, FeedEvent.builder().dateTime(DateTime.now()).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -166,6 +179,10 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void addPumpEventClick() {
+        if (activeChild == null) {
+            logger.warn("add event: active child is null");
+            return;
+        }
         unsubscribeOnDestroy(calendarInteractor.add(activeChild, PumpEvent.builder().dateTime(DateTime.now()).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -173,6 +190,10 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void addOtherEventClick() {
+        if (activeChild == null) {
+            logger.warn("add event: active child is null");
+            return;
+        }
         unsubscribeOnDestroy(calendarInteractor.add(activeChild, OtherEvent.builder().dateTime(DateTime.now()).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -1,7 +1,6 @@
 package ru.android.childdiary.domain.interactors.child;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -9,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,9 +17,12 @@ import ru.android.childdiary.app.ChildDiaryPreferences;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.core.events.ActiveChildChangedEvent;
+import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
+import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
+import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
 import ru.android.childdiary.utils.ObjectUtils;
 
-public class ChildInteractor implements Interactor {
+public class ChildInteractor implements Interactor, ChildRepository {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final EventBus bus;
@@ -37,17 +38,33 @@ public class ChildInteractor implements Interactor {
         this.childValidator = childValidator;
     }
 
-    public Observable<ChildResponse> getAll() {
-        return childRepository.getAll()
-                .map(childList -> ChildResponse.builder().childList(childList).build())
-                .flatMap(response ->
-                        getActiveChild(response.getChildList())
-                                .map(child -> response.toBuilder().activeChild(child).build())
-                );
+    public Observable<Child> getActiveChild() {
+        return childRepository.getAll().flatMap(this::getActiveChild);
     }
 
-    public Observable<Child> get(@NonNull Long id) {
-        return childRepository.get(id);
+    public Observable<Child> getActiveChild(@NonNull List<Child> childList) {
+        if (childList.isEmpty()) {
+            return Observable.just(Child.NULL);
+        } else {
+            return Observable
+                    .fromIterable(childList)
+                    .filter(child -> ObjectUtils.equals(child.getId(), preferences.getActiveChildId()))
+                    .first(childList.get(0))
+                    .toObservable();
+        }
+    }
+
+    public Observable<Child> setActiveChild(@NonNull Child child) {
+        return Observable.fromCallable(() -> {
+            preferences.setActiveChildId(child.getId());
+            bus.post(ActiveChildChangedEvent.builder().child(child).build());
+            return child;
+        });
+    }
+
+    @Override
+    public Observable<List<Child>> getAll() {
+        return childRepository.getAll();
     }
 
     public Observable<Child> add(@NonNull Child item) {
@@ -74,40 +91,6 @@ public class ChildInteractor implements Interactor {
                         }
                     }
                 });
-    }
-
-    public Observable<Child> getActiveChild() {
-        return childRepository.getAll().flatMap(this::getActiveChild);
-    }
-
-    private Observable<Child> getActiveChild(@NonNull List<Child> childList) {
-        if (childList.isEmpty()) {
-            return Observable.just(Child.NULL);
-        } else {
-            return Observable
-                    .fromIterable(childList)
-                    .filter(child -> ObjectUtils.equals(child.getId(), preferences.getActiveChildId()))
-                    .first(childList.get(0))
-                    .toObservable();
-        }
-    }
-
-    public Observable<Child> setActiveChild(@Nullable Long id) {
-        return childRepository.getAll()
-                .first(Collections.emptyList())
-                .flatMapObservable(Observable::fromIterable)
-                .filter(child -> ObjectUtils.equals(child.getId(), id))
-                .first(Child.NULL)
-                .toObservable()
-                .flatMap(this::setActiveChild);
-    }
-
-    private Observable<Child> setActiveChild(@NonNull Child child) {
-        return Observable.fromCallable(() -> {
-            preferences.setActiveChildId(child.getId());
-            bus.post(ActiveChildChangedEvent.builder().child(child).build());
-            return child;
-        });
     }
 
     public Observable<Boolean> controlDoneButton(@NonNull Observable<Child> childObservable) {

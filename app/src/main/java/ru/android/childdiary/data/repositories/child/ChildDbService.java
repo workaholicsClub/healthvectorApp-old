@@ -33,15 +33,6 @@ public class ChildDbService implements ChildService {
     }
 
     @Override
-    public Observable<Child> get(@NonNull Long id) {
-        return dataStore.select(ChildEntity.class)
-                .where(ChildEntity.ID.eq(id))
-                .get()
-                .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, ChildMapper::mapToPlainObject));
-    }
-
-    @Override
     public Observable<Child> add(@NonNull Child child) {
         return dataStore.insert(ChildMapper.mapToEntity(child)).toObservable().map(ChildMapper::mapToPlainObject);
     }

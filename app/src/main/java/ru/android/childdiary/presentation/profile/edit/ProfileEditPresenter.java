@@ -16,8 +16,8 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
-import ru.android.childdiary.domain.interactors.child.ChildValidationException;
-import ru.android.childdiary.domain.interactors.child.ChildValidationResult;
+import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
+import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
@@ -98,7 +98,7 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
     }
 
     private void onAddChild(Child child) {
-        logger.debug("onAddChild");
+        logger.debug("onAddChild: " + child);
         getViewState().childAdded(child);
     }
 
@@ -110,7 +110,7 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
     }
 
     private void onUpdateChild(Child child) {
-        logger.debug("onUpdateChild");
+        logger.debug("onUpdateChild: " + child);
         getViewState().childUpdated(child);
     }
 }

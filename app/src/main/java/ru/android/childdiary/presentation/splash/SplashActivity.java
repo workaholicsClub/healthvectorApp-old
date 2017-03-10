@@ -28,6 +28,7 @@ public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements 
 
     @Override
     public void startApp() {
+        logger.debug("startApp");
         finish();
         navigateToMain();
     }

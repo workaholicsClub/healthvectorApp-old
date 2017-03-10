@@ -10,8 +10,6 @@ import ru.android.childdiary.domain.core.Repository;
 public interface ChildRepository extends Repository {
     Observable<List<Child>> getAll();
 
-    Observable<Child> get(@NonNull Long id);
-
     Observable<Child> add(@NonNull Child child);
 
     Observable<Child> update(@NonNull Child child);
