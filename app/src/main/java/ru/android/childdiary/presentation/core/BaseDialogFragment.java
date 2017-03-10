@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -34,7 +33,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     protected Child child;
     protected Sex sex;
 
-    public void showAllowingStateLoss(FragmentManager manager, String tag, @Nullable Child child) {
+    public void showAllowingStateLoss(FragmentManager manager, String tag, @NonNull Child child) {
         Bundle arguments = new Bundle();
         arguments.putParcelable(ExtraConstants.EXTRA_CHILD, child);
         setArguments(arguments);
@@ -47,7 +46,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         child = getArguments().getParcelable(ExtraConstants.EXTRA_CHILD);
-        sex = child == null ? null : child.getSex();
+        sex = child.getSex();
         Icepick.restoreInstanceState(this, savedInstanceState);
         return super.onCreateDialog(savedInstanceState);
     }

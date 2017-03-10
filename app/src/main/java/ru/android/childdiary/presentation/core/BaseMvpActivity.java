@@ -91,10 +91,11 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     @CallSuper
     protected void themeChanged() {
+        logger.debug("setup theme");
     }
 
     private void setupToolbarColor() {
-        logger.debug("theme changed");
+        logger.debug("setup toolbar color");
         if (toolbar != null) {
             toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
         }
@@ -103,8 +104,8 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         }
     }
 
-    protected final void changeThemeIfNeeded(@Nullable Child child) {
-        Sex sex = child == null ? null : child.getSex();
+    protected final void changeThemeIfNeeded(@NonNull Child child) {
+        Sex sex = child.getSex();
         changeThemeIfNeeded(sex);
     }
 

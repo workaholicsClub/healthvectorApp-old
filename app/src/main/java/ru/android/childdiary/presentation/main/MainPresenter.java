@@ -106,7 +106,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void editChild() {
-        unsubscribeOnDestroy(childInteractor.getActiveChild()
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::navigateToProfileEdit, this::onUnexpectedError));
@@ -117,7 +117,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void deleteChild() {
-        unsubscribeOnDestroy(childInteractor.getActiveChild()
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showDeleteChildConfirmation, this::onUnexpectedError));
@@ -127,13 +127,13 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(childInteractor.delete(child)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(deletedChild -> logger.debug("onDeleteChild: " + deletedChild), this::onUnexpectedError));
+                .subscribe(deletedChild -> logger.debug("child deleted: " + deletedChild), this::onUnexpectedError));
     }
 
     public void addDiaperEvent() {
         Observable.combineLatest(
                 calendarInteractor.getSelectedDate().map(date -> DiaperEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
-                childInteractor.getActiveChild().firstOrError().toObservable(),
+                childInteractor.getActiveChildOnce(),
                 (event, child) -> AddDiaperRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
@@ -144,7 +144,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void addSleepEvent() {
         Observable.combineLatest(
                 calendarInteractor.getSelectedDate().map(date -> SleepEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
-                childInteractor.getActiveChild().firstOrError().toObservable(),
+                childInteractor.getActiveChildOnce(),
                 (event, child) -> AddSleepRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
@@ -155,7 +155,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void addFeedEvent() {
         Observable.combineLatest(
                 calendarInteractor.getSelectedDate().map(date -> FeedEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
-                childInteractor.getActiveChild().firstOrError().toObservable(),
+                childInteractor.getActiveChildOnce(),
                 (event, child) -> AddFeedRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
@@ -166,7 +166,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void addPumpEventClick() {
         Observable.combineLatest(
                 calendarInteractor.getSelectedDate().map(date -> PumpEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
-                childInteractor.getActiveChild().firstOrError().toObservable(),
+                childInteractor.getActiveChildOnce(),
                 (event, child) -> AddPumpRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
@@ -177,7 +177,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void addOtherEventClick() {
         Observable.combineLatest(
                 calendarInteractor.getSelectedDate().map(date -> OtherEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
-                childInteractor.getActiveChild().firstOrError().toObservable(),
+                childInteractor.getActiveChildOnce(),
                 (event, child) -> AddOtherRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
@@ -185,7 +185,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribe(this::onEventAdded, this::onUnexpectedError);
     }
 
-    private void onEventAdded(MasterEvent event) {
+    private void onEventAdded(@NonNull MasterEvent event) {
         logger.debug("onEventAdded: " + event);
     }
 }

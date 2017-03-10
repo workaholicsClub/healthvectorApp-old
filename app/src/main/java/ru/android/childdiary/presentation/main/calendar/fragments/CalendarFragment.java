@@ -108,10 +108,10 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     }
 
     @Override
-    public void setActive(@Nullable Child child) {
+    public void setActive(@NonNull Child child) {
         logger.debug("setActive: " + child);
-        textView.setText(child == null ? "no active child" : child.getName());
-        sex = child == null ? null : child.getSex();
+        textView.setText(child == Child.NULL ? "no active child" : child.getName());
+        sex = child.getSex();
         calendarAdapter.setSex(sex);
         eventsAdapter.setSex(sex);
     }

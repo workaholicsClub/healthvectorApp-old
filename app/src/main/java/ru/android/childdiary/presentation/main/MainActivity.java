@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -203,10 +202,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void showChild(@Nullable Child child) {
-        logger.debug("setActive: " + child);
+    public void showChild(@NonNull Child child) {
+        logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
-        if (child == null) {
+        if (child == Child.NULL) {
             getSupportActionBar().setTitle(R.string.app_name);
         } else {
             getSupportActionBar().setTitle(child.getName());

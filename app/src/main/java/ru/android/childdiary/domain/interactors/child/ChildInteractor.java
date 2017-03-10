@@ -35,6 +35,10 @@ public class ChildInteractor implements Interactor, ChildRepository {
         return childRepository.getActiveChild();
     }
 
+    public Observable<Child> getActiveChildOnce() {
+        return childRepository.getActiveChild().first(Child.NULL).toObservable();
+    }
+
     @Override
     public Observable<Child> setActiveChild(@NonNull Child child) {
         return childRepository.setActiveChild(child);

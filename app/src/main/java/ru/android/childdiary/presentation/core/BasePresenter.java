@@ -31,7 +31,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         compositeDisposable.add(disposable);
     }
 
-    protected void onUnexpectedError(Throwable e) {
+    public void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
         getViewState().onUnexpectedError(e);
     }

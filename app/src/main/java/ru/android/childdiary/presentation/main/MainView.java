@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.main;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
@@ -17,7 +16,7 @@ public interface MainView extends BaseView {
     void showChildList(@NonNull List<Child> childList);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showChild(@Nullable Child child);
+    void showChild(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToProfileAdd();

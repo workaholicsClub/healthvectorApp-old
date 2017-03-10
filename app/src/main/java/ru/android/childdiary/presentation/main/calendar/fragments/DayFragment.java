@@ -39,7 +39,7 @@ public class DayFragment extends BaseMvpFragment<CalendarPresenter> implements C
     }
 
     @Override
-    public void setActive(@Nullable Child child) {
+    public void setActive(@NonNull Child child) {
     }
 
     @Override

@@ -32,7 +32,7 @@ public class ProfileReviewPresenter extends BasePresenter<ProfileReviewView> {
     }
 
     public void editChild() {
-        unsubscribeOnDestroy(childInteractor.getActiveChild()
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(child -> logger.debug("navigateToProfileEdit: " + child))

@@ -109,6 +109,7 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
 
     @Override
     public void navigateToProfileEdit(@NonNull Child child) {
+        logger.debug("navigateToProfileEdit: " + child);
         Intent intent = ProfileEditActivity.getIntent(this, child);
         startActivity(intent);
     }

@@ -33,7 +33,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         unsubscribeOnDestroy(Observable.combineLatest(
                 Observable.timer(SPLASH_TIME_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
                         .doOnNext(zero -> logger.debug("timer finished")),
-                childInteractor.getActiveChild().first(Child.NULL).toObservable()
+                childInteractor.getActiveChildOnce().first(Child.NULL).toObservable()
                         .doOnNext(child -> logger.debug("active child: " + child)),
                 (zero, child) -> child)
                 .subscribeOn(Schedulers.io())
