@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.main.calendar.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
 
@@ -24,7 +25,7 @@ public class MonthViewAdapter extends CalendarViewAdapter {
     }
 
     @Override
-    protected void initCalendar(LocalDate date) {
+    protected void initCalendar(@NonNull LocalDate date) {
         this.year = date.getYear();
         this.month = date.getMonthOfYear();
         dates.clear();

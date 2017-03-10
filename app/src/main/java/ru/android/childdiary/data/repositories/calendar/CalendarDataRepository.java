@@ -2,6 +2,7 @@ package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
 
+import org.greenrobot.eventbus.EventBus;
 import org.joda.time.LocalDate;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.data.repositories.core.events.SelectedDateChangedEvent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -21,11 +23,28 @@ import ru.android.childdiary.domain.interactors.child.Child;
 
 @Singleton
 public class CalendarDataRepository implements CalendarRepository {
+    private final EventBus bus;
     private final CalendarDbService dbService;
+    private LocalDate selectedDate = LocalDate.now();
 
     @Inject
-    public CalendarDataRepository(CalendarDbService dbService) {
+    public CalendarDataRepository(EventBus bus, CalendarDbService dbService) {
+        this.bus = bus;
         this.dbService = dbService;
+    }
+
+    @Override
+    public Observable<LocalDate> getSelectedDate() {
+        return Observable.just(selectedDate);
+    }
+
+    @Override
+    public Observable<LocalDate> setSelectedDate(@NonNull LocalDate date) {
+        return Observable.fromCallable(() -> {
+            selectedDate = date;
+            bus.post(SelectedDateChangedEvent.builder().date(date).build());
+            return date;
+        });
     }
 
     @Override

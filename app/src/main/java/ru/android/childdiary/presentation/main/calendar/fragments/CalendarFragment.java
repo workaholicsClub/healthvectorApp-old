@@ -16,7 +16,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import org.joda.time.LocalDate;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -76,7 +75,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewEvents.setLayoutManager(layoutManager);
         updateTitle(calendarAdapter);
-        eventsAdapter = new EventsAdapter(getActivity(), Collections.emptyList());
+        eventsAdapter = new EventsAdapter(getActivity());
         recyclerViewEvents.setAdapter(eventsAdapter);
     }
 

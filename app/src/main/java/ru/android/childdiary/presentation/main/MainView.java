@@ -17,17 +17,17 @@ public interface MainView extends BaseView {
     void showChildList(@NonNull List<Child> childList);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void setActive(@Nullable Child child);
+    void showChild(@Nullable Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void addChild();
+    void navigateToProfileAdd();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void editChild(@NonNull Child child);
+    void navigateToProfileEdit(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void reviewChild();
+    void navigateToProfileReview();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void confirmDeleteChild(@NonNull Child child);
+    void showDeleteChildConfirmation(@NonNull Child child);
 }

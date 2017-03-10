@@ -3,7 +3,6 @@ package ru.android.childdiary.domain.interactors.child;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,53 +12,32 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.app.ChildDiaryPreferences;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.domain.core.Interactor;
-import ru.android.childdiary.domain.core.events.ActiveChildChangedEvent;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
-import ru.android.childdiary.utils.ObjectUtils;
 
 public class ChildInteractor implements Interactor, ChildRepository {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
-    private final EventBus bus;
-    private final ChildDiaryPreferences preferences;
     private final ChildDataRepository childRepository;
     private final ChildValidator childValidator;
 
     @Inject
-    public ChildInteractor(EventBus bus, ChildDiaryPreferences preferences, ChildDataRepository childRepository, ChildValidator childValidator) {
-        this.bus = bus;
-        this.preferences = preferences;
+    public ChildInteractor(ChildDataRepository childRepository, ChildValidator childValidator) {
         this.childRepository = childRepository;
         this.childValidator = childValidator;
     }
 
+    @Override
     public Observable<Child> getActiveChild() {
-        return childRepository.getAll().flatMap(this::getActiveChild);
+        return childRepository.getActiveChild();
     }
 
-    public Observable<Child> getActiveChild(@NonNull List<Child> childList) {
-        if (childList.isEmpty()) {
-            return Observable.just(Child.NULL);
-        } else {
-            return Observable
-                    .fromIterable(childList)
-                    .filter(child -> ObjectUtils.equals(child.getId(), preferences.getActiveChildId()))
-                    .first(childList.get(0))
-                    .toObservable();
-        }
-    }
-
+    @Override
     public Observable<Child> setActiveChild(@NonNull Child child) {
-        return Observable.fromCallable(() -> {
-            preferences.setActiveChildId(child.getId());
-            bus.post(ActiveChildChangedEvent.builder().child(child).build());
-            return child;
-        });
+        return childRepository.setActiveChild(child);
     }
 
     @Override

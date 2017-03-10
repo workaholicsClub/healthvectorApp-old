@@ -9,20 +9,18 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.joda.time.LocalDate;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.repositories.core.events.ActiveChildChangedEvent;
+import ru.android.childdiary.data.repositories.core.events.SelectedDateChangedEvent;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.core.events.ActiveChildChangedEvent;
-import ru.android.childdiary.domain.core.events.SelectedDateChangedEvent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.EventsResponse;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
@@ -37,8 +35,6 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
     @Inject
     EventBus bus;
 
-    private LocalDate selectedDate = LocalDate.now();
-    private Child activeChild;
     private Disposable subscription;
 
     @Override
@@ -50,36 +46,44 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(childInteractor.getActiveChild()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setActiveChild, this::onUnexpectedError));
+        requestEvents();
         bus.register(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unsubscribe();
         bus.unregister(this);
+    }
+
+    private void unsubscribe() {
+        if (subscription != null && !subscription.isDisposed()) {
+            subscription.dispose();
+        }
+    }
+
+    private void requestEvents() {
+        unsubscribe();
+        subscription = Observable.combineLatest(
+                calendarInteractor.getSelectedDate(),
+                childInteractor.getActiveChild(),
+                (date, child) -> EventsRequest.builder().date(date).child(child).build())
+                .flatMap(request -> calendarInteractor.getAll(request))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::init, this::onUnexpectedError);
+    }
+
+    private void init(EventsResponse response) {
+        getViewState().setActive(response.getRequest().getChild());
+        getViewState().setSelected(response.getRequest().getDate());
+        getViewState().showEvents(response.getEvents());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setActiveChild(ActiveChildChangedEvent event) {
-        setActiveChild(event.getChild());
-    }
-
-    private void setActiveChild(@NonNull Child child) {
-        logger.debug("setActiveChild: " + child);
-        if (!child.equals(activeChild)) {
-            logger.debug("active child changed");
-            if (child == Child.NULL) {
-                activeChild = null;
-            } else {
-                activeChild = child;
-            }
-            getViewState().setActive(activeChild);
-            requestEvents();
-        }
+        requestEvents();
     }
 
     public void switchDate(@NonNull LocalDate date) {
@@ -94,40 +98,6 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setSelectedDate(SelectedDateChangedEvent event) {
-        setSelectedDate(event.getDate());
-    }
-
-    private void setSelectedDate(@NonNull LocalDate date) {
-        logger.debug("setSelectedDate: " + date);
-        if (!date.equals(selectedDate)) {
-            logger.debug("selected date changed");
-            selectedDate = date;
-            getViewState().setSelected(selectedDate);
-            requestEvents();
-        }
-    }
-
-    private void unsubscribe() {
-        if (subscription != null && !subscription.isDisposed()) {
-            subscription.dispose();
-        }
-    }
-
-    private void requestEvents() {
-        unsubscribe();
-
-        if (activeChild == null) {
-            getViewState().showEvents(Collections.emptyList());
-            return;
-        }
-
-        subscription = calendarInteractor.getAll(activeChild, selectedDate)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetEvents, this::onUnexpectedError);
-    }
-
-    private void onGetEvents(@NonNull List<MasterEvent> events) {
-        getViewState().showEvents(events);
+        requestEvents();
     }
 }

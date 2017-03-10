@@ -19,9 +19,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     private final Context context;
     private final LayoutInflater inflater;
     private Sex sex;
-    private List<MasterEvent> events;
+    private List<MasterEvent> events = Collections.emptyList();
 
-    public EventsAdapter(Context context, @NonNull List<MasterEvent> events) {
+    public EventsAdapter(Context context) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.events = Collections.unmodifiableList(events);
@@ -35,7 +35,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     }
 
     public void setEvents(@NonNull List<MasterEvent> events) {
-        // TODO: здесь можно рассчитать разницу
         this.events = Collections.unmodifiableList(events);
         notifyDataSetChanged();
     }

@@ -8,6 +8,10 @@ import io.reactivex.Observable;
 import ru.android.childdiary.domain.core.Repository;
 
 public interface ChildRepository extends Repository {
+    Observable<Child> getActiveChild();
+
+    Observable<Child> setActiveChild(@NonNull Child child);
+
     Observable<List<Child>> getAll();
 
     Observable<Child> add(@NonNull Child child);

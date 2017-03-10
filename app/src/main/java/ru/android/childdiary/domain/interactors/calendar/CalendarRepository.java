@@ -17,6 +17,10 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public interface CalendarRepository extends Repository {
+    Observable<LocalDate> getSelectedDate();
+
+    Observable<LocalDate> setSelectedDate(@NonNull LocalDate date);
+
     Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate);
 
     Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event);

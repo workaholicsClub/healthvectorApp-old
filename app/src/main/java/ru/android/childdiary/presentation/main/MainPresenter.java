@@ -7,16 +7,17 @@ import com.arellomobile.mvp.InjectViewState;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.repositories.core.events.ActiveChildChangedEvent;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.core.events.ActiveChildChangedEvent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -24,6 +25,11 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.requests.AddDiaperRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.AddFeedRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.AddOtherRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.AddPumpRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.AddSleepRequest;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -40,8 +46,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Inject
     EventBus bus;
 
-    private List<Child> childList;
-    private Child activeChild;
+    private boolean isFirstTime = true;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -67,23 +72,22 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     private void onGetChildList(@NonNull List<Child> childList) {
         logger.debug("onGetChildList: " + StringUtils.childList(childList));
-        boolean isFirstTime = this.childList == null;
-        this.childList = childList;
         getViewState().showChildList(childList);
         if (childList.isEmpty()) {
             if (isFirstTime) {
-                getViewState().addChild();
+                getViewState().navigateToProfileAdd();
             }
         } else {
-            unsubscribeOnDestroy(childInteractor.getActiveChild(childList)
+            unsubscribeOnDestroy(childInteractor.getActiveChild()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::setActiveChild, this::onUnexpectedError));
+                    .subscribe(getViewState()::showChild, this::onUnexpectedError));
         }
+        isFirstTime = false;
     }
 
-    public void toggleChild(@NonNull Child child) {
-        logger.debug("user toggle child: " + child);
+    public void switchChild(@NonNull Child child) {
+        logger.debug("user switch child: " + child);
         unsubscribeOnDestroy(childInteractor.setActiveChild(child)
                 .ignoreElements()
                 .subscribeOn(Schedulers.io())
@@ -94,110 +98,91 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setActiveChild(ActiveChildChangedEvent event) {
-        setActiveChild(event.getChild());
-    }
-
-    private void setActiveChild(@NonNull Child child) {
-        logger.debug("setActiveChild: " + child);
-        if (!child.equals(activeChild)) {
-            logger.debug("active child changed");
-            if (child == Child.NULL) {
-                activeChild = null;
-            } else {
-                activeChild = child;
-            }
-            getViewState().setActive(activeChild);
-        }
+        getViewState().showChild(event.getChild());
     }
 
     public void addChild() {
-        getViewState().addChild();
+        getViewState().navigateToProfileAdd();
     }
 
     public void editChild() {
-        if (activeChild == null) {
-            logger.warn("editChild: active child is null");
-            return;
-        }
-        getViewState().editChild(activeChild);
+        unsubscribeOnDestroy(childInteractor.getActiveChild()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToProfileEdit, this::onUnexpectedError));
     }
 
     public void reviewChild() {
-        getViewState().reviewChild();
+        getViewState().navigateToProfileAdd();
     }
 
     public void deleteChild() {
-        if (activeChild == null) {
-            logger.warn("deleteChild: active child is null");
-            return;
-        }
-        getViewState().confirmDeleteChild(activeChild);
+        unsubscribeOnDestroy(childInteractor.getActiveChild()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showDeleteChildConfirmation, this::onUnexpectedError));
     }
 
     public void deleteChild(@NonNull Child child) {
         unsubscribeOnDestroy(childInteractor.delete(child)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onDeleteChild, this::onUnexpectedError));
-    }
-
-    private void onDeleteChild(Child child) {
-        logger.debug("onDeleteChild: " + child);
+                .subscribe(deletedChild -> logger.debug("onDeleteChild: " + deletedChild), this::onUnexpectedError));
     }
 
     public void addDiaperEvent() {
-        if (activeChild == null) {
-            logger.warn("add event: active child is null");
-            return;
-        }
-        unsubscribeOnDestroy(calendarInteractor.add(activeChild, DiaperEvent.builder().dateTime(DateTime.now()).build())
+        Observable.combineLatest(
+                calendarInteractor.getSelectedDate().map(date -> DiaperEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                childInteractor.getActiveChild().firstOrError().toObservable(),
+                (event, child) -> AddDiaperRequest.builder().event(event).child(child).build())
+                .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError));
+                .subscribe(this::onEventAdded, this::onUnexpectedError);
     }
 
     public void addSleepEvent() {
-        if (activeChild == null) {
-            logger.warn("add event: active child is null");
-            return;
-        }
-        unsubscribeOnDestroy(calendarInteractor.add(activeChild, SleepEvent.builder().dateTime(DateTime.now()).build())
+        Observable.combineLatest(
+                calendarInteractor.getSelectedDate().map(date -> SleepEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                childInteractor.getActiveChild().firstOrError().toObservable(),
+                (event, child) -> AddSleepRequest.builder().event(event).child(child).build())
+                .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError));
+                .subscribe(this::onEventAdded, this::onUnexpectedError);
     }
 
     public void addFeedEvent() {
-        if (activeChild == null) {
-            logger.warn("add event: active child is null");
-            return;
-        }
-        unsubscribeOnDestroy(calendarInteractor.add(activeChild, FeedEvent.builder().dateTime(DateTime.now()).build())
+        Observable.combineLatest(
+                calendarInteractor.getSelectedDate().map(date -> FeedEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                childInteractor.getActiveChild().firstOrError().toObservable(),
+                (event, child) -> AddFeedRequest.builder().event(event).child(child).build())
+                .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError));
+                .subscribe(this::onEventAdded, this::onUnexpectedError);
     }
 
     public void addPumpEventClick() {
-        if (activeChild == null) {
-            logger.warn("add event: active child is null");
-            return;
-        }
-        unsubscribeOnDestroy(calendarInteractor.add(activeChild, PumpEvent.builder().dateTime(DateTime.now()).build())
+        Observable.combineLatest(
+                calendarInteractor.getSelectedDate().map(date -> PumpEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                childInteractor.getActiveChild().firstOrError().toObservable(),
+                (event, child) -> AddPumpRequest.builder().event(event).child(child).build())
+                .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError));
+                .subscribe(this::onEventAdded, this::onUnexpectedError);
     }
 
     public void addOtherEventClick() {
-        if (activeChild == null) {
-            logger.warn("add event: active child is null");
-            return;
-        }
-        unsubscribeOnDestroy(calendarInteractor.add(activeChild, OtherEvent.builder().dateTime(DateTime.now()).build())
+        Observable.combineLatest(
+                calendarInteractor.getSelectedDate().map(date -> OtherEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                childInteractor.getActiveChild().firstOrError().toObservable(),
+                (event, child) -> AddOtherRequest.builder().event(event).child(child).build())
+                .flatMap(request -> calendarInteractor.add(request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError));
+                .subscribe(this::onEventAdded, this::onUnexpectedError);
     }
 
     private void onEventAdded(MasterEvent event) {

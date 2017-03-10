@@ -115,6 +115,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         return new Intent(context, MainActivity.class);
     }
 
+    private static IProfile mapToProfile(Context context, @NonNull Child child) {
+        return new ProfileDrawerItem()
+                .withName(child.getName())
+                .withEmail(StringUtils.age(context, child))
+                .withNameShown(true)
+                .withTag(child)
+                .withIdentifier(mapToProfileId(child))
+                .withIcon(ResourcesUtils.getChildIcon(context, child));
+    }
+
     private static long mapToProfileId(@NonNull Child child) {
         return child.getId() + PROFILE_SETTINGS_USER;
     }
@@ -134,17 +144,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         setContentView(R.layout.activity_main);
         setupViewPager();
         buildUi();
-    }
-
-    private void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new DayFragment(), getString(R.string.day));
-        adapter.addFragment(new WeekFragment(), getString(R.string.week));
-        adapter.addFragment(new MonthFragment(), getString(R.string.month));
-        viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(2, false);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -179,7 +178,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         logger.debug("showChildList: " + StringUtils.childList(childList));
 
         List<IProfile> profiles = new ArrayList<>();
-
         if (!childList.isEmpty()) {
             profiles.add(new ProfileSettingDrawerItem()
                     .withName(getString(R.string.edit_child_short))
@@ -194,7 +192,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                     .withIdentifier(PROFILE_SETTINGS_DELETE));
         }
 
-        profiles.addAll(Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList()));
+        profiles.addAll(Stream.of(childList)
+                .map(child -> mapToProfile(this, child))
+                .collect(Collectors.toList()));
 
         closeDrawerWithoutAnimation();
         if (accountHeader != null) {
@@ -203,7 +203,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void setActive(@Nullable Child child) {
+    public void showChild(@Nullable Child child) {
         logger.debug("setActive: " + child);
         changeThemeIfNeeded(child);
         if (child == null) {
@@ -216,33 +216,26 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         }
     }
 
-    private IProfile mapToProfile(@NonNull Child child) {
-        return new ProfileDrawerItem()
-                .withName(child.getName())
-                .withEmail(StringUtils.age(this, child))
-                .withNameShown(true)
-                .withTag(child)
-                .withIdentifier(mapToProfileId(child))
-                .withIcon(ResourcesUtils.getChildIcon(this, child));
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(this, null);
+        startActivity(intent);
     }
 
     @Override
-    public void addChild() {
-        navigateToProfileAdd();
+    public void navigateToProfileEdit(@NonNull Child child) {
+        Intent intent = ProfileEditActivity.getIntent(this, child);
+        startActivity(intent);
     }
 
     @Override
-    public void editChild(@NonNull Child child) {
-        navigateToProfileEdit(child);
+    public void navigateToProfileReview() {
+        Intent intent = ProfileReviewActivity.getIntent(this);
+        startActivity(intent);
     }
 
     @Override
-    public void reviewChild() {
-        navigateToProfileReview();
-    }
-
-    @Override
-    public void confirmDeleteChild(@NonNull Child child) {
+    public void showDeleteChildConfirmation(@NonNull Child child) {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(sex))
                 .setTitle(getString(R.string.remove_child_confirmation_title, child.getName()))
                 .setMessage(R.string.remove_child_confirmation_text)
@@ -301,7 +294,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         IProfile profile = accountHeader.getProfiles().get(position);
         if (profile instanceof ProfileDrawerItem) {
             Child child = (Child) ((ProfileDrawerItem) profile).getTag();
-            presenter.toggleChild(child);
+            presenter.switchChild(child);
         } else if (profile instanceof ProfileSettingDrawerItem) {
             if (id == PROFILE_SETTINGS_EDIT) {
                 presenter.editChild();
@@ -326,6 +319,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         }
         popupWindow = null;
         return false;
+    }
+
+    private void setupViewPager() {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new DayFragment(), getString(R.string.day));
+        adapter.addFragment(new WeekFragment(), getString(R.string.week));
+        adapter.addFragment(new MonthFragment(), getString(R.string.month));
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(2, false);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void buildUi() {
@@ -474,20 +478,5 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 return true;
         }
         return false;
-    }
-
-    private void navigateToProfileEdit(@NonNull Child child) {
-        Intent intent = ProfileEditActivity.getIntent(this, child);
-        startActivity(intent);
-    }
-
-    private void navigateToProfileAdd() {
-        Intent intent = ProfileEditActivity.getIntent(this, null);
-        startActivity(intent);
-    }
-
-    private void navigateToProfileReview() {
-        Intent intent = ProfileReviewActivity.getIntent(this);
-        startActivity(intent);
     }
 }

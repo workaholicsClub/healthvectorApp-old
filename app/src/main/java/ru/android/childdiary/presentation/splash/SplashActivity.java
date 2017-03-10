@@ -27,14 +27,9 @@ public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements 
     }
 
     @Override
-    public void startApp() {
-        logger.debug("startApp");
-        finish();
-        navigateToMain();
-    }
-
-    private void navigateToMain() {
+    public void navigateToMain() {
         Intent intent = MainActivity.getIntent(this);
         startActivity(intent);
+        finish();
     }
 }

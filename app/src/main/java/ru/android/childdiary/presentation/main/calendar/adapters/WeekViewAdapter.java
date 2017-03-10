@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.main.calendar.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
 
@@ -22,7 +23,7 @@ public class WeekViewAdapter extends CalendarViewAdapter {
     }
 
     @Override
-    protected void initCalendar(LocalDate date) {
+    protected void initCalendar(@NonNull LocalDate date) {
         dates.clear();
 
         int trailing = indexOfDayOfWeek(date);

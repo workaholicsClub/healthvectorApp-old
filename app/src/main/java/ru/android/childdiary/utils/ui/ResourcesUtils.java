@@ -55,7 +55,9 @@ public class ResourcesUtils {
 
     @DrawableRes
     public static int getSelectedDateBackgroundRes(@Nullable Sex sex) {
-        if (sex == null || sex == Sex.MALE) {
+        if (sex == null) {
+            return R.drawable.calendar_cell_background_selected;
+        } else if (sex == Sex.MALE) {
             return R.drawable.calendar_cell_background_selected_boy;
         } else {
             return R.drawable.calendar_cell_background_selected_girl;

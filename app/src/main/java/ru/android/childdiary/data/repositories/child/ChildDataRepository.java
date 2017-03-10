@@ -2,22 +2,55 @@ package ru.android.childdiary.data.repositories.child;
 
 import android.support.annotation.NonNull;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.app.ChildDiaryPreferences;
+import ru.android.childdiary.data.repositories.core.events.ActiveChildChangedEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class ChildDataRepository implements ChildRepository {
+    private final EventBus bus;
+    private final ChildDiaryPreferences preferences;
     private final ChildDbService dbService;
 
     @Inject
-    public ChildDataRepository(ChildDbService dbService) {
+    public ChildDataRepository(EventBus bus, ChildDiaryPreferences preferences, ChildDbService dbService) {
+        this.bus = bus;
+        this.preferences = preferences;
         this.dbService = dbService;
+    }
+
+    public Observable<Child> getActiveChild() {
+        return getAll().flatMap(this::getActiveChild);
+    }
+
+    public Observable<Child> getActiveChild(@NonNull List<Child> childList) {
+        if (childList.isEmpty()) {
+            return Observable.just(Child.NULL);
+        } else {
+            return Observable
+                    .fromIterable(childList)
+                    .filter(child -> ObjectUtils.equals(child.getId(), preferences.getActiveChildId()))
+                    .first(childList.get(0))
+                    .toObservable();
+        }
+    }
+
+    public Observable<Child> setActiveChild(@NonNull Child child) {
+        return Observable.fromCallable(() -> {
+            preferences.setActiveChildId(child.getId());
+            bus.post(ActiveChildChangedEvent.builder().child(child).build());
+            return child;
+        });
     }
 
     @Override

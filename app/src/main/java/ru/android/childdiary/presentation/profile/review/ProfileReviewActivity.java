@@ -108,8 +108,9 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     }
 
     @Override
-    public void editChild(@NonNull Child child) {
-        navigateToProfileEdit(child);
+    public void navigateToProfileEdit(@NonNull Child child) {
+        Intent intent = ProfileEditActivity.getIntent(this, child);
+        startActivity(intent);
     }
 
     @OnClick(R.id.buttonEdit)
@@ -133,10 +134,5 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void navigateToProfileEdit(@NonNull Child child) {
-        Intent intent = ProfileEditActivity.getIntent(this, child);
-        startActivity(intent);
     }
 }
