@@ -73,17 +73,16 @@ public class MainPresenter extends BasePresenter<MainView> {
     private void onGetChildList(@NonNull List<Child> childList) {
         logger.debug("onGetChildList: " + StringUtils.childList(childList));
         getViewState().showChildList(childList);
-        if (childList.isEmpty()) {
-            if (isFirstTime) {
+        if (isFirstTime) {
+            if (childList.isEmpty()) {
                 getViewState().navigateToProfileAdd();
             }
-        } else {
             unsubscribeOnDestroy(childInteractor.getActiveChild()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(getViewState()::showChild, this::onUnexpectedError));
+            isFirstTime = false;
         }
-        isFirstTime = false;
     }
 
     public void switchChild(@NonNull Child child) {
@@ -132,7 +131,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addDiaperEvent() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> DiaperEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                calendarInteractor.getSelectedDate().map(date -> DiaperEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddDiaperRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
@@ -143,7 +142,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addSleepEvent() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> SleepEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                calendarInteractor.getSelectedDate().map(date -> SleepEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddSleepRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
@@ -154,7 +153,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addFeedEvent() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> FeedEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                calendarInteractor.getSelectedDate().map(date -> FeedEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddFeedRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
@@ -165,7 +164,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addPumpEventClick() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> PumpEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                calendarInteractor.getSelectedDate().map(date -> PumpEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddPumpRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
@@ -176,7 +175,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addOtherEventClick() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> OtherEvent.builder().dateTime(date.toDateTime(LocalTime.MIDNIGHT)).build()),
+                calendarInteractor.getSelectedDate().map(date -> OtherEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddOtherRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))

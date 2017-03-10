@@ -46,7 +46,7 @@ public class CalendarInteractor implements Interactor {
 
     public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {
         return calendarRepository.getAll(request.getChild(), request.getDate())
-                .flatMap(events -> Observable.just(EventsResponse.builder().request(request).events(events).build()));
+                .map(events -> EventsResponse.builder().request(request).events(events).build());
     }
 
     public Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event) {

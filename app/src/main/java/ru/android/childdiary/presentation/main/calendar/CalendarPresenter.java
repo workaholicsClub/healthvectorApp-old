@@ -67,15 +67,15 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
         unsubscribe();
         subscription = Observable.combineLatest(
                 calendarInteractor.getSelectedDate(),
-                childInteractor.getActiveChild(),
+                childInteractor.getActiveChildOnce(),
                 (date, child) -> EventsRequest.builder().date(date).child(child).build())
                 .flatMap(request -> calendarInteractor.getAll(request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::init, this::onUnexpectedError);
+                .subscribe(this::onGetData, this::onUnexpectedError);
     }
 
-    private void init(EventsResponse response) {
+    private void onGetData(EventsResponse response) {
         getViewState().setActive(response.getRequest().getChild());
         getViewState().setSelected(response.getRequest().getDate());
         getViewState().showEvents(response.getEvents());
