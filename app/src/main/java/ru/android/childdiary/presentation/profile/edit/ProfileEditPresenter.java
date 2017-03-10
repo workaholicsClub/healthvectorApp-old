@@ -94,23 +94,15 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
         unsubscribeOnDestroy(childInteractor.add(child)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onAddChild, this::onUnexpectedError));
-    }
-
-    private void onAddChild(Child child) {
-        logger.debug("onAddChild: " + child);
-        getViewState().childAdded(child);
+                .doOnNext(addedChild -> logger.debug("child added: " + addedChild))
+                .subscribe(getViewState()::childAdded, this::onUnexpectedError));
     }
 
     public void updateChild(Child child) {
         unsubscribeOnDestroy(childInteractor.update(child)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onUpdateChild, this::onUnexpectedError));
-    }
-
-    private void onUpdateChild(Child child) {
-        logger.debug("onUpdateChild: " + child);
-        getViewState().childUpdated(child);
+                .doOnNext(updatedChild -> logger.debug("child updated: " + updatedChild))
+                .subscribe(getViewState()::childUpdated, this::onUnexpectedError));
     }
 }
