@@ -68,13 +68,14 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         gridViewCalendar.setOnItemClickListener(this);
         calendarAdapter = getCalendarViewAdapter();
         gridViewCalendar.setAdapter(calendarAdapter);
         updateTitle(calendarAdapter);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewEvents.setLayoutManager(layoutManager);
-        updateTitle(calendarAdapter);
         eventsAdapter = new EventsAdapter(getActivity());
         recyclerViewEvents.setAdapter(eventsAdapter);
     }
@@ -103,7 +104,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
     @Override
     public final void onSelectedDateChanged() {
-        updateTitle(calendarAdapter);
         presenter.switchDate(calendarAdapter.getSelectedDate());
     }
 
@@ -120,6 +120,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     public void setSelected(@NonNull LocalDate date) {
         logger.debug("setSelected: " + date);
         calendarAdapter.setSelectedDate(date, false);
+        updateTitle(calendarAdapter);
     }
 
     @Override

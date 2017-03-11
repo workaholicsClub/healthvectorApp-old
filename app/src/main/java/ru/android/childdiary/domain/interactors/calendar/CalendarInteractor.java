@@ -40,6 +40,10 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.getSelectedDate();
     }
 
+    public Observable<LocalDate> getSelectedDateOnce() {
+        return calendarRepository.getSelectedDate().first(LocalDate.now()).toObservable();
+    }
+
     public Observable<LocalDate> setSelectedDate(@NonNull LocalDate date) {
         return calendarRepository.setSelectedDate(date);
     }

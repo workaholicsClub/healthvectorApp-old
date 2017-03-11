@@ -16,7 +16,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.repositories.core.events.ActiveChildChangedEvent;
-import ru.android.childdiary.data.repositories.core.events.SelectedDateChangedEvent;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
@@ -104,11 +103,5 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                 }, this::onUnexpectedError));
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setSelectedDate(SelectedDateChangedEvent event) {
-        requestBuilder.date(event.getDate());
-        requestData();
     }
 }

@@ -131,7 +131,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addDiaperEvent() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> DiaperEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
+                calendarInteractor.getSelectedDateOnce().map(date -> DiaperEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddDiaperRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
@@ -142,7 +142,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addSleepEvent() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> SleepEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
+                calendarInteractor.getSelectedDateOnce().map(date -> SleepEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddSleepRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
@@ -153,7 +153,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addFeedEvent() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> FeedEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
+                calendarInteractor.getSelectedDateOnce().map(date -> FeedEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddFeedRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
@@ -164,7 +164,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addPumpEventClick() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> PumpEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
+                calendarInteractor.getSelectedDateOnce().map(date -> PumpEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddPumpRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
@@ -175,7 +175,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void addOtherEventClick() {
         Observable.combineLatest(
-                calendarInteractor.getSelectedDate().map(date -> OtherEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
+                calendarInteractor.getSelectedDateOnce().map(date -> OtherEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
                 childInteractor.getActiveChildOnce(),
                 (event, child) -> AddOtherRequest.builder().event(event).child(child).build())
                 .flatMap(request -> calendarInteractor.add(request))
