@@ -72,8 +72,9 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     }
 
     @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        super.setContentView(layoutResID);
+    public void setContentView(@LayoutRes int layoutResId) {
+        super.setContentView(layoutResId);
+        setContentViewBeforeBind();
         ButterKnife.bind(this);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -82,6 +83,8 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         themeChanged();
     }
 
+    protected void setContentViewBeforeBind() {
+    }
 
     @CallSuper
     protected void setupToolbar() {

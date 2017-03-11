@@ -1,8 +1,11 @@
 package ru.android.childdiary.presentation.main.calendar.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -20,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.Optional;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
@@ -29,24 +34,33 @@ import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.main.calendar.CalendarView;
 import ru.android.childdiary.presentation.main.calendar.adapters.CalendarViewAdapter;
 import ru.android.childdiary.presentation.main.calendar.adapters.EventsAdapter;
+import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
 
 public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> extends BaseMvpFragment<CalendarPresenter> implements CalendarView,
         AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged {
-    @BindView(R.id.calendarTitle)
-    protected TextView calendarTitle;
-
     @InjectPresenter
     CalendarPresenter presenter;
 
     @BindView(R.id.textView)
     TextView textView;
 
+    @Nullable
+    @BindView(R.id.calendarTitle)
+    TextView calendarTitle;
+
+    @Nullable
     @BindView(R.id.gridViewCalendar)
     GridView gridViewCalendar;
 
+    @BindView(R.id.textViewSelectedDate)
+    TextView textViewSelectedDate;
+
     @BindView(R.id.recyclerViewEvents)
     RecyclerView recyclerViewEvents;
+
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
 
     private Adapter calendarAdapter;
     private EventsAdapter eventsAdapter;
@@ -62,33 +76,60 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_calendar, container, false);
+        return inflater.inflate(getLayoutResourceId(), container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        gridViewCalendar.setOnItemClickListener(this);
         calendarAdapter = getCalendarViewAdapter();
-        gridViewCalendar.setAdapter(calendarAdapter);
         updateTitle(calendarAdapter);
+
+        if (gridViewCalendar != null) {
+            gridViewCalendar.setOnItemClickListener(this);
+            gridViewCalendar.setAdapter(calendarAdapter);
+            gridViewCalendar.setLayoutParams(
+                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, getGridViewHeight()));
+        }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewEvents.setLayoutManager(layoutManager);
         eventsAdapter = new EventsAdapter(getActivity());
         recyclerViewEvents.setAdapter(eventsAdapter);
+
+        nestedScrollView.setNestedScrollingEnabled(false);
+        nestedScrollView.setSmoothScrollingEnabled(true);
     }
+
+    @LayoutRes
+    protected abstract int getLayoutResourceId();
 
     protected abstract Adapter getCalendarViewAdapter();
 
-    protected abstract void updateTitle(Adapter adapter);
+    protected abstract int getGridViewHeight();
 
+    protected abstract String getCalendarTitleText(Adapter adapter);
+
+    private void updateTitle(Adapter adapter) {
+        Context context = getContext();
+        LocalDate selectedDate = adapter.getSelectedDate();
+        int day = selectedDate.getDayOfMonth();
+        String monthName = DateUtils.monthGenitiveName(getContext(), selectedDate.getMonthOfYear());
+        String text = context.getString(R.string.calendar_selected_date_format, day, monthName);
+        textViewSelectedDate.setText(text);
+        if (calendarTitle != null) {
+            calendarTitle.setText(getCalendarTitleText(calendarAdapter));
+        }
+    }
+
+    @Optional
     @OnClick(R.id.left)
     void moveLeft() {
         calendarAdapter.moveLeft();
     }
 
+    @Optional
     @OnClick(R.id.right)
     void moveRight() {
         calendarAdapter.moveRight();

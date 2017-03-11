@@ -53,35 +53,40 @@
         </activity>
         <activity
             android:name=".presentation.events.DiaperEventDetailActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.events.FeedEventDetailActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.events.OtherEventDetailActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.events.PumpEventDetailActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.events.SleepEventDetailActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.edit.widgets;
+package ru.android.childdiary.presentation.core.widgets;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;

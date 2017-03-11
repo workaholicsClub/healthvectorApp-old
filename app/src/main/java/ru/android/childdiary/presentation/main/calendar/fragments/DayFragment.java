@@ -1,52 +1,38 @@
 package ru.android.childdiary.presentation.main.calendar.fragments;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.arellomobile.mvp.presenter.InjectPresenter;
+import android.content.Context;
+import android.support.annotation.LayoutRes;
 
 import org.joda.time.LocalDate;
 
-import java.util.List;
-
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.core.BaseMvpFragment;
-import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
-import ru.android.childdiary.presentation.main.calendar.CalendarView;
+import ru.android.childdiary.presentation.main.calendar.adapters.DayViewAdapter;
+import ru.android.childdiary.utils.DateUtils;
 
-public class DayFragment extends BaseMvpFragment<CalendarPresenter> implements CalendarView {
-    @InjectPresenter
-    CalendarPresenter presenter;
-
+public class DayFragment extends CalendarFragment<DayViewAdapter> {
     @Override
-    @Nullable
-    protected Sex getSex() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_day, container, false);
+    @LayoutRes
+    protected int getLayoutResourceId() {
+        return R.layout.fragment_day;
     }
 
     @Override
-    public void setActive(@NonNull Child child) {
+    protected DayViewAdapter getCalendarViewAdapter() {
+        return new DayViewAdapter(getActivity(), this);
     }
 
     @Override
-    public void setSelected(@NonNull LocalDate date) {
+    protected int getGridViewHeight() {
+        return getResources().getDimensionPixelSize(R.dimen.week_calendar_grid_view_height);
     }
 
     @Override
-    public void showEvents(@NonNull List<MasterEvent> events) {
+    protected String getCalendarTitleText(DayViewAdapter adapter) {
+        Context context = getContext();
+        LocalDate selectedDate = adapter.getSelectedDate();
+        int day = selectedDate.getDayOfMonth();
+        String monthName = DateUtils.monthGenitiveName(context, selectedDate.getMonthOfYear());
+        String text = context.getString(R.string.calendar_selected_date_format, day, monthName);
+        return text;
     }
 }

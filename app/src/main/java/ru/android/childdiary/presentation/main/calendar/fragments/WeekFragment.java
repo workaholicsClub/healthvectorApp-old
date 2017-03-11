@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.main.calendar.fragments;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 
 import org.joda.time.LocalDate;
 
@@ -10,13 +11,24 @@ import ru.android.childdiary.utils.DateUtils;
 
 public class WeekFragment extends CalendarFragment<WeekViewAdapter> {
     @Override
+    @LayoutRes
+    protected int getLayoutResourceId() {
+        return R.layout.fragment_week;
+    }
+
+    @Override
     protected WeekViewAdapter getCalendarViewAdapter() {
         return new WeekViewAdapter(getActivity(), this);
     }
 
     @Override
-    protected void updateTitle(WeekViewAdapter adapter) {
-        Context context = adapter.getContext();
+    protected int getGridViewHeight() {
+        return getResources().getDimensionPixelSize(R.dimen.week_calendar_grid_view_height);
+    }
+
+    @Override
+    protected String getCalendarTitleText(WeekViewAdapter adapter) {
+        Context context = getContext();
         LocalDate firstDayOfWeek = adapter.getFirstDayOfWeek();
         LocalDate lastDayOfWeek = adapter.getLastDayOfWeek();
         String text;
@@ -31,6 +43,6 @@ public class WeekFragment extends CalendarFragment<WeekViewAdapter> {
                     firstDayOfWeek.getDayOfMonth(), firstDayMonthString,
                     lastDayOfWeek.getDayOfMonth(), lastDayMonthString);
         }
-        calendarTitle.setText(text);
+        return text;
     }
 }

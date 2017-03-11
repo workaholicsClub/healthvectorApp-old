@@ -6,6 +6,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/dummy"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <requestFocus />
+    </View>
+
     <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/topPanel"
         android:layout_width="match_parent"
@@ -40,7 +50,7 @@
             android:text="@string/add_image_button_title"
             android:textAppearance="@style/PlaceholderTextAppearance" />
 
-        <ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText
+        <ru.android.childdiary.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextChildName"
             style="@style/NameEditTextStyle"
             android:layout_width="wrap_content"
@@ -136,7 +146,7 @@
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:orientation="horizontal">
 
-        <ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText
+        <ru.android.childdiary.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextBirthHeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
@@ -151,7 +161,7 @@
             android:textColorHint="@color/placeholder_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
 
-        <ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText
+        <ru.android.childdiary.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextBirthWeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
@@ -163,15 +173,5 @@
             android:textAppearance="@style/PrimaryTextAppearance"
             android:textColorHint="@color/placeholder_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
-
-        <View
-            android:id="@+id/dummy"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
-
-            <requestFocus />
-        </View>
     </LinearLayout>
 </LinearLayout>

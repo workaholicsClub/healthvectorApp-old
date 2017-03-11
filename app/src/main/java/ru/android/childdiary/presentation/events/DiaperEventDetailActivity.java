@@ -2,18 +2,35 @@ package ru.android.childdiary.presentation.events;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
 
+import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailDiaperStateView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailNotificationTimeView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> {
+    @BindView(R.id.dateView)
+    EventDetailDateView dateView;
+
+    @BindView(R.id.timeView)
+    EventDetailTimeView timeView;
+
+    @BindView(R.id.notificationTimeView)
+    EventDetailNotificationTimeView notificationTimeView;
+
+    @BindView(R.id.diaperStateView)
+    EventDetailDiaperStateView diaperStateView;
+
     public static Intent getIntent(Context context, @Nullable Long masterEventId) {
         Intent intent = new Intent(context, DiaperEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_EVENT_ID, masterEventId);
@@ -33,11 +50,21 @@ public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> 
     }
 
     @Override
-    protected View getContentView() {
-        return new View(this);
+    public void showEventDetail(@NonNull DiaperEvent event) {
     }
 
     @Override
-    public void showEventDetail(@NonNull DiaperEvent event) {
+    @LayoutRes
+    protected int getContentLayoutResourceId() {
+        return R.layout.activity_event_detail_diaper;
+    }
+
+    @Override
+    protected void addEvent() {
+        presenter.addDiaperEvent();
+    }
+
+    @Override
+    protected void updateEvent() {
     }
 }

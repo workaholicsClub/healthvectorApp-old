@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.main.calendar.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -33,7 +34,13 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Context context, int position, Sex sex, MasterEvent item) {
-        rootView.setBackgroundColor(ResourcesUtils.getEventColor(context, sex, item));
+        float corner = context.getResources().getDimension(R.dimen.event_row_corner);
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setCornerRadii(new float[]{corner, corner, corner, corner, corner, corner, corner, corner});
+        shape.setColor(ResourcesUtils.getEventColor(context, sex, item));
+        //noinspection deprecation
+        rootView.setBackgroundDrawable(shape);
         textViewTime.setText(DateUtils.time(item.getDateTime().toLocalTime()));
         textViewEventType.setText(StringUtils.eventType(context, item.getEventType()));
         textViewDescription.setText(item.getDescription());
