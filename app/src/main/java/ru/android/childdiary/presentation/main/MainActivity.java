@@ -45,6 +45,11 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
+import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
+import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
+import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
+import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
@@ -242,6 +247,36 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                         (DialogInterface dialog, int which) -> presenter.deleteChild(child))
                 .setNegativeButton(R.string.Cancel, null)
                 .show();
+    }
+
+    @Override
+    public void navigateToDiaperEventAdd() {
+        Intent intent = DiaperEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToFeedEventAdd() {
+        Intent intent = FeedEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToOtherEventAdd() {
+        Intent intent = OtherEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToPumpEventAdd() {
+        Intent intent = PumpEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToSleepEventAdd() {
+        Intent intent = SleepEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
     }
 
     @Override

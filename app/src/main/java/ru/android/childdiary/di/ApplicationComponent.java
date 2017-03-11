@@ -5,8 +5,12 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.di.modules.DataModule;
-import ru.android.childdiary.domain.interactors.child.AntropometryInteractor;
-import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
+import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
+import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
+import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
+import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.main.MainPresenter;
 import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
@@ -35,6 +39,8 @@ public interface ApplicationComponent {
 
     void inject(CalendarPresenter presenter);
 
+    void inject(EventDetailPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -45,4 +51,14 @@ public interface ApplicationComponent {
     void inject(ProfileEditActivity activity);
 
     void inject(ProfileReviewActivity activity);
+
+    void inject(DiaperEventDetailActivity activity);
+
+    void inject(FeedEventDetailActivity activity);
+
+    void inject(OtherEventDetailActivity activity);
+
+    void inject(PumpEventDetailActivity activity);
+
+    void inject(SleepEventDetailActivity activity);
 }

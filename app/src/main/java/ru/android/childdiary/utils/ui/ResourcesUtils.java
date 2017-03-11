@@ -88,4 +88,29 @@ public class ResourcesUtils {
                 return R.color.white;
         }
     }
+
+    @DrawableRes
+    public static int getDiaperEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_diaper_boy : R.drawable.toolbar_logo_diaper_girl;
+    }
+
+    @DrawableRes
+    public static int getFeedEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_boy : R.drawable.toolbar_logo_feed_girl;
+    }
+
+    @DrawableRes
+    public static int getOtherEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_other_boy : R.drawable.toolbar_logo_other_girl;
+    }
+
+    @DrawableRes
+    public static int getPumpEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_pump_boy : R.drawable.toolbar_logo_pump_girl;
+    }
+
+    @DrawableRes
+    public static int getSleepEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_sleep_boy : R.drawable.toolbar_logo_sleep_girl;
+    }
 }

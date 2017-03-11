@@ -7,29 +7,17 @@ import com.arellomobile.mvp.InjectViewState;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.joda.time.LocalTime;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.repositories.core.events.ActiveChildChangedEvent;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.AddDiaperRequest;
-import ru.android.childdiary.domain.interactors.calendar.requests.AddFeedRequest;
-import ru.android.childdiary.domain.interactors.calendar.requests.AddOtherRequest;
-import ru.android.childdiary.domain.interactors.calendar.requests.AddPumpRequest;
-import ru.android.childdiary.domain.interactors.calendar.requests.AddSleepRequest;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -130,58 +118,23 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void addDiaperEvent() {
-        Observable.combineLatest(
-                calendarInteractor.getSelectedDateOnce().map(date -> DiaperEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
-                childInteractor.getActiveChildOnce(),
-                (event, child) -> AddDiaperRequest.builder().event(event).child(child).build())
-                .flatMap(request -> calendarInteractor.add(request))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError);
+        getViewState().navigateToDiaperEventAdd();
     }
 
     public void addSleepEvent() {
-        Observable.combineLatest(
-                calendarInteractor.getSelectedDateOnce().map(date -> SleepEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
-                childInteractor.getActiveChildOnce(),
-                (event, child) -> AddSleepRequest.builder().event(event).child(child).build())
-                .flatMap(request -> calendarInteractor.add(request))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError);
+        getViewState().navigateToSleepEventAdd();
     }
 
     public void addFeedEvent() {
-        Observable.combineLatest(
-                calendarInteractor.getSelectedDateOnce().map(date -> FeedEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
-                childInteractor.getActiveChildOnce(),
-                (event, child) -> AddFeedRequest.builder().event(event).child(child).build())
-                .flatMap(request -> calendarInteractor.add(request))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError);
+        getViewState().navigateToFeedEventAdd();
     }
 
     public void addPumpEventClick() {
-        Observable.combineLatest(
-                calendarInteractor.getSelectedDateOnce().map(date -> PumpEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
-                childInteractor.getActiveChildOnce(),
-                (event, child) -> AddPumpRequest.builder().event(event).child(child).build())
-                .flatMap(request -> calendarInteractor.add(request))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError);
+        getViewState().navigateToPumpEventAdd();
     }
 
     public void addOtherEventClick() {
-        Observable.combineLatest(
-                calendarInteractor.getSelectedDateOnce().map(date -> OtherEvent.builder().dateTime(date.toDateTime(LocalTime.now())).build()),
-                childInteractor.getActiveChildOnce(),
-                (event, child) -> AddOtherRequest.builder().event(event).child(child).build())
-                .flatMap(request -> calendarInteractor.add(request))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onEventAdded, this::onUnexpectedError);
+        getViewState().navigateToOtherEventAdd();
     }
 
     private void onEventAdded(@NonNull MasterEvent event) {
