@@ -26,6 +26,8 @@ import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
 public class CalendarPresenter extends BasePresenter<CalendarView> {
+    private final EventsRequest.EventsRequestBuilder requestBuilder = EventsRequest.builder();
+
     @Inject
     ChildInteractor childInteractor;
 
@@ -46,15 +48,26 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        requestEvents();
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getSelectedDate(),
+                childInteractor.getActiveChild(),
+                (date, child) -> EventsRequest.builder().date(date).child(child).build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGetRequest, this::onUnexpectedError));
         bus.register(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unsubscribe();
         bus.unregister(this);
+    }
+
+    private void onGetRequest(@NonNull EventsRequest request) {
+        logger.debug("onGetRequest: " + request);
+        requestBuilder.date(request.getDate()).child(request.getChild());
+        requestData();
     }
 
     private void unsubscribe() {
@@ -63,19 +76,15 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
         }
     }
 
-    private void requestEvents() {
+    private void requestData() {
         unsubscribe();
-        subscription = Observable.combineLatest(
-                calendarInteractor.getSelectedDate(),
-                childInteractor.getActiveChildOnce(),
-                (date, child) -> EventsRequest.builder().date(date).child(child).build())
-                .flatMap(request -> calendarInteractor.getAll(request))
+        subscription = unsubscribeOnDestroy(calendarInteractor.getAll(requestBuilder.build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetData, this::onUnexpectedError);
+                .subscribe(this::onGetData, this::onUnexpectedError));
     }
 
-    private void onGetData(EventsResponse response) {
+    private void onGetData(@NonNull EventsResponse response) {
         getViewState().setActive(response.getRequest().getChild());
         getViewState().setSelected(response.getRequest().getDate());
         getViewState().showEvents(response.getEvents());
@@ -83,7 +92,8 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setActiveChild(ActiveChildChangedEvent event) {
-        requestEvents();
+        requestBuilder.child(event.getChild());
+        requestData();
     }
 
     public void switchDate(@NonNull LocalDate date) {
@@ -98,6 +108,7 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setSelectedDate(SelectedDateChangedEvent event) {
-        requestEvents();
+        requestBuilder.date(event.getDate());
+        requestData();
     }
 }
