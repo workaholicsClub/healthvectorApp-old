@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import ru.android.childdiary.app.ChildDiaryPreferences;
 import ru.android.childdiary.data.repositories.core.events.ActiveChildChangedEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -38,9 +37,9 @@ public class ChildDataRepository implements ChildRepository {
         return Observable
                 .fromIterable(childList)
                 .filter(child -> ObjectUtils.equals(child.getId(), preferences.getActiveChildId()))
-                .first(childList.get(0))
-                .onErrorResumeNext(Single.just(Child.NULL))
-                .toObservable();
+                .first(Child.NULL)
+                .toObservable()
+                .switchIfEmpty(Observable.just(Child.NULL));
     }
 
     public Observable<Child> setActiveChild(@NonNull Child child) {
