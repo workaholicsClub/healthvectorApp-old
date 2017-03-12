@@ -27,6 +27,13 @@
 
         <include layout="@layout/calendar_view" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
         <include
             layout="@layout/events_view"
             android:layout_width="match_parent"

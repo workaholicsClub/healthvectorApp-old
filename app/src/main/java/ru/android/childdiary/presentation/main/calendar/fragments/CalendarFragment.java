@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -98,6 +99,8 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         eventsAdapter = new EventsAdapter(getActivity());
         recyclerViewEvents.setAdapter(eventsAdapter);
 
+        ViewCompat.setNestedScrollingEnabled(recyclerViewEvents, false);
+        recyclerViewEvents.setNestedScrollingEnabled(false);
         nestedScrollView.setNestedScrollingEnabled(false);
         nestedScrollView.setSmoothScrollingEnabled(true);
     }
