@@ -2,9 +2,13 @@ package ru.android.childdiary.presentation.events;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
@@ -24,6 +28,9 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> {
+    private static final String TAG_TIME_PICKER = "TIME_PICKER";
+    private static final String TAG_DATE_PICKER = "DATE_PICKER";
+
     @BindView(R.id.feedTypeView)
     EventDetailFeedTypeView feedTypeView;
 
@@ -63,6 +70,14 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> {
     }
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
+        timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
+    }
+
+    @Override
     protected void setupToolbar() {
         super.setupToolbar();
         toolbar.setLogo(ResourcesUtils.getFeedEventLogoRes(sex));
@@ -86,5 +101,15 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> {
 
     @Override
     protected void updateEvent() {
+    }
+
+    @Override
+    protected void setDate(String tag, LocalDate date) {
+        dateView.setDate(date);
+    }
+
+    @Override
+    protected void setTime(String tag, LocalTime time) {
+        timeView.setTime(time);
     }
 }

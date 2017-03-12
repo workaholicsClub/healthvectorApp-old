@@ -21,6 +21,6 @@
         android:layout_width="@dimen/event_detail_height"
         android:layout_height="@dimen/event_detail_height"
         android:scaleType="center"
-        android:src="@drawable/radio_background" />
+        android:src="@drawable/radio_off" />
 
 </LinearLayout>

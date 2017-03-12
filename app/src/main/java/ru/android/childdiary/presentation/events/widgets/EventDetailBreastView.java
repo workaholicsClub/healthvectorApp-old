@@ -6,12 +6,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.utils.StringUtils;
 
 public class EventDetailBreastView extends LinearLayout {
+    @BindView(R.id.textView)
+    TextView textView;
+
     public EventDetailBreastView(Context context) {
         super(context);
         init();
@@ -38,6 +42,6 @@ public class EventDetailBreastView extends LinearLayout {
             TextView textView = ButterKnife.findById(child, R.id.textView);
             textView.setText(StringUtils.breast(getContext(), breast));
         }
-        // ButterKnife.bind(this);
+        ButterKnife.bind(this);
     }
 }

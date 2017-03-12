@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.repositories.core.events;
+package ru.android.childdiary.data.repositories.child.events;
 
 import android.support.annotation.NonNull;
 

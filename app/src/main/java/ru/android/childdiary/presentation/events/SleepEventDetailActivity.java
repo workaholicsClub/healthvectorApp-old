@@ -7,6 +7,9 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -20,6 +23,11 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> {
+    private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
+    private static final String TAG_DATE_PICKER_START = "DATE_PICKER_START";
+    private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
+    private static final String TAG_DATE_PICKER_FINISH = "DATE_PICKER_FINISH";
+
     @BindView(R.id.startTitleView)
     EventDetailTitleView startTitleView;
 
@@ -58,6 +66,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> {
 
         startTitleView.setTitle(R.string.asleep);
         finishTitleView.setTitle(R.string.awoke);
+
+        startDateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getDate()));
+        startTimeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getTime()));
+        finishDateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getDate()));
+        finishTimeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getTime()));
     }
 
     @Override
@@ -84,5 +97,29 @@ public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> {
 
     @Override
     protected void updateEvent() {
+    }
+
+    @Override
+    protected void setDate(String tag, LocalDate date) {
+        switch (tag) {
+            case TAG_DATE_PICKER_START:
+                startDateView.setDate(date);
+                break;
+            case TAG_DATE_PICKER_FINISH:
+                finishDateView.setDate(date);
+                break;
+        }
+    }
+
+    @Override
+    protected void setTime(String tag, LocalTime time) {
+        switch (tag) {
+            case TAG_TIME_PICKER_START:
+                startTimeView.setTime(time);
+                break;
+            case TAG_TIME_PICKER_FINISH:
+                finishTimeView.setTime(time);
+                break;
+        }
     }
 }

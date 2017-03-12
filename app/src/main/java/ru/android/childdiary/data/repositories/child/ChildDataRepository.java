@@ -11,7 +11,7 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.app.ChildDiaryPreferences;
-import ru.android.childdiary.data.repositories.core.events.ActiveChildChangedEvent;
+import ru.android.childdiary.data.repositories.child.events.ActiveChildChangedEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
 import ru.android.childdiary.utils.ObjectUtils;
