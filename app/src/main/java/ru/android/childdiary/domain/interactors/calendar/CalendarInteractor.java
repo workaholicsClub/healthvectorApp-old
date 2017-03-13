@@ -118,23 +118,11 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.update(event);
     }
 
-    public Observable<DiaperEvent> delete(@NonNull DiaperEvent event) {
+    public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
         return calendarRepository.delete(event);
     }
 
-    public Observable<FeedEvent> delete(@NonNull FeedEvent event) {
-        return calendarRepository.delete(event);
-    }
-
-    public Observable<OtherEvent> delete(@NonNull OtherEvent event) {
-        return calendarRepository.delete(event);
-    }
-
-    public Observable<PumpEvent> delete(@NonNull PumpEvent event) {
-        return calendarRepository.delete(event);
-    }
-
-    public Observable<SleepEvent> delete(@NonNull SleepEvent event) {
-        return calendarRepository.delete(event);
+    public Observable<MasterEvent> done(@NonNull MasterEvent event) {
+        return calendarRepository.done(event);
     }
 }

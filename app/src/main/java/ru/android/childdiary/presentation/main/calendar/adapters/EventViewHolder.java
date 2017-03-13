@@ -6,23 +6,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import butterknife.BindColor;
+import com.daimajia.swipe.SwipeLayout;
+
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class EventViewHolder extends RecyclerView.ViewHolder {
+class EventViewHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.swipeLayout)
+    SwipeLayout swipeLayout;
+
+    @BindView(R.id.bottomView)
+    View bottomView;
+
     @BindView(R.id.actionsView)
     View actionsView;
 
-    @BindView(R.id.rootView)
-    View rootView;
+    @BindView(R.id.eventView)
+    View eventView;
 
     @BindView(R.id.textViewTime)
     TextView textViewTime;
@@ -33,26 +44,43 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.textViewDescription)
     TextView textViewDescription;
 
+    @BindView(R.id.eventRowActionDone)
+    View actionDoneView;
+
+    @BindView(R.id.delimiter3)
+    View delimiter3;
+
     @BindDimen(R.dimen.event_row_corner)
     float corner;
 
-    @BindColor(R.color.swipe_color)
-    int swipeColor;
+    @Getter
+    private MasterEvent event;
+    private EventActionAdapterListener listener;
 
-    public EventViewHolder(View itemView) {
+    public EventViewHolder(View itemView, EventActionAdapterListener listener) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        this.listener = listener;
     }
 
-    public void bind(Context context, int position, Sex sex, MasterEvent item) {
-        //noinspection deprecation
-        actionsView.setBackgroundDrawable(getShape(swipeColor));
-        //noinspection deprecation
-        rootView.setBackgroundDrawable(getShape(ResourcesUtils.getEventColor(context, sex, item)));
+    public void bind(Context context, int position, Sex sex, MasterEvent event) {
+        this.event = event;
 
-        textViewTime.setText(DateUtils.time(item.getDateTime().toLocalTime()));
-        textViewEventType.setText(StringUtils.eventType(context, item.getEventType()));
-        textViewDescription.setText(item.getDescription());
+        //noinspection deprecation
+        actionsView.setBackgroundDrawable(getShape(ThemeUtils.getColorAccent(context, sex)));
+        //noinspection deprecation
+        eventView.setBackgroundDrawable(getShape(ResourcesUtils.getEventColor(context, sex, event)));
+
+        textViewTime.setText(DateUtils.time(event.getDateTime().toLocalTime()));
+        textViewEventType.setText(StringUtils.eventType(context, event.getEventType()));
+        textViewDescription.setText(event.getDescription());
+
+        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
+
+        boolean showActionDone = event.getEventType() == EventType.OTHER;
+        actionDoneView.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
+        delimiter3.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
     }
 
     private GradientDrawable getShape(int color) {
@@ -61,5 +89,33 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         shape.setCornerRadii(new float[]{corner, corner, corner, corner, corner, corner, corner, corner});
         shape.setColor(color);
         return shape;
+    }
+
+    @OnClick(R.id.eventRowActionDelete)
+    void onDeleteClick() {
+        if (listener != null) {
+            listener.delete(this);
+        }
+    }
+
+    @OnClick(R.id.eventRowActionMove)
+    void onMoveClick() {
+        if (listener != null) {
+            listener.move(this);
+        }
+    }
+
+    @OnClick(R.id.eventRowActionEdit)
+    void onEditClick() {
+        if (listener != null) {
+            listener.edit(this);
+        }
+    }
+
+    @OnClick(R.id.eventRowActionDone)
+    void onDoneClick() {
+        if (listener != null) {
+            listener.done(this);
+        }
     }
 }

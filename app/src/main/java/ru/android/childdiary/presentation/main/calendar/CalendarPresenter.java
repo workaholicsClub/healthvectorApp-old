@@ -14,6 +14,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsResponse;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
@@ -83,5 +84,26 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                 }, this::onUnexpectedError));
+    }
+
+    public void delete(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(calendarInteractor.delete(event)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(deletedEvent -> logger.debug("event deleted: " + deletedEvent), this::onUnexpectedError));
+    }
+
+    public void move(@NonNull MasterEvent event) {
+    }
+
+    public void edit(@NonNull MasterEvent event) {
+        getViewState().navigateToEventEdit(event);
+    }
+
+    public void done(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(calendarInteractor.done(event)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(doneEvent -> logger.debug("event done: " + doneEvent), this::onUnexpectedError));
     }
 }

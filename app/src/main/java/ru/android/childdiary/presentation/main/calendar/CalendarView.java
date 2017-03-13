@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.main.calendar;
 import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import org.joda.time.LocalDate;
@@ -22,4 +23,7 @@ public interface CalendarView extends BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showEvents(@NonNull List<MasterEvent> events);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToEventEdit(@NonNull MasterEvent event);
 }

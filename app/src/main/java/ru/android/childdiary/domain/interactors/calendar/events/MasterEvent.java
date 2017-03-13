@@ -37,4 +37,16 @@ public class MasterEvent {
     public MasterEvent getMasterEvent() {
         return this;
     }
+
+    public MasterEvent.MasterEventBuilder toMasterBuilder() {
+        return MasterEvent.masterBuilder()
+                .masterEventId(masterEventId)
+                .eventType(eventType)
+                .description(description)
+                .dateTime(dateTime)
+                .notifyTimeInMinutes(notifyTimeInMinutes)
+                .note(note)
+                .isDone(isDone)
+                .isDeleted(isDeleted);
+    }
 }
