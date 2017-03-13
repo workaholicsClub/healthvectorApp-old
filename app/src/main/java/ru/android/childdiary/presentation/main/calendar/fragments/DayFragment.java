@@ -18,7 +18,7 @@ public class DayFragment extends CalendarFragment<DayViewAdapter> {
 
     @Override
     protected DayViewAdapter getCalendarViewAdapter() {
-        return new DayViewAdapter(getActivity(), this);
+        return new DayViewAdapter(getContext(), this);
     }
 
     @Override

@@ -58,17 +58,17 @@ public abstract class BaseDialogFragment extends DialogFragment {
     }
 
     protected void showToast(String text) {
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     protected final void requestPermission(RequestPermissionInfo permissionInfo) {
         String permission = permissionInfo.getPermission();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && ActivityCompat.checkSelfPermission(getActivity(), permission)
+                && ActivityCompat.checkSelfPermission(getContext(), permission)
                 != PackageManager.PERMISSION_GRANTED) {
             permissionInfoMap.put(permissionInfo.getRequestCode(), permissionInfo);
             if (shouldShowRequestPermissionRationale(permission)) {
-                new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialogRes(sex))
+                new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(sex))
                         .setTitle(permissionInfo.getTitleResourceId())
                         .setMessage(permissionInfo.getTextResourceId())
                         .setPositiveButton(R.string.OK,

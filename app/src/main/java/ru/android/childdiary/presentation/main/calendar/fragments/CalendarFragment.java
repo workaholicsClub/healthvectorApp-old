@@ -94,9 +94,9 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, getGridViewHeight()));
         }
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewEvents.setLayoutManager(layoutManager);
-        eventsAdapter = new EventsAdapter(getActivity());
+        eventsAdapter = new EventsAdapter(getContext());
         recyclerViewEvents.setAdapter(eventsAdapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewEvents, false);
@@ -118,7 +118,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         Context context = getContext();
         LocalDate selectedDate = adapter.getSelectedDate();
         int day = selectedDate.getDayOfMonth();
-        String monthName = DateUtils.monthGenitiveName(getContext(), selectedDate.getMonthOfYear());
+        String monthName = DateUtils.monthGenitiveName(context, selectedDate.getMonthOfYear());
         String text = context.getString(R.string.calendar_selected_date_format, day, monthName);
         textViewSelectedDate.setText(text);
         if (calendarTitle != null) {
