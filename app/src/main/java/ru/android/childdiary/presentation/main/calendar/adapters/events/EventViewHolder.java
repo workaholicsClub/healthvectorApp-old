@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main.calendar.adapters;
+package ru.android.childdiary.presentation.main.calendar.adapters.events;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
@@ -55,9 +55,9 @@ class EventViewHolder extends RecyclerView.ViewHolder {
 
     @Getter
     private MasterEvent event;
-    private EventActionAdapterListener listener;
+    private SwipeActionListener listener;
 
-    public EventViewHolder(View itemView, EventActionAdapterListener listener) {
+    public EventViewHolder(View itemView, SwipeActionListener listener) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.listener = listener;
@@ -117,5 +117,15 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         if (listener != null) {
             listener.done(this);
         }
+    }
+
+    interface SwipeActionListener {
+        void delete(EventViewHolder viewHolder);
+
+        void move(EventViewHolder viewHolder);
+
+        void edit(EventViewHolder viewHolder);
+
+        void done(EventViewHolder viewHolder);
     }
 }

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main.calendar.adapters;
+package ru.android.childdiary.presentation.main.calendar.adapters.events;
 
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 

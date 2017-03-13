@@ -38,9 +38,9 @@ import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.main.calendar.CalendarView;
-import ru.android.childdiary.presentation.main.calendar.adapters.CalendarViewAdapter;
-import ru.android.childdiary.presentation.main.calendar.adapters.EventActionListener;
-import ru.android.childdiary.presentation.main.calendar.adapters.EventsAdapter;
+import ru.android.childdiary.presentation.main.calendar.adapters.calendar.CalendarViewAdapter;
+import ru.android.childdiary.presentation.main.calendar.adapters.events.EventActionListener;
+import ru.android.childdiary.presentation.main.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
 
@@ -67,7 +67,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     RecyclerView recyclerViewEvents;
 
     private Adapter calendarAdapter;
-    private EventsAdapter eventsAdapter;
+    private EventAdapter eventAdapter;
     private Sex sex;
 
     @Override
@@ -99,8 +99,8 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewEvents.setLayoutManager(layoutManager);
-        eventsAdapter = new EventsAdapter(getContext(), this);
-        recyclerViewEvents.setAdapter(eventsAdapter);
+        eventAdapter = new EventAdapter(getContext(), this);
+        recyclerViewEvents.setAdapter(eventAdapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewEvents, false);
     }
@@ -157,7 +157,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         textView.setText(child == Child.NULL ? "no active child" : child.getName());
         sex = child.getSex();
         calendarAdapter.setSex(sex);
-        eventsAdapter.setSex(sex);
+        eventAdapter.setSex(sex);
     }
 
     @Override
@@ -170,7 +170,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @Override
     public void showEvents(@NonNull List<MasterEvent> events) {
         logger.debug("showEvents: " + StringUtils.eventsList(events));
-        eventsAdapter.setEvents(events);
+        eventAdapter.setEvents(events);
     }
 
     @Override
