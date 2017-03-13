@@ -174,34 +174,33 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     }
 
     @Override
-    public void navigateToEventEdit(@NonNull MasterEvent event) {
-        switch (event.getEventType()) {
-            case SLEEP: {
-                Intent intent = SleepEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
-                startActivity(intent);
-                break;
-            }
-            case FEED: {
-                Intent intent = FeedEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
-                startActivity(intent);
-                break;
-            }
-            case PUMP: {
-                Intent intent = PumpEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
-                startActivity(intent);
-                break;
-            }
-            case DIAPER: {
-                Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
-                startActivity(intent);
-                break;
-            }
-            case OTHER: {
-                Intent intent = OtherEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
-                startActivity(intent);
-                break;
-            }
-        }
+    public void navigateToDiaperEventEdit(@NonNull MasterEvent event) {
+        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToFeedEventEdit(@NonNull MasterEvent event) {
+        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToOtherEventEdit(@NonNull MasterEvent event) {
+        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToPumpEventEdit(@NonNull MasterEvent event) {
+        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToSleepEventEdit(@NonNull MasterEvent event) {
+        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        startActivity(intent);
     }
 
     @Override

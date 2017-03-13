@@ -25,5 +25,17 @@ public interface CalendarView extends BaseView {
     void showEvents(@NonNull List<MasterEvent> events);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToEventEdit(@NonNull MasterEvent event);
+    void navigateToDiaperEventEdit(@NonNull MasterEvent event);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToFeedEventEdit(@NonNull MasterEvent event);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToOtherEventEdit(@NonNull MasterEvent event);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToPumpEventEdit(@NonNull MasterEvent event);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToSleepEventEdit(@NonNull MasterEvent event);
 }
