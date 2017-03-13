@@ -2,8 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/calendar_margin_horizontal"
-    android:layout_marginRight="@dimen/calendar_margin_horizontal"
     android:gravity="center"
     android:orientation="horizontal">
 
@@ -13,6 +11,8 @@
         android:layout_height="@dimen/calendar_title_height"
         android:layout_weight="1"
         android:gravity="center_vertical"
+        android:paddingLeft="@dimen/calendar_margin_horizontal"
+        android:paddingRight="@dimen/calendar_margin_horizontal"
         android:textAppearance="@style/TitleTextAppearance" />
 
     <ImageView

@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.main.calendar.adapters.events;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +43,9 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventViewHolder> implemen
     }
 
     public void setEvents(@NonNull List<MasterEvent> events) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new EventListDiff(this.events, events), false);
+        diffResult.dispatchUpdatesTo(this);
         this.events = Collections.unmodifiableList(events);
-        notifyDataSetChanged();
     }
 
     @Override
