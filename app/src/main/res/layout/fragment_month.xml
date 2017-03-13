@@ -10,29 +10,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
+        <include layout="@layout/request_focus_view_white" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/calendar_margin_horizontal"
-            android:layout_marginRight="@dimen/calendar_margin_horizontal"
-            android:gravity="end" />
+            android:background="@color/white"
+            android:gravity="end"
+            android:paddingLeft="@dimen/calendar_margin_horizontal"
+            android:paddingRight="@dimen/calendar_margin_horizontal" />
 
         <include layout="@layout/calendar_view" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
+        <include layout="@layout/request_focus_view_white" />
 
         <include
             layout="@layout/events_view"
