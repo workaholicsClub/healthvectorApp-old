@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.interactors.child;
+package ru.android.childdiary.domain.interactors.child.validation;
 
 public enum ChildFieldType {
     IMAGE, NAME, SEX, BIRTH_DATE, BIRTH_TIME, BIRTH_HEIGHT, BIRTH_WEIGHT

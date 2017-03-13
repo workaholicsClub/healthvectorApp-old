@@ -2,6 +2,8 @@ package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class ResourcesUtils {
@@ -19,7 +22,7 @@ public class ResourcesUtils {
         return Drawable.createFromPath(child.getImageFileName());
     }
 
-    public static int[] getNavigationDrawerItemResources(Sex sex) {
+    public static int[] getNavigationDrawerItemResources(@Nullable Sex sex) {
         if (sex == null || sex == Sex.MALE) {
             return new int[]{
                     R.drawable.navigation_drawer_item_calendar_boy,
@@ -51,11 +54,63 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
-    public static int getSelectedDateBackground(@Nullable Sex sex) {
+    public static int getSelectedDateBackgroundRes(@Nullable Sex sex) {
         if (sex == null || sex == Sex.MALE) {
             return R.drawable.calendar_cell_background_selected_boy;
         } else {
             return R.drawable.calendar_cell_background_selected_girl;
         }
+    }
+
+    @ColorInt
+    public static int getEventColor(Context context, @Nullable Sex sex, @NonNull MasterEvent event) {
+        return ContextCompat.getColor(context, getEventColorRes(sex, event));
+    }
+
+    @ColorRes
+    private static int getEventColorRes(@Nullable Sex sex, @NonNull MasterEvent event) {
+        if (event.getEventType() == null) {
+            return R.color.white;
+        }
+
+        switch (event.getEventType()) {
+            case DIAPER:
+                return sex == null || sex == Sex.MALE ? R.color.event_diaper_row_background_boy : R.color.event_diaper_row_background_girl;
+            case SLEEP:
+                return sex == null || sex == Sex.MALE ? R.color.event_sleep_row_background_boy : R.color.event_sleep_row_background_girl;
+            case FEED:
+                return sex == null || sex == Sex.MALE ? R.color.event_feed_row_background_boy : R.color.event_feed_row_background_girl;
+            case PUMP:
+                return sex == null || sex == Sex.MALE ? R.color.event_pump_row_background_boy : R.color.event_pump_row_background_girl;
+            case OTHER:
+                return sex == null || sex == Sex.MALE ? R.color.event_other_row_background_boy : R.color.event_other_row_background_girl;
+            default:
+                return R.color.white;
+        }
+    }
+
+    @DrawableRes
+    public static int getDiaperEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_diaper_boy : R.drawable.toolbar_logo_diaper_girl;
+    }
+
+    @DrawableRes
+    public static int getFeedEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_boy : R.drawable.toolbar_logo_feed_girl;
+    }
+
+    @DrawableRes
+    public static int getOtherEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_other_boy : R.drawable.toolbar_logo_other_girl;
+    }
+
+    @DrawableRes
+    public static int getPumpEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_pump_boy : R.drawable.toolbar_logo_pump_girl;
+    }
+
+    @DrawableRes
+    public static int getSleepEventLogoRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_sleep_boy : R.drawable.toolbar_logo_sleep_girl;
     }
 }

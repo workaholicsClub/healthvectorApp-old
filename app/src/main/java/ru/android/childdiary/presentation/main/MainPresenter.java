@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.main;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.InjectViewState;
 
@@ -15,8 +14,10 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.repositories.child.events.ActiveChildChangedEvent;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.core.events.ActiveChildChangedEvent;
+import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -28,10 +29,12 @@ public class MainPresenter extends BasePresenter<MainView> {
     ChildInteractor childInteractor;
 
     @Inject
+    CalendarInteractor calendarInteractor;
+
+    @Inject
     EventBus bus;
 
-    private List<Child> childList;
-    private Child activeChild;
+    private boolean isFirstTime = true;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -45,10 +48,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(childInteractor.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(childResponse -> {
-                    onGetChildList(childResponse.getChildList());
-                    setActiveChild(childResponse.getActiveChild());
-                }, this::onUnexpectedError));
+                .subscribe(this::onGetChildList, this::onUnexpectedError));
         bus.register(this);
     }
 
@@ -58,77 +58,86 @@ public class MainPresenter extends BasePresenter<MainView> {
         bus.unregister(this);
     }
 
-    public void toggleChild(@Nullable Long id) {
-        unsubscribeOnDestroy(childInteractor.setActiveChild(id)
+    private void onGetChildList(@NonNull List<Child> childList) {
+        logger.debug("onGetChildList: " + StringUtils.childList(childList));
+        getViewState().showChildList(childList);
+        if (isFirstTime) {
+            if (childList.isEmpty()) {
+                getViewState().navigateToProfileAdd();
+            }
+            unsubscribeOnDestroy(childInteractor.getActiveChild()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(getViewState()::showChild, this::onUnexpectedError));
+            isFirstTime = false;
+        }
+    }
+
+    public void switchChild(@NonNull Child child) {
+        logger.debug("user switch child: " + child);
+        unsubscribeOnDestroy(childInteractor.setActiveChild(child)
+                .ignoreElements()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setActiveChild, this::onUnexpectedError));
+                .subscribe(() -> {
+                }, this::onUnexpectedError));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setActiveChild(ActiveChildChangedEvent event) {
-        setActiveChild(event.getChild());
-    }
-
-    private void onGetChildList(@NonNull List<Child> childList) {
-        logger.debug("onGetChildList: " + StringUtils.childList(childList));
-        boolean isFirstTime = this.childList == null;
-        this.childList = childList;
-        getViewState().showChildList(childList);
-        if (childList.isEmpty() && isFirstTime) {
-            getViewState().addChild();
-        }
-    }
-
-    private void setActiveChild(@NonNull Child child) {
-        logger.debug("setActiveChild: " + child);
-        if (!child.equals(activeChild)) {
-            logger.debug("active child changed");
-            if (child == Child.NULL) {
-                activeChild = null;
-            } else {
-                activeChild = child;
-            }
-            getViewState().setActive(activeChild);
-        }
+        getViewState().showChild(event.getChild());
     }
 
     public void addChild() {
-        getViewState().addChild();
+        getViewState().navigateToProfileAdd();
     }
 
     public void editChild() {
-        if (activeChild == null) {
-            logger.warn("editChild: active child is null");
-            return;
-        }
-        getViewState().editChild(activeChild);
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToProfileEdit, this::onUnexpectedError));
     }
 
     public void reviewChild() {
-        if (activeChild == null) {
-            logger.warn("reviewChild: active child is null");
-            return;
-        }
-        getViewState().reviewChild(activeChild);
+        getViewState().navigateToProfileAdd();
     }
 
     public void deleteChild() {
-        if (activeChild == null) {
-            logger.warn("deleteChild: active child is null");
-            return;
-        }
-        getViewState().confirmDeleteChild(activeChild);
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showDeleteChildConfirmation, this::onUnexpectedError));
     }
 
     public void deleteChild(@NonNull Child child) {
         unsubscribeOnDestroy(childInteractor.delete(child)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onDeleteChild, this::onUnexpectedError));
+                .subscribe(deletedChild -> logger.debug("child deleted: " + deletedChild), this::onUnexpectedError));
     }
 
-    private void onDeleteChild(Child child) {
-        logger.debug("onDeleteChild: " + child);
+    public void addDiaperEvent() {
+        getViewState().navigateToDiaperEventAdd();
+    }
+
+    public void addSleepEvent() {
+        getViewState().navigateToSleepEventAdd();
+    }
+
+    public void addFeedEvent() {
+        getViewState().navigateToFeedEventAdd();
+    }
+
+    public void addPumpEventClick() {
+        getViewState().navigateToPumpEventAdd();
+    }
+
+    public void addOtherEventClick() {
+        getViewState().navigateToOtherEventAdd();
+    }
+
+    private void onEventAdded(@NonNull MasterEvent event) {
+        logger.debug("onEventAdded: " + event);
     }
 }

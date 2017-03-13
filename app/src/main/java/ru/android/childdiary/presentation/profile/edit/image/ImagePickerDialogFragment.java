@@ -62,7 +62,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
                 .titleResourceId(R.string.action_pick_image)
                 .iconResourceId(R.drawable.image_picker_action_pick_image)
                 .build());
-        if (child != null && child.getImageFileName() != null) {
+        if (child.getImageFileName() != null) {
             actions.add(ImagePickerAction.builder()
                     .type(ImagePickerActionType.DELETE)
                     .titleResourceId(R.string.action_delete_image)
@@ -70,8 +70,8 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
                     .build());
         }
 
-        ListView listView = new ListView(getActivity());
-        ArrayAdapter adapter = new ImagePickerActionAdapter(getActivity(), actions);
+        ListView listView = new ListView(getContext());
+        ArrayAdapter adapter = new ImagePickerActionAdapter(getContext(), actions);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
@@ -131,17 +131,17 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
 
     private void captureImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            File capturedImageFile = ImagePickerHelper.createCapturedImageFile(getActivity());
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            File capturedImageFile = ImagePickerHelper.createCapturedImageFile(getContext());
             if (capturedImageFile == null) {
                 showToast(getString(R.string.failed_to_create_file_for_camera));
             } else {
-                capturedImageFileUri = FileProvider.getUriForFile(getActivity(),
+                capturedImageFileUri = FileProvider.getUriForFile(getContext(),
                         getString(R.string.file_provider_authorities),
                         capturedImageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageFileUri);
 
-                ImagePickerHelper.grantPermissionToApps(getActivity(), intent, capturedImageFileUri);
+                ImagePickerHelper.grantPermissionToApps(getContext(), intent, capturedImageFileUri);
 
                 startActivityForResult(intent, REQUEST_CAPTURE_IMAGE);
             }
@@ -163,7 +163,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
                 startCropActivity(selectedImageUri);
             }
         } else if (requestCode == REQUEST_CAPTURE_IMAGE) {
-            ImagePickerHelper.revokePermissions(getActivity(), capturedImageFileUri);
+            ImagePickerHelper.revokePermissions(getContext(), capturedImageFileUri);
             if (resultCode == RESULT_OK) {
                 startCropActivity(capturedImageFileUri);
             }
@@ -177,7 +177,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
     }
 
     private void startCropActivity(@NonNull Uri sourceUri) {
-        File destinationFile = ImagePickerHelper.getCroppedImageFile(getActivity());
+        File destinationFile = ImagePickerHelper.getCroppedImageFile(getContext());
 
         if (destinationFile == null) {
             showToast(getString(R.string.failed_to_create_file_for_crop));
@@ -200,12 +200,12 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         options.setCropGridRowCount(0);
         options.setShowCropFrame(false);
 
-        WidgetsUtils.setupCropActivityToolbar(getActivity(), options, sex);
+        WidgetsUtils.setupCropActivityToolbar(getContext(), options, sex);
 
         uCrop.withOptions(options);
 
-        Intent intent = uCrop.getIntent(getActivity());
-        intent.setClass(getActivity(), CropActivity.class);
+        Intent intent = uCrop.getIntent(getContext());
+        intent.setClass(getContext(), CropActivity.class);
         startActivityForResult(intent, REQUEST_CROP_IMAGE);
     }
 
@@ -213,7 +213,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
             dismiss();
-            File resultFile = ImagePickerHelper.createUniqueImageFile(getActivity(), resultUri);
+            File resultFile = ImagePickerHelper.createUniqueImageFile(getContext(), resultUri);
             if (resultFile == null) {
                 showToast(getString(R.string.failed_to_save_result_file));
             } else {

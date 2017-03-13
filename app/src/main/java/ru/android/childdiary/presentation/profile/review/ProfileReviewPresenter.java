@@ -1,7 +1,5 @@
 package ru.android.childdiary.presentation.profile.review;
 
-import android.support.annotation.NonNull;
-
 import com.arellomobile.mvp.InjectViewState;
 
 import javax.inject.Inject;
@@ -9,7 +7,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
@@ -18,31 +15,27 @@ public class ProfileReviewPresenter extends BasePresenter<ProfileReviewView> {
     @Inject
     ChildInteractor childInteractor;
 
-    private Child child;
-
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
     }
 
-    public void loadChild(@NonNull Long id) {
-        unsubscribeOnDestroy(childInteractor.get(id)
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+
+        unsubscribeOnDestroy(childInteractor.getActiveChild()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetChild, this::onUnexpectedError));
-    }
-
-    private void onGetChild(@NonNull Child child) {
-        logger.debug("onGetChild");
-        this.child = child;
-        getViewState().showChild(child);
+                .doOnNext(child -> logger.debug("showChild: " + child))
+                .subscribe(getViewState()::showChild, this::onUnexpectedError));
     }
 
     public void editChild() {
-        if (child == null) {
-            logger.warn("editChild: child is null");
-            return;
-        }
-        getViewState().editChild(child);
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(child -> logger.debug("navigateToProfileEdit: " + child))
+                .subscribe(getViewState()::navigateToProfileEdit, this::onUnexpectedError));
     }
 }

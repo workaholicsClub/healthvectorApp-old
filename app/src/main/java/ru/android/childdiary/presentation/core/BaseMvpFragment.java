@@ -55,7 +55,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
-            new AlertDialog.Builder(getActivity(), ThemeUtils.getThemeDialog(getSex()))
+            new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                     .setMessage(e.toString())
                     .setPositiveButton(R.string.OK, null)
                     .show();
@@ -63,7 +63,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
     }
 
     protected void showToast(String text) {
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Nullable

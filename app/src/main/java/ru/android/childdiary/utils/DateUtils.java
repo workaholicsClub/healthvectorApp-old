@@ -13,7 +13,7 @@ import ru.android.childdiary.R;
 public class DateUtils {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("dd.MM.yyyy");
 
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern("H:mm");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern("HH:mm");
 
     private static String[] nominativeMonthNames, genitiveMonthNames;
 

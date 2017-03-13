@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/note_background"
+    android:minHeight="@dimen/event_detail_height"
+    android:orientation="horizontal">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="8dp"
+        app:hintTextAppearance="@style/PlaceholderTextAppearance">
+
+        <ru.android.childdiary.presentation.core.widgets.CustomEditText
+            android:id="@+id/editTextNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_view_background"
+            android:hint="@string/note"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="2000"
+            android:paddingBottom="@dimen/name_edit_text_padding_bottom"
+            android:textColor="@color/black"
+            android:textColorHint="@color/placeholder_text"
+            android:textCursorDrawable="@drawable/edit_text_cursor"
+            android:textSize="@dimen/text_size_base" />
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

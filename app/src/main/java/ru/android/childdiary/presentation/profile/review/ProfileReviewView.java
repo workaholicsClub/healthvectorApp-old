@@ -14,5 +14,5 @@ public interface ProfileReviewView extends BaseView {
     void showChild(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void editChild(@NonNull Child child);
+    void navigateToProfileEdit(@NonNull Child child);
 }

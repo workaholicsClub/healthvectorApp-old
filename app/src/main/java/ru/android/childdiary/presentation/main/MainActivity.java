@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -46,6 +45,11 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
+import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
+import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
+import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
+import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
@@ -115,6 +119,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         return new Intent(context, MainActivity.class);
     }
 
+    private static IProfile mapToProfile(Context context, @NonNull Child child) {
+        return new ProfileDrawerItem()
+                .withName(child.getName())
+                .withEmail(StringUtils.age(context, child))
+                .withNameShown(true)
+                .withTag(child)
+                .withIdentifier(mapToProfileId(child))
+                .withIcon(ResourcesUtils.getChildIcon(context, child));
+    }
+
     private static long mapToProfileId(@NonNull Child child) {
         return child.getId() + PROFILE_SETTINGS_USER;
     }
@@ -133,16 +147,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupViewPager();
-    }
-
-    private void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new DayFragment(), getString(R.string.day));
-        adapter.addFragment(new WeekFragment(), getString(R.string.week));
-        adapter.addFragment(new MonthFragment(), getString(R.string.month));
-        viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(2, false);
-        tabLayout.setupWithViewPager(viewPager);
+        buildUi();
     }
 
     @Override
@@ -173,9 +178,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void showChildList(List<Child> childList) {
-        List<IProfile> profiles = new ArrayList<>();
+    public void showChildList(@NonNull List<Child> childList) {
+        logger.debug("showChildList: " + StringUtils.childList(childList));
 
+        List<IProfile> profiles = new ArrayList<>();
         if (!childList.isEmpty()) {
             profiles.add(new ProfileSettingDrawerItem()
                     .withName(getString(R.string.edit_child_short))
@@ -190,16 +196,21 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                     .withIdentifier(PROFILE_SETTINGS_DELETE));
         }
 
-        profiles.addAll(Stream.of(childList).map(this::mapToProfile).collect(Collectors.toList()));
+        profiles.addAll(Stream.of(childList)
+                .map(child -> mapToProfile(this, child))
+                .collect(Collectors.toList()));
 
         closeDrawerWithoutAnimation();
-        buildUi(profiles);
+        if (accountHeader != null) {
+            accountHeader.setProfiles(profiles);
+        }
     }
 
     @Override
-    public void setActive(@Nullable Child child) {
+    public void showChild(@NonNull Child child) {
+        logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
-        if (child == null) {
+        if (child == Child.NULL) {
             getSupportActionBar().setTitle(R.string.app_name);
         } else {
             getSupportActionBar().setTitle(child.getName());
@@ -209,40 +220,63 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         }
     }
 
-    private IProfile mapToProfile(@NonNull Child child) {
-        return new ProfileDrawerItem()
-                .withName(child.getName())
-                .withEmail(StringUtils.age(this, child))
-                .withNameShown(true)
-                .withTag(child)
-                .withIdentifier(mapToProfileId(child))
-                .withIcon(ResourcesUtils.getChildIcon(this, child));
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(this, null);
+        startActivity(intent);
     }
 
     @Override
-    public void addChild() {
-        navigateToProfileAdd();
+    public void navigateToProfileEdit(@NonNull Child child) {
+        Intent intent = ProfileEditActivity.getIntent(this, child);
+        startActivity(intent);
     }
 
     @Override
-    public void editChild(@NonNull Child child) {
-        navigateToProfileEdit(child);
+    public void navigateToProfileReview() {
+        Intent intent = ProfileReviewActivity.getIntent(this);
+        startActivity(intent);
     }
 
     @Override
-    public void reviewChild(@NonNull Child child) {
-        navigateToProfileReview(child);
-    }
-
-    @Override
-    public void confirmDeleteChild(@NonNull Child child) {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialog(sex))
+    public void showDeleteChildConfirmation(@NonNull Child child) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(sex))
                 .setTitle(getString(R.string.remove_child_confirmation_title, child.getName()))
                 .setMessage(R.string.remove_child_confirmation_text)
                 .setPositiveButton(R.string.Yes,
                         (DialogInterface dialog, int which) -> presenter.deleteChild(child))
                 .setNegativeButton(R.string.Cancel, null)
                 .show();
+    }
+
+    @Override
+    public void navigateToDiaperEventAdd() {
+        Intent intent = DiaperEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToFeedEventAdd() {
+        Intent intent = FeedEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToOtherEventAdd() {
+        Intent intent = OtherEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToPumpEventAdd() {
+        Intent intent = PumpEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToSleepEventAdd() {
+        Intent intent = SleepEventDetailActivity.getIntent(this, null);
+        startActivity(intent);
     }
 
     @Override
@@ -291,14 +325,18 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         dismissPopupWindow();
-        if (id > PROFILE_SETTINGS_USER) {
-            presenter.toggleChild(mapToChildId(id));
-        } else if (id == PROFILE_SETTINGS_EDIT) {
-            presenter.editChild();
-        } else if (id == PROFILE_SETTINGS_ADD) {
-            presenter.addChild();
-        } else if (id == PROFILE_SETTINGS_DELETE) {
-            presenter.deleteChild();
+        IProfile profile = accountHeader.getProfiles().get(position);
+        if (profile instanceof ProfileDrawerItem) {
+            Child child = (Child) ((ProfileDrawerItem) profile).getTag();
+            presenter.switchChild(child);
+        } else if (profile instanceof ProfileSettingDrawerItem) {
+            if (id == PROFILE_SETTINGS_EDIT) {
+                presenter.editChild();
+            } else if (id == PROFILE_SETTINGS_ADD) {
+                presenter.addChild();
+            } else if (id == PROFILE_SETTINGS_DELETE) {
+                presenter.deleteChild();
+            }
         }
     }
 
@@ -317,8 +355,19 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         return false;
     }
 
-    private void buildUi(List<IProfile> profiles) {
-        buildHeader(profiles);
+    private void setupViewPager() {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new DayFragment(), getString(R.string.day));
+        adapter.addFragment(new WeekFragment(), getString(R.string.week));
+        adapter.addFragment(new MonthFragment(), getString(R.string.month));
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(2, false);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void buildUi() {
+        buildHeader();
         buildDrawer();
 
         setupToolbar();
@@ -340,7 +389,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         ViewCompat.animate(switcherImage).rotation(0).start();
     }
 
-    private void buildHeader(List<IProfile> profiles) {
+    private void buildHeader() {
         accountHeader = new CustomAccountHeaderBuilder()
                 .withActivity(this)
                 .withCompactStyle(true)
@@ -348,7 +397,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withAccountHeader(R.layout.account_header)
                 .withHeightRes(R.dimen.account_header_height)
                 .withHeaderBackground(ThemeUtils.getColorPrimaryDrawable(this, sex))
-                .addProfiles(profiles.toArray(new IProfile[profiles.size()]))
                 .build();
     }
 
@@ -364,27 +412,27 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @OnClick(R.id.addDiaperEvent)
     void onAddDiaperEventClick() {
-
+        presenter.addDiaperEvent();
     }
 
     @OnClick(R.id.addSleepEvent)
     void onAddSleepEventClick() {
-
+        presenter.addSleepEvent();
     }
 
     @OnClick(R.id.addFeedEvent)
     void onAddFeedEventClick() {
-
+        presenter.addFeedEvent();
     }
 
     @OnClick(R.id.addPumpEvent)
     void onAddPumpEventClick() {
-
+        presenter.addPumpEventClick();
     }
 
     @OnClick(R.id.addOtherEvent)
     void onAddOtherEventClick() {
-
+        presenter.addOtherEventClick();
     }
 
     private void closeDrawerWithoutAnimation() {
@@ -464,20 +512,5 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 return true;
         }
         return false;
-    }
-
-    private void navigateToProfileEdit(@NonNull Child child) {
-        Intent intent = ProfileEditActivity.getIntent(this, child);
-        startActivity(intent);
-    }
-
-    private void navigateToProfileAdd() {
-        Intent intent = ProfileEditActivity.getIntent(this, null);
-        startActivity(intent);
-    }
-
-    private void navigateToProfileReview(@NonNull Child child) {
-        Intent intent = ProfileReviewActivity.getIntent(this, child);
-        startActivity(intent);
     }
 }

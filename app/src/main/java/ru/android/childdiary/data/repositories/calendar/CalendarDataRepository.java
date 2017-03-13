@@ -4,12 +4,16 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -22,10 +26,40 @@ import ru.android.childdiary.domain.interactors.child.Child;
 @Singleton
 public class CalendarDataRepository implements CalendarRepository {
     private final CalendarDbService dbService;
+    private final List<OnSelectedDateChangedListener> selectedDateChangedListeners = new ArrayList<>();
+    private LocalDate selectedDate = LocalDate.now();
 
     @Inject
     public CalendarDataRepository(CalendarDbService dbService) {
         this.dbService = dbService;
+    }
+
+    void addOnActiveChildChangedListener(OnSelectedDateChangedListener listener) {
+        synchronized (selectedDateChangedListeners) {
+            selectedDateChangedListeners.add(listener);
+        }
+    }
+
+    void removeOnActiveChildChangedListener(OnSelectedDateChangedListener listener) {
+        synchronized (selectedDateChangedListeners) {
+            selectedDateChangedListeners.remove(listener);
+        }
+    }
+
+    @Override
+    public Observable<LocalDate> getSelectedDate() {
+        return new SelectedDateObservable();
+    }
+
+    @Override
+    public Observable<LocalDate> setSelectedDate(@NonNull LocalDate date) {
+        return Observable.fromCallable(() -> {
+            selectedDate = date;
+            for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
+                listener.onSelectedDateChanged(date);
+            }
+            return date;
+        });
     }
 
     @Override
@@ -131,5 +165,49 @@ public class CalendarDataRepository implements CalendarRepository {
     @Override
     public Observable<SleepEvent> delete(@NonNull SleepEvent event) {
         return dbService.delete(event);
+    }
+
+    private interface OnSelectedDateChangedListener {
+        void onSelectedDateChanged(LocalDate date);
+    }
+
+    private class SelectedDateObservable extends Observable<LocalDate> {
+        @Override
+        protected void subscribeActual(Observer<? super LocalDate> observer) {
+            OnSelectedDateChangedSubscription listener = new OnSelectedDateChangedSubscription(observer);
+            listener.subscribe();
+        }
+    }
+
+    private class OnSelectedDateChangedSubscription implements Disposable, OnSelectedDateChangedListener {
+        private final Observer<? super LocalDate> observer;
+        private final AtomicBoolean unsubscribed = new AtomicBoolean();
+
+        public OnSelectedDateChangedSubscription(Observer<? super LocalDate> observer) {
+            this.observer = observer;
+        }
+
+        public void subscribe() {
+            addOnActiveChildChangedListener(this);
+            observer.onSubscribe(this);
+            observer.onNext(selectedDate);
+        }
+
+        @Override
+        public void onSelectedDateChanged(@NonNull LocalDate date) {
+            observer.onNext(date);
+        }
+
+        @Override
+        public void dispose() {
+            if (unsubscribed.compareAndSet(false, true)) {
+                removeOnActiveChildChangedListener(this);
+            }
+        }
+
+        @Override
+        public boolean isDisposed() {
+            return unsubscribed.get();
+        }
     }
 }

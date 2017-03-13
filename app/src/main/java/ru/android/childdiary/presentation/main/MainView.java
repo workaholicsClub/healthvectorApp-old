@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.main;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
@@ -14,20 +13,35 @@ import ru.android.childdiary.presentation.core.BaseView;
 
 public interface MainView extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showChildList(List<Child> childList);
+    void showChildList(@NonNull List<Child> childList);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void setActive(@Nullable Child child);
+    void showChild(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void addChild();
+    void navigateToProfileAdd();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void editChild(@NonNull Child child);
+    void navigateToProfileEdit(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void reviewChild(@NonNull Child child);
+    void navigateToProfileReview();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void confirmDeleteChild(@NonNull Child child);
+    void showDeleteChildConfirmation(@NonNull Child child);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToDiaperEventAdd();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToFeedEventAdd();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToOtherEventAdd();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToPumpEventAdd();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToSleepEventAdd();
 }

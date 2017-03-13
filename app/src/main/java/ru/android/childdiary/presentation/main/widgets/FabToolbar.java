@@ -59,6 +59,11 @@ public class FabToolbar extends RevealFrameLayout {
         }
 
         inflate(getContext(), R.layout.fab_toolbar, this);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
         ButterKnife.bind(this);
         fab.setOnClickListener(onFabClickListener);
     }

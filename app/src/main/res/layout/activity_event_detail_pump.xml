@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ru.android.childdiary.presentation.events.widgets.EventDetailDateView
+        android:id="@+id/dateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.events.widgets.EventDetailTimeView
+        android:id="@+id/timeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.events.widgets.EventDetailBreastView
+        android:id="@+id/breastView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.events.widgets.EventDetailDurationView
+        android:id="@+id/durationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.events.widgets.EventDetailNotificationTimeView
+        android:id="@+id/notificationTimeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

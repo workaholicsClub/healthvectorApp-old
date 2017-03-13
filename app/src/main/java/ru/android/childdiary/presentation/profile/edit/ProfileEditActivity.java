@@ -50,7 +50,7 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
 import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
-import ru.android.childdiary.presentation.profile.edit.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
@@ -61,8 +61,7 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener,
-        AdapterView.OnItemClickListener, PopupWindow.OnDismissListener,
-        CustomEditText.OnKeyboardHiddenListener {
+        AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
@@ -235,14 +234,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 hideKeyboardAndClearFocus(editTextBirthWeight);
             }
         }));
-        editTextName.setOnKeyboardHiddenListener(this);
-        editTextBirthHeight.setOnKeyboardHiddenListener(this);
-        editTextBirthWeight.setOnKeyboardHiddenListener(this);
-    }
-
-    @Override
-    public void onKeyboardHidden(CustomEditText editText) {
-        hideKeyboardAndClearFocus(editText);
+        editTextName.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+        editTextBirthHeight.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+        editTextBirthWeight.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
     }
 
     private void hideKeyboardAndClearFocus(View view) {

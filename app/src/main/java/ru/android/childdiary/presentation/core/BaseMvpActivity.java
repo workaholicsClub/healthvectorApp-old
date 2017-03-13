@@ -72,8 +72,9 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     }
 
     @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        super.setContentView(layoutResID);
+    public void setContentView(@LayoutRes int layoutResId) {
+        super.setContentView(layoutResId);
+        setContentViewBeforeBind();
         ButterKnife.bind(this);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -82,6 +83,8 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         themeChanged();
     }
 
+    protected void setContentViewBeforeBind() {
+    }
 
     @CallSuper
     protected void setupToolbar() {
@@ -91,10 +94,11 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     @CallSuper
     protected void themeChanged() {
+        logger.debug("setup theme");
     }
 
     private void setupToolbarColor() {
-        logger.debug("theme changed");
+        logger.debug("setup toolbar color");
         if (toolbar != null) {
             toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
         }
@@ -103,13 +107,14 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         }
     }
 
-    protected final void changeThemeIfNeeded(@Nullable Child child) {
-        Sex sex = child == null ? null : child.getSex();
+    protected final void changeThemeIfNeeded(@NonNull Child child) {
+        Sex sex = child.getSex();
         changeThemeIfNeeded(sex);
     }
 
     protected final void changeThemeIfNeeded(@Nullable Sex sex) {
         if (this.sex != sex) {
+            logger.debug("theme switched");
             this.sex = sex;
             setupToolbarColor();
             themeChanged();
@@ -165,7 +170,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     public void onUnexpectedError(Throwable e) {
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
-            new AlertDialog.Builder(this, ThemeUtils.getThemeDialog(sex))
+            new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(sex))
                     .setMessage(e.toString())
                     .setPositiveButton(R.string.OK, null)
                     .show();

@@ -68,6 +68,32 @@
     <string name="calendar_month_title">%1$s %2$d</string>
     <string name="calendar_week_title_one_month">%1$d\u2014%2$d %3$s</string>
     <string name="calendar_week_title_two_month">%1$d %2$s\u2014%3$d %4$s</string>
+    <string name="calendar_selected_date_format">%1$d %2$s</string>
+    <string name="breast_left">Левая</string>
+    <string name="breast_right">Правая</string>
+    <string name="diaper_state_dirty">Грязный</string>
+    <string name="diaper_state_dry">Сухой</string>
+    <string name="diaper_state_mixed">Смешанный</string>
+    <string name="diaper_state_wet">Влажный</string>
+    <string name="feed_type_breast_milk">Грудь</string>
+    <string name="feed_type_pumped_milk">Сцеженное</string>
+    <string name="feed_type_milk_formula">Смесь</string>
+    <string name="feed_type_food">Добавка</string>
+    <string name="food_measure_grams">Граммы</string>
+    <string name="food_measure_millilitres">Миллилитры</string>
+    <string name="food_measure_other">Другое</string>
+    <string name="notification_time">Оповещение</string>
+    <string name="diaper_state">Состояние подгузника</string>
+    <string name="note">Примечание</string>
+    <string name="asleep">Уснул</string>
+    <string name="awoke">Проснулся</string>
+    <string name="feed_type">Тип кормления</string>
+    <string name="duration">Продолжительность</string>
+    <string name="breast">Грудь</string>
+    <string name="amount">Количество</string>
+    <string name="food_measure">Ед. измерения</string>
+    <string name="other_event_start">Начало</string>
+    <string name="other_event_finish">Конец</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

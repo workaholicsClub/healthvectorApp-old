@@ -16,7 +16,7 @@ import ru.android.childdiary.data.types.Sex;
 
 public class WidgetsUtils {
     public static void setupTextView(TextView textView, boolean enabled) {
-        @ColorRes int colorRes = enabled ? R.color.primary_text : R.color.secondary_text;
+        @ColorRes int colorRes = enabled ? R.color.primary_text : R.color.placeholder_text;
         @ColorInt int color = ContextCompat.getColor(textView.getContext(), colorRes);
         textView.setTextColor(color);
     }
@@ -28,10 +28,12 @@ public class WidgetsUtils {
     }
 
     public static void setupDatePicker(Context context, DatePickerDialog dpd, @Nullable Sex sex) {
-        dpd.setAccentColor(ThemeUtils.getColorAccent(context, sex));
+        dpd.setVersion(DatePickerDialog.Version.VERSION_2);
+        dpd.setAccentColor(ThemeUtils.getColorPrimary(context, sex));
     }
 
     public static void setupTimePicker(Context context, TimePickerDialog tpd, @Nullable Sex sex) {
-        tpd.setAccentColor(ThemeUtils.getColorAccent(context, sex));
+        tpd.setVersion(TimePickerDialog.Version.VERSION_2);
+        tpd.setAccentColor(ThemeUtils.getColorPrimary(context, sex));
     }
 }

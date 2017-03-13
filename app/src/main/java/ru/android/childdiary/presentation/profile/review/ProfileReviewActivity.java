@@ -20,7 +20,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
-import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
@@ -59,10 +58,8 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     @BindView(R.id.textViewBirthWeight)
     TextView textViewBirthWeight;
 
-    public static Intent getIntent(Context context, @NonNull Child child) {
-        Intent intent = new Intent(context, ProfileReviewActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_CHILD, child);
-        return intent;
+    public static Intent getIntent(Context context) {
+        return new Intent(context, ProfileReviewActivity.class);
     }
 
     @Override
@@ -74,9 +71,6 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_review);
-
-        Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
-        presenter.loadChild(child.getId());
     }
 
     @Override
@@ -108,13 +102,16 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
 
     @Override
     public void showChild(@NonNull Child child) {
+        logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
         setupViews(child);
     }
 
     @Override
-    public void editChild(@NonNull Child child) {
-        navigateToProfileEdit(child);
+    public void navigateToProfileEdit(@NonNull Child child) {
+        logger.debug("navigateToProfileEdit: " + child);
+        Intent intent = ProfileEditActivity.getIntent(this, child);
+        startActivity(intent);
     }
 
     @OnClick(R.id.buttonEdit)
@@ -138,10 +135,5 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void navigateToProfileEdit(@NonNull Child child) {
-        Intent intent = ProfileEditActivity.getIntent(this, child);
-        startActivity(intent);
     }
 }

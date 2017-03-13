@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#EEF1F3</color>
+    <color name="gray_background">#00F1F3</color>
+    <!--color name="gray_background">#EEF1F3</color-->
     <color name="primary_boy">#26A6F6</color>
     <color name="primary_dark_boy">#4288B4</color>
     <color name="accent_boy">#4288B4</color>
@@ -13,8 +14,19 @@
     <color name="white">#FFFFFF</color>
     <color name="white_transparent">#B2FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="black_text">#DD000000</color>
-    <color name="primary_text">@android:color/primary_text_light</color>
-    <color name="secondary_text">@android:color/darker_gray</color>
     <color name="black_transparent">#10000000</color>
+    <color name="primary_text">#DD000000</color>
+    <color name="secondary_text">#90000000</color>
+    <color name="placeholder_text">#60000000</color>
+    <color name="event_diaper_row_background_boy">#80DB9628</color>
+    <color name="event_sleep_row_background_boy">#8028A0AE</color>
+    <color name="event_feed_row_background_boy">#80B3673E</color>
+    <color name="event_pump_row_background_boy">#80D4B932</color>
+    <color name="event_other_row_background_boy">#802364A8</color>
+    <color name="event_diaper_row_background_girl">#80EF89AF</color>
+    <color name="event_sleep_row_background_girl">#80E1492D</color>
+    <color name="event_feed_row_background_girl">#80A9A124</color>
+    <color name="event_pump_row_background_girl">#60D16A0C</color>
+    <color name="event_other_row_background_girl">#80C2742C</color>
+    <color name="swipe_color">#488AB4</color>
 </resources>
