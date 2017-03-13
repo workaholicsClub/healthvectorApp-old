@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -25,19 +24,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public abstract class EventDetailActivity<E extends MasterEvent> extends BaseMvpActivity implements EventDetailView<E>,
+public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvpActivity implements EventDetailView<T>,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    @InjectPresenter
-    public EventDetailPresenter presenter;
-
-    protected E event;
-
     @BindView(R.id.rootView)
     protected View rootView;
 
@@ -52,11 +47,16 @@ public abstract class EventDetailActivity<E extends MasterEvent> extends BaseMvp
 
     private ViewGroup eventDetailsView;
 
+    private MasterEvent masterEvent;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         editTextNote.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+
+        // TODO: get from intent
+        getPresenter().requestEventDetails(masterEvent);
     }
 
     @Override
@@ -87,29 +87,35 @@ public abstract class EventDetailActivity<E extends MasterEvent> extends BaseMvp
 
     @OnClick(R.id.buttonDone)
     void onButtonDoneClick() {
-        if (event == null) {
-            addEvent();
+        if (masterEvent == null) {
+            getPresenter().addEvent(buildEvent());
         } else {
-            updateEvent();
+            getPresenter().updateEvent(buildEvent());
         }
     }
 
     @Override
-    public void eventAdded(@NonNull MasterEvent event) {
-        finish();
+    public void showChild(@NonNull Child child) {
+        logger.debug("showChild: " + child);
+        changeThemeIfNeeded(child);
     }
 
-    @Override
-    public void eventUpdated(@NonNull MasterEvent event) {
-        finish();
-    }
+    protected abstract EventDetailPresenter<T> getPresenter();
 
     @LayoutRes
     protected abstract int getContentLayoutResourceId();
 
-    protected abstract void addEvent();
+    protected abstract T buildEvent();
 
-    protected abstract void updateEvent();
+    @Override
+    public void eventAdded(@NonNull T event) {
+        finish();
+    }
+
+    @Override
+    public void eventUpdated(@NonNull T event) {
+        finish();
+    }
 
     @Override
     public void onAttachFragment(Fragment fragment) {
