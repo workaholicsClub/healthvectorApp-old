@@ -30,6 +30,11 @@ public class EventDetailFoodMeasureView extends LinearLayout {
 
     private void init() {
         inflate(getContext(), R.layout.event_detail_food_measure, this);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
         ButterKnife.bind(this);
     }
 }

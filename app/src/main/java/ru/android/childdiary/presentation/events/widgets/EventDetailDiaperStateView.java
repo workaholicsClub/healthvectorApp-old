@@ -38,6 +38,11 @@ public class EventDetailDiaperStateView extends LinearLayout {
             TextView textView = ButterKnife.findById(child, R.id.textView);
             textView.setText(StringUtils.diaperState(getContext(), diaperState));
         }
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
         // ButterKnife.bind(this);
     }
 }

@@ -24,6 +24,11 @@ public class EventDetailAmountMlView extends LinearLayout {
 
     private void init() {
         inflate(getContext(), R.layout.event_detail_amount_ml, this);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
         // ButterKnife.bind(this);
     }
 }

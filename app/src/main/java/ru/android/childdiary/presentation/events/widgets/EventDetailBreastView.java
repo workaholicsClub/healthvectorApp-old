@@ -42,6 +42,11 @@ public class EventDetailBreastView extends LinearLayout {
             TextView textView = ButterKnife.findById(child, R.id.textView);
             textView.setText(StringUtils.breast(getContext(), breast));
         }
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
         ButterKnife.bind(this);
     }
 }
