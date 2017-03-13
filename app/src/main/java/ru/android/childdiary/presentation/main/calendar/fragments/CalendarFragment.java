@@ -60,9 +60,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @BindView(R.id.recyclerViewEvents)
     RecyclerView recyclerViewEvents;
 
-    @BindView(R.id.nestedScrollView)
-    NestedScrollView nestedScrollView;
-
     private Adapter calendarAdapter;
     private EventsAdapter eventsAdapter;
     private Sex sex;
@@ -100,9 +97,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         recyclerViewEvents.setAdapter(eventsAdapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewEvents, false);
-        recyclerViewEvents.setNestedScrollingEnabled(false);
-        nestedScrollView.setNestedScrollingEnabled(false);
-        nestedScrollView.setSmoothScrollingEnabled(true);
     }
 
     @LayoutRes
