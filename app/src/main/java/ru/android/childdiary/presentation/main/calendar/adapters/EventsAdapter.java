@@ -18,7 +18,7 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 
 public class EventsAdapter extends RecyclerSwipeAdapter<EventViewHolder> implements EventActionAdapterListener {
-    private final SwipeItemRecyclerMangerImpl swipeManager = new SwipeItemRecyclerMangerImpl(this);
+    private final SwipeItemRecyclerMangerImpl swipeManager = mItemManger;
 
     private final Context context;
     private final LayoutInflater inflater;
@@ -56,7 +56,7 @@ public class EventsAdapter extends RecyclerSwipeAdapter<EventViewHolder> impleme
     @Override
     public void onBindViewHolder(EventViewHolder viewHolder, int position) {
         viewHolder.bind(context, position, sex, events.get(position));
-        mItemManger.bindView(viewHolder.itemView, position);
+        swipeManager.bindView(viewHolder.itemView, position);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class EventsAdapter extends RecyclerSwipeAdapter<EventViewHolder> impleme
 
     @Override
     public void delete(EventViewHolder viewHolder) {
-        mItemManger.closeAllItems();
+        swipeManager.closeAllItems();
         if (listener != null) {
             listener.delete(viewHolder.getEvent());
         }
@@ -79,7 +79,7 @@ public class EventsAdapter extends RecyclerSwipeAdapter<EventViewHolder> impleme
 
     @Override
     public void move(EventViewHolder viewHolder) {
-        mItemManger.closeAllItems();
+        swipeManager.closeAllItems();
         if (listener != null) {
             listener.move(viewHolder.getEvent());
         }
@@ -87,7 +87,7 @@ public class EventsAdapter extends RecyclerSwipeAdapter<EventViewHolder> impleme
 
     @Override
     public void edit(EventViewHolder viewHolder) {
-        mItemManger.closeAllItems();
+        swipeManager.closeAllItems();
         if (listener != null) {
             listener.edit(viewHolder.getEvent());
         }
@@ -95,7 +95,7 @@ public class EventsAdapter extends RecyclerSwipeAdapter<EventViewHolder> impleme
 
     @Override
     public void done(EventViewHolder viewHolder) {
-        mItemManger.closeAllItems();
+        swipeManager.closeAllItems();
         if (listener != null) {
             listener.done(viewHolder.getEvent());
         }
