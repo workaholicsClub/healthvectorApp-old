@@ -2,7 +2,7 @@ package ru.android.childdiary.data.repositories.child;
 
 import android.support.annotation.NonNull;
 
-import org.greenrobot.eventbus.EventBus;
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import java.util.List;
 
@@ -10,42 +10,41 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.app.ChildDiaryPreferences;
-import ru.android.childdiary.data.repositories.child.events.ActiveChildChangedEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class ChildDataRepository implements ChildRepository {
-    private final EventBus bus;
-    private final ChildDiaryPreferences preferences;
+    private static final String KEY_ACTIVE_CHILD_ID = "active_child_id";
+
+    private final RxSharedPreferences preferences;
     private final ChildDbService dbService;
 
     @Inject
-    public ChildDataRepository(EventBus bus, ChildDiaryPreferences preferences, ChildDbService dbService) {
-        this.bus = bus;
+    public ChildDataRepository(RxSharedPreferences preferences, ChildDbService dbService) {
         this.preferences = preferences;
         this.dbService = dbService;
     }
 
     public Observable<Child> getActiveChild() {
-        return getAll().flatMap(this::getActiveChild);
+        return Observable.combineLatest(
+                getAll(),
+                preferences.getLong(KEY_ACTIVE_CHILD_ID).asObservable(),
+                this::getActiveChild);
     }
 
-    public Observable<Child> getActiveChild(@NonNull List<Child> childList) {
-        return Observable
+    private Child getActiveChild(@NonNull List<Child> childList, Long id) {
+        return childList.isEmpty() ? Child.NULL : Observable
                 .fromIterable(childList)
-                .filter(child -> ObjectUtils.equals(child.getId(), preferences.getActiveChildId()))
-                .first(Child.NULL)
-                .toObservable()
-                .switchIfEmpty(Observable.just(Child.NULL));
+                .filter(child -> ObjectUtils.equals(child.getId(), id))
+                .first(childList.get(0))
+                .blockingGet();
     }
 
     public Observable<Child> setActiveChild(@NonNull Child child) {
         return Observable.fromCallable(() -> {
-            preferences.setActiveChildId(child.getId());
-            bus.post(ActiveChildChangedEvent.builder().child(child).build());
+            preferences.getLong(KEY_ACTIVE_CHILD_ID).set(child.getId());
             return child;
         });
     }

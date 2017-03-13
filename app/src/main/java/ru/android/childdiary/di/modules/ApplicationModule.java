@@ -1,15 +1,15 @@
 package ru.android.childdiary.di.modules;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
-import org.greenrobot.eventbus.EventBus;
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import proxypref.ProxyPreferences;
-import ru.android.childdiary.app.ChildDiaryPreferences;
 
 @Module
 public class ApplicationModule {
@@ -27,14 +27,9 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public ChildDiaryPreferences providePreferences(Context context) {
-        return ProxyPreferences.build(ChildDiaryPreferences.class,
-                context.getSharedPreferences("diary", Context.MODE_PRIVATE));
-    }
-
-    @Provides
-    @Singleton
-    public EventBus provideBus() {
-        return EventBus.getDefault();
+    public RxSharedPreferences providePreferences(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        RxSharedPreferences rxPreferences = RxSharedPreferences.create(preferences);
+        return rxPreferences;
     }
 }

@@ -4,17 +4,12 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.data.repositories.child.events.ActiveChildChangedEvent;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
@@ -31,9 +26,6 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Inject
     CalendarInteractor calendarInteractor;
 
-    @Inject
-    EventBus bus;
-
     private boolean isFirstTime = true;
 
     @Override
@@ -49,13 +41,6 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetChildList, this::onUnexpectedError));
-        bus.register(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        bus.unregister(this);
     }
 
     private void onGetChildList(@NonNull List<Child> childList) {
@@ -81,11 +66,6 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                 }, this::onUnexpectedError));
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setActiveChild(ActiveChildChangedEvent event) {
-        getViewState().showChild(event.getChild());
     }
 
     public void addChild() {

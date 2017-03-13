@@ -74,8 +74,6 @@ dependencies {
 
     compile "com.jakewharton.rxbinding2:rxbinding:2.0.0"
 
-    compile "org.greenrobot:eventbus:3.0.0"
-
     def requeryVersion = '1.1.2'
     compile "io.requery:requery:$requeryVersion"
     compile "io.requery:requery-android:$requeryVersion"
@@ -107,7 +105,7 @@ dependencies {
     compile "frankiesardo:icepick:$icepickVersion"
     provided "frankiesardo:icepick-processor:$icepickVersion"
 
-    compile "info.android15.proxypref:proxypref:0.2.0"
+    compile "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC1"
 
     compile "com.yalantis:ucrop:2.2.0"
 
