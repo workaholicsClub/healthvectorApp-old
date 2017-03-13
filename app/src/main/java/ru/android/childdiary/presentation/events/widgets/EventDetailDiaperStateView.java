@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
@@ -26,6 +27,7 @@ public class EventDetailDiaperStateView extends EventDetailRadioView<DiaperState
     }
 
     @Override
+    @LayoutRes
     protected int getTitleLayoutResourceId() {
         return R.layout.event_detail_diaper_state;
     }
