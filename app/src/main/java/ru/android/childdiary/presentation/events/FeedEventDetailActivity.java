@@ -7,15 +7,20 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
@@ -27,9 +32,12 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailNotification
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> {
+public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> implements EventDetailView<FeedEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
+
+    @InjectPresenter
+    FeedEventDetailPresenter presenter;
 
     @BindView(R.id.feedTypeView)
     EventDetailFeedTypeView feedTypeView;
@@ -85,7 +93,14 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> {
     }
 
     @Override
-    public void showEventDetail(@NonNull FeedEvent event) {
+    protected void themeChanged() {
+        super.themeChanged();
+        breastView.setSex(sex);
+    }
+
+    @Override
+    public FeedEventDetailPresenter getPresenter() {
+        return presenter;
     }
 
     @Override
@@ -95,12 +110,12 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> {
     }
 
     @Override
-    protected void addEvent() {
-        presenter.addFeedEvent();
+    public void showEventDetail(@NonNull FeedEvent event) {
     }
 
     @Override
-    protected void updateEvent() {
+    protected FeedEvent buildEvent() {
+        return FeedEvent.builder().eventType(EventType.FEED).dateTime(DateTime.now()).build();
     }
 
     @Override

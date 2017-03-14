@@ -52,6 +52,8 @@ public class CalendarDbService {
                 .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
                 .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
                 .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
+                .and(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
+                .and(MasterEventEntity.EVENT_TYPE.notNull())
                 .orderBy(MasterEventEntity.DATE_TIME)
                 .get()
                 .observableResult()
@@ -158,33 +160,15 @@ public class CalendarDbService {
                 SleepEventMapper::updateEntityWithPlainObject, SleepEventMapper::mapToPlainObject);
     }
 
-    public Observable<DiaperEvent> delete(@NonNull DiaperEvent event) {
-        event = event.toBuilder().isDeleted(true).build();
-        return DbUtils.updateObservable(dataStore, DiaperEventEntity.class, event, event.getId(),
-                DiaperEventMapper::updateEntityWithPlainObject, DiaperEventMapper::mapToPlainObject);
+    public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
+        event = event.toMasterBuilder().isDeleted(true).build();
+        return DbUtils.updateObservable(dataStore, MasterEventEntity.class, event, event.getMasterEventId(),
+                MasterEventMapper::updateEntityWithPlainObject, MasterEventMapper::mapToPlainObject);
     }
 
-    public Observable<FeedEvent> delete(@NonNull FeedEvent event) {
-        event = event.toBuilder().isDeleted(true).build();
-        return DbUtils.updateObservable(dataStore, FeedEventEntity.class, event, event.getId(),
-                FeedEventMapper::updateEntityWithPlainObject, FeedEventMapper::mapToPlainObject);
-    }
-
-    public Observable<OtherEvent> delete(@NonNull OtherEvent event) {
-        event = event.toBuilder().isDeleted(true).build();
-        return DbUtils.updateObservable(dataStore, OtherEventEntity.class, event, event.getId(),
-                OtherEventMapper::updateEntityWithPlainObject, OtherEventMapper::mapToPlainObject);
-    }
-
-    public Observable<PumpEvent> delete(@NonNull PumpEvent event) {
-        event = event.toBuilder().isDeleted(true).build();
-        return DbUtils.updateObservable(dataStore, PumpEventEntity.class, event, event.getId(),
-                PumpEventMapper::updateEntityWithPlainObject, PumpEventMapper::mapToPlainObject);
-    }
-
-    public Observable<SleepEvent> delete(@NonNull SleepEvent event) {
-        event = event.toBuilder().isDeleted(true).build();
-        return DbUtils.updateObservable(dataStore, SleepEventEntity.class, event, event.getId(),
-                SleepEventMapper::updateEntityWithPlainObject, SleepEventMapper::mapToPlainObject);
+    public Observable<MasterEvent> done(@NonNull MasterEvent event) {
+        event = event.toMasterBuilder().isDone(true).build();
+        return DbUtils.updateObservable(dataStore, MasterEventEntity.class, event, event.getMasterEventId(),
+                MasterEventMapper::updateEntityWithPlainObject, MasterEventMapper::mapToPlainObject);
     }
 }

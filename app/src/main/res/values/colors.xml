@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="gray_background">#00F1F3</color>
-    <!--color name="gray_background">#EEF1F3</color-->
+    <color name="gray_background">#EEF1F3</color>
     <color name="primary_boy">#26A6F6</color>
     <color name="primary_dark_boy">#4288B4</color>
     <color name="accent_boy">#4288B4</color>
@@ -28,5 +27,4 @@
     <color name="event_feed_row_background_girl">#80A9A124</color>
     <color name="event_pump_row_background_girl">#60D16A0C</color>
     <color name="event_other_row_background_girl">#80C2742C</color>
-    <color name="swipe_color">#488AB4</color>
 </resources>

@@ -142,29 +142,12 @@ public class CalendarDataRepository implements CalendarRepository {
         return dbService.update(event);
     }
 
-    @Override
-    public Observable<DiaperEvent> delete(@NonNull DiaperEvent event) {
+    public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
         return dbService.delete(event);
     }
 
-    @Override
-    public Observable<FeedEvent> delete(@NonNull FeedEvent event) {
-        return dbService.delete(event);
-    }
-
-    @Override
-    public Observable<OtherEvent> delete(@NonNull OtherEvent event) {
-        return dbService.delete(event);
-    }
-
-    @Override
-    public Observable<PumpEvent> delete(@NonNull PumpEvent event) {
-        return dbService.delete(event);
-    }
-
-    @Override
-    public Observable<SleepEvent> delete(@NonNull SleepEvent event) {
-        return dbService.delete(event);
+    public Observable<MasterEvent> done(@NonNull MasterEvent event) {
+        return dbService.done(event);
     }
 
     private interface OnSelectedDateChangedListener {

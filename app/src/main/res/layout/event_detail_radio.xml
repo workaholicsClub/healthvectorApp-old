@@ -18,6 +18,7 @@
         android:textAppearance="@style/PrimaryTextAppearance" />
 
     <ImageView
+        android:id="@+id/imageViewRadio"
         android:layout_width="@dimen/event_detail_height"
         android:layout_height="@dimen/event_detail_height"
         android:scaleType="center"

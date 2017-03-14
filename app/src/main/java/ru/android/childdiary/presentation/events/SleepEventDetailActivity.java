@@ -7,26 +7,34 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotificationTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> {
+public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> implements EventDetailView<SleepEvent> {
     private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
     private static final String TAG_DATE_PICKER_START = "DATE_PICKER_START";
     private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
     private static final String TAG_DATE_PICKER_FINISH = "DATE_PICKER_FINISH";
+
+    @InjectPresenter
+    SleepEventDetailPresenter presenter;
 
     @BindView(R.id.startTitleView)
     EventDetailTitleView startTitleView;
@@ -81,7 +89,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> {
     }
 
     @Override
-    public void showEventDetail(@NonNull SleepEvent event) {
+    public SleepEventDetailPresenter getPresenter() {
+        return presenter;
     }
 
     @Override
@@ -91,12 +100,12 @@ public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> {
     }
 
     @Override
-    protected void addEvent() {
-        presenter.addSleepEvent();
+    public void showEventDetail(@NonNull SleepEvent event) {
     }
 
     @Override
-    protected void updateEvent() {
+    protected SleepEvent buildEvent() {
+        return SleepEvent.builder().eventType(EventType.SLEEP).dateTime(DateTime.now()).build();
     }
 
     @Override

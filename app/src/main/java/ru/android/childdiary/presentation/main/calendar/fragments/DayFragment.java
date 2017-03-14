@@ -6,7 +6,7 @@ import android.support.annotation.LayoutRes;
 import org.joda.time.LocalDate;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.presentation.main.calendar.adapters.DayViewAdapter;
+import ru.android.childdiary.presentation.main.calendar.adapters.calendar.DayViewAdapter;
 import ru.android.childdiary.utils.DateUtils;
 
 public class DayFragment extends CalendarFragment<DayViewAdapter> {

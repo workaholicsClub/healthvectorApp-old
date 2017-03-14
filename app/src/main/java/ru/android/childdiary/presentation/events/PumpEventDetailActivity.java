@@ -7,24 +7,32 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotificationTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> {
+public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> implements EventDetailView<PumpEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
+
+    @InjectPresenter
+    PumpEventDetailPresenter presenter;
 
     @BindView(R.id.dateView)
     EventDetailDateView dateView;
@@ -65,7 +73,14 @@ public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> {
     }
 
     @Override
-    public void showEventDetail(@NonNull PumpEvent event) {
+    protected void themeChanged() {
+        super.themeChanged();
+        breastView.setSex(sex);
+    }
+
+    @Override
+    public PumpEventDetailPresenter getPresenter() {
+        return presenter;
     }
 
     @Override
@@ -75,12 +90,12 @@ public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> {
     }
 
     @Override
-    protected void addEvent() {
-        presenter.addPumpEvent();
+    public void showEventDetail(@NonNull PumpEvent event) {
     }
 
     @Override
-    protected void updateEvent() {
+    protected PumpEvent buildEvent() {
+        return PumpEvent.builder().eventType(EventType.PUMP).dateTime(DateTime.now()).build();
     }
 
     @Override

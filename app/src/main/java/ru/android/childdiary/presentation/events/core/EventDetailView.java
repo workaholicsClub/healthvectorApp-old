@@ -7,15 +7,19 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseView;
 
-public interface EventDetailView<E extends MasterEvent> extends BaseView {
+public interface EventDetailView<T extends MasterEvent> extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showEventDetail(@NonNull E event);
+    void showChild(@NonNull Child child);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showEventDetail(@NonNull T event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void eventAdded(@NonNull MasterEvent event);
+    void eventAdded(@NonNull T event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void eventUpdated(@NonNull MasterEvent event);
+    void eventUpdated(@NonNull T event);
 }

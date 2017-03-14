@@ -6,11 +6,15 @@ import dagger.Component;
 import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.di.modules.DataModule;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
-import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
+import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.FeedEventDetailPresenter;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
+import ru.android.childdiary.presentation.events.OtherEventDetailPresenter;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
+import ru.android.childdiary.presentation.events.PumpEventDetailPresenter;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
+import ru.android.childdiary.presentation.events.SleepEventDetailPresenter;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.main.MainPresenter;
 import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
@@ -39,7 +43,15 @@ public interface ApplicationComponent {
 
     void inject(CalendarPresenter presenter);
 
-    void inject(EventDetailPresenter presenter);
+    void inject(DiaperEventDetailPresenter presenter);
+
+    void inject(FeedEventDetailPresenter presenter);
+
+    void inject(OtherEventDetailPresenter presenter);
+
+    void inject(PumpEventDetailPresenter presenter);
+
+    void inject(SleepEventDetailPresenter presenter);
 
     // activities
     void inject(SplashActivity activity);

@@ -53,13 +53,7 @@ public interface CalendarRepository extends Repository {
 
     Observable<SleepEvent> update(@NonNull SleepEvent event);
 
-    Observable<DiaperEvent> delete(@NonNull DiaperEvent event);
+    Observable<MasterEvent> delete(@NonNull MasterEvent event);
 
-    Observable<FeedEvent> delete(@NonNull FeedEvent event);
-
-    Observable<OtherEvent> delete(@NonNull OtherEvent event);
-
-    Observable<PumpEvent> delete(@NonNull PumpEvent event);
-
-    Observable<SleepEvent> delete(@NonNull SleepEvent event);
+    Observable<MasterEvent> done(@NonNull MasterEvent event);
 }

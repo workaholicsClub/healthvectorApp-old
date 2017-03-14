@@ -113,4 +113,9 @@ public class ResourcesUtils {
     public static int getSleepEventLogoRes(Sex sex) {
         return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_sleep_boy : R.drawable.toolbar_logo_sleep_girl;
     }
+
+    @DrawableRes
+    public static int getRadioOnRes(Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.radio_on_boy : R.drawable.radio_on_girl;
+    }
 }

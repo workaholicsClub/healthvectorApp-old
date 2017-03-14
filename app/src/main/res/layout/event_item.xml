@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/event_row_margin_vertical"
@@ -8,6 +9,7 @@
     android:layout_marginTop="@dimen/event_row_margin_vertical">
 
     <LinearLayout
+        android:id="@+id/bottomView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -19,7 +21,6 @@
             android:id="@+id/actionsView"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/event_row_height"
-            android:background="@color/swipe_color"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -32,6 +33,7 @@
                 android:src="@drawable/event_row_action_delete" />
 
             <View
+                android:id="@+id/delimiter1"
                 android:layout_width="1dp"
                 android:layout_height="26dp"
                 android:background="#33FFFFFF" />
@@ -45,6 +47,7 @@
                 android:src="@drawable/event_row_action_move" />
 
             <View
+                android:id="@+id/delimiter2"
                 android:layout_width="1dp"
                 android:layout_height="26dp"
                 android:background="#33FFFFFF" />
@@ -58,6 +61,7 @@
                 android:src="@drawable/event_row_action_edit" />
 
             <View
+                android:id="@+id/delimiter3"
                 android:layout_width="1dp"
                 android:layout_height="26dp"
                 android:background="#33FFFFFF" />
@@ -73,7 +77,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/rootView"
+        android:id="@+id/eventView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/event_row_height"
         android:gravity="center"
