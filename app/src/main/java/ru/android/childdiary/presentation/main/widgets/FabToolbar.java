@@ -85,6 +85,12 @@ public class FabToolbar extends RevealFrameLayout {
         animateCircle(0, screenWidth, null);
     }
 
+    public void showButton() {
+        if (fab.getVisibility() == GONE) {
+            fab.show();
+        }
+    }
+
     public boolean hide() {
         boolean isVisible = bottomPanel.getVisibility() == VISIBLE;
         if (isVisible) {
@@ -92,6 +98,12 @@ public class FabToolbar extends RevealFrameLayout {
             return true;
         }
         return false;
+    }
+
+    public void hideButton() {
+        if (fab.getVisibility() == VISIBLE) {
+            fab.hide();
+        }
     }
 
     private void animateCircle(float startRadius, float endRadius, SupportAnimator.AnimatorListener listener) {

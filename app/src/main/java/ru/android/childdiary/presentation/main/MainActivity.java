@@ -50,6 +50,7 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
+import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
 import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
@@ -70,7 +71,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
         PopupMenu.OnMenuItemClickListener,
-        View.OnClickListener {
+        View.OnClickListener,
+        FabController {
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
@@ -513,5 +515,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void showFab() {
+        fabToolbar.showButton();
+    }
+
+    @Override
+    public void hideFab() {
+        fabToolbar.hide();
+        fabToolbar.hideButton();
     }
 }

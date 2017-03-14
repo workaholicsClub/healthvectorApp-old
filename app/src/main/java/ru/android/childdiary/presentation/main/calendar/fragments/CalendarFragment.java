@@ -41,6 +41,7 @@ import ru.android.childdiary.presentation.main.calendar.CalendarView;
 import ru.android.childdiary.presentation.main.calendar.adapters.calendar.CalendarViewAdapter;
 import ru.android.childdiary.presentation.main.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.main.calendar.adapters.events.EventAdapter;
+import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
 
@@ -63,6 +64,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @BindView(R.id.recyclerViewEvents)
     RecyclerView recyclerViewEvents;
 
+    private FabController fabController;
     private Adapter calendarAdapter;
     private EventAdapter eventAdapter;
     private Sex sex;
@@ -96,10 +98,24 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewEvents.setLayoutManager(layoutManager);
-        eventAdapter = new EventAdapter(getContext(), this);
+        eventAdapter = new EventAdapter(getContext(), this, fabController);
         recyclerViewEvents.setAdapter(eventAdapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewEvents, false);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FabController) {
+            fabController = (FabController) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fabController = null;
     }
 
     @LayoutRes
