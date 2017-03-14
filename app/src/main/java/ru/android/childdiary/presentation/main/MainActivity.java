@@ -51,6 +51,7 @@ import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
+import ru.android.childdiary.presentation.main.calendar.fragments.CalendarFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
@@ -111,6 +112,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @BindView(R.id.fabToolbar)
     FabToolbar fabToolbar;
 
+    private ViewPagerAdapter viewPagerAdapter;
     private AccountHeader accountHeader;
     private Drawer drawer;
     private DrawerBuilder drawerBuilder;
@@ -213,8 +215,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
         if (child == Child.NULL) {
+            hideFabBar();
             getSupportActionBar().setTitle(R.string.app_name);
         } else {
+            updateFab(viewPager.getCurrentItem());
             getSupportActionBar().setTitle(child.getName());
             if (accountHeader != null) {
                 accountHeader.setActiveProfile(mapToProfileId(child));
@@ -359,14 +363,28 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new DayFragment(), getString(R.string.day));
-        adapter.addFragment(new WeekFragment(), getString(R.string.week));
-        adapter.addFragment(new MonthFragment(), getString(R.string.month));
-        viewPager.setAdapter(adapter);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(new DayFragment(), getString(R.string.day));
+        viewPagerAdapter.addFragment(new WeekFragment(), getString(R.string.week));
+        viewPagerAdapter.addFragment(new MonthFragment(), getString(R.string.month));
+        viewPager.setAdapter(viewPagerAdapter);
         viewPager.setCurrentItem(2, false);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                updateFab(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     private void buildUi() {
@@ -464,7 +482,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             return;
         }
 
-        processed = fabToolbar.hide();
+        processed = fabToolbar.hideBar();
         if (processed) {
             return;
         }
@@ -517,14 +535,23 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         return false;
     }
 
-    @Override
-    public void showFab() {
-        fabToolbar.showButton();
+    private void updateFab(int position) {
+        CalendarFragment fragment = (CalendarFragment) viewPagerAdapter.getItem(position);
+        boolean hasOpenedItems = fragment.getEventAdapter().getSwipeManager().hasOpenedItems();
+        if (hasOpenedItems) {
+            hideFabBar();
+        } else {
+            showFab();
+        }
     }
 
     @Override
-    public void hideFab() {
-        fabToolbar.hide();
-        fabToolbar.hideButton();
+    public void showFab() {
+        fabToolbar.showFab();
+    }
+
+    @Override
+    public void hideFabBar() {
+        fabToolbar.hideFabBar();
     }
 }

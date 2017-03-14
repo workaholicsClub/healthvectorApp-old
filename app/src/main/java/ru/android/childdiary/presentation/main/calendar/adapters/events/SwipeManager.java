@@ -1,80 +1,118 @@
 package ru.android.childdiary.presentation.main.calendar.adapters.events;
 
-import android.support.v7.widget.RecyclerView;
-
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
-import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl;
 
-import lombok.Setter;
-import lombok.val;
-import ru.android.childdiary.R;
+import java.util.HashSet;
+import java.util.Set;
 
-public class SwipeManager extends SwipeItemRecyclerMangerImpl {
+public class SwipeManager {
+    private static final int INVALID_POSITION = -1;
     private final FabController fabController;
+    private final Set<SwipeLayout> shownLayouts = new HashSet<>();
+    private final Set<Integer> openedOrOpeningPositions = new HashSet<>();
+    private int openPosition = INVALID_POSITION;
 
-    public SwipeManager(RecyclerView.Adapter adapter, FabController fabController) {
-        super(adapter);
+    public SwipeManager(FabController fabController) {
         this.fabController = fabController;
     }
 
     public void bindViewHolder(EventViewHolder viewHolder, int position) {
-        super.bindView(viewHolder.itemView, position);
         SwipeLayout swipeLayout = viewHolder.swipeLayout;
-        val key = getSwipeLayoutId(position) + 1;
-        if (swipeLayout.getTag(key) == null) {
-            SwipeListener swipeListener = new SwipeListener(position);
-            swipeLayout.addSwipeListener(swipeListener);
-            swipeLayout.setTag(key, swipeListener);
+        ValueBox valueBox;
+        if (swipeLayout.getTag() == null) {
+            valueBox = new ValueBox();
+            valueBox.swipeListener = new SwipeListener();
+            valueBox.onLayoutListener = new OnLayoutListener();
+            swipeLayout.addSwipeListener(valueBox.swipeListener);
+            swipeLayout.addOnLayoutListener(valueBox.onLayoutListener);
+            shownLayouts.add(swipeLayout);
+            swipeLayout.setTag(valueBox);
         } else {
-            SwipeListener swipeListener = (SwipeListener) swipeLayout.getTag(key);
-            swipeListener.setPosition(position);
+            valueBox = (ValueBox) swipeLayout.getTag();
+        }
+        valueBox.position = position;
+        valueBox.swipeListener.position = position;
+        valueBox.onLayoutListener.position = position;
+    }
+
+    public void closeAllExcept(SwipeLayout layout) {
+        for (SwipeLayout swipeLayout : shownLayouts) {
+            if (swipeLayout != layout) {
+                swipeLayout.close();
+            }
         }
     }
 
-    @Override
-    public int getSwipeLayoutId(int position) {
-        return R.id.swipeLayout;
+    public void closeAllItems() {
+        openPosition = INVALID_POSITION;
+        openedOrOpeningPositions.clear();
+        for (SwipeLayout swipeLayout : shownLayouts) {
+            swipeLayout.close();
+        }
+        showFabIfPossible();
+    }
+
+    public boolean hasOpenedItems() {
+        return !openedOrOpeningPositions.isEmpty();
+    }
+
+    private void showFabIfPossible() {
+        if (openedOrOpeningPositions.isEmpty()) {
+            if (fabController != null) {
+                fabController.showFab();
+            }
+        }
+    }
+
+    private void hideFab() {
+        if (fabController != null) {
+            fabController.hideFabBar();
+        }
+    }
+
+    private static class ValueBox {
+        OnLayoutListener onLayoutListener;
+        SwipeListener swipeListener;
+        int position;
+    }
+
+    private class OnLayoutListener implements SwipeLayout.OnLayout {
+        int position;
+
+        @Override
+        public void onLayout(SwipeLayout v) {
+            if (openPosition == position) {
+                v.open(false, false);
+            } else {
+                v.close(false, false);
+            }
+        }
     }
 
     private class SwipeListener extends SimpleSwipeListener {
-        @Setter
-        private int position;
-
-        public SwipeListener(int position) {
-            this.position = position;
-        }
+        int position;
 
         @Override
         public void onStartOpen(SwipeLayout layout) {
-            super.onStartOpen(layout);
-            if (fabController != null) {
-                fabController.hideFab();
-            }
+            closeAllExcept(layout);
+            openedOrOpeningPositions.add(position);
+            hideFab();
         }
 
         @Override
         public void onOpen(SwipeLayout layout) {
-            super.onOpen(layout);
-            if (fabController != null) {
-                fabController.hideFab();
-            }
-        }
-
-        @Override
-        public void onStartClose(SwipeLayout layout) {
-            super.onStartClose(layout);
-            if (fabController != null) {
-                fabController.showFab();
-            }
+            closeAllExcept(layout);
+            openPosition = position;
+            openedOrOpeningPositions.add(position);
+            hideFab();
         }
 
         @Override
         public void onClose(SwipeLayout layout) {
-            super.onClose(layout);
-            if (fabController != null) {
-                fabController.showFab();
-            }
+            openPosition = INVALID_POSITION;
+            openedOrOpeningPositions.remove(position);
+            showFabIfPossible();
         }
     }
 }

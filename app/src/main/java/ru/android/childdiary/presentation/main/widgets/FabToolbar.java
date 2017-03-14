@@ -46,6 +46,14 @@ public class FabToolbar extends RevealFrameLayout {
     }
 
     private void init() {
+        inflate(getContext(), R.layout.fab_toolbar, this);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        ButterKnife.bind(this);
+        fab.setOnClickListener(onFabClickListener);
         screenWidth = getResources().getDisplayMetrics().widthPixels;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int fabSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
@@ -56,16 +64,8 @@ public class FabToolbar extends RevealFrameLayout {
             cx = cx < 0 ? 0 : cx;
             cy = toolbarHeight - distanceFromScreenEdge;
             cy = cy < 0 ? 0 : cy;
+        } else {
         }
-
-        inflate(getContext(), R.layout.fab_toolbar, this);
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        ButterKnife.bind(this);
-        fab.setOnClickListener(onFabClickListener);
     }
 
     public void setColor(@ColorInt int color) {
@@ -73,37 +73,37 @@ public class FabToolbar extends RevealFrameLayout {
         fab.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 
-    public void show() {
+    private void showBar() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             cx = (fab.getLeft() + fab.getRight()) / 2;
             cy = (fab.getTop() + fab.getBottom()) / 2;
         }
 
-        fab.setOnClickListener(null);
         fab.hide();
         bottomPanel.setVisibility(VISIBLE);
         animateCircle(0, screenWidth, null);
     }
 
-    public void showButton() {
-        if (fab.getVisibility() == GONE) {
+    public void showFab() {
+        boolean isBarVisible = bottomPanel.getVisibility() == VISIBLE;
+        if (!isBarVisible) {
             fab.show();
         }
     }
 
-    public boolean hide() {
-        boolean isVisible = bottomPanel.getVisibility() == VISIBLE;
-        if (isVisible) {
+    public boolean hideBar() {
+        boolean isBarVisible = bottomPanel.getVisibility() == VISIBLE;
+        if (isBarVisible) {
+            animatorListener.showFabOnAnimationEnd = true;
             animateCircle(screenWidth, 0, animatorListener);
             return true;
         }
         return false;
     }
 
-    public void hideButton() {
-        if (fab.getVisibility() == VISIBLE) {
-            fab.hide();
-        }
+    public void hideFabBar() {
+        bottomPanel.setVisibility(GONE);
+        fab.hide();
     }
 
     private void animateCircle(float startRadius, float endRadius, SupportAnimator.AnimatorListener listener) {
@@ -119,11 +119,13 @@ public class FabToolbar extends RevealFrameLayout {
     private class OnFabClickListener implements OnClickListener {
         @Override
         public void onClick(View v) {
-            show();
+            showBar();
         }
     }
 
     private class AnimatorListener implements SupportAnimator.AnimatorListener {
+        private boolean showFabOnAnimationEnd;
+
         @Override
         public void onAnimationStart() {
         }
@@ -131,8 +133,9 @@ public class FabToolbar extends RevealFrameLayout {
         @Override
         public void onAnimationEnd() {
             bottomPanel.setVisibility(GONE);
-            fab.show();
-            fab.setOnClickListener(onFabClickListener);
+            if (showFabOnAnimationEnd) {
+                fab.show();
+            }
         }
 
         @Override

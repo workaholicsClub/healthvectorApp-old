@@ -9,20 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.daimajia.swipe.SwipeLayout;
-import com.daimajia.swipe.interfaces.SwipeItemMangerInterface;
-import com.daimajia.swipe.util.Attributes;
-
 import java.util.Collections;
 import java.util.List;
 
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 
-public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implements EventViewHolder.SwipeActionListener, SwipeItemMangerInterface {
+public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implements EventViewHolder.SwipeActionListener {
     private final Context context;
     private final LayoutInflater inflater;
+    @Getter
     private final SwipeManager swipeManager;
     private final EventActionListener actionListener;
 
@@ -33,7 +31,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.actionListener = actionListener;
-        this.swipeManager = new SwipeManager(this, fabController);
+        this.swipeManager = new SwipeManager(fabController);
         this.events = Collections.unmodifiableList(events);
     }
 
@@ -45,6 +43,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
     }
 
     public void setEvents(@NonNull List<MasterEvent> events) {
+        swipeManager.closeAllItems();
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new EventListDiff(this.events, events), false);
         diffResult.dispatchUpdatesTo(this);
         this.events = Collections.unmodifiableList(events);
@@ -90,49 +89,5 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
     public void done(EventViewHolder viewHolder) {
         viewHolder.swipeLayout.addSwipeListener(new SwipeDoneAction(actionListener, viewHolder.getEvent()));
         swipeManager.closeAllItems();
-    }
-
-    @Override
-    public void openItem(int position) {
-    }
-
-    @Override
-    public void closeItem(int position) {
-    }
-
-    @Override
-    public void closeAllExcept(SwipeLayout layout) {
-    }
-
-    @Override
-    public void closeAllItems() {
-    }
-
-    @Override
-    public List<Integer> getOpenItems() {
-        return null;
-    }
-
-    @Override
-    public List<SwipeLayout> getOpenLayouts() {
-        return null;
-    }
-
-    @Override
-    public void removeShownLayouts(SwipeLayout layout) {
-    }
-
-    @Override
-    public boolean isOpen(int position) {
-        return false;
-    }
-
-    @Override
-    public Attributes.Mode getMode() {
-        return null;
-    }
-
-    @Override
-    public void setMode(Attributes.Mode mode) {
     }
 }

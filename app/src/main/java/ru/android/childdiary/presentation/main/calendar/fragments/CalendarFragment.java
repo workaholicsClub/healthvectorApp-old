@@ -26,6 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
@@ -64,9 +65,10 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @BindView(R.id.recyclerViewEvents)
     RecyclerView recyclerViewEvents;
 
-    private FabController fabController;
     private Adapter calendarAdapter;
+    @Getter
     private EventAdapter eventAdapter;
+    private FabController fabController;
     private Sex sex;
 
     @Override
