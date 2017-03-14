@@ -49,9 +49,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @InjectPresenter
     CalendarPresenter presenter;
 
-    @BindView(R.id.textView)
-    TextView textView;
-
     @Nullable
     @BindView(R.id.calendarTitle)
     TextView calendarTitle;
@@ -154,7 +151,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @Override
     public void setActive(@NonNull Child child) {
         logger.debug("setActive: " + child);
-        textView.setText(child == Child.NULL ? "no active child" : child.getName());
         sex = child.getSex();
         calendarAdapter.setSex(sex);
         eventAdapter.setSex(sex);
@@ -175,31 +171,31 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
     @Override
     public void navigateToDiaperEventEdit(@NonNull MasterEvent event) {
-        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
     public void navigateToFeedEventEdit(@NonNull MasterEvent event) {
-        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
     public void navigateToOtherEventEdit(@NonNull MasterEvent event) {
-        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
     public void navigateToPumpEventEdit(@NonNull MasterEvent event) {
-        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
     public void navigateToSleepEventEdit(@NonNull MasterEvent event) {
-        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 

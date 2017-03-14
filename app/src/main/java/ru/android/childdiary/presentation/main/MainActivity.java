@@ -69,8 +69,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         AccountHeader.OnAccountHeaderProfileImageListener,
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
-        View.OnClickListener,
-        PopupMenu.OnMenuItemClickListener {
+        PopupMenu.OnMenuItemClickListener,
+        View.OnClickListener {
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
@@ -303,6 +303,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             dismissPopupWindow();
             animateSwitcherIn();
             List<IProfile> profiles = accountHeader.getProfiles();
+            profiles.remove(accountHeader.getActiveProfile());
             ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles);
             View anchor = v;
             int width = profiles.size() == 1

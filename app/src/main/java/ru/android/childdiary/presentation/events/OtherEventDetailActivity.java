@@ -17,6 +17,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
@@ -57,9 +58,9 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
     @BindView(R.id.notificationTimeView)
     EventDetailNotificationTimeView notificationTimeView;
 
-    public static Intent getIntent(Context context, @Nullable Long masterEventId) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, OtherEventDetailActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_EVENT_ID, masterEventId);
+        intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
         return intent;
     }
 
@@ -71,6 +72,9 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setDateTime(DateTime.now(), startDateView, startTimeView);
+        setDateTime(DateTime.now(), finishDateView, finishTimeView);
 
         startTitleView.setTitle(R.string.other_event_start);
         finishTitleView.setTitle(R.string.other_event_finish);
@@ -89,6 +93,12 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
     }
 
     @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        toolbar.setLogo(ResourcesUtils.getOtherEventLogoRes(sex));
+    }
+
+    @Override
     public OtherEventDetailPresenter getPresenter() {
         return presenter;
     }
@@ -100,12 +110,34 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
     }
 
     @Override
-    public void showEventDetail(@NonNull OtherEvent event) {
+    public void showDate(@NonNull LocalDate date) {
+        setDateTime(date.toDateTime(LocalTime.now()), startDateView, startTimeView);
+        setDateTime(date.toDateTime(LocalTime.now()), finishDateView, finishTimeView);
     }
 
     @Override
-    protected OtherEvent buildEvent() {
-        return OtherEvent.builder().eventType(EventType.OTHER).dateTime(DateTime.now()).build();
+    public void showEventDetail(@NonNull OtherEvent event) {
+        super.showEventDetail(event);
+        setDateTime(event.getDateTime(), startDateView, startTimeView);
+        setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
+        editTextNote.setText(event.getNote());
+    }
+
+    @Override
+    protected OtherEvent buildEvent(OtherEvent event) {
+        OtherEvent.OtherEventBuilder builder = event == null
+                ? OtherEvent.builder().eventType(EventType.OTHER)
+                : event.toBuilder();
+
+        DateTime startDateTime = getDateTime(startDateView, startTimeView);
+        builder.dateTime(startDateTime);
+
+        DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
+        builder.finishDateTime(finishDateTime);
+
+        builder.note(editTextNote.getText().toString());
+
+        return builder.build();
     }
 
     @Override

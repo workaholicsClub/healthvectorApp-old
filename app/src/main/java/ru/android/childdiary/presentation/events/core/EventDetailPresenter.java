@@ -30,6 +30,14 @@ public abstract class EventDetailPresenter<T extends MasterEvent> extends BasePr
                 .subscribe(getViewState()::showChild, this::onUnexpectedError));
     }
 
+    public void requestDate() {
+        unsubscribeOnDestroy(calendarInteractor.getSelectedDate()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(date -> logger.debug("showDate: " + date))
+                .subscribe(getViewState()::showDate, this::onUnexpectedError));
+    }
+
     @SuppressWarnings("unchecked")
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
         unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)

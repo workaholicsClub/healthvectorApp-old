@@ -21,5 +21,5 @@ public interface OtherEventData {
     @OneToOne
     MasterEventData getMasterEvent();
 
-    DateTime getFinishTime();
+    DateTime getFinishDateTime();
 }

@@ -15,8 +15,10 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
@@ -66,9 +68,9 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
     @BindView(R.id.notificationTimeView)
     EventDetailNotificationTimeView notificationTimeView;
 
-    public static Intent getIntent(Context context, @Nullable Long masterEventId) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, FeedEventDetailActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_EVENT_ID, masterEventId);
+        intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
         return intent;
     }
 
@@ -80,6 +82,9 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setDateTime(DateTime.now(), dateView, timeView);
+        breastView.setSelected(Breast.LEFT);
 
         dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
         timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
@@ -95,6 +100,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
     @Override
     protected void themeChanged() {
         super.themeChanged();
+        toolbar.setLogo(ResourcesUtils.getFeedEventLogoRes(sex));
         breastView.setSex(sex);
     }
 
@@ -110,12 +116,35 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
     }
 
     @Override
-    public void showEventDetail(@NonNull FeedEvent event) {
+    public void showDate(@NonNull LocalDate date) {
+        setDateTime(date.toDateTime(LocalTime.now()), dateView, timeView);
     }
 
     @Override
-    protected FeedEvent buildEvent() {
-        return FeedEvent.builder().eventType(EventType.FEED).dateTime(DateTime.now()).build();
+    public void showEventDetail(@NonNull FeedEvent event) {
+        super.showEventDetail(event);
+        setDateTime(event.getDateTime(), dateView, timeView);
+        feedTypeView.setFeedType(event.getFeedType());
+        breastView.setSelected(event.getBreast());
+        editTextNote.setText(event.getNote());
+    }
+
+    @Override
+    protected FeedEvent buildEvent(FeedEvent event) {
+        FeedEvent.FeedEventBuilder builder = event == null
+                ? FeedEvent.builder().eventType(EventType.FEED)
+                : event.toBuilder();
+
+        DateTime dateTime = getDateTime(dateView, timeView);
+        builder.dateTime(dateTime);
+
+        builder.feedType(feedTypeView.getFeedType());
+
+        builder.breast(breastView.getSelected());
+
+        builder.note(editTextNote.getText().toString());
+
+        return builder.build();
     }
 
     @Override

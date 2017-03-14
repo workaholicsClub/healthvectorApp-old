@@ -135,40 +135,48 @@ public class CalendarDbService {
                         SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject));
     }
 
+    private Observable<MasterEvent> update(@NonNull MasterEvent event) {
+        return DbUtils.updateObservable(dataStore, MasterEventEntity.class, event, event.getMasterEventId(),
+                MasterEventMapper::updateEntityWithPlainObject, MasterEventMapper::mapToPlainObject);
+    }
+
     public Observable<DiaperEvent> update(@NonNull DiaperEvent event) {
-        return DbUtils.updateObservable(dataStore, DiaperEventEntity.class, event, event.getId(),
-                DiaperEventMapper::updateEntityWithPlainObject, DiaperEventMapper::mapToPlainObject);
+        return update(event.getMasterEvent())
+                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, DiaperEventEntity.class, event, event.getId(),
+                        DiaperEventMapper::updateEntityWithPlainObject, DiaperEventMapper::mapToPlainObject));
     }
 
     public Observable<FeedEvent> update(@NonNull FeedEvent event) {
-        return DbUtils.updateObservable(dataStore, FeedEventEntity.class, event, event.getId(),
-                FeedEventMapper::updateEntityWithPlainObject, FeedEventMapper::mapToPlainObject);
+        return update(event.getMasterEvent())
+                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, FeedEventEntity.class, event, event.getId(),
+                        FeedEventMapper::updateEntityWithPlainObject, FeedEventMapper::mapToPlainObject));
     }
 
     public Observable<OtherEvent> update(@NonNull OtherEvent event) {
-        return DbUtils.updateObservable(dataStore, OtherEventEntity.class, event, event.getId(),
-                OtherEventMapper::updateEntityWithPlainObject, OtherEventMapper::mapToPlainObject);
+        return update(event.getMasterEvent())
+                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, OtherEventEntity.class, event, event.getId(),
+                        OtherEventMapper::updateEntityWithPlainObject, OtherEventMapper::mapToPlainObject));
     }
 
     public Observable<PumpEvent> update(@NonNull PumpEvent event) {
-        return DbUtils.updateObservable(dataStore, PumpEventEntity.class, event, event.getId(),
-                PumpEventMapper::updateEntityWithPlainObject, PumpEventMapper::mapToPlainObject);
+        return update(event.getMasterEvent())
+                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, PumpEventEntity.class, event, event.getId(),
+                        PumpEventMapper::updateEntityWithPlainObject, PumpEventMapper::mapToPlainObject));
     }
 
     public Observable<SleepEvent> update(@NonNull SleepEvent event) {
-        return DbUtils.updateObservable(dataStore, SleepEventEntity.class, event, event.getId(),
-                SleepEventMapper::updateEntityWithPlainObject, SleepEventMapper::mapToPlainObject);
+        return update(event.getMasterEvent())
+                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, SleepEventEntity.class, event, event.getId(),
+                        SleepEventMapper::updateEntityWithPlainObject, SleepEventMapper::mapToPlainObject));
     }
 
     public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
         event = event.toMasterBuilder().isDeleted(true).build();
-        return DbUtils.updateObservable(dataStore, MasterEventEntity.class, event, event.getMasterEventId(),
-                MasterEventMapper::updateEntityWithPlainObject, MasterEventMapper::mapToPlainObject);
+        return update(event);
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         event = event.toMasterBuilder().isDone(true).build();
-        return DbUtils.updateObservable(dataStore, MasterEventEntity.class, event, event.getMasterEventId(),
-                MasterEventMapper::updateEntityWithPlainObject, MasterEventMapper::mapToPlainObject);
+        return update(event);
     }
 }
