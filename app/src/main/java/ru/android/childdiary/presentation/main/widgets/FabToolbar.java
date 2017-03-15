@@ -101,6 +101,11 @@ public class FabToolbar extends RevealFrameLayout {
         return false;
     }
 
+    public void hideBarWithoutAnimation() {
+        bottomPanel.setVisibility(GONE);
+        fab.show();
+    }
+
     public void hideFabBar() {
         bottomPanel.setVisibility(GONE);
         fab.hide();

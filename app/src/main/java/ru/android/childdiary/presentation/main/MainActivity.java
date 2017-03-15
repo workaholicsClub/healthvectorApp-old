@@ -433,26 +433,31 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @OnClick(R.id.addDiaperEvent)
     void onAddDiaperEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addDiaperEvent();
     }
 
     @OnClick(R.id.addSleepEvent)
     void onAddSleepEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addSleepEvent();
     }
 
     @OnClick(R.id.addFeedEvent)
     void onAddFeedEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addFeedEvent();
     }
 
     @OnClick(R.id.addPumpEvent)
     void onAddPumpEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addPumpEventClick();
     }
 
     @OnClick(R.id.addOtherEvent)
     void onAddOtherEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addOtherEventClick();
     }
 
