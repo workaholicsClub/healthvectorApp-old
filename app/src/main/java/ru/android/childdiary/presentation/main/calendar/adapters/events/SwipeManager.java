@@ -8,11 +8,14 @@ import com.daimajia.swipe.SwipeLayout;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.Setter;
+
 public class SwipeManager {
     private static final int INVALID_POSITION = -1;
-    private final FabController fabController;
     private final Set<SwipeLayout> shownLayouts = new HashSet<>();
     private final Set<Integer> openedOrOpeningPositions = new HashSet<>();
+    @Setter
+    private FabController fabController;
     private int openPosition = INVALID_POSITION;
 
     public SwipeManager(@Nullable FabController fabController) {
@@ -55,8 +58,16 @@ public class SwipeManager {
         showFabIfPossible();
     }
 
-    public boolean hasOpenedItems() {
+    private boolean hasOpenedItems() {
         return !openedOrOpeningPositions.isEmpty();
+    }
+
+    public void update() {
+        if (hasOpenedItems()) {
+            hideFab();
+        } else {
+            showFabIfPossible();
+        }
     }
 
     private void showFabIfPossible() {
