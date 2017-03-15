@@ -75,6 +75,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> im
 
         setDateTime(DateTime.now(), startDateView, startTimeView);
         setDateTime(DateTime.now(), finishDateView, finishTimeView);
+        // TODO not time
 
         startTitleView.setTitle(R.string.asleep);
         finishTitleView.setTitle(R.string.awoke);
@@ -120,6 +121,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> im
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
+        // TODO not time
         editTextNote.setText(event.getNote());
     }
 
@@ -134,6 +136,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<SleepEvent> im
 
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
         builder.finishDateTime(finishDateTime);
+
+        // TODO not time
 
         builder.note(editTextNote.getText().toString());
 

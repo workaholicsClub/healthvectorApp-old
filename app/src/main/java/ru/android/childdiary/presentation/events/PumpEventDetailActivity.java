@@ -65,6 +65,8 @@ public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> impl
 
         setDateTime(DateTime.now(), dateView, timeView);
         breastView.setSelected(Breast.LEFT);
+        // TODO duration
+        // TODO not time
 
         dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
         timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
@@ -105,6 +107,8 @@ public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> impl
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
         breastView.setSelected(event.getBreast());
+        // TODO duration
+        // TODO not time
         editTextNote.setText(event.getNote());
     }
 
@@ -118,6 +122,9 @@ public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> impl
         builder.dateTime(dateTime);
 
         builder.breast(breastView.getSelected());
+
+        // TODO duration
+        // TODO not time
 
         builder.note(editTextNote.getText().toString());
 

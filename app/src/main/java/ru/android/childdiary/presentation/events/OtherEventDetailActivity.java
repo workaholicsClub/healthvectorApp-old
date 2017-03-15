@@ -75,6 +75,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
 
         setDateTime(DateTime.now(), startDateView, startTimeView);
         setDateTime(DateTime.now(), finishDateView, finishTimeView);
+        // TODO not time
 
         startTitleView.setTitle(R.string.other_event_start);
         finishTitleView.setTitle(R.string.other_event_finish);
@@ -120,6 +121,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
+        // TODO not time
         editTextNote.setText(event.getNote());
     }
 
@@ -134,6 +136,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
 
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
         builder.finishDateTime(finishDateTime);
+
+        // TODO not time
 
         builder.note(editTextNote.getText().toString());
 

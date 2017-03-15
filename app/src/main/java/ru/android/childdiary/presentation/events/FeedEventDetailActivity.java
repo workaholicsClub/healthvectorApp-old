@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -17,6 +18,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -34,7 +36,9 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailNotification
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> implements EventDetailView<FeedEvent> {
+public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> implements
+        EventDetailView<FeedEvent>,
+        EventDetailFeedTypeView.OnFeedTypeChanged {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
 
@@ -84,7 +88,14 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
         super.onCreate(savedInstanceState);
 
         setDateTime(DateTime.now(), dateView, timeView);
+        feedTypeView.setOnFeedTypeChanged(this);
+        feedTypeView.setFeedType(FeedType.BREAST_MILK);
         breastView.setSelected(Breast.LEFT);
+        // TODO amountMl
+        // TODO duration
+        // TODO amount
+        // TODO foodMeasure
+        // TODO not time
 
         dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
         timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
@@ -126,6 +137,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
         setDateTime(event.getDateTime(), dateView, timeView);
         feedTypeView.setFeedType(event.getFeedType());
         breastView.setSelected(event.getBreast());
+        // TODO amountMl
+        // TODO duration
+        // TODO amount
+        // TODO foodMeasure
+        // TODO not time
         editTextNote.setText(event.getNote());
     }
 
@@ -142,9 +158,50 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
 
         builder.breast(breastView.getSelected());
 
+        // TODO amountMl
+        // TODO duration
+        // TODO amount
+        // TODO foodMeasure
+        // TODO not time
+
         builder.note(editTextNote.getText().toString());
 
         return builder.build();
+    }
+
+    @Override
+    public void onFeedTypeChanged() {
+        FeedType feedType = feedTypeView.getFeedType();
+        switch (feedType) {
+            case BREAST_MILK:
+                breastView.setVisibility(View.VISIBLE);
+                amountMlView.setVisibility(View.GONE);
+                durationView.setVisibility(View.VISIBLE);
+                amountView.setVisibility(View.GONE);
+                foodMeasureView.setVisibility(View.GONE);
+                break;
+            case PUMPED_MILK:
+                breastView.setVisibility(View.GONE);
+                amountMlView.setVisibility(View.VISIBLE);
+                durationView.setVisibility(View.GONE);
+                amountView.setVisibility(View.GONE);
+                foodMeasureView.setVisibility(View.GONE);
+                break;
+            case MILK_FORMULA:
+                breastView.setVisibility(View.GONE);
+                amountMlView.setVisibility(View.VISIBLE);
+                durationView.setVisibility(View.GONE);
+                amountView.setVisibility(View.GONE);
+                foodMeasureView.setVisibility(View.GONE);
+                break;
+            case FOOD:
+                breastView.setVisibility(View.GONE);
+                amountMlView.setVisibility(View.GONE);
+                durationView.setVisibility(View.GONE);
+                amountView.setVisibility(View.VISIBLE);
+                foodMeasureView.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     @Override
@@ -155,5 +212,15 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
     @Override
     protected void setTime(String tag, LocalTime time) {
         timeView.setTime(time);
+    }
+
+    @Override
+    public void onBackPressed() {
+        boolean processed = feedTypeView.dismissPopupWindow();
+        if (processed) {
+            return;
+        }
+
+        super.onBackPressed();
     }
 }

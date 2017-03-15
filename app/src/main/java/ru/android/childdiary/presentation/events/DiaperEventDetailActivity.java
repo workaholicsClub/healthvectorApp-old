@@ -65,6 +65,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> 
 
         setDateTime(DateTime.now(), dateView, timeView);
         diaperStateView.setSelected(DiaperState.WET);
+        // TODO not time
 
         dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
         timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
@@ -105,6 +106,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> 
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
         diaperStateView.setSelected(event.getDiaperState());
+        // TODO not time
         editTextNote.setText(event.getNote());
     }
 
@@ -118,6 +120,8 @@ public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> 
         builder.dateTime(dateTime);
 
         builder.diaperState(diaperStateView.getSelected());
+
+        // TODO not time
 
         builder.note(editTextNote.getText().toString());
 
