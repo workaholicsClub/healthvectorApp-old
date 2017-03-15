@@ -6,6 +6,8 @@ import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -42,6 +44,14 @@ public class CalendarInteractor implements Interactor {
 
     public Observable<LocalDate> setSelectedDate(@NonNull LocalDate date) {
         return calendarRepository.setSelectedDate(date);
+    }
+
+    public Observable<List<FoodMeasure>> getFoodMeasureList() {
+        return calendarRepository.getFoodMeasureList();
+    }
+
+    public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
+        return calendarRepository.addFoodMeasure(foodMeasure);
     }
 
     public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {

@@ -6,7 +6,6 @@ import ru.android.childdiary.data.converters.BreastEnumConverter;
 import ru.android.childdiary.data.converters.DiaperStateEnumConverter;
 import ru.android.childdiary.data.converters.EventTypeEnumConverter;
 import ru.android.childdiary.data.converters.FeedTypeEnumConverter;
-import ru.android.childdiary.data.converters.FoodMeasureEnumConverter;
 import ru.android.childdiary.data.converters.JodaDateTimeConverter;
 import ru.android.childdiary.data.converters.JodaLocalDateConverter;
 import ru.android.childdiary.data.converters.JodaLocalTimeConverter;
@@ -19,7 +18,6 @@ public class CustomMapping extends DefaultMapping {
         addConverter(new DiaperStateEnumConverter());
         addConverter(new EventTypeEnumConverter());
         addConverter(new FeedTypeEnumConverter());
-        addConverter(new FoodMeasureEnumConverter());
         addConverter(new JodaDateTimeConverter());
         addConverter(new JodaLocalDateConverter());
         addConverter(new JodaLocalTimeConverter());

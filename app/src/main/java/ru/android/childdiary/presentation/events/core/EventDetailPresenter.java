@@ -12,12 +12,12 @@ import ru.android.childdiary.domain.interactors.calendar.requests.AddEventReques
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
-public abstract class EventDetailPresenter<T extends MasterEvent> extends BasePresenter<EventDetailView<T>> {
+public abstract class EventDetailPresenter<V extends EventDetailView<T>, T extends MasterEvent> extends BasePresenter<V> {
     @Inject
-    ChildInteractor childInteractor;
+    protected ChildInteractor childInteractor;
 
     @Inject
-    CalendarInteractor calendarInteractor;
+    protected CalendarInteractor calendarInteractor;
 
     @Override
     protected void onFirstViewAttach() {

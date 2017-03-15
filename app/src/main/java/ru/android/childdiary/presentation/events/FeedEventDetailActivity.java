@@ -14,17 +14,19 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.util.List;
+
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
-import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
@@ -37,8 +39,8 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> implements
-        EventDetailView<FeedEvent>,
-        EventDetailFeedTypeView.OnFeedTypeChanged {
+        FeedEventDetailView,
+        EventDetailFeedTypeView.OnValueChanged {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
 
@@ -88,8 +90,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
         super.onCreate(savedInstanceState);
 
         setDateTime(DateTime.now(), dateView, timeView);
-        feedTypeView.setOnFeedTypeChanged(this);
-        feedTypeView.setFeedType(FeedType.BREAST_MILK);
+        feedTypeView.setOnValueChanged(this);
+        feedTypeView.setValue(FeedType.BREAST_MILK);
         breastView.setSelected(Breast.LEFT);
         // TODO amountMl
         // TODO duration
@@ -135,7 +137,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
     public void showEventDetail(@NonNull FeedEvent event) {
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
-        feedTypeView.setFeedType(event.getFeedType());
+        feedTypeView.setValue(event.getFeedType());
         breastView.setSelected(event.getBreast());
         // TODO amountMl
         // TODO duration
@@ -154,7 +156,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
         DateTime dateTime = getDateTime(dateView, timeView);
         builder.dateTime(dateTime);
 
-        builder.feedType(feedTypeView.getFeedType());
+        builder.feedType(feedTypeView.getValue());
 
         builder.breast(breastView.getSelected());
 
@@ -170,8 +172,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
     }
 
     @Override
-    public void onFeedTypeChanged() {
-        FeedType feedType = feedTypeView.getFeedType();
+    public void onValueChanged() {
+        FeedType feedType = feedTypeView.getValue();
         switch (feedType) {
             case BREAST_MILK:
                 breastView.setVisibility(View.VISIBLE);
@@ -215,8 +217,18 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> impl
     }
 
     @Override
+    public void showFoodMeasureList(@NonNull List<FoodMeasure> foodMeasureList) {
+        foodMeasureView.updateAdapter(foodMeasureList);
+    }
+
+    @Override
     public void onBackPressed() {
         boolean processed = feedTypeView.dismissPopupWindow();
+        if (processed) {
+            return;
+        }
+
+        processed = foodMeasureView.dismissPopupWindow();
         if (processed) {
             return;
         }

@@ -118,7 +118,7 @@ public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvp
         this.event = event;
     }
 
-    protected abstract EventDetailPresenter<T> getPresenter();
+    protected abstract EventDetailPresenter getPresenter();
 
     @LayoutRes
     protected abstract int getContentLayoutResourceId();

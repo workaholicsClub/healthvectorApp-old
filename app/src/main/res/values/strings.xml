@@ -81,7 +81,6 @@
     <string name="feed_type_food">Добавка</string>
     <string name="food_measure_grams">Граммы</string>
     <string name="food_measure_millilitres">Миллилитры</string>
-    <string name="food_measure_other">Другое</string>
     <string name="notification_time">Оповещение</string>
     <string name="diaper_state">Состояние подгузника</string>
     <string name="note">Примечание</string>

@@ -26,7 +26,7 @@ class FeedEventMapper {
                 .durationInMinutes(eventData.getDurationInMinutes())
                 .milkAmountImMilliliters(eventData.getMilkAmountImMilliliters())
                 .foodAmount(eventData.getFoodAmount())
-                .foodMeasure(eventData.getFoodMeasure())
+                .foodMeasure(FoodMeasureMapper.mapToPlainObject(eventData.getFoodMeasureData()))
                 .build();
     }
 
@@ -46,7 +46,7 @@ class FeedEventMapper {
         to.setDurationInMinutes(from.getDurationInMinutes());
         to.setMilkAmountImMilliliters(from.getMilkAmountImMilliliters());
         to.setFoodAmount(from.getFoodAmount());
-        to.setFoodMeasure(from.getFoodMeasure());
+        // TODO: food measure update
         return to;
     }
 }

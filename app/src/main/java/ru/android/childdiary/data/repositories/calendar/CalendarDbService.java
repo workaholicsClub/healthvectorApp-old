@@ -18,10 +18,12 @@ import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.DiaperEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.standard.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -45,6 +47,18 @@ public class CalendarDbService {
 
     private static DateTime nextDayMidnight(LocalDate date) {
         return date.plusDays(1).toDateTime(LocalTime.MIDNIGHT);
+    }
+
+    public Observable<List<FoodMeasure>> getFoodMeasureList() {
+        return dataStore.select(FoodMeasureEntity.class)
+                .orderBy(FoodMeasureEntity.NAME)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, FoodMeasureMapper::mapToPlainObject));
+    }
+
+    public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
+        return dataStore.insert(FoodMeasureMapper.mapToEntity(foodMeasure)).toObservable().map(FoodMeasureMapper::mapToPlainObject);
     }
 
     public Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate) {
