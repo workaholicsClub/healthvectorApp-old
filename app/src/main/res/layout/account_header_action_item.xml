@@ -20,21 +20,19 @@
         android:id="@android:id/text1"
         android:layout_width="0dp"
         android:layout_height="@dimen/account_header_action_item_height"
+        android:layout_marginLeft="@dimen/account_header_action_item_text_margin_horizontal"
+        android:layout_marginStart="@dimen/account_header_action_item_text_margin_horizontal"
         android:layout_weight="1"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:paddingLeft="@dimen/account_header_action_item_text_padding_horizontal"
-        android:paddingRight="@dimen/account_header_action_item_text_padding_horizontal"
         android:textAlignment="inherit"
         android:textAppearance="@style/PrimaryTextAppearance" />
 
     <ImageView
         android:id="@+id/imageViewDropdown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/account_header_action_item_image_margin_horizontal"
-        android:layout_marginRight="@dimen/account_header_action_item_image_margin_horizontal"
+        android:layout_width="@dimen/account_header_action_item_height"
+        android:layout_height="@dimen/account_header_action_item_height"
         android:scaleType="center"
         android:src="@drawable/arrow_up_black"
         tools:ignore="ContentDescription" />

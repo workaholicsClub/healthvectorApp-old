@@ -13,7 +13,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 public class OtherEvent extends MasterEvent {
     Long id;
 
-    DateTime finishTime;
+    DateTime finishDateTime;
 
     @Builder(toBuilder = true)
     private OtherEvent(Long masterEventId,
@@ -25,9 +25,9 @@ public class OtherEvent extends MasterEvent {
                        Boolean isDone,
                        Boolean isDeleted,
                        Long id,
-                       DateTime finishTime) {
+                       DateTime finishDateTime) {
         super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
         this.id = id;
-        this.finishTime = finishTime;
+        this.finishDateTime = finishDateTime;
     }
 }

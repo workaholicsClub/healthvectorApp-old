@@ -21,7 +21,7 @@ class OtherEventMapper {
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
                 .isDeleted(masterEventData.isDeleted())
-                .finishTime(eventData.getFinishTime())
+                .finishDateTime(eventData.getFinishDateTime())
                 .build();
     }
 
@@ -36,7 +36,7 @@ class OtherEventMapper {
     }
 
     public static OtherEventEntity updateEntityWithPlainObject(@NonNull OtherEventEntity to, @NonNull OtherEvent from) {
-        to.setFinishTime(from.getFinishTime());
+        to.setFinishDateTime(from.getFinishDateTime());
         return to;
     }
 }

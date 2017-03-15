@@ -22,7 +22,7 @@ public interface CalendarView extends BaseView {
     void setSelected(@NonNull LocalDate date);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showEvents(@NonNull List<MasterEvent> events);
+    void showEvents(@NonNull LocalDate date, @NonNull List<MasterEvent> events);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToDiaperEventEdit(@NonNull MasterEvent event);

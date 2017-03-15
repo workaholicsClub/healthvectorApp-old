@@ -13,7 +13,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 public class SleepEvent extends MasterEvent {
     Long id;
 
-    DateTime awakeTime;
+    DateTime finishDateTime;
 
     @Builder(toBuilder = true)
     private SleepEvent(Long masterEventId,
@@ -25,9 +25,9 @@ public class SleepEvent extends MasterEvent {
                        Boolean isDone,
                        Boolean isDeleted,
                        Long id,
-                       DateTime awakeTime) {
+                       DateTime finishDateTime) {
         super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
         this.id = id;
-        this.awakeTime = awakeTime;
+        this.finishDateTime = finishDateTime;
     }
 }

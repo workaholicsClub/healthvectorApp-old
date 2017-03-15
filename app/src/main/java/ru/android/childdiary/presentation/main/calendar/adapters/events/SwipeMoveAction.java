@@ -1,11 +1,13 @@
 package ru.android.childdiary.presentation.main.calendar.adapters.events;
 
+import android.support.annotation.NonNull;
+
 import com.daimajia.swipe.SwipeLayout;
 
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 
 class SwipeMoveAction extends SwipeAction {
-    public SwipeMoveAction(EventActionListener listener, MasterEvent event) {
+    public SwipeMoveAction(@NonNull EventActionListener listener, @NonNull MasterEvent event) {
         super(listener, event);
     }
 
@@ -13,8 +15,6 @@ class SwipeMoveAction extends SwipeAction {
     public void onClose(SwipeLayout layout) {
         layout.removeSwipeListener(this);
         layout.removeSwipeListener(this);
-        if (listener != null) {
-            listener.move(event);
-        }
+        listener.move(event);
     }
 }

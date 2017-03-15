@@ -21,5 +21,5 @@ public interface SleepEventData {
     @OneToOne
     MasterEventData getMasterEvent();
 
-    DateTime getAwakeTime();
+    DateTime getFinishDateTime();
 }

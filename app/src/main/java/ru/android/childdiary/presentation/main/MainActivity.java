@@ -50,6 +50,8 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
+import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
+import ru.android.childdiary.presentation.main.calendar.fragments.CalendarFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
@@ -69,8 +71,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         AccountHeader.OnAccountHeaderProfileImageListener,
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
+        PopupMenu.OnMenuItemClickListener,
         View.OnClickListener,
-        PopupMenu.OnMenuItemClickListener {
+        FabController {
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
@@ -109,6 +112,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @BindView(R.id.fabToolbar)
     FabToolbar fabToolbar;
 
+    private ViewPagerAdapter viewPagerAdapter;
     private AccountHeader accountHeader;
     private Drawer drawer;
     private DrawerBuilder drawerBuilder;
@@ -211,8 +215,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
         if (child == Child.NULL) {
+            hideFabBar();
             getSupportActionBar().setTitle(R.string.app_name);
         } else {
+            updateFab(viewPager.getCurrentItem());
             getSupportActionBar().setTitle(child.getName());
             if (accountHeader != null) {
                 accountHeader.setActiveProfile(mapToProfileId(child));
@@ -302,7 +308,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         if (v.getId() == R.id.material_drawer_account_header_text_switcher_wrapper && accountHeader != null) {
             dismissPopupWindow();
             animateSwitcherIn();
-            List<IProfile> profiles = accountHeader.getProfiles();
+            List<IProfile> profiles = new ArrayList<>(accountHeader.getProfiles());
+            profiles.remove(accountHeader.getActiveProfile());
             ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles);
             View anchor = v;
             int width = profiles.size() == 1
@@ -325,7 +332,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         dismissPopupWindow();
-        IProfile profile = accountHeader.getProfiles().get(position);
+        IProfile profile = ((AccountHeaderActionAdapter) parent.getAdapter()).getItems().get(position);
         if (profile instanceof ProfileDrawerItem) {
             Child child = (Child) ((ProfileDrawerItem) profile).getTag();
             presenter.switchChild(child);
@@ -356,14 +363,28 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new DayFragment(), getString(R.string.day));
-        adapter.addFragment(new WeekFragment(), getString(R.string.week));
-        adapter.addFragment(new MonthFragment(), getString(R.string.month));
-        viewPager.setAdapter(adapter);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(new DayFragment(), getString(R.string.day));
+        viewPagerAdapter.addFragment(new WeekFragment(), getString(R.string.week));
+        viewPagerAdapter.addFragment(new MonthFragment(), getString(R.string.month));
+        viewPager.setAdapter(viewPagerAdapter);
         viewPager.setCurrentItem(2, false);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                updateFab(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     private void buildUi() {
@@ -412,26 +433,31 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @OnClick(R.id.addDiaperEvent)
     void onAddDiaperEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addDiaperEvent();
     }
 
     @OnClick(R.id.addSleepEvent)
     void onAddSleepEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addSleepEvent();
     }
 
     @OnClick(R.id.addFeedEvent)
     void onAddFeedEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addFeedEvent();
     }
 
     @OnClick(R.id.addPumpEvent)
     void onAddPumpEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addPumpEventClick();
     }
 
     @OnClick(R.id.addOtherEvent)
     void onAddOtherEventClick() {
+        fabToolbar.hideBarWithoutAnimation();
         presenter.addOtherEventClick();
     }
 
@@ -461,7 +487,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             return;
         }
 
-        processed = fabToolbar.hide();
+        processed = fabToolbar.hideBar();
         if (processed) {
             return;
         }
@@ -512,5 +538,25 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 return true;
         }
         return false;
+    }
+
+    private void updateFab(int position) {
+        CalendarFragment fragment = (CalendarFragment) viewPagerAdapter.getItem(position);
+        boolean hasOpenedItems = fragment.getEventAdapter().getSwipeManager().hasOpenedItems();
+        if (hasOpenedItems) {
+            hideFabBar();
+        } else {
+            showFab();
+        }
+    }
+
+    @Override
+    public void showFab() {
+        fabToolbar.showFab();
+    }
+
+    @Override
+    public void hideFabBar() {
+        fabToolbar.hideFabBar();
     }
 }

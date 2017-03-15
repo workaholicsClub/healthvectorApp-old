@@ -13,8 +13,11 @@ import android.widget.ArrayAdapter;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.Getter;
+
 public abstract class BaseArrayAdapter<T, VH extends BaseViewHolder<T>> extends ArrayAdapter<T> {
     private final LayoutInflater inflater;
+    @Getter
     private final List<T> items;
 
     public BaseArrayAdapter(Context context, @NonNull List<T> items) {

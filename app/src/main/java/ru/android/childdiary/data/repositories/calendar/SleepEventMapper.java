@@ -21,7 +21,7 @@ class SleepEventMapper {
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
                 .isDeleted(masterEventData.isDeleted())
-                .awakeTime(eventData.getAwakeTime())
+                .finishDateTime(eventData.getFinishDateTime())
                 .build();
     }
 
@@ -36,7 +36,7 @@ class SleepEventMapper {
     }
 
     public static SleepEventEntity updateEntityWithPlainObject(@NonNull SleepEventEntity to, @NonNull SleepEvent from) {
-        to.setAwakeTime(from.getAwakeTime());
+        to.setFinishDateTime(from.getFinishDateTime());
         return to;
     }
 }

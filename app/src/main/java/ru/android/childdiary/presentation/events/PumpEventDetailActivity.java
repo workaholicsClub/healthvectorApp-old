@@ -15,8 +15,10 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
@@ -46,9 +48,9 @@ public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> impl
     @BindView(R.id.notificationTimeView)
     EventDetailNotificationTimeView notificationTimeView;
 
-    public static Intent getIntent(Context context, @Nullable Long masterEventId) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, PumpEventDetailActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_EVENT_ID, masterEventId);
+        intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
         return intent;
     }
 
@@ -60,6 +62,9 @@ public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> impl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setDateTime(DateTime.now(), dateView, timeView);
+        breastView.setSelected(Breast.LEFT);
 
         dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
         timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
@@ -75,6 +80,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> impl
     @Override
     protected void themeChanged() {
         super.themeChanged();
+        toolbar.setLogo(ResourcesUtils.getPumpEventLogoRes(sex));
         breastView.setSex(sex);
     }
 
@@ -90,12 +96,32 @@ public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> impl
     }
 
     @Override
-    public void showEventDetail(@NonNull PumpEvent event) {
+    public void showDate(@NonNull LocalDate date) {
+        setDateTime(date.toDateTime(LocalTime.now()), dateView, timeView);
     }
 
     @Override
-    protected PumpEvent buildEvent() {
-        return PumpEvent.builder().eventType(EventType.PUMP).dateTime(DateTime.now()).build();
+    public void showEventDetail(@NonNull PumpEvent event) {
+        super.showEventDetail(event);
+        setDateTime(event.getDateTime(), dateView, timeView);
+        breastView.setSelected(event.getBreast());
+        editTextNote.setText(event.getNote());
+    }
+
+    @Override
+    protected PumpEvent buildEvent(PumpEvent event) {
+        PumpEvent.PumpEventBuilder builder = event == null
+                ? PumpEvent.builder().eventType(EventType.PUMP)
+                : event.toBuilder();
+
+        DateTime dateTime = getDateTime(dateView, timeView);
+        builder.dateTime(dateTime);
+
+        builder.breast(breastView.getSelected());
+
+        builder.note(editTextNote.getText().toString());
+
+        return builder.build();
     }
 
     @Override

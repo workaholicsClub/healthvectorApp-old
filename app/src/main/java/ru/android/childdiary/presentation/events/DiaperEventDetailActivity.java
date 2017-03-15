@@ -15,8 +15,10 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
@@ -46,9 +48,9 @@ public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> 
     @BindView(R.id.diaperStateView)
     EventDetailDiaperStateView diaperStateView;
 
-    public static Intent getIntent(Context context, @Nullable Long masterEventId) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, DiaperEventDetailActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_EVENT_ID, masterEventId);
+        intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
         return intent;
     }
 
@@ -60,6 +62,9 @@ public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setDateTime(DateTime.now(), dateView, timeView);
+        diaperStateView.setSelected(DiaperState.WET);
 
         dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
         timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
@@ -75,6 +80,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> 
     @Override
     protected void themeChanged() {
         super.themeChanged();
+        toolbar.setLogo(ResourcesUtils.getDiaperEventLogoRes(sex));
         diaperStateView.setSex(sex);
     }
 
@@ -90,12 +96,32 @@ public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> 
     }
 
     @Override
-    public void showEventDetail(@NonNull DiaperEvent event) {
+    public void showDate(@NonNull LocalDate date) {
+        setDateTime(date.toDateTime(LocalTime.now()), dateView, timeView);
     }
 
     @Override
-    protected DiaperEvent buildEvent() {
-        return DiaperEvent.builder().eventType(EventType.DIAPER).dateTime(DateTime.now()).build();
+    public void showEventDetail(@NonNull DiaperEvent event) {
+        super.showEventDetail(event);
+        setDateTime(event.getDateTime(), dateView, timeView);
+        diaperStateView.setSelected(event.getDiaperState());
+        editTextNote.setText(event.getNote());
+    }
+
+    @Override
+    protected DiaperEvent buildEvent(@Nullable DiaperEvent event) {
+        DiaperEvent.DiaperEventBuilder builder = event == null
+                ? DiaperEvent.builder().eventType(EventType.DIAPER)
+                : event.toBuilder();
+
+        DateTime dateTime = getDateTime(dateView, timeView);
+        builder.dateTime(dateTime);
+
+        builder.diaperState(diaperStateView.getSelected());
+
+        builder.note(editTextNote.getText().toString());
+
+        return builder.build();
     }
 
     @Override

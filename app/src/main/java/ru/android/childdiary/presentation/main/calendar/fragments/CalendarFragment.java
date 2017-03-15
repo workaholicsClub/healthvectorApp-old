@@ -26,6 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
@@ -41,6 +42,7 @@ import ru.android.childdiary.presentation.main.calendar.CalendarView;
 import ru.android.childdiary.presentation.main.calendar.adapters.calendar.CalendarViewAdapter;
 import ru.android.childdiary.presentation.main.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.main.calendar.adapters.events.EventAdapter;
+import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
 
@@ -48,9 +50,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener {
     @InjectPresenter
     CalendarPresenter presenter;
-
-    @BindView(R.id.textView)
-    TextView textView;
 
     @Nullable
     @BindView(R.id.calendarTitle)
@@ -67,7 +66,9 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     RecyclerView recyclerViewEvents;
 
     private Adapter calendarAdapter;
+    @Getter
     private EventAdapter eventAdapter;
+    private FabController fabController;
     private Sex sex;
 
     @Override
@@ -88,7 +89,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         super.onActivityCreated(savedInstanceState);
 
         calendarAdapter = getCalendarViewAdapter();
-        updateTitle(calendarAdapter);
+        updateCalendarTitle();
 
         if (gridViewCalendar != null) {
             gridViewCalendar.setOnItemClickListener(this);
@@ -99,10 +100,24 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewEvents.setLayoutManager(layoutManager);
-        eventAdapter = new EventAdapter(getContext(), this);
+        eventAdapter = new EventAdapter(getContext(), this, fabController);
         recyclerViewEvents.setAdapter(eventAdapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewEvents, false);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FabController) {
+            fabController = (FabController) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fabController = null;
     }
 
     @LayoutRes
@@ -114,16 +129,18 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
     protected abstract String getCalendarTitleText(Adapter adapter);
 
-    private void updateTitle(Adapter adapter) {
+    private void updateCalendarTitle() {
+        if (calendarTitle != null) {
+            calendarTitle.setText(getCalendarTitleText(calendarAdapter));
+        }
+    }
+
+    private void updateEventsTitle(LocalDate selectedDate) {
         Context context = getContext();
-        LocalDate selectedDate = adapter.getSelectedDate();
         int day = selectedDate.getDayOfMonth();
         String monthName = DateUtils.monthGenitiveName(context, selectedDate.getMonthOfYear());
         String text = context.getString(R.string.calendar_selected_date_format, day, monthName);
         textViewSelectedDate.setText(text);
-        if (calendarTitle != null) {
-            calendarTitle.setText(getCalendarTitleText(calendarAdapter));
-        }
     }
 
     @Optional
@@ -154,7 +171,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @Override
     public void setActive(@NonNull Child child) {
         logger.debug("setActive: " + child);
-        textView.setText(child == Child.NULL ? "no active child" : child.getName());
         sex = child.getSex();
         calendarAdapter.setSex(sex);
         eventAdapter.setSex(sex);
@@ -164,42 +180,43 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     public void setSelected(@NonNull LocalDate date) {
         logger.debug("setSelected: " + date);
         calendarAdapter.setSelectedDate(date, false);
-        updateTitle(calendarAdapter);
+        updateCalendarTitle();
     }
 
     @Override
-    public void showEvents(@NonNull List<MasterEvent> events) {
+    public void showEvents(@NonNull LocalDate date, @NonNull List<MasterEvent> events) {
         logger.debug("showEvents: " + StringUtils.eventsList(events));
+        updateEventsTitle(date);
         eventAdapter.setEvents(events);
     }
 
     @Override
     public void navigateToDiaperEventEdit(@NonNull MasterEvent event) {
-        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
     public void navigateToFeedEventEdit(@NonNull MasterEvent event) {
-        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
     public void navigateToOtherEventEdit(@NonNull MasterEvent event) {
-        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
     public void navigateToPumpEventEdit(@NonNull MasterEvent event) {
-        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
     public void navigateToSleepEventEdit(@NonNull MasterEvent event) {
-        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event.getMasterEventId());
+        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 

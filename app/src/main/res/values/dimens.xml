@@ -19,8 +19,8 @@
     <dimen name="account_header_image_size">44dp</dimen>
     <dimen name="account_header_height">80dp</dimen>
     <dimen name="account_header_action_item_image_size">44dp</dimen>
-    <dimen name="account_header_action_item_image_margin_horizontal">20dp</dimen>
-    <dimen name="account_header_action_item_text_padding_horizontal">20dp</dimen>
+    <dimen name="account_header_action_item_image_margin_horizontal">16dp</dimen>
+    <dimen name="account_header_action_item_text_margin_horizontal">16dp</dimen>
     <dimen name="account_header_action_item_height">54dp</dimen>
     <dimen name="account_header_action_item_width_wide">240dp</dimen>
     <dimen name="account_header_action_item_width_narrow">200dp</dimen>
@@ -53,6 +53,7 @@
     <dimen name="event_row_margin_vertical">2dp</dimen>
     <dimen name="event_row_corner">2dp</dimen>
     <!-- event detail -->
+    <dimen name="event_detail_text_width">150dp</dimen>
     <dimen name="event_detail_height">56dp</dimen>
     <dimen name="event_detail_icon_size">53dp</dimen>
     <!-- text sizes -->

@@ -2,6 +2,8 @@ package ru.android.childdiary.domain.interactors.calendar.events;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +19,7 @@ import ru.android.childdiary.data.types.EventType;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
 @Getter
 @Builder(builderMethodName = "masterBuilder")
-public class MasterEvent {
+public class MasterEvent implements Serializable {
     Long masterEventId;
 
     EventType eventType;
