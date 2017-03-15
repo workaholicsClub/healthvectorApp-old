@@ -308,7 +308,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         if (v.getId() == R.id.material_drawer_account_header_text_switcher_wrapper && accountHeader != null) {
             dismissPopupWindow();
             animateSwitcherIn();
-            List<IProfile> profiles = accountHeader.getProfiles();
+            List<IProfile> profiles = new ArrayList<>(accountHeader.getProfiles());
             profiles.remove(accountHeader.getActiveProfile());
             ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles);
             View anchor = v;
@@ -332,7 +332,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         dismissPopupWindow();
-        IProfile profile = accountHeader.getProfiles().get(position);
+        IProfile profile = ((AccountHeaderActionAdapter) parent.getAdapter()).getItems().get(position);
         if (profile instanceof ProfileDrawerItem) {
             Child child = (Child) ((ProfileDrawerItem) profile).getTag();
             presenter.switchChild(child);
