@@ -23,7 +23,7 @@ public abstract class EventDetailPresenter<T extends MasterEvent> extends BasePr
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(childInteractor.getActiveChild()
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(child -> logger.debug("showChild: " + child))
@@ -31,7 +31,7 @@ public abstract class EventDetailPresenter<T extends MasterEvent> extends BasePr
     }
 
     public void requestDate() {
-        unsubscribeOnDestroy(calendarInteractor.getSelectedDate()
+        unsubscribeOnDestroy(calendarInteractor.getSelectedDateOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(date -> logger.debug("showDate: " + date))
@@ -41,6 +41,8 @@ public abstract class EventDetailPresenter<T extends MasterEvent> extends BasePr
     @SuppressWarnings("unchecked")
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
         unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
+                .firstOrError()
+                .toObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(event -> logger.debug("event details: " + event))
