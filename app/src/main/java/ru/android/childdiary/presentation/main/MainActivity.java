@@ -50,6 +50,7 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
+import ru.android.childdiary.presentation.main.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
 import ru.android.childdiary.presentation.main.calendar.fragments.CalendarFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
@@ -218,7 +219,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             hideFabBar();
             getSupportActionBar().setTitle(R.string.app_name);
         } else {
-            updateFab(viewPager.getCurrentItem());
             getSupportActionBar().setTitle(child.getName());
             if (accountHeader != null) {
                 accountHeader.setActiveProfile(mapToProfileId(child));
@@ -378,7 +378,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
             @Override
             public void onPageSelected(int position) {
-                updateFab(position);
+                CalendarFragment fragment = (CalendarFragment) viewPagerAdapter.getItem(position);
+                EventAdapter eventAdapter = fragment.getEventAdapter();
+                if (eventAdapter != null) {
+                    eventAdapter.getSwipeManager().update();
+                } else {
+                    logger.error("selected page: " + position + "; event adapter is null");
+                }
             }
 
             @Override
@@ -538,16 +544,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 return true;
         }
         return false;
-    }
-
-    private void updateFab(int position) {
-        CalendarFragment fragment = (CalendarFragment) viewPagerAdapter.getItem(position);
-        boolean hasOpenedItems = fragment.getEventAdapter().getSwipeManager().hasOpenedItems();
-        if (hasOpenedItems) {
-            hideFabBar();
-        } else {
-            showFab();
-        }
     }
 
     @Override
