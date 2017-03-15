@@ -52,6 +52,8 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
 
     private void onGetRequest(@NonNull EventsRequest request) {
         logger.debug("onGetRequest: " + request);
+        getViewState().setActive(request.getChild());
+        getViewState().setSelected(request.getDate());
         requestBuilder.date(request.getDate()).child(request.getChild());
         requestData();
     }
@@ -71,9 +73,8 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
     }
 
     private void onGetData(@NonNull EventsResponse response) {
-        getViewState().setActive(response.getRequest().getChild());
-        getViewState().setSelected(response.getRequest().getDate());
-        getViewState().showEvents(response.getEvents());
+        logger.debug("onGetData: " + response);
+        getViewState().showEvents(response.getRequest().getDate(), response.getEvents());
     }
 
     public void switchDate(@NonNull LocalDate date) {

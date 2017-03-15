@@ -89,7 +89,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         super.onActivityCreated(savedInstanceState);
 
         calendarAdapter = getCalendarViewAdapter();
-        updateTitle(calendarAdapter);
+        updateCalendarTitle();
 
         if (gridViewCalendar != null) {
             gridViewCalendar.setOnItemClickListener(this);
@@ -129,16 +129,18 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
     protected abstract String getCalendarTitleText(Adapter adapter);
 
-    private void updateTitle(Adapter adapter) {
+    private void updateCalendarTitle() {
+        if (calendarTitle != null) {
+            calendarTitle.setText(getCalendarTitleText(calendarAdapter));
+        }
+    }
+
+    private void updateEventsTitle(LocalDate selectedDate) {
         Context context = getContext();
-        LocalDate selectedDate = adapter.getSelectedDate();
         int day = selectedDate.getDayOfMonth();
         String monthName = DateUtils.monthGenitiveName(context, selectedDate.getMonthOfYear());
         String text = context.getString(R.string.calendar_selected_date_format, day, monthName);
         textViewSelectedDate.setText(text);
-        if (calendarTitle != null) {
-            calendarTitle.setText(getCalendarTitleText(calendarAdapter));
-        }
     }
 
     @Optional
@@ -178,12 +180,13 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     public void setSelected(@NonNull LocalDate date) {
         logger.debug("setSelected: " + date);
         calendarAdapter.setSelectedDate(date, false);
-        updateTitle(calendarAdapter);
+        updateCalendarTitle();
     }
 
     @Override
-    public void showEvents(@NonNull List<MasterEvent> events) {
+    public void showEvents(@NonNull LocalDate date, @NonNull List<MasterEvent> events) {
         logger.debug("showEvents: " + StringUtils.eventsList(events));
+        updateEventsTitle(date);
         eventAdapter.setEvents(events);
     }
 
