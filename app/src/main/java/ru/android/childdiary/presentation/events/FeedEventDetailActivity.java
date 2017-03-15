@@ -27,6 +27,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
@@ -34,12 +35,13 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDurationView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailFeedTypeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailFoodMeasureView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotificationTimeView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailSpinnerView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
-        EventDetailFeedTypeView.OnValueChanged {
+        EventDetailSpinnerView.EventDetailSpinnerListener, FoodMeasureDialog.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
 
@@ -70,8 +72,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @BindView(R.id.foodMeasureView)
     EventDetailFoodMeasureView foodMeasureView;
 
-    @BindView(R.id.notificationTimeView)
-    EventDetailNotificationTimeView notificationTimeView;
+    @BindView(R.id.notifyTimeView)
+    EventDetailNotifyTimeView notifyTimeView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, FeedEventDetailActivity.class);
@@ -89,16 +91,17 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         super.onCreate(savedInstanceState);
 
         setDateTime(DateTime.now(), dateView, timeView);
-        feedTypeView.setOnValueChanged(this);
+        feedTypeView.setEventDetailSpinnerListener(this);
         feedTypeView.setValue(FeedType.BREAST_MILK);
         breastView.setSelected(Breast.LEFT);
         // TODO amountMl
         // TODO duration
         // TODO amount
-        // TODO food measure
+        foodMeasureView.setEventDetailSpinnerListener(this);
 
-        dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
-        timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
+        dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
+        timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestNotifyTimeDialog());
     }
 
     @Override
@@ -145,14 +148,14 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         // TODO amountMl
         // TODO duration
         // TODO amount
-        // TODO foodMeasure
-        notificationTimeView.setMinutes(event.getNotifyTimeInMinutes());
+        foodMeasureView.setValue(event.getFoodMeasure());
+        notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
     }
 
     @Override
     public void showDefaultNotifyTime(int minutes) {
-        notificationTimeView.setMinutes(minutes);
+        notifyTimeView.setValue(minutes);
     }
 
     @Override
@@ -176,9 +179,10 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         // TODO amountMl
         // TODO duration
         // TODO amount
-        // TODO foodMeasure
 
-        builder.notifyTimeInMinutes(notificationTimeView.getMinutes());
+        builder.foodMeasure(foodMeasureView.getValue());
+
+        builder.notifyTimeInMinutes(notifyTimeView.getValue());
 
         builder.note(editTextNote.getText().toString());
 
@@ -186,48 +190,70 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
-    public void onValueChanged() {
-        FeedType feedType = feedTypeView.getValue();
-        switch (feedType) {
-            case BREAST_MILK:
-                breastView.setVisibility(View.VISIBLE);
-                amountMlView.setVisibility(View.GONE);
-                durationView.setVisibility(View.VISIBLE);
-                amountView.setVisibility(View.GONE);
-                foodMeasureView.setVisibility(View.GONE);
-                break;
-            case PUMPED_MILK:
-                breastView.setVisibility(View.GONE);
-                amountMlView.setVisibility(View.VISIBLE);
-                durationView.setVisibility(View.GONE);
-                amountView.setVisibility(View.GONE);
-                foodMeasureView.setVisibility(View.GONE);
-                break;
-            case MILK_FORMULA:
-                breastView.setVisibility(View.GONE);
-                amountMlView.setVisibility(View.VISIBLE);
-                durationView.setVisibility(View.GONE);
-                amountView.setVisibility(View.GONE);
-                foodMeasureView.setVisibility(View.GONE);
-                break;
-            case FOOD:
-                breastView.setVisibility(View.GONE);
-                amountMlView.setVisibility(View.GONE);
-                durationView.setVisibility(View.GONE);
-                amountView.setVisibility(View.VISIBLE);
-                foodMeasureView.setVisibility(View.VISIBLE);
-                break;
+    public void onValueChanged(EventDetailSpinnerView view) {
+        if (view == feedTypeView) {
+            FeedType feedType = feedTypeView.getValue();
+            switch (feedType) {
+                case BREAST_MILK:
+                    breastView.setVisibility(View.VISIBLE);
+                    amountMlView.setVisibility(View.GONE);
+                    durationView.setVisibility(View.VISIBLE);
+                    amountView.setVisibility(View.GONE);
+                    foodMeasureView.setVisibility(View.GONE);
+                    break;
+                case PUMPED_MILK:
+                    breastView.setVisibility(View.GONE);
+                    amountMlView.setVisibility(View.VISIBLE);
+                    durationView.setVisibility(View.GONE);
+                    amountView.setVisibility(View.GONE);
+                    foodMeasureView.setVisibility(View.GONE);
+                    break;
+                case MILK_FORMULA:
+                    breastView.setVisibility(View.GONE);
+                    amountMlView.setVisibility(View.VISIBLE);
+                    durationView.setVisibility(View.GONE);
+                    amountView.setVisibility(View.GONE);
+                    foodMeasureView.setVisibility(View.GONE);
+                    break;
+                case FOOD:
+                    breastView.setVisibility(View.GONE);
+                    amountMlView.setVisibility(View.GONE);
+                    durationView.setVisibility(View.GONE);
+                    amountView.setVisibility(View.VISIBLE);
+                    foodMeasureView.setVisibility(View.VISIBLE);
+                    break;
+            }
         }
     }
 
     @Override
+    public void onSpinnerItemClick(EventDetailSpinnerView view, Object item) {
+        if (view == feedTypeView) {
+            FeedType feedType = (FeedType) item;
+            feedTypeView.setValue(feedType);
+        } else if (view == foodMeasureView) {
+            FoodMeasure foodMeasure = (FoodMeasure) item;
+            if (foodMeasure == FoodMeasure.NULL) {
+                presenter.requestFoodMeasureDialog();
+            } else {
+                foodMeasureView.setValue(foodMeasure);
+            }
+        }
+    }
+
+    @Override
+    public void onSetFoodMeasure(@NonNull FoodMeasure foodMeasure) {
+        foodMeasureView.setValue(foodMeasure);
+    }
+
+    @Override
     protected void setDate(String tag, LocalDate date) {
-        dateView.setDate(date);
+        dateView.setValue(date);
     }
 
     @Override
     protected void setTime(String tag, LocalTime time) {
-        timeView.setTime(time);
+        timeView.setValue(time);
     }
 
     @Override

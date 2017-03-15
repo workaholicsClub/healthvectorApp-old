@@ -1,9 +1,12 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.widget.ListAdapter;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ru.android.childdiary.R;
@@ -11,7 +14,7 @@ import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.presentation.events.adapters.FoodMeasureAdapter;
 
 public class EventDetailFoodMeasureView extends EventDetailSpinnerView<FoodMeasure> {
-    private final FoodMeasureAdapter adapter = new FoodMeasureAdapter(getContext());
+    private final FoodMeasureAdapter adapter = new FoodMeasureAdapter(getContext(), Collections.singletonList(FoodMeasure.NULL));
 
     public EventDetailFoodMeasureView(Context context) {
         super(context);
@@ -26,6 +29,7 @@ public class EventDetailFoodMeasureView extends EventDetailSpinnerView<FoodMeasu
     }
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.event_detail_food_measure;
     }
@@ -41,6 +45,8 @@ public class EventDetailFoodMeasureView extends EventDetailSpinnerView<FoodMeasu
     }
 
     public void updateAdapter(List<FoodMeasure> items) {
+        items = new ArrayList<>(items);
+        items.add(FoodMeasure.NULL);
         adapter.setItems(items);
     }
 }

@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.widget.ListAdapter;
 
@@ -25,6 +26,7 @@ public class EventDetailFeedTypeView extends EventDetailSpinnerView<FeedType> {
     }
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.event_detail_feed_type;
     }

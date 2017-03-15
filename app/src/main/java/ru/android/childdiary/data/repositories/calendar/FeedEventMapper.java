@@ -6,11 +6,15 @@ import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.standard.FoodMeasureData;
+import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 
 class FeedEventMapper {
     public static FeedEvent mapToPlainObject(@NonNull FeedEventData eventData) {
         MasterEventData masterEventData = eventData.getMasterEvent();
+        FoodMeasureData foodMeasureData = eventData.getFoodMeasureData();
+        FoodMeasure foodMeasure = foodMeasureData == null ? null : FoodMeasureMapper.mapToPlainObject(foodMeasureData);
         return FeedEvent.builder()
                 .id(eventData.getId())
                 .masterEventId(masterEventData.getId())
@@ -26,7 +30,7 @@ class FeedEventMapper {
                 .durationInMinutes(eventData.getDurationInMinutes())
                 .milkAmountImMilliliters(eventData.getMilkAmountImMilliliters())
                 .foodAmount(eventData.getFoodAmount())
-                .foodMeasure(FoodMeasureMapper.mapToPlainObject(eventData.getFoodMeasureData()))
+                .foodMeasure(foodMeasure)
                 .build();
     }
 

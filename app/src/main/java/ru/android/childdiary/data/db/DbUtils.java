@@ -75,31 +75,31 @@ public class DbUtils {
     }
 
     public static <T, E, RT, RE> Observable<T> addObservable(EntityStore dataStore,
-                                                             Class<RE> referencedEntityClass, long referencedEntityId,
+                                                             Class<RE> parentEntityClass, long parentEntityId,
                                                              T object,
                                                              @NonNull BiFunction<T, RE, E> mapToEntity,
                                                              @NonNull Function<E, T> mapToPlainObject) {
-        return Observable.fromCallable(() -> add(dataStore, referencedEntityClass, referencedEntityId, object, mapToEntity, mapToPlainObject));
+        return Observable.fromCallable(() -> add(dataStore, parentEntityClass, parentEntityId, object, mapToEntity, mapToPlainObject));
     }
 
     @SuppressWarnings("unchecked")
     public static <T, E, RT, RE> T add(EntityStore dataStore,
-                                       Class<RE> referencedEntityClass, long referencedEntityId,
+                                       Class<RE> parentEntityClass, long parentEntityId,
                                        T object,
                                        @NonNull BiFunction<T, RE, E> mapToEntity,
                                        @NonNull Function<E, T> mapToPlainObject) {
         try {
             BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-            RE referencedEntity = (RE) blockingEntityStore.findByKey(referencedEntityClass, referencedEntityId);
-            if (referencedEntity != null) {
-                E entity = mapToEntity.apply(object, referencedEntity);
+            RE parentEntity = (RE) blockingEntityStore.findByKey(parentEntityClass, parentEntityId);
+            if (parentEntity != null) {
+                E entity = mapToEntity.apply(object, parentEntity);
                 entity = (E) blockingEntityStore.insert(entity);
                 return mapToPlainObject.apply(entity);
             }
         } catch (Exception e) {
             throw new RuntimeException("error while inserting " + object, e);
         }
-        throw new RuntimeException("referenced entity not found while inserting " + object);
+        throw new RuntimeException("parent entity not found while inserting " + object);
     }
 
     public static <T, E> Observable<List<T>> mapReactiveResultToListObservable(ReactiveResult<E> reactiveResult, @NonNull Function<E, T> map) {

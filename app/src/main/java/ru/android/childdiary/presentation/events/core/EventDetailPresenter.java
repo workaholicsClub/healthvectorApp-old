@@ -59,6 +59,20 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
     }
 
+    public void requestFoodMeasureDialog() {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showFoodMeasureDialog, this::onUnexpectedError));
+    }
+
+    public void requestNotifyTimeDialog() {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showNotifyTimeDialog, this::onUnexpectedError));
+    }
+
     @SuppressWarnings("unchecked")
     public void addEvent(@NonNull T event) {
         unsubscribeOnDestroy(childInteractor.getActiveChildOnce()

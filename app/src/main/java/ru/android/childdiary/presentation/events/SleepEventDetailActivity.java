@@ -23,7 +23,7 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotificationTimeView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -55,8 +55,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @BindView(R.id.finishTimeView)
     EventDetailTimeView finishTimeView;
 
-    @BindView(R.id.notificationTimeView)
-    EventDetailNotificationTimeView notificationTimeView;
+    @BindView(R.id.notifyTimeView)
+    EventDetailNotifyTimeView notifyTimeView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, SleepEventDetailActivity.class);
@@ -79,10 +79,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         startTitleView.setTitle(R.string.asleep);
         finishTitleView.setTitle(R.string.awoke);
 
-        startDateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getDate()));
-        startTimeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getTime()));
-        finishDateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getDate()));
-        finishTimeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getTime()));
+        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue()));
+        startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
+        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue()));
+        finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestNotifyTimeDialog());
     }
 
     @Override
@@ -120,13 +121,13 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
-        notificationTimeView.setMinutes(event.getNotifyTimeInMinutes());
+        notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
     }
 
     @Override
     public void showDefaultNotifyTime(int minutes) {
-        notificationTimeView.setMinutes(minutes);
+        notifyTimeView.setValue(minutes);
     }
 
     @Override
@@ -146,7 +147,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
         builder.finishDateTime(finishDateTime);
 
-        builder.notifyTimeInMinutes(notificationTimeView.getMinutes());
+        builder.notifyTimeInMinutes(notifyTimeView.getValue());
 
         builder.note(editTextNote.getText().toString());
 
@@ -157,10 +158,10 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     protected void setDate(String tag, LocalDate date) {
         switch (tag) {
             case TAG_DATE_PICKER_START:
-                startDateView.setDate(date);
+                startDateView.setValue(date);
                 break;
             case TAG_DATE_PICKER_FINISH:
-                finishDateView.setDate(date);
+                finishDateView.setValue(date);
                 break;
         }
     }
@@ -169,10 +170,10 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     protected void setTime(String tag, LocalTime time) {
         switch (tag) {
             case TAG_TIME_PICKER_START:
-                startTimeView.setTime(time);
+                startTimeView.setValue(time);
                 break;
             case TAG_TIME_PICKER_FINISH:
-                finishTimeView.setTime(time);
+                finishTimeView.setValue(time);
                 break;
         }
     }

@@ -31,7 +31,7 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
     int spinnerItemWidth;
 
     @Setter
-    private OnValueChanged onValueChanged;
+    private EventDetailSpinnerListener<T> eventDetailSpinnerListener;
     @Getter
     private T value;
 
@@ -66,8 +66,8 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         if (this.value != value) {
             this.value = value;
             textView.setText(getTextForValue(value));
-            if (onValueChanged != null) {
-                onValueChanged.onValueChanged();
+            if (eventDetailSpinnerListener != null) {
+                eventDetailSpinnerListener.onValueChanged(this);
             }
         }
     }
@@ -104,7 +104,9 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         dismissPopupWindow();
         //noinspection unchecked
         T value = (T) parent.getAdapter().getItem(position);
-        setValue(value);
+        if (eventDetailSpinnerListener != null) {
+            eventDetailSpinnerListener.onSpinnerItemClick(this, value);
+        }
     }
 
     @Override
@@ -119,7 +121,9 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
 
     protected abstract ListAdapter getAdapter();
 
-    public interface OnValueChanged {
-        void onValueChanged();
+    public interface EventDetailSpinnerListener<T> {
+        void onValueChanged(EventDetailSpinnerView view);
+
+        void onSpinnerItemClick(EventDetailSpinnerView view, T item);
     }
 }

@@ -81,7 +81,8 @@
     <string name="feed_type_food">Добавка</string>
     <string name="food_measure_grams">граммы</string>
     <string name="food_measure_millilitres">миллилитры</string>
-    <string name="notification_time">Оповещение</string>
+    <string name="food_measure_other">Другое</string>
+    <string name="notify_time">Оповещение</string>
     <string name="diaper_state">Состояние подгузника</string>
     <string name="note">Примечание</string>
     <string name="asleep">Уснул</string>
@@ -93,6 +94,11 @@
     <string name="food_measure">Ед. измерения</string>
     <string name="other_event_start">Начало</string>
     <string name="other_event_finish">Конец</string>
+    <string name="notify_time_dialog_title">Оповещение за</string>
+    <string name="notify_time_dialog_days">Дней</string>
+    <string name="notify_time_dialog_hours">Часов</string>
+    <string name="notify_time_dialog_minutes">Минут</string>
+    <string name="food_measure_dialog_title">Введите единицу измерения</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

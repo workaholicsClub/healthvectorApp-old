@@ -15,7 +15,7 @@ public class StringUtilsTest {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     @Test
-    public void printNotificationTime() {
+    public void printNotifyTime() {
         Context appContext = InstrumentationRegistry.getTargetContext();
         for (int i = 0; i < 360; ++i) {
             logger.debug(String.format(Locale.US, "%5d: %s", i, StringUtils.notifyTime(appContext, i)));

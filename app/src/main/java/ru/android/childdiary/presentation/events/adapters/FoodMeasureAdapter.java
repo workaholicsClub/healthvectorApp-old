@@ -14,10 +14,6 @@ import ru.android.childdiary.presentation.core.adapters.BaseArrayAdapter;
 import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
 
 public class FoodMeasureAdapter extends BaseArrayAdapter<FoodMeasure, FoodMeasureAdapter.ViewHolder> {
-    public FoodMeasureAdapter(Context context) {
-        super(context);
-    }
-
     public FoodMeasureAdapter(Context context, List<FoodMeasure> foodMeasureList) {
         super(context, foodMeasureList);
     }
@@ -45,7 +41,9 @@ public class FoodMeasureAdapter extends BaseArrayAdapter<FoodMeasure, FoodMeasur
 
         @Override
         public void bind(Context context, int position, FoodMeasure foodMeasure) {
-            String text = foodMeasure.getName();
+            String text = foodMeasure == FoodMeasure.NULL
+                    ? context.getString(R.string.food_measure_other)
+                    : foodMeasure.getName();
             textView.setText(text);
             imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
         }

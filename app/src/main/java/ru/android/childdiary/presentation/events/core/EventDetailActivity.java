@@ -31,6 +31,8 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
+import ru.android.childdiary.presentation.events.dialogs.NotifyTimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.KeyboardUtils;
@@ -39,15 +41,23 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    private static final String TAG_FOOD_MEASURE_DIALOG = "TAG_FOOD_MEASURE_DIALOG";
+    private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
+
+    protected T event;
+
     @BindView(R.id.editTextNote)
     protected CustomEditText editTextNote;
-    protected T event;
+
     @BindView(R.id.rootView)
     View rootView;
+
     @BindView(R.id.buttonDone)
     Button buttonDone;
+
     @BindView(R.id.dummy)
     View dummy;
+
     private ViewGroup eventDetailsView;
     private MasterEvent masterEvent;
 
@@ -135,6 +145,18 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
+    public void showFoodMeasureDialog(@NonNull Child child) {
+        FoodMeasureDialog dialog = new FoodMeasureDialog();
+        dialog.showAllowingStateLoss(getSupportFragmentManager(), TAG_FOOD_MEASURE_DIALOG, child);
+    }
+
+    @Override
+    public void showNotifyTimeDialog(@NonNull Child child) {
+        NotifyTimeDialog dialog = new NotifyTimeDialog();
+        dialog.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG, child);
+    }
+
+    @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         if (fragment instanceof TimePickerDialog) {
@@ -192,14 +214,14 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected DateTime getDateTime(EventDetailDateView dateView, EventDetailTimeView timeView) {
-        LocalDate date = dateView.getDate();
-        LocalTime time = timeView.getTime();
+        LocalDate date = dateView.getValue();
+        LocalTime time = timeView.getValue();
         return new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
                 time.getHourOfDay(), time.getMinuteOfHour());
     }
 
     protected void setDateTime(DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
-        dateView.setDate(dateTime.toLocalDate());
-        timeView.setTime(dateTime.toLocalTime());
+        dateView.setValue(dateTime.toLocalDate());
+        timeView.setValue(dateTime.toLocalTime());
     }
 }

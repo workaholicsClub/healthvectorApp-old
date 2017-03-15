@@ -30,4 +30,10 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showDefaultNotifyTime(int minutes);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showNotifyTimeDialog(@NonNull Child child);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showFoodMeasureDialog(@NonNull Child child);
 }

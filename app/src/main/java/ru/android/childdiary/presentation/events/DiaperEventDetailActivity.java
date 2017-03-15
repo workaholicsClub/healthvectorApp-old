@@ -25,7 +25,7 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDiaperStateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotificationTimeView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
@@ -45,8 +45,8 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @BindView(R.id.diaperStateView)
     EventDetailDiaperStateView diaperStateView;
 
-    @BindView(R.id.notificationTimeView)
-    EventDetailNotificationTimeView notificationTimeView;
+    @BindView(R.id.notifyTimeView)
+    EventDetailNotifyTimeView notifyTimeView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, DiaperEventDetailActivity.class);
@@ -66,8 +66,9 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
         setDateTime(DateTime.now(), dateView, timeView);
         diaperStateView.setSelected(DiaperState.WET);
 
-        dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
-        timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
+        dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
+        timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestNotifyTimeDialog());
     }
 
     @Override
@@ -110,13 +111,13 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
         diaperStateView.setSelected(event.getDiaperState());
-        notificationTimeView.setMinutes(event.getNotifyTimeInMinutes());
+        notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
     }
 
     @Override
     public void showDefaultNotifyTime(int minutes) {
-        notificationTimeView.setMinutes(minutes);
+        notifyTimeView.setValue(minutes);
     }
 
     @Override
@@ -130,7 +131,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
 
         builder.diaperState(diaperStateView.getSelected());
 
-        builder.notifyTimeInMinutes(notificationTimeView.getMinutes());
+        builder.notifyTimeInMinutes(notifyTimeView.getValue());
 
         builder.note(editTextNote.getText().toString());
 
@@ -139,11 +140,11 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
 
     @Override
     protected void setDate(String tag, LocalDate date) {
-        dateView.setDate(date);
+        dateView.setValue(date);
     }
 
     @Override
     protected void setTime(String tag, LocalTime time) {
-        timeView.setTime(time);
+        timeView.setValue(time);
     }
 }
