@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
@@ -40,20 +41,15 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     @BindView(R.id.editTextNote)
     protected CustomEditText editTextNote;
-
+    protected T event;
     @BindView(R.id.rootView)
     View rootView;
-
     @BindView(R.id.buttonDone)
     Button buttonDone;
-
     @BindView(R.id.dummy)
     View dummy;
-
     private ViewGroup eventDetailsView;
-
     private MasterEvent masterEvent;
-    private T event;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +61,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         if (savedInstanceState == null) {
             if (masterEvent == null) {
                 getPresenter().requestDate();
+                getPresenter().requestDefaultValues(getEventType());
             } else {
                 getPresenter().requestEventDetails(masterEvent);
             }
@@ -119,6 +116,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
+
+    protected abstract EventType getEventType();
 
     @LayoutRes
     protected abstract int getContentLayoutResourceId();

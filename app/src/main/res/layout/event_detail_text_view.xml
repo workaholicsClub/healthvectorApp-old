@@ -9,7 +9,7 @@
     android:drawableEnd="@drawable/arrow_down_black"
     android:drawablePadding="12dp"
     android:drawableRight="@drawable/arrow_down_black"
-    android:gravity="center_vertical"
+    android:gravity="center_vertical|end"
     android:minWidth="100dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"

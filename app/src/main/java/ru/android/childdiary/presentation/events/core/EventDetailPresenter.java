@@ -1,11 +1,13 @@
 package ru.android.childdiary.presentation.events.core;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.requests.AddEventRequest;
@@ -36,6 +38,14 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(date -> logger.debug("showDate: " + date))
                 .subscribe(getViewState()::showDate, this::onUnexpectedError));
+    }
+
+    @CallSuper
+    public void requestDefaultValues(@NonNull EventType eventType) {
+        unsubscribeOnDestroy(calendarInteractor.getDefaultNotifyTimeInMinutes(eventType)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showDefaultNotifyTime));
     }
 
     @SuppressWarnings("unchecked")

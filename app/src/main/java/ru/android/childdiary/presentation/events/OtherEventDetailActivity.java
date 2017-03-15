@@ -75,7 +75,6 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
 
         setDateTime(DateTime.now(), startDateView, startTimeView);
         setDateTime(DateTime.now(), finishDateView, finishTimeView);
-        // TODO not time
 
         startTitleView.setTitle(R.string.other_event_start);
         finishTitleView.setTitle(R.string.other_event_finish);
@@ -105,6 +104,11 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
+    protected EventType getEventType() {
+        return EventType.OTHER;
+    }
+
+    @Override
     @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_event_detail_other;
@@ -121,8 +125,13 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
-        // TODO not time
+        notificationTimeView.setMinutes(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
+    }
+
+    @Override
+    public void showDefaultNotifyTime(int minutes) {
+        notificationTimeView.setMinutes(minutes);
     }
 
     @Override
@@ -137,7 +146,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
         builder.finishDateTime(finishDateTime);
 
-        // TODO not time
+        builder.notifyTimeInMinutes(notificationTimeView.getMinutes());
 
         builder.note(editTextNote.getText().toString());
 

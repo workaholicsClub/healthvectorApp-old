@@ -19,6 +19,9 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class StringUtils {
+    private static final int MINUTES_IN_HOUR = 60;
+    private static final int MINUTES_IN_DAY = 24 * MINUTES_IN_HOUR;
+
     @Nullable
     public static String age(Context context, Child child) {
         LocalDate birthDate = child.getBirthDate();
@@ -159,5 +162,38 @@ public class StringUtils {
             default:
                 return null;
         }
+    }
+
+    @Nullable
+    public static String notifyTime(Context context, @Nullable Integer minutes) {
+        if (minutes == null || minutes <= 0) {
+            return null;
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        int days = minutes / MINUTES_IN_DAY;
+        if (days > 0) {
+            result.append(context.getResources().getQuantityString(R.plurals.numberOfDays, days, days));
+        }
+
+        minutes -= days * MINUTES_IN_DAY;
+        int hours = minutes / MINUTES_IN_HOUR;
+        if (hours > 0) {
+            if (result.length() > 0) {
+                result.append(' ');
+            }
+            result.append(context.getResources().getQuantityString(R.plurals.numberOfHours, hours, hours));
+        }
+
+        minutes -= hours * MINUTES_IN_HOUR;
+        if (minutes > 0) {
+            if (result.length() > 0) {
+                result.append(' ');
+            }
+            result.append(context.getResources().getQuantityString(R.plurals.numberOfMinutes, minutes, minutes));
+        }
+
+        return result.toString();
     }
 }

@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.events;
 import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.List;
@@ -14,4 +15,7 @@ import ru.android.childdiary.presentation.events.core.EventDetailView;
 public interface FeedEventDetailView extends EventDetailView<FeedEvent> {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showFoodMeasureList(@NonNull List<FoodMeasure> foodMeasureList);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showDefaultFoodMeasure(@NonNull FoodMeasure foodMeasure);
 }

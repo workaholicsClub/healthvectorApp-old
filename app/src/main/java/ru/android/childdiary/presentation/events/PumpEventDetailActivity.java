@@ -66,7 +66,6 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
         setDateTime(DateTime.now(), dateView, timeView);
         breastView.setSelected(Breast.LEFT);
         // TODO duration
-        // TODO not time
 
         dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
         timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
@@ -92,6 +91,11 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     }
 
     @Override
+    protected EventType getEventType() {
+        return EventType.PUMP;
+    }
+
+    @Override
     @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_event_detail_pump;
@@ -108,8 +112,13 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
         setDateTime(event.getDateTime(), dateView, timeView);
         breastView.setSelected(event.getBreast());
         // TODO duration
-        // TODO not time
+        notificationTimeView.setMinutes(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
+    }
+
+    @Override
+    public void showDefaultNotifyTime(int minutes) {
+        notificationTimeView.setMinutes(minutes);
     }
 
     @Override
@@ -124,7 +133,8 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
         builder.breast(breastView.getSelected());
 
         // TODO duration
-        // TODO not time
+
+        builder.notifyTimeInMinutes(notificationTimeView.getMinutes());
 
         builder.note(editTextNote.getText().toString());
 

@@ -27,4 +27,7 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void eventUpdated(@NonNull T event);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showDefaultNotifyTime(int minutes);
 }

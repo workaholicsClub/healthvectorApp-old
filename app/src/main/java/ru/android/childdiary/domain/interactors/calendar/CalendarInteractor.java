@@ -54,6 +54,30 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.addFoodMeasure(foodMeasure);
     }
 
+    public Observable<FoodMeasure> getDefaultFoodMeasure() {
+        return calendarRepository.getFoodMeasureList()
+                .firstOrError()
+                .flatMapObservable(Observable::fromIterable)
+                .first(FoodMeasure.NULL)
+                .toObservable();
+    }
+
+    public Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
+        switch (eventType) {
+            case DIAPER:
+                return Observable.just(5);
+            case FEED:
+                return Observable.just(10);
+            case OTHER:
+                return Observable.just(60);
+            case PUMP:
+                return Observable.just(20);
+            case SLEEP:
+                return Observable.just(10);
+        }
+        return null;
+    }
+
     public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {
         return calendarRepository.getAll(request.getChild(), request.getDate())
                 .map(events -> EventsResponse.builder().request(request).events(events).build());

@@ -75,6 +75,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         PopupMenu.OnMenuItemClickListener,
         View.OnClickListener,
         FabController {
+    private static final int REQUEST_ADD_EVENT = 1;
+
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
@@ -258,31 +260,39 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void navigateToDiaperEventAdd() {
         Intent intent = DiaperEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToFeedEventAdd() {
         Intent intent = FeedEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToOtherEventAdd() {
         Intent intent = OtherEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToPumpEventAdd() {
         Intent intent = PumpEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToSleepEventAdd() {
         Intent intent = SleepEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ADD_EVENT) {
+            fabToolbar.hideBarWithoutAnimation();
+        }
     }
 
     @Override
@@ -439,31 +449,26 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @OnClick(R.id.addDiaperEvent)
     void onAddDiaperEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addDiaperEvent();
     }
 
     @OnClick(R.id.addSleepEvent)
     void onAddSleepEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addSleepEvent();
     }
 
     @OnClick(R.id.addFeedEvent)
     void onAddFeedEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addFeedEvent();
     }
 
     @OnClick(R.id.addPumpEvent)
     void onAddPumpEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addPumpEventClick();
     }
 
     @OnClick(R.id.addOtherEvent)
     void onAddOtherEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addOtherEventClick();
     }
 

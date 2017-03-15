@@ -42,11 +42,11 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @BindView(R.id.timeView)
     EventDetailTimeView timeView;
 
-    @BindView(R.id.notificationTimeView)
-    EventDetailNotificationTimeView notificationTimeView;
-
     @BindView(R.id.diaperStateView)
     EventDetailDiaperStateView diaperStateView;
+
+    @BindView(R.id.notificationTimeView)
+    EventDetailNotificationTimeView notificationTimeView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, DiaperEventDetailActivity.class);
@@ -65,7 +65,6 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
 
         setDateTime(DateTime.now(), dateView, timeView);
         diaperStateView.setSelected(DiaperState.WET);
-        // TODO not time
 
         dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
         timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
@@ -91,6 +90,11 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     }
 
     @Override
+    protected EventType getEventType() {
+        return EventType.DIAPER;
+    }
+
+    @Override
     @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_event_detail_diaper;
@@ -106,8 +110,13 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
         diaperStateView.setSelected(event.getDiaperState());
-        // TODO not time
+        notificationTimeView.setMinutes(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
+    }
+
+    @Override
+    public void showDefaultNotifyTime(int minutes) {
+        notificationTimeView.setMinutes(minutes);
     }
 
     @Override
@@ -121,7 +130,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
 
         builder.diaperState(diaperStateView.getSelected());
 
-        // TODO not time
+        builder.notifyTimeInMinutes(notificationTimeView.getMinutes());
 
         builder.note(editTextNote.getText().toString());
 

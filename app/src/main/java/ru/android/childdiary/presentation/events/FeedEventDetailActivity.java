@@ -95,8 +95,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         // TODO amountMl
         // TODO duration
         // TODO amount
-        // TODO foodMeasure
-        // TODO not time
+        // TODO food measure
 
         dateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER, dateView.getDate()));
         timeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER, timeView.getTime()));
@@ -122,6 +121,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
+    protected EventType getEventType() {
+        return EventType.FEED;
+    }
+
+    @Override
     @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_event_detail_feed;
@@ -142,8 +146,18 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         // TODO duration
         // TODO amount
         // TODO foodMeasure
-        // TODO not time
+        notificationTimeView.setMinutes(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
+    }
+
+    @Override
+    public void showDefaultNotifyTime(int minutes) {
+        notificationTimeView.setMinutes(minutes);
+    }
+
+    @Override
+    public void showDefaultFoodMeasure(@NonNull FoodMeasure foodMeasure) {
+        foodMeasureView.setValue(foodMeasure);
     }
 
     @Override
@@ -163,7 +177,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         // TODO duration
         // TODO amount
         // TODO foodMeasure
-        // TODO not time
+
+        builder.notifyTimeInMinutes(notificationTimeView.getMinutes());
 
         builder.note(editTextNote.getText().toString());
 
