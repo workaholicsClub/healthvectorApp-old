@@ -29,7 +29,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailNotification
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class DiaperEventDetailActivity extends EventDetailActivity<DiaperEvent> implements EventDetailView<DiaperEvent> {
+public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailView<DiaperEvent>, DiaperEvent> implements EventDetailView<DiaperEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
 

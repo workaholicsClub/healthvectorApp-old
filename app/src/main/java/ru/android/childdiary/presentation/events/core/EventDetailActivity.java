@@ -36,8 +36,8 @@ import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvpActivity implements EventDetailView<T>,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
+        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     @BindView(R.id.editTextNote)
     protected CustomEditText editTextNote;
 
@@ -118,7 +118,7 @@ public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvp
         this.event = event;
     }
 
-    protected abstract EventDetailPresenter getPresenter();
+    protected abstract EventDetailPresenter<V, T> getPresenter();
 
     @LayoutRes
     protected abstract int getContentLayoutResourceId();

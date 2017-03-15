@@ -29,7 +29,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailNotification
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class PumpEventDetailActivity extends EventDetailActivity<PumpEvent> implements EventDetailView<PumpEvent> {
+public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView<PumpEvent>, PumpEvent> implements EventDetailView<PumpEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
 

@@ -38,8 +38,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailNotification
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class FeedEventDetailActivity extends EventDetailActivity<FeedEvent> implements
-        FeedEventDetailView,
+public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
         EventDetailFeedTypeView.OnValueChanged {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
