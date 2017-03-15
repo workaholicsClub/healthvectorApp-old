@@ -1,5 +1,7 @@
 package ru.android.childdiary.presentation.main.calendar.adapters.events;
 
+import android.support.annotation.Nullable;
+
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 
@@ -13,7 +15,7 @@ public class SwipeManager {
     private final Set<Integer> openedOrOpeningPositions = new HashSet<>();
     private int openPosition = INVALID_POSITION;
 
-    public SwipeManager(FabController fabController) {
+    public SwipeManager(@Nullable FabController fabController) {
         this.fabController = fabController;
     }
 

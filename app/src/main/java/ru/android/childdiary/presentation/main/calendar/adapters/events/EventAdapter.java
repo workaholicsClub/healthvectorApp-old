@@ -27,7 +27,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
     private Sex sex;
     private List<MasterEvent> events = Collections.emptyList();
 
-    public EventAdapter(Context context, EventActionListener actionListener, FabController fabController) {
+    public EventAdapter(Context context, @NonNull EventActionListener actionListener, @Nullable FabController fabController) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.actionListener = actionListener;

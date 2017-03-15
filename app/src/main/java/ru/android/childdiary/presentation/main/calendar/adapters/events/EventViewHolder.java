@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.main.calendar.adapters.events;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -57,7 +58,7 @@ class EventViewHolder extends RecyclerView.ViewHolder {
     private MasterEvent event;
     private SwipeActionListener listener;
 
-    public EventViewHolder(View itemView, SwipeActionListener listener) {
+    public EventViewHolder(View itemView, @NonNull SwipeActionListener listener) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.listener = listener;
@@ -93,30 +94,22 @@ class EventViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.eventRowActionDelete)
     void onDeleteClick() {
-        if (listener != null) {
-            listener.delete(this);
-        }
+        listener.delete(this);
     }
 
     @OnClick(R.id.eventRowActionMove)
     void onMoveClick() {
-        if (listener != null) {
-            listener.move(this);
-        }
+        listener.move(this);
     }
 
     @OnClick(R.id.eventRowActionEdit)
     void onEditClick() {
-        if (listener != null) {
-            listener.edit(this);
-        }
+        listener.edit(this);
     }
 
     @OnClick(R.id.eventRowActionDone)
     void onDoneClick() {
-        if (listener != null) {
-            listener.done(this);
-        }
+        listener.done(this);
     }
 
     interface SwipeActionListener {
