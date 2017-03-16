@@ -11,6 +11,7 @@ import org.joda.time.LocalDate;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseView;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 
 public interface EventDetailView<T extends MasterEvent> extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
@@ -32,8 +33,8 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
     void showDefaultNotifyTime(int minutes);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showTimeDialog(@NonNull Child child);
+    void showFoodMeasureDialog(String tag, @NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showFoodMeasureDialog(@NonNull Child child);
+    void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters);
 }

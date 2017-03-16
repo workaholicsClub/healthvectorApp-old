@@ -3,9 +3,6 @@ package ru.android.childdiary.utils;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Months;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,45 +16,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class StringUtils {
-    private static final int MINUTES_IN_HOUR = 60;
-    private static final int MINUTES_IN_DAY = 24 * MINUTES_IN_HOUR;
-
-    @Nullable
-    public static String age(Context context, Child child) {
-        LocalDate birthDate = child.getBirthDate();
-
-        if (birthDate == null) {
-            return null;
-        }
-
-        LocalDate now = LocalDate.now();
-
-        if (birthDate.isAfter(now)) {
-            return null;
-        }
-
-        Months period = Months.monthsBetween(birthDate, now);
-        int years = period.getMonths() / 12;
-        int months = period.getMonths() % 12;
-
-        if (years == 0 && months == 0) {
-            return context.getString(R.string.newborn);
-        }
-
-        String yearsString = context.getResources().getQuantityString(R.plurals.numberOfYears, years, years);
-        String monthsString = context.getResources().getQuantityString(R.plurals.numberOfMonths, months, months);
-
-        if (years == 0) {
-            return monthsString;
-        }
-
-        if (months == 0) {
-            return yearsString;
-        }
-
-        return context.getString(R.string.years_and_months, yearsString, monthsString);
-    }
-
     @Nullable
     public static String sex(Context context, Sex sex) {
         return sex(context, sex, null);
@@ -162,49 +120,5 @@ public class StringUtils {
             default:
                 return null;
         }
-    }
-
-    @Nullable
-    private static String time(Context context, @Nullable Integer minutes) {
-        if (minutes == null || minutes <= 0) {
-            return null;
-        }
-
-        StringBuilder result = new StringBuilder();
-
-        int days = minutes / MINUTES_IN_DAY;
-        if (days > 0) {
-            result.append(context.getResources().getQuantityString(R.plurals.numberOfDays, days, days));
-        }
-
-        minutes -= days * MINUTES_IN_DAY;
-        int hours = minutes / MINUTES_IN_HOUR;
-        if (hours > 0) {
-            if (result.length() > 0) {
-                result.append(' ');
-            }
-            result.append(context.getResources().getQuantityString(R.plurals.numberOfHours, hours, hours));
-        }
-
-        minutes -= hours * MINUTES_IN_HOUR;
-        if (minutes > 0) {
-            if (result.length() > 0) {
-                result.append(' ');
-            }
-            result.append(context.getResources().getQuantityString(R.plurals.numberOfMinutes, minutes, minutes));
-        }
-
-        return result.toString();
-    }
-
-    @Nullable
-    public static String notifyTime(Context context, @Nullable Integer minutes) {
-        String time = time(context, minutes);
-        return time == null ? null : context.getString(R.string.notify_time_text, time);
-    }
-
-    @Nullable
-    public static String duration(Context context, @Nullable Integer minutes) {
-        return time(context, minutes);
     }
 }

@@ -106,7 +106,7 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
                 getViewState().navigateToFeedEventEdit(event);
                 break;
             case OTHER:
-                getViewState().navigateToFeedEventEdit(event);
+                getViewState().navigateToOtherEventEdit(event);
                 break;
             case PUMP:
                 getViewState().navigateToPumpEventEdit(event);

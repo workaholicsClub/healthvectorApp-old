@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.TimeUtils;
 
 public class EventDetailNotifyTimeView extends EventDetailDialogView<Integer> {
     public EventDetailNotifyTimeView(Context context) {
@@ -19,6 +19,10 @@ public class EventDetailNotifyTimeView extends EventDetailDialogView<Integer> {
         super(context, attrs, defStyle);
     }
 
+    public int getValueInt() {
+        return getValue() == null ? 0 : getValue();
+    }
+
     @Override
     protected int getLayoutResourceId() {
         return R.layout.event_detail_notify_time;
@@ -26,6 +30,6 @@ public class EventDetailNotifyTimeView extends EventDetailDialogView<Integer> {
 
     @Override
     protected String getTextForValue(Integer value) {
-        return StringUtils.notifyTime(getContext(), value);
+        return TimeUtils.notifyTime(getContext(), value);
     }
 }

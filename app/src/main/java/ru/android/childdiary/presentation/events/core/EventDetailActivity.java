@@ -20,10 +20,12 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
@@ -35,6 +37,7 @@ import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -43,9 +46,6 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
         FoodMeasureDialog.Listener, TimeDialog.Listener {
-    private static final String TAG_FOOD_MEASURE_DIALOG = "TAG_FOOD_MEASURE_DIALOG";
-    private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
-
     protected T event;
 
     @BindView(R.id.editTextNote)
@@ -87,10 +87,17 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         eventDetailsView.addView(contentView);
     }
 
-    protected void hideKeyboardAndClearFocus(View view) {
+    public void hideKeyboardAndClearFocus(View view) {
         KeyboardUtils.hideKeyboard(this, view);
         view.clearFocus();
         dummy.requestFocus();
+    }
+
+    protected void setupEditTextView(EventDetailEditTextView view) {
+        List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
+        for (Disposable disposable : disposables) {
+            unsubscribeOnDestroy(disposable);
+        }
     }
 
     @Override
@@ -146,15 +153,15 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void showFoodMeasureDialog(@NonNull Child child) {
+    public void showFoodMeasureDialog(String tag, @NonNull Child child) {
         FoodMeasureDialog dialog = new FoodMeasureDialog();
-        dialog.showAllowingStateLoss(getSupportFragmentManager(), TAG_FOOD_MEASURE_DIALOG, child);
+        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child);
     }
 
     @Override
-    public void showTimeDialog(@NonNull Child child) {
+    public void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters) {
         TimeDialog dialog = new TimeDialog();
-        dialog.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG, child);
+        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child, parameters);
     }
 
     @Override
@@ -227,12 +234,10 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public final void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
-        // TODO
+    public void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
     }
 
     @Override
-    public final void onSetTime(String tag, int minutes) {
-        // TODO
+    public void onSetTime(String tag, int minutes) {
     }
 }

@@ -53,7 +53,6 @@
     <string name="validate_child_birth_weight_empty">Введите вес ребенка при рождении</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
-    <string name="duration_review">%s мин.</string>
     <string name="amount_review">%s мл</string>
     <string name="newborn">новорождённый</string>
     <string name="years_and_months">%1$s %2$s</string>
@@ -101,10 +100,10 @@
     <string name="other_event_start">Начало</string>
     <string name="other_event_finish">Конец</string>
     <string name="notify_time_dialog_title">Оповещение за</string>
-    <string name="notify_time_dialog_days">Дней</string>
-    <string name="notify_time_dialog_hours">Часов</string>
-    <string name="notify_time_dialog_minutes">Минут</string>
     <string name="notify_time_text">За %s</string>
+    <string name="time_dialog_days">Дней</string>
+    <string name="time_dialog_hours">Часов</string>
+    <string name="time_dialog_minutes">Минут</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>

@@ -23,6 +23,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEve
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlPumpView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
@@ -33,6 +34,7 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView<PumpEvent>, PumpEvent> implements EventDetailView<PumpEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
+    private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
     @InjectPresenter
     PumpEventDetailPresenter presenter;
@@ -66,15 +68,21 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        amountMlPumpView.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+        setupEditTextView(amountMlPumpView);
 
         setDateTime(DateTime.now(), dateView, timeView);
         breastView.setSelected(Breast.LEFT);
-        // TODO amount ml left right
 
         dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
         timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog());
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
+                TimeDialog.Parameters.builder()
+                        .minutes(notifyTimeView.getValueInt())
+                        .showDays(true)
+                        .showHours(true)
+                        .showMinutes(true)
+                        .title(getString(R.string.notify_time_dialog_title))
+                        .build()));
     }
 
     @Override
@@ -117,7 +125,8 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
         breastView.setSelected(event.getBreast());
-        // TODO amount ml left right
+        amountMlPumpView.setAmountMlLeft(event.getLeftAmountMl());
+        amountMlPumpView.setAmountMlRight(event.getRightAmountMl());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
     }
@@ -138,7 +147,9 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
 
         builder.breast(breastView.getSelected());
 
-        // TODO amount ml left right
+        builder.leftAmountMl(amountMlPumpView.getAmountMlLeft());
+
+        builder.rightAmountMl(amountMlPumpView.getAmountMlRight());
 
         builder.notifyTimeInMinutes(notifyTimeView.getValue());
 
@@ -155,5 +166,10 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @Override
     protected void setTime(String tag, LocalTime time) {
         timeView.setValue(time);
+    }
+
+    @Override
+    public void onSetTime(String tag, int minutes) {
+        notifyTimeView.setValue(minutes);
     }
 }

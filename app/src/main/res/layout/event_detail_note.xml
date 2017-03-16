@@ -29,5 +29,4 @@
             android:textCursorDrawable="@drawable/edit_text_cursor"
             android:textSize="@dimen/text_size_base" />
     </android.support.design.widget.TextInputLayout>
-
 </LinearLayout>

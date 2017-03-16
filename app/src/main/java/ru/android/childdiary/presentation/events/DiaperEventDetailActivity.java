@@ -23,6 +23,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperE
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDiaperStateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
@@ -32,6 +33,7 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailView<DiaperEvent>, DiaperEvent> implements EventDetailView<DiaperEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
+    private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
     @InjectPresenter
     DiaperEventDetailPresenter presenter;
@@ -68,7 +70,14 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
 
         dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
         timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog());
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
+                TimeDialog.Parameters.builder()
+                        .minutes(notifyTimeView.getValueInt())
+                        .showDays(true)
+                        .showHours(true)
+                        .showMinutes(true)
+                        .title(getString(R.string.notify_time_dialog_title))
+                        .build()));
     }
 
     @Override
@@ -146,5 +155,10 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @Override
     protected void setTime(String tag, LocalTime time) {
         timeView.setValue(time);
+    }
+
+    @Override
+    public void onSetTime(String tag, int minutes) {
+        notifyTimeView.setValue(minutes);
     }
 }

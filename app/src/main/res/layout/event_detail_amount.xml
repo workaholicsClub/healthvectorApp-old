@@ -17,5 +17,5 @@
         android:text="@string/amount"
         android:textAppearance="@style/SecondaryTextAppearance" />
 
-    <include layout="@layout/event_detail_edit_text_number_decimal" />
+    <include layout="@layout/event_detail_text_view_editable" />
 </LinearLayout>

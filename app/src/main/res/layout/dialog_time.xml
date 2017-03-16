@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginStart="16dp"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingTop="16dp">
+
+    <include layout="@layout/request_focus_view_dummy" />
+
+    <LinearLayout
+        android:id="@+id/daysView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time_dialog_days"
+            android:textAppearance="@style/SecondaryTextAppearance" />
+
+        <NumberPicker
+            android:id="@+id/numberPickerDays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/PrimaryTextAppearance" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/hoursView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time_dialog_hours"
+            android:textAppearance="@style/SecondaryTextAppearance" />
+
+        <NumberPicker
+            android:id="@+id/numberPickerHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/PrimaryTextAppearance" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/delimiter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:textAppearance="@style/SecondaryTextAppearance" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=":"
+            android:textAppearance="@style/PrimaryTextAppearance" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/minutesView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time_dialog_minutes"
+            android:textAppearance="@style/SecondaryTextAppearance" />
+
+        <NumberPicker
+            android:id="@+id/numberPickerMinutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/PrimaryTextAppearance" />
+    </LinearLayout>
+</LinearLayout>

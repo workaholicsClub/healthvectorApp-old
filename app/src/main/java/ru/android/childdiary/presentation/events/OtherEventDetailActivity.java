@@ -22,6 +22,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
@@ -33,6 +34,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     private static final String TAG_DATE_PICKER_START = "DATE_PICKER_START";
     private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
     private static final String TAG_DATE_PICKER_FINISH = "DATE_PICKER_FINISH";
+    private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
     @InjectPresenter
     OtherEventDetailPresenter presenter;
@@ -83,7 +85,14 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
         startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
         finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue()));
         finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog());
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
+                TimeDialog.Parameters.builder()
+                        .minutes(notifyTimeView.getValueInt())
+                        .showDays(true)
+                        .showHours(true)
+                        .showMinutes(true)
+                        .title(getString(R.string.notify_time_dialog_title))
+                        .build()));
     }
 
     @Override
@@ -176,5 +185,10 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
                 finishTimeView.setValue(time);
                 break;
         }
+    }
+
+    @Override
+    public void onSetTime(String tag, int minutes) {
+        notifyTimeView.setValue(minutes);
     }
 }

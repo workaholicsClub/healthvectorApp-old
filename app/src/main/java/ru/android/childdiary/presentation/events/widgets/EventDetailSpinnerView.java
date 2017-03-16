@@ -81,10 +81,10 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         return false;
     }
 
-    @OnClick(R.id.textView)
-    void onTextViewClick() {
+    @OnClick(R.id.textViewWrapper)
+    void onTextViewClick(View view) {
         dismissPopupWindow();
-        View anchor = textView;
+        View anchor = view;
         int width = spinnerItemWidth;
         int gravity = Gravity.END;
 

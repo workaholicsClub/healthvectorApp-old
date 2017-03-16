@@ -2,10 +2,16 @@ package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.inputmethod.EditorInfo;
+
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 import lombok.Getter;
+import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
@@ -14,6 +20,7 @@ public class EventDetailAmountMlView extends EventDetailEditTextView {
     CustomEditText editText;
 
     @Getter
+    @Setter
     private Double amountMl;
 
     public EventDetailAmountMlView(Context context) {
@@ -39,10 +46,12 @@ public class EventDetailAmountMlView extends EventDetailEditTextView {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
     @Override
-    public void setOnKeyboardHiddenListener(CustomEditText.OnKeyboardHiddenListener listener) {
+    public List<Disposable> createSubscriptions(CustomEditText.OnKeyboardHiddenListener listener) {
         editText.setOnKeyboardHiddenListener(listener);
+        return Collections.emptyList();
     }
 }

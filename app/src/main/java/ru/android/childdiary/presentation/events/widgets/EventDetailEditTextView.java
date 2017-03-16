@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
 public abstract class EventDetailEditTextView extends LinearLayout {
@@ -20,5 +23,5 @@ public abstract class EventDetailEditTextView extends LinearLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public abstract void setOnKeyboardHiddenListener(CustomEditText.OnKeyboardHiddenListener listener);
+    public abstract List<Disposable> createSubscriptions(CustomEditText.OnKeyboardHiddenListener listener);
 }

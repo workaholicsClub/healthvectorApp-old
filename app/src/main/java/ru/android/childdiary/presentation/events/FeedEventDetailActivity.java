@@ -27,6 +27,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
@@ -43,6 +44,10 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         EventDetailSpinnerView.EventDetailSpinnerListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
+    private static final String TAG_FOOD_MEASURE_DIALOG = "FOOD_MEASURE_DIALOG";
+    private static final String TAG_LEFT_DURATION_DIALOG = "TAG_LEFT_DURATION_DIALOG";
+    private static final String TAG_RIGHT_DURATION_DIALOG = "TAG_RIGHT_DURATION_DIALOG";
+    private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
     @InjectPresenter
     FeedEventDetailPresenter presenter;
@@ -88,16 +93,13 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        amountView.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
-        amountMlView.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+        setupEditTextView(amountView);
+        setupEditTextView(amountMlView);
 
         setDateTime(DateTime.now(), dateView, timeView);
         feedTypeView.setEventDetailSpinnerListener(this);
         feedTypeView.setValue(FeedType.BREAST_MILK);
         breastView.setSelected(Breast.LEFT);
-        // TODO amountMl
-        // TODO duration
-        // TODO amount
         foodMeasureView.setEventDetailSpinnerListener(this);
 
         dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
@@ -105,15 +107,36 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         durationView.setEventDetailDurationListener(new EventDetailDurationView.EventDetailDurationListener() {
             @Override
             public void requestLeftValueChange(EventDetailDurationView view) {
-                presenter.requestTimeDialog();
+                presenter.requestTimeDialog(TAG_LEFT_DURATION_DIALOG,
+                        TimeDialog.Parameters.builder()
+                                .minutes(durationView.getDurationLeftInt())
+                                .showDays(false)
+                                .showHours(false)
+                                .showMinutes(true)
+                                .title(getString(R.string.duration_left))
+                                .build());
             }
 
             @Override
             public void requestRightValueChange(EventDetailDurationView view) {
-                presenter.requestTimeDialog();
+                presenter.requestTimeDialog(TAG_RIGHT_DURATION_DIALOG,
+                        TimeDialog.Parameters.builder()
+                                .minutes(durationView.getDurationRightInt())
+                                .showDays(false)
+                                .showHours(false)
+                                .showMinutes(true)
+                                .title(getString(R.string.duration_right))
+                                .build());
             }
         });
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog());
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
+                TimeDialog.Parameters.builder()
+                        .minutes(notifyTimeView.getValueInt())
+                        .showDays(true)
+                        .showHours(true)
+                        .showMinutes(true)
+                        .title(getString(R.string.notify_time_dialog_title))
+                        .build()));
     }
 
     @Override
@@ -157,9 +180,10 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         setDateTime(event.getDateTime(), dateView, timeView);
         feedTypeView.setValue(event.getFeedType());
         breastView.setSelected(event.getBreast());
-        // TODO amountMl
-        // TODO duration
-        // TODO amount
+        amountMlView.setAmountMl(event.getAmountMl());
+        durationView.setLeftDuration(event.getLeftDurationInMinutes());
+        durationView.setRightDuration(event.getRightDurationInMinutes());
+        amountView.setAmount(event.getAmount());
         foodMeasureView.setValue(event.getFoodMeasure());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
@@ -188,9 +212,13 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
         builder.breast(breastView.getSelected());
 
-        // TODO amountMl
-        // TODO duration
-        // TODO amount
+        builder.amountMl(amountMlView.getAmountMl());
+
+        builder.leftDurationInMinutes(durationView.getDurationLeft());
+
+        builder.rightDurationInMinutes(durationView.getDurationRight());
+
+        builder.amount(amountView.getAmount());
 
         builder.foodMeasure(foodMeasureView.getValue());
 
@@ -246,7 +274,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         } else if (view == foodMeasureView) {
             FoodMeasure foodMeasure = (FoodMeasure) item;
             if (foodMeasure == FoodMeasure.NULL) {
-                presenter.requestFoodMeasureDialog();
+                presenter.requestFoodMeasureDialog(TAG_FOOD_MEASURE_DIALOG);
             } else {
                 foodMeasureView.setValue(foodMeasure);
             }
@@ -266,6 +294,27 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     public void showFoodMeasureList(@NonNull List<FoodMeasure> foodMeasureList) {
         foodMeasureView.updateAdapter(foodMeasureList);
+    }
+
+    @Override
+    public void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
+        presenter.addFoodMeasure(foodMeasure);
+        foodMeasureView.setValue(foodMeasure);
+    }
+
+    @Override
+    public void onSetTime(String tag, int minutes) {
+        switch (tag) {
+            case TAG_LEFT_DURATION_DIALOG:
+                durationView.setLeftDuration(minutes);
+                break;
+            case TAG_RIGHT_DURATION_DIALOG:
+                durationView.setRightDuration(minutes);
+                break;
+            case TAG_NOTIFY_TIME_DIALOG:
+                notifyTimeView.setValue(minutes);
+                break;
+        }
     }
 
     @Override

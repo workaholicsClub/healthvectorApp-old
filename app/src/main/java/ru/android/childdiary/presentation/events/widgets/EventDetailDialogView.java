@@ -53,7 +53,7 @@ public abstract class EventDetailDialogView<T> extends LinearLayout {
         textView.setText(getTextForValue(value));
     }
 
-    @OnClick(R.id.textView)
+    @OnClick(R.id.textViewWrapper)
     void onTextViewClick() {
         if (eventDetailDialogListener != null) {
             eventDetailDialogListener.requestValueChange(this);

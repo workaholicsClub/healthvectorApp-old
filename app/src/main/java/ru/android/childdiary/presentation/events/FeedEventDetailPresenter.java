@@ -8,6 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
 
@@ -37,5 +38,12 @@ public class FeedEventDetailPresenter extends EventDetailPresenter<FeedEventDeta
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(child -> logger.debug("showChild: " + child))
                 .subscribe(getViewState()::showDefaultFoodMeasure, this::onUnexpectedError));
+    }
+
+    public void addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
+        unsubscribeOnDestroy(calendarInteractor.addFoodMeasure(foodMeasure)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(addedFoodMeasure -> logger.debug("addFoodMeasure: " + addedFoodMeasure), this::onUnexpectedError));
     }
 }

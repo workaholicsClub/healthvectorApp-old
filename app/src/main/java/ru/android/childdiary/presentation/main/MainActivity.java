@@ -64,6 +64,7 @@ import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -129,7 +130,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private static IProfile mapToProfile(Context context, @NonNull Child child) {
         return new ProfileDrawerItem()
                 .withName(child.getName())
-                .withEmail(StringUtils.age(context, child))
+                .withEmail(TimeUtils.age(context, child))
                 .withNameShown(true)
                 .withTag(child)
                 .withIdentifier(mapToProfileId(child))
