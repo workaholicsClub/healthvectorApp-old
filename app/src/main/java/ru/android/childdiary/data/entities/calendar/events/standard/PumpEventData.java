@@ -22,5 +22,7 @@ public interface PumpEventData {
 
     Breast getBreast();
 
-    Integer getDurationInMinutes();
+    Double getLeftAmountMl();
+
+    Double getRightAmountMl();
 }

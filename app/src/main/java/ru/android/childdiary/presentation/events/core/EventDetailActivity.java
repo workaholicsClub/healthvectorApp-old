@@ -26,13 +26,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
-import ru.android.childdiary.presentation.events.dialogs.NotifyTimeDialog;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.KeyboardUtils;
@@ -40,7 +41,8 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
-        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
+        FoodMeasureDialog.Listener, TimeDialog.Listener {
     private static final String TAG_FOOD_MEASURE_DIALOG = "TAG_FOOD_MEASURE_DIALOG";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
@@ -66,7 +68,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         editTextNote.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
-
         masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             if (masterEvent == null) {
@@ -86,7 +87,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         eventDetailsView.addView(contentView);
     }
 
-    private void hideKeyboardAndClearFocus(View view) {
+    protected void hideKeyboardAndClearFocus(View view) {
         KeyboardUtils.hideKeyboard(this, view);
         view.clearFocus();
         dummy.requestFocus();
@@ -151,8 +152,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void showNotifyTimeDialog(@NonNull Child child) {
-        NotifyTimeDialog dialog = new NotifyTimeDialog();
+    public void showTimeDialog(@NonNull Child child) {
+        TimeDialog dialog = new TimeDialog();
         dialog.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG, child);
     }
 
@@ -182,7 +183,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+    public final void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, monthOfYear, dayOfMonth);
         LocalDate date = LocalDate.fromCalendarFields(calendar);
@@ -205,7 +206,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+    public final void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         LocalTime time = new LocalTime(hourOfDay, minute);
         setTime(view.getTag(), time);
     }
@@ -223,5 +224,15 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setDateTime(DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
         dateView.setValue(dateTime.toLocalDate());
         timeView.setValue(dateTime.toLocalTime());
+    }
+
+    @Override
+    public final void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
+        // TODO
+    }
+
+    @Override
+    public final void onSetTime(String tag, int minutes) {
+        // TODO
     }
 }

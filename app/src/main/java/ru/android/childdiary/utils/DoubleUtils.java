@@ -64,6 +64,11 @@ public class DoubleUtils {
     }
 
     @Nullable
+    public static String amountReview(Context context, Double d) {
+        return d == null ? null : context.getString(R.string.amount_review, Double.toString(d));
+    }
+
+    @Nullable
     public static String heightEdit(Double d) {
         return d == null ? null : HEIGHT_FORMAT.get().format(d);
     }
@@ -71,5 +76,10 @@ public class DoubleUtils {
     @Nullable
     public static String weightEdit(Double d) {
         return d == null ? null : WEIGHT_FORMAT.get().format(d);
+    }
+
+    @Nullable
+    public static String amountEdit(Double d) {
+        return d == null ? null : Double.toString(d);
     }
 }

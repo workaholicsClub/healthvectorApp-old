@@ -27,7 +27,7 @@ public class FoodMeasureDialog extends BaseDialogFragment {
                 .setTitle(R.string.food_measure_dialog_title)
                 .setPositiveButton(R.string.OK, (dialog, which) -> {
                     if (listener != null) {
-                        listener.onSetFoodMeasure(FoodMeasure.NULL);
+                        listener.onSetFoodMeasure(getTag(), FoodMeasure.NULL);
                     }
                 })
                 .setNegativeButton(R.string.Cancel, null);
@@ -49,6 +49,6 @@ public class FoodMeasureDialog extends BaseDialogFragment {
     }
 
     public interface Listener {
-        void onSetFoodMeasure(@NonNull FoodMeasure foodMeasure);
+        void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure);
     }
 }

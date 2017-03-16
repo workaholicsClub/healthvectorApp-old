@@ -20,11 +20,13 @@ public class FeedEvent extends MasterEvent {
 
     Breast breast;
 
-    Integer durationInMinutes;
+    Integer leftDurationInMinutes;
 
-    Integer milkAmountImMilliliters;
+    Integer rightDurationInMinutes;
 
-    Integer foodAmount;
+    Double amount;
+
+    Double amountMl;
 
     FoodMeasure foodMeasure;
 
@@ -40,17 +42,19 @@ public class FeedEvent extends MasterEvent {
                       Long id,
                       FeedType feedType,
                       Breast breast,
-                      Integer durationInMinutes,
-                      Integer milkAmountImMilliliters,
-                      Integer foodAmount,
+                      Integer leftDurationInMinutes,
+                      Integer rightDurationInMinutes,
+                      Double amount,
+                      Double amountMl,
                       FoodMeasure foodMeasure) {
         super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
         this.id = id;
         this.feedType = feedType;
         this.breast = breast;
-        this.durationInMinutes = durationInMinutes;
-        this.milkAmountImMilliliters = milkAmountImMilliliters;
-        this.foodAmount = foodAmount;
+        this.leftDurationInMinutes = leftDurationInMinutes;
+        this.rightDurationInMinutes = rightDurationInMinutes;
+        this.amount = amount;
+        this.amountMl = amountMl;
         this.foodMeasure = foodMeasure;
     }
 }

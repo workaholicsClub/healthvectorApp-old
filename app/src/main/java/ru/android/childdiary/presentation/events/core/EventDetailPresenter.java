@@ -66,11 +66,11 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribe(getViewState()::showFoodMeasureDialog, this::onUnexpectedError));
     }
 
-    public void requestNotifyTimeDialog() {
+    public void requestTimeDialog() {
         unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::showNotifyTimeDialog, this::onUnexpectedError));
+                .subscribe(getViewState()::showTimeDialog, this::onUnexpectedError));
     }
 
     @SuppressWarnings("unchecked")

@@ -19,8 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDurationView
-        android:id="@+id/durationView"
+    <ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlPumpView
+        android:id="@+id/amountMlPumpView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

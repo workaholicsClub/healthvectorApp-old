@@ -24,7 +24,8 @@ class PumpEventMapper {
                 .isDone(masterEventData.isDone())
                 .isDeleted(masterEventData.isDeleted())
                 .breast(eventData.getBreast())
-                .durationInMinutes(eventData.getDurationInMinutes())
+                .leftAmountMl(eventData.getLeftAmountMl())
+                .rightAmountMl(eventData.getRightAmountMl())
                 .build();
     }
 
@@ -52,6 +53,7 @@ class PumpEventMapper {
 
     private static void fillNonReferencedFields(@NonNull PumpEventEntity to, @NonNull PumpEvent from) {
         to.setBreast(from.getBreast());
-        to.setDurationInMinutes(from.getDurationInMinutes());
+        to.setLeftAmountMl(from.getLeftAmountMl());
+        to.setRightAmountMl(from.getRightAmountMl());
     }
 }

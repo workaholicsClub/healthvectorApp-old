@@ -68,7 +68,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
 
         dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
         timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestNotifyTimeDialog());
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog());
     }
 
     @Override

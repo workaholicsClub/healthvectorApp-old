@@ -26,11 +26,13 @@ public interface FeedEventData {
 
     Breast getBreast();
 
-    Integer getDurationInMinutes();
+    Integer getLeftDurationInMinutes();
 
-    Integer getMilkAmountImMilliliters();
+    Integer getRightDurationInMinutes();
 
-    Integer getFoodAmount();
+    Double getAmount();
+
+    Double getAmountMl();
 
     @ForeignKey
     @ManyToOne

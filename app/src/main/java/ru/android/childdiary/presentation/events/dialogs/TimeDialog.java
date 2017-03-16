@@ -12,7 +12,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseDialogFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class NotifyTimeDialog extends BaseDialogFragment {
+public class TimeDialog extends BaseDialogFragment {
     private Listener listener;
 
     @Override
@@ -26,7 +26,7 @@ public class NotifyTimeDialog extends BaseDialogFragment {
                 .setTitle(R.string.notify_time_dialog_title)
                 .setPositiveButton(R.string.OK, (dialog, which) -> {
                     if (listener != null) {
-                        listener.onSetNotifyTime(0);
+                        listener.onSetTime(getTag(), 0);
                     }
                 })
                 .setNegativeButton(R.string.Cancel, null);
@@ -48,6 +48,6 @@ public class NotifyTimeDialog extends BaseDialogFragment {
     }
 
     public interface Listener {
-        void onSetNotifyTime(int minutes);
+        void onSetTime(String tag, int minutes);
     }
 }

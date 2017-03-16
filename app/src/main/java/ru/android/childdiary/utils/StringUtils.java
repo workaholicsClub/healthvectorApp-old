@@ -165,7 +165,7 @@ public class StringUtils {
     }
 
     @Nullable
-    public static String notifyTime(Context context, @Nullable Integer minutes) {
+    private static String time(Context context, @Nullable Integer minutes) {
         if (minutes == null || minutes <= 0) {
             return null;
         }
@@ -195,5 +195,16 @@ public class StringUtils {
         }
 
         return result.toString();
+    }
+
+    @Nullable
+    public static String notifyTime(Context context, @Nullable Integer minutes) {
+        String time = time(context, minutes);
+        return time == null ? null : context.getString(R.string.notify_time_text, time);
+    }
+
+    @Nullable
+    public static String duration(Context context, @Nullable Integer minutes) {
+        return time(context, minutes);
     }
 }

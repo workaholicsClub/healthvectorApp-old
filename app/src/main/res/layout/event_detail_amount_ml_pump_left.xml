@@ -5,16 +5,14 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <ImageView
+    <View
         android:layout_width="@dimen/event_detail_icon_size"
-        android:layout_height="@dimen/event_detail_icon_size"
-        android:scaleType="center"
-        android:src="@drawable/ic_duration" />
+        android:layout_height="@dimen/event_detail_icon_size" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/amount"
+        android:text="@string/amount_left"
         android:textAppearance="@style/SecondaryTextAppearance" />
 
     <include layout="@layout/event_detail_edit_text_number_decimal" />

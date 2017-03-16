@@ -2,11 +2,20 @@ package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
-public class EventDetailAmountMlView extends LinearLayout {
+public class EventDetailAmountMlView extends EventDetailEditTextView {
+    @BindView(R.id.editText)
+    CustomEditText editText;
+
+    @Getter
+    private Double amountMl;
+
     public EventDetailAmountMlView(Context context) {
         super(context);
         init();
@@ -29,6 +38,11 @@ public class EventDetailAmountMlView extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        // ButterKnife.bind(this);
+        ButterKnife.bind(this);
+    }
+
+    @Override
+    public void setOnKeyboardHiddenListener(CustomEditText.OnKeyboardHiddenListener listener) {
+        editText.setOnKeyboardHiddenListener(listener);
     }
 }

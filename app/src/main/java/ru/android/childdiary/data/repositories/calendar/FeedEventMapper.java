@@ -31,9 +31,10 @@ class FeedEventMapper {
                 .isDeleted(masterEventData.isDeleted())
                 .feedType(eventData.getFeedType())
                 .breast(eventData.getBreast())
-                .durationInMinutes(eventData.getDurationInMinutes())
-                .milkAmountImMilliliters(eventData.getMilkAmountImMilliliters())
-                .foodAmount(eventData.getFoodAmount())
+                .leftDurationInMinutes(eventData.getLeftDurationInMinutes())
+                .rightDurationInMinutes(eventData.getRightDurationInMinutes())
+                .amount(eventData.getAmount())
+                .amountMl(eventData.getAmountMl())
                 .foodMeasure(foodMeasure)
                 .build();
     }
@@ -68,8 +69,9 @@ class FeedEventMapper {
     private static void fillNonReferencedFields(@NonNull FeedEventEntity to, @NonNull FeedEvent from) {
         to.setFeedType(from.getFeedType());
         to.setBreast(from.getBreast());
-        to.setDurationInMinutes(from.getDurationInMinutes());
-        to.setMilkAmountImMilliliters(from.getMilkAmountImMilliliters());
-        to.setFoodAmount(from.getFoodAmount());
+        to.setLeftDurationInMinutes(from.getLeftDurationInMinutes());
+        to.setRightDurationInMinutes(from.getRightDurationInMinutes());
+        to.setAmount(from.getAmount());
+        to.setAmountMl(from.getAmountMl());
     }
 }

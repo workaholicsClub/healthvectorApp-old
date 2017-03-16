@@ -53,6 +53,8 @@
     <string name="validate_child_birth_weight_empty">Введите вес ребенка при рождении</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
+    <string name="duration_review">%s мин.</string>
+    <string name="amount_review">%s мл</string>
     <string name="newborn">новорождённый</string>
     <string name="years_and_months">%1$s %2$s</string>
     <string name="select_sex">Выберите пол</string>
@@ -89,8 +91,12 @@
     <string name="awoke">Проснулся</string>
     <string name="feed_type">Тип кормления</string>
     <string name="duration">Продолжительность</string>
+    <string name="duration_left">Прод-ть левой</string>
+    <string name="duration_right">Прод-ть правой</string>
     <string name="breast">Грудь</string>
     <string name="amount">Количество</string>
+    <string name="amount_left">Кол-во из левой</string>
+    <string name="amount_right">Кол-во из правой</string>
     <string name="food_measure">Ед. измерения</string>
     <string name="other_event_start">Начало</string>
     <string name="other_event_finish">Конец</string>
@@ -98,6 +104,7 @@
     <string name="notify_time_dialog_days">Дней</string>
     <string name="notify_time_dialog_hours">Часов</string>
     <string name="notify_time_dialog_minutes">Минут</string>
+    <string name="notify_time_text">За %s</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
@@ -156,10 +163,10 @@
         <item quantity="zero">%d часов</item>
     </plurals>
     <plurals name="numberOfMinutes">
-        <item quantity="one">%d минута</item>
-        <item quantity="few">%d минуты</item>
-        <item quantity="other">%d минут</item>
-        <item quantity="many">%d минут</item>
-        <item quantity="zero">%d минут</item>
+        <item quantity="one">%d мин.</item>
+        <item quantity="few">%d мин.</item>
+        <item quantity="other">%d мин.</item>
+        <item quantity="many">%d мин.</item>
+        <item quantity="zero">%d мин.</item>
     </plurals>
 </resources>

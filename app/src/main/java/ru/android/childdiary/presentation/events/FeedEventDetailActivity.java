@@ -27,7 +27,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
-import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
@@ -41,7 +40,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
-        EventDetailSpinnerView.EventDetailSpinnerListener, FoodMeasureDialog.Listener {
+        EventDetailSpinnerView.EventDetailSpinnerListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
 
@@ -89,6 +88,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        amountView.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+        amountMlView.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
 
         setDateTime(DateTime.now(), dateView, timeView);
         feedTypeView.setEventDetailSpinnerListener(this);
@@ -101,7 +102,18 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
         dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
         timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestNotifyTimeDialog());
+        durationView.setEventDetailDurationListener(new EventDetailDurationView.EventDetailDurationListener() {
+            @Override
+            public void requestLeftValueChange(EventDetailDurationView view) {
+                presenter.requestTimeDialog();
+            }
+
+            @Override
+            public void requestRightValueChange(EventDetailDurationView view) {
+                presenter.requestTimeDialog();
+            }
+        });
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog());
     }
 
     @Override
@@ -239,11 +251,6 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 foodMeasureView.setValue(foodMeasure);
             }
         }
-    }
-
-    @Override
-    public void onSetFoodMeasure(@NonNull FoodMeasure foodMeasure) {
-        foodMeasureView.setValue(foodMeasure);
     }
 
     @Override

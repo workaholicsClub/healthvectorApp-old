@@ -83,7 +83,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
         startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
         finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue()));
         finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestNotifyTimeDialog());
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog());
     }
 
     @Override
