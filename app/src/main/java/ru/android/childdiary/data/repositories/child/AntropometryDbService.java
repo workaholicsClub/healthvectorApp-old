@@ -12,9 +12,7 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.child.AntropometryEntity;
-import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
-import ru.android.childdiary.domain.interactors.child.AntropometryRepository;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 @Singleton
@@ -36,13 +34,13 @@ public class AntropometryDbService {
     }
 
     public Observable<Antropometry> add(@NonNull Child child, @NonNull Antropometry antropometry) {
-        return DbUtils.addObservable(dataStore, ChildEntity.class, child.getId(), antropometry,
+        return DbUtils.insertObservable(dataStore, antropometry, child,
                 AntropometryMapper::mapToEntity, AntropometryMapper::mapToPlainObject);
     }
 
     public Observable<Antropometry> update(@NonNull Antropometry antropometry) {
-        return DbUtils.updateObservable(dataStore, AntropometryEntity.class, antropometry, antropometry.getId(),
-                AntropometryMapper::updateEntityWithPlainObject, AntropometryMapper::mapToPlainObject);
+        return DbUtils.updateObservable(dataStore, antropometry,
+                AntropometryMapper::mapToEntity, AntropometryMapper::mapToPlainObject);
     }
 
     public Observable<Antropometry> delete(@NonNull Antropometry antropometry) {

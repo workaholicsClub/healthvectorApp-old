@@ -24,7 +24,7 @@ public class FoodMeasureDialog extends BaseDialogFragment {
         View view = inflater.inflate(R.layout.dialog_notify_time, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(sex))
                 .setView(view)
-                .setTitle(R.string.notify_time_dialog_title)
+                .setTitle(R.string.food_measure_dialog_title)
                 .setPositiveButton(R.string.OK, (dialog, which) -> {
                     if (listener != null) {
                         listener.onSetFoodMeasure(FoodMeasure.NULL);
