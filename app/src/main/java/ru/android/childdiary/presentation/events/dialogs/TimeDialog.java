@@ -21,6 +21,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseDialogFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -47,6 +48,9 @@ public class TimeDialog extends BaseDialogFragment {
 
     @BindView(R.id.delimiter)
     View delimiter;
+
+    @BindView(R.id.dummy)
+    View dummy;
 
     private Listener listener;
 
@@ -78,6 +82,7 @@ public class TimeDialog extends BaseDialogFragment {
                 .setView(view)
                 .setTitle(parameters.getTitle())
                 .setPositiveButton(R.string.OK, (dialog, which) -> {
+                    hideKeyboardAndClearFocus(view.findFocus());
                     int resultMinutes = numberPickerDays.getValue() * TimeUtils.MINUTES_IN_DAY
                             + numberPickerHours.getValue() * TimeUtils.MINUTES_IN_HOUR
                             + numberPickerMinutes.getValue();
@@ -108,6 +113,12 @@ public class TimeDialog extends BaseDialogFragment {
         hoursView.setVisibility(parameters.isShowHours() ? View.VISIBLE : View.GONE);
         delimiter.setVisibility(parameters.isShowHours() && parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
         minutesView.setVisibility(parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
+    }
+
+    public void hideKeyboardAndClearFocus(View view) {
+        KeyboardUtils.hideKeyboard(getContext(), view);
+        view.clearFocus();
+        dummy.requestFocus();
     }
 
     @Override
