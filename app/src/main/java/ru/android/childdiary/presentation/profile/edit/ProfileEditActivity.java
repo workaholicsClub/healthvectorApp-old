@@ -252,7 +252,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         WidgetsUtils.setupTextView(textViewSex, sex != null);
     }
 
-    @OnClick(R.id.textViewSex)
+    @OnClick(R.id.textViewSexWrapper)
     void onSexClick(View v) {
         dismissPopupWindow();
         ListAdapter adapter = new SexAdapter(this);
@@ -321,7 +321,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         imagePicker.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER, editedChild);
     }
 
-    @OnClick(R.id.textViewDate)
+    @OnClick(R.id.textViewDateWrapper)
     void onDateClick() {
         LocalDate birthDate = editedChild.getBirthDate();
         Calendar calendar = Calendar.getInstance();
@@ -338,7 +338,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
-    @OnClick(R.id.textViewTime)
+    @OnClick(R.id.textViewTimeWrapper)
     void onTimeClick() {
         LocalTime birthTime = editedChild.getBirthTime();
         LocalTime time = birthTime == null ? LocalTime.now() : birthTime;
