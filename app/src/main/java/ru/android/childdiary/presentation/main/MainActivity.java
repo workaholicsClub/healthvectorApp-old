@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -161,8 +162,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    protected void setupToolbar() {
-        super.setupToolbar();
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_navigation_drawer);
     }
 
@@ -220,11 +221,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     public void showChild(@NonNull Child child) {
         logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
+        setupToolbarLogo(ResourcesUtils.getChildIcon(this, child));
         if (child == Child.NULL) {
             hideFabBar();
-            getSupportActionBar().setTitle(R.string.app_name);
+            setupToolbarTitle(R.string.app_name);
         } else {
-            getSupportActionBar().setTitle(child.getName());
+            setupToolbarTitle(child.getName());
             if (accountHeader != null) {
                 accountHeader.setActiveProfile(mapToProfileId(child));
             }
@@ -415,7 +417,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         buildHeader();
         buildDrawer();
 
-        setupToolbar();
+        setupToolbar(getToolbar());
 
         View switcherWrapper = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher_wrapper);
         switcherWrapper.setOnClickListener(this);
@@ -449,7 +451,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         updateDrawerItems(false);
         drawerBuilder = new CustomDrawerBuilder()
                 .withActivity(this)
-                .withToolbar(toolbar)
+                .withToolbar(getToolbar())
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(drawerItems);
         drawer = drawerBuilder.build();

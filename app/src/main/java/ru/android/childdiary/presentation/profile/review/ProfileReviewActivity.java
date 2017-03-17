@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -74,9 +75,9 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     }
 
     @Override
-    protected void setupToolbar() {
-        super.setupToolbar();
-        getSupportActionBar().setTitle(R.string.profile);
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
+        setupToolbarTitle(R.string.profile);
     }
 
     @Override

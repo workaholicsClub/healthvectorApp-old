@@ -48,9 +48,9 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
 import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
-import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
@@ -146,7 +146,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             editedChild = child.toBuilder().build();
         }
 
-        getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child_long);
+        setupToolbarTitle(child == null ? R.string.add_child : R.string.edit_child_long);
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
             hideKeyboardAndClearFocus(rootView.findFocus());

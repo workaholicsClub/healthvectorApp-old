@@ -2,16 +2,24 @@ package ru.android.childdiary.presentation.core;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -25,6 +33,8 @@ import icepick.Icepick;
 import icepick.State;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import lombok.AccessLevel;
+import lombok.Getter;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
 import ru.android.childdiary.app.ChildDiaryApplication;
@@ -40,12 +50,17 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    @Nullable
-    @BindView(R.id.toolbar)
-    protected Toolbar toolbar;
-
     @State
     protected Sex sex;
+
+    @Nullable
+    @BindView(R.id.toolbar)
+    @Getter(AccessLevel.PROTECTED)
+    Toolbar toolbar;
+
+    private ImageView toolbarLogo;
+
+    private TextView toolbarTitle;
 
     protected void unsubscribeOnDestroy(@NonNull Disposable disposable) {
         compositeDisposable.add(disposable);
@@ -78,7 +93,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         ButterKnife.bind(this);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            setupToolbar();
+            setupToolbar(toolbar);
         }
         themeChanged();
     }
@@ -87,9 +102,34 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     }
 
     @CallSuper
-    protected void setupToolbar() {
-        toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance);
-        toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleTextAppearance);
+    protected void setupToolbar(Toolbar toolbar) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+        toolbar.setTitleMargin(0, 0, 0, 0);
+        toolbarLogo = ButterKnife.findById(toolbar, R.id.toolbarLogo);
+        toolbarLogo.setVisibility(View.GONE);
+        toolbarTitle = ButterKnife.findById(toolbar, R.id.toolbarTitle);
+        toolbarTitle.setText(R.string.app_name);
+    }
+
+    protected final void setupToolbarLogo(@NonNull Drawable drawable) {
+        toolbarLogo.setVisibility(View.VISIBLE);
+        toolbarLogo.setImageDrawable(drawable);
+    }
+
+    protected final void setupToolbarLogo(@DrawableRes int drawableRes) {
+        toolbarLogo.setVisibility(View.VISIBLE);
+        toolbarLogo.setImageDrawable(ContextCompat.getDrawable(this, drawableRes));
+    }
+
+    protected final void setupToolbarTitle(String text) {
+        toolbarTitle.setText(text);
+    }
+
+    protected final void setupToolbarTitle(@StringRes int titleRes) {
+        toolbarTitle.setText(titleRes);
     }
 
     @CallSuper

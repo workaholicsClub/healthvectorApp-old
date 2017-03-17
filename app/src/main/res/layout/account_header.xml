@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/material_drawer_account_header_height_compact">
+    android:layout_height="@dimen/material_drawer_account_header_height_compact"
+    tools:ignore="UnusedAttribute">
 
     <ImageView
         android:id="@+id/material_drawer_account_header_background"
@@ -44,6 +45,7 @@
             android:layout_marginLeft="@dimen/material_drawer_vertical_padding"
             android:layout_marginRight="@dimen/material_drawer_vertical_padding"
             android:layout_marginStart="@dimen/material_drawer_vertical_padding"
+            android:elevation="8dp"
             app:biv_selectorOnPress="@android:color/transparent" />
 
         <LinearLayout

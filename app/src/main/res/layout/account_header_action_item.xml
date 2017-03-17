@@ -33,6 +33,7 @@
         android:id="@+id/imageViewDropdown"
         android:layout_width="@dimen/account_header_action_item_height"
         android:layout_height="@dimen/account_header_action_item_height"
+        android:background="@drawable/background_clickable"
         android:scaleType="center"
         android:src="@drawable/arrow_up_black"
         tools:ignore="ContentDescription" />

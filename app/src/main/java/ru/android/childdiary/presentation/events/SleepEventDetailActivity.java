@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -96,16 +97,16 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
-    protected void setupToolbar() {
-        super.setupToolbar();
-        toolbar.setLogo(ResourcesUtils.getSleepEventLogoRes(sex));
-        getSupportActionBar().setTitle(R.string.event_sleep);
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
+        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(sex));
+        setupToolbarTitle(R.string.event_sleep);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        toolbar.setLogo(ResourcesUtils.getSleepEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(sex));
     }
 
     @Override
