@@ -7,7 +7,6 @@ import org.joda.time.LocalDate;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.data.entities.calendar.events.standard.FoodMeasureData;
 import ru.android.childdiary.domain.core.Repository;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;

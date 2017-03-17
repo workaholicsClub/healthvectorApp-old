@@ -106,6 +106,7 @@
     <string name="time_dialog_hours">Часов</string>
     <string name="time_dialog_minutes">Минут</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
+    <string name="hours_minutes_delimiter">:</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

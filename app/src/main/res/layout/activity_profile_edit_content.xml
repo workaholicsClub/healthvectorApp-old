@@ -100,6 +100,7 @@
         android:textAppearance="@style/PlaceholderTextAppearance" />
 
     <LinearLayout
+        android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/profile_margin_horizontal"
@@ -174,6 +175,7 @@
             android:layout_weight="1"
             android:background="@drawable/edit_text_background"
             android:drawableRight="@drawable/arrow_down_gray"
+            android:drawableEnd="@drawable/arrow_down_gray"
             android:hint="@string/enter_height"
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
@@ -188,6 +190,7 @@
             android:layout_weight="1"
             android:background="@drawable/edit_text_background"
             android:drawableRight="@drawable/arrow_down_gray"
+            android:drawableEnd="@drawable/arrow_down_gray"
             android:hint="@string/enter_weight"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"

@@ -20,7 +20,6 @@
         android:layout_width="@dimen/calendar_title_height"
         android:layout_height="@dimen/calendar_title_height"
         android:background="@drawable/background_clickable"
-        android:contentDescription="@string/empty"
         android:scaleType="center"
         android:src="@drawable/arrow_left" />
 
@@ -29,7 +28,6 @@
         android:layout_width="@dimen/calendar_title_height"
         android:layout_height="@dimen/calendar_title_height"
         android:background="@drawable/background_clickable"
-        android:contentDescription="@string/empty"
         android:scaleType="center"
         android:src="@drawable/arrow_right" />
 </LinearLayout>

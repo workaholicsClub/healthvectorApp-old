@@ -64,7 +64,6 @@ public class FabToolbar extends RevealFrameLayout {
             cx = cx < 0 ? 0 : cx;
             cy = toolbarHeight - distanceFromScreenEdge;
             cy = cy < 0 ? 0 : cy;
-        } else {
         }
     }
 
