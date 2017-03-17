@@ -39,6 +39,7 @@
             android:layout_alignRight="@+id/imageViewPhoto"
             android:layout_alignStart="@+id/imageViewPhoto"
             android:layout_alignTop="@+id/imageViewPhoto"
+            android:elevation="8dp"
             android:gravity="center"
             android:text="@string/add_image_button_title"
             android:textAppearance="@style/PlaceholderTextAppearance" />
