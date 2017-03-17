@@ -64,7 +64,12 @@ public class DoubleUtils {
     }
 
     @Nullable
-    public static String amountReview(Context context, Double d) {
+    public static String amountReview(Double d) {
+        return d == null ? null : WEIGHT_FORMAT.get().format(d);
+    }
+
+    @Nullable
+    public static String amountMlReview(Context context, Double d) {
         return d == null ? null : context.getString(R.string.amount_review, WEIGHT_FORMAT.get().format(d));
     }
 
@@ -80,6 +85,11 @@ public class DoubleUtils {
 
     @Nullable
     public static String amountEdit(Double d) {
+        return d == null ? null : WEIGHT_FORMAT.get().format(d);
+    }
+
+    @Nullable
+    public static String amountMlEdit(Double d) {
         return d == null ? null : WEIGHT_FORMAT.get().format(d);
     }
 }

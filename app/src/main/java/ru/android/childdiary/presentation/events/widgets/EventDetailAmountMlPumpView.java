@@ -64,11 +64,21 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
         editTextAmountMlRight.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
+    public void setAmountMlLeft(Double amount) {
+        amountMlLeft = amount;
+        editTextAmountMlLeft.setText(DoubleUtils.amountMlReview(getContext(), amountMlLeft));
+    }
+
+    public void setAmountMlRight(Double amount) {
+        amountMlRight = amount;
+        editTextAmountMlRight.setText(DoubleUtils.amountMlReview(getContext(), amountMlRight));
+    }
+
     private void updateSum() {
         double left = amountMlLeft == null ? 0 : amountMlLeft;
         double right = amountMlRight == null ? 0 : amountMlRight;
         double sum = left + right;
-        textViewAmountMl.setText(DoubleUtils.amountReview(getContext(), sum));
+        textViewAmountMl.setText(DoubleUtils.amountMlReview(getContext(), sum));
     }
 
     @Override
@@ -80,29 +90,29 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
 
         disposables.add(RxTextView.afterTextChangeEvents(editTextAmountMlLeft).subscribe(textViewAfterTextChangeEvent -> {
             Double amount = DoubleUtils.parse(editTextAmountMlLeft.getText().toString().trim());
-            setAmountMlLeft(amount);
+            amountMlLeft = amount;
             updateSum();
         }));
         disposables.add(RxTextView.afterTextChangeEvents(editTextAmountMlRight).subscribe(textViewAfterTextChangeEvent -> {
             Double amount = DoubleUtils.parse(editTextAmountMlRight.getText().toString().trim());
-            setAmountMlRight(amount);
+            amountMlRight = amount;
             updateSum();
         }));
 
         disposables.add(RxView.focusChanges(editTextAmountMlLeft).subscribe(hasFocus -> {
             if (hasFocus) {
-                editTextAmountMlLeft.setText(DoubleUtils.amountEdit(amountMlLeft));
+                editTextAmountMlLeft.setText(DoubleUtils.amountMlEdit(amountMlLeft));
                 editTextAmountMlLeft.setSelection(editTextAmountMlLeft.getText().length());
             } else {
-                editTextAmountMlLeft.setText(DoubleUtils.amountReview(getContext(), amountMlLeft));
+                editTextAmountMlLeft.setText(DoubleUtils.amountMlReview(getContext(), amountMlLeft));
             }
         }));
         disposables.add(RxView.focusChanges(editTextAmountMlRight).subscribe(hasFocus -> {
             if (hasFocus) {
-                editTextAmountMlRight.setText(DoubleUtils.amountEdit(amountMlRight));
+                editTextAmountMlRight.setText(DoubleUtils.amountMlEdit(amountMlRight));
                 editTextAmountMlRight.setSelection(editTextAmountMlRight.getText().length());
             } else {
-                editTextAmountMlRight.setText(DoubleUtils.amountReview(getContext(), amountMlRight));
+                editTextAmountMlRight.setText(DoubleUtils.amountMlReview(getContext(), amountMlRight));
             }
         }));
 
