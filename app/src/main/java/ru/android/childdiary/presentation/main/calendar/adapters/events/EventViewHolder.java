@@ -51,7 +51,7 @@ class EventViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.delimiter3)
     View delimiter3;
 
-    @BindDimen(R.dimen.event_row_corner)
+    @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
 
     @Getter

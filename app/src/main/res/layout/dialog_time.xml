@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginEnd="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginStart="16dp"
+    android:layout_marginEnd="@dimen/base_margin_horizontal"
+    android:layout_marginLeft="@dimen/base_margin_horizontal"
+    android:layout_marginRight="@dimen/base_margin_horizontal"
+    android:layout_marginStart="@dimen/base_margin_horizontal"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingTop="16dp">
+    android:paddingTop="@dimen/alert_dialog_padding_top">
 
     <include layout="@layout/request_focus_view_dummy" />
 
@@ -16,10 +16,10 @@
         android:id="@+id/daysView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="@dimen/base_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin_horizontal"
+        android:layout_marginRight="@dimen/base_margin_horizontal"
+        android:layout_marginStart="@dimen/base_margin_horizontal"
         android:orientation="vertical">
 
         <TextView
@@ -39,10 +39,10 @@
         android:id="@+id/hoursView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="@dimen/base_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin_horizontal"
+        android:layout_marginRight="@dimen/base_margin_horizontal"
+        android:layout_marginStart="@dimen/base_margin_horizontal"
         android:orientation="vertical">
 
         <TextView
@@ -83,10 +83,10 @@
         android:id="@+id/minutesView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="@dimen/base_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin_horizontal"
+        android:layout_marginRight="@dimen/base_margin_horizontal"
+        android:layout_marginStart="@dimen/base_margin_horizontal"
         android:orientation="vertical">
 
         <TextView

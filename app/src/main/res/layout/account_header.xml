@@ -45,7 +45,7 @@
             android:layout_marginLeft="@dimen/material_drawer_vertical_padding"
             android:layout_marginRight="@dimen/material_drawer_vertical_padding"
             android:layout_marginStart="@dimen/material_drawer_vertical_padding"
-            android:elevation="8dp"
+            android:elevation="@dimen/image_elevation"
             app:biv_selectorOnPress="@android:color/transparent" />
 
         <LinearLayout
