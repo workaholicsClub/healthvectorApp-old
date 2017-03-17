@@ -109,7 +109,9 @@ public class TimeUtils {
     @Nullable
     public static String notifyTime(Context context, @Nullable Integer minutes) {
         String time = time(context, minutes);
-        return time == null ? null : context.getString(R.string.notify_time_text, time);
+        return minutes == null || minutes <= 0 || time == null
+                ? context.getString(R.string.no_notification)
+                : context.getString(R.string.notify_time_text, time);
     }
 
     @Nullable

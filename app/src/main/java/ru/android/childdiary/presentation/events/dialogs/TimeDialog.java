@@ -98,7 +98,7 @@ public class TimeDialog extends BaseDialogFragment {
         TimeUtils.Time time = TimeUtils.splitMinutes(parameters.getMinutes());
 
         numberPickerDays.setMinValue(0);
-        numberPickerDays.setMaxValue(Math.max(7, time.getDays()));
+        numberPickerDays.setMaxValue(Math.max(30, time.getDays()));
         numberPickerDays.setValue(time.getDays());
 
         numberPickerHours.setMinValue(0);
