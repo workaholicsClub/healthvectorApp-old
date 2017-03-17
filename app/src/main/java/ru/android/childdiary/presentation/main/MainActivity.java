@@ -320,7 +320,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.material_drawer_account_header_text_switcher_wrapper && accountHeader != null) {
+        if (v == switcherImage && accountHeader != null) {
             dismissPopupWindow();
             animateSwitcherIn();
             List<IProfile> profiles = new ArrayList<>(accountHeader.getProfiles());
@@ -419,11 +419,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
         setupToolbar(getToolbar());
 
-        View switcherWrapper = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher_wrapper);
-        switcherWrapper.setOnClickListener(this);
-
         switcherImage = ButterKnife.findById(accountHeader.getView(), R.id.material_drawer_account_header_text_switcher);
         switcherImage.setImageResource(R.drawable.arrow_down_white);
+        switcherImage.setOnClickListener(this);
     }
 
     private void animateSwitcherIn() {

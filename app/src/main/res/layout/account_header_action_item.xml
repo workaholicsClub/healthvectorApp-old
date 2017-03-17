@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
@@ -35,6 +34,5 @@
         android:layout_height="@dimen/account_header_action_item_height"
         android:background="@drawable/background_clickable"
         android:scaleType="center"
-        android:src="@drawable/arrow_up_black"
-        tools:ignore="ContentDescription" />
+        android:src="@drawable/arrow_up_black" />
 </LinearLayout>
