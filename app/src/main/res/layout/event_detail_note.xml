@@ -19,7 +19,7 @@
             android:id="@+id/editTextNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/text_view_background"
+            android:background="@drawable/edit_text_background"
             android:hint="@string/note"
             android:inputType="textCapSentences|textMultiLine"
             android:maxLength="2000"

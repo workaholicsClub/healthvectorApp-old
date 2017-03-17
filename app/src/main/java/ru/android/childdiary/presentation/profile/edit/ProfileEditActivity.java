@@ -441,7 +441,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     private void viewValidated(View view, boolean valid) {
-        viewValidated(view, valid, R.drawable.spinner_background, R.drawable.spinner_background_error);
+        viewValidated(view, valid, R.drawable.edit_text_background, R.drawable.edit_text_background_error);
     }
 
     private void viewValidated(View view, boolean valid,
