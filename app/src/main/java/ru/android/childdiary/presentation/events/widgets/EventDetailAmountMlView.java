@@ -24,7 +24,6 @@ public class EventDetailAmountMlView extends EventDetailEditTextView {
     CustomEditText editText;
 
     @Getter
-    @Setter
     private Double amountMl;
 
     public EventDetailAmountMlView(Context context) {

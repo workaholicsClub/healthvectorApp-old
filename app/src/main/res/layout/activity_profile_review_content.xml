@@ -18,10 +18,8 @@
             android:layout_width="@dimen/profile_image_size"
             android:layout_height="@dimen/profile_image_size"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="@dimen/profile_margin_vertical"
             android:layout_marginLeft="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
-            android:layout_marginTop="@dimen/profile_margin_vertical"
             android:elevation="8dp"
             android:src="@color/white"
             app:biv_selectorOnPress="@android:color/transparent" />

@@ -27,7 +27,6 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
     private CustomEditText editTextAmountMlRight;
 
     @Getter
-    @Setter
     private Double amountMlLeft, amountMlRight;
 
     public EventDetailAmountMlPumpView(Context context) {
