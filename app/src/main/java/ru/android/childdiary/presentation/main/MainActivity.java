@@ -57,6 +57,7 @@ import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
+import ru.android.childdiary.presentation.main.drawer.CloseMenuButtonClickListener;
 import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomPrimaryDrawerItem;
@@ -74,6 +75,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
         PopupMenu.OnMenuItemClickListener,
+        CloseMenuButtonClickListener,
         View.OnClickListener,
         FabController {
     private static final int REQUEST_ADD_EVENT = 1;
@@ -321,7 +323,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             animateSwitcherIn();
             List<IProfile> profiles = new ArrayList<>(accountHeader.getProfiles());
             profiles.remove(accountHeader.getActiveProfile());
-            ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles);
+            ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles, this);
             View anchor = v;
             int width = profiles.size() == 1
                     ? getResources().getDimensionPixelSize(R.dimen.account_header_action_item_width_wide)
@@ -356,6 +358,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 presenter.deleteChild();
             }
         }
+    }
+
+    @Override
+    public void closeMenu() {
+        dismissPopupWindow();
     }
 
     @Override
