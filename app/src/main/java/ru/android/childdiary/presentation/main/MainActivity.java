@@ -221,11 +221,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     public void showChild(@NonNull Child child) {
         logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
-        setupToolbarLogo(ResourcesUtils.getChildIcon(this, child));
         if (child == Child.NULL) {
             hideFabBar();
+            hideToolbarLogo();
             setupToolbarTitle(R.string.app_name);
         } else {
+            setupToolbarLogo(ResourcesUtils.getChildIcon(this, child));
             setupToolbarTitle(child.getName());
             if (accountHeader != null) {
                 accountHeader.setActiveProfile(mapToProfileId(child));

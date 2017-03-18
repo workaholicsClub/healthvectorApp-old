@@ -119,6 +119,11 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         toolbarLogo.setImageDrawable(drawable);
     }
 
+    protected final void hideToolbarLogo() {
+        toolbarLogo.setImageDrawable(null);
+        toolbarLogo.setVisibility(View.GONE);
+    }
+
     protected final void setupToolbarLogo(@DrawableRes int drawableRes) {
         toolbarLogo.setVisibility(View.VISIBLE);
         toolbarLogo.setImageDrawable(ContextCompat.getDrawable(this, drawableRes));
