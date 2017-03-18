@@ -4,12 +4,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import io.requery.BlockingEntityStore;
+import ru.android.childdiary.data.entities.calendar.FoodMeasureData;
+import ru.android.childdiary.data.entities.calendar.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
-import ru.android.childdiary.data.entities.calendar.events.standard.FoodMeasureData;
-import ru.android.childdiary.data.entities.calendar.events.standard.FoodMeasureEntity;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;

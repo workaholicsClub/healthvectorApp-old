@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.entities.calendar.events.standard;
+package ru.android.childdiary.data.entities.calendar;
 
 import io.requery.Entity;
 import io.requery.Generated;

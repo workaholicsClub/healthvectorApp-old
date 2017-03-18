@@ -3,8 +3,8 @@ package ru.android.childdiary.data.repositories.calendar;
 import android.support.annotation.NonNull;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.entities.calendar.events.standard.FoodMeasureData;
-import ru.android.childdiary.data.entities.calendar.events.standard.FoodMeasureEntity;
+import ru.android.childdiary.data.entities.calendar.FoodMeasureData;
+import ru.android.childdiary.data.entities.calendar.FoodMeasureEntity;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 
 class FoodMeasureMapper {
