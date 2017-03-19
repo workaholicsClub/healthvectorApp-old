@@ -76,9 +76,6 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setDateTime(DateTime.now(), startDateView, startTimeView);
-        setDateTime(DateTime.now(), finishDateView, finishTimeView);
-
         startTitleView.setTitle(R.string.other_event_start);
         finishTitleView.setTitle(R.string.other_event_finish);
 
@@ -94,6 +91,11 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
+
+        if (savedInstanceState == null) {
+            setDateTime(DateTime.now(), startDateView, startTimeView);
+            setDateTime(DateTime.now(), finishDateView, finishTimeView);
+        }
     }
 
     @Override

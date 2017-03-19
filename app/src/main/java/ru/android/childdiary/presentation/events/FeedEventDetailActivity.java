@@ -53,29 +53,29 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @InjectPresenter
     FeedEventDetailPresenter presenter;
 
-    @BindView(R.id.feedTypeView)
-    EventDetailFeedTypeView feedTypeView;
-
     @BindView(R.id.dateView)
     EventDetailDateView dateView;
 
     @BindView(R.id.timeView)
     EventDetailTimeView timeView;
 
+    @BindView(R.id.feedTypeView)
+    EventDetailFeedTypeView feedTypeView;
+
+    @BindView(R.id.foodMeasureView)
+    EventDetailFoodMeasureView foodMeasureView;
+
     @BindView(R.id.amountMlView)
     EventDetailAmountMlView amountMlView;
+
+    @BindView(R.id.amountView)
+    EventDetailAmountView amountView;
 
     @BindView(R.id.breastView)
     EventDetailBreastView breastView;
 
     @BindView(R.id.durationView)
     EventDetailDurationView durationView;
-
-    @BindView(R.id.amountView)
-    EventDetailAmountView amountView;
-
-    @BindView(R.id.foodMeasureView)
-    EventDetailFoodMeasureView foodMeasureView;
 
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
@@ -94,17 +94,13 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupEditTextView(amountView);
-        setupEditTextView(amountMlView);
-
-        setDateTime(DateTime.now(), dateView, timeView);
-        feedTypeView.setEventDetailSpinnerListener(this);
-        feedTypeView.setValue(FeedType.BREAST_MILK);
-        breastView.setSelected(Breast.LEFT);
-        foodMeasureView.setEventDetailSpinnerListener(this);
 
         dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
         timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
+        feedTypeView.setEventDetailSpinnerListener(this);
+        foodMeasureView.setEventDetailSpinnerListener(this);
+        setupEditTextView(amountMlView);
+        setupEditTextView(amountView);
         durationView.setEventDetailDurationListener(new EventDetailDurationView.EventDetailDurationListener() {
             @Override
             public void requestLeftValueChange(EventDetailDurationView view) {
@@ -138,6 +134,13 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
+
+        if (savedInstanceState == null) {
+            setDateTime(DateTime.now(), dateView, timeView);
+            feedTypeView.setValue(FeedType.BREAST_MILK);
+            setupFeedType();
+            breastView.setSelected(Breast.LEFT);
+        }
     }
 
     @Override
@@ -180,12 +183,13 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
         feedTypeView.setValue(event.getFeedType());
-        breastView.setSelected(event.getBreast());
+        setupFeedType();
+        foodMeasureView.setValue(event.getFoodMeasure());
         amountMlView.setAmountMl(event.getAmountMl());
+        amountView.setAmount(event.getAmount());
+        breastView.setSelected(event.getBreast());
         durationView.setLeftDuration(event.getLeftDurationInMinutes());
         durationView.setRightDuration(event.getRightDurationInMinutes());
-        amountView.setAmount(event.getAmount());
-        foodMeasureView.setValue(event.getFoodMeasure());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
     }
@@ -193,6 +197,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     public void showDefaultNotifyTime(int minutes) {
         notifyTimeView.setValue(minutes);
+    }
+
+    @Override
+    public void showFoodMeasureList(@NonNull List<FoodMeasure> foodMeasureList) {
+        foodMeasureView.updateAdapter(foodMeasureList);
     }
 
     @Override
@@ -211,75 +220,23 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
         builder.feedType(feedTypeView.getValue());
 
-        builder.breast(breastView.getSelected());
+        builder.foodMeasure(foodMeasureView.getValue());
 
         builder.amountMl(amountMlView.getAmountMl());
+
+        builder.amount(amountView.getAmount());
+
+        builder.breast(breastView.getSelected());
 
         builder.leftDurationInMinutes(durationView.getDurationLeft());
 
         builder.rightDurationInMinutes(durationView.getDurationRight());
-
-        builder.amount(amountView.getAmount());
-
-        builder.foodMeasure(foodMeasureView.getValue());
 
         builder.notifyTimeInMinutes(notifyTimeView.getValue());
 
         builder.note(editTextNote.getText().toString());
 
         return builder.build();
-    }
-
-    @Override
-    public void onValueChanged(EventDetailSpinnerView view) {
-        if (view == feedTypeView) {
-            FeedType feedType = feedTypeView.getValue();
-            switch (feedType) {
-                case BREAST_MILK:
-                    breastView.setVisibility(View.VISIBLE);
-                    amountMlView.setVisibility(View.GONE);
-                    durationView.setVisibility(View.VISIBLE);
-                    amountView.setVisibility(View.GONE);
-                    foodMeasureView.setVisibility(View.GONE);
-                    break;
-                case PUMPED_MILK:
-                    breastView.setVisibility(View.GONE);
-                    amountMlView.setVisibility(View.VISIBLE);
-                    durationView.setVisibility(View.GONE);
-                    amountView.setVisibility(View.GONE);
-                    foodMeasureView.setVisibility(View.GONE);
-                    break;
-                case MILK_FORMULA:
-                    breastView.setVisibility(View.GONE);
-                    amountMlView.setVisibility(View.VISIBLE);
-                    durationView.setVisibility(View.GONE);
-                    amountView.setVisibility(View.GONE);
-                    foodMeasureView.setVisibility(View.GONE);
-                    break;
-                case FOOD:
-                    breastView.setVisibility(View.GONE);
-                    amountMlView.setVisibility(View.GONE);
-                    durationView.setVisibility(View.GONE);
-                    amountView.setVisibility(View.VISIBLE);
-                    foodMeasureView.setVisibility(View.VISIBLE);
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onSpinnerItemClick(EventDetailSpinnerView view, Object item) {
-        if (view == feedTypeView) {
-            FeedType feedType = (FeedType) item;
-            feedTypeView.setValue(feedType);
-        } else if (view == foodMeasureView) {
-            FoodMeasure foodMeasure = (FoodMeasure) item;
-            if (foodMeasure == FoodMeasure.NULL) {
-                presenter.requestFoodMeasureDialog(TAG_FOOD_MEASURE_DIALOG);
-            } else {
-                foodMeasureView.setValue(foodMeasure);
-            }
-        }
     }
 
     @Override
@@ -293,17 +250,6 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
-    public void showFoodMeasureList(@NonNull List<FoodMeasure> foodMeasureList) {
-        foodMeasureView.updateAdapter(foodMeasureList);
-    }
-
-    @Override
-    public void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
-        presenter.addFoodMeasure(foodMeasure);
-        foodMeasureView.setValue(foodMeasure);
-    }
-
-    @Override
     public void onSetTime(String tag, int minutes) {
         switch (tag) {
             case TAG_LEFT_DURATION_DIALOG:
@@ -314,6 +260,62 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 break;
             case TAG_NOTIFY_TIME_DIALOG:
                 notifyTimeView.setValue(minutes);
+                break;
+        }
+    }
+
+    @Override
+    public void onSpinnerItemClick(EventDetailSpinnerView view, Object item) {
+        if (view == feedTypeView) {
+            FeedType feedType = (FeedType) item;
+            feedTypeView.setValue(feedType);
+            setupFeedType();
+        } else if (view == foodMeasureView) {
+            FoodMeasure foodMeasure = (FoodMeasure) item;
+            if (foodMeasure == FoodMeasure.NULL) {
+                presenter.requestFoodMeasureDialog(TAG_FOOD_MEASURE_DIALOG);
+            } else {
+                foodMeasureView.setValue(foodMeasure);
+            }
+        }
+    }
+
+    @Override
+    public void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
+        presenter.addFoodMeasure(foodMeasure);
+        foodMeasureView.setValue(foodMeasure);
+    }
+
+    public void setupFeedType() {
+        FeedType feedType = feedTypeView.getValue();
+        switch (feedType) {
+            case BREAST_MILK:
+                breastView.setVisibility(View.VISIBLE);
+                amountMlView.setVisibility(View.GONE);
+                durationView.setVisibility(View.VISIBLE);
+                amountView.setVisibility(View.GONE);
+                foodMeasureView.setVisibility(View.GONE);
+                break;
+            case PUMPED_MILK:
+                breastView.setVisibility(View.GONE);
+                amountMlView.setVisibility(View.VISIBLE);
+                durationView.setVisibility(View.GONE);
+                amountView.setVisibility(View.GONE);
+                foodMeasureView.setVisibility(View.GONE);
+                break;
+            case MILK_FORMULA:
+                breastView.setVisibility(View.GONE);
+                amountMlView.setVisibility(View.VISIBLE);
+                durationView.setVisibility(View.GONE);
+                amountView.setVisibility(View.GONE);
+                foodMeasureView.setVisibility(View.GONE);
+                break;
+            case FOOD:
+                breastView.setVisibility(View.GONE);
+                amountMlView.setVisibility(View.GONE);
+                durationView.setVisibility(View.GONE);
+                amountView.setVisibility(View.VISIBLE);
+                foodMeasureView.setVisibility(View.VISIBLE);
                 break;
         }
     }

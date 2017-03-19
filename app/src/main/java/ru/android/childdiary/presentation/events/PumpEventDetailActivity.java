@@ -69,13 +69,10 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupEditTextView(amountMlPumpView);
-
-        setDateTime(DateTime.now(), dateView, timeView);
-        breastView.setSelected(Breast.LEFT);
 
         dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
         timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
+        setupEditTextView(amountMlPumpView);
         notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
                 TimeDialog.Parameters.builder()
                         .minutes(notifyTimeView.getValueInt())
@@ -84,6 +81,11 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
+
+        if (savedInstanceState == null) {
+            setDateTime(DateTime.now(), dateView, timeView);
+            breastView.setSelected(Breast.LEFT);
+        }
     }
 
     @Override

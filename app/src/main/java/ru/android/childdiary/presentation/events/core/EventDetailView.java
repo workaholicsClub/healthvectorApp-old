@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.events.core;
 
 import android.support.annotation.NonNull;
 
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
@@ -14,13 +13,13 @@ import ru.android.childdiary.presentation.core.BaseView;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 
 public interface EventDetailView<T extends MasterEvent> extends BaseView {
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showChild(@NonNull Child child);
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showDate(@NonNull LocalDate date);
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showEventDetail(@NonNull T event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

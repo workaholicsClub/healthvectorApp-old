@@ -81,6 +81,25 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        //noinspection unchecked
+        T event = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_EVENT);
+        showEventDetail(event);
+        dummy.requestFocus();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (masterEvent == null) {
+            outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent(null));
+        } else {
+            outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent(event));
+        }
+    }
+
+    @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View contentView = inflater.inflate(getContentLayoutResourceId(), null);

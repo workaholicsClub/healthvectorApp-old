@@ -66,9 +66,6 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         if (this.value != value) {
             this.value = value;
             textView.setText(getTextForValue(value));
-            if (eventDetailSpinnerListener != null) {
-                eventDetailSpinnerListener.onValueChanged(this);
-            }
         }
     }
 
@@ -122,8 +119,6 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
     protected abstract ListAdapter getAdapter();
 
     public interface EventDetailSpinnerListener<T> {
-        void onValueChanged(EventDetailSpinnerView view);
-
         void onSpinnerItemClick(EventDetailSpinnerView view, T item);
     }
 }
