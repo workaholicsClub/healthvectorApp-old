@@ -1,10 +1,10 @@
-package ru.android.childdiary.presentation.main.calendar.fragments;
+package ru.android.childdiary.presentation.calendar.fragments;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.presentation.main.calendar.adapters.calendar.MonthViewAdapter;
+import ru.android.childdiary.presentation.calendar.adapters.calendar.MonthViewAdapter;
 import ru.android.childdiary.utils.DateUtils;
 
 public class MonthFragment extends CalendarFragment<MonthViewAdapter> {

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main.calendar.fragments;
+package ru.android.childdiary.presentation.calendar.fragments;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -6,7 +6,7 @@ import android.support.annotation.LayoutRes;
 import org.joda.time.LocalDate;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.presentation.main.calendar.adapters.calendar.WeekViewAdapter;
+import ru.android.childdiary.presentation.calendar.adapters.calendar.WeekViewAdapter;
 import ru.android.childdiary.utils.DateUtils;
 
 public class WeekFragment extends CalendarFragment<WeekViewAdapter> {

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main.calendar.adapters.events;
+package ru.android.childdiary.presentation.calendar.adapters.events;
 
 public interface FabController {
     void showFab();

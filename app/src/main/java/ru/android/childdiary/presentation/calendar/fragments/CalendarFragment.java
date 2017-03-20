@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main.calendar.fragments;
+package ru.android.childdiary.presentation.calendar.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -37,12 +37,12 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
-import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
-import ru.android.childdiary.presentation.main.calendar.CalendarView;
-import ru.android.childdiary.presentation.main.calendar.adapters.calendar.CalendarViewAdapter;
-import ru.android.childdiary.presentation.main.calendar.adapters.events.EventActionListener;
-import ru.android.childdiary.presentation.main.calendar.adapters.events.EventAdapter;
-import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
+import ru.android.childdiary.presentation.calendar.CalendarPresenter;
+import ru.android.childdiary.presentation.calendar.CalendarView;
+import ru.android.childdiary.presentation.calendar.adapters.calendar.CalendarViewAdapter;
+import ru.android.childdiary.presentation.calendar.adapters.events.EventActionListener;
+import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
+import ru.android.childdiary.presentation.calendar.adapters.events.FabController;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
 

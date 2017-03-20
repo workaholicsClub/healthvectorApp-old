@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main.calendar.adapters.events;
+package ru.android.childdiary.presentation.calendar.adapters.events;
 
 import android.support.v7.util.DiffUtil;
 

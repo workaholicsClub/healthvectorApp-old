@@ -17,7 +17,7 @@ import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailPresenter;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.main.MainPresenter;
-import ru.android.childdiary.presentation.main.calendar.CalendarPresenter;
+import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditPresenter;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;

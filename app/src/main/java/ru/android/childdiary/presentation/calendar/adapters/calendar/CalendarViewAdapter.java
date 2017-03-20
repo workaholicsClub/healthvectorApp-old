@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main.calendar.adapters.calendar;
+package ru.android.childdiary.presentation.calendar.adapters.calendar;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;

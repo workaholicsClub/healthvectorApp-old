@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.main.calendar;
+package ru.android.childdiary.presentation.calendar;
 
 import android.support.annotation.NonNull;
 
