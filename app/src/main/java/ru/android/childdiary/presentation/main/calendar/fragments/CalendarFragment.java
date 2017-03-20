@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,15 +43,11 @@ import ru.android.childdiary.presentation.main.calendar.adapters.calendar.Calend
 import ru.android.childdiary.presentation.main.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.main.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
-import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
-import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> extends BaseMvpFragment<CalendarPresenter> implements CalendarView,
-        AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, FabController {
-    private static final int REQUEST_ADD_EVENT = 1;
-
+        AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener {
     @InjectPresenter
     CalendarPresenter presenter;
 
@@ -70,12 +65,10 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @BindView(R.id.recyclerViewEvents)
     RecyclerView recyclerViewEvents;
 
-    @BindView(R.id.fabToolbar)
-    FabToolbar fabToolbar;
-
     private Adapter calendarAdapter;
     @Getter
     private EventAdapter eventAdapter;
+    private FabController fabController;
     private Sex sex;
 
     @Override
@@ -107,20 +100,24 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewEvents.setLayoutManager(layoutManager);
-        eventAdapter = new EventAdapter(getContext(), this, this);
+        eventAdapter = new EventAdapter(getContext(), this, fabController);
         recyclerViewEvents.setAdapter(eventAdapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewEvents, false);
+    }
 
-        fabToolbar.setOnKeyListener((v, keyCode, event) -> {
-            if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                boolean processed = fabToolbar.hideBar();
-                if (processed) {
-                    return true;
-                }
-            }
-            return false;
-        });
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FabController) {
+            fabController = (FabController) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fabController = null;
     }
 
     @LayoutRes
@@ -158,31 +155,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         calendarAdapter.moveRight();
     }
 
-    @OnClick(R.id.addDiaperEvent)
-    void onAddDiaperEventClick() {
-        presenter.addDiaperEvent();
-    }
-
-    @OnClick(R.id.addSleepEvent)
-    void onAddSleepEventClick() {
-        presenter.addSleepEvent();
-    }
-
-    @OnClick(R.id.addFeedEvent)
-    void onAddFeedEventClick() {
-        presenter.addFeedEvent();
-    }
-
-    @OnClick(R.id.addPumpEvent)
-    void onAddPumpEventClick() {
-        presenter.addPumpEventClick();
-    }
-
-    @OnClick(R.id.addOtherEvent)
-    void onAddOtherEventClick() {
-        presenter.addOtherEventClick();
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (calendarAdapter.getItem(position) instanceof LocalDate) {
@@ -202,13 +174,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         sex = child.getSex();
         calendarAdapter.setSex(sex);
         eventAdapter.setSex(sex);
-        fabToolbar.setColor(ThemeUtils.getColorAccent(getContext(), sex));
-        eventAdapter.getSwipeManager().setFabController(child == Child.NULL ? null : this);
-        if (child == Child.NULL) {
-            hideFabBar();
-        } else {
-            eventAdapter.getSwipeManager().update();
-        }
+        eventAdapter.getSwipeManager().setFabController(child == Child.NULL ? null : fabController);
     }
 
     @Override
@@ -223,45 +189,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         logger.debug("showEvents: " + StringUtils.eventsList(events));
         updateEventsTitle(date);
         eventAdapter.setEvents(events);
-    }
-
-    @Override
-    public void navigateToDiaperEventAdd() {
-        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    public void navigateToFeedEventAdd() {
-        Intent intent = FeedEventDetailActivity.getIntent(getContext(), null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    public void navigateToOtherEventAdd() {
-        Intent intent = OtherEventDetailActivity.getIntent(getContext(), null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    public void navigateToPumpEventAdd() {
-        Intent intent = PumpEventDetailActivity.getIntent(getContext(), null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    public void navigateToSleepEventAdd() {
-        Intent intent = SleepEventDetailActivity.getIntent(getContext(), null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ADD_EVENT) {
-            fabToolbar.hideBarWithoutAnimation();
-        }
     }
 
     @Override
@@ -311,15 +238,5 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @Override
     public void done(MasterEvent event) {
         presenter.done(event);
-    }
-
-    @Override
-    public void showFab() {
-        fabToolbar.showFab();
-    }
-
-    @Override
-    public void hideFabBar() {
-        fabToolbar.hideFabBar();
     }
 }

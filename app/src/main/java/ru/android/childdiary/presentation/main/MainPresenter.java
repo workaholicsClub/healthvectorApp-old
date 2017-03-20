@@ -12,6 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -94,5 +95,29 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(deletedChild -> logger.debug("child deleted: " + deletedChild), this::onUnexpectedError));
+    }
+
+    public void addDiaperEvent() {
+        getViewState().navigateToDiaperEventAdd();
+    }
+
+    public void addSleepEvent() {
+        getViewState().navigateToSleepEventAdd();
+    }
+
+    public void addFeedEvent() {
+        getViewState().navigateToFeedEventAdd();
+    }
+
+    public void addPumpEventClick() {
+        getViewState().navigateToPumpEventAdd();
+    }
+
+    public void addOtherEventClick() {
+        getViewState().navigateToOtherEventAdd();
+    }
+
+    private void onEventAdded(@NonNull MasterEvent event) {
+        logger.debug("onEventAdded: " + event);
     }
 }
