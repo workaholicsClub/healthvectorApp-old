@@ -532,8 +532,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 popupMenu.setOnMenuItemClickListener(this);
                 popupMenu.show();
                 break;
-            case R.id.menu_overflow:
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
