@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/imageViewDropdown"
-        android:layout_width="@dimen/event_detail_icon_size"
-        android:layout_height="@dimen/event_detail_icon_size"
+        android:layout_width="@dimen/event_detail_height"
+        android:layout_height="@dimen/event_detail_height"
         android:scaleType="center"
         android:src="@drawable/arrow_up_black" />
 </LinearLayout>
