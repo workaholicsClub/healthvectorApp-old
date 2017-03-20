@@ -29,19 +29,4 @@ public interface MainView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showDeleteChildConfirmation(@NonNull Child child);
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToDiaperEventAdd();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToFeedEventAdd();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToOtherEventAdd();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToPumpEventAdd();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToSleepEventAdd();
 }

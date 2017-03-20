@@ -40,20 +40,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
-import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
-import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
-import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
-import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
-import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
-import ru.android.childdiary.presentation.main.calendar.adapters.events.EventAdapter;
-import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
-import ru.android.childdiary.presentation.main.calendar.fragments.CalendarFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
 import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
@@ -62,7 +53,6 @@ import ru.android.childdiary.presentation.main.drawer.CloseMenuButtonClickListen
 import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomPrimaryDrawerItem;
-import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.utils.StringUtils;
@@ -77,10 +67,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         PopupWindow.OnDismissListener,
         PopupMenu.OnMenuItemClickListener,
         CloseMenuButtonClickListener,
-        View.OnClickListener,
-        FabController {
-    private static final int REQUEST_ADD_EVENT = 1;
-
+        View.OnClickListener {
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
@@ -115,9 +102,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @BindView(R.id.viewPager)
     ViewPager viewPager;
-
-    @BindView(R.id.fabToolbar)
-    FabToolbar fabToolbar;
 
     private ViewPagerAdapter viewPagerAdapter;
     private AccountHeader accountHeader;
@@ -171,7 +155,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void themeChanged() {
         super.themeChanged();
         tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
-        fabToolbar.setColor(ThemeUtils.getColorAccent(this, sex));
         if (accountHeader != null) {
             accountHeader.setBackground(ThemeUtils.getColorPrimaryDrawable(this, sex));
         }
@@ -222,7 +205,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
         if (child == Child.NULL) {
-            hideFabBar();
             hideToolbarLogo();
             setupToolbarTitle(R.string.app_name);
         } else {
@@ -261,44 +243,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                         (DialogInterface dialog, int which) -> presenter.deleteChild(child))
                 .setNegativeButton(R.string.Cancel, null)
                 .show();
-    }
-
-    @Override
-    public void navigateToDiaperEventAdd() {
-        Intent intent = DiaperEventDetailActivity.getIntent(this, null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    public void navigateToFeedEventAdd() {
-        Intent intent = FeedEventDetailActivity.getIntent(this, null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    public void navigateToOtherEventAdd() {
-        Intent intent = OtherEventDetailActivity.getIntent(this, null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    public void navigateToPumpEventAdd() {
-        Intent intent = PumpEventDetailActivity.getIntent(this, null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    public void navigateToSleepEventAdd() {
-        Intent intent = SleepEventDetailActivity.getIntent(this, null);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ADD_EVENT) {
-            fabToolbar.hideBarWithoutAnimation();
-        }
     }
 
     @Override
@@ -392,26 +336,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         viewPager.setCurrentItem(2, false);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                CalendarFragment fragment = (CalendarFragment) viewPagerAdapter.getItem(position);
-                EventAdapter eventAdapter = fragment.getEventAdapter();
-                if (eventAdapter != null) {
-                    eventAdapter.getSwipeManager().update();
-                } else {
-                    logger.error("selected page: " + position + "; event adapter is null");
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
     }
 
     private void buildUi() {
@@ -456,31 +380,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         drawer = drawerBuilder.build();
     }
 
-    @OnClick(R.id.addDiaperEvent)
-    void onAddDiaperEventClick() {
-        presenter.addDiaperEvent();
-    }
-
-    @OnClick(R.id.addSleepEvent)
-    void onAddSleepEventClick() {
-        presenter.addSleepEvent();
-    }
-
-    @OnClick(R.id.addFeedEvent)
-    void onAddFeedEventClick() {
-        presenter.addFeedEvent();
-    }
-
-    @OnClick(R.id.addPumpEvent)
-    void onAddPumpEventClick() {
-        presenter.addPumpEventClick();
-    }
-
-    @OnClick(R.id.addOtherEvent)
-    void onAddOtherEventClick() {
-        presenter.addOtherEventClick();
-    }
-
     private void closeDrawerWithoutAnimation() {
         if (drawerBuilder != null && drawer != null && drawer.isDrawerOpen()) {
             ((CustomDrawerBuilder) drawerBuilder).closeDrawerWithoutAnimation();
@@ -503,11 +402,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         }
 
         processed = closeDrawer();
-        if (processed) {
-            return;
-        }
-
-        processed = fabToolbar.hideBar();
         if (processed) {
             return;
         }
@@ -558,15 +452,5 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 return true;
         }
         return false;
-    }
-
-    @Override
-    public void showFab() {
-        fabToolbar.showFab();
-    }
-
-    @Override
-    public void hideFabBar() {
-        fabToolbar.hideFabBar();
     }
 }

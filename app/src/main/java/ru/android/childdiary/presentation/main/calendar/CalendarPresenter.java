@@ -123,4 +123,28 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(doneEvent -> logger.debug("event done: " + doneEvent), this::onUnexpectedError));
     }
+
+    public void addDiaperEvent() {
+        getViewState().navigateToDiaperEventAdd();
+    }
+
+    public void addSleepEvent() {
+        getViewState().navigateToSleepEventAdd();
+    }
+
+    public void addFeedEvent() {
+        getViewState().navigateToFeedEventAdd();
+    }
+
+    public void addPumpEventClick() {
+        getViewState().navigateToPumpEventAdd();
+    }
+
+    public void addOtherEventClick() {
+        getViewState().navigateToOtherEventAdd();
+    }
+
+    private void onEventAdded(@NonNull MasterEvent event) {
+        logger.debug("onEventAdded: " + event);
+    }
 }
