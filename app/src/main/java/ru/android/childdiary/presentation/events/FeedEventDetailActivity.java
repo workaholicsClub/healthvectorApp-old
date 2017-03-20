@@ -109,7 +109,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                                 .showDays(false)
                                 .showHours(false)
                                 .showMinutes(true)
-                                .title(getString(R.string.duration_left))
+                                .title(getString(R.string.breast_left))
                                 .build());
             }
 
@@ -121,7 +121,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                                 .showDays(false)
                                 .showHours(false)
                                 .showMinutes(true)
-                                .title(getString(R.string.duration_right))
+                                .title(getString(R.string.breast_right))
                                 .build());
             }
         });

@@ -89,12 +89,8 @@
     <string name="awoke">Проснулся</string>
     <string name="feed_type">Тип кормления</string>
     <string name="duration">Продолжительность</string>
-    <string name="duration_left">Прод-ть левой</string>
-    <string name="duration_right">Прод-ть правой</string>
     <string name="breast">Грудь</string>
     <string name="amount">Количество</string>
-    <string name="amount_left">Кол-во из левой</string>
-    <string name="amount_right">Кол-во из правой</string>
     <string name="food_measure">Ед. измерения</string>
     <string name="other_event_start">Начало</string>
     <string name="other_event_finish">Конец</string>

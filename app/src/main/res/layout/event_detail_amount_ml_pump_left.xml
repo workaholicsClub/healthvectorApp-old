@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/amount_left"
+        android:text="@string/breast_left"
         android:textAppearance="@style/SecondaryTextAppearance" />
 
     <include layout="@layout/event_detail_text_view_editable" />
