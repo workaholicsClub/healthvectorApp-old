@@ -33,20 +33,14 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribe(getViewState()::showChild, this::onUnexpectedError));
     }
 
-    public void requestDate() {
-        unsubscribeOnDestroy(calendarInteractor.getSelectedDateOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(date -> logger.debug("showDate: " + date))
-                .subscribe(getViewState()::showDate, this::onUnexpectedError));
-    }
-
+    @SuppressWarnings("unchecked")
     @CallSuper
-    public void requestDefaultValues(@NonNull EventType eventType) {
-        unsubscribeOnDestroy(calendarInteractor.getDefaultNotifyTimeInMinutes(eventType)
+    public void requestDefaultEventDetail(@NonNull EventType eventType) {
+        unsubscribeOnDestroy(calendarInteractor.getDefaultEventDetail(eventType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::showDefaultNotifyTime));
+                .doOnNext(event -> logger.debug("default event details: " + event))
+                .subscribe(event -> getViewState().showDefaultEventDetail((T) event)));
     }
 
     @SuppressWarnings("unchecked")

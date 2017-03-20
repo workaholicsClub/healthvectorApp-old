@@ -19,7 +19,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -134,13 +133,6 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
-
-        if (savedInstanceState == null) {
-            setDateTime(DateTime.now(), dateView, timeView);
-            feedTypeView.setValue(FeedType.BREAST_MILK);
-            setupFeedType();
-            breastView.setSelected(Breast.LEFT);
-        }
     }
 
     @Override
@@ -174,11 +166,6 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
-    public void showDate(@NonNull LocalDate date) {
-        setDateTime(date.toDateTime(LocalTime.now()), dateView, timeView);
-    }
-
-    @Override
     public void showEventDetail(@NonNull FeedEvent event) {
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
@@ -195,18 +182,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
-    public void showDefaultNotifyTime(int minutes) {
-        notifyTimeView.setValue(minutes);
-    }
-
-    @Override
     public void showFoodMeasureList(@NonNull List<FoodMeasure> foodMeasureList) {
         foodMeasureView.updateAdapter(foodMeasureList);
-    }
-
-    @Override
-    public void showDefaultFoodMeasure(@NonNull FoodMeasure foodMeasure) {
-        foodMeasureView.setValue(foodMeasure);
     }
 
     @Override
@@ -283,6 +260,10 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     public void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
         presenter.addFoodMeasure(foodMeasure);
+    }
+
+    @Override
+    public void foodMeasureAdded(@NonNull FoodMeasure foodMeasure) {
         foodMeasureView.setValue(foodMeasure);
     }
 

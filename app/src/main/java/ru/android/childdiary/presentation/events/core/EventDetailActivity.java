@@ -72,8 +72,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             if (masterEvent == null) {
-                getPresenter().requestDate();
-                getPresenter().requestDefaultValues(getEventType());
+                getPresenter().requestDefaultEventDetail(getEventType());
             } else {
                 getPresenter().requestEventDetails(masterEvent);
             }
@@ -145,6 +144,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     public void showChild(@NonNull Child child) {
         logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
+    }
+
+    @Override
+    public void showDefaultEventDetail(@NonNull T event) {
+        showEventDetail(event);
+        this.event = null;
     }
 
     @Override

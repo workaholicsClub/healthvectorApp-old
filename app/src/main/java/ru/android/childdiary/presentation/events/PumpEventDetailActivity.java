@@ -16,7 +16,6 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
@@ -81,11 +80,6 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
-
-        if (savedInstanceState == null) {
-            setDateTime(DateTime.now(), dateView, timeView);
-            breastView.setSelected(Breast.LEFT);
-        }
     }
 
     @Override
@@ -119,11 +113,6 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     }
 
     @Override
-    public void showDate(@NonNull LocalDate date) {
-        setDateTime(date.toDateTime(LocalTime.now()), dateView, timeView);
-    }
-
-    @Override
     public void showEventDetail(@NonNull PumpEvent event) {
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
@@ -132,11 +121,6 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
         amountMlPumpView.setAmountMlRight(event.getRightAmountMl());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
-    }
-
-    @Override
-    public void showDefaultNotifyTime(int minutes) {
-        notifyTimeView.setValue(minutes);
     }
 
     @Override

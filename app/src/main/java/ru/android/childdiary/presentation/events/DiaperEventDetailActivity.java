@@ -16,7 +16,6 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
@@ -76,11 +75,6 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
-
-        if (savedInstanceState == null) {
-            setDateTime(DateTime.now(), dateView, timeView);
-            diaperStateView.setSelected(DiaperState.WET);
-        }
     }
 
     @Override
@@ -114,22 +108,12 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     }
 
     @Override
-    public void showDate(@NonNull LocalDate date) {
-        setDateTime(date.toDateTime(LocalTime.now()), dateView, timeView);
-    }
-
-    @Override
     public void showEventDetail(@NonNull DiaperEvent event) {
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), dateView, timeView);
         diaperStateView.setSelected(event.getDiaperState());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
-    }
-
-    @Override
-    public void showDefaultNotifyTime(int minutes) {
-        notifyTimeView.setValue(minutes);
     }
 
     @Override

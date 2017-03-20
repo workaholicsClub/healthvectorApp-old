@@ -91,11 +91,6 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
-
-        if (savedInstanceState == null) {
-            setDateTime(DateTime.now(), startDateView, startTimeView);
-            setDateTime(DateTime.now(), finishDateView, finishTimeView);
-        }
     }
 
     @Override
@@ -128,23 +123,12 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
-    public void showDate(@NonNull LocalDate date) {
-        setDateTime(date.toDateTime(LocalTime.now()), startDateView, startTimeView);
-        setDateTime(date.toDateTime(LocalTime.now()), finishDateView, finishTimeView);
-    }
-
-    @Override
     public void showEventDetail(@NonNull OtherEvent event) {
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
-    }
-
-    @Override
-    public void showDefaultNotifyTime(int minutes) {
-        notifyTimeView.setValue(minutes);
     }
 
     @Override

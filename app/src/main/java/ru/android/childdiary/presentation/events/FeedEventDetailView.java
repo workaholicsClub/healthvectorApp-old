@@ -17,5 +17,5 @@ public interface FeedEventDetailView extends EventDetailView<FeedEvent> {
     void showFoodMeasureList(@NonNull List<FoodMeasure> foodMeasureList);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showDefaultFoodMeasure(@NonNull FoodMeasure foodMeasure);
+    void foodMeasureAdded(@NonNull FoodMeasure foodMeasure);
 }
