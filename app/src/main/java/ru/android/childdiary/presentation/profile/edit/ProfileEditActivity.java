@@ -146,7 +146,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             editedChild = child.toBuilder().build();
         }
 
-        setupToolbarTitle(child == null ? R.string.add_child : R.string.edit_child_long);
+        setupToolbarTitle(child == null ? R.string.add_profile : R.string.profile);
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
             hideKeyboardAndClearFocus(rootView.findFocus());

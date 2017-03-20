@@ -195,11 +195,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         List<IProfile> profiles = new ArrayList<>();
         if (!childList.isEmpty()) {
             profiles.add(new ProfileSettingDrawerItem()
-                    .withName(getString(R.string.edit_child_short))
+                    .withName(getString(R.string.edit))
                     .withIdentifier(PROFILE_SETTINGS_EDIT));
         }
         profiles.add(new ProfileSettingDrawerItem()
-                .withName(getString(R.string.add_child))
+                .withName(getString(R.string.add_profile))
                 .withIdentifier(PROFILE_SETTINGS_ADD));
         if (!childList.isEmpty()) {
             profiles.add(new ProfileSettingDrawerItem()
