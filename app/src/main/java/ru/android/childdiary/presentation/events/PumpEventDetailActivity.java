@@ -130,17 +130,13 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                 : event.toBuilder();
 
         DateTime dateTime = getDateTime(dateView, timeView);
-        builder.dateTime(dateTime);
 
-        builder.breast(breastView.getSelected());
-
-        builder.leftAmountMl(amountMlPumpView.getAmountMlLeft());
-
-        builder.rightAmountMl(amountMlPumpView.getAmountMlRight());
-
-        builder.notifyTimeInMinutes(notifyTimeView.getValue());
-
-        builder.note(editTextNote.getText().toString());
+        builder.dateTime(dateTime)
+                .breast(breastView.getSelected())
+                .leftAmountMl(amountMlPumpView.getAmountMlLeft())
+                .rightAmountMl(amountMlPumpView.getAmountMlRight())
+                .notifyTimeInMinutes(notifyTimeView.getValue())
+                .note(editTextNote.getText().toString());
 
         return builder.build();
     }

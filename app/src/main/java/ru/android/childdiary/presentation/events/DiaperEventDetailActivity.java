@@ -123,13 +123,11 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
                 : event.toBuilder();
 
         DateTime dateTime = getDateTime(dateView, timeView);
-        builder.dateTime(dateTime);
 
-        builder.diaperState(diaperStateView.getSelected());
-
-        builder.notifyTimeInMinutes(notifyTimeView.getValue());
-
-        builder.note(editTextNote.getText().toString());
+        builder.dateTime(dateTime)
+                .diaperState(diaperStateView.getSelected())
+                .notifyTimeInMinutes(notifyTimeView.getValue())
+                .note(editTextNote.getText().toString());
 
         return builder.build();
     }

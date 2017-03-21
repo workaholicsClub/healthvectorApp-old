@@ -193,25 +193,17 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 : event.toBuilder();
 
         DateTime dateTime = getDateTime(dateView, timeView);
-        builder.dateTime(dateTime);
 
-        builder.feedType(feedTypeView.getValue());
-
-        builder.foodMeasure(foodMeasureView.getValue());
-
-        builder.amountMl(amountMlView.getAmountMl());
-
-        builder.amount(amountView.getAmount());
-
-        builder.breast(breastView.getSelected());
-
-        builder.leftDurationInMinutes(durationView.getDurationLeft());
-
-        builder.rightDurationInMinutes(durationView.getDurationRight());
-
-        builder.notifyTimeInMinutes(notifyTimeView.getValue());
-
-        builder.note(editTextNote.getText().toString());
+        builder.dateTime(dateTime)
+                .feedType(feedTypeView.getValue())
+                .foodMeasure(foodMeasureView.getValue())
+                .amountMl(amountMlView.getAmountMl())
+                .amount(amountView.getAmount())
+                .breast(breastView.getSelected())
+                .leftDurationInMinutes(durationView.getDurationLeft())
+                .rightDurationInMinutes(durationView.getDurationRight())
+                .notifyTimeInMinutes(notifyTimeView.getValue())
+                .note(editTextNote.getText().toString());
 
         return builder.build();
     }

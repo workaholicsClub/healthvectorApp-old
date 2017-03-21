@@ -138,14 +138,12 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
                 : event.toBuilder();
 
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
-        builder.dateTime(startDateTime);
-
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
-        builder.finishDateTime(finishDateTime);
 
-        builder.notifyTimeInMinutes(notifyTimeView.getValue());
-
-        builder.note(editTextNote.getText().toString());
+        builder.dateTime(startDateTime)
+                .finishDateTime(finishDateTime)
+                .notifyTimeInMinutes(notifyTimeView.getValue())
+                .note(editTextNote.getText().toString());
 
         return builder.build();
     }
