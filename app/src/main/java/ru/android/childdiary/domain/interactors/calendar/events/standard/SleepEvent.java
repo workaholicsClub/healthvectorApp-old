@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -14,6 +15,10 @@ public class SleepEvent extends MasterEvent {
     Long id;
 
     DateTime finishDateTime;
+
+    Child child;
+
+    Boolean isTimerStarted;
 
     @Builder(toBuilder = true)
     private SleepEvent(Long masterEventId,
@@ -25,9 +30,13 @@ public class SleepEvent extends MasterEvent {
                        Boolean isDone,
                        Boolean isDeleted,
                        Long id,
-                       DateTime finishDateTime) {
+                       DateTime finishDateTime,
+                       Child child,
+                       Boolean isTimerStarted) {
         super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
         this.id = id;
         this.finishDateTime = finishDateTime;
+        this.child = child;
+        this.isTimerStarted = isTimerStarted;
     }
 }

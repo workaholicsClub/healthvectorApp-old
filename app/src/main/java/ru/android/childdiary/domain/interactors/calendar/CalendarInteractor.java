@@ -148,6 +148,10 @@ public class CalendarInteractor implements Interactor {
                 .map(events -> EventsResponse.builder().request(request).events(events).build());
     }
 
+    public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
+        return calendarRepository.getSleepEventsWithTimer();
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends MasterEvent> Observable<T> getEventDetail(@NonNull MasterEvent event) {
         if (event.getEventType() == EventType.DIAPER) {

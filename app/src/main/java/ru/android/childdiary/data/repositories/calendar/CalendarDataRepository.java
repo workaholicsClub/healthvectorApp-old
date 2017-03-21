@@ -79,6 +79,11 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
+    public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
+        return dbService.getSleepEventsWithTimer();
+    }
+
+    @Override
     public Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event) {
         return dbService.getDiaperEventDetail(event);
     }

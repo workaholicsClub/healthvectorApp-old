@@ -22,6 +22,7 @@ import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEnt
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -72,6 +73,18 @@ public class CalendarDbService {
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MasterEventMapper::mapToPlainObject));
+    }
+
+    public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
+        return dataStore.select(SleepEventEntity.class)
+                .join(MasterEventEntity.class).on(SleepEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .where(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
+                .and(MasterEventEntity.EVENT_TYPE.eq(EventType.SLEEP))
+                //.and(SleepEventEntity.TIMER_STARTED.eq(true))
+                .orderBy(MasterEventEntity.DATE_TIME)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, SleepEventMapper::mapToPlainObject));
     }
 
     public Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event) {

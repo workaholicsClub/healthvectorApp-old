@@ -102,6 +102,10 @@
     <string name="time_dialog_minutes">Минут</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
     <string name="hours_minutes_delimiter">:</string>
+    <string name="child_sleep">%s спит</string>
+    <string name="days_short">%d д.</string>
+    <string name="hours_short">%d ч.</string>
+    <string name="minutes_short">%d мин.</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
@@ -159,10 +163,10 @@
         <item quantity="zero">%d часов</item>
     </plurals>
     <plurals name="numberOfMinutes">
-        <item quantity="one">%d мин.</item>
-        <item quantity="few">%d мин.</item>
-        <item quantity="other">%d мин.</item>
-        <item quantity="many">%d мин.</item>
-        <item quantity="zero">%d мин.</item>
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="other">%d минут</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="zero">%d минут</item>
     </plurals>
 </resources>

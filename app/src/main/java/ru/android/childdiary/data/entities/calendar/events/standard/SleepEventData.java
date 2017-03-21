@@ -22,4 +22,6 @@ public interface SleepEventData {
     MasterEventData getMasterEvent();
 
     DateTime getFinishDateTime();
+
+    Boolean isTimerStarted();
 }

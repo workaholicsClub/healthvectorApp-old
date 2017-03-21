@@ -27,6 +27,8 @@ public interface CalendarRepository extends Repository {
 
     Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate);
 
+    Observable<List<SleepEvent>> getSleepEventsWithTimer();
+
     Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event);
 
     Observable<FeedEvent> getFeedEventDetail(@NonNull MasterEvent event);

@@ -8,12 +8,17 @@ import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
+import ru.android.childdiary.data.entities.child.ChildData;
+import ru.android.childdiary.data.repositories.child.ChildMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 class SleepEventMapper {
     public static SleepEvent mapToPlainObject(@NonNull SleepEventData eventData) {
         MasterEventData masterEventData = eventData.getMasterEvent();
+        ChildData childData = masterEventData.getChild();
+        Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
         return SleepEvent.builder()
                 .id(eventData.getId())
                 .masterEventId(masterEventData.getId())
@@ -25,6 +30,8 @@ class SleepEventMapper {
                 .isDone(masterEventData.isDone())
                 .isDeleted(masterEventData.isDeleted())
                 .finishDateTime(eventData.getFinishDateTime())
+                .child(child)
+                .isTimerStarted(eventData.isTimerStarted())
                 .build();
     }
 

@@ -1,9 +1,12 @@
 package ru.android.childdiary.utils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.Minutes;
 import org.joda.time.Months;
 
 import lombok.Builder;
@@ -52,71 +55,105 @@ public class TimeUtils {
         return context.getString(R.string.years_and_months, yearsString, monthsString);
     }
 
-    public static Time splitMinutes(int minutes) {
-        Time.TimeBuilder builder = Time.builder();
+    public static Time.TimeBuilder splitMinutes(int minutes) {
+        Time.TimeBuilder timeBuilder = Time.builder();
 
         if (minutes <= 0) {
-            return builder.build();
+            return timeBuilder;
         }
 
         int days = minutes / MINUTES_IN_DAY;
-        builder.days(days);
+        timeBuilder.days(days);
 
         minutes -= days * MINUTES_IN_DAY;
         int hours = minutes / MINUTES_IN_HOUR;
-        builder.hours(hours);
+        timeBuilder.hours(hours);
 
         minutes -= hours * MINUTES_IN_HOUR;
-        builder.minutes(minutes);
+        timeBuilder.minutes(minutes);
 
-        return builder.build();
+        return timeBuilder;
     }
 
-    @Nullable
-    private static String time(Context context, @Nullable Integer minutes) {
-        if (minutes == null || minutes <= 0) {
-            return null;
-        }
-
-        Time time = splitMinutes(minutes);
-
+    private static String time(Context context, @NonNull Time time) {
         StringBuilder result = new StringBuilder();
 
         if (time.getDays() > 0) {
-            result.append(context.getResources().getQuantityString(R.plurals.numberOfDays,
-                    time.getDays(), time.getDays()));
+            if (time.isShortDays()) {
+                result.append(context.getString(R.string.days_short, time.getDays()));
+            } else {
+                result.append(context.getResources().getQuantityString(R.plurals.numberOfDays,
+                        time.getDays(), time.getDays()));
+            }
         }
 
         if (time.getHours() > 0) {
             if (result.length() > 0) {
                 result.append(' ');
             }
-            result.append(context.getResources().getQuantityString(R.plurals.numberOfHours,
-                    time.getHours(), time.getHours()));
+            if (time.isShortHours()) {
+                result.append(context.getString(R.string.hours_short, time.getHours()));
+            } else {
+                result.append(context.getResources().getQuantityString(R.plurals.numberOfHours,
+                        time.getHours(), time.getHours()));
+            }
         }
 
         if (time.getMinutes() > 0) {
             if (result.length() > 0) {
                 result.append(' ');
             }
-            result.append(context.getResources().getQuantityString(R.plurals.numberOfMinutes,
-                    time.getMinutes(), time.getMinutes()));
+            if (time.isShortMinutes()) {
+                result.append(context.getString(R.string.minutes_short, time.getMinutes()));
+            } else {
+                result.append(context.getResources().getQuantityString(R.plurals.numberOfMinutes,
+                        time.getMinutes(), time.getMinutes()));
+            }
         }
 
         return result.toString();
     }
 
-    @Nullable
     public static String notifyTime(Context context, @Nullable Integer minutes) {
-        String time = time(context, minutes);
-        return minutes == null || minutes <= 0 || time == null
-                ? context.getString(R.string.no_notification)
-                : context.getString(R.string.notify_time_text, time);
+        if (minutes == null || minutes <= 0) {
+            return context.getString(R.string.no_notification);
+        }
+
+        Time.TimeBuilder timeBuilder = splitMinutes(minutes);
+        timeBuilder.shortDays(true);
+        timeBuilder.shortHours(true);
+        timeBuilder.shortMinutes(true);
+        String time = time(context, timeBuilder.build());
+        return context.getString(R.string.notify_time_text, time);
+    }
+
+    @Nullable
+    public static String sleepTime(Context context, @Nullable DateTime start, @Nullable DateTime finish) {
+        if (start == null || finish == null || start.isAfter(finish)) {
+            return null;
+        }
+
+        Minutes minutes = Minutes.minutesBetween(start, finish);
+        Time.TimeBuilder timeBuilder = splitMinutes(minutes.getMinutes());
+        timeBuilder.shortDays(false);
+        timeBuilder.shortHours(false);
+        timeBuilder.shortMinutes(false);
+        String time = time(context, timeBuilder.build());
+        return time;
     }
 
     @Nullable
     public static String duration(Context context, @Nullable Integer minutes) {
-        return time(context, minutes);
+        if (minutes == null || minutes <= 0) {
+            return context.getString(R.string.no_notification);
+        }
+
+        Time.TimeBuilder timeBuilder = splitMinutes(minutes);
+        timeBuilder.shortDays(true);
+        timeBuilder.shortHours(true);
+        timeBuilder.shortMinutes(true);
+        String time = time(context, timeBuilder.build());
+        return time;
     }
 
     @Value
@@ -125,5 +162,8 @@ public class TimeUtils {
         int days;
         int hours;
         int minutes;
+        boolean shortDays;
+        boolean shortHours;
+        boolean shortMinutes;
     }
 }
