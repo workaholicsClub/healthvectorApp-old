@@ -1,6 +1,5 @@
 package ru.android.childdiary.data.repositories.calendar;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
@@ -27,14 +26,12 @@ import ru.android.childdiary.domain.interactors.child.Child;
 
 @Singleton
 public class CalendarDataRepository implements CalendarRepository {
-    private final Context context;
     private final CalendarDbService dbService;
     private final List<OnSelectedDateChangedListener> selectedDateChangedListeners = new ArrayList<>();
     private LocalDate selectedDate = LocalDate.now();
 
     @Inject
-    public CalendarDataRepository(Context context, CalendarDbService dbService) {
-        this.context = context;
+    public CalendarDataRepository(CalendarDbService dbService) {
         this.dbService = dbService;
     }
 
