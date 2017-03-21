@@ -141,7 +141,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_edit);
 
-        Child child = getIntent().getParcelableExtra(ExtraConstants.EXTRA_CHILD);
+        Child child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
         if (savedInstanceState == null && child != null) {
             editedChild = child.toBuilder().build();
         }

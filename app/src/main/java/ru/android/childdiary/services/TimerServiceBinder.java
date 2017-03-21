@@ -1,6 +1,7 @@
 package ru.android.childdiary.services;
 
 import android.os.Binder;
+import android.support.annotation.NonNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 
 class TimerServiceBinder extends Binder implements TimerServiceListener {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -23,7 +25,6 @@ class TimerServiceBinder extends Binder implements TimerServiceListener {
 
     public void subscribe(TimerServiceListener listener) {
         listeners.add(listener);
-        listener.onTimerTick();
     }
 
     public void unsubscribe(TimerServiceListener listener) {
@@ -31,9 +32,9 @@ class TimerServiceBinder extends Binder implements TimerServiceListener {
     }
 
     @Override
-    public void onTimerTick() {
+    public void onTimerTick(@NonNull SleepEvent event) {
         for (TimerServiceListener listener : listeners) {
-            listener.onTimerTick();
+            listener.onTimerTick(event);
         }
     }
 }

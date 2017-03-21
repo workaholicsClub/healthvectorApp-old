@@ -32,7 +32,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDurationView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailBreastFeedDurationView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailFeedTypeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailFoodMeasureView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
@@ -74,7 +74,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     EventDetailBreastView breastView;
 
     @BindView(R.id.durationView)
-    EventDetailDurationView durationView;
+    EventDetailBreastFeedDurationView durationView;
 
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
@@ -100,9 +100,9 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         foodMeasureView.setEventDetailSpinnerListener(this);
         setupEditTextView(amountMlView);
         setupEditTextView(amountView);
-        durationView.setEventDetailDurationListener(new EventDetailDurationView.EventDetailDurationListener() {
+        durationView.setEventDetailDurationListener(new EventDetailBreastFeedDurationView.EventDetailDurationListener() {
             @Override
-            public void requestLeftValueChange(EventDetailDurationView view) {
+            public void requestLeftValueChange(EventDetailBreastFeedDurationView view) {
                 presenter.requestTimeDialog(TAG_LEFT_DURATION_DIALOG,
                         TimeDialog.Parameters.builder()
                                 .minutes(durationView.getDurationLeftInt())
@@ -114,7 +114,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
             }
 
             @Override
-            public void requestRightValueChange(EventDetailDurationView view) {
+            public void requestRightValueChange(EventDetailBreastFeedDurationView view) {
                 presenter.requestTimeDialog(TAG_RIGHT_DURATION_DIALOG,
                         TimeDialog.Parameters.builder()
                                 .minutes(durationView.getDurationRightInt())

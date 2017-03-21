@@ -29,8 +29,8 @@ class SleepEventMapper {
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
                 .isDeleted(masterEventData.isDeleted())
-                .finishDateTime(eventData.getFinishDateTime())
                 .child(child)
+                .finishDateTime(eventData.getFinishDateTime())
                 .isTimerStarted(eventData.isTimerStarted())
                 .build();
     }
@@ -59,5 +59,6 @@ class SleepEventMapper {
 
     private static void fillNonReferencedFields(@NonNull SleepEventEntity to, @NonNull SleepEvent from) {
         to.setFinishDateTime(from.getFinishDateTime());
+        to.setTimerStarted(from.getIsTimerStarted());
     }
 }

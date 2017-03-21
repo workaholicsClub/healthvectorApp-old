@@ -1,17 +1,20 @@
 package ru.android.childdiary.services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -23,43 +26,27 @@ import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.log.LogSystem;
+import ru.android.childdiary.utils.ui.NotificationUtils;
 
 public class TimerService extends Service {
+    private static final long TIMER_PERIOD = 1000;
     private final Logger logger = LoggerFactory.getLogger(toString());
+
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final TimerServiceBinder binder = new TimerServiceBinder(this);
-    private final NotificationManager notificationManager = new NotificationManager();
-
     @Inject
     CalendarInteractor calendarInteractor;
-
-    private Timer timer;
+    private Map<Long, NotificationCompat.Builder> notificationBuilders = new HashMap<>();
+    private List<SleepEvent> events = new ArrayList<>();
+    private Handler handler;
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
         logger.debug("onStartCommand: " + intent);
 
-        unsubscribeOnDestroy(calendarInteractor.getSleepEventsWithTimer()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleResult, this::onUnexpectedError));
-
         return START_STICKY;
-    }
-
-    private void handleResult(@NonNull List<SleepEvent> events) {
-        notificationManager.updateNotifications(this, events);
-        if (events.isEmpty()) {
-            stopTimer();
-        } else {
-            startTimer();
-        }
-    }
-
-    private void onUnexpectedError(Throwable e) {
-        LogSystem.report(logger, "unexpected error", e);
-        stopTimer();
     }
 
     @Override
@@ -73,6 +60,10 @@ public class TimerService extends Service {
         logger.debug("onCreate");
         ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
         component.inject(this);
+        unsubscribeOnDestroy(calendarInteractor.getSleepEventsWithTimer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleResult, this::onUnexpectedError));
     }
 
     @Override
@@ -83,33 +74,87 @@ public class TimerService extends Service {
         compositeDisposable.dispose();
     }
 
+    private void unsubscribeOnDestroy(@NonNull Disposable disposable) {
+        compositeDisposable.add(disposable);
+    }
+
+    private void handleResult(@NonNull List<SleepEvent> events) {
+        updateNotifications(this, events);
+        if (events.isEmpty()) {
+            stopTimer();
+        } else {
+            startTimer();
+        }
+    }
+
+    private void onUnexpectedError(Throwable e) {
+        LogSystem.report(logger, "unexpected error", e);
+        stopTimer();
+    }
+
     private void startTimer() {
-        if (timer == null) {
-            Handler handler = new Handler(getMainLooper());
-            timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    handler.post(TimerService.this::timerTick);
-                }
-            }, 0, 1000);
+        if (handler == null) {
+            handler = new Handler(getMainLooper());
+            handler.postDelayed(this::timerTick, TIMER_PERIOD);
         }
     }
 
     private void timerTick() {
-        notificationManager.updateNotifications(this);
-        binder.onTimerTick();
+        if (handler == null) {
+            logger.debug("timer is already stopped");
+            return;
+        }
+        updateNotifications(this);
+        for (SleepEvent event : events) {
+            binder.onTimerTick(event);
+        }
+        handler.postDelayed(this::timerTick, TIMER_PERIOD);
     }
 
     private void stopTimer() {
-        if (timer != null) {
-            timer.cancel();
-            timer.purge();
-            timer = null;
+        if (handler == null) {
+            logger.debug("timer is already stopped");
+            return;
+        }
+        handler.removeCallbacks(this::timerTick);
+        handler = null;
+    }
+
+    private void updateNotifications(Context context, List<SleepEvent> newEvents) {
+        removeAll(events, newEvents);
+        for (SleepEvent event : events) {
+            Long masterEventId = event.getMasterEventId();
+            NotificationUtils.hideNotification(context, (int) (masterEventId % Integer.MAX_VALUE));
+        }
+        events = new ArrayList<>(newEvents);
+    }
+
+    private void removeAll(List<SleepEvent> from, List<SleepEvent> what) {
+        for (SleepEvent whatEvent : what) {
+            SleepEvent found = null;
+            for (SleepEvent fromEvent : from) {
+                if (ObjectUtils.equals(whatEvent.getId(), fromEvent.getId())) {
+                    found = fromEvent;
+                    break;
+                }
+            }
+            if (found != null) {
+                from.remove(found);
+            }
         }
     }
 
-    private void unsubscribeOnDestroy(@NonNull Disposable disposable) {
-        compositeDisposable.add(disposable);
+    private void updateNotifications(Context context) {
+        for (SleepEvent event : events) {
+            Long masterEventId = event.getMasterEventId();
+            NotificationCompat.Builder builder = notificationBuilders.get(masterEventId);
+            if (builder == null) {
+                builder = NotificationUtils.buildNotification(context, event);
+                notificationBuilders.put(masterEventId, builder);
+            } else {
+                NotificationUtils.updateNotification(context, builder, event);
+            }
+            NotificationUtils.showNotification(context, (int) (masterEventId % Integer.MAX_VALUE), builder);
+        }
     }
 }

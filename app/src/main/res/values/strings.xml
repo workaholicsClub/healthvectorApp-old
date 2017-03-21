@@ -101,11 +101,12 @@
     <string name="time_dialog_hours">Часов</string>
     <string name="time_dialog_minutes">Минут</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
-    <string name="hours_minutes_delimiter">:</string>
+    <string name="duration_separator">:</string>
     <string name="child_sleep">%s спит</string>
     <string name="days_short">%d д.</string>
     <string name="hours_short">%d ч.</string>
     <string name="minutes_short">%d мин.</string>
+    <string name="duration_format">00:00:00</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

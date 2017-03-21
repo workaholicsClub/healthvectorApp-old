@@ -67,6 +67,9 @@
     <dimen name="base_margin_horizontal">16dp</dimen>
     <dimen name="arrow_icon_size">24dp</dimen>
     <dimen name="alert_dialog_padding_top">16dp</dimen>
+    <!-- timer -->
+    <dimen name="timer_stroke_width">4dp</dimen>
+    <dimen name="timer_corner_radius">10dp</dimen>
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>

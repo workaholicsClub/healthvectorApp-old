@@ -62,14 +62,13 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     View dummy;
 
     private ViewGroup eventDetailsView;
-    private MasterEvent masterEvent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         editTextNote.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
-        masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
+        MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             if (masterEvent == null) {
                 getPresenter().requestDefaultEventDetail(getEventType());
@@ -91,11 +90,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (masterEvent == null) {
-            outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent(null));
-        } else {
-            outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent(event));
-        }
+        outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent());
     }
 
     @Override
@@ -133,10 +128,23 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @OnClick(R.id.buttonDone)
     void onButtonDoneClick() {
-        if (masterEvent == null) {
-            getPresenter().addEvent(buildEvent(null));
+        upsertEvent(buildEvent());
+        finish();
+    }
+
+    protected final T buildEvent() {
+        if (event == null) {
+            return buildEvent(null);
         } else {
-            getPresenter().updateEvent(buildEvent(event));
+            return buildEvent(event);
+        }
+    }
+
+    protected final void upsertEvent(@NonNull T event) {
+        if (this.event == null) {
+            getPresenter().addEvent(event);
+        } else {
+            getPresenter().updateEvent(event);
         }
     }
 
@@ -169,12 +177,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public void eventAdded(@NonNull T event) {
-        finish();
+        getPresenter().requestEventDetails(event.getMasterEvent());
     }
 
     @Override
     public void eventUpdated(@NonNull T event) {
-        finish();
     }
 
     @Override
@@ -246,16 +253,19 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setTime(String tag, LocalTime time) {
     }
 
+    @Nullable
     protected DateTime getDateTime(EventDetailDateView dateView, EventDetailTimeView timeView) {
         LocalDate date = dateView.getValue();
         LocalTime time = timeView.getValue();
-        return new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
+        return date == null || time == null
+                ? null
+                : new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
                 time.getHourOfDay(), time.getMinuteOfHour());
     }
 
-    protected void setDateTime(DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
-        dateView.setValue(dateTime.toLocalDate());
-        timeView.setValue(dateTime.toLocalTime());
+    protected void setDateTime(@Nullable DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
+        dateView.setValue(dateTime == null ? null : dateTime.toLocalDate());
+        timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
     }
 
     @Override

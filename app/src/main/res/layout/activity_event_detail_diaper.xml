@@ -14,13 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView
-        android:id="@+id/notifyTimeView"
+    <ru.android.childdiary.presentation.events.widgets.EventDetailDiaperStateView
+        android:id="@+id/diaperStateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDiaperStateView
-        android:id="@+id/diaperStateView"
+    <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView
+        android:id="@+id/notifyTimeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

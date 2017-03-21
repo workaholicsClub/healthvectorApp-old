@@ -5,6 +5,9 @@ import android.content.Intent;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lombok.Getter;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.di.DaggerApplicationComponent;
@@ -15,6 +18,7 @@ import ru.android.childdiary.utils.log.LogSystem;
 public class ChildDiaryApplication extends Application {
     @Getter
     private static ApplicationComponent applicationComponent;
+    private Logger logger;
 
     @Override
     public void onCreate() {
@@ -24,6 +28,8 @@ public class ChildDiaryApplication extends Application {
         // TODO: log to external files path if available
 
         LogSystem.initLogger(this);
+        logger = LoggerFactory.getLogger(toString());
+        logger.debug("onCreate");
 
         JodaTimeAndroid.init(this);
 

@@ -20,5 +20,5 @@
         android:text="@string/duration"
         android:textAppearance="@style/SecondaryTextAppearance" />
 
-    <include layout="@layout/event_detail_text_view_clickable" />
+    <include layout="@layout/event_detail_text_view_disabled" />
 </LinearLayout>

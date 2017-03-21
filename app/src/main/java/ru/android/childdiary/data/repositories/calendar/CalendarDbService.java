@@ -80,7 +80,7 @@ public class CalendarDbService {
                 .join(MasterEventEntity.class).on(SleepEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .where(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
                 .and(MasterEventEntity.EVENT_TYPE.eq(EventType.SLEEP))
-                //.and(SleepEventEntity.TIMER_STARTED.eq(true))
+                .and(SleepEventEntity.TIMER_STARTED.eq(true))
                 .orderBy(MasterEventEntity.DATE_TIME)
                 .get()
                 .observableResult()

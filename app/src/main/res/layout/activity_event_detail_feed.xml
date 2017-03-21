@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDurationView
+    <ru.android.childdiary.presentation.events.widgets.EventDetailBreastFeedDurationView
         android:id="@+id/durationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

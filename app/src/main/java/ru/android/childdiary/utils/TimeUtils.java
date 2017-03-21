@@ -5,9 +5,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 import org.joda.time.Minutes;
 import org.joda.time.Months;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 import lombok.Builder;
 import lombok.Value;
@@ -128,24 +132,9 @@ public class TimeUtils {
     }
 
     @Nullable
-    public static String sleepTime(Context context, @Nullable DateTime start, @Nullable DateTime finish) {
-        if (start == null || finish == null || start.isAfter(finish)) {
-            return null;
-        }
-
-        Minutes minutes = Minutes.minutesBetween(start, finish);
-        Time.TimeBuilder timeBuilder = splitMinutes(minutes.getMinutes());
-        timeBuilder.shortDays(false);
-        timeBuilder.shortHours(false);
-        timeBuilder.shortMinutes(false);
-        String time = time(context, timeBuilder.build());
-        return time;
-    }
-
-    @Nullable
     public static String duration(Context context, @Nullable Integer minutes) {
         if (minutes == null || minutes <= 0) {
-            return context.getString(R.string.no_notification);
+            return null;
         }
 
         Time.TimeBuilder timeBuilder = splitMinutes(minutes);
@@ -154,6 +143,52 @@ public class TimeUtils {
         timeBuilder.shortMinutes(true);
         String time = time(context, timeBuilder.build());
         return time;
+    }
+
+    @Nullable
+    public static String sleepTime(Context context, @Nullable DateTime start, @Nullable DateTime finish) {
+        Integer minutes = durationInMinutes(start, finish);
+        if (minutes == null) {
+            return null;
+        }
+
+        Time.TimeBuilder timeBuilder = splitMinutes(minutes);
+        timeBuilder.shortDays(false);
+        timeBuilder.shortHours(false);
+        timeBuilder.shortMinutes(false);
+        String time = time(context, timeBuilder.build());
+        return time;
+    }
+
+    @Nullable
+    public static String timerString(Context context, @Nullable DateTime start, @Nullable DateTime finish) {
+        if (start == null || finish == null || start.isAfter(finish)) {
+            return context.getString(R.string.duration_format);
+        }
+
+        Duration duration = new Duration(start, finish);
+        Period period = duration.toPeriod();
+        PeriodFormatter periodFormatter = new PeriodFormatterBuilder()
+                .printZeroAlways()
+                .minimumPrintedDigits(2)
+                .appendHours()
+                .appendSeparator(context.getString(R.string.duration_separator))
+                .appendMinutes()
+                .appendSeparator(context.getString(R.string.duration_separator))
+                .appendSeconds()
+                .toFormatter();
+        String result = periodFormatter.print(period);
+        return result;
+    }
+
+    @Nullable
+    public static Integer durationInMinutes(@Nullable DateTime start, @Nullable DateTime finish) {
+        if (start == null || finish == null || start.isAfter(finish)) {
+            return null;
+        }
+
+        Minutes minutes = Minutes.minutesBetween(start, finish);
+        return minutes.getMinutes();
     }
 
     @Value

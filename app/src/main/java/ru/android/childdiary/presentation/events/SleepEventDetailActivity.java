@@ -7,6 +7,8 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -15,6 +17,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -25,16 +28,23 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailDurationView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
+import ru.android.childdiary.services.TimerServiceConnection;
+import ru.android.childdiary.services.TimerServiceListener;
+import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class SleepEventDetailActivity extends EventDetailActivity<EventDetailView<SleepEvent>, SleepEvent> implements EventDetailView<SleepEvent> {
+public class SleepEventDetailActivity extends EventDetailActivity<EventDetailView<SleepEvent>, SleepEvent> implements EventDetailView<SleepEvent>,
+        TimerServiceListener {
     private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
     private static final String TAG_DATE_PICKER_START = "DATE_PICKER_START";
     private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
     private static final String TAG_DATE_PICKER_FINISH = "DATE_PICKER_FINISH";
+    private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
     @InjectPresenter
@@ -58,8 +68,16 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @BindView(R.id.finishTimeView)
     EventDetailTimeView finishTimeView;
 
+    @BindView(R.id.durationView)
+    EventDetailDurationView durationView;
+
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
+
+    @BindView(R.id.buttonTimer)
+    Button buttonTimer;
+
+    private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, SleepEventDetailActivity.class);
@@ -83,6 +101,14 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
         finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue()));
         finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
+        durationView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_DURATION_DIALOG,
+                TimeDialog.Parameters.builder()
+                        .minutes(durationView.getValueInt())
+                        .showDays(durationView.getValueInt() >= TimeUtils.MINUTES_IN_DAY)
+                        .showHours(true)
+                        .showMinutes(true)
+                        .title(getString(R.string.duration))
+                        .build()));
         notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
                 TimeDialog.Parameters.builder()
                         .minutes(notifyTimeView.getValueInt())
@@ -104,6 +130,46 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     protected void themeChanged() {
         super.themeChanged();
         setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(sex));
+        buttonTimer.setBackgroundResource(ResourcesUtils.getButtonTimerBackgroundRes(sex));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        timerServiceConnection = new TimerServiceConnection(this, this);
+        timerServiceConnection.open();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timerServiceConnection.close();
+    }
+
+    @OnClick(R.id.buttonTimer)
+    void onTimerClick() {
+        SleepEvent event = buildEvent();
+
+        Boolean isTimerStarted = event.getIsTimerStarted();
+        isTimerStarted = isTimerStarted == null || !isTimerStarted;
+
+        SleepEvent.SleepEventBuilder builder = event.toBuilder();
+        builder.isTimerStarted(isTimerStarted);
+
+        if (isTimerStarted) {
+            builder.finishDateTime(null);
+        } else {
+            builder.finishDateTime(DateTime.now());
+        }
+
+        upsertEvent(builder.build());
+    }
+
+    @Override
+    public void onTimerTick(@NonNull SleepEvent event) {
+        if (this.event != null && ObjectUtils.equals(this.event.getId(), event.getId())) {
+            updateTimer(event);
+        }
     }
 
     @Override
@@ -124,6 +190,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
+        updateDuration();
+        updateTimer(event);
     }
 
     @Override
@@ -153,9 +221,12 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         switch (tag) {
             case TAG_DATE_PICKER_START:
                 startDateView.setValue(date);
+                updateDuration();
+                updateIfNeeded();
                 break;
             case TAG_DATE_PICKER_FINISH:
                 finishDateView.setValue(date);
+                updateDuration();
                 break;
         }
     }
@@ -165,15 +236,57 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         switch (tag) {
             case TAG_TIME_PICKER_START:
                 startTimeView.setValue(time);
+                updateDuration();
+                updateIfNeeded();
                 break;
             case TAG_TIME_PICKER_FINISH:
                 finishTimeView.setValue(time);
+                updateDuration();
                 break;
         }
     }
 
     @Override
     public void onSetTime(String tag, int minutes) {
-        notifyTimeView.setValue(minutes);
+        switch (tag) {
+            case TAG_DURATION_DIALOG:
+                DateTime start = getDateTime(startDateView, startTimeView);
+                DateTime finish = start.plusMinutes(minutes);
+                setDateTime(finish, finishDateView, finishTimeView);
+                durationView.setValue(minutes);
+                break;
+            case TAG_NOTIFY_TIME_DIALOG:
+                notifyTimeView.setValue(minutes);
+                break;
+        }
+    }
+
+    private void updateDuration() {
+        DateTime start = getDateTime(startDateView, startTimeView);
+        DateTime finish = getDateTime(finishDateView, finishTimeView);
+        Integer minutes = TimeUtils.durationInMinutes(start, finish);
+        durationView.setValue(minutes);
+        int visibility = event.getIsTimerStarted() == null || !event.getIsTimerStarted()
+                ? View.VISIBLE
+                : View.GONE;
+        finishDateView.setVisibility(visibility);
+        finishTimeView.setVisibility(visibility);
+        durationView.setVisibility(visibility);
+    }
+
+    private void updateTimer(@NonNull SleepEvent event) {
+        String text;
+        if (event.getIsTimerStarted() == null || !event.getIsTimerStarted()) {
+            text = getString(R.string.duration_format);
+        } else {
+            text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());
+        }
+        buttonTimer.setText(text);
+    }
+
+    private void updateIfNeeded() {
+        if (this.event != null && event.getIsTimerStarted() != null && event.getIsTimerStarted()) {
+            getPresenter().updateEvent(buildEvent());
+        }
     }
 }

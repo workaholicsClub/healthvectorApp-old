@@ -35,7 +35,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     public void showAllowingStateLoss(FragmentManager manager, String tag, @NonNull Child child) {
         Bundle arguments = new Bundle();
-        arguments.putParcelable(ExtraConstants.EXTRA_CHILD, child);
+        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, child);
         setArguments(arguments);
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);
@@ -50,7 +50,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     }
 
     protected void init(Bundle savedInstanceState) {
-        child = getArguments().getParcelable(ExtraConstants.EXTRA_CHILD);
+        child = (Child) getArguments().getSerializable(ExtraConstants.EXTRA_CHILD);
         sex = child.getSex();
         Icepick.restoreInstanceState(this, savedInstanceState);
     }

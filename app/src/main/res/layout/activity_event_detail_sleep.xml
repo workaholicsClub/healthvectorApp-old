@@ -34,6 +34,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ru.android.childdiary.presentation.events.widgets.EventDetailDurationView
+        android:id="@+id/durationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonTimer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background_timer_boy"
+        android:drawableLeft="@drawable/ic_duration"
+        android:drawableStart="@drawable/ic_duration"
+        android:gravity="center_vertical|end"
+        android:padding="16dp" />
+
     <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView
         android:id="@+id/notifyTimeView"
         android:layout_width="match_parent"

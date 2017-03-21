@@ -56,7 +56,7 @@ public class TimeDialog extends BaseDialogFragment {
 
     public void showAllowingStateLoss(FragmentManager manager, String tag, @NonNull Child child, Parameters parameters) {
         Bundle arguments = new Bundle();
-        arguments.putParcelable(ExtraConstants.EXTRA_CHILD, child);
+        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, child);
         arguments.putSerializable(KEY_PARAMETERS, parameters);
         setArguments(arguments);
         FragmentTransaction ft = manager.beginTransaction();

@@ -13,16 +13,17 @@ import ru.android.childdiary.utils.TimeUtils;
 
 public class NotificationUtils {
     public static NotificationCompat.Builder buildNotification(Context context, SleepEvent event) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.toolbar_logo_sleep_boy)
-                .setWhen(event.getDateTime().toDate().getTime())
-                .setContentTitle(context.getString(R.string.child_sleep, event.getChild().getName()))
-                .setContentText(TimeUtils.sleepTime(context, event.getDateTime(), DateTime.now()));
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        updateNotification(context, builder, event);
         return builder;
     }
 
     public static void updateNotification(Context context, NotificationCompat.Builder builder, SleepEvent event) {
-        builder.setContentText(TimeUtils.sleepTime(context, event.getDateTime(), DateTime.now()));
+        builder
+                .setSmallIcon(ResourcesUtils.getSleepEventLogoRes(event.getChild().getSex()))
+                .setContentTitle(context.getString(R.string.child_sleep, event.getChild().getName()))
+                .setWhen(event.getDateTime().toDate().getTime())
+                .setContentText(TimeUtils.sleepTime(context, event.getDateTime(), DateTime.now()));
     }
 
     public static void showNotification(Context context, int notificationId, NotificationCompat.Builder builder) {
