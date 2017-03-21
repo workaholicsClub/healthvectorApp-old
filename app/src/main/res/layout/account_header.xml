@@ -2,14 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/material_drawer_account_header_height_compact">
+    android:layout_height="@dimen/material_drawer_account_header_height_compact"
+    tools:ignore="UnusedAttribute">
 
     <ImageView
         android:id="@+id/material_drawer_account_header_background"
         android:layout_width="match_parent"
         android:layout_height="@dimen/material_drawer_account_header_height_compact"
-        android:scaleType="fitXY"
-        tools:ignore="ContentDescription" />
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:id="@+id/material_drawer_account_header"
@@ -44,6 +44,7 @@
             android:layout_marginLeft="@dimen/material_drawer_vertical_padding"
             android:layout_marginRight="@dimen/material_drawer_vertical_padding"
             android:layout_marginStart="@dimen/material_drawer_vertical_padding"
+            android:elevation="@dimen/image_elevation"
             app:biv_selectorOnPress="@android:color/transparent" />
 
         <LinearLayout
@@ -59,7 +60,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="1"
                 android:maxLines="1"
                 android:textAppearance="@style/ToolbarTitleTextAppearance" />
 
@@ -68,30 +68,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="1"
                 android:maxLines="1"
                 android:textAppearance="@style/ToolbarSubtitleTextAppearance" />
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/material_drawer_account_header_text_switcher_wrapper"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/material_drawer_account_header_text_switcher"
+            android:layout_width="@dimen/account_header_action_item_height"
             android:layout_height="@dimen/account_header_action_item_height"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/background_clickable">
-
-            <ImageView
-                android:id="@+id/material_drawer_account_header_text_switcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="@dimen/account_header_action_item_image_margin_horizontal"
-                android:layout_marginLeft="@dimen/account_header_action_item_image_margin_horizontal"
-                android:layout_marginRight="@dimen/account_header_action_item_image_margin_horizontal"
-                android:layout_marginStart="@dimen/account_header_action_item_image_margin_horizontal"
-                android:scaleType="center"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
+            android:background="@drawable/background_clickable"
+            android:scaleType="center"
+            android:src="@drawable/arrow_down_white" />
     </LinearLayout>
 </FrameLayout>

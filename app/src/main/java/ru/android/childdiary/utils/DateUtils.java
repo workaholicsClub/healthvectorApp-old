@@ -18,22 +18,22 @@ public class DateUtils {
     private static String[] nominativeMonthNames, genitiveMonthNames;
 
     @Nullable
-    public static String date(LocalDate localDate) {
+    public static String date(@Nullable LocalDate localDate) {
         return date(localDate, null);
     }
 
     @Nullable
-    public static String date(LocalDate localDate, @Nullable String defaultValue) {
+    public static String date(@Nullable LocalDate localDate, @Nullable String defaultValue) {
         return localDate == null ? defaultValue : localDate.toString(DATE_FORMATTER);
     }
 
     @Nullable
-    public static String time(LocalTime localTime) {
+    public static String time(@Nullable LocalTime localTime) {
         return time(localTime, null);
     }
 
     @Nullable
-    public static String time(LocalTime localTime, @Nullable String defaultValue) {
+    public static String time(@Nullable LocalTime localTime, @Nullable String defaultValue) {
         return localTime == null ? defaultValue : localTime.toString(TIME_FORMATTER);
     }
 

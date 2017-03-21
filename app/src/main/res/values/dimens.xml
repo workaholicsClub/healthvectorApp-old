@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="image_elevation">8dp</dimen>
     <!-- profile -->
     <dimen name="profile_top_panel_height">114dp</dimen>
     <dimen name="profile_image_size">84dp</dimen>
     <dimen name="profile_margin_horizontal">16dp</dimen>
-    <dimen name="profile_margin_vertical">12dp</dimen>
-    <dimen name="profile_field_height">54dp</dimen>
-    <dimen name="profile_review_text_padding_horizontal">5dp</dimen>
+    <dimen name="profile_margin_vertical">26dp</dimen>
+    <dimen name="profile_field_height">30dp</dimen>
     <dimen name="name_edit_text_padding_bottom">6dp</dimen>
     <dimen name="name_edit_text_stroke_width">1dp</dimen>
     <dimen name="name_edit_text_stroke_width_negative">-2dp</dimen>
@@ -15,7 +15,9 @@
     <dimen name="sex_item_height">54dp</dimen>
     <dimen name="button_height">54dp</dimen>
     <dimen name="button_corner_radius">20dp</dimen>
+    <dimen name="button_margin_vertical">12dp</dimen>
     <!-- account header -->
+    <dimen name="toolbar_logo_size">33dp</dimen>
     <dimen name="account_header_image_size">44dp</dimen>
     <dimen name="account_header_height">80dp</dimen>
     <dimen name="account_header_action_item_image_size">44dp</dimen>
@@ -37,6 +39,7 @@
     <!-- calendar -->
     <dimen name="calendar_title_height">54dp</dimen>
     <dimen name="calendar_margin_horizontal">16dp</dimen>
+    <dimen name="calendar_margin_vertical">8dp</dimen>
     <dimen name="calendar_grid_view_margin_horizontal">6dp</dimen>
     <dimen name="calendar_horizontal_spacing">1dp</dimen>
     <dimen name="calendar_vertical_spacing">1dp</dimen>
@@ -51,11 +54,19 @@
     <dimen name="event_row_padding_horizontal">8dp</dimen>
     <dimen name="event_row_margin_horizontal">8dp</dimen>
     <dimen name="event_row_margin_vertical">2dp</dimen>
-    <dimen name="event_row_corner">2dp</dimen>
+    <dimen name="event_row_corner_radius">2dp</dimen>
+    <dimen name="event_row_action_delimiter_height">26dp</dimen>
     <!-- event detail -->
     <dimen name="event_detail_text_width">150dp</dimen>
-    <dimen name="event_detail_height">56dp</dimen>
-    <dimen name="event_detail_icon_size">53dp</dimen>
+    <dimen name="event_detail_height">54dp</dimen>
+    <dimen name="event_detail_icon_size">54dp</dimen>
+    <dimen name="event_detail_text_view_min_width">100dp</dimen>
+    <dimen name="event_detail_margin_base">8dp</dimen>
+    <dimen name="event_detail_note_corner_radius">4dp</dimen>
+    <!-- base -->
+    <dimen name="base_margin_horizontal">16dp</dimen>
+    <dimen name="arrow_icon_size">24dp</dimen>
+    <dimen name="alert_dialog_padding_top">16dp</dimen>
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>

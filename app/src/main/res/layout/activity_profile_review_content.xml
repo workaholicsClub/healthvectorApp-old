@@ -18,10 +18,9 @@
             android:layout_width="@dimen/profile_image_size"
             android:layout_height="@dimen/profile_image_size"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="@dimen/profile_margin_vertical"
             android:layout_marginLeft="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
-            android:layout_marginTop="@dimen/profile_margin_vertical"
+            android:elevation="@dimen/image_elevation"
             android:src="@color/white"
             app:biv_selectorOnPress="@android:color/transparent" />
 
@@ -54,10 +53,7 @@
         android:layout_height="@dimen/profile_field_height"
         android:layout_marginLeft="@dimen/profile_margin_horizontal"
         android:layout_marginRight="@dimen/profile_margin_horizontal"
-        android:background="@drawable/text_view_background"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
-        android:paddingRight="@dimen/profile_review_text_padding_horizontal"
         android:textAppearance="@style/PrimaryTextAppearance" />
 
     <TextView
@@ -83,10 +79,7 @@
             android:layout_marginEnd="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_weight="1"
-            android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
-            android:paddingRight="@dimen/profile_review_text_padding_horizontal"
             android:textAppearance="@style/PrimaryTextAppearance" />
 
         <TextView
@@ -94,10 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
             android:layout_weight="1"
-            android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
-            android:paddingRight="@dimen/profile_review_text_padding_horizontal"
             android:textAppearance="@style/PrimaryTextAppearance" />
     </LinearLayout>
 
@@ -124,10 +114,7 @@
             android:layout_marginEnd="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_weight="1"
-            android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
-            android:paddingRight="@dimen/profile_review_text_padding_horizontal"
             android:textAppearance="@style/PrimaryTextAppearance" />
 
         <TextView
@@ -135,10 +122,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
             android:layout_weight="1"
-            android:background="@drawable/text_view_background"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/profile_review_text_padding_horizontal"
-            android:paddingRight="@dimen/profile_review_text_padding_horizontal"
             android:textAppearance="@style/PrimaryTextAppearance" />
     </LinearLayout>
 </LinearLayout>

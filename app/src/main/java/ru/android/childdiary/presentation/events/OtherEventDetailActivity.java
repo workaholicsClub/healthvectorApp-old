@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -22,17 +23,19 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotificationTimeView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> implements EventDetailView<OtherEvent> {
+public class OtherEventDetailActivity extends EventDetailActivity<EventDetailView<OtherEvent>, OtherEvent> implements EventDetailView<OtherEvent> {
     private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
     private static final String TAG_DATE_PICKER_START = "DATE_PICKER_START";
     private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
     private static final String TAG_DATE_PICKER_FINISH = "DATE_PICKER_FINISH";
+    private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
     @InjectPresenter
     OtherEventDetailPresenter presenter;
@@ -55,8 +58,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
     @BindView(R.id.finishTimeView)
     EventDetailTimeView finishTimeView;
 
-    @BindView(R.id.notificationTimeView)
-    EventDetailNotificationTimeView notificationTimeView;
+    @BindView(R.id.notifyTimeView)
+    EventDetailNotifyTimeView notifyTimeView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, OtherEventDetailActivity.class);
@@ -73,34 +76,44 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setDateTime(DateTime.now(), startDateView, startTimeView);
-        setDateTime(DateTime.now(), finishDateView, finishTimeView);
-
         startTitleView.setTitle(R.string.other_event_start);
         finishTitleView.setTitle(R.string.other_event_finish);
 
-        startDateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getDate()));
-        startTimeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getTime()));
-        finishDateView.setOnDateClickListener(() -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getDate()));
-        finishTimeView.setOnTimeClickListener(() -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getTime()));
+        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue()));
+        startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
+        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue()));
+        finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
+        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
+                TimeDialog.Parameters.builder()
+                        .minutes(notifyTimeView.getValueInt())
+                        .showDays(true)
+                        .showHours(true)
+                        .showMinutes(true)
+                        .title(getString(R.string.notify_time_dialog_title))
+                        .build()));
     }
 
     @Override
-    protected void setupToolbar() {
-        super.setupToolbar();
-        toolbar.setLogo(ResourcesUtils.getOtherEventLogoRes(sex));
-        getSupportActionBar().setTitle(R.string.event_other);
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
+        setupToolbarLogo(ResourcesUtils.getOtherEventLogoRes(sex));
+        setupToolbarTitle(R.string.event_other);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        toolbar.setLogo(ResourcesUtils.getOtherEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getOtherEventLogoRes(sex));
     }
 
     @Override
     public OtherEventDetailPresenter getPresenter() {
         return presenter;
+    }
+
+    @Override
+    protected EventType getEventType() {
+        return EventType.OTHER;
     }
 
     @Override
@@ -110,16 +123,11 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
     }
 
     @Override
-    public void showDate(@NonNull LocalDate date) {
-        setDateTime(date.toDateTime(LocalTime.now()), startDateView, startTimeView);
-        setDateTime(date.toDateTime(LocalTime.now()), finishDateView, finishTimeView);
-    }
-
-    @Override
     public void showEventDetail(@NonNull OtherEvent event) {
         super.showEventDetail(event);
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
+        notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         editTextNote.setText(event.getNote());
     }
 
@@ -130,12 +138,12 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
                 : event.toBuilder();
 
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
-        builder.dateTime(startDateTime);
-
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
-        builder.finishDateTime(finishDateTime);
 
-        builder.note(editTextNote.getText().toString());
+        builder.dateTime(startDateTime)
+                .finishDateTime(finishDateTime)
+                .notifyTimeInMinutes(notifyTimeView.getValue())
+                .note(editTextNote.getText().toString());
 
         return builder.build();
     }
@@ -144,10 +152,10 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
     protected void setDate(String tag, LocalDate date) {
         switch (tag) {
             case TAG_DATE_PICKER_START:
-                startDateView.setDate(date);
+                startDateView.setValue(date);
                 break;
             case TAG_DATE_PICKER_FINISH:
-                finishDateView.setDate(date);
+                finishDateView.setValue(date);
                 break;
         }
     }
@@ -156,11 +164,16 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEvent> im
     protected void setTime(String tag, LocalTime time) {
         switch (tag) {
             case TAG_TIME_PICKER_START:
-                startTimeView.setTime(time);
+                startTimeView.setValue(time);
                 break;
             case TAG_TIME_PICKER_FINISH:
-                finishTimeView.setTime(time);
+                finishTimeView.setValue(time);
                 break;
         }
+    }
+
+    @Override
+    public void onSetTime(String tag, int minutes) {
+        notifyTimeView.setValue(minutes);
     }
 }

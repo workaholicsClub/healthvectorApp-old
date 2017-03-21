@@ -17,8 +17,11 @@ import ru.android.childdiary.presentation.core.adapters.BaseArrayAdapter;
 import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
 
 public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, AccountHeaderActionAdapter.ViewHolder> {
-    public AccountHeaderActionAdapter(Context context, List<IProfile> profiles) {
+    private CloseMenuButtonClickListener listener;
+
+    public AccountHeaderActionAdapter(Context context, List<IProfile> profiles, CloseMenuButtonClickListener listener) {
         super(context, profiles);
+        this.listener = listener;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
 
     @Override
     protected ViewHolder createViewHolder(View view) {
-        return new ViewHolder(view);
+        return new ViewHolder(view, listener);
     }
 
     @Override
@@ -42,16 +45,18 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
         return true;
     }
 
-    static class ViewHolder extends BaseViewHolder<IProfile> {
+    static class ViewHolder extends BaseViewHolder<IProfile> implements View.OnClickListener {
         @BindView(R.id.imageViewPhoto)
         ImageView imageViewPhoto;
         @BindView(android.R.id.text1)
         TextView textView;
         @BindView(R.id.imageViewDropdown)
         View imageViewDropdown;
+        private CloseMenuButtonClickListener listener;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, CloseMenuButtonClickListener listener) {
             super(view);
+            this.listener = listener;
         }
 
         @Override
@@ -62,6 +67,14 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
             imageViewPhoto.setImageDrawable(icon);
             textView.setText(text);
             imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+            imageViewDropdown.setOnClickListener(position == 0 ? this : null);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v == imageViewDropdown) {
+                listener.closeMenu();
+            }
         }
     }
 }

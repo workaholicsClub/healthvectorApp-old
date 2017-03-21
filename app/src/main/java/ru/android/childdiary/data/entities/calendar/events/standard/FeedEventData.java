@@ -4,12 +4,13 @@ import io.requery.Entity;
 import io.requery.ForeignKey;
 import io.requery.Generated;
 import io.requery.Key;
+import io.requery.ManyToOne;
 import io.requery.OneToOne;
 import io.requery.Table;
+import ru.android.childdiary.data.entities.calendar.FoodMeasureData;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.FeedType;
-import ru.android.childdiary.data.types.FoodMeasure;
 
 @Table(name = "feed_event")
 @Entity(name = "FeedEventEntity")
@@ -26,11 +27,15 @@ public interface FeedEventData {
 
     Breast getBreast();
 
-    Integer getDurationInMinutes();
+    Integer getLeftDurationInMinutes();
 
-    Integer getMilkAmountImMilliliters();
+    Integer getRightDurationInMinutes();
 
-    Integer getFoodAmount();
+    Double getAmount();
 
-    FoodMeasure getFoodMeasure();
+    Double getAmountMl();
+
+    @ForeignKey
+    @ManyToOne
+    FoodMeasureData getFoodMeasureData();
 }

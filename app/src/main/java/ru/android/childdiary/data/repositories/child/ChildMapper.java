@@ -2,6 +2,7 @@ package ru.android.childdiary.data.repositories.child;
 
 import android.support.annotation.NonNull;
 
+import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -20,11 +21,18 @@ class ChildMapper {
                 .build();
     }
 
-    public static ChildEntity mapToEntity(@NonNull Child child) {
-        return updateEntityWithPlainObject(new ChildEntity(), child);
+    public static ChildEntity mapToEntity(BlockingEntityStore blockingEntityStore, @NonNull Child child) {
+        ChildEntity childEntity;
+        if (child.getId() == null) {
+            childEntity = new ChildEntity();
+        } else {
+            childEntity = (ChildEntity) blockingEntityStore.findByKey(ChildEntity.class, child.getId());
+        }
+        fillNonReferencedFields(childEntity, child);
+        return childEntity;
     }
 
-    public static ChildEntity updateEntityWithPlainObject(@NonNull ChildEntity to, @NonNull Child from) {
+    private static void fillNonReferencedFields(@NonNull ChildEntity to, @NonNull Child from) {
         to.setName(from.getName());
         to.setBirthDate(from.getBirthDate());
         to.setBirthTime(from.getBirthTime());
@@ -32,6 +40,5 @@ class ChildMapper {
         to.setImageFileName(from.getImageFileName());
         to.setBirthHeight(from.getBirthHeight());
         to.setBirthWeight(from.getBirthWeight());
-        return to;
     }
 }

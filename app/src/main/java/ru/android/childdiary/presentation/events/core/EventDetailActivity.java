@@ -6,6 +6,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,24 +21,34 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvpActivity implements EventDetailView<T>,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
+        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
+        FoodMeasureDialog.Listener, TimeDialog.Listener {
+    protected T event;
+
     @BindView(R.id.editTextNote)
     protected CustomEditText editTextNote;
 
@@ -51,23 +62,39 @@ public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvp
     View dummy;
 
     private ViewGroup eventDetailsView;
-
     private MasterEvent masterEvent;
-    private T event;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         editTextNote.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
-
         masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             if (masterEvent == null) {
-                getPresenter().requestDate();
+                getPresenter().requestDefaultEventDetail(getEventType());
             } else {
                 getPresenter().requestEventDetails(masterEvent);
             }
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        //noinspection unchecked
+        T event = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_EVENT);
+        showEventDetail(event);
+        dummy.requestFocus();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (masterEvent == null) {
+            outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent(null));
+        } else {
+            outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent(event));
         }
     }
 
@@ -79,15 +106,22 @@ public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvp
         eventDetailsView.addView(contentView);
     }
 
-    private void hideKeyboardAndClearFocus(View view) {
+    public void hideKeyboardAndClearFocus(View view) {
         KeyboardUtils.hideKeyboard(this, view);
         view.clearFocus();
         dummy.requestFocus();
     }
 
+    protected void setupEditTextView(EventDetailEditTextView view) {
+        List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
+        for (Disposable disposable : disposables) {
+            unsubscribeOnDestroy(disposable);
+        }
+    }
+
     @Override
-    protected void setupToolbar() {
-        super.setupToolbar();
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_close);
     }
 
@@ -113,12 +147,20 @@ public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvp
     }
 
     @Override
+    public void showDefaultEventDetail(@NonNull T event) {
+        showEventDetail(event);
+        this.event = null;
+    }
+
+    @Override
     @CallSuper
     public void showEventDetail(@NonNull T event) {
         this.event = event;
     }
 
-    protected abstract EventDetailPresenter<T> getPresenter();
+    protected abstract EventDetailPresenter<V, T> getPresenter();
+
+    protected abstract EventType getEventType();
 
     @LayoutRes
     protected abstract int getContentLayoutResourceId();
@@ -133,6 +175,18 @@ public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvp
     @Override
     public void eventUpdated(@NonNull T event) {
         finish();
+    }
+
+    @Override
+    public void showFoodMeasureDialog(String tag, @NonNull Child child) {
+        FoodMeasureDialog dialog = new FoodMeasureDialog();
+        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child);
+    }
+
+    @Override
+    public void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters) {
+        TimeDialog dialog = new TimeDialog();
+        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child, parameters);
     }
 
     @Override
@@ -161,7 +215,7 @@ public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvp
     }
 
     @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+    public final void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, monthOfYear, dayOfMonth);
         LocalDate date = LocalDate.fromCalendarFields(calendar);
@@ -184,7 +238,7 @@ public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvp
     }
 
     @Override
-    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+    public final void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         LocalTime time = new LocalTime(hourOfDay, minute);
         setTime(view.getTag(), time);
     }
@@ -193,14 +247,22 @@ public abstract class EventDetailActivity<T extends MasterEvent> extends BaseMvp
     }
 
     protected DateTime getDateTime(EventDetailDateView dateView, EventDetailTimeView timeView) {
-        LocalDate date = dateView.getDate();
-        LocalTime time = timeView.getTime();
+        LocalDate date = dateView.getValue();
+        LocalTime time = timeView.getValue();
         return new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
                 time.getHourOfDay(), time.getMinuteOfHour());
     }
 
     protected void setDateTime(DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
-        dateView.setDate(dateTime.toLocalDate());
-        timeView.setTime(dateTime.toLocalTime());
+        dateView.setValue(dateTime.toLocalDate());
+        timeView.setValue(dateTime.toLocalTime());
+    }
+
+    @Override
+    public void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
+    }
+
+    @Override
+    public void onSetTime(String tag, int minutes) {
     }
 }

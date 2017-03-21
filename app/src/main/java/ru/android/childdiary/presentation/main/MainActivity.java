@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,13 +51,14 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
-import ru.android.childdiary.presentation.main.calendar.adapters.events.EventAdapter;
-import ru.android.childdiary.presentation.main.calendar.adapters.events.FabController;
-import ru.android.childdiary.presentation.main.calendar.fragments.CalendarFragment;
-import ru.android.childdiary.presentation.main.calendar.fragments.DayFragment;
-import ru.android.childdiary.presentation.main.calendar.fragments.MonthFragment;
-import ru.android.childdiary.presentation.main.calendar.fragments.WeekFragment;
+import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
+import ru.android.childdiary.presentation.calendar.adapters.events.FabController;
+import ru.android.childdiary.presentation.calendar.fragments.CalendarFragment;
+import ru.android.childdiary.presentation.calendar.fragments.DayFragment;
+import ru.android.childdiary.presentation.calendar.fragments.MonthFragment;
+import ru.android.childdiary.presentation.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
+import ru.android.childdiary.presentation.main.drawer.CloseMenuButtonClickListener;
 import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomPrimaryDrawerItem;
@@ -64,6 +66,7 @@ import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -73,8 +76,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
         PopupMenu.OnMenuItemClickListener,
+        CloseMenuButtonClickListener,
         View.OnClickListener,
         FabController {
+    private static final int REQUEST_ADD_EVENT = 1;
+
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
@@ -127,7 +133,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private static IProfile mapToProfile(Context context, @NonNull Child child) {
         return new ProfileDrawerItem()
                 .withName(child.getName())
-                .withEmail(StringUtils.age(context, child))
+                .withEmail(TimeUtils.age(context, child))
                 .withNameShown(true)
                 .withTag(child)
                 .withIdentifier(mapToProfileId(child))
@@ -156,8 +162,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    protected void setupToolbar() {
-        super.setupToolbar();
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_navigation_drawer);
     }
 
@@ -189,11 +195,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         List<IProfile> profiles = new ArrayList<>();
         if (!childList.isEmpty()) {
             profiles.add(new ProfileSettingDrawerItem()
-                    .withName(getString(R.string.edit_child_short))
+                    .withName(getString(R.string.edit))
                     .withIdentifier(PROFILE_SETTINGS_EDIT));
         }
         profiles.add(new ProfileSettingDrawerItem()
-                .withName(getString(R.string.add_child))
+                .withName(getString(R.string.add_profile))
                 .withIdentifier(PROFILE_SETTINGS_ADD));
         if (!childList.isEmpty()) {
             profiles.add(new ProfileSettingDrawerItem()
@@ -217,9 +223,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         changeThemeIfNeeded(child);
         if (child == Child.NULL) {
             hideFabBar();
-            getSupportActionBar().setTitle(R.string.app_name);
+            hideToolbarLogo();
+            setupToolbarTitle(R.string.app_name);
         } else {
-            getSupportActionBar().setTitle(child.getName());
+            setupToolbarLogo(ResourcesUtils.getChildIcon(this, child));
+            setupToolbarTitle(child.getName());
             if (accountHeader != null) {
                 accountHeader.setActiveProfile(mapToProfileId(child));
             }
@@ -258,31 +266,39 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void navigateToDiaperEventAdd() {
         Intent intent = DiaperEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToFeedEventAdd() {
         Intent intent = FeedEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToOtherEventAdd() {
         Intent intent = OtherEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToPumpEventAdd() {
         Intent intent = PumpEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToSleepEventAdd() {
         Intent intent = SleepEventDetailActivity.getIntent(this, null);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EVENT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ADD_EVENT) {
+            fabToolbar.hideBarWithoutAnimation();
+        }
     }
 
     @Override
@@ -305,12 +321,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.material_drawer_account_header_text_switcher_wrapper && accountHeader != null) {
+        if (v == switcherImage && accountHeader != null) {
             dismissPopupWindow();
             animateSwitcherIn();
             List<IProfile> profiles = new ArrayList<>(accountHeader.getProfiles());
             profiles.remove(accountHeader.getActiveProfile());
-            ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles);
+            ListAdapter adapter = new AccountHeaderActionAdapter(this, profiles, this);
             View anchor = v;
             int width = profiles.size() == 1
                     ? getResources().getDimensionPixelSize(R.dimen.account_header_action_item_width_wide)
@@ -345,6 +361,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 presenter.deleteChild();
             }
         }
+    }
+
+    @Override
+    public void closeMenu() {
+        dismissPopupWindow();
     }
 
     @Override
@@ -397,13 +418,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         buildHeader();
         buildDrawer();
 
-        setupToolbar();
-
-        View switcherWrapper = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher_wrapper);
-        switcherWrapper.setOnClickListener(this);
+        setupToolbar(getToolbar());
 
         switcherImage = ButterKnife.findById(accountHeader.getView(), R.id.material_drawer_account_header_text_switcher);
         switcherImage.setImageResource(R.drawable.arrow_down_white);
+        switcherImage.setOnClickListener(this);
     }
 
     private void animateSwitcherIn() {
@@ -431,7 +450,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         updateDrawerItems(false);
         drawerBuilder = new CustomDrawerBuilder()
                 .withActivity(this)
-                .withToolbar(toolbar)
+                .withToolbar(getToolbar())
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(drawerItems);
         drawer = drawerBuilder.build();
@@ -439,31 +458,26 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @OnClick(R.id.addDiaperEvent)
     void onAddDiaperEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addDiaperEvent();
     }
 
     @OnClick(R.id.addSleepEvent)
     void onAddSleepEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addSleepEvent();
     }
 
     @OnClick(R.id.addFeedEvent)
     void onAddFeedEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addFeedEvent();
     }
 
     @OnClick(R.id.addPumpEvent)
     void onAddPumpEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addPumpEventClick();
     }
 
     @OnClick(R.id.addOtherEvent)
     void onAddOtherEventClick() {
-        fabToolbar.hideBarWithoutAnimation();
         presenter.addOtherEventClick();
     }
 
@@ -517,8 +531,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 popupMenu.inflate(R.menu.filter);
                 popupMenu.setOnMenuItemClickListener(this);
                 popupMenu.show();
-                break;
-            case R.id.menu_overflow:
                 break;
         }
         return super.onOptionsItemSelected(item);

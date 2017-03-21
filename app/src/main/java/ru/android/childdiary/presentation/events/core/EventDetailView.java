@@ -2,24 +2,22 @@ package ru.android.childdiary.presentation.events.core;
 
 import android.support.annotation.NonNull;
 
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
-
-import org.joda.time.LocalDate;
 
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseView;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 
 public interface EventDetailView<T extends MasterEvent> extends BaseView {
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showChild(@NonNull Child child);
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
-    void showDate(@NonNull LocalDate date);
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showDefaultEventDetail(@NonNull T event);
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showEventDetail(@NonNull T event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
@@ -27,4 +25,10 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void eventUpdated(@NonNull T event);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showFoodMeasureDialog(String tag, @NonNull Child child);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters);
 }

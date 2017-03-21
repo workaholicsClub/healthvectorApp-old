@@ -39,7 +39,7 @@
         <activity
             android:name=".presentation.profile.edit.ProfileEditActivity"
             android:parentActivityName=".presentation.main.MainActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />

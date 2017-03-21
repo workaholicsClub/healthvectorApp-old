@@ -18,12 +18,21 @@ import lombok.Getter;
 public abstract class BaseArrayAdapter<T, VH extends BaseViewHolder<T>> extends ArrayAdapter<T> {
     private final LayoutInflater inflater;
     @Getter
-    private final List<T> items;
+    private List<T> items = Collections.emptyList();
 
-    public BaseArrayAdapter(Context context, @NonNull List<T> items) {
+    public BaseArrayAdapter(Context context) {
         super(context, 0);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public BaseArrayAdapter(Context context, @NonNull List<T> items) {
+        this(context);
         this.items = Collections.unmodifiableList(items);
+    }
+
+    public void setItems(@NonNull List<T> items) {
+        this.items = Collections.unmodifiableList(items);
+        notifyDataSetChanged();
     }
 
     private View inflate(@LayoutRes int resourceId) {

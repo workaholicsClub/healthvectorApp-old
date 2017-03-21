@@ -45,10 +45,14 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        init(savedInstanceState);
+        return super.onCreateDialog(savedInstanceState);
+    }
+
+    protected void init(Bundle savedInstanceState) {
         child = getArguments().getParcelable(ExtraConstants.EXTRA_CHILD);
         sex = child.getSex();
         Icepick.restoreInstanceState(this, savedInstanceState);
-        return super.onCreateDialog(savedInstanceState);
     }
 
     @Override

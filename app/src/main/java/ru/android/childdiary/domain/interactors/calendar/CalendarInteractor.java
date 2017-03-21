@@ -3,14 +3,21 @@ package ru.android.childdiary.domain.interactors.calendar;
 import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
+import ru.android.childdiary.data.types.Breast;
+import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -44,6 +51,98 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.setSelectedDate(date);
     }
 
+    public Observable<List<FoodMeasure>> getFoodMeasureList() {
+        return calendarRepository.getFoodMeasureList();
+    }
+
+    public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
+        return calendarRepository.addFoodMeasure(foodMeasure);
+    }
+
+    private Observable<FoodMeasure> getDefaultFoodMeasure() {
+        return calendarRepository.getFoodMeasureList()
+                .first(Collections.singletonList(FoodMeasure.NULL))
+                .flatMapObservable(Observable::fromIterable)
+                .first(FoodMeasure.NULL)
+                .toObservable();
+    }
+
+    private Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
+        switch (eventType) {
+            case DIAPER:
+                return Observable.just(5);
+            case FEED:
+                return Observable.just(10);
+            case OTHER:
+                return Observable.just(60);
+            case PUMP:
+                return Observable.just(20);
+            case SLEEP:
+                return Observable.just(10);
+        }
+        throw new IllegalArgumentException("Unknown event type");
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends MasterEvent> Observable<T> getDefaultEventDetail(@NonNull EventType eventType) {
+        switch (eventType) {
+            case DIAPER:
+                return (Observable<T>) Observable.combineLatest(
+                        getSelectedDate(),
+                        Observable.just(LocalTime.now()),
+                        getDefaultNotifyTimeInMinutes(eventType),
+                        (date, time, minutes) -> DiaperEvent.builder()
+                                .dateTime(date.toDateTime(time))
+                                .notifyTimeInMinutes(minutes)
+                                .diaperState(DiaperState.WET)
+                                .build());
+            case FEED:
+                return (Observable<T>) Observable.combineLatest(
+                        getSelectedDate(),
+                        Observable.just(LocalTime.now()),
+                        getDefaultNotifyTimeInMinutes(eventType),
+                        getDefaultFoodMeasure(),
+                        (date, time, minutes, foodMeasure) -> FeedEvent.builder()
+                                .dateTime(date.toDateTime(time))
+                                .notifyTimeInMinutes(minutes)
+                                .feedType(FeedType.BREAST_MILK)
+                                .foodMeasure(foodMeasure)
+                                .breast(Breast.LEFT)
+                                .build());
+            case OTHER:
+                return (Observable<T>) Observable.combineLatest(
+                        getSelectedDate(),
+                        Observable.just(LocalTime.now()),
+                        getDefaultNotifyTimeInMinutes(eventType),
+                        (date, time, minutes) -> OtherEvent.builder()
+                                .dateTime(date.toDateTime(time))
+                                .notifyTimeInMinutes(minutes)
+                                .finishDateTime(date.toDateTime(time))
+                                .build());
+            case PUMP:
+                return (Observable<T>) Observable.combineLatest(
+                        getSelectedDate(),
+                        Observable.just(LocalTime.now()),
+                        getDefaultNotifyTimeInMinutes(eventType),
+                        (date, time, minutes) -> PumpEvent.builder()
+                                .dateTime(date.toDateTime(time))
+                                .notifyTimeInMinutes(minutes)
+                                .breast(Breast.LEFT)
+                                .build());
+            case SLEEP:
+                return (Observable<T>) Observable.combineLatest(
+                        getSelectedDate(),
+                        Observable.just(LocalTime.now()),
+                        getDefaultNotifyTimeInMinutes(eventType),
+                        (date, time, minutes) -> SleepEvent.builder()
+                                .dateTime(date.toDateTime(time))
+                                .notifyTimeInMinutes(minutes)
+                                .finishDateTime(date.toDateTime(time))
+                                .build());
+        }
+        throw new IllegalArgumentException("Unknown event type");
+    }
+
     public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {
         return calendarRepository.getAll(request.getChild(), request.getDate())
                 .map(events -> EventsResponse.builder().request(request).events(events).build());
@@ -62,7 +161,7 @@ public class CalendarInteractor implements Interactor {
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.getSleepEventDetail(event);
         }
-        return null;
+        throw new IllegalArgumentException("Unknown event type");
     }
 
     @SuppressWarnings("unchecked")
@@ -78,7 +177,7 @@ public class CalendarInteractor implements Interactor {
         } else if (request.getEvent().getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.add(request.getChild(), (SleepEvent) request.getEvent());
         }
-        return null;
+        throw new IllegalArgumentException("Unknown event type");
     }
 
     @SuppressWarnings("unchecked")
@@ -94,7 +193,7 @@ public class CalendarInteractor implements Interactor {
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.update((SleepEvent) event);
         }
-        return null;
+        throw new IllegalArgumentException("Unknown event type");
     }
 
     public Observable<MasterEvent> delete(@NonNull MasterEvent event) {

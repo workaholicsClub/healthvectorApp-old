@@ -30,7 +30,6 @@
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:layout_gravity="center"
                 android:background="@drawable/background_clickable"
-                android:contentDescription="@string/event_diaper"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_diaper" />
         </FrameLayout>
@@ -46,7 +45,6 @@
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:layout_gravity="center"
                 android:background="@drawable/background_clickable"
-                android:contentDescription="@string/event_sleep"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_sleep" />
         </FrameLayout>
@@ -62,7 +60,6 @@
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:layout_gravity="center"
                 android:background="@drawable/background_clickable"
-                android:contentDescription="@string/event_feed"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_feed" />
         </FrameLayout>
@@ -78,7 +75,6 @@
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:layout_gravity="center"
                 android:background="@drawable/background_clickable"
-                android:contentDescription="@string/event_pump"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_pump" />
         </FrameLayout>
@@ -94,7 +90,6 @@
                 android:layout_height="@dimen/fab_toolbar_height"
                 android:layout_gravity="center"
                 android:background="@drawable/background_clickable"
-                android:contentDescription="@string/event_other"
                 android:scaleType="center"
                 android:src="@drawable/calendar_action_add_other" />
         </FrameLayout>

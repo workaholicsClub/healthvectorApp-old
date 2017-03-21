@@ -1,11 +1,14 @@
 package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
+import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 
 class OtherEventMapper {
@@ -25,18 +28,29 @@ class OtherEventMapper {
                 .build();
     }
 
-    public static OtherEventEntity mapToEntity(@NonNull OtherEvent event) {
-        return updateEntityWithPlainObject(new OtherEventEntity(), event);
+    public static OtherEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
+                                               @NonNull OtherEvent otherEvent) {
+        return mapToEntity(blockingEntityStore, otherEvent, null);
     }
 
-    public static OtherEventEntity mapToEntity(@NonNull OtherEvent event, @NonNull MasterEventEntity masterEventEntity) {
-        OtherEventEntity eventEntity = updateEntityWithPlainObject(new OtherEventEntity(), event);
-        eventEntity.setMasterEvent(masterEventEntity);
-        return eventEntity;
+    public static OtherEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
+                                               @NonNull OtherEvent otherEvent,
+                                               @Nullable MasterEvent masterEvent) {
+        OtherEventEntity otherEventEntity;
+        if (otherEvent.getId() == null) {
+            otherEventEntity = new OtherEventEntity();
+        } else {
+            otherEventEntity = (OtherEventEntity) blockingEntityStore.findByKey(OtherEventEntity.class, otherEvent.getId());
+        }
+        fillNonReferencedFields(otherEventEntity, otherEvent);
+        if (masterEvent != null) {
+            MasterEventEntity masterEventEntity = (MasterEventEntity) blockingEntityStore.findByKey(MasterEventEntity.class, masterEvent.getMasterEventId());
+            otherEventEntity.setMasterEvent(masterEventEntity);
+        }
+        return otherEventEntity;
     }
 
-    public static OtherEventEntity updateEntityWithPlainObject(@NonNull OtherEventEntity to, @NonNull OtherEvent from) {
+    private static void fillNonReferencedFields(@NonNull OtherEventEntity to, @NonNull OtherEvent from) {
         to.setFinishDateTime(from.getFinishDateTime());
-        return to;
     }
 }

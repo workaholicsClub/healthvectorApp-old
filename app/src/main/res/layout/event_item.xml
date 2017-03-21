@@ -35,7 +35,7 @@
             <View
                 android:id="@+id/delimiter1"
                 android:layout_width="1dp"
-                android:layout_height="26dp"
+                android:layout_height="@dimen/event_row_action_delimiter_height"
                 android:background="#33FFFFFF" />
 
             <ImageView
@@ -49,7 +49,7 @@
             <View
                 android:id="@+id/delimiter2"
                 android:layout_width="1dp"
-                android:layout_height="26dp"
+                android:layout_height="@dimen/event_row_action_delimiter_height"
                 android:background="#33FFFFFF" />
 
             <ImageView
@@ -63,7 +63,7 @@
             <View
                 android:id="@+id/delimiter3"
                 android:layout_width="1dp"
-                android:layout_height="26dp"
+                android:layout_height="@dimen/event_row_action_delimiter_height"
                 android:background="#33FFFFFF" />
 
             <ImageView
@@ -96,6 +96,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
             android:textAppearance="@style/EventRowTextAppearance" />

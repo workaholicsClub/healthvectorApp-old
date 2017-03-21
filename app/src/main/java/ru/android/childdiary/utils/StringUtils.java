@@ -3,9 +3,6 @@ package ru.android.childdiary.utils;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Months;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,48 +11,11 @@ import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
-import ru.android.childdiary.data.types.FoodMeasure;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class StringUtils {
-    @Nullable
-    public static String age(Context context, Child child) {
-        LocalDate birthDate = child.getBirthDate();
-
-        if (birthDate == null) {
-            return null;
-        }
-
-        LocalDate now = LocalDate.now();
-
-        if (birthDate.isAfter(now)) {
-            return null;
-        }
-
-        Months period = Months.monthsBetween(birthDate, now);
-        int years = period.getMonths() / 12;
-        int months = period.getMonths() % 12;
-
-        if (years == 0 && months == 0) {
-            return context.getString(R.string.newborn);
-        }
-
-        String yearsString = context.getResources().getQuantityString(R.plurals.numberOfYears, years, years);
-        String monthsString = context.getResources().getQuantityString(R.plurals.numberOfMonths, months, months);
-
-        if (years == 0) {
-            return monthsString;
-        }
-
-        if (months == 0) {
-            return yearsString;
-        }
-
-        return context.getString(R.string.years_and_months, yearsString, monthsString);
-    }
-
     @Nullable
     public static String sex(Context context, Sex sex) {
         return sex(context, sex, null);
@@ -157,23 +117,6 @@ public class StringUtils {
                 return context.getString(R.string.feed_type_milk_formula);
             case FOOD:
                 return context.getString(R.string.feed_type_food);
-            default:
-                return null;
-        }
-    }
-
-    @Nullable
-    public static String foodMeasure(Context context, @Nullable FoodMeasure foodMeasure) {
-        if (foodMeasure == null) {
-            return null;
-        }
-        switch (foodMeasure) {
-            case GRAMS:
-                return context.getString(R.string.food_measure_grams);
-            case MILLILITRES:
-                return context.getString(R.string.food_measure_millilitres);
-            case OTHER:
-                return context.getString(R.string.food_measure_other);
             default:
                 return null;
         }

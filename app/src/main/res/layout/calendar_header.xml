@@ -10,7 +10,9 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/calendar_title_height"
         android:layout_weight="1"
+        android:ellipsize="end"
         android:gravity="center_vertical"
+        android:maxLines="1"
         android:paddingLeft="@dimen/calendar_margin_horizontal"
         android:paddingRight="@dimen/calendar_margin_horizontal"
         android:textAppearance="@style/TitleTextAppearance" />
@@ -20,7 +22,6 @@
         android:layout_width="@dimen/calendar_title_height"
         android:layout_height="@dimen/calendar_title_height"
         android:background="@drawable/background_clickable"
-        android:contentDescription="@string/empty"
         android:scaleType="center"
         android:src="@drawable/arrow_left" />
 
@@ -29,7 +30,6 @@
         android:layout_width="@dimen/calendar_title_height"
         android:layout_height="@dimen/calendar_title_height"
         android:background="@drawable/background_clickable"
-        android:contentDescription="@string/empty"
         android:scaleType="center"
         android:src="@drawable/arrow_right" />
 </LinearLayout>

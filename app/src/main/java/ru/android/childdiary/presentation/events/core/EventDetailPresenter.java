@@ -1,23 +1,26 @@
 package ru.android.childdiary.presentation.events.core;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.requests.AddEventRequest;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 
-public abstract class EventDetailPresenter<T extends MasterEvent> extends BasePresenter<EventDetailView<T>> {
+public abstract class EventDetailPresenter<V extends EventDetailView<T>, T extends MasterEvent> extends BasePresenter<V> {
     @Inject
-    ChildInteractor childInteractor;
+    protected ChildInteractor childInteractor;
 
     @Inject
-    CalendarInteractor calendarInteractor;
+    protected CalendarInteractor calendarInteractor;
 
     @Override
     protected void onFirstViewAttach() {
@@ -30,12 +33,14 @@ public abstract class EventDetailPresenter<T extends MasterEvent> extends BasePr
                 .subscribe(getViewState()::showChild, this::onUnexpectedError));
     }
 
-    public void requestDate() {
-        unsubscribeOnDestroy(calendarInteractor.getSelectedDateOnce()
+    @SuppressWarnings("unchecked")
+    @CallSuper
+    public void requestDefaultEventDetail(@NonNull EventType eventType) {
+        unsubscribeOnDestroy(calendarInteractor.getDefaultEventDetail(eventType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(date -> logger.debug("showDate: " + date))
-                .subscribe(getViewState()::showDate, this::onUnexpectedError));
+                .doOnNext(event -> logger.debug("default event details: " + event))
+                .subscribe(event -> getViewState().showDefaultEventDetail((T) event)));
     }
 
     @SuppressWarnings("unchecked")
@@ -47,6 +52,20 @@ public abstract class EventDetailPresenter<T extends MasterEvent> extends BasePr
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(event -> logger.debug("event details: " + event))
                 .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
+    }
+
+    public void requestFoodMeasureDialog(String tag) {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(child -> getViewState().showFoodMeasureDialog(tag, child), this::onUnexpectedError));
+    }
+
+    public void requestTimeDialog(String tag, TimeDialog.Parameters parameters) {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(child -> getViewState().showTimeDialog(tag, child, parameters), this::onUnexpectedError));
     }
 
     @SuppressWarnings("unchecked")

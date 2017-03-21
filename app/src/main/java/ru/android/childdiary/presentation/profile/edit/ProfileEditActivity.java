@@ -48,9 +48,9 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
 import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
-import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
@@ -146,7 +146,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             editedChild = child.toBuilder().build();
         }
 
-        getSupportActionBar().setTitle(child == null ? R.string.add_child : R.string.edit_child_long);
+        setupToolbarTitle(child == null ? R.string.add_profile : R.string.profile);
         buttonDone.setText(child == null ? R.string.add : R.string.save);
         buttonDone.setOnClickListener(v -> {
             hideKeyboardAndClearFocus(rootView.findFocus());
@@ -252,7 +252,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         WidgetsUtils.setupTextView(textViewSex, sex != null);
     }
 
-    @OnClick(R.id.textViewSex)
+    @OnClick(R.id.textViewSexWrapper)
     void onSexClick(View v) {
         dismissPopupWindow();
         ListAdapter adapter = new SexAdapter(this);
@@ -321,7 +321,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         imagePicker.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER, editedChild);
     }
 
-    @OnClick(R.id.textViewDate)
+    @OnClick(R.id.textViewDateWrapper)
     void onDateClick() {
         LocalDate birthDate = editedChild.getBirthDate();
         Calendar calendar = Calendar.getInstance();
@@ -338,7 +338,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
-    @OnClick(R.id.textViewTime)
+    @OnClick(R.id.textViewTimeWrapper)
     void onTimeClick() {
         LocalTime birthTime = editedChild.getBirthTime();
         LocalTime time = birthTime == null ? LocalTime.now() : birthTime;
@@ -441,7 +441,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     private void viewValidated(View view, boolean valid) {
-        viewValidated(view, valid, R.drawable.spinner_background, R.drawable.spinner_background_error);
+        viewValidated(view, valid, R.drawable.edit_text_background, R.drawable.edit_text_background_error);
     }
 
     private void viewValidated(View view, boolean valid,

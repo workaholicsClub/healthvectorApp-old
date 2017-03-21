@@ -19,10 +19,10 @@
         style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
-        android:layout_marginBottom="@dimen/profile_margin_vertical"
+        android:layout_marginBottom="@dimen/button_margin_vertical"
         android:layout_marginLeft="@dimen/profile_margin_horizontal"
         android:layout_marginRight="@dimen/profile_margin_horizontal"
-        android:layout_marginTop="@dimen/profile_margin_vertical"
-        android:text="@string/edit_child_short"
+        android:layout_marginTop="@dimen/button_margin_vertical"
+        android:text="@string/edit"
         android:textAllCaps="false" />
 </LinearLayout>

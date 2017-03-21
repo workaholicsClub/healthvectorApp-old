@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/event_detail_margin_base"
     android:background="@drawable/note_background"
     android:minHeight="@dimen/event_detail_height"
     android:orientation="horizontal">
@@ -12,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/event_detail_margin_base"
         app:hintTextAppearance="@style/PlaceholderTextAppearance">
 
         <ru.android.childdiary.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/text_view_background"
+            android:background="@drawable/edit_text_background"
             android:hint="@string/note"
             android:inputType="textCapSentences|textMultiLine"
             android:maxLength="2000"
@@ -29,5 +29,4 @@
             android:textCursorDrawable="@drawable/edit_text_cursor"
             android:textSize="@dimen/text_size_base" />
     </android.support.design.widget.TextInputLayout>
-
 </LinearLayout>

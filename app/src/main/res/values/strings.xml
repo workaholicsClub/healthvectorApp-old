@@ -11,9 +11,8 @@
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_help">Помощь</string>
     <string name="profile">Профиль</string>
-    <string name="add_child">Добавить профиль</string>
-    <string name="edit_child_long">Редактировать профиль</string>
-    <string name="edit_child_short">Редактировать</string>
+    <string name="add_profile">Добавить профиль</string>
+    <string name="edit">Редактировать</string>
     <string name="remove_child">Удалить профиль</string>
     <string name="remove_child_confirmation_title">Удалить профиль %s?</string>
     <string name="remove_child_confirmation_text">Все данные профиля будут удалены без возможности восстановления.</string>
@@ -53,6 +52,7 @@
     <string name="validate_child_birth_weight_empty">Введите вес ребенка при рождении</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
+    <string name="amount_review">%s мл</string>
     <string name="newborn">новорождённый</string>
     <string name="years_and_months">%1$s %2$s</string>
     <string name="select_sex">Выберите пол</string>
@@ -79,10 +79,10 @@
     <string name="feed_type_pumped_milk">Сцеженное</string>
     <string name="feed_type_milk_formula">Смесь</string>
     <string name="feed_type_food">Добавка</string>
-    <string name="food_measure_grams">Граммы</string>
-    <string name="food_measure_millilitres">Миллилитры</string>
+    <string name="food_measure_grams">граммы</string>
+    <string name="food_measure_millilitres">миллилитры</string>
     <string name="food_measure_other">Другое</string>
-    <string name="notification_time">Оповещение</string>
+    <string name="notify_time">Оповещение</string>
     <string name="diaper_state">Состояние подгузника</string>
     <string name="note">Примечание</string>
     <string name="asleep">Уснул</string>
@@ -94,6 +94,14 @@
     <string name="food_measure">Ед. измерения</string>
     <string name="other_event_start">Начало</string>
     <string name="other_event_finish">Конец</string>
+    <string name="notify_time_dialog_title">Оповещение за</string>
+    <string name="notify_time_text">За %s</string>
+    <string name="no_notification">Нет</string>
+    <string name="time_dialog_days">Дней</string>
+    <string name="time_dialog_hours">Часов</string>
+    <string name="time_dialog_minutes">Минут</string>
+    <string name="food_measure_dialog_title">Введите единицу измерения</string>
+    <string name="hours_minutes_delimiter">:</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
@@ -135,5 +143,26 @@
         <item quantity="other">%d месяцев</item>
         <item quantity="many">%d месяцев</item>
         <item quantity="zero">%d месяцев</item>
+    </plurals>
+    <plurals name="numberOfDays">
+        <item quantity="one">%d день</item>
+        <item quantity="few">%d дня</item>
+        <item quantity="other">%d дней</item>
+        <item quantity="many">%d дней</item>
+        <item quantity="zero">%d дней</item>
+    </plurals>
+    <plurals name="numberOfHours">
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="other">%d часов</item>
+        <item quantity="many">%d часов</item>
+        <item quantity="zero">%d часов</item>
+    </plurals>
+    <plurals name="numberOfMinutes">
+        <item quantity="one">%d мин.</item>
+        <item quantity="few">%d мин.</item>
+        <item quantity="other">%d мин.</item>
+        <item quantity="many">%d мин.</item>
+        <item quantity="zero">%d мин.</item>
     </plurals>
 </resources>

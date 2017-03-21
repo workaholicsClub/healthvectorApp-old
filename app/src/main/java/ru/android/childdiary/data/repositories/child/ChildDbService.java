@@ -13,7 +13,6 @@ import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.child.ChildRepository;
 
 @Singleton
 public class ChildDbService {
@@ -33,12 +32,13 @@ public class ChildDbService {
     }
 
     public Observable<Child> add(@NonNull Child child) {
-        return dataStore.insert(ChildMapper.mapToEntity(child)).toObservable().map(ChildMapper::mapToPlainObject);
+        return DbUtils.insertObservable(dataStore, child,
+                ChildMapper::mapToEntity, ChildMapper::mapToPlainObject);
     }
 
     public Observable<Child> update(@NonNull Child child) {
-        return DbUtils.updateObservable(dataStore, ChildEntity.class, child, child.getId(),
-                ChildMapper::updateEntityWithPlainObject, ChildMapper::mapToPlainObject);
+        return DbUtils.updateObservable(dataStore, child,
+                ChildMapper::mapToEntity, ChildMapper::mapToPlainObject);
     }
 
     public Observable<Child> delete(@NonNull Child child) {
