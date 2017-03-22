@@ -78,7 +78,7 @@
     <string name="feed_type_breast_milk">Грудь</string>
     <string name="feed_type_pumped_milk">Сцеженное</string>
     <string name="feed_type_milk_formula">Смесь</string>
-    <string name="feed_type_food">Добавка</string>
+    <string name="feed_type_food">Прикорм</string>
     <string name="food_measure_grams">граммы</string>
     <string name="food_measure_millilitres">миллилитры</string>
     <string name="food_measure_other">Другое</string>
