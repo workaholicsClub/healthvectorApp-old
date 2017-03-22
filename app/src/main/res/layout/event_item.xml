@@ -25,12 +25,12 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/eventRowActionDelete"
+                android:id="@+id/eventRowActionDone"
                 android:layout_width="@dimen/event_row_height"
                 android:layout_height="@dimen/event_row_height"
                 android:background="@drawable/background_clickable"
                 android:scaleType="center"
-                android:src="@drawable/event_row_action_delete" />
+                android:src="@drawable/event_row_action_done" />
 
             <View
                 android:id="@+id/delimiter1"
@@ -67,12 +67,12 @@
                 android:background="#33FFFFFF" />
 
             <ImageView
-                android:id="@+id/eventRowActionDone"
+                android:id="@+id/eventRowActionDelete"
                 android:layout_width="@dimen/event_row_height"
                 android:layout_height="@dimen/event_row_height"
                 android:background="@drawable/background_clickable"
                 android:scaleType="center"
-                android:src="@drawable/event_row_action_done" />
+                android:src="@drawable/event_row_action_delete" />
         </LinearLayout>
     </LinearLayout>
 
@@ -109,6 +109,5 @@
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
             android:textAppearance="@style/EventRowDescriptionTextAppearance" />
-
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

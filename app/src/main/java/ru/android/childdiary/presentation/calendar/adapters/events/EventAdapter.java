@@ -20,17 +20,17 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implements EventViewHolder.SwipeActionListener {
     private final Context context;
     private final LayoutInflater inflater;
+    private final EventActionListener eventActionListener;
     @Getter
     private final SwipeManager swipeManager;
-    private final EventActionListener actionListener;
 
     private Sex sex;
     private List<MasterEvent> events = Collections.emptyList();
 
-    public EventAdapter(Context context, @NonNull EventActionListener actionListener, @Nullable FabController fabController) {
+    public EventAdapter(Context context, @NonNull EventActionListener eventActionListener, @Nullable FabController fabController) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
-        this.actionListener = actionListener;
+        this.eventActionListener = eventActionListener;
         this.swipeManager = new SwipeManager(fabController);
         this.events = Collections.unmodifiableList(events);
     }
@@ -52,7 +52,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.event_item, parent, false);
-        EventViewHolder viewHolder = new EventViewHolder(v, this);
+        EventViewHolder viewHolder = new EventViewHolder(v, eventActionListener, this);
         return viewHolder;
     }
 
@@ -68,26 +68,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
     }
 
     @Override
-    public void delete(EventViewHolder viewHolder) {
-        viewHolder.swipeLayout.addSwipeListener(new SwipeDeleteAction(actionListener, viewHolder.getEvent()));
+    public void done(EventViewHolder viewHolder) {
+        viewHolder.swipeLayout.addSwipeListener(new SwipeDoneAction(eventActionListener, viewHolder.getEvent()));
         swipeManager.closeAllItems();
     }
 
     @Override
     public void move(EventViewHolder viewHolder) {
-        viewHolder.swipeLayout.addSwipeListener(new SwipeMoveAction(actionListener, viewHolder.getEvent()));
+        viewHolder.swipeLayout.addSwipeListener(new SwipeMoveAction(eventActionListener, viewHolder.getEvent()));
         swipeManager.closeAllItems();
     }
 
     @Override
     public void edit(EventViewHolder viewHolder) {
-        viewHolder.swipeLayout.addSwipeListener(new SwipeEditAction(actionListener, viewHolder.getEvent()));
+        viewHolder.swipeLayout.addSwipeListener(new SwipeEditAction(eventActionListener, viewHolder.getEvent()));
         swipeManager.closeAllItems();
     }
 
     @Override
-    public void done(EventViewHolder viewHolder) {
-        viewHolder.swipeLayout.addSwipeListener(new SwipeDoneAction(actionListener, viewHolder.getEvent()));
+    public void delete(EventViewHolder viewHolder) {
+        viewHolder.swipeLayout.addSwipeListener(new SwipeDeleteAction(eventActionListener, viewHolder.getEvent()));
         swipeManager.closeAllItems();
     }
 }
