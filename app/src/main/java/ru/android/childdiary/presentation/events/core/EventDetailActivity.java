@@ -117,7 +117,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.toolbar_action_close);
+        toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
     }
 
     @Override
