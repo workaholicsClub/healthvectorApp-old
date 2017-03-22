@@ -22,9 +22,11 @@
         android:gravity="center_vertical|end"
         android:inputType="numberDecimal"
         android:textAppearance="@style/PrimaryTextAppearance"
+        android:textColor="@drawable/event_detail_editable_text_color"
         android:textCursorDrawable="@drawable/edit_text_cursor" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="@dimen/arrow_icon_size"
         android:layout_height="@dimen/arrow_icon_size"
         android:layout_marginEnd="@dimen/event_detail_margin_base"

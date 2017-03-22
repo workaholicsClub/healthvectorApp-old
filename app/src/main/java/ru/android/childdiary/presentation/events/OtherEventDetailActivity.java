@@ -61,9 +61,10 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
         Intent intent = new Intent(context, OtherEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
+        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,8 +23,8 @@ import ru.android.childdiary.utils.DoubleUtils;
 
 public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
     private TextView textViewAmountMl;
-    private CustomEditText editTextAmountMlLeft;
-    private CustomEditText editTextAmountMlRight;
+    private CustomEditText editTextAmountMlLeft, editTextAmountMlRight;
+    private ImageView imageViewLeft, imageViewRight;
 
     @Getter
     private Double amountMlLeft, amountMlRight;
@@ -53,11 +54,13 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
 
         view = inflate(getContext(), R.layout.event_detail_amount_ml_pump_left, null);
         addView(view);
+        imageViewLeft = ButterKnife.findById(view, R.id.imageView);
         editTextAmountMlLeft = ButterKnife.findById(view, R.id.editText);
         editTextAmountMlLeft.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         view = inflate(getContext(), R.layout.event_detail_amount_ml_pump_right, null);
         addView(view);
+        imageViewRight = ButterKnife.findById(view, R.id.imageView);
         editTextAmountMlRight = ButterKnife.findById(view, R.id.editText);
         editTextAmountMlRight.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
@@ -121,5 +124,13 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
         }));
 
         return disposables;
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        editTextAmountMlLeft.setEnabled(!readOnly);
+        editTextAmountMlRight.setEnabled(!readOnly);
+        imageViewLeft.setVisibility(readOnly ? INVISIBLE : VISIBLE);
+        imageViewRight.setVisibility(readOnly ? INVISIBLE : VISIBLE);
     }
 }

@@ -17,11 +17,14 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayout implements View.OnClickListener {
+public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayout implements View.OnClickListener, ReadOnlyView {
+    private final List<View> items = new ArrayList<>();
+    private final List<TextView> texts = new ArrayList<>();
     private final List<ImageView> radios = new ArrayList<>();
     private Sex sex;
     @Getter
     private T selected;
+    private boolean isReadOnly;
 
     public EventDetailRadioView(Context context) {
         super(context);
@@ -48,8 +51,10 @@ public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayo
             addView(child);
             child.setOnClickListener(this);
             child.setTag(value);
+            items.add(child);
             TextView textView = ButterKnife.findById(child, R.id.textView);
             textView.setText(getTextForValue(value));
+            texts.add(textView);
             ImageView radio = ButterKnife.findById(child, R.id.imageViewRadio);
             radios.add(radio);
         }
@@ -86,6 +91,23 @@ public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayo
             radios.get(i).setImageResource(value == selected
                     ? ResourcesUtils.getRadioOnRes(sex)
                     : R.drawable.radio_off);
+            boolean enabled = value == selected || !isReadOnly;
+            //noinspection deprecation
+            texts.get(i).setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
+            ++i;
+        }
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        isReadOnly = readOnly;
+        int i = 0;
+        for (T value : getEnumType().getEnumConstants()) {
+            items.get(i).setOnClickListener(readOnly ? null : this);
+            items.get(i).setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
+            boolean enabled = value == selected || !readOnly;
+            //noinspection deprecation
+            texts.get(i).setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
             ++i;
         }
     }

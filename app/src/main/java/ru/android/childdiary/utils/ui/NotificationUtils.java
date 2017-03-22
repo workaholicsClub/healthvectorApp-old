@@ -18,7 +18,7 @@ import ru.android.childdiary.utils.TimeUtils;
 
 public class NotificationUtils {
     private static PendingIntent buildPendingIntent(Context context, int notificationId, @NonNull SleepEvent event) {
-        Intent intent = SleepEventDetailActivity.getIntent(context, event);
+        Intent intent = SleepEventDetailActivity.getIntent(context, event, true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(SleepEventDetailActivity.class);
         stackBuilder.addNextIntent(intent);

@@ -22,6 +22,7 @@
         android:textAppearance="@style/PrimaryTextAppearance" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="@dimen/arrow_icon_size"
         android:layout_height="@dimen/arrow_icon_size"
         android:layout_marginEnd="@dimen/event_detail_margin_base"

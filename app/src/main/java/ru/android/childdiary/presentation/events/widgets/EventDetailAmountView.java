@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.events.widgets;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -21,6 +22,9 @@ import ru.android.childdiary.utils.DoubleUtils;
 public class EventDetailAmountView extends EventDetailEditTextView {
     @BindView(R.id.editText)
     CustomEditText editText;
+
+    @BindView(R.id.imageView)
+    ImageView imageView;
 
     @Getter
     private Double amount;
@@ -83,5 +87,11 @@ public class EventDetailAmountView extends EventDetailEditTextView {
         }));
 
         return disposables;
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        editText.setEnabled(!readOnly);
+        imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
     }
 }

@@ -30,9 +30,9 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailBreastFeedDurationView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailBreastFeedDurationView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailFeedTypeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailFoodMeasureView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
@@ -79,9 +79,10 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
         Intent intent = new Intent(context, FeedEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
+        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 

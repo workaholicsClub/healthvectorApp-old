@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,12 +14,11 @@ import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.TimeUtils;
 
-public class EventDetailBreastFeedDurationView extends LinearLayout implements View.OnClickListener {
+public class EventDetailBreastFeedDurationView extends LinearLayout implements View.OnClickListener, ReadOnlyView {
     private TextView textViewDuration;
-    private TextView textViewDurationLeft;
-    private TextView textViewDurationRight;
-    private View textViewDurationLeftWrapper;
-    private View textViewDurationRightWrapper;
+    private TextView textViewDurationLeft, textViewDurationRight;
+    private View textViewDurationLeftWrapper, textViewDurationRightWrapper;
+    private ImageView imageViewLeft, imageViewRight;
 
     @Setter
     private EventDetailDurationListener eventDetailDurationListener;
@@ -61,12 +61,14 @@ public class EventDetailBreastFeedDurationView extends LinearLayout implements V
         textViewDurationLeftWrapper = ButterKnife.findById(view, R.id.textViewWrapper);
         textViewDurationLeftWrapper.setOnClickListener(this);
         textViewDurationLeft = ButterKnife.findById(view, R.id.textView);
+        imageViewLeft = ButterKnife.findById(view, R.id.imageView);
 
         view = inflate(getContext(), R.layout.event_detail_duration_right, null);
         addView(view);
         textViewDurationRightWrapper = ButterKnife.findById(view, R.id.textViewWrapper);
         textViewDurationRightWrapper.setOnClickListener(this);
         textViewDurationRight = ButterKnife.findById(view, R.id.textView);
+        imageViewRight = ButterKnife.findById(view, R.id.imageView);
     }
 
     public void setLeftDuration(@Nullable Integer value) {
@@ -99,6 +101,16 @@ public class EventDetailBreastFeedDurationView extends LinearLayout implements V
                 eventDetailDurationListener.requestRightValueChange(this);
             }
         }
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        textViewDurationLeftWrapper.setOnClickListener(readOnly ? null : this);
+        textViewDurationRightWrapper.setOnClickListener(readOnly ? null : this);
+        textViewDurationLeftWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
+        textViewDurationRightWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
+        imageViewLeft.setVisibility(readOnly ? INVISIBLE : VISIBLE);
+        imageViewRight.setVisibility(readOnly ? INVISIBLE : VISIBLE);
     }
 
     public interface EventDetailDurationListener {

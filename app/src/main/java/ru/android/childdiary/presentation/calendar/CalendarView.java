@@ -25,17 +25,17 @@ public interface CalendarView extends BaseView {
     void showEvents(@NonNull LocalDate date, @NonNull List<MasterEvent> events);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToDiaperEventEdit(@NonNull MasterEvent event);
+    void navigateToDiaperEvent(@NonNull MasterEvent event, boolean readOnly);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToFeedEventEdit(@NonNull MasterEvent event);
+    void navigateToFeedEvent(@NonNull MasterEvent event, boolean readOnly);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToOtherEventEdit(@NonNull MasterEvent event);
+    void navigateToOtherEvent(@NonNull MasterEvent event, boolean readOnly);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToPumpEventEdit(@NonNull MasterEvent event);
+    void navigateToPumpEvent(@NonNull MasterEvent event, boolean readOnly);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToSleepEventEdit(@NonNull MasterEvent event);
+    void navigateToSleepEvent(@NonNull MasterEvent event, boolean readOnly);
 }

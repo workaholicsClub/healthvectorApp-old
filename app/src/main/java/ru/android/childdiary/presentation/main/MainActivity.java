@@ -44,6 +44,12 @@ import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
+import ru.android.childdiary.presentation.calendar.adapters.events.FabController;
+import ru.android.childdiary.presentation.calendar.fragments.CalendarFragment;
+import ru.android.childdiary.presentation.calendar.fragments.DayFragment;
+import ru.android.childdiary.presentation.calendar.fragments.MonthFragment;
+import ru.android.childdiary.presentation.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
@@ -51,12 +57,6 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
-import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
-import ru.android.childdiary.presentation.calendar.adapters.events.FabController;
-import ru.android.childdiary.presentation.calendar.fragments.CalendarFragment;
-import ru.android.childdiary.presentation.calendar.fragments.DayFragment;
-import ru.android.childdiary.presentation.calendar.fragments.MonthFragment;
-import ru.android.childdiary.presentation.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
 import ru.android.childdiary.presentation.main.drawer.CloseMenuButtonClickListener;
 import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
@@ -265,31 +265,31 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     public void navigateToDiaperEventAdd() {
-        Intent intent = DiaperEventDetailActivity.getIntent(this, null);
+        Intent intent = DiaperEventDetailActivity.getIntent(this, null, true);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToFeedEventAdd() {
-        Intent intent = FeedEventDetailActivity.getIntent(this, null);
+        Intent intent = FeedEventDetailActivity.getIntent(this, null, true);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToOtherEventAdd() {
-        Intent intent = OtherEventDetailActivity.getIntent(this, null);
+        Intent intent = OtherEventDetailActivity.getIntent(this, null, true);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToPumpEventAdd() {
-        Intent intent = PumpEventDetailActivity.getIntent(this, null);
+        Intent intent = PumpEventDetailActivity.getIntent(this, null, true);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToSleepEventAdd() {
-        Intent intent = SleepEventDetailActivity.getIntent(this, null);
+        Intent intent = SleepEventDetailActivity.getIntent(this, null, true);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 

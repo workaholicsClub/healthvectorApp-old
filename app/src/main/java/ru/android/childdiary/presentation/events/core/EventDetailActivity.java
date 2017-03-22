@@ -26,6 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import icepick.State;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
@@ -40,6 +41,7 @@ import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.presentation.events.widgets.ReadOnlyView;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -61,6 +63,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @BindView(R.id.dummy)
     View dummy;
 
+    @State
+    boolean readOnly;
+
     private ViewGroup eventDetailsView;
 
     @Override
@@ -74,8 +79,10 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 getPresenter().requestDefaultEventDetail(getEventType());
             } else {
                 getPresenter().requestEventDetails(masterEvent);
+                readOnly = getIntent().getBooleanExtra(ExtraConstants.EXTRA_READ_ONLY, false);
             }
         }
+        setupReadOnlyFields();
     }
 
     @Override
@@ -128,8 +135,13 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @OnClick(R.id.buttonDone)
     void onButtonDoneClick() {
-        upsertEvent(buildEvent());
-        finish();
+        if (readOnly) {
+            readOnly = false;
+            setupReadOnlyFields();
+        } else {
+            upsertEvent(buildEvent());
+            finish();
+        }
     }
 
     protected final T buildEvent() {
@@ -275,5 +287,23 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public void onSetTime(String tag, int minutes) {
+    }
+
+    private void setupReadOnlyFields() {
+        setReadOnly(rootView);
+        editTextNote.setEnabled(!readOnly);
+        buttonDone.setText(readOnly ? R.string.edit : R.string.save);
+    }
+
+    private void setReadOnly(View view) {
+        if (view instanceof ReadOnlyView) {
+            ((ReadOnlyView) view).setReadOnly(readOnly);
+        } else if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); ++i) {
+                View viewChild = viewGroup.getChildAt(i);
+                setReadOnly(viewChild);
+            }
+        }
     }
 }
