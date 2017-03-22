@@ -266,7 +266,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         DateTime finish = getDateTime(finishDateView, finishTimeView);
         Integer minutes = TimeUtils.durationInMinutes(start, finish);
         durationView.setValue(minutes);
-        int visibility = event.getIsTimerStarted() == null || !event.getIsTimerStarted()
+        int visibility = event == null || event.getIsTimerStarted() == null || !event.getIsTimerStarted()
                 ? View.VISIBLE
                 : View.GONE;
         finishDateView.setVisibility(visibility);
@@ -275,13 +275,10 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     private void updateTimer(@NonNull SleepEvent event) {
-        String text;
-        if (event.getIsTimerStarted() == null || !event.getIsTimerStarted()) {
-            text = getString(R.string.duration_format);
-        } else {
-            text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());
+        if (event.getIsTimerStarted() != null && event.getIsTimerStarted()) {
+            String text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());
+            buttonTimer.setText(text);
         }
-        buttonTimer.setText(text);
     }
 
     private void updateIfNeeded() {

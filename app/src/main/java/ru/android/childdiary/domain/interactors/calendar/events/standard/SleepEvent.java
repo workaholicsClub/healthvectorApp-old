@@ -12,8 +12,6 @@ import ru.android.childdiary.domain.interactors.child.Child;
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class SleepEvent extends MasterEvent {
-    Child child;
-
     Long id;
 
     DateTime finishDateTime;
@@ -33,8 +31,7 @@ public class SleepEvent extends MasterEvent {
                        Long id,
                        DateTime finishDateTime,
                        Boolean isTimerStarted) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
-        this.child = child;
+        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.finishDateTime = finishDateTime;
         this.isTimerStarted = isTimerStarted;

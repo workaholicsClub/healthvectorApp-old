@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -24,9 +25,10 @@ public class OtherEvent extends MasterEvent {
                        String note,
                        Boolean isDone,
                        Boolean isDeleted,
+                       Child child,
                        Long id,
                        DateTime finishDateTime) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
+        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.finishDateTime = finishDateTime;
     }

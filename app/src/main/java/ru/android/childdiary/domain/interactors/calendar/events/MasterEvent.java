@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 @ToString
 @EqualsAndHashCode
@@ -36,6 +37,8 @@ public class MasterEvent implements Serializable {
 
     Boolean isDeleted;
 
+    Child child;
+
     public MasterEvent getMasterEvent() {
         return this;
     }
@@ -49,6 +52,7 @@ public class MasterEvent implements Serializable {
                 .notifyTimeInMinutes(notifyTimeInMinutes)
                 .note(note)
                 .isDone(isDone)
-                .isDeleted(isDeleted);
+                .isDeleted(isDeleted)
+                .child(child);
     }
 }

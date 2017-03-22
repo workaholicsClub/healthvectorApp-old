@@ -7,12 +7,17 @@ import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
+import ru.android.childdiary.data.entities.child.ChildData;
+import ru.android.childdiary.data.repositories.child.ChildMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 class PumpEventMapper {
     public static PumpEvent mapToPlainObject(@NonNull PumpEventEntity eventData) {
         MasterEventData masterEventData = eventData.getMasterEvent();
+        ChildData childData = masterEventData.getChild();
+        Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
         return PumpEvent.builder()
                 .id(eventData.getId())
                 .masterEventId(masterEventData.getId())
@@ -23,6 +28,7 @@ class PumpEventMapper {
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
                 .isDeleted(masterEventData.isDeleted())
+                .child(child)
                 .breast(eventData.getBreast())
                 .leftAmountMl(eventData.getLeftAmountMl())
                 .rightAmountMl(eventData.getRightAmountMl())

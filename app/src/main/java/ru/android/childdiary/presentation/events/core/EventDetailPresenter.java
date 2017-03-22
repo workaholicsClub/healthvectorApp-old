@@ -24,20 +24,14 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     private boolean isSubscribedToEventDetails;
 
-    @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
-
+    @SuppressWarnings("unchecked")
+    @CallSuper
+    public void requestDefaultEventDetail(@NonNull EventType eventType) {
         unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(child -> logger.debug("showChild: " + child))
                 .subscribe(getViewState()::showChild, this::onUnexpectedError));
-    }
-
-    @SuppressWarnings("unchecked")
-    @CallSuper
-    public void requestDefaultEventDetail(@NonNull EventType eventType) {
         unsubscribeOnDestroy(calendarInteractor.getDefaultEventDetail(eventType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,10 +42,11 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     @SuppressWarnings("unchecked")
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
         if (!isSubscribedToEventDetails) {
-            unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(event -> logger.debug("event details: " + event))
+            unsubscribeOnDestroy(childInteractor.setActiveChild(masterEvent.getChild())
+                    .flatMap(child -> calendarInteractor.getEventDetail(masterEvent)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnNext(event -> logger.debug("event details: " + event)))
                     .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
             isSubscribedToEventDetails = true;
         }

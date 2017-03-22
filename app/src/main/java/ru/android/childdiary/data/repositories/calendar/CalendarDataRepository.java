@@ -109,28 +109,28 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
-    public Observable<DiaperEvent> add(@NonNull Child child, @NonNull DiaperEvent event) {
-        return dbService.add(child, event);
+    public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
+        return dbService.add(event);
     }
 
     @Override
-    public Observable<FeedEvent> add(@NonNull Child child, @NonNull FeedEvent event) {
-        return dbService.add(child, event);
+    public Observable<FeedEvent> add(@NonNull FeedEvent event) {
+        return dbService.add(event);
     }
 
     @Override
-    public Observable<OtherEvent> add(@NonNull Child child, @NonNull OtherEvent event) {
-        return dbService.add(child, event);
+    public Observable<OtherEvent> add(@NonNull OtherEvent event) {
+        return dbService.add(event);
     }
 
     @Override
-    public Observable<PumpEvent> add(@NonNull Child child, @NonNull PumpEvent event) {
-        return dbService.add(child, event);
+    public Observable<PumpEvent> add(@NonNull PumpEvent event) {
+        return dbService.add(event);
     }
 
     @Override
-    public Observable<SleepEvent> add(@NonNull Child child, @NonNull SleepEvent event) {
-        return dbService.add(child, event);
+    public Observable<SleepEvent> add(@NonNull SleepEvent event) {
+        return dbService.add(event);
     }
 
     @Override

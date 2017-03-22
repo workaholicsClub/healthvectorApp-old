@@ -51,7 +51,8 @@
         android:drawableLeft="@drawable/ic_duration"
         android:drawableStart="@drawable/ic_duration"
         android:gravity="center_vertical|end"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:text="@string/duration_format" />
 
     <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView
         android:id="@+id/notifyTimeView"

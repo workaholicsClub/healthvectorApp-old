@@ -163,6 +163,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     @CallSuper
     public void showEventDetail(@NonNull T event) {
+        changeThemeIfNeeded(event.getChild());
         this.event = event;
     }
 
@@ -177,7 +178,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public void eventAdded(@NonNull T event) {
-        getPresenter().requestEventDetails(event.getMasterEvent());
+        getPresenter().requestEventDetails(event);
     }
 
     @Override

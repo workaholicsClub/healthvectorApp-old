@@ -92,6 +92,8 @@ public class TimerService extends Service {
 
     private void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
+
+        updateNotifications(this, Collections.emptyList());
         stopTimer();
     }
 
@@ -150,14 +152,15 @@ public class TimerService extends Service {
     private void updateNotifications(Context context) {
         for (SleepEvent event : events) {
             Long masterEventId = event.getMasterEventId();
+            int notificationId = (int) (masterEventId % Integer.MAX_VALUE);
             NotificationCompat.Builder builder = notificationBuilders.get(masterEventId);
             if (builder == null) {
-                builder = NotificationUtils.buildNotification(context, event);
+                builder = NotificationUtils.buildNotification(context, notificationId, event);
                 notificationBuilders.put(masterEventId, builder);
             } else {
                 NotificationUtils.updateNotification(context, builder, event);
             }
-            NotificationUtils.showNotification(context, (int) (masterEventId % Integer.MAX_VALUE), builder);
+            NotificationUtils.showNotification(context, notificationId, builder);
         }
     }
 }
