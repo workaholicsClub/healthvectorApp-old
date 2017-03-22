@@ -118,7 +118,6 @@ public class CalendarInteractor implements Interactor {
                         (date, time, minutes) -> OtherEvent.builder()
                                 .dateTime(date.toDateTime(time))
                                 .notifyTimeInMinutes(minutes)
-                                .finishDateTime(date.toDateTime(time))
                                 .build());
             case PUMP:
                 return (Observable<T>) Observable.combineLatest(
