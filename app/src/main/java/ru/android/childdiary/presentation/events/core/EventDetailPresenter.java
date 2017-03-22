@@ -27,11 +27,6 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     @SuppressWarnings("unchecked")
     @CallSuper
     public void requestDefaultEventDetail(@NonNull EventType eventType) {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(child -> logger.debug("showChild: " + child))
-                .subscribe(getViewState()::showChild, this::onUnexpectedError));
         unsubscribeOnDestroy(calendarInteractor.getDefaultEventDetail(eventType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

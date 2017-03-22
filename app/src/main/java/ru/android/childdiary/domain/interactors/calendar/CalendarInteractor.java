@@ -29,15 +29,18 @@ import ru.android.childdiary.domain.interactors.calendar.requests.AddEventReques
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsResponse;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 
 public class CalendarInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CalendarDataRepository calendarRepository;
+    private final ChildInteractor childInteractor;
 
     @Inject
-    public CalendarInteractor(CalendarDataRepository calendarRepository) {
+    public CalendarInteractor(CalendarDataRepository calendarRepository, ChildInteractor childInteractor) {
         this.calendarRepository = calendarRepository;
+        this.childInteractor = childInteractor;
     }
 
     public Observable<LocalDate> getSelectedDate() {
@@ -89,21 +92,25 @@ public class CalendarInteractor implements Interactor {
         switch (eventType) {
             case DIAPER:
                 return (Observable<T>) Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
                         getSelectedDate(),
                         Observable.just(LocalTime.now()),
                         getDefaultNotifyTimeInMinutes(eventType),
-                        (date, time, minutes) -> DiaperEvent.builder()
+                        (child, date, time, minutes) -> DiaperEvent.builder()
+                                .child(child)
                                 .dateTime(date.toDateTime(time))
                                 .notifyTimeInMinutes(minutes)
                                 .diaperState(DiaperState.WET)
                                 .build());
             case FEED:
                 return (Observable<T>) Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
                         getSelectedDate(),
                         Observable.just(LocalTime.now()),
                         getDefaultNotifyTimeInMinutes(eventType),
                         getDefaultFoodMeasure(),
-                        (date, time, minutes, foodMeasure) -> FeedEvent.builder()
+                        (child, date, time, minutes, foodMeasure) -> FeedEvent.builder()
+                                .child(child)
                                 .dateTime(date.toDateTime(time))
                                 .notifyTimeInMinutes(minutes)
                                 .feedType(FeedType.BREAST_MILK)
@@ -112,29 +119,35 @@ public class CalendarInteractor implements Interactor {
                                 .build());
             case OTHER:
                 return (Observable<T>) Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
                         getSelectedDate(),
                         Observable.just(LocalTime.now()),
                         getDefaultNotifyTimeInMinutes(eventType),
-                        (date, time, minutes) -> OtherEvent.builder()
+                        (child, date, time, minutes) -> OtherEvent.builder()
+                                .child(child)
                                 .dateTime(date.toDateTime(time))
                                 .notifyTimeInMinutes(minutes)
                                 .build());
             case PUMP:
                 return (Observable<T>) Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
                         getSelectedDate(),
                         Observable.just(LocalTime.now()),
                         getDefaultNotifyTimeInMinutes(eventType),
-                        (date, time, minutes) -> PumpEvent.builder()
+                        (child, date, time, minutes) -> PumpEvent.builder()
+                                .child(child)
                                 .dateTime(date.toDateTime(time))
                                 .notifyTimeInMinutes(minutes)
                                 .breast(Breast.LEFT)
                                 .build());
             case SLEEP:
                 return (Observable<T>) Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
                         getSelectedDate(),
                         Observable.just(LocalTime.now()),
                         getDefaultNotifyTimeInMinutes(eventType),
-                        (date, time, minutes) -> SleepEvent.builder()
+                        (child, date, time, minutes) -> SleepEvent.builder()
+                                .child(child)
                                 .dateTime(date.toDateTime(time))
                                 .notifyTimeInMinutes(minutes)
                                 .build());

@@ -152,8 +152,8 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         }
     }
 
-    protected final void changeThemeIfNeeded(@Nullable Child child) {
-        Sex sex = child == null ? null : child.getSex();
+    protected final void changeThemeIfNeeded(@NonNull Child child) {
+        Sex sex = child.getSex();
         changeThemeIfNeeded(sex);
     }
 

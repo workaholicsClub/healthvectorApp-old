@@ -178,6 +178,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
+    protected EventType getEventType() {
+        return EventType.SLEEP;
+    }
+
+    @Override
     @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_event_detail_sleep;
@@ -192,11 +197,6 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         editTextNote.setText(event.getNote());
         updateDuration();
         updateTimer(event);
-    }
-
-    @Override
-    protected EventType getEventType() {
-        return EventType.SLEEP;
     }
 
     @Override
