@@ -143,7 +143,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     protected OtherEvent buildEvent(OtherEvent event) {
         OtherEvent.OtherEventBuilder builder = event == null
-                ? OtherEvent.builder().eventType(EventType.OTHER)
+                ? OtherEvent.builder()
                 : event.toBuilder();
 
         DateTime startDateTime = getDateTime(startDateView, startTimeView);

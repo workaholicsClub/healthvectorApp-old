@@ -127,7 +127,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @Override
     protected PumpEvent buildEvent(PumpEvent event) {
         PumpEvent.PumpEventBuilder builder = event == null
-                ? PumpEvent.builder().eventType(EventType.PUMP)
+                ? PumpEvent.builder()
                 : event.toBuilder();
 
         DateTime dateTime = getDateTime(dateView, timeView);

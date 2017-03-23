@@ -205,7 +205,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     protected SleepEvent buildEvent(SleepEvent event) {
         SleepEvent.SleepEventBuilder builder = event == null
-                ? SleepEvent.builder().eventType(EventType.SLEEP)
+                ? SleepEvent.builder()
                 : event.toBuilder();
 
         DateTime startDateTime = getDateTime(startDateView, startTimeView);

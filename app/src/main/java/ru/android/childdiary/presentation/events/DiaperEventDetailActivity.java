@@ -120,7 +120,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @Override
     protected DiaperEvent buildEvent(@Nullable DiaperEvent event) {
         DiaperEvent.DiaperEventBuilder builder = event == null
-                ? DiaperEvent.builder().eventType(EventType.DIAPER)
+                ? DiaperEvent.builder()
                 : event.toBuilder();
 
         DateTime dateTime = getDateTime(dateView, timeView);

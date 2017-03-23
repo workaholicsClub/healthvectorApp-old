@@ -206,7 +206,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     protected FeedEvent buildEvent(FeedEvent event) {
         FeedEvent.FeedEventBuilder builder = event == null
-                ? FeedEvent.builder().eventType(EventType.FEED)
+                ? FeedEvent.builder()
                 : event.toBuilder();
 
         DateTime dateTime = getDateTime(dateView, timeView);
