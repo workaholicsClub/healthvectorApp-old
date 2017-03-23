@@ -3,10 +3,12 @@ package ru.android.childdiary.presentation.events.adapters;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.Food;
@@ -34,6 +36,8 @@ public class FoodAdapter extends BaseArrayAdapter<Food, FoodAdapter.ViewHolder> 
         TextView textView;
         @BindView(R.id.imageViewDropdown)
         View imageViewDropdown;
+        @BindDimen(R.dimen.base_margin_horizontal)
+        int baseMarginHorizontal;
 
         public ViewHolder(View view) {
             super(view);
@@ -46,6 +50,9 @@ public class FoodAdapter extends BaseArrayAdapter<Food, FoodAdapter.ViewHolder> 
                     : food.getName();
             textView.setText(text);
             imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textView.getLayoutParams();
+            params.rightMargin = position == 0 ? 0 : baseMarginHorizontal;
+            textView.setLayoutParams(params);
         }
     }
 }

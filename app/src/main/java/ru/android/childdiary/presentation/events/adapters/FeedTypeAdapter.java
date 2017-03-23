@@ -3,10 +3,12 @@ package ru.android.childdiary.presentation.events.adapters;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.FeedType;
@@ -35,6 +37,8 @@ public class FeedTypeAdapter extends BaseArrayAdapter<FeedType, FeedTypeAdapter.
         TextView textView;
         @BindView(R.id.imageViewDropdown)
         View imageViewDropdown;
+        @BindDimen(R.dimen.base_margin_horizontal)
+        int baseMarginHorizontal;
 
         public ViewHolder(View view) {
             super(view);
@@ -45,6 +49,9 @@ public class FeedTypeAdapter extends BaseArrayAdapter<FeedType, FeedTypeAdapter.
             String text = StringUtils.feedType(context, value);
             textView.setText(text);
             imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textView.getLayoutParams();
+            params.rightMargin = position == 0 ? 0 : baseMarginHorizontal;
+            textView.setLayoutParams(params);
         }
     }
 }
