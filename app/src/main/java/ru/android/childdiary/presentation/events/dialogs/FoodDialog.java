@@ -4,25 +4,25 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.Food;
 
-public class FoodMeasureDialog extends AddValueDialog {
+public class FoodDialog extends AddValueDialog {
     private Listener listener;
 
     @Override
     protected int getMaxLength() {
-        return getResources().getInteger(R.integer.max_length_event_detail_food_measure);
+        return getResources().getInteger(R.integer.max_length_event_detail_food);
     }
 
     @Override
     protected String getTitle() {
-        return getString(R.string.food_measure_dialog_title);
+        return getString(R.string.food_dialog_title);
     }
 
     @Override
     protected void addValue(String name) {
         if (listener != null) {
-            listener.onSetFoodMeasure(getTag(), FoodMeasure.builder().name(name).build());
+            listener.onSetFood(getTag(), Food.builder().name(name).build());
         }
     }
 
@@ -41,6 +41,6 @@ public class FoodMeasureDialog extends AddValueDialog {
     }
 
     public interface Listener {
-        void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure);
+        void onSetFood(String tag, @NonNull Food food);
     }
 }

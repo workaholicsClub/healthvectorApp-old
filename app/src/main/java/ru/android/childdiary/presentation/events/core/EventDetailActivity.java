@@ -30,13 +30,11 @@ import icepick.State;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
-import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
@@ -47,8 +45,7 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
-        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
-        FoodMeasureDialog.Listener, TimeDialog.Listener {
+        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
     protected T event;
 
     @BindView(R.id.editTextNote)
@@ -204,12 +201,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void showFoodMeasureDialog(String tag, @NonNull Child child) {
-        FoodMeasureDialog dialog = new FoodMeasureDialog();
-        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child);
-    }
-
-    @Override
     public void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters) {
         TimeDialog dialog = new TimeDialog();
         dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child, parameters);
@@ -308,10 +299,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setDateTime(@Nullable DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
         dateView.setValue(dateTime == null ? null : dateTime.toLocalDate());
         timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
-    }
-
-    @Override
-    public void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
     }
 
     @Override

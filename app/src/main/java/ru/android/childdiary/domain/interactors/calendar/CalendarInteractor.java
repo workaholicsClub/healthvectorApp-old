@@ -82,6 +82,22 @@ public class CalendarInteractor implements Interactor {
                 .toObservable();
     }
 
+    public Observable<List<Food>> getFoodList() {
+        return calendarRepository.getFoodList();
+    }
+
+    public Observable<Food> addFood(@NonNull Food food) {
+        return calendarRepository.addFood(food);
+    }
+
+    private Observable<Food> getDefaultFood() {
+        return calendarRepository.getFoodList()
+                .first(Collections.singletonList(Food.NULL))
+                .flatMapObservable(Observable::fromIterable)
+                .first(Food.NULL)
+                .toObservable();
+    }
+
     private Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
         switch (eventType) {
             case DIAPER:

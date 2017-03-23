@@ -86,6 +86,11 @@
     <string name="food_measure_grams">граммы</string>
     <string name="food_measure_millilitres">миллилитры</string>
     <string name="food_measure_other">Другое</string>
+    <string name="food_porridge">Каша</string>
+    <string name="food_vegetables">Овощное пюре</string>
+    <string name="food_fruits">Фруктовое пюре</string>
+    <string name="food_meat">Мясное пюре</string>
+    <string name="food_other">Другое</string>
     <string name="notify_time">Оповещение</string>
     <string name="diaper_state">Состояние подгузника</string>
     <string name="note">Примечание</string>
@@ -105,6 +110,7 @@
     <string name="time_dialog_hours">Часов</string>
     <string name="time_dialog_minutes">Минут</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
+    <string name="food_dialog_title">Введите наименование прикорма</string>
     <string name="duration_separator">:</string>
     <string name="child_sleep">%s спит</string>
     <string name="days_short">%d д.</string>

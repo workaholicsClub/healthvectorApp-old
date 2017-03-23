@@ -15,6 +15,7 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
+import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -71,6 +72,16 @@ public class CalendarDataRepository implements CalendarRepository {
     @Override
     public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
         return dbService.addFoodMeasure(foodMeasure);
+    }
+
+    @Override
+    public Observable<List<Food>> getFoodList() {
+        return dbService.getFoodList();
+    }
+
+    @Override
+    public Observable<Food> addFood(@NonNull Food food) {
+        return dbService.addFood(food);
     }
 
     @Override

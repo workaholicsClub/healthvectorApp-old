@@ -8,10 +8,10 @@ import ru.android.childdiary.data.entities.calendar.FoodMeasureEntity;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 
 class FoodMeasureMapper {
-    public static FoodMeasure mapToPlainObject(@NonNull FoodMeasureData foodMeasure) {
+    public static FoodMeasure mapToPlainObject(@NonNull FoodMeasureData foodMeasureData) {
         return FoodMeasure.builder()
-                .id(foodMeasure.getId())
-                .name(foodMeasure.getName())
+                .id(foodMeasureData.getId())
+                .name(foodMeasureData.getName())
                 .build();
     }
 

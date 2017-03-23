@@ -2,4 +2,5 @@
 <resources>
     <integer name="max_length_event_detail_note">2000</integer>
     <integer name="max_length_event_detail_food_measure">20</integer>
+    <integer name="max_length_event_detail_food">20</integer>
 </resources>

@@ -25,6 +25,10 @@ public interface CalendarRepository extends Repository {
 
     Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure value);
 
+    Observable<List<Food>> getFoodList();
+
+    Observable<Food> addFood(@NonNull Food value);
+
     Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate);
 
     Observable<List<SleepEvent>> getSleepEventsWithTimer();

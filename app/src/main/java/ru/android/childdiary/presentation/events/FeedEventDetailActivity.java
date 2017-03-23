@@ -22,11 +22,15 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.dialogs.FoodDialog;
+import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailAmountView;
@@ -35,16 +39,18 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailFeedTypeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailFoodMeasureView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailFoodView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailSpinnerView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
-        EventDetailSpinnerView.EventDetailSpinnerListener {
+        EventDetailSpinnerView.EventDetailSpinnerListener, FoodMeasureDialog.Listener, FoodDialog.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_FOOD_MEASURE_DIALOG = "FOOD_MEASURE_DIALOG";
+    private static final String TAG_FOOD_DIALOG = "FOOD_DIALOG";
     private static final String TAG_LEFT_DURATION_DIALOG = "TAG_LEFT_DURATION_DIALOG";
     private static final String TAG_RIGHT_DURATION_DIALOG = "TAG_RIGHT_DURATION_DIALOG";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
@@ -63,6 +69,9 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
     @BindView(R.id.foodMeasureView)
     EventDetailFoodMeasureView foodMeasureView;
+
+    @BindView(R.id.foodView)
+    EventDetailFoodView foodView;
 
     @BindView(R.id.amountMlView)
     EventDetailAmountMlView amountMlView;
@@ -99,6 +108,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue(), null, null));
         feedTypeView.setEventDetailSpinnerListener(this);
         foodMeasureView.setEventDetailSpinnerListener(this);
+        foodView.setEventDetailSpinnerListener(this);
         setupEditTextView(amountMlView);
         setupEditTextView(amountView);
         durationView.setEventDetailDurationListener(new EventDetailBreastFeedDurationView.EventDetailDurationListener() {
@@ -173,6 +183,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         feedTypeView.setValue(event.getFeedType());
         setupFeedType();
         foodMeasureView.setValue(event.getFoodMeasure());
+        foodView.setValue(event.getFood());
         amountMlView.setAmountMl(event.getAmountMl());
         amountView.setAmount(event.getAmount());
         breastView.setSelected(event.getBreast());
@@ -188,6 +199,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
+    public void showFoodList(@NonNull List<Food> foodList) {
+        foodView.updateAdapter(foodList);
+    }
+
+    @Override
     protected FeedEvent buildEvent(FeedEvent event) {
         FeedEvent.FeedEventBuilder builder = event == null
                 ? FeedEvent.builder().eventType(EventType.FEED)
@@ -198,6 +214,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         builder.dateTime(dateTime)
                 .feedType(feedTypeView.getValue())
                 .foodMeasure(foodMeasureView.getValue())
+                .food(foodView.getValue())
                 .amountMl(amountMlView.getAmountMl())
                 .amount(amountView.getAmount())
                 .breast(breastView.getSelected())
@@ -207,6 +224,18 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 .note(editTextNote.getText().toString());
 
         return builder.build();
+    }
+
+    @Override
+    public void showFoodMeasureDialog(String tag, @NonNull Child child) {
+        FoodMeasureDialog dialog = new FoodMeasureDialog();
+        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child);
+    }
+
+    @Override
+    public void showFoodDialog(String tag, @NonNull Child child) {
+        FoodDialog dialog = new FoodDialog();
+        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child);
     }
 
     @Override
@@ -247,6 +276,13 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
             } else {
                 foodMeasureView.setValue(foodMeasure);
             }
+        } else if (view == foodView) {
+            Food food = (Food) item;
+            if (food == Food.NULL) {
+                presenter.requestFoodDialog(TAG_FOOD_DIALOG);
+            } else {
+                foodView.setValue(food);
+            }
         }
     }
 
@@ -260,6 +296,16 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         foodMeasureView.setValue(foodMeasure);
     }
 
+    @Override
+    public void onSetFood(String tag, @NonNull Food food) {
+        presenter.addFood(food);
+    }
+
+    @Override
+    public void foodAdded(@NonNull Food food) {
+        foodView.setValue(food);
+    }
+
     public void setupFeedType() {
         FeedType feedType = feedTypeView.getValue();
         switch (feedType) {
@@ -269,6 +315,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 durationView.setVisibility(View.VISIBLE);
                 amountView.setVisibility(View.GONE);
                 foodMeasureView.setVisibility(View.GONE);
+                foodView.setVisibility(View.GONE);
                 break;
             case PUMPED_MILK:
                 breastView.setVisibility(View.GONE);
@@ -276,6 +323,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 durationView.setVisibility(View.GONE);
                 amountView.setVisibility(View.GONE);
                 foodMeasureView.setVisibility(View.GONE);
+                foodView.setVisibility(View.GONE);
                 break;
             case MILK_FORMULA:
                 breastView.setVisibility(View.GONE);
@@ -283,6 +331,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 durationView.setVisibility(View.GONE);
                 amountView.setVisibility(View.GONE);
                 foodMeasureView.setVisibility(View.GONE);
+                foodView.setVisibility(View.GONE);
                 break;
             case FOOD:
                 breastView.setVisibility(View.GONE);
@@ -290,6 +339,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 durationView.setVisibility(View.GONE);
                 amountView.setVisibility(View.VISIBLE);
                 foodMeasureView.setVisibility(View.VISIBLE);
+                foodView.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -302,6 +352,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         }
 
         processed = foodMeasureView.dismissPopupWindow();
+        if (processed) {
+            return;
+        }
+
+        processed = foodView.dismissPopupWindow();
         if (processed) {
             return;
         }

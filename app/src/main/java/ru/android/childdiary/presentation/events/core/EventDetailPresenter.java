@@ -54,13 +54,6 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
         }
     }
 
-    public void requestFoodMeasureDialog(String tag) {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(child -> getViewState().showFoodMeasureDialog(tag, child), this::onUnexpectedError));
-    }
-
     public void requestTimeDialog(String tag, TimeDialog.Parameters parameters) {
         unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
                 .subscribeOn(Schedulers.io())

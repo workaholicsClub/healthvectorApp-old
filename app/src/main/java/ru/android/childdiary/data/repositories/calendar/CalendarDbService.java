@@ -15,6 +15,7 @@ import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.entities.calendar.FoodEntity;
 import ru.android.childdiary.data.entities.calendar.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.DiaperEventEntity;
@@ -23,6 +24,7 @@ import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEn
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -60,6 +62,19 @@ public class CalendarDbService {
     public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
         return DbUtils.insertObservable(dataStore, foodMeasure,
                 FoodMeasureMapper::mapToEntity, FoodMeasureMapper::mapToPlainObject);
+    }
+
+    public Observable<List<Food>> getFoodList() {
+        return dataStore.select(FoodEntity.class)
+                .orderBy(FoodEntity.NAME)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, FoodMapper::mapToPlainObject));
+    }
+
+    public Observable<Food> addFood(@NonNull Food food) {
+        return DbUtils.insertObservable(dataStore, food,
+                FoodMapper::mapToEntity, FoodMapper::mapToPlainObject);
     }
 
     public Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate) {

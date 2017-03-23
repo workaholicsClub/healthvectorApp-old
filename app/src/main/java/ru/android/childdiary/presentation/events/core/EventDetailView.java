@@ -27,9 +27,6 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
     void eventUpdated(@NonNull T event, boolean afterButtonPressed);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showFoodMeasureDialog(String tag, @NonNull Child child);
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
     void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

@@ -37,9 +37,16 @@ public class CustomDatabaseSource extends DatabaseSource {
     @Override
     public void onCreate(SQLiteDatabase db) {
         super.onCreate(db);
+
         // TODO: translation table
         db.execSQL("insert into food_measure (name) values ('" + context.getString(R.string.food_measure_grams) + "');");
         db.execSQL("insert into food_measure (name) values ('" + context.getString(R.string.food_measure_millilitres) + "');");
+
+        // TODO: translation table
+        db.execSQL("insert into food (name) values ('" + context.getString(R.string.food_porridge) + "');");
+        db.execSQL("insert into food (name) values ('" + context.getString(R.string.food_vegetables) + "');");
+        db.execSQL("insert into food (name) values ('" + context.getString(R.string.food_fruits) + "');");
+        db.execSQL("insert into food (name) values ('" + context.getString(R.string.food_meat) + "');");
     }
 
     @Override
