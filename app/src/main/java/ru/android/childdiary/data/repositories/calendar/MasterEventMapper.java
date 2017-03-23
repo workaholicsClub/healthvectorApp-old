@@ -18,6 +18,7 @@ class MasterEventMapper {
         return MasterEvent.masterBuilder()
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
+                .description(masterEventData.getDescription())
                 .dateTime(masterEventData.getDateTime())
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
@@ -46,6 +47,7 @@ class MasterEventMapper {
 
     private static void fillNonReferencedFields(@NonNull MasterEventEntity to, @NonNull MasterEvent from) {
         to.setEventType(from.getEventType());
+        to.setDescription(from.getDescription());
         to.setDateTime(from.getDateTime());
         to.setNotifyTimeInMinutes(from.getNotifyTimeInMinutes());
         to.setNote(from.getNote());

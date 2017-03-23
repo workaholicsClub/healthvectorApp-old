@@ -23,6 +23,7 @@ class OtherEventMapper {
                 .id(eventData.getId())
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
+                .description(masterEventData.getDescription())
                 .dateTime(masterEventData.getDateTime())
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
