@@ -87,12 +87,10 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
 
         startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue(),
                 null, finishDateView.getValue()));
-        startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue(),
-                null, getStartTimeMaxValue()));
+        startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
         finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue(),
                 startDateView.getValue(), null));
-        finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue(),
-                getFinishTimeMinValue(), null));
+        finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
         notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
                 TimeDialog.Parameters.builder()
                         .minutes(notifyTimeView.getValueInt())
@@ -101,24 +99,6 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
-    }
-
-    private LocalTime getStartTimeMaxValue() {
-        LocalDate startDate = startDateView.getValue();
-        LocalDate finishDate = finishDateView.getValue();
-        if (startDate.equals(finishDate)) {
-            return finishTimeView.getValue();
-        }
-        return null;
-    }
-
-    private LocalTime getFinishTimeMinValue() {
-        LocalDate startDate = startDateView.getValue();
-        LocalDate finishDate = finishDateView.getValue();
-        if (startDate.equals(finishDate)) {
-            return startTimeView.getValue();
-        }
-        return null;
     }
 
     @Override

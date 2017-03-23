@@ -71,7 +71,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
         super.onCreate(savedInstanceState);
 
         dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(), null, null));
-        timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue(), null, null));
+        timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
         setupEditTextView(amountMlPumpView);
         notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
                 TimeDialog.Parameters.builder()

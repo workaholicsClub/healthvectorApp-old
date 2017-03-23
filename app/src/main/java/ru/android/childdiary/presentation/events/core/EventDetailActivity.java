@@ -258,8 +258,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setDate(String tag, LocalDate date) {
     }
 
-    protected void showTimePicker(String tag, @Nullable LocalTime time,
-                                  @Nullable LocalTime minTime, @Nullable LocalTime maxTime) {
+    protected void showTimePicker(String tag, @Nullable LocalTime time) {
         if (time == null) {
             time = LocalTime.now();
         }
@@ -267,12 +266,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
         tpd.vibrate(false);
         WidgetsUtils.setupTimePicker(this, tpd, sex);
-        if (minTime != null) {
-            tpd.setMinTime(minTime.getHourOfDay(), minTime.getMinuteOfHour(), 0);
-        }
-        if (maxTime != null) {
-            tpd.setMaxTime(maxTime.getHourOfDay(), maxTime.getMinuteOfHour(), 0);
-        }
         tpd.show(getFragmentManager(), tag);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
