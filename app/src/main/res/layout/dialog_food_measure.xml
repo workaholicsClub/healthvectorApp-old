@@ -14,7 +14,7 @@
         android:imeOptions="actionDone"
         android:inputType="text"
         android:lines="1"
-        android:maxLength="30"
+        android:maxLength="@integer/max_length_event_detail_food_measure"
         android:maxLines="1"
         android:singleLine="true"
         tools:ignore="Deprecated" />

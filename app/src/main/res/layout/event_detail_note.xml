@@ -22,7 +22,7 @@
             android:background="@drawable/edit_text_background"
             android:hint="@string/note"
             android:inputType="textCapSentences|textMultiLine"
-            android:maxLength="2000"
+            android:maxLength="@integer/max_length_event_detail_note"
             android:paddingBottom="@dimen/name_edit_text_padding_bottom"
             android:textColor="@color/black"
             android:textColorHint="@color/placeholder_text"
