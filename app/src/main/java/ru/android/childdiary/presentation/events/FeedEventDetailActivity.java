@@ -95,8 +95,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
-        timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
+        dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(), null, null));
+        timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue(), null, null));
         feedTypeView.setEventDetailSpinnerListener(this);
         foodMeasureView.setEventDetailSpinnerListener(this);
         setupEditTextView(amountMlView);

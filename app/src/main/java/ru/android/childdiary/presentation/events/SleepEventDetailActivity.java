@@ -98,10 +98,14 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         startTitleView.setTitle(R.string.asleep);
         finishTitleView.setTitle(R.string.awoke);
 
-        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue()));
-        startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
-        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue()));
-        finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
+        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue(),
+                null, finishDateView.getValue()));
+        startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue(),
+                null, getStartTimeMaxValue()));
+        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue(),
+                startDateView.getValue(), null));
+        finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue(),
+                getFinishTimeMinValue(), null));
         durationView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_DURATION_DIALOG,
                 TimeDialog.Parameters.builder()
                         .minutes(durationView.getValueInt())
@@ -118,6 +122,24 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
+    }
+
+    private LocalTime getStartTimeMaxValue() {
+        LocalDate startDate = startDateView.getValue();
+        LocalDate finishDate = finishDateView.getValue();
+        if (startDate.equals(finishDate)) {
+            return finishTimeView.getValue();
+        }
+        return null;
+    }
+
+    private LocalTime getFinishTimeMinValue() {
+        LocalDate startDate = startDateView.getValue();
+        LocalDate finishDate = finishDateView.getValue();
+        if (startDate.equals(finishDate)) {
+            return startTimeView.getValue();
+        }
+        return null;
     }
 
     @Override
