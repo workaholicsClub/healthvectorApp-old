@@ -31,18 +31,18 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.core.BaseMvpFragment;
-import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
-import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
-import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
-import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
-import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.CalendarView;
 import ru.android.childdiary.presentation.calendar.adapters.calendar.CalendarViewAdapter;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.calendar.adapters.events.FabController;
+import ru.android.childdiary.presentation.core.BaseMvpFragment;
+import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
+import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
+import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
+import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
 
@@ -192,38 +192,38 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     }
 
     @Override
-    public void navigateToDiaperEventEdit(@NonNull MasterEvent event) {
-        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToDiaperEvent(@NonNull MasterEvent event, boolean readOnly) {
+        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event, readOnly);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToFeedEventEdit(@NonNull MasterEvent event) {
-        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToFeedEvent(@NonNull MasterEvent event, boolean readOnly) {
+        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event, readOnly);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToOtherEventEdit(@NonNull MasterEvent event) {
-        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToOtherEvent(@NonNull MasterEvent event, boolean readOnly) {
+        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event, readOnly);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToPumpEventEdit(@NonNull MasterEvent event) {
-        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToPumpEvent(@NonNull MasterEvent event, boolean readOnly) {
+        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event, readOnly);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToSleepEventEdit(@NonNull MasterEvent event) {
-        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToSleepEvent(@NonNull MasterEvent event, boolean readOnly) {
+        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event, readOnly);
         startActivity(intent);
     }
 
     @Override
-    public void delete(MasterEvent event) {
-        presenter.delete(event);
+    public void done(MasterEvent event) {
+        presenter.done(event);
     }
 
     @Override
@@ -232,11 +232,16 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
     @Override
     public void edit(MasterEvent event) {
-        presenter.edit(event);
+        presenter.requestEventDetail(event, false);
     }
 
     @Override
-    public void done(MasterEvent event) {
-        presenter.done(event);
+    public void review(MasterEvent event) {
+        presenter.requestEventDetail(event, true);
+    }
+
+    @Override
+    public void delete(MasterEvent event) {
+        presenter.delete(event);
     }
 }

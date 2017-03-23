@@ -22,6 +22,7 @@ import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEnt
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -74,6 +75,18 @@ public class CalendarDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MasterEventMapper::mapToPlainObject));
     }
 
+    public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
+        return dataStore.select(SleepEventEntity.class)
+                .join(MasterEventEntity.class).on(SleepEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .where(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
+                .and(MasterEventEntity.EVENT_TYPE.eq(EventType.SLEEP))
+                .and(SleepEventEntity.TIMER_STARTED.eq(true))
+                .orderBy(MasterEventEntity.DATE_TIME)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, SleepEventMapper::mapToPlainObject));
+    }
+
     public Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event) {
         return dataStore.select(DiaperEventEntity.class)
                 .where(DiaperEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
@@ -114,37 +127,37 @@ public class CalendarDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, SleepEventMapper::mapToPlainObject));
     }
 
-    private Observable<MasterEvent> add(@NonNull Child child, @NonNull MasterEvent event) {
-        return DbUtils.insertObservable(dataStore, event, child,
+    private Observable<MasterEvent> add(@NonNull MasterEvent event) {
+        return DbUtils.insertObservable(dataStore, event,
                 MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
     }
 
-    public Observable<DiaperEvent> add(@NonNull Child child, @NonNull DiaperEvent event) {
-        return add(child, event.getMasterEvent())
+    public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
+        return add(event.getMasterEvent())
                 .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
                         DiaperEventMapper::mapToEntity, DiaperEventMapper::mapToPlainObject));
     }
 
-    public Observable<FeedEvent> add(@NonNull Child child, @NonNull FeedEvent event) {
-        return add(child, event.getMasterEvent())
+    public Observable<FeedEvent> add(@NonNull FeedEvent event) {
+        return add(event.getMasterEvent())
                 .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
                         FeedEventMapper::mapToEntity, FeedEventMapper::mapToPlainObject));
     }
 
-    public Observable<OtherEvent> add(@NonNull Child child, @NonNull OtherEvent event) {
-        return add(child, event.getMasterEvent())
+    public Observable<OtherEvent> add(@NonNull OtherEvent event) {
+        return add(event.getMasterEvent())
                 .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
                         OtherEventMapper::mapToEntity, OtherEventMapper::mapToPlainObject));
     }
 
-    public Observable<PumpEvent> add(@NonNull Child child, @NonNull PumpEvent event) {
-        return add(child, event.getMasterEvent())
+    public Observable<PumpEvent> add(@NonNull PumpEvent event) {
+        return add(event.getMasterEvent())
                 .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
                         PumpEventMapper::mapToEntity, PumpEventMapper::mapToPlainObject));
     }
 
-    public Observable<SleepEvent> add(@NonNull Child child, @NonNull SleepEvent event) {
-        return add(child, event.getMasterEvent())
+    public Observable<SleepEvent> add(@NonNull SleepEvent event) {
+        return add(event.getMasterEvent())
                 .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
                         SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject));
     }

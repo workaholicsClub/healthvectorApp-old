@@ -4,19 +4,27 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
 
-public abstract class EventDetailDialogView<T> extends LinearLayout {
+public abstract class EventDetailDialogView<T> extends LinearLayout implements
+        View.OnClickListener, ReadOnlyView {
+    @BindView(R.id.textViewWrapper)
+    View textViewWrapper;
+
     @BindView(R.id.textView)
     TextView textView;
+
+    @BindView(R.id.imageView)
+    ImageView imageView;
 
     @Setter
     private EventDetailDialogListener eventDetailDialogListener;
@@ -53,10 +61,12 @@ public abstract class EventDetailDialogView<T> extends LinearLayout {
         textView.setText(getTextForValue(value));
     }
 
-    @OnClick(R.id.textViewWrapper)
-    void onTextViewClick() {
-        if (eventDetailDialogListener != null) {
-            eventDetailDialogListener.requestValueChange(this);
+    @Override
+    public void onClick(View view) {
+        if (view == textViewWrapper) {
+            if (eventDetailDialogListener != null) {
+                eventDetailDialogListener.requestValueChange(this);
+            }
         }
     }
 
@@ -64,6 +74,13 @@ public abstract class EventDetailDialogView<T> extends LinearLayout {
     protected abstract int getLayoutResourceId();
 
     protected abstract String getTextForValue(T value);
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        textViewWrapper.setOnClickListener(readOnly ? null : this);
+        textViewWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
+        imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
+    }
 
     public interface EventDetailDialogListener {
         void requestValueChange(EventDetailDialogView view);

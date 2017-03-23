@@ -10,6 +10,7 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -39,6 +40,7 @@ public class FeedEvent extends MasterEvent {
                       String note,
                       Boolean isDone,
                       Boolean isDeleted,
+                      Child child,
                       Long id,
                       FeedType feedType,
                       Breast breast,
@@ -47,7 +49,7 @@ public class FeedEvent extends MasterEvent {
                       Double amount,
                       Double amountMl,
                       FoodMeasure foodMeasure) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
+        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.feedType = feedType;
         this.breast = breast;

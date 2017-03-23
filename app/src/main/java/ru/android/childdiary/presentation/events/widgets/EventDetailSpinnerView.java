@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.PopupWindow;
@@ -16,16 +17,23 @@ import android.widget.TextView;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
 
 public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         AdapterView.OnItemClickListener,
-        PopupWindow.OnDismissListener {
+        PopupWindow.OnDismissListener,
+        View.OnClickListener,
+        ReadOnlyView {
+    @BindView(R.id.textViewWrapper)
+    View textViewWrapper;
+
     @BindView(R.id.textView)
     TextView textView;
+
+    @BindView(R.id.imageView)
+    ImageView imageView;
 
     @BindDimen(R.dimen.event_detail_text_width)
     int spinnerItemWidth;
@@ -78,22 +86,24 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         return false;
     }
 
-    @OnClick(R.id.textViewWrapper)
-    void onTextViewClick(View view) {
-        dismissPopupWindow();
-        View anchor = view;
-        int width = spinnerItemWidth;
-        int gravity = Gravity.END;
+    @Override
+    public void onClick(View view) {
+        if (view == textViewWrapper) {
+            dismissPopupWindow();
+            View anchor = view;
+            int width = spinnerItemWidth;
+            int gravity = Gravity.END;
 
-        popupWindow = new android.support.v7.widget.ListPopupWindow(getContext(), null, R.attr.actionOverflowMenuStyle, R.style.OverflowMenu);
-        popupWindow.setWidth(width);
-        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setAdapter(getAdapter());
-        popupWindow.setAnchorView(anchor);
-        popupWindow.setDropDownGravity(gravity);
-        popupWindow.setOnItemClickListener(this);
-        popupWindow.setOnDismissListener(this);
-        popupWindow.show();
+            popupWindow = new android.support.v7.widget.ListPopupWindow(getContext(), null, R.attr.actionOverflowMenuStyle, R.style.OverflowMenu);
+            popupWindow.setWidth(width);
+            popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+            popupWindow.setAdapter(getAdapter());
+            popupWindow.setAnchorView(anchor);
+            popupWindow.setDropDownGravity(gravity);
+            popupWindow.setOnItemClickListener(this);
+            popupWindow.setOnDismissListener(this);
+            popupWindow.show();
+        }
     }
 
     @Override
@@ -117,6 +127,13 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
     protected abstract String getTextForValue(T value);
 
     protected abstract ListAdapter getAdapter();
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        textViewWrapper.setOnClickListener(readOnly ? null : this);
+        textViewWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
+        imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
+    }
 
     public interface EventDetailSpinnerListener<T> {
         void onSpinnerItemClick(EventDetailSpinnerView view, T item);

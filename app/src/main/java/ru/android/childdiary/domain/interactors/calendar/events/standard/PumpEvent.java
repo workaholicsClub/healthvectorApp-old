@@ -8,6 +8,7 @@ import lombok.Value;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -29,11 +30,12 @@ public class PumpEvent extends MasterEvent {
                       String note,
                       Boolean isDone,
                       Boolean isDeleted,
+                      Child child,
                       Long id,
                       Breast breast,
                       Double leftAmountMl,
                       Double rightAmountMl) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
+        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.breast = breast;
         this.leftAmountMl = leftAmountMl;

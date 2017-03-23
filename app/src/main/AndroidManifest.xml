@@ -4,6 +4,7 @@
     tools:ignore="UnusedAttribute">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".app.ChildDiaryApplication"
@@ -14,7 +15,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".presentation.main.MainActivity" />
+        <activity
+            android:name=".presentation.main.MainActivity"
+            android:exported="true" />
         <activity android:name=".presentation.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -85,6 +88,7 @@
         </activity>
         <activity
             android:name=".presentation.events.SleepEventDetailActivity"
+            android:exported="true"
             android:parentActivityName=".presentation.main.MainActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
@@ -102,5 +106,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <service android:name=".services.TimerService" />
+
+        <receiver android:name=".receivers.BootCompletedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

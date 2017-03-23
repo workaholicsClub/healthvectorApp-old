@@ -90,32 +90,37 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
-    public static int getDiaperEventLogoRes(Sex sex) {
+    public static int getDiaperEventLogoRes(@Nullable Sex sex) {
         return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_diaper_boy : R.drawable.toolbar_logo_diaper_girl;
     }
 
     @DrawableRes
-    public static int getFeedEventLogoRes(Sex sex) {
+    public static int getFeedEventLogoRes(@Nullable Sex sex) {
         return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_boy : R.drawable.toolbar_logo_feed_girl;
     }
 
     @DrawableRes
-    public static int getOtherEventLogoRes(Sex sex) {
+    public static int getOtherEventLogoRes(@Nullable Sex sex) {
         return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_other_boy : R.drawable.toolbar_logo_other_girl;
     }
 
     @DrawableRes
-    public static int getPumpEventLogoRes(Sex sex) {
+    public static int getPumpEventLogoRes(@Nullable Sex sex) {
         return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_pump_boy : R.drawable.toolbar_logo_pump_girl;
     }
 
     @DrawableRes
-    public static int getSleepEventLogoRes(Sex sex) {
+    public static int getSleepEventLogoRes(@Nullable Sex sex) {
         return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_sleep_boy : R.drawable.toolbar_logo_sleep_girl;
     }
 
     @DrawableRes
-    public static int getRadioOnRes(Sex sex) {
+    public static int getRadioOnRes(@Nullable Sex sex) {
         return sex == null || sex == Sex.MALE ? R.drawable.radio_on_boy : R.drawable.radio_on_girl;
+    }
+
+    @DrawableRes
+    public static int getButtonTimerBackgroundRes(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE ? R.drawable.background_timer_boy : R.drawable.background_timer_girl;
     }
 }

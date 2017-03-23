@@ -10,13 +10,18 @@ import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
+import ru.android.childdiary.data.entities.child.ChildData;
+import ru.android.childdiary.data.repositories.child.ChildMapper;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 class FeedEventMapper {
     public static FeedEvent mapToPlainObject(@NonNull FeedEventData eventData) {
         MasterEventData masterEventData = eventData.getMasterEvent();
+        ChildData childData = masterEventData.getChild();
+        Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
         FoodMeasureData foodMeasureData = eventData.getFoodMeasureData();
         FoodMeasure foodMeasure = foodMeasureData == null ? null : FoodMeasureMapper.mapToPlainObject(foodMeasureData);
         return FeedEvent.builder()
@@ -29,6 +34,7 @@ class FeedEventMapper {
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
                 .isDeleted(masterEventData.isDeleted())
+                .child(child)
                 .feedType(eventData.getFeedType())
                 .breast(eventData.getBreast())
                 .leftDurationInMinutes(eventData.getLeftDurationInMinutes())

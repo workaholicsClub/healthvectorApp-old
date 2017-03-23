@@ -27,6 +27,8 @@ public interface CalendarRepository extends Repository {
 
     Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate);
 
+    Observable<List<SleepEvent>> getSleepEventsWithTimer();
+
     Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event);
 
     Observable<FeedEvent> getFeedEventDetail(@NonNull MasterEvent event);
@@ -37,15 +39,15 @@ public interface CalendarRepository extends Repository {
 
     Observable<SleepEvent> getSleepEventDetail(@NonNull MasterEvent event);
 
-    Observable<DiaperEvent> add(@NonNull Child child, @NonNull DiaperEvent event);
+    Observable<DiaperEvent> add(@NonNull DiaperEvent event);
 
-    Observable<FeedEvent> add(@NonNull Child child, @NonNull FeedEvent event);
+    Observable<FeedEvent> add(@NonNull FeedEvent event);
 
-    Observable<OtherEvent> add(@NonNull Child child, @NonNull OtherEvent event);
+    Observable<OtherEvent> add(@NonNull OtherEvent event);
 
-    Observable<PumpEvent> add(@NonNull Child child, @NonNull PumpEvent event);
+    Observable<PumpEvent> add(@NonNull PumpEvent event);
 
-    Observable<SleepEvent> add(@NonNull Child child, @NonNull SleepEvent event);
+    Observable<SleepEvent> add(@NonNull SleepEvent event);
 
     Observable<DiaperEvent> update(@NonNull DiaperEvent event);
 

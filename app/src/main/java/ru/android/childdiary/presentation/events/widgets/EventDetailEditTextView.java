@@ -10,7 +10,7 @@ import java.util.List;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
-public abstract class EventDetailEditTextView extends LinearLayout {
+public abstract class EventDetailEditTextView extends LinearLayout implements ReadOnlyView {
     public EventDetailEditTextView(Context context) {
         super(context);
     }

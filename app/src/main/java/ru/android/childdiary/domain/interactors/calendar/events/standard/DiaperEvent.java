@@ -8,6 +8,7 @@ import lombok.Value;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -25,9 +26,10 @@ public class DiaperEvent extends MasterEvent {
                         String note,
                         Boolean isDone,
                         Boolean isDeleted,
+                        Child child,
                         Long id,
                         DiaperState diaperState) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted);
+        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.diaperState = diaperState;
     }

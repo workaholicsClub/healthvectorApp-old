@@ -22,16 +22,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     @Inject
     protected CalendarInteractor calendarInteractor;
 
-    @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
-
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(child -> logger.debug("showChild: " + child))
-                .subscribe(getViewState()::showChild, this::onUnexpectedError));
-    }
+    private boolean isSubscribedToEventDetails;
 
     @SuppressWarnings("unchecked")
     @CallSuper
@@ -45,13 +36,15 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     @SuppressWarnings("unchecked")
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
-        unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
-                .firstOrError()
-                .toObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(event -> logger.debug("event details: " + event))
-                .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
+        if (!isSubscribedToEventDetails) {
+            unsubscribeOnDestroy(childInteractor.setActiveChild(masterEvent.getChild())
+                    .flatMap(child -> calendarInteractor.getEventDetail(masterEvent)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnNext(event -> logger.debug("event details: " + event)))
+                    .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
+            isSubscribedToEventDetails = true;
+        }
     }
 
     public void requestFoodMeasureDialog(String tag) {

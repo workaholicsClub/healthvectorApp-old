@@ -97,22 +97,22 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
     public void move(@NonNull MasterEvent event) {
     }
 
-    public void edit(@NonNull MasterEvent event) {
+    public void requestEventDetail(@NonNull MasterEvent event, boolean readOnly) {
         switch (event.getEventType()) {
             case DIAPER:
-                getViewState().navigateToDiaperEventEdit(event);
+                getViewState().navigateToDiaperEvent(event, readOnly);
                 break;
             case FEED:
-                getViewState().navigateToFeedEventEdit(event);
+                getViewState().navigateToFeedEvent(event, readOnly);
                 break;
             case OTHER:
-                getViewState().navigateToOtherEventEdit(event);
+                getViewState().navigateToOtherEvent(event, readOnly);
                 break;
             case PUMP:
-                getViewState().navigateToPumpEventEdit(event);
+                getViewState().navigateToPumpEvent(event, readOnly);
                 break;
             case SLEEP:
-                getViewState().navigateToSleepEventEdit(event);
+                getViewState().navigateToSleepEvent(event, readOnly);
                 break;
         }
     }

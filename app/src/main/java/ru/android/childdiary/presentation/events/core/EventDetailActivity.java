@@ -26,6 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import icepick.State;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
@@ -40,6 +41,7 @@ import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.presentation.events.widgets.ReadOnlyView;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -61,22 +63,26 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @BindView(R.id.dummy)
     View dummy;
 
+    @State
+    boolean readOnly;
+
     private ViewGroup eventDetailsView;
-    private MasterEvent masterEvent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         editTextNote.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
-        masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
+        MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             if (masterEvent == null) {
                 getPresenter().requestDefaultEventDetail(getEventType());
             } else {
                 getPresenter().requestEventDetails(masterEvent);
+                readOnly = getIntent().getBooleanExtra(ExtraConstants.EXTRA_READ_ONLY, false);
             }
         }
+        setupReadOnlyFields();
     }
 
     @Override
@@ -91,11 +97,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (masterEvent == null) {
-            outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent(null));
-        } else {
-            outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent(event));
-        }
+        outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent());
     }
 
     @Override
@@ -122,7 +124,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.toolbar_action_close);
+        toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
     }
 
     @Override
@@ -133,10 +135,28 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @OnClick(R.id.buttonDone)
     void onButtonDoneClick() {
-        if (masterEvent == null) {
-            getPresenter().addEvent(buildEvent(null));
+        if (readOnly) {
+            readOnly = false;
+            setupReadOnlyFields();
         } else {
-            getPresenter().updateEvent(buildEvent(event));
+            upsertEvent(buildEvent());
+            finish();
+        }
+    }
+
+    protected final T buildEvent() {
+        if (event == null) {
+            return buildEvent(null);
+        } else {
+            return buildEvent(event);
+        }
+    }
+
+    protected final void upsertEvent(@NonNull T event) {
+        if (this.event == null) {
+            getPresenter().addEvent(event);
+        } else {
+            getPresenter().updateEvent(event);
         }
     }
 
@@ -155,6 +175,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     @CallSuper
     public void showEventDetail(@NonNull T event) {
+        changeThemeIfNeeded(event.getChild());
         this.event = event;
     }
 
@@ -169,12 +190,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public void eventAdded(@NonNull T event) {
-        finish();
+        getPresenter().requestEventDetails(event);
     }
 
     @Override
     public void eventUpdated(@NonNull T event) {
-        finish();
     }
 
     @Override
@@ -246,16 +266,19 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setTime(String tag, LocalTime time) {
     }
 
+    @Nullable
     protected DateTime getDateTime(EventDetailDateView dateView, EventDetailTimeView timeView) {
         LocalDate date = dateView.getValue();
         LocalTime time = timeView.getValue();
-        return new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
+        return date == null || time == null
+                ? null
+                : new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
                 time.getHourOfDay(), time.getMinuteOfHour());
     }
 
-    protected void setDateTime(DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
-        dateView.setValue(dateTime.toLocalDate());
-        timeView.setValue(dateTime.toLocalTime());
+    protected void setDateTime(@Nullable DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
+        dateView.setValue(dateTime == null ? null : dateTime.toLocalDate());
+        timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
     }
 
     @Override
@@ -264,5 +287,23 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public void onSetTime(String tag, int minutes) {
+    }
+
+    private void setupReadOnlyFields() {
+        setReadOnly(rootView);
+        editTextNote.setEnabled(!readOnly);
+        buttonDone.setText(readOnly ? R.string.edit : R.string.save);
+    }
+
+    private void setReadOnly(View view) {
+        if (view instanceof ReadOnlyView) {
+            ((ReadOnlyView) view).setReadOnly(readOnly);
+        } else if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); ++i) {
+                View viewChild = viewGroup.getChildAt(i);
+                setReadOnly(viewChild);
+            }
+        }
     }
 }

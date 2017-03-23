@@ -7,7 +7,7 @@ import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Child;
 
-class ChildMapper {
+public class ChildMapper {
     public static Child mapToPlainObject(@NonNull ChildData childData) {
         return Child.builder()
                 .id(childData.getId())

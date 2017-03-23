@@ -29,10 +29,10 @@
         <item quantity="zero">%d часов</item>
     </plurals>
     <plurals name="numberOfMinutes">
-        <item quantity="one">%d мин.</item>
-        <item quantity="few">%d мин.</item>
-        <item quantity="other">%d мин.</item>
-        <item quantity="many">%d мин.</item>
-        <item quantity="zero">%d мин.</item>
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="other">%d минут</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="zero">%d минут</item>
     </plurals>
 </resources>

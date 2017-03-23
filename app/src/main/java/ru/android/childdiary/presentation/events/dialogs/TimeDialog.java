@@ -56,7 +56,7 @@ public class TimeDialog extends BaseDialogFragment {
 
     public void showAllowingStateLoss(FragmentManager manager, String tag, @NonNull Child child, Parameters parameters) {
         Bundle arguments = new Bundle();
-        arguments.putParcelable(ExtraConstants.EXTRA_CHILD, child);
+        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, child);
         arguments.putSerializable(KEY_PARAMETERS, parameters);
         setArguments(arguments);
         FragmentTransaction ft = manager.beginTransaction();
@@ -95,7 +95,7 @@ public class TimeDialog extends BaseDialogFragment {
     }
 
     private void setupUi(Parameters parameters) {
-        TimeUtils.Time time = TimeUtils.splitMinutes(parameters.getMinutes());
+        TimeUtils.Time time = TimeUtils.splitMinutes(parameters.getMinutes()).build();
 
         numberPickerDays.setMinValue(0);
         numberPickerDays.setMaxValue(Math.max(30, time.getDays()));
