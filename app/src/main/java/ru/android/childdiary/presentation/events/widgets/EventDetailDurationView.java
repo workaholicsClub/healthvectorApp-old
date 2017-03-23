@@ -30,6 +30,6 @@ public class EventDetailDurationView extends EventDetailDialogView<Integer> {
 
     @Override
     protected String getTextForValue(Integer value) {
-        return TimeUtils.duration(getContext(), value);
+        return TimeUtils.durationShort(getContext(), value);
     }
 }

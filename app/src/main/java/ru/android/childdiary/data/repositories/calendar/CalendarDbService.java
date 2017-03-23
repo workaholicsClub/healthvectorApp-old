@@ -84,7 +84,7 @@ public class CalendarDbService {
                 .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
                 .and(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
                 .and(MasterEventEntity.EVENT_TYPE.notNull())
-                .orderBy(MasterEventEntity.DATE_TIME)
+                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MasterEventMapper::mapToPlainObject));

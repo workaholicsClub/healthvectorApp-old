@@ -39,7 +39,7 @@ public class NotificationUtils {
                 .setSmallIcon(ResourcesUtils.getNotificationSleepRes(event.getChild().getSex()))
                 .setContentTitle(context.getString(R.string.child_sleep, event.getChild().getName()))
                 .setWhen(event.getDateTime().toDate().getTime())
-                .setContentText(TimeUtils.sleepTime(context, event.getDateTime(), DateTime.now()));
+                .setContentText(TimeUtils.durationLong(context, event.getDateTime(), DateTime.now()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setColor(ThemeUtils.getColorPrimary(context, event.getChild().getSex()));
         }

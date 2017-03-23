@@ -39,6 +39,8 @@ import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventVal
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.TimeUtils;
 
 public class CalendarInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -287,15 +289,34 @@ public class CalendarInteractor implements Interactor {
     @SuppressWarnings("unchecked")
     private <T extends MasterEvent> T preprocess(@NonNull T event, @NonNull Child child) {
         if (event instanceof DiaperEvent) {
-            return (T) ((DiaperEvent) event).toBuilder()
+            DiaperEvent diaperEvent = (DiaperEvent) event;
+            return (T) diaperEvent.toBuilder()
                     .eventType(EventType.DIAPER)
                     .child(child)
+                    .description(StringUtils.diaperState(context, diaperEvent.getDiaperState()))
                     .build();
         } else if (event instanceof FeedEvent) {
-            return (T) ((FeedEvent) event).toBuilder()
+            FeedEvent feedEvent = (FeedEvent) event;
+            FeedEvent.FeedEventBuilder builder = feedEvent.toBuilder()
                     .eventType(EventType.FEED)
-                    .child(child)
-                    .build();
+                    .child(child);
+            switch (feedEvent.getFeedType()) {
+                case BREAST_MILK:
+                    builder.description(StringUtils.breast(context, feedEvent.getBreast()));
+                    break;
+                case PUMPED_MILK:
+                    builder.description(StringUtils.feedType(context, feedEvent.getFeedType()));
+                    break;
+                case MILK_FORMULA:
+                    builder.description(StringUtils.feedType(context, feedEvent.getFeedType()));
+                    break;
+                case FOOD:
+                    builder.description(feedEvent.getFood() == null
+                            ? StringUtils.feedType(context, feedEvent.getFeedType())
+                            : feedEvent.getFood().getName());
+                    break;
+            }
+            return (T) builder.build();
         } else if (event instanceof OtherEvent) {
             return (T) ((OtherEvent) event).toBuilder()
                     .eventType(EventType.OTHER)
@@ -303,14 +324,18 @@ public class CalendarInteractor implements Interactor {
                     .description(((OtherEvent) event).getTitle())
                     .build();
         } else if (event instanceof PumpEvent) {
-            return (T) ((PumpEvent) event).toBuilder()
+            PumpEvent pumpEvent = (PumpEvent) event;
+            return (T) pumpEvent.toBuilder()
                     .eventType(EventType.PUMP)
                     .child(child)
+                    .description(StringUtils.breast(context, pumpEvent.getBreast()))
                     .build();
         } else if (event instanceof SleepEvent) {
-            return (T) ((SleepEvent) event).toBuilder()
+            SleepEvent sleepEvent = (SleepEvent) event;
+            return (T) sleepEvent.toBuilder()
                     .eventType(EventType.SLEEP)
                     .child(child)
+                    .description(TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime()))
                     .build();
         }
         throw new IllegalArgumentException("Unknown event type");
