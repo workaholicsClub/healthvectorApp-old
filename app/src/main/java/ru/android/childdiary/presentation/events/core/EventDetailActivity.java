@@ -6,6 +6,8 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -50,6 +52,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @BindView(R.id.editTextNote)
     protected CustomEditText editTextNote;
+
+    @BindView(R.id.editTextNoteWrapper)
+    TextInputLayout editTextNoteWrapper;
 
     @BindView(R.id.rootView)
     View rootView;
@@ -122,6 +127,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
+        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
     }
 
     @Override
@@ -300,8 +306,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     private void setupReadOnlyFields() {
         setReadOnly(rootView);
-        editTextNote.setEnabled(!readOnly);
-        editTextNote.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
+        editTextNoteWrapper.setEnabled(!readOnly);
+        editTextNoteWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
         buttonDone.setText(readOnly ? R.string.edit : R.string.save);
     }
 

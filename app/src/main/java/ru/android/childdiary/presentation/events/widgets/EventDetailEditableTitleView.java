@@ -84,5 +84,6 @@ public class EventDetailEditableTitleView extends EventDetailEditTextView {
     public void setReadOnly(boolean readOnly) {
         editText.setEnabled(!readOnly);
         editText.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
+        editText.setHint(readOnly ? "" : getContext().getString(R.string.other_event_title_hint));
     }
 }
