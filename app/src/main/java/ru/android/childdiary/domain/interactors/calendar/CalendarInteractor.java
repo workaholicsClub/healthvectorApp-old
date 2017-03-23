@@ -55,7 +55,7 @@ public class CalendarInteractor implements Interactor {
     }
 
     public Observable<LocalDate> getSelectedDate() {
-        return calendarRepository.getSelectedDate().distinctUntilChanged();
+        return calendarRepository.getSelectedDate();
     }
 
     public Observable<LocalDate> getSelectedDateOnce() {
@@ -178,15 +178,15 @@ public class CalendarInteractor implements Interactor {
     @SuppressWarnings("unchecked")
     public <T extends MasterEvent> Observable<T> getEventDetail(@NonNull MasterEvent event) {
         if (event.getEventType() == EventType.DIAPER) {
-            return (Observable<T>) calendarRepository.getDiaperEventDetail(event).distinctUntilChanged();
+            return (Observable<T>) calendarRepository.getDiaperEventDetail(event);
         } else if (event.getEventType() == EventType.FEED) {
-            return (Observable<T>) calendarRepository.getFeedEventDetail(event).distinctUntilChanged();
+            return (Observable<T>) calendarRepository.getFeedEventDetail(event);
         } else if (event.getEventType() == EventType.OTHER) {
-            return (Observable<T>) calendarRepository.getOtherEventDetail(event).distinctUntilChanged();
+            return (Observable<T>) calendarRepository.getOtherEventDetail(event);
         } else if (event.getEventType() == EventType.PUMP) {
-            return (Observable<T>) calendarRepository.getPumpEventDetail(event).distinctUntilChanged();
+            return (Observable<T>) calendarRepository.getPumpEventDetail(event);
         } else if (event.getEventType() == EventType.SLEEP) {
-            return (Observable<T>) calendarRepository.getSleepEventDetail(event).distinctUntilChanged();
+            return (Observable<T>) calendarRepository.getSleepEventDetail(event);
         }
         throw new IllegalArgumentException("Unknown event type");
     }
