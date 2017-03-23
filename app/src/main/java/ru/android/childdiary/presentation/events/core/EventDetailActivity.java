@@ -11,6 +11,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -320,6 +323,34 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 View viewChild = viewGroup.getChildAt(i);
                 setReadOnly(viewChild);
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.event_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.menu_done);
+        item.setVisible(getEventType() == EventType.OTHER);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_done:
+                return true;
+            case R.id.menu_move:
+                return true;
+            case R.id.menu_delete:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
