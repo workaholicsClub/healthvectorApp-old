@@ -35,7 +35,7 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
     @BindView(R.id.imageView)
     ImageView imageView;
 
-    @BindDimen(R.dimen.event_detail_text_width)
+    @BindDimen(R.dimen.spinner_item_width)
     int spinnerItemWidth;
 
     @Setter
