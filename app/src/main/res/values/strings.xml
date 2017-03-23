@@ -50,6 +50,10 @@
     <string name="validate_child_birth_date_empty">Введите дату рождения ребенка</string>
     <string name="validate_child_birth_height_empty">Введите рост ребенка при рождении</string>
     <string name="validate_child_birth_weight_empty">Введите вес ребенка при рождении</string>
+    <string name="validate_event_feed_breast_milk_fill_left_duration">Введите продолжительность кормления для левой груди</string>
+    <string name="validate_event_feed_breast_milk_fill_right_duration">Введите продолжительность кормления для правой груди</string>
+    <string name="validate_event_pump_fill_left_amount">Введите количество сцеженного молока для левой груди</string>
+    <string name="validate_event_pump_fill_right_amount">Введите количество сцеженного молока для правой груди</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
     <string name="amount_review">%s мл</string>

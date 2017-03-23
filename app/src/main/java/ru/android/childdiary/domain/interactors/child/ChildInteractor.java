@@ -32,7 +32,7 @@ public class ChildInteractor implements Interactor, ChildRepository {
 
     @Override
     public Observable<Child> getActiveChild() {
-        return childRepository.getActiveChild();
+        return childRepository.getActiveChild().distinctUntilChanged();
     }
 
     public Observable<Child> getActiveChildOnce() {

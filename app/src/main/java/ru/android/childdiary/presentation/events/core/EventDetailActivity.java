@@ -139,8 +139,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             readOnly = false;
             setupReadOnlyFields();
         } else {
-            upsertEvent(buildEvent());
-            finish();
+            upsertEvent(buildEvent(), true);
         }
     }
 
@@ -152,11 +151,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
     }
 
-    protected final void upsertEvent(@NonNull T event) {
+    protected final void upsertEvent(@NonNull T event, boolean afterButtonPressed) {
         if (this.event == null) {
-            getPresenter().addEvent(event);
+            getPresenter().addEvent(event, afterButtonPressed);
         } else {
-            getPresenter().updateEvent(event);
+            getPresenter().updateEvent(event, afterButtonPressed);
         }
     }
 
@@ -189,12 +188,19 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected abstract T buildEvent(@Nullable T event);
 
     @Override
-    public void eventAdded(@NonNull T event) {
-        getPresenter().requestEventDetails(event);
+    public void eventAdded(@NonNull T event, boolean afterButtonPressed) {
+        if (afterButtonPressed) {
+            finish();
+        } else {
+            getPresenter().requestEventDetails(event);
+        }
     }
 
     @Override
-    public void eventUpdated(@NonNull T event) {
+    public void eventUpdated(@NonNull T event, boolean afterButtonPressed) {
+        if (afterButtonPressed) {
+            finish();
+        }
     }
 
     @Override
@@ -207,6 +213,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     public void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters) {
         TimeDialog dialog = new TimeDialog();
         dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child, parameters);
+    }
+
+    @Override
+    public void showValidationErrorMessage(String msg) {
+        showToast(msg);
     }
 
     @Override

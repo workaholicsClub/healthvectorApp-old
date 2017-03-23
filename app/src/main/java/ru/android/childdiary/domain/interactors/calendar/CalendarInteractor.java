@@ -1,5 +1,6 @@
 package ru.android.childdiary.domain.interactors.calendar;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
@@ -19,6 +20,7 @@ import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.core.Interactor;
+import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -28,23 +30,32 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.domain.interactors.calendar.requests.AddEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
+import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
+import ru.android.childdiary.domain.interactors.calendar.validation.DiaperEventValidator;
+import ru.android.childdiary.domain.interactors.calendar.validation.FeedEventValidator;
+import ru.android.childdiary.domain.interactors.calendar.validation.OtherEventValidator;
+import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventValidator;
+import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 
 public class CalendarInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
+    private final Context context;
     private final CalendarDataRepository calendarRepository;
     private final ChildInteractor childInteractor;
 
     @Inject
-    public CalendarInteractor(CalendarDataRepository calendarRepository, ChildInteractor childInteractor) {
+    public CalendarInteractor(Context context, CalendarDataRepository calendarRepository, ChildInteractor childInteractor) {
+        this.context = context;
         this.calendarRepository = calendarRepository;
         this.childInteractor = childInteractor;
     }
 
     public Observable<LocalDate> getSelectedDate() {
-        return calendarRepository.getSelectedDate();
+        return calendarRepository.getSelectedDate().distinctUntilChanged();
     }
 
     public Observable<LocalDate> getSelectedDateOnce() {
@@ -167,21 +178,25 @@ public class CalendarInteractor implements Interactor {
     @SuppressWarnings("unchecked")
     public <T extends MasterEvent> Observable<T> getEventDetail(@NonNull MasterEvent event) {
         if (event.getEventType() == EventType.DIAPER) {
-            return (Observable<T>) calendarRepository.getDiaperEventDetail(event);
+            return (Observable<T>) calendarRepository.getDiaperEventDetail(event).distinctUntilChanged();
         } else if (event.getEventType() == EventType.FEED) {
-            return (Observable<T>) calendarRepository.getFeedEventDetail(event);
+            return (Observable<T>) calendarRepository.getFeedEventDetail(event).distinctUntilChanged();
         } else if (event.getEventType() == EventType.OTHER) {
-            return (Observable<T>) calendarRepository.getOtherEventDetail(event);
+            return (Observable<T>) calendarRepository.getOtherEventDetail(event).distinctUntilChanged();
         } else if (event.getEventType() == EventType.PUMP) {
-            return (Observable<T>) calendarRepository.getPumpEventDetail(event);
+            return (Observable<T>) calendarRepository.getPumpEventDetail(event).distinctUntilChanged();
         } else if (event.getEventType() == EventType.SLEEP) {
-            return (Observable<T>) calendarRepository.getSleepEventDetail(event);
+            return (Observable<T>) calendarRepository.getSleepEventDetail(event).distinctUntilChanged();
         }
         throw new IllegalArgumentException("Unknown event type");
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends MasterEvent> Observable<T> add(@NonNull AddEventRequest<T> request) {
+        return validate(request.getEvent()).flatMap(event -> addInternal(request));
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> Observable<T> addInternal(@NonNull AddEventRequest<T> request) {
         Child child = request.getChild();
         if (request.getEvent().getEventType() == EventType.DIAPER) {
             DiaperEvent event = (DiaperEvent) request.getEvent();
@@ -207,8 +222,12 @@ public class CalendarInteractor implements Interactor {
         throw new IllegalArgumentException("Unknown event type");
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends MasterEvent> Observable<T> update(@NonNull T event) {
+        return validate(event).flatMap(this::updateInternal);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> Observable<T> updateInternal(@NonNull T event) {
         if (event.getEventType() == EventType.DIAPER) {
             return (Observable<T>) calendarRepository.update((DiaperEvent) event);
         } else if (event.getEventType() == EventType.FEED) {
@@ -229,5 +248,33 @@ public class CalendarInteractor implements Interactor {
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         return calendarRepository.done(event);
+    }
+
+    private <T extends MasterEvent> Observable<T> validate(@NonNull T item) {
+        return Observable.just(item)
+                .flatMap(event -> {
+                    Validator<T, CalendarValidationResult> validator = getValidator(event);
+                    List<CalendarValidationResult> results = validator.validate(event);
+                    if (!validator.isValid(results)) {
+                        return Observable.error(new CalendarValidationException(results));
+                    }
+                    return Observable.just(event);
+                });
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> Validator<T, CalendarValidationResult> getValidator(@NonNull T event) {
+        if (event.getEventType() == EventType.DIAPER) {
+            return (Validator<T, CalendarValidationResult>) new DiaperEventValidator(context);
+        } else if (event.getEventType() == EventType.FEED) {
+            return (Validator<T, CalendarValidationResult>) new FeedEventValidator(context);
+        } else if (event.getEventType() == EventType.OTHER) {
+            return (Validator<T, CalendarValidationResult>) new OtherEventValidator(context);
+        } else if (event.getEventType() == EventType.PUMP) {
+            return (Validator<T, CalendarValidationResult>) new PumpEventValidator(context);
+        } else if (event.getEventType() == EventType.SLEEP) {
+            return (Validator<T, CalendarValidationResult>) new SleepEventValidator(context);
+        }
+        throw new IllegalArgumentException("Unknown event type");
     }
 }

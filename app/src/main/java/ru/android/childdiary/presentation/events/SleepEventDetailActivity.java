@@ -163,7 +163,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
             builder.finishDateTime(DateTime.now());
         }
 
-        upsertEvent(builder.build());
+        upsertEvent(builder.build(), false);
     }
 
     @Override
@@ -284,7 +284,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     private void updateIfNeeded() {
         if (this.event != null && event.getIsTimerStarted() != null && event.getIsTimerStarted()) {
-            getPresenter().updateEvent(buildEvent());
+            upsertEvent(buildEvent(), false);
         }
     }
 }
