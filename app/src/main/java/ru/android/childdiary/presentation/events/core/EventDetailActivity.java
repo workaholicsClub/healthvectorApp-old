@@ -308,6 +308,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     private void setupReadOnlyFields() {
         setReadOnly(rootView);
         editTextNote.setEnabled(!readOnly);
+        editTextNote.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
         buttonDone.setText(readOnly ? R.string.edit : R.string.save);
     }
 
