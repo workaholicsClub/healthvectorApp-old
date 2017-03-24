@@ -139,6 +139,10 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
 
     public abstract void moveLeft();
 
+    public void moveToday() {
+        setSelectedDate(LocalDate.now());
+    }
+
     public abstract void moveRight();
 
     public interface OnSelectedDateChanged {

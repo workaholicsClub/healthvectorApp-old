@@ -37,6 +37,7 @@ import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class SleepEventDetailActivity extends EventDetailActivity<EventDetailView<SleepEvent>, SleepEvent> implements EventDetailView<SleepEvent>,
         TimerServiceListener {
@@ -133,7 +134,6 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     protected void themeChanged() {
         super.themeChanged();
         setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(sex));
-        buttonTimer.setBackgroundResource(ResourcesUtils.getButtonTimerBackgroundRes(sex));
     }
 
     @Override
@@ -282,6 +282,9 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         if (event.getIsTimerStarted() != null && event.getIsTimerStarted()) {
             String text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());
             buttonTimer.setText(text);
+            WidgetsUtils.setupTimer(this, buttonTimer, sex, true);
+        } else {
+            WidgetsUtils.setupTimer(this, buttonTimer, sex, false);
         }
     }
 

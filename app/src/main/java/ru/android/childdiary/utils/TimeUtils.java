@@ -206,6 +206,11 @@ public class TimeUtils {
         return minutes.getMinutes();
     }
 
+    public static boolean isBeforeOrEqualNow(DateTime dateTime) {
+        DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
+        return dateTime.isBefore(now) || dateTime.isEqual(now);
+    }
+
     @Value
     @Builder
     public static class Time {

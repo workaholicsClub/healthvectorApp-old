@@ -75,7 +75,11 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         if (this.value != value) {
             this.value = value;
             textView.setText(getTextForValue(value));
+            valueChanged();
         }
+    }
+
+    protected void valueChanged() {
     }
 
     public boolean dismissPopupWindow() {

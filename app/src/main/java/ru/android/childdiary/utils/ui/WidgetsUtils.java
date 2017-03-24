@@ -5,6 +5,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -35,5 +36,11 @@ public class WidgetsUtils {
     public static void setupTimePicker(Context context, TimePickerDialog tpd, @Nullable Sex sex) {
         tpd.setVersion(TimePickerDialog.Version.VERSION_2);
         tpd.setAccentColor(ThemeUtils.getColorPrimary(context, sex));
+    }
+
+    public static void setupTimer(Context context, Button buttonTimer, @Nullable Sex sex, boolean on) {
+        buttonTimer.setTextColor(ResourcesUtils.getTimerTextColor(context, sex, on));
+        buttonTimer.setBackgroundResource(ResourcesUtils.getTimerBackgroundRes(sex, on));
+        buttonTimer.setCompoundDrawablesWithIntrinsicBounds(ResourcesUtils.getTimerIcon(sex, on), 0, 0, 0);
     }
 }

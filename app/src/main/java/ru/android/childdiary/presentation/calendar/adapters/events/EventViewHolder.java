@@ -25,6 +25,7 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -94,6 +95,10 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         boolean showActionDone = event.getEventType() == EventType.OTHER;
         actionDoneView.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
         delimiter1.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
+        boolean isDone = event.getIsDone() != null && event.getIsDone();
+        boolean isExpired = TimeUtils.isBeforeOrEqualNow(event.getDateTime());
+        int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
+        textViewEventType.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
     }
 
     private Drawable getEventViewBackgroundDrawable(@ColorInt int color) {
