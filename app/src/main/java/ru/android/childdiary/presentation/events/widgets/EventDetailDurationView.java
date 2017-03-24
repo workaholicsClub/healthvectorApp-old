@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
@@ -29,7 +30,7 @@ public class EventDetailDurationView extends EventDetailDialogView<Integer> {
     }
 
     @Override
-    protected String getTextForValue(Integer value) {
+    protected String getTextForValue(@Nullable Integer value) {
         return TimeUtils.durationShort(getContext(), value);
     }
 }

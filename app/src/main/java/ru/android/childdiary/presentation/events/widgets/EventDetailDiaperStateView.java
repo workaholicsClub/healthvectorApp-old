@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
@@ -33,7 +34,7 @@ public class EventDetailDiaperStateView extends EventDetailRadioView<DiaperState
     }
 
     @Override
-    protected String getTextForValue(DiaperState value) {
+    protected String getTextForValue(@Nullable DiaperState value) {
         return StringUtils.diaperState(getContext(), value);
     }
 }

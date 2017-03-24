@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import org.joda.time.LocalTime;
@@ -27,7 +28,7 @@ public class EventDetailTimeView extends EventDetailDialogView<LocalTime> {
     }
 
     @Override
-    protected String getTextForValue(LocalTime value) {
+    protected String getTextForValue(@Nullable LocalTime value) {
         return DateUtils.time(value);
     }
 }

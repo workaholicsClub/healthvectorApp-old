@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ListAdapter;
 
@@ -32,7 +33,7 @@ public class EventDetailFeedTypeView extends EventDetailSpinnerView<FeedType> {
     }
 
     @Override
-    protected String getTextForValue(FeedType value) {
+    protected String getTextForValue(@Nullable FeedType value) {
         return StringUtils.feedType(getContext(), value);
     }
 

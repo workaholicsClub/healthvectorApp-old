@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ListAdapter;
 
@@ -35,8 +36,8 @@ public class EventDetailFoodView extends EventDetailSpinnerView<Food> {
     }
 
     @Override
-    protected String getTextForValue(Food value) {
-        return value.getName();
+    protected String getTextForValue(@Nullable Food value) {
+        return value == null ? null : value.getName();
     }
 
     @Override
