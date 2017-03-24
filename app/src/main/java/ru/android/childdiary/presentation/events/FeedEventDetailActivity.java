@@ -149,14 +149,12 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getFeedEventLogoRes(sex));
         setupToolbarTitle(R.string.event_feed);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getFeedEventLogoRes(sex));
         breastView.setSex(sex);
     }
 
@@ -308,6 +306,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
     public void setupFeedType() {
         FeedType feedType = feedTypeView.getValue();
+        setupToolbarLogo(ResourcesUtils.getFeedEventLogoRes(sex, feedType));
         switch (feedType) {
             case BREAST_MILK:
                 breastView.setVisibility(View.VISIBLE);

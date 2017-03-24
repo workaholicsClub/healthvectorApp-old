@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -96,8 +97,43 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
-    public static int getFeedEventLogoRes(@Nullable Sex sex) {
-        return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_boy : R.drawable.toolbar_logo_feed_girl;
+    public static int getFeedTypeIcon(@Nullable FeedType feedType) {
+        if (feedType == null) {
+            return R.drawable.ic_feed_type;
+        }
+
+        switch (feedType) {
+            case BREAST_MILK:
+                return R.drawable.ic_feed_type_breast_milk;
+            case PUMPED_MILK:
+                return R.drawable.ic_feed_type_pumped_milk;
+            case MILK_FORMULA:
+                return R.drawable.ic_feed_type_milk_formula;
+            case FOOD:
+                return R.drawable.ic_feed_type_food;
+            default:
+                return R.drawable.ic_feed_type;
+        }
+    }
+
+    @DrawableRes
+    public static int getFeedEventLogoRes(@Nullable Sex sex, @Nullable FeedType feedType) {
+        if (feedType == null) {
+            return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_boy : R.drawable.toolbar_logo_feed_girl;
+        }
+
+        switch (feedType) {
+            case BREAST_MILK:
+                return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_breast_milk_boy : R.drawable.toolbar_logo_feed_breast_milk_girl;
+            case PUMPED_MILK:
+                return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_pumped_milk_boy : R.drawable.toolbar_logo_feed_pumped_milk_girl;
+            case MILK_FORMULA:
+                return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_milk_formula_boy : R.drawable.toolbar_logo_feed_milk_formula_girl;
+            case FOOD:
+                return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_food_boy : R.drawable.toolbar_logo_feed_food_girl;
+            default:
+                return sex == null || sex == Sex.MALE ? R.drawable.toolbar_logo_feed_boy : R.drawable.toolbar_logo_feed_girl;
+        }
     }
 
     @DrawableRes
@@ -116,8 +152,18 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
-    public static int getRadioOnRes(@Nullable Sex sex) {
-        return sex == null || sex == Sex.MALE ? R.drawable.radio_on_boy : R.drawable.radio_on_girl;
+    public static int getRadioRes(@Nullable Sex sex, boolean on) {
+        return on ? (sex == null || sex == Sex.MALE ? R.drawable.radio_on_boy : R.drawable.radio_on_girl) : R.drawable.radio_off;
+    }
+
+    @DrawableRes
+    public static int getCheckBoxRes(@Nullable Sex sex, boolean on) {
+        return on ? (sex == null || sex == Sex.MALE ? R.drawable.checkbox_on_boy : R.drawable.checkbox_on_girl) : R.drawable.checkbox_off;
+    }
+
+    @DrawableRes
+    public static int getTimerRes(@Nullable Sex sex, boolean on) {
+        return sex == null || sex == Sex.MALE ? (on ? R.drawable.timer_on_boy : R.drawable.timer_off_boy) : (on ? R.drawable.timer_on_girl : R.drawable.timer_off_girl);
     }
 
     @DrawableRes
@@ -128,8 +174,7 @@ public class ResourcesUtils {
     @DrawableRes
     public static int getNotificationSleepRes(@Nullable Sex sex) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            // TODO: need icon with blue/pink background
-            return getSleepEventLogoRes(sex);
+            return sex == null || sex == Sex.MALE ? R.drawable.ic_notification_sleep_pre_lollipop_boy : R.drawable.ic_notification_sleep_pre_lollipop_girl;
         } else {
             return R.drawable.ic_notification_sleep;
         }
