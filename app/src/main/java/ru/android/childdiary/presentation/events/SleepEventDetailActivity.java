@@ -275,6 +275,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
+        notifyTimeView.setVisibility(visibility);
     }
 
     private void updateTimer(@NonNull SleepEvent event) {

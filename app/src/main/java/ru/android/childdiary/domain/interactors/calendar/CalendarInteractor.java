@@ -281,7 +281,7 @@ public class CalendarInteractor implements Interactor {
         } else if (event.getEventType() == EventType.PUMP) {
             return (Validator<T, CalendarValidationResult>) new PumpEventValidator(context);
         } else if (event.getEventType() == EventType.SLEEP) {
-            return (Validator<T, CalendarValidationResult>) new SleepEventValidator(context);
+            return (Validator<T, CalendarValidationResult>) new SleepEventValidator(context, this);
         }
         throw new IllegalArgumentException("Unknown event type");
     }

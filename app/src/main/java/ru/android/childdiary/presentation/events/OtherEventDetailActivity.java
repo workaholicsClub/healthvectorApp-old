@@ -149,8 +149,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
 
-        builder
-                .title(editableTitleView.getTitle())
+        builder.title(editableTitleView.getTitle())
                 .dateTime(startDateTime)
                 .finishDateTime(finishDateTime)
                 .notifyTimeInMinutes(notifyTimeView.getValue())
