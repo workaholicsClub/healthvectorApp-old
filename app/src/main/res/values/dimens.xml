@@ -36,6 +36,7 @@
     <dimen name="image_picker_item_height">54dp</dimen>
     <!-- calendar -->
     <dimen name="calendar_title_height">54dp</dimen>
+    <dimen name="calendar_title_button_width">44dp</dimen>
     <dimen name="calendar_margin_horizontal">16dp</dimen>
     <dimen name="calendar_margin_vertical">8dp</dimen>
     <dimen name="calendar_grid_view_margin_horizontal">6dp</dimen>
@@ -66,8 +67,12 @@
     <dimen name="arrow_icon_size">24dp</dimen>
     <dimen name="alert_dialog_padding_top">16dp</dimen>
     <!-- timer -->
-    <dimen name="timer_stroke_width">4dp</dimen>
-    <dimen name="timer_corner_radius">10dp</dimen>
+    <dimen name="timer_stroke_width">2dp</dimen>
+    <dimen name="timer_corner_radius">8dp</dimen>
+    <dimen name="timer_height">77dp</dimen>
+    <dimen name="timer_margin_horizontal">16dp</dimen>
+    <dimen name="timer_margin_vertical">8dp</dimen>
+    <dimen name="timer_text_size">44sp</dimen>
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>

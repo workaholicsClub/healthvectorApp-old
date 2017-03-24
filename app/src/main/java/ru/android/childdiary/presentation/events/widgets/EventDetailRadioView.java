@@ -89,9 +89,7 @@ public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayo
     private void updateItems() {
         int i = 0;
         for (T value : getEnumType().getEnumConstants()) {
-            radios.get(i).setImageResource(value == selected
-                    ? ResourcesUtils.getRadioOnRes(sex)
-                    : R.drawable.radio_off);
+            radios.get(i).setImageResource(ResourcesUtils.getRadioRes(sex, value == selected));
             boolean enabled = value == selected || !isReadOnly;
             //noinspection deprecation
             texts.get(i).setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);

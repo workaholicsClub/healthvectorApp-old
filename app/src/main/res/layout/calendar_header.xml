@@ -9,25 +9,33 @@
         android:id="@+id/calendarTitle"
         android:layout_width="0dp"
         android:layout_height="@dimen/calendar_title_height"
+        android:layout_marginLeft="@dimen/calendar_margin_horizontal"
+        android:layout_marginStart="@dimen/calendar_margin_horizontal"
         android:layout_weight="1"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:paddingLeft="@dimen/calendar_margin_horizontal"
-        android:paddingRight="@dimen/calendar_margin_horizontal"
         android:textAppearance="@style/TitleTextAppearance" />
 
     <ImageView
         android:id="@+id/left"
-        android:layout_width="@dimen/calendar_title_height"
+        android:layout_width="@dimen/calendar_title_button_width"
         android:layout_height="@dimen/calendar_title_height"
         android:background="@drawable/background_clickable"
         android:scaleType="center"
         android:src="@drawable/arrow_left" />
 
     <ImageView
+        android:id="@+id/today"
+        android:layout_width="@dimen/calendar_title_button_width"
+        android:layout_height="@dimen/calendar_title_height"
+        android:background="@drawable/background_clickable"
+        android:scaleType="center"
+        android:src="@drawable/ic_today" />
+
+    <ImageView
         android:id="@+id/right"
-        android:layout_width="@dimen/calendar_title_height"
+        android:layout_width="@dimen/calendar_title_button_width"
         android:layout_height="@dimen/calendar_title_height"
         android:background="@drawable/background_clickable"
         android:scaleType="center"

@@ -150,6 +150,12 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     }
 
     @Optional
+    @OnClick(R.id.today)
+    void moveToday() {
+        calendarAdapter.moveToday();
+    }
+
+    @Optional
     @OnClick(R.id.right)
     void moveRight() {
         calendarAdapter.moveRight();
