@@ -28,5 +28,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/ToolbarTitleTextAppearance" />
+        android:singleLine="true"
+        android:textAppearance="@style/ToolbarTitleTextAppearance"
+        tools:ignore="Deprecated" />
 </android.support.v7.widget.Toolbar>

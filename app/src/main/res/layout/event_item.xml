@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -101,7 +102,9 @@
             android:maxLines="1"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
-            android:textAppearance="@style/EventRowTextAppearance" />
+            android:singleLine="true"
+            android:textAppearance="@style/EventRowTextAppearance"
+            tools:ignore="Deprecated" />
 
         <TextView
             android:id="@+id/textViewDescription"
@@ -113,6 +116,8 @@
             android:maxWidth="200dp"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
-            android:textAppearance="@style/EventRowDescriptionTextAppearance" />
+            android:singleLine="true"
+            android:textAppearance="@style/EventRowDescriptionTextAppearance"
+            tools:ignore="Deprecated" />
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

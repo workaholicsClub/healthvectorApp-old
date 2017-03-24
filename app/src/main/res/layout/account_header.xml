@@ -61,7 +61,9 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="@style/ToolbarTitleTextAppearance" />
+                android:singleLine="true"
+                android:textAppearance="@style/ToolbarTitleTextAppearance"
+                tools:ignore="Deprecated" />
 
             <TextView
                 android:id="@+id/material_drawer_account_header_email"
@@ -69,7 +71,9 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="@style/ToolbarSubtitleTextAppearance" />
+                android:singleLine="true"
+                android:textAppearance="@style/ToolbarSubtitleTextAppearance"
+                tools:ignore="Deprecated" />
         </LinearLayout>
 
         <ImageView

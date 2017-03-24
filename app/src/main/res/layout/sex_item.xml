@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,6 +13,8 @@
         android:maxLines="1"
         android:paddingLeft="@dimen/sex_item_text_padding_horizontal"
         android:paddingRight="@dimen/sex_item_text_padding_horizontal"
+        android:singleLine="true"
         android:textAlignment="inherit"
-        android:textAppearance="@style/PrimaryTextAppearance" />
+        android:textAppearance="@style/PrimaryTextAppearance"
+        tools:ignore="Deprecated" />
 </RelativeLayout>
