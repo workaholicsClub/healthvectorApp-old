@@ -2,9 +2,9 @@
 <resources>
 
     <style name="AppTheme" parent="@style/MaterialDrawerTheme.Light">
-        <item name="colorPrimary">@color/primary_boy</item>
-        <item name="colorPrimaryDark">@color/primary_dark_boy</item>
-        <item name="colorAccent">@color/accent_boy</item>
+        <item name="colorPrimary">#607D8B</item>
+        <item name="colorPrimaryDark">#455A64</item>
+        <item name="colorAccent">#90A4AE</item>
     </style>
 
     <style name="AppThemeDialog.Boy" parent="Theme.AppCompat.Light.Dialog">

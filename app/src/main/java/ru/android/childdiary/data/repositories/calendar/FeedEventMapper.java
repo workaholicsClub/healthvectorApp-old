@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import io.requery.BlockingEntityStore;
+import ru.android.childdiary.data.entities.calendar.FoodData;
+import ru.android.childdiary.data.entities.calendar.FoodEntity;
 import ru.android.childdiary.data.entities.calendar.FoodMeasureData;
 import ru.android.childdiary.data.entities.calendar.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
@@ -12,6 +14,7 @@ import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventDat
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.repositories.child.ChildMapper;
+import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -24,6 +27,8 @@ class FeedEventMapper {
         Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
         FoodMeasureData foodMeasureData = eventData.getFoodMeasureData();
         FoodMeasure foodMeasure = foodMeasureData == null ? null : FoodMeasureMapper.mapToPlainObject(foodMeasureData);
+        FoodData foodData = eventData.getFoodData();
+        Food food = foodData == null ? null : FoodMapper.mapToPlainObject(foodData);
         return FeedEvent.builder()
                 .id(eventData.getId())
                 .masterEventId(masterEventData.getId())
@@ -42,6 +47,7 @@ class FeedEventMapper {
                 .amount(eventData.getAmount())
                 .amountMl(eventData.getAmountMl())
                 .foodMeasure(foodMeasure)
+                .food(food)
                 .build();
     }
 
@@ -68,6 +74,11 @@ class FeedEventMapper {
         if (foodMeasure != null) {
             FoodMeasureEntity foodMeasureEntity = (FoodMeasureEntity) blockingEntityStore.findByKey(FoodMeasureEntity.class, foodMeasure.getId());
             feedEventEntity.setFoodMeasureData(foodMeasureEntity);
+        }
+        Food food = feedEvent.getFood();
+        if (food != null) {
+            FoodEntity foodEntity = (FoodEntity) blockingEntityStore.findByKey(FoodEntity.class, food.getId());
+            feedEventEntity.setFoodData(foodEntity);
         }
         return feedEventEntity;
     }

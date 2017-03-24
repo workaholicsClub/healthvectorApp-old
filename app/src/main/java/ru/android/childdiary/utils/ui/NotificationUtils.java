@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -35,10 +36,13 @@ public class NotificationUtils {
 
     public static void updateNotification(Context context, NotificationCompat.Builder builder, @NonNull SleepEvent event) {
         builder
-                .setSmallIcon(ResourcesUtils.getSleepEventLogoRes(event.getChild().getSex()))
+                .setSmallIcon(ResourcesUtils.getNotificationSleepRes(event.getChild().getSex()))
                 .setContentTitle(context.getString(R.string.child_sleep, event.getChild().getName()))
                 .setWhen(event.getDateTime().toDate().getTime())
-                .setContentText(TimeUtils.sleepTime(context, event.getDateTime(), DateTime.now()));
+                .setContentText(TimeUtils.durationLong(context, event.getDateTime(), DateTime.now()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setColor(ThemeUtils.getColorPrimary(context, event.getChild().getSex()));
+        }
     }
 
     public static void showNotification(Context context, int notificationId, NotificationCompat.Builder builder) {

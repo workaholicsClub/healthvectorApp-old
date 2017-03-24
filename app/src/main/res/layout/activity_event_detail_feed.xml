@@ -34,6 +34,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ru.android.childdiary.presentation.events.widgets.EventDetailFoodView
+        android:id="@+id/foodView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ru.android.childdiary.presentation.events.widgets.EventDetailAmountView
         android:id="@+id/amountView"
         android:layout_width="match_parent"

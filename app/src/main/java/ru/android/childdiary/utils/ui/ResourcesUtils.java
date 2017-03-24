@@ -2,6 +2,7 @@ package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -122,5 +123,15 @@ public class ResourcesUtils {
     @DrawableRes
     public static int getButtonTimerBackgroundRes(@Nullable Sex sex) {
         return sex == null || sex == Sex.MALE ? R.drawable.background_timer_boy : R.drawable.background_timer_girl;
+    }
+
+    @DrawableRes
+    public static int getNotificationSleepRes(@Nullable Sex sex) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            // TODO: need icon with blue/pink background
+            return getSleepEventLogoRes(sex);
+        } else {
+            return R.drawable.ic_notification_sleep;
+        }
     }
 }

@@ -8,6 +8,7 @@ import lombok.Value;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
+import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -31,6 +32,8 @@ public class FeedEvent extends MasterEvent {
 
     FoodMeasure foodMeasure;
 
+    Food food;
+
     @Builder(toBuilder = true)
     private FeedEvent(Long masterEventId,
                       EventType eventType,
@@ -48,7 +51,8 @@ public class FeedEvent extends MasterEvent {
                       Integer rightDurationInMinutes,
                       Double amount,
                       Double amountMl,
-                      FoodMeasure foodMeasure) {
+                      FoodMeasure foodMeasure,
+                      Food food) {
         super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.feedType = feedType;
@@ -58,5 +62,6 @@ public class FeedEvent extends MasterEvent {
         this.amount = amount;
         this.amountMl = amountMl;
         this.foodMeasure = foodMeasure;
+        this.food = food;
     }
 }

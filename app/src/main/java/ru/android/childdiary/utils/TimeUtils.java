@@ -132,32 +132,47 @@ public class TimeUtils {
     }
 
     @Nullable
-    public static String duration(Context context, @Nullable Integer minutes) {
+    private static String duration(Context context, @Nullable Integer minutes, boolean allShort) {
         if (minutes == null || minutes <= 0) {
             return null;
         }
 
         Time.TimeBuilder timeBuilder = splitMinutes(minutes);
-        timeBuilder.shortDays(true);
-        timeBuilder.shortHours(true);
-        timeBuilder.shortMinutes(true);
+        timeBuilder.shortDays(allShort);
+        timeBuilder.shortHours(allShort);
+        timeBuilder.shortMinutes(allShort);
         String time = time(context, timeBuilder.build());
         return time;
     }
 
     @Nullable
-    public static String sleepTime(Context context, @Nullable DateTime start, @Nullable DateTime finish) {
+    public static String durationShort(Context context, @Nullable Integer minutes) {
+        return duration(context, minutes, true);
+    }
+
+    @Nullable
+    public static String durationLong(Context context, @Nullable Integer minutes) {
+        return duration(context, minutes, false);
+    }
+
+    @Nullable
+    private static String duration(Context context, @Nullable DateTime start, @Nullable DateTime finish, boolean allShort) {
         Integer minutes = durationInMinutes(start, finish);
         if (minutes == null) {
             return null;
         }
 
-        Time.TimeBuilder timeBuilder = splitMinutes(minutes);
-        timeBuilder.shortDays(false);
-        timeBuilder.shortHours(false);
-        timeBuilder.shortMinutes(false);
-        String time = time(context, timeBuilder.build());
-        return time;
+        return duration(context, minutes, allShort);
+    }
+
+    @Nullable
+    public static String durationShort(Context context, @Nullable DateTime start, @Nullable DateTime finish) {
+        return duration(context, start, finish, true);
+    }
+
+    @Nullable
+    public static String durationLong(Context context, @Nullable DateTime start, @Nullable DateTime finish) {
+        return duration(context, start, finish, false);
     }
 
     @Nullable

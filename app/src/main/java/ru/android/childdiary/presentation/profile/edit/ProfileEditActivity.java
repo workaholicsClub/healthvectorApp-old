@@ -334,6 +334,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 calendar.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(false);
         WidgetsUtils.setupDatePicker(this, dpd, sex);
+        dpd.setMaxDate(Calendar.getInstance());
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }

@@ -6,9 +6,14 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,13 +35,11 @@ import icepick.State;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
-import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
@@ -47,12 +50,14 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
-        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
-        FoodMeasureDialog.Listener, TimeDialog.Listener {
+        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
     protected T event;
 
     @BindView(R.id.editTextNote)
     protected CustomEditText editTextNote;
+
+    @BindView(R.id.editTextNoteWrapper)
+    TextInputLayout editTextNoteWrapper;
 
     @BindView(R.id.rootView)
     View rootView;
@@ -125,6 +130,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
+        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
     }
 
     @Override
@@ -139,8 +145,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             readOnly = false;
             setupReadOnlyFields();
         } else {
-            upsertEvent(buildEvent());
-            finish();
+            upsertEvent(buildEvent(), true);
         }
     }
 
@@ -152,11 +157,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
     }
 
-    protected final void upsertEvent(@NonNull T event) {
+    protected final void upsertEvent(@NonNull T event, boolean afterButtonPressed) {
         if (this.event == null) {
-            getPresenter().addEvent(event);
+            getPresenter().addEvent(event, afterButtonPressed);
         } else {
-            getPresenter().updateEvent(event);
+            getPresenter().updateEvent(event, afterButtonPressed);
         }
     }
 
@@ -189,24 +194,30 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected abstract T buildEvent(@Nullable T event);
 
     @Override
-    public void eventAdded(@NonNull T event) {
-        getPresenter().requestEventDetails(event);
+    public void eventAdded(@NonNull T event, boolean afterButtonPressed) {
+        if (afterButtonPressed) {
+            finish();
+        } else {
+            getPresenter().requestEventDetails(event);
+        }
     }
 
     @Override
-    public void eventUpdated(@NonNull T event) {
-    }
-
-    @Override
-    public void showFoodMeasureDialog(String tag, @NonNull Child child) {
-        FoodMeasureDialog dialog = new FoodMeasureDialog();
-        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child);
+    public void eventUpdated(@NonNull T event, boolean afterButtonPressed) {
+        if (afterButtonPressed) {
+            finish();
+        }
     }
 
     @Override
     public void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters) {
         TimeDialog dialog = new TimeDialog();
         dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child, parameters);
+    }
+
+    @Override
+    public void showValidationErrorMessage(String msg) {
+        showToast(msg);
     }
 
     @Override
@@ -219,7 +230,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
     }
 
-    protected void showDatePicker(String tag, @Nullable LocalDate date) {
+    protected void showDatePicker(String tag, @Nullable LocalDate date,
+                                  @Nullable LocalDate minDate, @Nullable LocalDate maxDate) {
         Calendar calendar = Calendar.getInstance();
         if (date != null) {
             calendar.setTime(date.toDate());
@@ -230,6 +242,16 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 calendar.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(false);
         WidgetsUtils.setupDatePicker(this, dpd, sex);
+        if (minDate != null) {
+            calendar = Calendar.getInstance();
+            calendar.setTime(minDate.toDate());
+            dpd.setMinDate(calendar);
+        }
+        if (maxDate != null) {
+            calendar = Calendar.getInstance();
+            calendar.setTime(maxDate.toDate());
+            dpd.setMaxDate(calendar);
+        }
         dpd.show(getFragmentManager(), tag);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
@@ -282,16 +304,13 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
-    }
-
-    @Override
     public void onSetTime(String tag, int minutes) {
     }
 
     private void setupReadOnlyFields() {
         setReadOnly(rootView);
-        editTextNote.setEnabled(!readOnly);
+        editTextNoteWrapper.setEnabled(!readOnly);
+        editTextNoteWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
         buttonDone.setText(readOnly ? R.string.edit : R.string.save);
     }
 
@@ -304,6 +323,34 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 View viewChild = viewGroup.getChildAt(i);
                 setReadOnly(viewChild);
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.event_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.menu_done);
+        item.setVisible(getEventType() == EventType.OTHER);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_done:
+                return true;
+            case R.id.menu_move:
+                return true;
+            case R.id.menu_delete:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

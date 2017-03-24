@@ -28,6 +28,9 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 public class TimeDialog extends BaseDialogFragment {
     private static final String KEY_PARAMETERS = "parameters";
 
+    @BindView(R.id.rootView)
+    View rootView;
+
     @BindView(R.id.numberPickerDays)
     NumberPicker numberPickerDays;
 
@@ -82,7 +85,7 @@ public class TimeDialog extends BaseDialogFragment {
                 .setView(view)
                 .setTitle(parameters.getTitle())
                 .setPositiveButton(R.string.OK, (dialog, which) -> {
-                    hideKeyboardAndClearFocus(view.findFocus());
+                    hideKeyboardAndClearFocus(rootView.findFocus());
                     int resultMinutes = numberPickerDays.getValue() * TimeUtils.MINUTES_IN_DAY
                             + numberPickerHours.getValue() * TimeUtils.MINUTES_IN_HOUR
                             + numberPickerMinutes.getValue();
@@ -90,8 +93,12 @@ public class TimeDialog extends BaseDialogFragment {
                         listener.onSetTime(getTag(), resultMinutes);
                     }
                 })
-                .setNegativeButton(R.string.Cancel, null);
-        return builder.create();
+                .setNegativeButton(R.string.Cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
+
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
     }
 
     private void setupUi(Parameters parameters) {

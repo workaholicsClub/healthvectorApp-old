@@ -106,6 +106,10 @@
             android:id="@+id/textViewDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:maxWidth="200dp"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
             android:textAppearance="@style/EventRowDescriptionTextAppearance" />

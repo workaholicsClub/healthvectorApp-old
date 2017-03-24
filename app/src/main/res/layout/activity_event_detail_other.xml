@@ -4,10 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ru.android.childdiary.presentation.events.widgets.EventDetailEditableTitleView
+        android:id="@+id/editableTitleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ru.android.childdiary.presentation.events.widgets.EventDetailTitleView
         android:id="@+id/startTitleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-16dp" />
 
     <ru.android.childdiary.presentation.events.widgets.EventDetailDateView
         android:id="@+id/startDateView"

@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.ListPopupWindow;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -35,7 +36,7 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
     @BindView(R.id.imageView)
     ImageView imageView;
 
-    @BindDimen(R.dimen.event_detail_text_width)
+    @BindDimen(R.dimen.spinner_item_width)
     int spinnerItemWidth;
 
     @Setter
@@ -124,7 +125,7 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
     @LayoutRes
     protected abstract int getLayoutResourceId();
 
-    protected abstract String getTextForValue(T value);
+    protected abstract String getTextForValue(@Nullable T value);
 
     protected abstract ListAdapter getAdapter();
 

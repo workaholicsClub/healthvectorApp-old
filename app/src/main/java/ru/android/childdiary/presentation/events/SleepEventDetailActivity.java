@@ -98,9 +98,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         startTitleView.setTitle(R.string.asleep);
         finishTitleView.setTitle(R.string.awoke);
 
-        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue()));
+        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue(),
+                null, finishDateView.getValue()));
         startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
-        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue()));
+        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue(),
+                startDateView.getValue(), null));
         finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
         durationView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_DURATION_DIALOG,
                 TimeDialog.Parameters.builder()
@@ -163,7 +165,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
             builder.finishDateTime(DateTime.now());
         }
 
-        upsertEvent(builder.build());
+        upsertEvent(builder.build(), false);
     }
 
     @Override
@@ -203,7 +205,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     protected SleepEvent buildEvent(SleepEvent event) {
         SleepEvent.SleepEventBuilder builder = event == null
-                ? SleepEvent.builder().eventType(EventType.SLEEP)
+                ? SleepEvent.builder()
                 : event.toBuilder();
 
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
@@ -273,6 +275,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
+        notifyTimeView.setVisibility(visibility);
     }
 
     private void updateTimer(@NonNull SleepEvent event) {
@@ -284,7 +287,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     private void updateIfNeeded() {
         if (this.event != null && event.getIsTimerStarted() != null && event.getIsTimerStarted()) {
-            getPresenter().updateEvent(buildEvent());
+            upsertEvent(buildEvent(), false);
         }
     }
 }

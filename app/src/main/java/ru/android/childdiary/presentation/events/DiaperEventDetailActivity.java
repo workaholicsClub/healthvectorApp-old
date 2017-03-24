@@ -66,7 +66,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue()));
+        dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(), null, null));
         timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
         notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
                 TimeDialog.Parameters.builder()
@@ -120,7 +120,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @Override
     protected DiaperEvent buildEvent(@Nullable DiaperEvent event) {
         DiaperEvent.DiaperEventBuilder builder = event == null
-                ? DiaperEvent.builder().eventType(EventType.DIAPER)
+                ? DiaperEvent.builder()
                 : event.toBuilder();
 
         DateTime dateTime = getDateTime(dateView, timeView);

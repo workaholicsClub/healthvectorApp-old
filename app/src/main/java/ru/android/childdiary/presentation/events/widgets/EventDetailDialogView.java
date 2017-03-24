@@ -73,7 +73,7 @@ public abstract class EventDetailDialogView<T> extends LinearLayout implements
     @LayoutRes
     protected abstract int getLayoutResourceId();
 
-    protected abstract String getTextForValue(T value);
+    protected abstract String getTextForValue(@Nullable T value);
 
     @Override
     public void setReadOnly(boolean readOnly) {

@@ -73,13 +73,13 @@ public class EventDetailBreastFeedDurationView extends LinearLayout implements V
 
     public void setLeftDuration(@Nullable Integer value) {
         this.durationLeft = value;
-        textViewDurationLeft.setText(TimeUtils.duration(getContext(), value));
+        textViewDurationLeft.setText(TimeUtils.durationShort(getContext(), value));
         updateSum();
     }
 
     public void setRightDuration(@Nullable Integer value) {
         this.durationRight = value;
-        textViewDurationRight.setText(TimeUtils.duration(getContext(), value));
+        textViewDurationRight.setText(TimeUtils.durationShort(getContext(), value));
         updateSum();
     }
 
@@ -87,7 +87,7 @@ public class EventDetailBreastFeedDurationView extends LinearLayout implements V
         int left = getDurationLeftInt();
         int right = getDurationRightInt();
         int sum = left + right;
-        textViewDuration.setText(TimeUtils.duration(getContext(), sum));
+        textViewDuration.setText(TimeUtils.durationShort(getContext(), sum));
     }
 
     @Override

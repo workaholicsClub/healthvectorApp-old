@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -65,7 +66,7 @@ public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayo
     @LayoutRes
     protected abstract int getTitleLayoutResourceId();
 
-    protected abstract String getTextForValue(T value);
+    protected abstract String getTextForValue(@Nullable T value);
 
     @Override
     public void onClick(View v) {

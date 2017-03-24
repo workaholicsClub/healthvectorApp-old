@@ -50,6 +50,11 @@
     <string name="validate_child_birth_date_empty">Введите дату рождения ребенка</string>
     <string name="validate_child_birth_height_empty">Введите рост ребенка при рождении</string>
     <string name="validate_child_birth_weight_empty">Введите вес ребенка при рождении</string>
+    <string name="validate_event_feed_breast_milk_fill_left_duration">Введите продолжительность кормления для левой груди</string>
+    <string name="validate_event_feed_breast_milk_fill_right_duration">Введите продолжительность кормления для правой груди</string>
+    <string name="validate_event_pump_fill_left_amount">Введите количество сцеженного молока для левой груди</string>
+    <string name="validate_event_pump_fill_right_amount">Введите количество сцеженного молока для правой груди</string>
+    <string name="validate_event_sleep_timer_already_started">Таймер сна уже запущен</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
     <string name="amount_review">%s мл</string>
@@ -82,6 +87,11 @@
     <string name="food_measure_grams">граммы</string>
     <string name="food_measure_millilitres">миллилитры</string>
     <string name="food_measure_other">Другое</string>
+    <string name="food_porridge">Каша</string>
+    <string name="food_vegetables">Овощное пюре</string>
+    <string name="food_fruits">Фруктовое пюре</string>
+    <string name="food_meat">Мясное пюре</string>
+    <string name="food_other">Другое</string>
     <string name="notify_time">Оповещение</string>
     <string name="diaper_state">Состояние подгузника</string>
     <string name="note">Примечание</string>
@@ -101,12 +111,17 @@
     <string name="time_dialog_hours">Часов</string>
     <string name="time_dialog_minutes">Минут</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
+    <string name="food_dialog_title">Введите наименование прикорма</string>
     <string name="duration_separator">:</string>
     <string name="child_sleep">%s спит</string>
     <string name="days_short">%d д.</string>
     <string name="hours_short">%d ч.</string>
     <string name="minutes_short">%d мин.</string>
     <string name="duration_format">00:00:00</string>
+    <string name="other_event_title_hint">Введите название</string>
+    <string name="menu_title_done">Выполнить</string>
+    <string name="menu_title_move">Перенести</string>
+    <string name="menu_title_delete">Удалить</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

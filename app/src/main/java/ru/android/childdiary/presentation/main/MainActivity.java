@@ -10,7 +10,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -75,7 +74,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         AccountHeader.OnAccountHeaderProfileImageListener,
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
-        PopupMenu.OnMenuItemClickListener,
         CloseMenuButtonClickListener,
         View.OnClickListener,
         FabController {
@@ -526,36 +524,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_filter:
-                View menuItemView = findViewById(R.id.menu_filter);
-                PopupMenu popupMenu = new PopupMenu(this, menuItemView, Gravity.END, R.attr.actionOverflowMenuStyle, R.style.OverflowMenu);
-                popupMenu.inflate(R.menu.filter);
-                popupMenu.setOnMenuItemClickListener(this);
-                popupMenu.show();
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_diaper:
-                showToast(getString(R.string.event_diaper));
-                return true;
-            case R.id.menu_sleep:
-                showToast(getString(R.string.event_sleep));
-                return true;
-            case R.id.menu_feed:
-                showToast(getString(R.string.event_feed));
-                return true;
-            case R.id.menu_pump:
-                showToast(getString(R.string.event_pump));
-                return true;
-            case R.id.menu_other:
-                showToast(getString(R.string.event_other));
-                return true;
-        }
-        return false;
     }
 
     @Override

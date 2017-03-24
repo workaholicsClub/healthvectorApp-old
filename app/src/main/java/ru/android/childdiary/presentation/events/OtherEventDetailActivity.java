@@ -25,6 +25,7 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailEditableTitleView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
@@ -39,6 +40,9 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @InjectPresenter
     OtherEventDetailPresenter presenter;
+
+    @BindView(R.id.editableTitleView)
+    EventDetailEditableTitleView editableTitleView;
 
     @BindView(R.id.startTitleView)
     EventDetailTitleView startTitleView;
@@ -77,12 +81,15 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setupEditTextView(editableTitleView);
         startTitleView.setTitle(R.string.other_event_start);
         finishTitleView.setTitle(R.string.other_event_finish);
 
-        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue()));
+        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue(),
+                null, finishDateView.getValue()));
         startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
-        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue()));
+        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue(),
+                startDateView.getValue(), null));
         finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
         notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
                 TimeDialog.Parameters.builder()
@@ -126,6 +133,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     public void showEventDetail(@NonNull OtherEvent event) {
         super.showEventDetail(event);
+        editableTitleView.setTitle(event.getTitle());
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
@@ -135,13 +143,14 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     protected OtherEvent buildEvent(OtherEvent event) {
         OtherEvent.OtherEventBuilder builder = event == null
-                ? OtherEvent.builder().eventType(EventType.OTHER)
+                ? OtherEvent.builder()
                 : event.toBuilder();
 
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
 
-        builder.dateTime(startDateTime)
+        builder.title(editableTitleView.getTitle())
+                .dateTime(startDateTime)
                 .finishDateTime(finishDateTime)
                 .notifyTimeInMinutes(notifyTimeView.getValue())
                 .note(editTextNote.getText().toString());

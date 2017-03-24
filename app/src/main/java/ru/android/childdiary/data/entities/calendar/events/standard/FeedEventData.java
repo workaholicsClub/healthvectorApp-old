@@ -7,6 +7,7 @@ import io.requery.Key;
 import io.requery.ManyToOne;
 import io.requery.OneToOne;
 import io.requery.Table;
+import ru.android.childdiary.data.entities.calendar.FoodData;
 import ru.android.childdiary.data.entities.calendar.FoodMeasureData;
 import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
 import ru.android.childdiary.data.types.Breast;
@@ -38,4 +39,8 @@ public interface FeedEventData {
     @ForeignKey
     @ManyToOne
     FoodMeasureData getFoodMeasureData();
+
+    @ForeignKey
+    @ManyToOne
+    FoodData getFoodData();
 }

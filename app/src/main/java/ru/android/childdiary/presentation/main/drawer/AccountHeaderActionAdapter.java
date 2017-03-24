@@ -5,12 +5,14 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.adapters.BaseArrayAdapter;
@@ -52,6 +54,9 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
         TextView textView;
         @BindView(R.id.imageViewDropdown)
         View imageViewDropdown;
+        @BindDimen(R.dimen.base_margin_horizontal)
+        int baseMarginHorizontal;
+
         private CloseMenuButtonClickListener listener;
 
         public ViewHolder(View view, CloseMenuButtonClickListener listener) {
@@ -68,6 +73,9 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
             textView.setText(text);
             imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
             imageViewDropdown.setOnClickListener(position == 0 ? this : null);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textView.getLayoutParams();
+            params.rightMargin = position == 0 ? 0 : baseMarginHorizontal;
+            textView.setLayoutParams(params);
         }
 
         @Override

@@ -21,14 +21,14 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
     void showEventDetail(@NonNull T event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void eventAdded(@NonNull T event);
+    void eventAdded(@NonNull T event, boolean afterButtonPressed);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void eventUpdated(@NonNull T event);
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void showFoodMeasureDialog(String tag, @NonNull Child child);
+    void eventUpdated(@NonNull T event, boolean afterButtonPressed);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showValidationErrorMessage(String msg);
 }
