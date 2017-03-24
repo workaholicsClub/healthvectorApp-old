@@ -33,7 +33,8 @@ public class SleepEventValidator extends Validator<SleepEvent, CalendarValidatio
             Long count = calendarInteractor.getSleepEventsWithTimer()
                     .firstOrError()
                     .flatMapObservable(Observable::fromIterable)
-                    .filter(sleepEvent -> ObjectUtils.equals(sleepEvent.getChild().getId(), event.getChild().getId()))
+                    .filter(sleepEvent -> ObjectUtils.equals(sleepEvent.getChild().getId(), event.getChild().getId())
+                            && !ObjectUtils.equals(sleepEvent.getId(), event.getId()))
                     .count()
                     .blockingGet();
 
