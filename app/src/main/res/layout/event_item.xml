@@ -94,9 +94,8 @@
 
         <TextView
             android:id="@+id/textViewEventType"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:drawablePadding="@dimen/event_row_padding_horizontal"
             android:ellipsize="end"
             android:maxLines="1"
@@ -108,12 +107,12 @@
 
         <TextView
             android:id="@+id/textViewDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="end"
             android:maxLines="1"
-            android:maxWidth="200dp"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
             android:singleLine="true"
