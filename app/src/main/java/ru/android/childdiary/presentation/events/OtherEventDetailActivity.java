@@ -25,7 +25,7 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailEditView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailOtherEventNameView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
@@ -41,8 +41,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     @InjectPresenter
     OtherEventDetailPresenter presenter;
 
-    @BindView(R.id.editView)
-    EventDetailEditView editView;
+    @BindView(R.id.otherEventNameView)
+    EventDetailOtherEventNameView otherEventNameView;
 
     @BindView(R.id.startTitleView)
     EventDetailTitleView startTitleView;
@@ -81,7 +81,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupEditTextView(editView);
+        setupEditTextView(otherEventNameView);
         startTitleView.setTitle(R.string.other_event_start);
         finishTitleView.setTitle(R.string.other_event_finish);
 
@@ -133,7 +133,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     public void showEventDetail(@NonNull OtherEvent event) {
         super.showEventDetail(event);
-        editView.setText(event.getName());
+        otherEventNameView.setText(event.getName());
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
@@ -149,7 +149,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
 
-        builder.name(editView.getText())
+        builder.name(otherEventNameView.getText())
                 .dateTime(startDateTime)
                 .finishDateTime(finishDateTime)
                 .notifyTimeInMinutes(notifyTimeView.getValue())

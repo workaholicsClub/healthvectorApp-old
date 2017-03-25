@@ -16,27 +16,27 @@ import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
-public class EventDetailEditView extends EventDetailEditTextView {
+public class EventDetailOtherEventNameView extends EventDetailEditTextView {
     @BindView(R.id.editText)
     CustomEditText editText;
 
-    public EventDetailEditView(Context context) {
+    public EventDetailOtherEventNameView(Context context) {
         super(context);
         init();
     }
 
-    public EventDetailEditView(Context context, AttributeSet attrs) {
+    public EventDetailOtherEventNameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public EventDetailEditView(Context context, AttributeSet attrs, int defStyle) {
+    public EventDetailOtherEventNameView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
     private void init() {
-        inflate(getContext(), R.layout.event_detail_edit, this);
+        inflate(getContext(), R.layout.event_detail_other_event_name, this);
     }
 
     @Override
