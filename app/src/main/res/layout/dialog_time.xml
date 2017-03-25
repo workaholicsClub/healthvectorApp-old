@@ -3,101 +3,86 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:paddingLeft="@dimen/base_margin_horizontal"
-    android:paddingRight="@dimen/base_margin_horizontal"
+    android:orientation="vertical"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
     <include layout="@layout/request_focus_view_dummy" />
 
-    <LinearLayout
-        android:id="@+id/daysView"
+    <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/base_margin_horizontal"
+        android:layout_gravity="center"
         android:layout_marginLeft="@dimen/base_margin_horizontal"
-        android:layout_marginRight="@dimen/base_margin_horizontal"
-        android:layout_marginStart="@dimen/base_margin_horizontal"
-        android:orientation="vertical">
+        android:layout_marginRight="@dimen/base_margin_horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time_dialog_days"
-            android:textAppearance="@style/SecondaryTextAppearance" />
+        <TableRow>
 
-        <NumberPicker
-            android:id="@+id/numberPickerDays"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/PrimaryTextAppearance" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/daysHeader"
+                android:layout_width="@dimen/time_dialog_header_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/time_dialog_column_space"
+                android:layout_marginRight="@dimen/time_dialog_column_space"
+                android:text="@string/time_dialog_days"
+                android:textAppearance="@style/SecondaryTextAppearance" />
 
-    <LinearLayout
-        android:id="@+id/hoursView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/base_margin_horizontal"
-        android:layout_marginLeft="@dimen/base_margin_horizontal"
-        android:layout_marginRight="@dimen/base_margin_horizontal"
-        android:layout_marginStart="@dimen/base_margin_horizontal"
-        android:orientation="vertical">
+            <TextView
+                android:id="@+id/hoursHeader"
+                android:layout_width="@dimen/time_dialog_header_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/time_dialog_hours"
+                android:textAppearance="@style/SecondaryTextAppearance" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time_dialog_hours"
-            android:textAppearance="@style/SecondaryTextAppearance" />
+            <TextView
+                android:id="@+id/durationSeparatorHeader"
+                android:layout_width="@dimen/time_dialog_column_space"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/SecondaryTextAppearance" />
 
-        <NumberPicker
-            android:id="@+id/numberPickerHours"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/PrimaryTextAppearance" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/minutesHeader"
+                android:layout_width="@dimen/time_dialog_header_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/time_dialog_minutes"
+                android:textAppearance="@style/SecondaryTextAppearance" />
+        </TableRow>
 
+        <TableRow>
 
-    <LinearLayout
-        android:id="@+id/delimiter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+            <NumberPicker
+                android:id="@+id/numberPickerDays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/time_dialog_column_space"
+                android:layout_marginRight="@dimen/time_dialog_column_space"
+                android:textAppearance="@style/PrimaryTextAppearance" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:textAppearance="@style/SecondaryTextAppearance" />
+            <NumberPicker
+                android:id="@+id/numberPickerHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/PrimaryTextAppearance" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/duration_separator"
-            android:textAppearance="@style/PrimaryTextAppearance" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/durationSeparator"
+                android:layout_width="@dimen/time_dialog_column_space"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/duration_separator"
+                android:textAppearance="@style/PrimaryTextAppearance" />
 
-    <LinearLayout
-        android:id="@+id/minutesView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/base_margin_horizontal"
-        android:layout_marginLeft="@dimen/base_margin_horizontal"
-        android:layout_marginRight="@dimen/base_margin_horizontal"
-        android:layout_marginStart="@dimen/base_margin_horizontal"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time_dialog_minutes"
-            android:textAppearance="@style/SecondaryTextAppearance" />
-
-        <NumberPicker
-            android:id="@+id/numberPickerMinutes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/PrimaryTextAppearance" />
-    </LinearLayout>
+            <NumberPicker
+                android:id="@+id/numberPickerMinutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/PrimaryTextAppearance" />
+        </TableRow>
+    </TableLayout>
 </LinearLayout>

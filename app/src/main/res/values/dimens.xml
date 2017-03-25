@@ -77,5 +77,8 @@
     <dimen name="text_size_small">12sp</dimen>
     <!-- base -->
     <dimen name="base_margin_horizontal">16dp</dimen>
+    <!-- dialogs -->
+    <dimen name="time_dialog_header_width">50dp</dimen>
+    <dimen name="time_dialog_column_space">6dp</dimen>
     <dimen name="alert_dialog_padding_top">16dp</dimen>
 </resources>

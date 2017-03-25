@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/base_margin_horizontal"
-    android:paddingRight="@dimen/base_margin_horizontal"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
     <include layout="@layout/request_focus_view_dummy" />
@@ -14,6 +12,8 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_field_height"
+        android:layout_marginLeft="@dimen/base_margin_horizontal"
+        android:layout_marginRight="@dimen/base_margin_horizontal"
         android:background="@drawable/edit_text_background"
         android:imeOptions="actionDone"
         android:inputType="text"
