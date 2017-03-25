@@ -175,8 +175,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
-    public void showEventDetail(@NonNull FeedEvent event) {
-        super.showEventDetail(event);
+    public void setupEventDetail(@NonNull FeedEvent event) {
         setDateTime(event.getDateTime(), dateView, timeView);
         feedTypeView.setValue(event.getFeedType());
         setupFeedType();

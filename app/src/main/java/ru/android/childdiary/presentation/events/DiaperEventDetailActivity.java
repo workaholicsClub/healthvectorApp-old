@@ -109,8 +109,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     }
 
     @Override
-    public void showEventDetail(@NonNull DiaperEvent event) {
-        super.showEventDetail(event);
+    public void setupEventDetail(@NonNull DiaperEvent event) {
         setDateTime(event.getDateTime(), dateView, timeView);
         diaperStateView.setSelected(event.getDiaperState());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());

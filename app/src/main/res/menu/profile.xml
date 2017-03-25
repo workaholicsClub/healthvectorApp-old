@@ -5,6 +5,6 @@
     <item
         android:id="@+id/menu_close"
         android:icon="@drawable/toolbar_action_close"
-        android:name="@string/empty"
+        android:title="@string/empty"
         app:showAsAction="always" />
 </menu>

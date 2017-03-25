@@ -25,8 +25,8 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailOtherEventNameView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailOtherEventNameView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -131,8 +131,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
-    public void showEventDetail(@NonNull OtherEvent event) {
-        super.showEventDetail(event);
+    public void setupEventDetail(@NonNull OtherEvent event) {
         otherEventNameView.setText(event.getName());
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);

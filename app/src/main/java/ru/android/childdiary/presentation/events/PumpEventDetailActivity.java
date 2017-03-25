@@ -114,8 +114,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     }
 
     @Override
-    public void showEventDetail(@NonNull PumpEvent event) {
-        super.showEventDetail(event);
+    public void setupEventDetail(@NonNull PumpEvent event) {
         setDateTime(event.getDateTime(), dateView, timeView);
         breastView.setSelected(event.getBreast());
         amountMlPumpView.setAmountMlLeft(event.getLeftAmountMl());

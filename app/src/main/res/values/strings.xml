@@ -121,9 +121,11 @@
     <string name="minutes_short">%d мин.</string>
     <string name="duration_format">00:00:00</string>
     <string name="other_event_title_hint">Введите наименование</string>
-    <string name="menu_title_done">Выполнить</string>
+    <string name="menu_title_done">Выполнено</string>
     <string name="menu_title_move">Перенести</string>
     <string name="menu_title_delete">Удалить</string>
+    <string name="event_is_done">Выполнено</string>
+    <string name="event_is_not_done">Не выполнено</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

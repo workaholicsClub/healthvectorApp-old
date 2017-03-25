@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.events.core;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -127,7 +126,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
-        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
     }
 
     @Override
@@ -163,22 +161,19 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void showChild(@NonNull Child child) {
-        logger.debug("showChild: " + child);
-        changeThemeIfNeeded(child);
-    }
-
-    @Override
-    public void showDefaultEventDetail(@NonNull T event) {
-        showEventDetail(event);
+    public final void showDefaultEventDetail(@NonNull T event) {
+        changeThemeIfNeeded(event.getChild());
+        setupEventDetail(event);
         this.event = null;
     }
 
     @Override
-    @CallSuper
-    public void showEventDetail(@NonNull T event) {
+    public final void showEventDetail(@NonNull T event) {
         changeThemeIfNeeded(event.getChild());
+        setupEventDetail(event);
         this.event = event;
+        invalidateOptionsMenu();
+        getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
@@ -187,6 +182,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @LayoutRes
     protected abstract int getContentLayoutResourceId();
+
+    protected abstract void setupEventDetail(@NonNull T event);
 
     protected abstract T buildEvent(@Nullable T event);
 
@@ -206,6 +203,17 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             setResult(RESULT_OK);
             finish();
         }
+    }
+
+    @Override
+    public void eventDeleted(@NonNull MasterEvent event) {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void eventDone(@NonNull MasterEvent event) {
+        showToast(getString(EventHelper.isDone(event) ? R.string.event_is_done : R.string.event_is_not_done));
     }
 
     @Override
@@ -325,6 +333,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (event == null) {
+            return false;
+        }
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.event_detail, menu);
         return true;
@@ -332,19 +343,28 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        if (event == null) {
+            return false;
+        }
         MenuItem item = menu.findItem(R.id.menu_done);
         item.setVisible(EventHelper.canBeDone(getEventType()));
+        item.setChecked(EventHelper.isDone(event));
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (event == null) {
+            return false;
+        }
         switch (item.getItemId()) {
             case R.id.menu_done:
+                getPresenter().doneEvent(event);
                 return true;
             case R.id.menu_move:
                 return true;
             case R.id.menu_delete:
+                getPresenter().deleteEvent(event);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

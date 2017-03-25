@@ -190,8 +190,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
-    public void showEventDetail(@NonNull SleepEvent event) {
-        super.showEventDetail(event);
+    public void setupEventDetail(@NonNull SleepEvent event) {
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());

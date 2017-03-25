@@ -77,7 +77,23 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(updatedEvent -> logger.debug("event updated: " + updatedEvent))
-                .subscribe(updatedEvent -> getViewState().eventUpdated((T) updatedEvent, afterButtonPressed), this::onUnexpectedError));
+                .subscribe(updatedEvent -> getViewState().eventUpdated(updatedEvent, afterButtonPressed), this::onUnexpectedError));
+    }
+
+    public void deleteEvent(@NonNull T event) {
+        unsubscribeOnDestroy(calendarInteractor.delete(event)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(deletedEvent -> logger.debug("event deleted: " + deletedEvent))
+                .subscribe(deletedEvent -> getViewState().eventDeleted(deletedEvent), this::onUnexpectedError));
+    }
+
+    public void doneEvent(@NonNull T event) {
+        unsubscribeOnDestroy(calendarInteractor.done(event)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(doneEvent -> logger.debug("event done: " + doneEvent))
+                .subscribe(doneEvent -> getViewState().eventDone(doneEvent), this::onUnexpectedError));
     }
 
     @Override
