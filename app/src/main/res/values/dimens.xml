@@ -62,10 +62,7 @@
     <dimen name="event_detail_text_view_min_width">100dp</dimen>
     <dimen name="event_detail_margin_base">8dp</dimen>
     <dimen name="event_detail_note_corner_radius">4dp</dimen>
-    <!-- base -->
-    <dimen name="base_margin_horizontal">16dp</dimen>
     <dimen name="arrow_icon_size">24dp</dimen>
-    <dimen name="alert_dialog_padding_top">16dp</dimen>
     <!-- timer -->
     <dimen name="timer_stroke_width">2dp</dimen>
     <dimen name="timer_corner_radius">8dp</dimen>
@@ -78,4 +75,7 @@
     <dimen name="text_size_base">16sp</dimen>
     <dimen name="text_size_calendar">14sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
+    <!-- base -->
+    <dimen name="base_margin_horizontal">16dp</dimen>
+    <dimen name="alert_dialog_padding_top">16dp</dimen>
 </resources>
