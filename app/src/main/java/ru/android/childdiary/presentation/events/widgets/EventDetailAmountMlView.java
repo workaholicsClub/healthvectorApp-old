@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
@@ -25,6 +27,9 @@ public class EventDetailAmountMlView extends EventDetailEditTextView {
 
     @BindView(R.id.imageView)
     ImageView imageView;
+
+    @BindInt(R.integer.max_length_amount_ml)
+    int amountMlMaxLength;
 
     @Getter
     private Double amountMl;
@@ -53,6 +58,7 @@ public class EventDetailAmountMlView extends EventDetailEditTextView {
         super.onFinishInflate();
         ButterKnife.bind(this);
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amountMlMaxLength)});
     }
 
     public void setAmountMl(Double amount) {

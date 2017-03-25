@@ -22,6 +22,7 @@
         android:hint="@string/other_event_title_hint"
         android:imeOptions="actionDone"
         android:inputType="text"
+        android:maxLength="@integer/max_length_other_event_name"
         android:maxLines="1"
         android:textAppearance="@style/PrimaryTextAppearance"
         android:textColor="@drawable/event_detail_editable_text_color"

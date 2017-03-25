@@ -3,4 +3,10 @@
     <integer name="max_length_event_detail_note">2000</integer>
     <integer name="max_length_event_detail_food_measure">10</integer>
     <integer name="max_length_event_detail_food">10</integer>
+    <integer name="max_length_child_name">200</integer>
+    <integer name="max_length_child_height">7</integer>
+    <integer name="max_length_child_weight">8</integer>
+    <integer name="max_length_amount">5</integer>
+    <integer name="max_length_amount_ml">8</integer>
+    <integer name="max_length_other_event_name">30</integer>
 </resources>

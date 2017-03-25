@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -14,6 +15,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindInt;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import lombok.Getter;
@@ -22,6 +24,9 @@ import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.DoubleUtils;
 
 public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
+    @BindInt(R.integer.max_length_amount_ml)
+    int amountMlMaxLength;
+
     private TextView textViewAmountMl;
     private CustomEditText editTextAmountMlLeft, editTextAmountMlRight;
     private ImageView imageViewLeft, imageViewRight;
@@ -57,12 +62,14 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
         imageViewLeft = ButterKnife.findById(view, R.id.imageView);
         editTextAmountMlLeft = ButterKnife.findById(view, R.id.editText);
         editTextAmountMlLeft.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        editTextAmountMlLeft.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amountMlMaxLength)});
 
         view = inflate(getContext(), R.layout.event_detail_amount_ml_pump_right, null);
         addView(view);
         imageViewRight = ButterKnife.findById(view, R.id.imageView);
         editTextAmountMlRight = ButterKnife.findById(view, R.id.editText);
         editTextAmountMlRight.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editTextAmountMlRight.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amountMlMaxLength)});
     }
 
     public void setAmountMlLeft(Double amount) {
