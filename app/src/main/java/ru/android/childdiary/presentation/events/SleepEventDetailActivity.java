@@ -35,7 +35,6 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -169,7 +168,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @Override
     public void onTimerTick(@NonNull SleepEvent event) {
-        if (this.event != null && ObjectUtils.equals(this.event.getId(), event.getId())) {
+        if (EventHelper.sameEvent(this.event, event)) {
             updateTimer(event);
         }
     }

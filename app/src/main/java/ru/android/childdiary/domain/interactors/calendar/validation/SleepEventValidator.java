@@ -14,7 +14,6 @@ import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.utils.EventHelper;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 
 public class SleepEventValidator extends Validator<SleepEvent, CalendarValidationResult> {
@@ -35,8 +34,8 @@ public class SleepEventValidator extends Validator<SleepEvent, CalendarValidatio
             Long count = calendarInteractor.getSleepEventsWithTimer()
                     .firstOrError()
                     .flatMapObservable(Observable::fromIterable)
-                    .filter(sleepEvent -> ObjectUtils.equals(sleepEvent.getChild().getId(), event.getChild().getId())
-                            && !ObjectUtils.equals(sleepEvent.getId(), event.getId()))
+                    .filter(sleepEvent -> EventHelper.sameChild(sleepEvent, event)
+                            && !EventHelper.sameEvent(sleepEvent, event))
                     .count()
                     .blockingGet();
 

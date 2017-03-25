@@ -36,4 +36,15 @@ public class EventHelper {
     public static String getDescription(Context context, @NonNull MasterEvent event) {
         return event.getDescription();
     }
+
+    public static boolean sameEvent(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {
+        return event1 != null && event2 != null
+                && ObjectUtils.equals(event1.getMasterEventId(), event2.getMasterEventId());
+    }
+
+    public static boolean sameChild(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {
+        return event1 != null && event2 != null
+                && event1.getChild() != null && event2.getChild() != null
+                && ObjectUtils.equals(event1.getChild().getId(), event2.getChild().getId());
+    }
 }

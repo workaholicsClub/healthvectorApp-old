@@ -5,7 +5,7 @@ import android.support.v7.util.DiffUtil;
 import java.util.List;
 
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
-import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.EventHelper;
 
 public class EventListDiff extends DiffUtil.Callback {
     private final List<MasterEvent> oldEvents;
@@ -30,7 +30,7 @@ public class EventListDiff extends DiffUtil.Callback {
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
         MasterEvent oldEvent = oldEvents.get(oldItemPosition);
         MasterEvent newEvent = newEvents.get(newItemPosition);
-        return ObjectUtils.equals(oldEvent.getMasterEventId(), newEvent.getMasterEventId());
+        return EventHelper.sameEvent(oldEvent, newEvent);
     }
 
     @Override
