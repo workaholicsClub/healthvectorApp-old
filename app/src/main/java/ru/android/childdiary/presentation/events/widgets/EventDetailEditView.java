@@ -62,7 +62,7 @@ public class EventDetailEditView extends EventDetailEditTextView {
         List<Disposable> disposables = new ArrayList<>();
 
         disposables.add(RxTextView.afterTextChangeEvents(editText).subscribe(textViewAfterTextChangeEvent -> {
-            this.text = editText.getText().toString();
+            this.text = editText.getText().toString().trim();
         }));
 
         disposables.add(RxView.focusChanges(editText).subscribe(hasFocus -> {

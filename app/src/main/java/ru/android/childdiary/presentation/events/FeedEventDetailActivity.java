@@ -219,7 +219,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 .leftDurationInMinutes(durationView.getDurationLeft())
                 .rightDurationInMinutes(durationView.getDurationRight())
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(editTextNote.getText().toString());
+                .note(editTextNote.getText().toString().trim());
 
         return builder.build();
     }

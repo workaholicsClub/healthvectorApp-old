@@ -196,7 +196,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getBirthWeight()));
 
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextName).subscribe(textViewAfterTextChangeEvent -> {
-            String name = editTextName.getText().toString();
+            String name = editTextName.getText().toString().trim();
             updateChild(editedChild.toBuilder().name(name).build());
         }));
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthHeight).subscribe(textViewAfterTextChangeEvent -> {

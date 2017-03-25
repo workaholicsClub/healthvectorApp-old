@@ -213,7 +213,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         builder.dateTime(startDateTime)
                 .finishDateTime(finishDateTime)
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(editTextNote.getText().toString());
+                .note(editTextNote.getText().toString().trim());
 
         return builder.build();
     }
