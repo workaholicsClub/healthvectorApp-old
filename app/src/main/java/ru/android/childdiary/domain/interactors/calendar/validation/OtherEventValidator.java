@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
+import ru.android.childdiary.utils.TimeUtils;
 
 public class OtherEventValidator extends Validator<OtherEvent, CalendarValidationResult> {
     private final Context context;
@@ -28,6 +29,12 @@ public class OtherEventValidator extends Validator<OtherEvent, CalendarValidatio
         if (TextUtils.isEmpty(event.getName())) {
             CalendarValidationResult result = new CalendarValidationResult();
             result.addMessage(context.getString(R.string.validate_event_other_title_empty));
+            results.add(result);
+        }
+
+        if (TimeUtils.isStartTimeLessThanFinishTime(event.getDateTime(), event.getFinishDateTime())) {
+            CalendarValidationResult result = new CalendarValidationResult();
+            result.addMessage(context.getString(R.string.validate_start_finish_time));
             results.add(result);
         }
 

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
 import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 import org.joda.time.Minutes;
@@ -22,6 +23,9 @@ public class TimeUtils {
     public static final int MINUTES_IN_HOUR = 60;
     public static final int HOURS_IN_DAY = 24;
     public static final int MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR;
+
+    private static final DateTimeComparator COMPARE_ONLY_DATE = DateTimeComparator.getDateOnlyInstance();
+    private static final DateTimeComparator COMPARE_ONLY_TIME = DateTimeComparator.getTimeOnlyInstance();
 
     @Nullable
     public static String age(Context context, Child child) {
@@ -206,9 +210,21 @@ public class TimeUtils {
         return minutes.getMinutes();
     }
 
-    public static boolean isBeforeOrEqualNow(DateTime dateTime) {
+    public static boolean isBeforeOrEqualNow(@Nullable DateTime dateTime) {
+        if (dateTime == null) {
+            return false;
+        }
         DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
         return dateTime.isBefore(now) || dateTime.isEqual(now);
+    }
+
+    public static boolean isStartTimeLessThanFinishTime(@Nullable DateTime start, @Nullable DateTime finish) {
+        if (start == null || finish == null) {
+            return false;
+        }
+        boolean sameDate = COMPARE_ONLY_DATE.compare(start, finish) == 0;
+        boolean isStartTimeAfterFinishTime = COMPARE_ONLY_TIME.compare(start, finish) > 0;
+        return sameDate && isStartTimeAfterFinishTime;
     }
 
     @Value

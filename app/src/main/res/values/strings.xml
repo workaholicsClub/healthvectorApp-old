@@ -56,6 +56,7 @@
     <string name="validate_event_pump_fill_right_amount">Введите количество сцеженного молока для правой груди</string>
     <string name="validate_event_sleep_timer_already_started">Таймер сна уже запущен</string>
     <string name="validate_event_other_title_empty">Введите наименование события</string>
+    <string name="validate_start_finish_time">Время окончания не может быть меньше, чем время начала события</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
     <string name="amount_review">%s мл</string>
