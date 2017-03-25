@@ -9,7 +9,7 @@
         android:layout_width="@dimen/event_detail_icon_size"
         android:layout_height="@dimen/event_detail_icon_size"
         android:scaleType="center"
-        android:src="@drawable/ic_editable_title" />
+        android:src="@drawable/ic_other_event_name" />
 
     <ru.android.childdiary.presentation.core.widgets.CustomEditText
         android:id="@+id/editText"

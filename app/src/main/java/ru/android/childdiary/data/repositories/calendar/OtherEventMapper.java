@@ -30,7 +30,7 @@ class OtherEventMapper {
                 .isDone(masterEventData.isDone())
                 .isDeleted(masterEventData.isDeleted())
                 .child(child)
-                .title(eventData.getTitle())
+                .name(eventData.getName())
                 .finishDateTime(eventData.getFinishDateTime())
                 .build();
     }
@@ -58,7 +58,7 @@ class OtherEventMapper {
     }
 
     private static void fillNonReferencedFields(@NonNull OtherEventEntity to, @NonNull OtherEvent from) {
-        to.setTitle(from.getTitle());
+        to.setName(from.getName());
         to.setFinishDateTime(from.getFinishDateTime());
     }
 }

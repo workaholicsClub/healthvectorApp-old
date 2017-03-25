@@ -321,7 +321,7 @@ public class CalendarInteractor implements Interactor {
             return (T) ((OtherEvent) event).toBuilder()
                     .eventType(EventType.OTHER)
                     .child(child)
-                    .description(((OtherEvent) event).getTitle())
+                    .description(((OtherEvent) event).getName())
                     .build();
         } else if (event instanceof PumpEvent) {
             PumpEvent pumpEvent = (PumpEvent) event;

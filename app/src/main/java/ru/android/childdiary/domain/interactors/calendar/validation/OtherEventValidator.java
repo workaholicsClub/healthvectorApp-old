@@ -25,7 +25,7 @@ public class OtherEventValidator extends Validator<OtherEvent, CalendarValidatio
     public List<CalendarValidationResult> validate(@NonNull OtherEvent event) {
         List<CalendarValidationResult> results = new ArrayList<>();
 
-        if (TextUtils.isEmpty(event.getTitle())) {
+        if (TextUtils.isEmpty(event.getName())) {
             CalendarValidationResult result = new CalendarValidationResult();
             result.addMessage(context.getString(R.string.validate_event_other_title_empty));
             results.add(result);

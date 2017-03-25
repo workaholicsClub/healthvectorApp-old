@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailEditableTitleView
-        android:id="@+id/editableTitleView"
+    <ru.android.childdiary.presentation.events.widgets.EventDetailEditView
+        android:id="@+id/editView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

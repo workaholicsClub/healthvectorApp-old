@@ -17,30 +17,30 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
-public class EventDetailEditableTitleView extends EventDetailEditTextView {
+public class EventDetailEditView extends EventDetailEditTextView {
     @BindView(R.id.editText)
     CustomEditText editText;
 
     @Getter
-    private String title;
+    private String text;
 
-    public EventDetailEditableTitleView(Context context) {
+    public EventDetailEditView(Context context) {
         super(context);
         init();
     }
 
-    public EventDetailEditableTitleView(Context context, AttributeSet attrs) {
+    public EventDetailEditView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public EventDetailEditableTitleView(Context context, AttributeSet attrs, int defStyle) {
+    public EventDetailEditView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
     private void init() {
-        inflate(getContext(), R.layout.event_detail_editable_title, this);
+        inflate(getContext(), R.layout.event_detail_edit, this);
     }
 
     @Override
@@ -50,9 +50,9 @@ public class EventDetailEditableTitleView extends EventDetailEditTextView {
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-        editText.setText(title);
+    public void setText(String text) {
+        this.text = text;
+        editText.setText(text);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class EventDetailEditableTitleView extends EventDetailEditTextView {
         List<Disposable> disposables = new ArrayList<>();
 
         disposables.add(RxTextView.afterTextChangeEvents(editText).subscribe(textViewAfterTextChangeEvent -> {
-            this.title = editText.getText().toString();
+            this.text = editText.getText().toString();
         }));
 
         disposables.add(RxView.focusChanges(editText).subscribe(hasFocus -> {
