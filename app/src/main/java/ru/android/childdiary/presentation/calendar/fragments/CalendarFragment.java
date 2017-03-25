@@ -24,8 +24,7 @@ import org.joda.time.LocalDate;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.Optional;
+import butterknife.ButterKnife;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -52,15 +51,17 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     CalendarPresenter presenter;
 
     @Nullable
-    @BindView(R.id.calendarTitle)
+    @BindView(R.id.calendarHeader)
+    View calendarHeader;
     TextView calendarTitle;
 
     @Nullable
     @BindView(R.id.gridViewCalendar)
     GridView gridViewCalendar;
 
-    @BindView(R.id.textViewSelectedDate)
-    TextView textViewSelectedDate;
+    @BindView(R.id.eventsHeader)
+    View eventsHeader;
+    TextView eventsTitle;
 
     @BindView(R.id.recyclerViewEvents)
     RecyclerView recyclerViewEvents;
@@ -87,6 +88,24 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if (calendarHeader != null) {
+            calendarTitle = ButterKnife.findById(calendarHeader, R.id.title);
+            calendarHeader.findViewById(R.id.left).setOnClickListener(v -> moveLeft());
+            calendarHeader.findViewById(R.id.right).setOnClickListener(v -> moveRight());
+            calendarHeader.findViewById(R.id.today).setOnClickListener(v -> moveToday());
+        }
+
+        eventsTitle = ButterKnife.findById(eventsHeader, R.id.title);
+        if (showEventsHeaderNavigationButtons()) {
+            eventsHeader.findViewById(R.id.left).setOnClickListener(v -> moveLeft());
+            eventsHeader.findViewById(R.id.right).setOnClickListener(v -> moveRight());
+            eventsHeader.findViewById(R.id.today).setOnClickListener(v -> moveToday());
+        } else {
+            eventsHeader.findViewById(R.id.left).setVisibility(View.GONE);
+            eventsHeader.findViewById(R.id.right).setVisibility(View.GONE);
+            eventsHeader.findViewById(R.id.today).setVisibility(View.GONE);
+        }
 
         calendarAdapter = getCalendarViewAdapter();
         updateCalendarTitle();
@@ -129,6 +148,8 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
 
     protected abstract String getCalendarTitleText(Adapter adapter);
 
+    protected abstract boolean showEventsHeaderNavigationButtons();
+
     private void updateCalendarTitle() {
         if (calendarTitle != null) {
             calendarTitle.setText(getCalendarTitleText(calendarAdapter));
@@ -140,23 +161,17 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         int day = selectedDate.getDayOfMonth();
         String monthName = DateUtils.monthGenitiveName(context, selectedDate.getMonthOfYear());
         String text = context.getString(R.string.calendar_selected_date_format, day, monthName);
-        textViewSelectedDate.setText(text);
+        eventsTitle.setText(text);
     }
 
-    @Optional
-    @OnClick(R.id.left)
     void moveLeft() {
         calendarAdapter.moveLeft();
     }
 
-    @Optional
-    @OnClick(R.id.today)
     void moveToday() {
         calendarAdapter.moveToday();
     }
 
-    @Optional
-    @OnClick(R.id.right)
     void moveRight() {
         calendarAdapter.moveRight();
     }

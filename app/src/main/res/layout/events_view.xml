@@ -6,7 +6,9 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/events_padding_vertical">
 
-    <include layout="@layout/calendar_header_sub" />
+    <include
+        android:id="@+id/eventsHeader"
+        layout="@layout/calendar_header" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewEvents"

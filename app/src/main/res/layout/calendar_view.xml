@@ -6,7 +6,9 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/events_padding_vertical">
 
-    <include layout="@layout/calendar_header" />
+    <include
+        android:id="@+id/calendarHeader"
+        layout="@layout/calendar_header" />
 
     <GridView
         android:id="@+id/gridViewCalendar"

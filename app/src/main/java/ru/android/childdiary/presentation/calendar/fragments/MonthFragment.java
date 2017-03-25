@@ -33,4 +33,9 @@ public class MonthFragment extends CalendarFragment<MonthViewAdapter> {
         String text = context.getString(R.string.calendar_month_title, monthString, year);
         return text;
     }
+
+    @Override
+    protected boolean showEventsHeaderNavigationButtons() {
+        return false;
+    }
 }

@@ -45,4 +45,9 @@ public class WeekFragment extends CalendarFragment<WeekViewAdapter> {
         }
         return text;
     }
+
+    @Override
+    protected boolean showEventsHeaderNavigationButtons() {
+        return false;
+    }
 }
