@@ -20,12 +20,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.StringUtils;
-import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -92,11 +91,12 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
 
-        boolean showActionDone = event.getEventType() == EventType.OTHER;
+        boolean showActionDone = EventHelper.canBeDone(event);
         actionDoneView.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
         delimiter1.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
-        boolean isDone = event.getIsDone() != null && event.getIsDone();
-        boolean isExpired = TimeUtils.isBeforeOrEqualNow(event.getDateTime());
+
+        boolean isDone = EventHelper.isDone(event);
+        boolean isExpired = EventHelper.isExpired(event);
         int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
         textViewEventType.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
     }

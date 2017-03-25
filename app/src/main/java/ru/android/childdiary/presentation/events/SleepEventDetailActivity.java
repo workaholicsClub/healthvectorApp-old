@@ -34,6 +34,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
+import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -152,9 +153,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @OnClick(R.id.buttonTimer)
     void onTimerClick() {
         SleepEvent event = buildEvent();
-
-        Boolean isTimerStarted = event.getIsTimerStarted();
-        isTimerStarted = isTimerStarted == null || !isTimerStarted;
+        boolean isTimerStarted = !EventHelper.isTimerStarted(event);
 
         SleepEvent.SleepEventBuilder builder = event.toBuilder();
         builder.isTimerStarted(isTimerStarted);
@@ -269,9 +268,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         DateTime finish = getDateTime(finishDateView, finishTimeView);
         Integer minutes = TimeUtils.durationInMinutes(start, finish);
         durationView.setValue(minutes);
-        int visibility = event == null || event.getIsTimerStarted() == null || !event.getIsTimerStarted()
-                ? View.VISIBLE
-                : View.GONE;
+        int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
@@ -279,7 +276,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     private void updateTimer(@NonNull SleepEvent event) {
-        if (event.getIsTimerStarted() != null && event.getIsTimerStarted()) {
+        if (EventHelper.isTimerStarted(event)) {
             String text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());
             buttonTimer.setText(text);
             WidgetsUtils.setupTimer(this, buttonTimer, sex, true);
@@ -289,7 +286,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     private void updateIfNeeded() {
-        if (this.event != null && event.getIsTimerStarted() != null && event.getIsTimerStarted()) {
+        if (EventHelper.isTimerStarted(event)) {
             upsertEvent(buildEvent(), false);
         }
     }

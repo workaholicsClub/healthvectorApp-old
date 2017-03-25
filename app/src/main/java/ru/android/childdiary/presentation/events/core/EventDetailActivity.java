@@ -45,6 +45,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.ReadOnlyView;
+import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -336,7 +337,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.menu_done);
-        item.setVisible(getEventType() == EventType.OTHER);
+        item.setVisible(EventHelper.canBeDone(getEventType()));
         return true;
     }
 

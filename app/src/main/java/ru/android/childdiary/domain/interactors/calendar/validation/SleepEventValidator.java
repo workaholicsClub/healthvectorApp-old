@@ -13,6 +13,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public class SleepEventValidator extends Validator<SleepEvent, CalendarValidationResult> {
@@ -29,7 +30,7 @@ public class SleepEventValidator extends Validator<SleepEvent, CalendarValidatio
     public List<CalendarValidationResult> validate(@NonNull SleepEvent event) {
         List<CalendarValidationResult> results = new ArrayList<>();
 
-        if (event.getIsTimerStarted() != null && event.getIsTimerStarted()) {
+        if (EventHelper.isTimerStarted(event)) {
             Long count = calendarInteractor.getSleepEventsWithTimer()
                     .firstOrError()
                     .flatMapObservable(Observable::fromIterable)
