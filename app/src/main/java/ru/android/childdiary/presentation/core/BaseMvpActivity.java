@@ -107,7 +107,6 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
         }
-        toolbar.setTitleMargin(0, 0, 0, 0);
         toolbarLogo = ButterKnife.findById(toolbar, R.id.toolbarLogo);
         toolbarLogo.setVisibility(View.GONE);
         toolbarTitle = ButterKnife.findById(toolbar, R.id.toolbarTitle);
