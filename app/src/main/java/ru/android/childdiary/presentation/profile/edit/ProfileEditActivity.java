@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ListPopupWindow;
+import android.text.InputFilter;
 import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.Menu;
@@ -49,6 +50,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
 import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
 import ru.android.childdiary.utils.DateUtils;
@@ -191,6 +193,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     private void setupTextViews() {
+        editTextBirthHeight.setFilters(new InputFilter[]{new RegExpInputFilter.HeightInputFilter()});
+        editTextBirthWeight.setFilters(new InputFilter[]{new RegExpInputFilter.WeightInputFilter()});
+
         editTextName.setText(editedChild.getName());
         editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getBirthHeight()));
         editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getBirthWeight()));

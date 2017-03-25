@@ -180,7 +180,6 @@
             android:hint="@string/enter_height"
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
-            android:maxLength="@integer/max_length_child_height"
             android:textAppearance="@style/PrimaryTextAppearance"
             android:textColorHint="@color/placeholder_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
@@ -196,7 +195,6 @@
             android:hint="@string/enter_weight"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-            android:maxLength="@integer/max_length_child_weight"
             android:textAppearance="@style/PrimaryTextAppearance"
             android:textColorHint="@color/placeholder_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />

@@ -15,18 +15,15 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindInt;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.utils.DoubleUtils;
 
 public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
-    @BindInt(R.integer.max_length_amount_ml)
-    int amountMlMaxLength;
-
     private TextView textViewAmountMl;
     private CustomEditText editTextAmountMlLeft, editTextAmountMlRight;
     private ImageView imageViewLeft, imageViewRight;
@@ -73,9 +70,9 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
         super.onFinishInflate();
         ButterKnife.bind(this);
         editTextAmountMlLeft.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        editTextAmountMlLeft.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amountMlMaxLength)});
+        editTextAmountMlLeft.setFilters(new InputFilter[]{new RegExpInputFilter.AmountMlInputFilter()});
         editTextAmountMlRight.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        editTextAmountMlRight.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amountMlMaxLength)});
+        editTextAmountMlRight.setFilters(new InputFilter[]{new RegExpInputFilter.AmountMlInputFilter()});
     }
 
     public void setAmountMlLeft(Double amount) {
