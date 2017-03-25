@@ -15,7 +15,7 @@ import ru.android.childdiary.R;
 public class DoubleUtils {
     private static final Logger logger = LoggerFactory.getLogger(DoubleUtils.class);
 
-    private static final ThreadLocal<DecimalFormat> HEIGHT_FORMAT = new ThreadLocal<DecimalFormat>() {
+    private static final ThreadLocal<DecimalFormat> SUBMULTIPLE_UNIT_FORMAT = new ThreadLocal<DecimalFormat>() {
         @Override
         protected DecimalFormat initialValue() {
             DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
@@ -26,7 +26,7 @@ public class DoubleUtils {
         }
     };
 
-    private static final ThreadLocal<DecimalFormat> WEIGHT_FORMAT = new ThreadLocal<DecimalFormat>() {
+    private static final ThreadLocal<DecimalFormat> MULTIPLE_UNIT_FORMAT = new ThreadLocal<DecimalFormat>() {
         @Override
         protected DecimalFormat initialValue() {
             DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
@@ -45,51 +45,49 @@ public class DoubleUtils {
                 double d = Double.parseDouble(part);
                 return d;
             } catch (NumberFormatException e) {
-                logger.warn("failed to parse double", e);
                 return null;
             }
         }
-        logger.warn("double not found");
         return null;
     }
 
     @Nullable
     public static String heightReview(Context context, Double d) {
-        return d == null ? null : context.getString(R.string.height_review, HEIGHT_FORMAT.get().format(d));
+        return d == null ? null : context.getString(R.string.height_review, SUBMULTIPLE_UNIT_FORMAT.get().format(d));
     }
 
     @Nullable
     public static String weightReview(Context context, Double d) {
-        return d == null ? null : context.getString(R.string.weight_review, WEIGHT_FORMAT.get().format(d));
+        return d == null ? null : context.getString(R.string.weight_review, MULTIPLE_UNIT_FORMAT.get().format(d));
     }
 
     @Nullable
     public static String amountReview(Double d) {
-        return d == null ? null : WEIGHT_FORMAT.get().format(d);
+        return d == null ? null : MULTIPLE_UNIT_FORMAT.get().format(d);
     }
 
     @Nullable
     public static String amountMlReview(Context context, Double d) {
-        return d == null ? null : context.getString(R.string.amount_review, WEIGHT_FORMAT.get().format(d));
+        return d == null ? null : context.getString(R.string.amount_review, MULTIPLE_UNIT_FORMAT.get().format(d));
     }
 
     @Nullable
     public static String heightEdit(Double d) {
-        return d == null ? null : HEIGHT_FORMAT.get().format(d);
+        return d == null ? null : SUBMULTIPLE_UNIT_FORMAT.get().format(d);
     }
 
     @Nullable
     public static String weightEdit(Double d) {
-        return d == null ? null : WEIGHT_FORMAT.get().format(d);
+        return d == null ? null : MULTIPLE_UNIT_FORMAT.get().format(d);
     }
 
     @Nullable
     public static String amountEdit(Double d) {
-        return d == null ? null : WEIGHT_FORMAT.get().format(d);
+        return d == null ? null : SUBMULTIPLE_UNIT_FORMAT.get().format(d);
     }
 
     @Nullable
     public static String amountMlEdit(Double d) {
-        return d == null ? null : WEIGHT_FORMAT.get().format(d);
+        return d == null ? null : SUBMULTIPLE_UNIT_FORMAT.get().format(d);
     }
 }
