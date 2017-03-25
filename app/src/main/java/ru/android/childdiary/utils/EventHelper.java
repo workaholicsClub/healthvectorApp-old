@@ -1,5 +1,6 @@
 package ru.android.childdiary.utils;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -26,5 +27,13 @@ public class EventHelper {
 
     public static boolean isTimerStarted(@Nullable SleepEvent event) {
         return event != null && event.getIsTimerStarted() != null && event.getIsTimerStarted();
+    }
+
+    public static String getTitle(Context context, @NonNull MasterEvent event) {
+        return StringUtils.eventType(context, event.getEventType());
+    }
+
+    public static String getDescription(Context context, @NonNull MasterEvent event) {
+        return event.getDescription();
     }
 }
