@@ -188,7 +188,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         durationView.setLeftDuration(event.getLeftDurationInMinutes());
         durationView.setRightDuration(event.getRightDurationInMinutes());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        editTextNote.setText(event.getNote());
+        noteView.setText(event.getNote());
     }
 
     @Override
@@ -219,7 +219,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 .leftDurationInMinutes(durationView.getDurationLeft())
                 .rightDurationInMinutes(durationView.getDurationRight())
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(editTextNote.getText().toString().trim());
+                .note(noteView.getText());
 
         return builder.build();
     }

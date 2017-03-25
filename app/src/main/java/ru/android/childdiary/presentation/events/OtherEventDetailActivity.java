@@ -137,7 +137,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        editTextNote.setText(event.getNote());
+        noteView.setText(event.getNote());
     }
 
     @Override
@@ -153,7 +153,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
                 .dateTime(startDateTime)
                 .finishDateTime(finishDateTime)
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(editTextNote.getText().toString().trim());
+                .note(noteView.getText());
 
         return builder.build();
     }

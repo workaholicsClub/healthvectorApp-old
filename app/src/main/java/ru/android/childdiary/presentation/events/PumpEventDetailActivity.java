@@ -121,7 +121,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
         amountMlPumpView.setAmountMlLeft(event.getLeftAmountMl());
         amountMlPumpView.setAmountMlRight(event.getRightAmountMl());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        editTextNote.setText(event.getNote());
+        noteView.setText(event.getNote());
     }
 
     @Override
@@ -137,7 +137,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                 .leftAmountMl(amountMlPumpView.getAmountMlLeft())
                 .rightAmountMl(amountMlPumpView.getAmountMlRight())
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(editTextNote.getText().toString().trim());
+                .note(noteView.getText());
 
         return builder.build();
     }

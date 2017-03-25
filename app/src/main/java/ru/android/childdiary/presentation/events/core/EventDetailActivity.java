@@ -6,7 +6,6 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
@@ -39,10 +38,10 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailNoteView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.ReadOnlyView;
 import ru.android.childdiary.utils.EventHelper;
@@ -54,11 +53,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
     protected T event;
 
-    @BindView(R.id.editTextNote)
-    protected CustomEditText editTextNote;
-
-    @BindView(R.id.editTextNoteWrapper)
-    TextInputLayout editTextNoteWrapper;
+    @BindView(R.id.noteView)
+    protected EventDetailNoteView noteView;
 
     @BindView(R.id.rootView)
     View rootView;
@@ -78,7 +74,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-        editTextNote.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+        setupEditTextView(noteView);
         MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             if (masterEvent == null) {
@@ -197,6 +193,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public void eventAdded(@NonNull T event, boolean afterButtonPressed) {
         if (afterButtonPressed) {
+            setResult(RESULT_OK);
             finish();
         } else {
             getPresenter().requestEventDetails(event);
@@ -206,6 +203,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public void eventUpdated(@NonNull T event, boolean afterButtonPressed) {
         if (afterButtonPressed) {
+            setResult(RESULT_OK);
             finish();
         }
     }
@@ -310,8 +308,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     private void setupReadOnlyFields() {
         setReadOnly(rootView);
-        editTextNoteWrapper.setEnabled(!readOnly);
-        editTextNoteWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
         buttonDone.setText(readOnly ? R.string.edit : R.string.save);
     }
 

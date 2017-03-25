@@ -29,7 +29,10 @@
                 android:paddingBottom="@dimen/event_detail_margin_base"
                 android:paddingTop="@dimen/event_detail_margin_base" />
 
-            <include layout="@layout/event_detail_note" />
+            <ru.android.childdiary.presentation.events.widgets.EventDetailNoteView
+                android:id="@+id/noteView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 

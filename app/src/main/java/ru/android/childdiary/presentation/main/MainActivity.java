@@ -294,7 +294,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ADD_EVENT) {
+        if (requestCode == REQUEST_ADD_EVENT && resultCode == RESULT_OK) {
             fabToolbar.hideBarWithoutAnimation();
         }
     }

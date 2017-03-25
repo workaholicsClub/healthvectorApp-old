@@ -114,7 +114,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
         setDateTime(event.getDateTime(), dateView, timeView);
         diaperStateView.setSelected(event.getDiaperState());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        editTextNote.setText(event.getNote());
+        noteView.setText(event.getNote());
     }
 
     @Override
@@ -128,7 +128,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
         builder.dateTime(dateTime)
                 .diaperState(diaperStateView.getSelected())
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(editTextNote.getText().toString().trim());
+                .note(noteView.getText());
 
         return builder.build();
     }
