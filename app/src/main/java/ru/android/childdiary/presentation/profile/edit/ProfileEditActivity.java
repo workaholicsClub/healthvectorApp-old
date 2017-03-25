@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.OnClick;
 import icepick.State;
@@ -108,6 +109,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @BindView(R.id.dummy)
     View dummy;
+
+    @BindDimen(R.dimen.name_edit_text_padding_bottom)
+    int editTextBottomPadding;
 
     @State
     boolean isButtonDoneEnabled;
@@ -422,8 +426,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     public void nameValidated(boolean valid) {
         viewValidated(editTextName, valid,
                 R.drawable.name_edit_text_background, R.drawable.name_edit_text_background_error);
-        int bottom = getResources().getDimensionPixelSize(R.dimen.name_edit_text_padding_bottom);
-        editTextName.setPadding(0, 0, 0, bottom);
+        editTextName.setPadding(0, 0, 0, editTextBottomPadding);
     }
 
     @Override
