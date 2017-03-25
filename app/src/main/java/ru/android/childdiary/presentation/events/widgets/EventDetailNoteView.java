@@ -1,8 +1,6 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -97,54 +95,5 @@ public class EventDetailNoteView extends EventDetailEditTextView {
         boolean isTextEmpty = TextUtils.isEmpty(editText.getText());
         editTextWrapper.setVisibility(isTextEmpty && readOnly ? GONE : VISIBLE);
         placeholder.setVisibility(isTextEmpty && readOnly ? VISIBLE : GONE);
-    }
-
-    @Override
-    public Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-        SavedState savedState = new SavedState(superState);
-        savedState.readOnly = readOnly;
-        return savedState;
-    }
-
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof SavedState) {
-            SavedState savedState = (SavedState) state;
-            super.onRestoreInstanceState(savedState.getSuperState());
-            this.readOnly = savedState.readOnly;
-        } else {
-            super.onRestoreInstanceState(state);
-        }
-    }
-
-    private static class SavedState extends BaseSavedState {
-        public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
-                    public SavedState createFromParcel(Parcel in) {
-                        return new SavedState(in);
-                    }
-
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                };
-
-        private boolean readOnly;
-
-        private SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        private SavedState(Parcel in) {
-            super(in);
-            this.readOnly = in.readInt() == 1;
-        }
-
-        @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeInt(readOnly ? 1 : 0);
-        }
     }
 }
