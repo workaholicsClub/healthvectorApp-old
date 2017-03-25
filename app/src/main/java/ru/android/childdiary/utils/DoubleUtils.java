@@ -63,12 +63,12 @@ public class DoubleUtils {
 
     @Nullable
     public static String amountReview(Double d) {
-        return d == null ? null : MULTIPLE_UNIT_FORMAT.get().format(d);
+        return d == null ? null : SUBMULTIPLE_UNIT_FORMAT.get().format(d);
     }
 
     @Nullable
     public static String amountMlReview(Context context, Double d) {
-        return d == null ? null : context.getString(R.string.amount_review, MULTIPLE_UNIT_FORMAT.get().format(d));
+        return d == null ? null : context.getString(R.string.amount_review, SUBMULTIPLE_UNIT_FORMAT.get().format(d));
     }
 
     @Nullable

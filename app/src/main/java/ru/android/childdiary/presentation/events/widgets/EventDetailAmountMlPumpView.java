@@ -61,13 +61,19 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
         addView(view);
         imageViewLeft = ButterKnife.findById(view, R.id.imageView);
         editTextAmountMlLeft = ButterKnife.findById(view, R.id.editText);
-        editTextAmountMlLeft.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        editTextAmountMlLeft.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amountMlMaxLength)});
 
         view = inflate(getContext(), R.layout.event_detail_amount_ml_pump_right, null);
         addView(view);
         imageViewRight = ButterKnife.findById(view, R.id.imageView);
         editTextAmountMlRight = ButterKnife.findById(view, R.id.editText);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        ButterKnife.bind(this);
+        editTextAmountMlLeft.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        editTextAmountMlLeft.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amountMlMaxLength)});
         editTextAmountMlRight.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editTextAmountMlRight.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amountMlMaxLength)});
     }

@@ -13,16 +13,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
-import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
 public class EventDetailEditView extends EventDetailEditTextView {
     @BindView(R.id.editText)
     CustomEditText editText;
-
-    @Getter
-    private String text;
 
     public EventDetailEditView(Context context) {
         super(context);
@@ -50,8 +46,11 @@ public class EventDetailEditView extends EventDetailEditTextView {
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
+    public String getText() {
+        return editText.getText().toString().trim();
+    }
+
     public void setText(String text) {
-        this.text = text;
         editText.setText(text);
     }
 
@@ -60,10 +59,6 @@ public class EventDetailEditView extends EventDetailEditTextView {
         editText.setOnKeyboardHiddenListener(listener);
 
         List<Disposable> disposables = new ArrayList<>();
-
-        disposables.add(RxTextView.afterTextChangeEvents(editText).subscribe(textViewAfterTextChangeEvent -> {
-            this.text = editText.getText().toString().trim();
-        }));
 
         disposables.add(RxView.focusChanges(editText).subscribe(hasFocus -> {
             if (hasFocus) {
@@ -84,6 +79,5 @@ public class EventDetailEditView extends EventDetailEditTextView {
     public void setReadOnly(boolean readOnly) {
         editText.setEnabled(!readOnly);
         editText.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
-        editText.setHint(readOnly ? "" : getContext().getString(R.string.other_event_title_hint));
     }
 }
