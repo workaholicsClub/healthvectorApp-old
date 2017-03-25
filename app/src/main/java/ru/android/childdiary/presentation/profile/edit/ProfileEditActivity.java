@@ -200,11 +200,11 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
             updateChild(editedChild.toBuilder().name(name).build());
         }));
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthHeight).subscribe(textViewAfterTextChangeEvent -> {
-            Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
+            Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString());
             updateChild(editedChild.toBuilder().birthHeight(height).build());
         }));
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthWeight).subscribe(textViewAfterTextChangeEvent -> {
-            Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
+            Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString());
             updateChild(editedChild.toBuilder().birthWeight(weight).build());
         }));
 

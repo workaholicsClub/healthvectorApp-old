@@ -97,12 +97,12 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
         List<Disposable> disposables = new ArrayList<>();
 
         disposables.add(RxTextView.afterTextChangeEvents(editTextAmountMlLeft).subscribe(textViewAfterTextChangeEvent -> {
-            Double amount = DoubleUtils.parse(editTextAmountMlLeft.getText().toString().trim());
+            Double amount = DoubleUtils.parse(editTextAmountMlLeft.getText().toString());
             amountMlLeft = amount;
             updateSum();
         }));
         disposables.add(RxTextView.afterTextChangeEvents(editTextAmountMlRight).subscribe(textViewAfterTextChangeEvent -> {
-            Double amount = DoubleUtils.parse(editTextAmountMlRight.getText().toString().trim());
+            Double amount = DoubleUtils.parse(editTextAmountMlRight.getText().toString());
             amountMlRight = amount;
             updateSum();
         }));

@@ -73,7 +73,7 @@ public class EventDetailAmountView extends EventDetailEditTextView {
         List<Disposable> disposables = new ArrayList<>();
 
         disposables.add(RxTextView.afterTextChangeEvents(editText).subscribe(textViewAfterTextChangeEvent -> {
-            Double amount = DoubleUtils.parse(editText.getText().toString().trim());
+            Double amount = DoubleUtils.parse(editText.getText().toString());
             this.amount = amount;
         }));
 
