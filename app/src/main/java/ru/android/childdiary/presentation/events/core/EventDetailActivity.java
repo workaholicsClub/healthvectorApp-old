@@ -156,22 +156,28 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         if (this.event == null) {
             getPresenter().addEvent(event, afterButtonPressed);
         } else {
-            getPresenter().updateEvent(event, afterButtonPressed);
+            if (this.event.equals(event)) {
+                if (afterButtonPressed) {
+                    finish();
+                }
+            } else {
+                getPresenter().updateEvent(event, afterButtonPressed);
+            }
         }
     }
 
     @Override
     public final void showDefaultEventDetail(@NonNull T event) {
+        this.event = null;
         changeThemeIfNeeded(event.getChild());
         setupEventDetail(event);
-        this.event = null;
     }
 
     @Override
     public final void showEventDetail(@NonNull T event) {
+        this.event = event;
         changeThemeIfNeeded(event.getChild());
         setupEventDetail(event);
-        this.event = event;
         invalidateOptionsMenu();
         getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
     }

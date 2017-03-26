@@ -23,6 +23,7 @@ import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEnt
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
+import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
@@ -78,7 +79,7 @@ public class CalendarDbService {
                 FoodMapper::mapToEntity, FoodMapper::mapToPlainObject);
     }
 
-    public Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate) {
+    public Observable<List<MasterEvent>> getAllWithoutDetails(@NonNull Child child, @NonNull LocalDate selectedDate) {
         return dataStore.select(MasterEventEntity.class)
                 .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
                 .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
@@ -89,6 +90,76 @@ public class CalendarDbService {
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MasterEventMapper::mapToPlainObject));
+    }
+
+    public Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate) {
+        return dataStore.select(
+                // master event
+                MasterEventEntity.ID,
+                MasterEventEntity.EVENT_TYPE,
+                MasterEventEntity.DESCRIPTION,
+                MasterEventEntity.DATE_TIME,
+                MasterEventEntity.NOTIFY_TIME_IN_MINUTES,
+                MasterEventEntity.NOTE,
+                MasterEventEntity.DONE,
+                MasterEventEntity.DELETED,
+                // child
+                ChildEntity.ID.as("child_id"),
+                ChildEntity.NAME.as("child_name"),
+                ChildEntity.BIRTH_DATE,
+                ChildEntity.BIRTH_TIME,
+                ChildEntity.SEX,
+                ChildEntity.IMAGE_FILE_NAME,
+                ChildEntity.BIRTH_HEIGHT,
+                ChildEntity.BIRTH_WEIGHT,
+                // diaper event
+                DiaperEventEntity.ID.as("diaper_event_id"),
+                DiaperEventEntity.DIAPER_STATE,
+                // feed event
+                FeedEventEntity.ID.as("feed_event_id"),
+                FeedEventEntity.FEED_TYPE,
+                FeedEventEntity.BREAST.as("feed_event_breast"),
+                FeedEventEntity.LEFT_DURATION_IN_MINUTES,
+                FeedEventEntity.RIGHT_DURATION_IN_MINUTES,
+                FeedEventEntity.AMOUNT,
+                FeedEventEntity.AMOUNT_ML,
+                // food measure
+                FoodMeasureEntity.ID.as("food_measure_id"),
+                FoodMeasureEntity.NAME.as("food_measure_name"),
+                // food
+                FoodEntity.ID.as("food_id"),
+                FoodEntity.NAME.as("food_name"),
+                // other event
+                OtherEventEntity.ID.as("other_event_id"),
+                OtherEventEntity.NAME.as("other_event_name"),
+                OtherEventEntity.FINISH_DATE_TIME.as("other_event_finish_date_time"),
+                // pump event
+                PumpEventEntity.ID.as("pump_event_id"),
+                PumpEventEntity.BREAST.as("pump_event_breast"),
+                PumpEventEntity.LEFT_AMOUNT_ML,
+                PumpEventEntity.RIGHT_AMOUNT_ML,
+                // sleep event
+                SleepEventEntity.ID.as("sleep_event_id"),
+                SleepEventEntity.FINISH_DATE_TIME.as("sleep_event_finish_date_time"),
+                SleepEventEntity.TIMER_STARTED)
+                .from(MasterEventEntity.class)
+                .join(ChildEntity.class).on(ChildEntity.ID.eq(MasterEventEntity.CHILD_ID))
+                .leftJoin(DiaperEventEntity.class).on(DiaperEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .leftJoin(FeedEventEntity.class).on(FeedEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .leftJoin(FoodMeasureEntity.class).on(FoodMeasureEntity.ID.eq(FeedEventEntity.FOOD_MEASURE_DATA_ID))
+                .leftJoin(FoodEntity.class).on(FoodEntity.ID.eq(FeedEventEntity.FOOD_DATA_ID))
+                .leftJoin(OtherEventEntity.class).on(OtherEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .leftJoin(PumpEventEntity.class).on(PumpEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .leftJoin(SleepEventEntity.class).on(SleepEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
+                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
+                .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
+                .and(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
+                .and(MasterEventEntity.EVENT_TYPE.notNull())
+                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, AllEventsMapper::mapToPlainObject));
     }
 
     public Observable<List<SleepEvent>> getSleepEventsWithTimer() {

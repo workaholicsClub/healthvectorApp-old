@@ -39,8 +39,7 @@ import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventVal
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
-import ru.android.childdiary.utils.StringUtils;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.EventHelper;
 
 public class CalendarInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -113,7 +112,7 @@ public class CalendarInteractor implements Interactor {
             case SLEEP:
                 return Observable.just(10);
         }
-        throw new IllegalArgumentException("Unknown event type");
+        throw new IllegalStateException("Unknown event type");
     }
 
     @SuppressWarnings("unchecked")
@@ -181,7 +180,7 @@ public class CalendarInteractor implements Interactor {
                                 .notifyTimeInMinutes(minutes)
                                 .build());
         }
-        throw new IllegalArgumentException("Unknown event type");
+        throw new IllegalStateException("Unknown event type");
     }
 
     public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {
@@ -206,7 +205,7 @@ public class CalendarInteractor implements Interactor {
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.getSleepEventDetail(event);
         }
-        throw new IllegalArgumentException("Unknown event type");
+        throw new IllegalStateException("Unknown event type");
     }
 
     public <T extends MasterEvent> Observable<T> add(@NonNull AddEventRequest<T> request) {
@@ -227,7 +226,7 @@ public class CalendarInteractor implements Interactor {
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.add((SleepEvent) event);
         }
-        throw new IllegalArgumentException("Unknown event type");
+        throw new IllegalStateException("Unknown event type");
     }
 
     public <T extends MasterEvent> Observable<T> update(@NonNull T event) {
@@ -247,7 +246,7 @@ public class CalendarInteractor implements Interactor {
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.update((SleepEvent) event);
         }
-        throw new IllegalArgumentException("Unknown event type");
+        throw new IllegalStateException("Unknown event type");
     }
 
     public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
@@ -283,7 +282,7 @@ public class CalendarInteractor implements Interactor {
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Validator<T, CalendarValidationResult>) new SleepEventValidator(context, this);
         }
-        throw new IllegalArgumentException("Unknown event type");
+        throw new IllegalStateException("Unknown event type");
     }
 
     @SuppressWarnings("unchecked")
@@ -292,52 +291,38 @@ public class CalendarInteractor implements Interactor {
             DiaperEvent diaperEvent = (DiaperEvent) event;
             return (T) diaperEvent.toBuilder()
                     .eventType(EventType.DIAPER)
+                    .description(EventHelper.getDescription(context, event))
                     .child(child)
-                    .description(StringUtils.diaperState(context, diaperEvent.getDiaperState()))
                     .build();
         } else if (event instanceof FeedEvent) {
             FeedEvent feedEvent = (FeedEvent) event;
-            FeedEvent.FeedEventBuilder builder = feedEvent.toBuilder()
+            return (T) feedEvent.toBuilder()
                     .eventType(EventType.FEED)
-                    .child(child);
-            switch (feedEvent.getFeedType()) {
-                case BREAST_MILK:
-                    builder.description(StringUtils.breast(context, feedEvent.getBreast()));
-                    break;
-                case PUMPED_MILK:
-                    builder.description(StringUtils.feedType(context, feedEvent.getFeedType()));
-                    break;
-                case MILK_FORMULA:
-                    builder.description(StringUtils.feedType(context, feedEvent.getFeedType()));
-                    break;
-                case FOOD:
-                    builder.description(feedEvent.getFood() == null
-                            ? StringUtils.feedType(context, feedEvent.getFeedType())
-                            : feedEvent.getFood().getName());
-                    break;
-            }
-            return (T) builder.build();
-        } else if (event instanceof OtherEvent) {
-            return (T) ((OtherEvent) event).toBuilder()
-                    .eventType(EventType.OTHER)
+                    .description(EventHelper.getDescription(context, event))
                     .child(child)
-                    .description(((OtherEvent) event).getName())
+                    .build();
+        } else if (event instanceof OtherEvent) {
+            OtherEvent otherEvent = (OtherEvent) event;
+            return (T) otherEvent.toBuilder()
+                    .eventType(EventType.OTHER)
+                    .description(EventHelper.getDescription(context, event))
+                    .child(child)
                     .build();
         } else if (event instanceof PumpEvent) {
             PumpEvent pumpEvent = (PumpEvent) event;
             return (T) pumpEvent.toBuilder()
                     .eventType(EventType.PUMP)
+                    .description(EventHelper.getDescription(context, event))
                     .child(child)
-                    .description(StringUtils.breast(context, pumpEvent.getBreast()))
                     .build();
         } else if (event instanceof SleepEvent) {
             SleepEvent sleepEvent = (SleepEvent) event;
             return (T) sleepEvent.toBuilder()
                     .eventType(EventType.SLEEP)
+                    .description(EventHelper.getDescription(context, event))
                     .child(child)
-                    .description(TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime()))
                     .build();
         }
-        throw new IllegalArgumentException("Unknown event type");
+        throw new IllegalStateException("Unknown event type");
     }
 }

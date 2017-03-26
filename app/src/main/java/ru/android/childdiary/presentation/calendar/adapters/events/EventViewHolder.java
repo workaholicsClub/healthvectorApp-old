@@ -20,10 +20,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -84,8 +86,14 @@ class EventViewHolder extends RecyclerView.ViewHolder {
                 getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
 
         textViewTime.setText(DateUtils.time(event.getDateTime().toLocalTime()));
-        textViewEventTitle.setText(EventHelper.getTitle(context, event));
-        textViewDescription.setText(EventHelper.getDescription(context, event));
+        EventType eventType = event.getEventType();
+        if (eventType == EventType.OTHER) {
+            textViewEventTitle.setText(EventHelper.getDescription(context, event));
+            textViewDescription.setText(null);
+        } else {
+            textViewEventTitle.setText(StringUtils.eventType(context, eventType));
+            textViewDescription.setText(EventHelper.getDescription(context, event));
+        }
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);

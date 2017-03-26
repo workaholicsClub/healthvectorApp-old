@@ -5,8 +5,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+
+import static ru.android.childdiary.data.types.FeedType.BREAST_MILK;
+import static ru.android.childdiary.data.types.FeedType.FOOD;
 
 public class EventHelper {
     public static boolean canBeDone(@NonNull MasterEvent event) {
@@ -29,11 +37,30 @@ public class EventHelper {
         return event != null && event.getIsTimerStarted() != null && event.getIsTimerStarted();
     }
 
-    public static String getTitle(Context context, @NonNull MasterEvent event) {
-        return StringUtils.eventType(context, event.getEventType());
-    }
-
     public static String getDescription(Context context, @NonNull MasterEvent event) {
+        if (event instanceof DiaperEvent) {
+            DiaperEvent diaperEvent = (DiaperEvent) event;
+            return StringUtils.diaperState(context, diaperEvent.getDiaperState());
+        } else if (event instanceof FeedEvent) {
+            FeedEvent feedEvent = (FeedEvent) event;
+            FeedType feedType = feedEvent.getFeedType();
+            if (feedType == BREAST_MILK) {
+                return StringUtils.breast(context, feedEvent.getBreast());
+            } else if (feedType == FOOD && feedEvent.getFood() != null) {
+                return feedEvent.getFood().getName();
+            } else {
+                return StringUtils.feedType(context, feedType);
+            }
+        } else if (event instanceof OtherEvent) {
+            OtherEvent otherEvent = (OtherEvent) event;
+            return otherEvent.getName();
+        } else if (event instanceof PumpEvent) {
+            PumpEvent pumpEvent = (PumpEvent) event;
+            return StringUtils.breast(context, pumpEvent.getBreast());
+        } else if (event instanceof SleepEvent) {
+            SleepEvent sleepEvent = (SleepEvent) event;
+            return TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime());
+        }
         return event.getDescription();
     }
 
