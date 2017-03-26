@@ -3,9 +3,6 @@ package ru.android.childdiary.utils;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -13,8 +10,6 @@ import java.text.DecimalFormatSymbols;
 import ru.android.childdiary.R;
 
 public class DoubleUtils {
-    private static final Logger logger = LoggerFactory.getLogger(DoubleUtils.class);
-
     private static final ThreadLocal<DecimalFormat> SUBMULTIPLE_UNIT_FORMAT = new ThreadLocal<DecimalFormat>() {
         @Override
         protected DecimalFormat initialValue() {
