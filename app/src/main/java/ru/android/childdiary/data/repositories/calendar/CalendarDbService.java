@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
@@ -214,83 +215,143 @@ public class CalendarDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, SleepEventMapper::mapToPlainObject));
     }
 
-    private Observable<MasterEvent> add(@NonNull MasterEvent event) {
-        return DbUtils.insertObservable(dataStore, event,
-                MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
-    }
-
     public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
-        return add(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
-                        DiaperEventMapper::mapToEntity, DiaperEventMapper::mapToPlainObject));
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (DiaperEvent) blockingEntityStore.runInTransaction(() -> {
+                MasterEvent masterEvent = DbUtils.insert(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.insert(dataStore, event, masterEvent,
+                        DiaperEventMapper::mapToEntity, DiaperEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<FeedEvent> add(@NonNull FeedEvent event) {
-        return add(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
-                        FeedEventMapper::mapToEntity, FeedEventMapper::mapToPlainObject));
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (FeedEvent) blockingEntityStore.runInTransaction(() -> {
+                MasterEvent masterEvent = DbUtils.insert(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.insert(dataStore, event, masterEvent,
+                        FeedEventMapper::mapToEntity, FeedEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<OtherEvent> add(@NonNull OtherEvent event) {
-        return add(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
-                        OtherEventMapper::mapToEntity, OtherEventMapper::mapToPlainObject));
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (OtherEvent) blockingEntityStore.runInTransaction(() -> {
+                MasterEvent masterEvent = DbUtils.insert(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.insert(dataStore, event, masterEvent,
+                        OtherEventMapper::mapToEntity, OtherEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<PumpEvent> add(@NonNull PumpEvent event) {
-        return add(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
-                        PumpEventMapper::mapToEntity, PumpEventMapper::mapToPlainObject));
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (PumpEvent) blockingEntityStore.runInTransaction(() -> {
+                MasterEvent masterEvent = DbUtils.insert(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.insert(dataStore, event, masterEvent,
+                        PumpEventMapper::mapToEntity, PumpEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<SleepEvent> add(@NonNull SleepEvent event) {
-        return add(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.insertObservable(dataStore, event, masterEvent,
-                        SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject));
-    }
-
-    private Observable<MasterEvent> update(@NonNull MasterEvent event) {
-        return DbUtils.updateObservable(dataStore, event,
-                MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (SleepEvent) blockingEntityStore.runInTransaction(() -> {
+                MasterEvent masterEvent = DbUtils.insert(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.insert(dataStore, event, masterEvent,
+                        SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<DiaperEvent> update(@NonNull DiaperEvent event) {
-        return update(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, event,
-                        DiaperEventMapper::mapToEntity, DiaperEventMapper::mapToPlainObject));
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (DiaperEvent) blockingEntityStore.runInTransaction(() -> {
+                DbUtils.update(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.update(dataStore, event,
+                        DiaperEventMapper::mapToEntity, DiaperEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<FeedEvent> update(@NonNull FeedEvent event) {
-        return update(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, event,
-                        FeedEventMapper::mapToEntity, FeedEventMapper::mapToPlainObject));
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (FeedEvent) blockingEntityStore.runInTransaction(() -> {
+                DbUtils.update(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.update(dataStore, event,
+                        FeedEventMapper::mapToEntity, FeedEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<OtherEvent> update(@NonNull OtherEvent event) {
-        return update(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, event,
-                        OtherEventMapper::mapToEntity, OtherEventMapper::mapToPlainObject));
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (OtherEvent) blockingEntityStore.runInTransaction(() -> {
+                DbUtils.update(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.update(dataStore, event,
+                        OtherEventMapper::mapToEntity, OtherEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<PumpEvent> update(@NonNull PumpEvent event) {
-        return update(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, event,
-                        PumpEventMapper::mapToEntity, PumpEventMapper::mapToPlainObject));
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (PumpEvent) blockingEntityStore.runInTransaction(() -> {
+                DbUtils.update(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.update(dataStore, event,
+                        PumpEventMapper::mapToEntity, PumpEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<SleepEvent> update(@NonNull SleepEvent event) {
-        return update(event.getMasterEvent())
-                .flatMap(masterEvent -> DbUtils.updateObservable(dataStore, event,
-                        SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject));
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (SleepEvent) blockingEntityStore.runInTransaction(() -> {
+                DbUtils.update(dataStore, event.getMasterEvent(),
+                        MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
+                return DbUtils.update(dataStore, event,
+                        SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject);
+            });
+        });
     }
 
     public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
-        event = event.toMasterBuilder().isDeleted(true).build();
-        return update(event);
+        MasterEvent masterEvent = event.toMasterBuilder().isDeleted(true).build();
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (MasterEvent) blockingEntityStore
+                    .runInTransaction(() -> DbUtils.update(dataStore, masterEvent,
+                            MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject));
+        });
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        event = event.toMasterBuilder().isDone(!EventHelper.isDone(event)).build();
-        return update(event);
+        MasterEvent masterEvent = event.toMasterBuilder().isDone(!EventHelper.isDone(event)).build();
+        return Observable.fromCallable(() -> {
+            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+            return (MasterEvent) blockingEntityStore
+                    .runInTransaction(() -> DbUtils.update(dataStore, masterEvent,
+                            MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject));
+        });
     }
 }
