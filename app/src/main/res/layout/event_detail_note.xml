@@ -23,13 +23,14 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:hint="@string/note"
+            android:imeOptions="actionDone"
             android:inputType="textCapSentences|textMultiLine"
             android:maxLength="@integer/max_length_event_detail_note"
             android:paddingBottom="@dimen/name_edit_text_padding_bottom"
-            android:textColor="@color/black"
+            android:textAppearance="@style/PrimaryTextAppearance"
+            android:textColor="@drawable/event_detail_editable_text_color"
             android:textColorHint="@color/placeholder_text"
-            android:textCursorDrawable="@drawable/edit_text_cursor"
-            android:textSize="@dimen/text_size_base" />
+            android:textCursorDrawable="@drawable/edit_text_cursor" />
     </android.support.design.widget.TextInputLayout>
 
     <TextView

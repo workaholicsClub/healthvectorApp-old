@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="UnusedAttribute">
 
     <include layout="@layout/request_focus_view_dummy" />
 
-    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:id="@+id/topPanel"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_top_panel_height"
+        android:layout_height="wrap_content"
         android:elevation="@dimen/toolbar_elevation"
-        android:orientation="horizontal"
-        tools:ignore="UnusedAttribute">
+        android:minHeight="@dimen/profile_top_panel_height"
+        android:orientation="horizontal">
 
-        <com.mikepenz.materialdrawer.view.BezelImageView
-            android:id="@+id/imageViewPhoto"
-            android:layout_width="@dimen/profile_image_size"
-            android:layout_height="@dimen/profile_image_size"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/profile_margin_horizontal"
-            android:layout_marginRight="@dimen/profile_margin_horizontal"
-            android:elevation="@dimen/image_elevation"
-            android:src="@color/white"
-            app:biv_selectorOnPress="@android:color/transparent" />
-
-        <TextView
-            android:id="@+id/textViewPhoto"
+        <RelativeLayout
+            android:id="@+id/imageViewPhotoWrapper"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/imageViewPhoto"
-            android:layout_alignEnd="@+id/imageViewPhoto"
-            android:layout_alignLeft="@+id/imageViewPhoto"
-            android:layout_alignRight="@+id/imageViewPhoto"
-            android:layout_alignStart="@+id/imageViewPhoto"
-            android:layout_alignTop="@+id/imageViewPhoto"
-            android:elevation="@dimen/image_elevation"
-            android:gravity="center"
-            android:text="@string/add_image_button_title"
-            android:textAppearance="@style/PlaceholderTextAppearance" />
+            android:layout_height="@dimen/profile_top_panel_height"
+            android:layout_centerVertical="true">
+
+            <com.mikepenz.materialdrawer.view.BezelImageView
+                android:id="@+id/imageViewPhoto"
+                android:layout_width="@dimen/profile_image_size"
+                android:layout_height="@dimen/profile_image_size"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="@dimen/profile_margin_horizontal"
+                android:layout_marginLeft="@dimen/profile_margin_horizontal"
+                android:layout_marginRight="@dimen/profile_margin_horizontal"
+                android:layout_marginStart="@dimen/profile_margin_horizontal"
+                android:elevation="@dimen/image_elevation"
+                android:src="@color/white"
+                app:biv_selectorOnPress="@android:color/transparent" />
+
+            <TextView
+                android:id="@+id/textViewPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:elevation="@dimen/image_elevation"
+                android:gravity="center"
+                android:text="@string/add_image_button_title"
+                android:textAppearance="@style/PlaceholderTextAppearance" />
+        </RelativeLayout>
 
         <ru.android.childdiary.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextChildName"
@@ -50,13 +56,15 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/profile_margin_vertical"
             android:layout_marginEnd="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
-            android:layout_toEndOf="@+id/imageViewPhoto"
-            android:layout_toRightOf="@+id/imageViewPhoto"
+            android:layout_marginTop="@dimen/profile_margin_vertical"
+            android:layout_toEndOf="@+id/imageViewPhotoWrapper"
+            android:layout_toRightOf="@+id/imageViewPhotoWrapper"
             android:hint="@string/child_name"
             android:imeOptions="actionNext"
-            android:inputType="textCapWords"
+            android:inputType="textCapWords|textMultiLine"
             android:maxLength="@integer/max_length_child_name"
             android:textCursorDrawable="@drawable/name_edit_text_cursor" />
     </RelativeLayout>

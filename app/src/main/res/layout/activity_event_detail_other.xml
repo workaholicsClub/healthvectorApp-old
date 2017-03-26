@@ -12,8 +12,7 @@
     <ru.android.childdiary.presentation.events.widgets.EventDetailTitleView
         android:id="@+id/startTitleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-16dp" />
+        android:layout_height="wrap_content" />
 
     <ru.android.childdiary.presentation.events.widgets.EventDetailDateView
         android:id="@+id/startDateView"

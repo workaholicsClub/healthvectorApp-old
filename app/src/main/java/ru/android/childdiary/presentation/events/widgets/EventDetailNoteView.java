@@ -54,7 +54,6 @@ public class EventDetailNoteView extends EventDetailEditTextView {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
     public String getText() {

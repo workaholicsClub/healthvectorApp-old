@@ -10,6 +10,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
@@ -19,6 +20,9 @@ import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 public class EventDetailOtherEventNameView extends EventDetailEditTextView {
     @BindView(R.id.editText)
     CustomEditText editText;
+
+    @BindDimen(R.dimen.name_edit_text_padding_bottom)
+    int editTextBottomPadding;
 
     public EventDetailOtherEventNameView(Context context) {
         super(context);
@@ -43,7 +47,6 @@ public class EventDetailOtherEventNameView extends EventDetailEditTextView {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
     public String getText() {
@@ -79,5 +82,6 @@ public class EventDetailOtherEventNameView extends EventDetailEditTextView {
     public void setReadOnly(boolean readOnly) {
         editText.setEnabled(!readOnly);
         editText.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
+        editText.setPadding(0, 0, 0, editTextBottomPadding);
     }
 }
