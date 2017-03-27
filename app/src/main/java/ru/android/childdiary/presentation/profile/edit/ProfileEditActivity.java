@@ -314,13 +314,13 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     private void setupDate() {
         LocalDate birthDate = editedChild.getBirthDate();
-        textViewBirthDate.setText(DateUtils.date(birthDate, getString(R.string.date)));
+        textViewBirthDate.setText(DateUtils.date(this, birthDate, getString(R.string.date)));
         WidgetsUtils.setupTextView(textViewBirthDate, birthDate != null);
     }
 
     private void setupTime() {
         LocalTime birthTime = editedChild.getBirthTime();
-        textViewBirthTime.setText(DateUtils.time(birthTime, getString(R.string.time)));
+        textViewBirthTime.setText(DateUtils.time(this, birthTime, getString(R.string.time)));
         WidgetsUtils.setupTextView(textViewBirthTime, birthTime != null);
     }
 

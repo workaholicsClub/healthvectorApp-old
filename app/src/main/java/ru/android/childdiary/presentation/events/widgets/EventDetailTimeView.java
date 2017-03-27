@@ -29,6 +29,6 @@ public class EventDetailTimeView extends EventDetailDialogView<LocalTime> {
 
     @Override
     protected String getTextForValue(@Nullable LocalTime value) {
-        return DateUtils.time(value);
+        return DateUtils.time(getContext(), value);
     }
 }

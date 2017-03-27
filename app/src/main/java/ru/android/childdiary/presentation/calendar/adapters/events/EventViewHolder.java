@@ -85,7 +85,7 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         actionsView.setBackgroundDrawable(
                 getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
 
-        textViewTime.setText(DateUtils.time(event.getDateTime().toLocalTime()));
+        textViewTime.setText(DateUtils.time(context, event.getDateTime().toLocalTime()));
         EventType eventType = event.getEventType();
         if (eventType == EventType.OTHER) {
             textViewEventTitle.setText(EventHelper.getDescription(context, event));

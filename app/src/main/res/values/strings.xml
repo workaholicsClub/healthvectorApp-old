@@ -126,6 +126,9 @@
     <string name="menu_title_delete">Удалить</string>
     <string name="event_is_done">Выполнено</string>
     <string name="event_is_not_done">Не выполнено</string>
+    <!-- TODO: pattern for English: "MMM d, yyyy" -->
+    <string name="date_format">d MMM yyyy</string>
+    <string name="time_format">HH:mm</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
