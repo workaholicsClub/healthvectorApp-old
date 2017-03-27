@@ -219,7 +219,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     public void showChild(@NonNull Child child) {
         logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
-        if (child == Child.NULL) {
+        if (child.getId() == null) {
             hideFabBar();
             hideToolbarLogo();
             setupToolbarTitle(R.string.app_name);

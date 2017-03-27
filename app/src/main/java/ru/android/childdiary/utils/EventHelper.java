@@ -4,8 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
+import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -46,8 +48,10 @@ public class EventHelper {
             FeedType feedType = feedEvent.getFeedType();
             if (feedType == BREAST_MILK) {
                 return StringUtils.breast(context, feedEvent.getBreast());
-            } else if (feedType == FOOD && feedEvent.getFood() != null) {
-                return feedEvent.getFood().getName();
+            } else if (feedType == FOOD) {
+                Food food = feedEvent.getFood();
+                return food == null || food.getName() == null
+                        ? context.getString(R.string.feed_type_food) : food.getName();
             } else {
                 return StringUtils.feedType(context, feedType);
             }

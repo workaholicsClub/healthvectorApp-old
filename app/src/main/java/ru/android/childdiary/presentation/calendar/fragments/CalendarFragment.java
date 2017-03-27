@@ -195,7 +195,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         sex = child.getSex();
         calendarAdapter.setSex(sex);
         eventAdapter.setSex(sex);
-        eventAdapter.getSwipeManager().setFabController(child == Child.NULL ? null : fabController);
+        eventAdapter.getSwipeManager().setFabController(child.getId() == null ? null : fabController);
     }
 
     @Override
