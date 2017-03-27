@@ -20,7 +20,6 @@ public class DiaperEvent extends MasterEvent {
     @Builder(toBuilder = true)
     private DiaperEvent(Long masterEventId,
                         EventType eventType,
-                        String description,
                         DateTime dateTime,
                         Integer notifyTimeInMinutes,
                         String note,
@@ -29,7 +28,7 @@ public class DiaperEvent extends MasterEvent {
                         Child child,
                         Long id,
                         DiaperState diaperState) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.diaperState = diaperState;
     }

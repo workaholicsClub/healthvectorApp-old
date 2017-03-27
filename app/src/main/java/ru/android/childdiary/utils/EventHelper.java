@@ -65,7 +65,7 @@ public class EventHelper {
             SleepEvent sleepEvent = (SleepEvent) event;
             return TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime());
         }
-        return event.getDescription();
+        throw new IllegalStateException("Unknown event type");
     }
 
     public static boolean sameEvent(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {

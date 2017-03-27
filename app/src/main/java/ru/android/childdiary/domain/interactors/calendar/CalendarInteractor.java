@@ -41,7 +41,6 @@ import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventVal
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
-import ru.android.childdiary.utils.EventHelper;
 
 public class CalendarInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -121,68 +120,88 @@ public class CalendarInteractor implements Interactor {
     public <T extends MasterEvent> Observable<T> getDefaultEventDetail(@NonNull EventType eventType) {
         switch (eventType) {
             case DIAPER:
-                return (Observable<T>) Observable.combineLatest(
-                        childInteractor.getActiveChildOnce(),
-                        getSelectedDate(),
-                        Observable.just(LocalTime.now()),
-                        getDefaultNotifyTimeInMinutes(eventType),
-                        (child, date, time, minutes) -> DiaperEvent.builder()
-                                .child(child)
-                                .dateTime(date.toDateTime(time))
-                                .notifyTimeInMinutes(minutes)
-                                .diaperState(DiaperState.WET)
-                                .build());
+                return (Observable<T>) getDefaultDiaperEvent();
             case FEED:
-                return (Observable<T>) Observable.combineLatest(
-                        childInteractor.getActiveChildOnce(),
-                        getSelectedDate(),
-                        Observable.just(LocalTime.now()),
-                        getDefaultNotifyTimeInMinutes(eventType),
-                        getDefaultFoodMeasure(),
-                        (child, date, time, minutes, foodMeasure) -> FeedEvent.builder()
-                                .child(child)
-                                .dateTime(date.toDateTime(time))
-                                .notifyTimeInMinutes(minutes)
-                                .feedType(FeedType.BREAST_MILK)
-                                .foodMeasure(foodMeasure)
-                                .breast(Breast.LEFT)
-                                .build());
+                return (Observable<T>) getDefaultFeedEvent();
             case OTHER:
-                return (Observable<T>) Observable.combineLatest(
-                        childInteractor.getActiveChildOnce(),
-                        getSelectedDate(),
-                        Observable.just(LocalTime.now()),
-                        getDefaultNotifyTimeInMinutes(eventType),
-                        (child, date, time, minutes) -> OtherEvent.builder()
-                                .child(child)
-                                .dateTime(date.toDateTime(time))
-                                .notifyTimeInMinutes(minutes)
-                                .build());
+                return (Observable<T>) getDefaultOtherEvent();
             case PUMP:
-                return (Observable<T>) Observable.combineLatest(
-                        childInteractor.getActiveChildOnce(),
-                        getSelectedDate(),
-                        Observable.just(LocalTime.now()),
-                        getDefaultNotifyTimeInMinutes(eventType),
-                        (child, date, time, minutes) -> PumpEvent.builder()
-                                .child(child)
-                                .dateTime(date.toDateTime(time))
-                                .notifyTimeInMinutes(minutes)
-                                .breast(Breast.LEFT)
-                                .build());
+                return (Observable<T>) getDefaultPumpEvent();
             case SLEEP:
-                return (Observable<T>) Observable.combineLatest(
-                        childInteractor.getActiveChildOnce(),
-                        getSelectedDate(),
-                        Observable.just(LocalTime.now()),
-                        getDefaultNotifyTimeInMinutes(eventType),
-                        (child, date, time, minutes) -> SleepEvent.builder()
-                                .child(child)
-                                .dateTime(date.toDateTime(time))
-                                .notifyTimeInMinutes(minutes)
-                                .build());
+                return (Observable<T>) getDefaultSleepEvent();
         }
         throw new IllegalStateException("Unknown event type");
+    }
+
+    private Observable<DiaperEvent> getDefaultDiaperEvent() {
+        return Observable.combineLatest(
+                childInteractor.getActiveChildOnce(),
+                getSelectedDate(),
+                Observable.just(LocalTime.now()),
+                getDefaultNotifyTimeInMinutes(EventType.DIAPER),
+                (child, date, time, minutes) -> DiaperEvent.builder()
+                        .child(child)
+                        .dateTime(date.toDateTime(time))
+                        .notifyTimeInMinutes(minutes)
+                        .diaperState(DiaperState.WET)
+                        .build());
+    }
+
+    private Observable<FeedEvent> getDefaultFeedEvent() {
+        return Observable.combineLatest(
+                childInteractor.getActiveChildOnce(),
+                getSelectedDate(),
+                Observable.just(LocalTime.now()),
+                getDefaultNotifyTimeInMinutes(EventType.FEED),
+                getDefaultFoodMeasure(),
+                (child, date, time, minutes, foodMeasure) -> FeedEvent.builder()
+                        .child(child)
+                        .dateTime(date.toDateTime(time))
+                        .notifyTimeInMinutes(minutes)
+                        .feedType(FeedType.BREAST_MILK)
+                        .foodMeasure(foodMeasure)
+                        .breast(Breast.LEFT)
+                        .build());
+    }
+
+    private Observable<OtherEvent> getDefaultOtherEvent() {
+        return Observable.combineLatest(
+                childInteractor.getActiveChildOnce(),
+                getSelectedDate(),
+                Observable.just(LocalTime.now()),
+                getDefaultNotifyTimeInMinutes(EventType.OTHER),
+                (child, date, time, minutes) -> OtherEvent.builder()
+                        .child(child)
+                        .dateTime(date.toDateTime(time))
+                        .notifyTimeInMinutes(minutes)
+                        .build());
+    }
+
+    private Observable<PumpEvent> getDefaultPumpEvent() {
+        return Observable.combineLatest(
+                childInteractor.getActiveChildOnce(),
+                getSelectedDate(),
+                Observable.just(LocalTime.now()),
+                getDefaultNotifyTimeInMinutes(EventType.PUMP),
+                (child, date, time, minutes) -> PumpEvent.builder()
+                        .child(child)
+                        .dateTime(date.toDateTime(time))
+                        .notifyTimeInMinutes(minutes)
+                        .breast(Breast.LEFT)
+                        .build());
+    }
+
+    private Observable<SleepEvent> getDefaultSleepEvent() {
+        return Observable.combineLatest(
+                childInteractor.getActiveChildOnce(),
+                getSelectedDate(),
+                Observable.just(LocalTime.now()),
+                getDefaultNotifyTimeInMinutes(EventType.SLEEP),
+                (child, date, time, minutes) -> SleepEvent.builder()
+                        .child(child)
+                        .dateTime(date.toDateTime(time))
+                        .notifyTimeInMinutes(minutes)
+                        .build());
     }
 
     public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {
@@ -211,12 +230,12 @@ public class CalendarInteractor implements Interactor {
     }
 
     public <T extends MasterEvent> Observable<T> add(@NonNull AddEventRequest<T> request) {
-        return validate(preprocess(request.getEvent(), request.getChild()))
-                .flatMap(event -> addInternal(event, request.getChild()));
+        return validate(preprocessInsert(request.getChild(), request.getEvent()))
+                .flatMap(this::addInternal);
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends MasterEvent> Observable<T> addInternal(@NonNull T event, @NonNull Child child) {
+    private <T extends MasterEvent> Observable<T> addInternal(@NonNull T event) {
         if (event.getEventType() == EventType.DIAPER) {
             return (Observable<T>) calendarRepository.add((DiaperEvent) event);
         } else if (event.getEventType() == EventType.FEED) {
@@ -232,7 +251,8 @@ public class CalendarInteractor implements Interactor {
     }
 
     public <T extends MasterEvent> Observable<T> update(@NonNull T event) {
-        return validate(preprocess(event, event.getChild())).flatMap(this::updateInternal);
+        return validate(preprocessUpdate(event))
+                .flatMap(this::updateInternal);
     }
 
     @SuppressWarnings("unchecked")
@@ -295,43 +315,99 @@ public class CalendarInteractor implements Interactor {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends MasterEvent> T preprocess(@NonNull T event, @NonNull Child child) {
+    private <T extends MasterEvent> T preprocessInsert(@NonNull Child child, @NonNull T event) {
         if (event instanceof DiaperEvent) {
-            DiaperEvent diaperEvent = (DiaperEvent) event;
-            return (T) diaperEvent.toBuilder()
-                    .eventType(EventType.DIAPER)
-                    .description(EventHelper.getDescription(context, event))
-                    .child(child)
-                    .build();
+            return (T) preprocessInsertDiaperEvent(child, (DiaperEvent) event);
         } else if (event instanceof FeedEvent) {
-            FeedEvent feedEvent = (FeedEvent) event;
-            return (T) feedEvent.toBuilder()
-                    .eventType(EventType.FEED)
-                    .description(EventHelper.getDescription(context, event))
-                    .child(child)
-                    .build();
+            return (T) preprocessInsertFeedEvent(child, (FeedEvent) event);
         } else if (event instanceof OtherEvent) {
-            OtherEvent otherEvent = (OtherEvent) event;
-            return (T) otherEvent.toBuilder()
-                    .eventType(EventType.OTHER)
-                    .description(EventHelper.getDescription(context, event))
-                    .child(child)
-                    .build();
+            return (T) preprocessInsertOtherEvent(child, (OtherEvent) event);
         } else if (event instanceof PumpEvent) {
-            PumpEvent pumpEvent = (PumpEvent) event;
-            return (T) pumpEvent.toBuilder()
-                    .eventType(EventType.PUMP)
-                    .description(EventHelper.getDescription(context, event))
-                    .child(child)
-                    .build();
+            return (T) preprocessInsertPumpEvent(child, (PumpEvent) event);
         } else if (event instanceof SleepEvent) {
-            SleepEvent sleepEvent = (SleepEvent) event;
-            return (T) sleepEvent.toBuilder()
-                    .eventType(EventType.SLEEP)
-                    .description(EventHelper.getDescription(context, event))
-                    .child(child)
-                    .build();
+            return (T) preprocessInsertSleepEvent(child, (SleepEvent) event);
         }
         throw new IllegalStateException("Unknown event type");
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> T preprocessUpdate(@NonNull T event) {
+        if (event instanceof DiaperEvent) {
+            return (T) preprocessUpdateDiaperEvent((DiaperEvent) event);
+        } else if (event instanceof FeedEvent) {
+            return (T) preprocessUpdateFeedEvent((FeedEvent) event);
+        } else if (event instanceof OtherEvent) {
+            return (T) preprocessUpdateOtherEvent((OtherEvent) event);
+        } else if (event instanceof PumpEvent) {
+            return (T) preprocessUpdatePumpEvent((PumpEvent) event);
+        } else if (event instanceof SleepEvent) {
+            return (T) preprocessUpdateSleepEvent((SleepEvent) event);
+        }
+        throw new IllegalStateException("Unknown event type");
+    }
+
+    private DiaperEvent preprocessInsertDiaperEvent(@NonNull Child child, DiaperEvent diaperEvent) {
+        return diaperEvent.toBuilder()
+                .eventType(EventType.DIAPER)
+                .child(child)
+                .build();
+    }
+
+    private FeedEvent preprocessInsertFeedEvent(@NonNull Child child, FeedEvent feedEvent) {
+        return feedEvent.toBuilder()
+                .eventType(EventType.FEED)
+                .child(child)
+                .build();
+    }
+
+    private OtherEvent preprocessInsertOtherEvent(@NonNull Child child, OtherEvent otherEvent) {
+        return otherEvent.toBuilder()
+                .eventType(EventType.OTHER)
+                .child(child)
+                .build();
+    }
+
+    private PumpEvent preprocessInsertPumpEvent(@NonNull Child child, PumpEvent pumpEvent) {
+        return pumpEvent.toBuilder()
+                .eventType(EventType.PUMP)
+                .child(child)
+                .build();
+    }
+
+    private SleepEvent preprocessInsertSleepEvent(@NonNull Child child, SleepEvent sleepEvent) {
+        return sleepEvent.toBuilder()
+                .eventType(EventType.SLEEP)
+                .child(child)
+                .build();
+    }
+
+    private DiaperEvent preprocessUpdateDiaperEvent(DiaperEvent diaperEvent) {
+        return diaperEvent.toBuilder()
+                .eventType(EventType.DIAPER)
+                .build();
+    }
+
+    private FeedEvent preprocessUpdateFeedEvent(FeedEvent feedEvent) {
+        return feedEvent.toBuilder()
+                .eventType(EventType.FEED)
+                .build();
+    }
+
+    private OtherEvent preprocessUpdateOtherEvent(OtherEvent otherEvent) {
+        return otherEvent.toBuilder()
+                .eventType(EventType.OTHER)
+                .build();
+    }
+
+    private PumpEvent preprocessUpdatePumpEvent(PumpEvent pumpEvent) {
+        return pumpEvent.toBuilder()
+                .eventType(EventType.PUMP)
+                .build();
+    }
+
+    private SleepEvent preprocessUpdateSleepEvent(SleepEvent sleepEvent) {
+        return sleepEvent.toBuilder()
+                .eventType(EventType.SLEEP)
+                .build();
     }
 }

@@ -25,8 +25,6 @@ public class MasterEvent implements Serializable {
 
     EventType eventType;
 
-    String description;
-
     DateTime dateTime;
 
     Integer notifyTimeInMinutes;
@@ -47,7 +45,6 @@ public class MasterEvent implements Serializable {
         return MasterEvent.masterBuilder()
                 .masterEventId(masterEventId)
                 .eventType(eventType)
-                .description(description)
                 .dateTime(dateTime)
                 .notifyTimeInMinutes(notifyTimeInMinutes)
                 .note(note)

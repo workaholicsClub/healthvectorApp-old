@@ -21,7 +21,6 @@ public class SleepEvent extends MasterEvent {
     @Builder(toBuilder = true)
     private SleepEvent(Long masterEventId,
                        EventType eventType,
-                       String description,
                        DateTime dateTime,
                        Integer notifyTimeInMinutes,
                        String note,
@@ -31,7 +30,7 @@ public class SleepEvent extends MasterEvent {
                        Long id,
                        DateTime finishDateTime,
                        Boolean isTimerStarted) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.finishDateTime = finishDateTime;
         this.isTimerStarted = isTimerStarted;
