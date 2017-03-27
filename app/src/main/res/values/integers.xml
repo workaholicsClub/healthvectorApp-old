@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="max_length_event_detail_note">2000</integer>
-    <integer name="max_length_event_detail_food_measure">20</integer>
-    <integer name="max_length_event_detail_food">20</integer>
+    <integer name="max_length_event_detail_food_measure">10</integer>
+    <integer name="max_length_event_detail_food">10</integer>
+    <integer name="max_length_child_name">100</integer>
+    <integer name="max_length_other_event_name">100</integer>
 </resources>

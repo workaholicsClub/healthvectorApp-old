@@ -13,7 +13,8 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.TimeUtils;
 
 public class SleepEventValidator extends Validator<SleepEvent, CalendarValidationResult> {
     private final Context context;
@@ -29,12 +30,12 @@ public class SleepEventValidator extends Validator<SleepEvent, CalendarValidatio
     public List<CalendarValidationResult> validate(@NonNull SleepEvent event) {
         List<CalendarValidationResult> results = new ArrayList<>();
 
-        if (event.getIsTimerStarted() != null && event.getIsTimerStarted()) {
+        if (EventHelper.isTimerStarted(event)) {
             Long count = calendarInteractor.getSleepEventsWithTimer()
                     .firstOrError()
                     .flatMapObservable(Observable::fromIterable)
-                    .filter(sleepEvent -> ObjectUtils.equals(sleepEvent.getChild().getId(), event.getChild().getId())
-                            && !ObjectUtils.equals(sleepEvent.getId(), event.getId()))
+                    .filter(sleepEvent -> EventHelper.sameChild(sleepEvent, event)
+                            && !EventHelper.sameEvent(sleepEvent, event))
                     .count()
                     .blockingGet();
 
@@ -43,6 +44,12 @@ public class SleepEventValidator extends Validator<SleepEvent, CalendarValidatio
                 result.addMessage(context.getString(R.string.validate_event_sleep_timer_already_started));
                 results.add(result);
             }
+        }
+
+        if (TimeUtils.isStartTimeLessThanFinishTime(event.getDateTime(), event.getFinishDateTime())) {
+            CalendarValidationResult result = new CalendarValidationResult();
+            result.addMessage(context.getString(R.string.validate_start_finish_time));
+            results.add(result);
         }
 
         return results;

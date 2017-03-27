@@ -27,7 +27,7 @@ import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.NotificationUtils;
 
@@ -138,7 +138,7 @@ public class TimerService extends Service {
         for (SleepEvent whatEvent : what) {
             SleepEvent found = null;
             for (SleepEvent fromEvent : from) {
-                if (ObjectUtils.equals(whatEvent.getId(), fromEvent.getId())) {
+                if (EventHelper.sameEvent(whatEvent, fromEvent)) {
                     found = fromEvent;
                     break;
                 }

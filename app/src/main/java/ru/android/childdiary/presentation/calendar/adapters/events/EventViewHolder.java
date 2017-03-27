@@ -24,8 +24,8 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.StringUtils;
-import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -48,8 +48,8 @@ class EventViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.textViewTime)
     TextView textViewTime;
 
-    @BindView(R.id.textViewEventType)
-    TextView textViewEventType;
+    @BindView(R.id.textViewEventTitle)
+    TextView textViewEventTitle;
 
     @BindView(R.id.textViewDescription)
     TextView textViewDescription;
@@ -86,19 +86,26 @@ class EventViewHolder extends RecyclerView.ViewHolder {
                 getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
 
         textViewTime.setText(DateUtils.time(event.getDateTime().toLocalTime()));
-        textViewEventType.setText(StringUtils.eventType(context, event.getEventType()));
-        textViewDescription.setText(event.getDescription());
+        EventType eventType = event.getEventType();
+        if (eventType == EventType.OTHER) {
+            textViewEventTitle.setText(EventHelper.getDescription(context, event));
+            textViewDescription.setText(null);
+        } else {
+            textViewEventTitle.setText(StringUtils.eventType(context, eventType));
+            textViewDescription.setText(EventHelper.getDescription(context, event));
+        }
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
 
-        boolean showActionDone = event.getEventType() == EventType.OTHER;
+        boolean showActionDone = EventHelper.canBeDone(event);
         actionDoneView.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
         delimiter1.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
-        boolean isDone = event.getIsDone() != null && event.getIsDone();
-        boolean isExpired = TimeUtils.isBeforeOrEqualNow(event.getDateTime());
+
+        boolean isDone = EventHelper.isDone(event);
+        boolean isExpired = EventHelper.isExpired(event);
         int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
-        textViewEventType.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
+        textViewEventTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
     }
 
     private Drawable getEventViewBackgroundDrawable(@ColorInt int color) {

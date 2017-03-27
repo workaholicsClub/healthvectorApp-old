@@ -1,10 +1,11 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
-import android.text.InputFilter;
+import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -15,52 +16,53 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
-import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
-import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
-import ru.android.childdiary.utils.DoubleUtils;
 
-public class EventDetailAmountView extends EventDetailEditTextView {
+public class EventDetailNoteView extends EventDetailEditTextView {
+    @BindView(R.id.editTextWrapper)
+    TextInputLayout editTextWrapper;
+
     @BindView(R.id.editText)
     CustomEditText editText;
 
-    @BindView(R.id.imageView)
-    ImageView imageView;
+    @BindView(R.id.placeholder)
+    TextView placeholder;
 
-    @Getter
-    private Double amount;
+    private boolean readOnly;
 
-    public EventDetailAmountView(Context context) {
+    public EventDetailNoteView(Context context) {
         super(context);
         init();
     }
 
-    public EventDetailAmountView(Context context, AttributeSet attrs) {
+    public EventDetailNoteView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public EventDetailAmountView(Context context, AttributeSet attrs, int defStyle) {
+    public EventDetailNoteView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
     private void init() {
-        inflate(getContext(), R.layout.event_detail_amount, this);
+        inflate(getContext(), R.layout.event_detail_note, this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        editText.setFilters(new InputFilter[]{new RegExpInputFilter.AmountInputFilter()});
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
-        editText.setText(DoubleUtils.amountReview(amount));
+    public String getText() {
+        return editText.getText().toString().trim();
+    }
+
+    public void setText(String text) {
+        editText.setText(text);
+        setReadOnly(readOnly);
     }
 
     @Override
@@ -69,17 +71,9 @@ public class EventDetailAmountView extends EventDetailEditTextView {
 
         List<Disposable> disposables = new ArrayList<>();
 
-        disposables.add(RxTextView.afterTextChangeEvents(editText).subscribe(textViewAfterTextChangeEvent -> {
-            Double amount = DoubleUtils.parse(editText.getText().toString());
-            this.amount = amount;
-        }));
-
         disposables.add(RxView.focusChanges(editText).subscribe(hasFocus -> {
             if (hasFocus) {
-                editText.setText(DoubleUtils.amountEdit(amount));
                 editText.setSelection(editText.getText().length());
-            } else {
-                editText.setText(DoubleUtils.amountReview(amount));
             }
         }));
 
@@ -94,7 +88,11 @@ public class EventDetailAmountView extends EventDetailEditTextView {
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        editText.setEnabled(!readOnly);
-        imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
+        this.readOnly = readOnly;
+        editTextWrapper.setEnabled(!readOnly);
+        editTextWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
+        boolean isTextEmpty = TextUtils.isEmpty(editText.getText());
+        editTextWrapper.setVisibility(isTextEmpty && readOnly ? GONE : VISIBLE);
+        placeholder.setVisibility(isTextEmpty && readOnly ? VISIBLE : GONE);
     }
 }

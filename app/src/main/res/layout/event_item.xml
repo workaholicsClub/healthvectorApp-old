@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -92,27 +93,30 @@
             android:textAppearance="@style/EventRowTextAppearance" />
 
         <TextView
-            android:id="@+id/textViewEventType"
-            android:layout_width="0dp"
+            android:id="@+id/textViewEventTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:drawablePadding="@dimen/event_row_padding_horizontal"
             android:ellipsize="end"
             android:maxLines="1"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
-            android:textAppearance="@style/EventRowTextAppearance" />
+            android:singleLine="true"
+            android:textAppearance="@style/EventRowTextAppearance"
+            tools:ignore="Deprecated" />
 
         <TextView
             android:id="@+id/textViewDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="end"
             android:maxLines="1"
-            android:maxWidth="200dp"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
-            android:textAppearance="@style/EventRowDescriptionTextAppearance" />
+            android:singleLine="true"
+            android:textAppearance="@style/EventRowDescriptionTextAppearance"
+            tools:ignore="Deprecated" />
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

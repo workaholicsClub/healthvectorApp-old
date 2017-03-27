@@ -10,49 +10,51 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
-import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
-public class EventDetailEditableTitleView extends EventDetailEditTextView {
+public class EventDetailOtherEventNameView extends EventDetailEditTextView {
     @BindView(R.id.editText)
     CustomEditText editText;
 
-    @Getter
-    private String title;
+    @BindDimen(R.dimen.name_edit_text_padding_bottom)
+    int editTextBottomPadding;
 
-    public EventDetailEditableTitleView(Context context) {
+    public EventDetailOtherEventNameView(Context context) {
         super(context);
         init();
     }
 
-    public EventDetailEditableTitleView(Context context, AttributeSet attrs) {
+    public EventDetailOtherEventNameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public EventDetailEditableTitleView(Context context, AttributeSet attrs, int defStyle) {
+    public EventDetailOtherEventNameView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
     private void init() {
-        inflate(getContext(), R.layout.event_detail_editable_title, this);
+        inflate(getContext(), R.layout.event_detail_other_event_name, this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-        editText.setText(title);
+    public String getText() {
+        return editText.getText().toString().trim();
+    }
+
+    public void setText(String text) {
+        editText.setText(text);
     }
 
     @Override
@@ -60,10 +62,6 @@ public class EventDetailEditableTitleView extends EventDetailEditTextView {
         editText.setOnKeyboardHiddenListener(listener);
 
         List<Disposable> disposables = new ArrayList<>();
-
-        disposables.add(RxTextView.afterTextChangeEvents(editText).subscribe(textViewAfterTextChangeEvent -> {
-            this.title = editText.getText().toString();
-        }));
 
         disposables.add(RxView.focusChanges(editText).subscribe(hasFocus -> {
             if (hasFocus) {
@@ -84,6 +82,6 @@ public class EventDetailEditableTitleView extends EventDetailEditTextView {
     public void setReadOnly(boolean readOnly) {
         editText.setEnabled(!readOnly);
         editText.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
-        editText.setHint(readOnly ? "" : getContext().getString(R.string.other_event_title_hint));
+        editText.setPadding(0, 0, 0, editTextBottomPadding);
     }
 }

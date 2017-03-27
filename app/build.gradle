@@ -74,7 +74,7 @@ dependencies {
 
     compile "com.jakewharton.rxbinding2:rxbinding:2.0.0"
 
-    def requeryVersion = '1.1.2'
+    def requeryVersion = '1.2.0'
     compile "io.requery:requery:$requeryVersion"
     compile "io.requery:requery-android:$requeryVersion"
     annotationProcessor "io.requery:requery-processor:$requeryVersion"

@@ -114,14 +114,13 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     }
 
     @Override
-    public void showEventDetail(@NonNull PumpEvent event) {
-        super.showEventDetail(event);
+    public void setupEventDetail(@NonNull PumpEvent event) {
         setDateTime(event.getDateTime(), dateView, timeView);
         breastView.setSelected(event.getBreast());
         amountMlPumpView.setAmountMlLeft(event.getLeftAmountMl());
         amountMlPumpView.setAmountMlRight(event.getRightAmountMl());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        editTextNote.setText(event.getNote());
+        noteView.setText(event.getNote());
     }
 
     @Override
@@ -137,7 +136,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                 .leftAmountMl(amountMlPumpView.getAmountMlLeft())
                 .rightAmountMl(amountMlPumpView.getAmountMlRight())
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(editTextNote.getText().toString());
+                .note(noteView.getText());
 
         return builder.build();
     }

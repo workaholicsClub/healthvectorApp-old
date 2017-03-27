@@ -12,9 +12,6 @@ import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 
 public interface EventDetailView<T extends MasterEvent> extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showChild(@NonNull Child child);
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
     void showDefaultEventDetail(@NonNull T event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
@@ -25,6 +22,12 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void eventUpdated(@NonNull T event, boolean afterButtonPressed);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void eventDeleted(@NonNull MasterEvent event);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void eventDone(@NonNull MasterEvent event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters);

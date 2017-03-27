@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/event_detail_height"
     android:gravity="center_vertical"
@@ -17,6 +18,8 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
+        android:singleLine="true"
         android:text="@string/breast"
-        android:textAppearance="@style/SecondaryTextAppearance" />
+        android:textAppearance="@style/SecondaryTextAppearance"
+        tools:ignore="Deprecated" />
 </LinearLayout>

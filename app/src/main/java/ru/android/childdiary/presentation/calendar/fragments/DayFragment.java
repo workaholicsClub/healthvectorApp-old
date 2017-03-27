@@ -35,4 +35,9 @@ public class DayFragment extends CalendarFragment<DayViewAdapter> {
         String text = context.getString(R.string.calendar_selected_date_format, day, monthName);
         return text;
     }
+
+    @Override
+    protected boolean showEventsHeaderNavigationButtons() {
+        return true;
+    }
 }

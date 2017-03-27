@@ -14,7 +14,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public class OtherEvent extends MasterEvent {
     Long id;
 
-    String title;
+    String name;
 
     DateTime finishDateTime;
 
@@ -29,11 +29,11 @@ public class OtherEvent extends MasterEvent {
                        Boolean isDeleted,
                        Child child,
                        Long id,
-                       String title,
+                       String name,
                        DateTime finishDateTime) {
         super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.finishDateTime = finishDateTime;
     }
 }

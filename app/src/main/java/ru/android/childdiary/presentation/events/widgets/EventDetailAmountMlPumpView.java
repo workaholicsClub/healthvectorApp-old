@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -19,6 +20,7 @@ import io.reactivex.disposables.Disposable;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.utils.DoubleUtils;
 
 public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
@@ -56,13 +58,21 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
         addView(view);
         imageViewLeft = ButterKnife.findById(view, R.id.imageView);
         editTextAmountMlLeft = ButterKnife.findById(view, R.id.editText);
-        editTextAmountMlLeft.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         view = inflate(getContext(), R.layout.event_detail_amount_ml_pump_right, null);
         addView(view);
         imageViewRight = ButterKnife.findById(view, R.id.imageView);
         editTextAmountMlRight = ButterKnife.findById(view, R.id.editText);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        ButterKnife.bind(this);
+        editTextAmountMlLeft.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        editTextAmountMlLeft.setFilters(new InputFilter[]{new RegExpInputFilter.AmountMlInputFilter()});
         editTextAmountMlRight.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editTextAmountMlRight.setFilters(new InputFilter[]{new RegExpInputFilter.AmountMlInputFilter()});
     }
 
     public void setAmountMlLeft(Double amount) {
@@ -90,12 +100,12 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
         List<Disposable> disposables = new ArrayList<>();
 
         disposables.add(RxTextView.afterTextChangeEvents(editTextAmountMlLeft).subscribe(textViewAfterTextChangeEvent -> {
-            Double amount = DoubleUtils.parse(editTextAmountMlLeft.getText().toString().trim());
+            Double amount = DoubleUtils.parse(editTextAmountMlLeft.getText().toString());
             amountMlLeft = amount;
             updateSum();
         }));
         disposables.add(RxTextView.afterTextChangeEvents(editTextAmountMlRight).subscribe(textViewAfterTextChangeEvent -> {
-            Double amount = DoubleUtils.parse(editTextAmountMlRight.getText().toString().trim());
+            Double amount = DoubleUtils.parse(editTextAmountMlRight.getText().toString());
             amountMlRight = amount;
             updateSum();
         }));

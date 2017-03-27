@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ListPopupWindow;
+import android.text.InputFilter;
 import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.Menu;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.OnClick;
 import icepick.State;
@@ -49,6 +51,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
 import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
 import ru.android.childdiary.utils.DateUtils;
@@ -106,6 +109,9 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
 
     @BindView(R.id.dummy)
     View dummy;
+
+    @BindDimen(R.dimen.name_edit_text_padding_bottom)
+    int editTextBottomPadding;
 
     @State
     boolean isButtonDoneEnabled;
@@ -191,20 +197,23 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     }
 
     private void setupTextViews() {
+        editTextBirthHeight.setFilters(new InputFilter[]{new RegExpInputFilter.HeightInputFilter()});
+        editTextBirthWeight.setFilters(new InputFilter[]{new RegExpInputFilter.WeightInputFilter()});
+
         editTextName.setText(editedChild.getName());
         editTextBirthHeight.setText(DoubleUtils.heightReview(this, editedChild.getBirthHeight()));
         editTextBirthWeight.setText(DoubleUtils.weightReview(this, editedChild.getBirthWeight()));
 
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextName).subscribe(textViewAfterTextChangeEvent -> {
-            String name = editTextName.getText().toString();
+            String name = editTextName.getText().toString().trim();
             updateChild(editedChild.toBuilder().name(name).build());
         }));
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthHeight).subscribe(textViewAfterTextChangeEvent -> {
-            Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString().trim());
+            Double height = DoubleUtils.parse(editTextBirthHeight.getText().toString());
             updateChild(editedChild.toBuilder().birthHeight(height).build());
         }));
         unsubscribeOnDestroy(RxTextView.afterTextChangeEvents(editTextBirthWeight).subscribe(textViewAfterTextChangeEvent -> {
-            Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString().trim());
+            Double weight = DoubleUtils.parse(editTextBirthWeight.getText().toString());
             updateChild(editedChild.toBuilder().birthWeight(weight).build());
         }));
 
@@ -417,8 +426,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     public void nameValidated(boolean valid) {
         viewValidated(editTextName, valid,
                 R.drawable.name_edit_text_background, R.drawable.name_edit_text_background_error);
-        int bottom = getResources().getDimensionPixelSize(R.dimen.name_edit_text_padding_bottom);
-        editTextName.setPadding(0, 0, 0, bottom);
+        editTextName.setPadding(0, 0, 0, editTextBottomPadding);
     }
 
     @Override

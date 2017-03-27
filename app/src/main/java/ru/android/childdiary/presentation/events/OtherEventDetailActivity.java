@@ -25,8 +25,8 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailEditableTitleView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailOtherEventNameView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -41,8 +41,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     @InjectPresenter
     OtherEventDetailPresenter presenter;
 
-    @BindView(R.id.editableTitleView)
-    EventDetailEditableTitleView editableTitleView;
+    @BindView(R.id.otherEventNameView)
+    EventDetailOtherEventNameView otherEventNameView;
 
     @BindView(R.id.startTitleView)
     EventDetailTitleView startTitleView;
@@ -81,7 +81,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupEditTextView(editableTitleView);
+        setupEditTextView(otherEventNameView);
         startTitleView.setTitle(R.string.other_event_start);
         finishTitleView.setTitle(R.string.other_event_finish);
 
@@ -131,13 +131,12 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
-    public void showEventDetail(@NonNull OtherEvent event) {
-        super.showEventDetail(event);
-        editableTitleView.setTitle(event.getTitle());
+    public void setupEventDetail(@NonNull OtherEvent event) {
+        otherEventNameView.setText(event.getName());
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        editTextNote.setText(event.getNote());
+        noteView.setText(event.getNote());
     }
 
     @Override
@@ -149,11 +148,11 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
 
-        builder.title(editableTitleView.getTitle())
+        builder.name(otherEventNameView.getText())
                 .dateTime(startDateTime)
                 .finishDateTime(finishDateTime)
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(editTextNote.getText().toString());
+                .note(noteView.getText());
 
         return builder.build();
     }

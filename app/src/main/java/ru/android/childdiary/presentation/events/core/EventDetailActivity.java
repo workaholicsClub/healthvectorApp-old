@@ -2,11 +2,9 @@ package ru.android.childdiary.presentation.events.core;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
@@ -39,12 +37,13 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
+import ru.android.childdiary.presentation.events.widgets.EventDetailNoteView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.ReadOnlyView;
+import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -53,11 +52,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
     protected T event;
 
-    @BindView(R.id.editTextNote)
-    protected CustomEditText editTextNote;
-
-    @BindView(R.id.editTextNoteWrapper)
-    TextInputLayout editTextNoteWrapper;
+    @BindView(R.id.noteView)
+    protected EventDetailNoteView noteView;
 
     @BindView(R.id.rootView)
     View rootView;
@@ -77,7 +73,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-        editTextNote.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+        setupEditTextView(noteView);
         MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             if (masterEvent == null) {
@@ -130,7 +126,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
-        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
     }
 
     @Override
@@ -161,27 +156,30 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         if (this.event == null) {
             getPresenter().addEvent(event, afterButtonPressed);
         } else {
-            getPresenter().updateEvent(event, afterButtonPressed);
+            if (this.event.equals(event)) {
+                if (afterButtonPressed) {
+                    finish();
+                }
+            } else {
+                getPresenter().updateEvent(event, afterButtonPressed);
+            }
         }
     }
 
     @Override
-    public void showChild(@NonNull Child child) {
-        logger.debug("showChild: " + child);
-        changeThemeIfNeeded(child);
-    }
-
-    @Override
-    public void showDefaultEventDetail(@NonNull T event) {
-        showEventDetail(event);
+    public final void showDefaultEventDetail(@NonNull T event) {
         this.event = null;
+        changeThemeIfNeeded(event.getChild());
+        setupEventDetail(event);
     }
 
     @Override
-    @CallSuper
-    public void showEventDetail(@NonNull T event) {
-        changeThemeIfNeeded(event.getChild());
+    public final void showEventDetail(@NonNull T event) {
         this.event = event;
+        changeThemeIfNeeded(event.getChild());
+        setupEventDetail(event);
+        invalidateOptionsMenu();
+        getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
@@ -191,11 +189,14 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @LayoutRes
     protected abstract int getContentLayoutResourceId();
 
+    protected abstract void setupEventDetail(@NonNull T event);
+
     protected abstract T buildEvent(@Nullable T event);
 
     @Override
     public void eventAdded(@NonNull T event, boolean afterButtonPressed) {
         if (afterButtonPressed) {
+            setResult(RESULT_OK);
             finish();
         } else {
             getPresenter().requestEventDetails(event);
@@ -205,8 +206,20 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public void eventUpdated(@NonNull T event, boolean afterButtonPressed) {
         if (afterButtonPressed) {
+            setResult(RESULT_OK);
             finish();
         }
+    }
+
+    @Override
+    public void eventDeleted(@NonNull MasterEvent event) {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void eventDone(@NonNull MasterEvent event) {
+        showToast(getString(EventHelper.isDone(event) ? R.string.event_is_done : R.string.event_is_not_done));
     }
 
     @Override
@@ -309,8 +322,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     private void setupReadOnlyFields() {
         setReadOnly(rootView);
-        editTextNoteWrapper.setEnabled(!readOnly);
-        editTextNoteWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
         buttonDone.setText(readOnly ? R.string.edit : R.string.save);
     }
 
@@ -328,6 +339,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (event == null) {
+            return false;
+        }
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.event_detail, menu);
         return true;
@@ -335,19 +349,28 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        if (event == null) {
+            return false;
+        }
         MenuItem item = menu.findItem(R.id.menu_done);
-        item.setVisible(getEventType() == EventType.OTHER);
+        item.setVisible(EventHelper.canBeDone(getEventType()));
+        item.setChecked(EventHelper.isDone(event));
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (event == null) {
+            return false;
+        }
         switch (item.getItemId()) {
             case R.id.menu_done:
+                getPresenter().doneEvent(event);
                 return true;
             case R.id.menu_move:
                 return true;
             case R.id.menu_delete:
+                getPresenter().deleteEvent(event);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

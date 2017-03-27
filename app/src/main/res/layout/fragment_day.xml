@@ -13,5 +13,7 @@
         <include layout="@layout/request_focus_view_white" />
 
         <include layout="@layout/events_view" />
+
+        <include layout="@layout/events_view_footer" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

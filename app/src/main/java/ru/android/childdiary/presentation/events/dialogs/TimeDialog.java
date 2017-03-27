@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import java.io.Serializable;
 
@@ -37,20 +38,23 @@ public class TimeDialog extends BaseDialogFragment {
     @BindView(R.id.numberPickerHours)
     NumberPicker numberPickerHours;
 
+    @BindView(R.id.durationSeparator)
+    TextView durationSeparator;
+
     @BindView(R.id.numberPickerMinutes)
     NumberPicker numberPickerMinutes;
 
-    @BindView(R.id.daysView)
-    View daysView;
+    @BindView(R.id.daysHeader)
+    TextView daysHeader;
 
-    @BindView(R.id.hoursView)
-    View hoursView;
+    @BindView(R.id.hoursHeader)
+    TextView hoursHeader;
 
-    @BindView(R.id.minutesView)
-    View minutesView;
+    @BindView(R.id.durationSeparatorHeader)
+    TextView durationSeparatorHeader;
 
-    @BindView(R.id.delimiter)
-    View delimiter;
+    @BindView(R.id.minutesHeader)
+    TextView minutesHeader;
 
     @BindView(R.id.dummy)
     View dummy;
@@ -116,10 +120,15 @@ public class TimeDialog extends BaseDialogFragment {
         numberPickerMinutes.setMaxValue(TimeUtils.MINUTES_IN_HOUR - 1);
         numberPickerMinutes.setValue(time.getMinutes());
 
-        daysView.setVisibility(parameters.isShowDays() ? View.VISIBLE : View.GONE);
-        hoursView.setVisibility(parameters.isShowHours() ? View.VISIBLE : View.GONE);
-        delimiter.setVisibility(parameters.isShowHours() && parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
-        minutesView.setVisibility(parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
+        numberPickerDays.setVisibility(parameters.isShowDays() ? View.VISIBLE : View.GONE);
+        numberPickerHours.setVisibility(parameters.isShowHours() ? View.VISIBLE : View.GONE);
+        durationSeparator.setVisibility(parameters.isShowHours() && parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
+        numberPickerMinutes.setVisibility(parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
+
+        daysHeader.setVisibility(parameters.isShowDays() ? View.VISIBLE : View.GONE);
+        hoursHeader.setVisibility(parameters.isShowHours() ? View.VISIBLE : View.GONE);
+        durationSeparatorHeader.setVisibility(parameters.isShowHours() && parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
+        minutesHeader.setVisibility(parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
     }
 
     public void hideKeyboardAndClearFocus(View view) {

@@ -9,6 +9,7 @@
     android:subtitleTextAppearance="@style/ToolbarSubtitleTextAppearance"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     android:titleTextAppearance="@style/ToolbarTitleTextAppearance"
+    app:contentInsetStartWithNavigation="0dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat"
     tools:ignore="UnusedAttribute">
 
@@ -28,5 +29,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/ToolbarTitleTextAppearance" />
+        android:singleLine="true"
+        android:textAppearance="@style/ToolbarTitleTextAppearance"
+        tools:ignore="Deprecated" />
 </android.support.v7.widget.Toolbar>

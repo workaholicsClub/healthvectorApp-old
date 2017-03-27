@@ -45,7 +45,7 @@ public abstract class AddValueDialog extends BaseDialogFragment {
                 .setTitle(getTitle())
                 .setPositiveButton(R.string.OK, (dialog, which) -> {
                     hideKeyboardAndClearFocus(rootView.findFocus());
-                    String text = editText.getText().toString();
+                    String text = editText.getText().toString().trim();
                     if (TextUtils.isEmpty(text)) {
                         return;
                     }

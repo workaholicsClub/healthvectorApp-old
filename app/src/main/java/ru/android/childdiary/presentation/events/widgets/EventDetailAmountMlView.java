@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import io.reactivex.disposables.Disposable;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.utils.DoubleUtils;
 
 public class EventDetailAmountMlView extends EventDetailEditTextView {
@@ -53,6 +55,7 @@ public class EventDetailAmountMlView extends EventDetailEditTextView {
         super.onFinishInflate();
         ButterKnife.bind(this);
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setFilters(new InputFilter[]{new RegExpInputFilter.AmountMlInputFilter()});
     }
 
     public void setAmountMl(Double amount) {
@@ -67,7 +70,7 @@ public class EventDetailAmountMlView extends EventDetailEditTextView {
         List<Disposable> disposables = new ArrayList<>();
 
         disposables.add(RxTextView.afterTextChangeEvents(editText).subscribe(textViewAfterTextChangeEvent -> {
-            Double amount = DoubleUtils.parse(editText.getText().toString().trim());
+            Double amount = DoubleUtils.parse(editText.getText().toString());
             amountMl = amount;
         }));
 
