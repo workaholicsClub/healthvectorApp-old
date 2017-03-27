@@ -229,6 +229,10 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
+    public void validationFailed() {
+    }
+
+    @Override
     public void showValidationErrorMessage(String msg) {
         showToast(msg);
     }

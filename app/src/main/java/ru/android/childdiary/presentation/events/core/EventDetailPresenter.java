@@ -104,13 +104,18 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 return;
             }
 
+            getViewState().validationFailed();
             String msg = Stream.of(results)
                     .filter(CalendarValidationResult::notValid)
                     .map(CalendarValidationResult::toString)
                     .findFirst().orElse(null);
             getViewState().showValidationErrorMessage(msg);
+            handleValidationResult(results);
         } else {
             super.onUnexpectedError(e);
         }
+    }
+
+    protected void handleValidationResult(List<CalendarValidationResult> results) {
     }
 }

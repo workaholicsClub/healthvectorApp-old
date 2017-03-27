@@ -6,6 +6,7 @@ import android.view.inputmethod.EditorInfo;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
@@ -78,10 +80,19 @@ public class EventDetailOtherEventNameView extends EventDetailEditTextView {
         return disposables;
     }
 
+    public Observable<TextViewAfterTextChangeEvent> otherEventNameObservable() {
+        return RxTextView.afterTextChangeEvents(editText);
+    }
+
     @Override
     public void setReadOnly(boolean readOnly) {
         editText.setEnabled(!readOnly);
         editText.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
+        editText.setPadding(0, 0, 0, editTextBottomPadding);
+    }
+
+    public void validated(boolean valid) {
+        editText.setBackgroundResource(valid ? R.drawable.edit_text_background : R.drawable.edit_text_background_error);
         editText.setPadding(0, 0, 0, editTextBottomPadding);
     }
 }

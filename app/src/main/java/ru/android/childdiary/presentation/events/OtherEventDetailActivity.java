@@ -22,7 +22,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
-import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
@@ -31,7 +30,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class OtherEventDetailActivity extends EventDetailActivity<EventDetailView<OtherEvent>, OtherEvent> implements EventDetailView<OtherEvent> {
+public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDetailView, OtherEvent> implements OtherEventDetailView {
     private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
     private static final String TAG_DATE_PICKER_START = "DATE_PICKER_START";
     private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
@@ -64,6 +63,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
+
+    private boolean isValidationStarted;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
         Intent intent = new Intent(context, OtherEventDetailActivity.class);
@@ -155,6 +156,19 @@ public class OtherEventDetailActivity extends EventDetailActivity<EventDetailVie
                 .note(noteView.getText());
 
         return builder.build();
+    }
+
+    @Override
+    public void validationFailed() {
+        if (!isValidationStarted) {
+            isValidationStarted = true;
+            unsubscribeOnDestroy(presenter.listenForFieldsUpdate(otherEventNameView.otherEventNameObservable()));
+        }
+    }
+
+    @Override
+    public void otherEventNameValidated(boolean valid) {
+        otherEventNameView.validated(valid);
     }
 
     @Override

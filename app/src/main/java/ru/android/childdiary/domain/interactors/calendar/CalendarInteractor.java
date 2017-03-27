@@ -3,6 +3,8 @@ package ru.android.childdiary.domain.interactors.calendar;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
+
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
@@ -255,6 +257,13 @@ public class CalendarInteractor implements Interactor {
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         return calendarRepository.done(event);
+    }
+
+    public Observable<List<CalendarValidationResult>> controlFields(Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
+        return otherEventNameObservable
+                .filter(textViewAfterTextChangeEvent -> textViewAfterTextChangeEvent.editable() != null)
+                .map(textViewAfterTextChangeEvent -> textViewAfterTextChangeEvent.editable().toString())
+                .map(otherEventName -> Collections.singletonList(new OtherEventValidator(context).validateOtherEventName(otherEventName)));
     }
 
     private <T extends MasterEvent> Observable<T> validate(@NonNull T item) {
