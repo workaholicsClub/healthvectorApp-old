@@ -45,7 +45,7 @@ class AllEventsMapper {
     }
 
     private static DiaperEvent mapToDiaperEvent(@NonNull Tuple data) {
-        DiaperEvent.builder()
+        return DiaperEvent.builder()
                 .id(data.get(SleepEventEntity.ID.as("diaper_event_id")))
                 .masterEventId(data.get(MasterEventEntity.ID))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE))
