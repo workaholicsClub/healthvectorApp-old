@@ -14,13 +14,17 @@
 
         <include layout="@layout/calendar_view" />
 
-        <include layout="@layout/request_focus_view_white" />
-
         <include
-            layout="@layout/events_view"
+            layout="@layout/request_focus_view_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/calendar_margin_vertical" />
+
+        <include
+            android:id="@+id/eventsHeader"
+            layout="@layout/calendar_header" />
+
+        <include layout="@layout/events_view" />
 
         <include layout="@layout/events_view_footer" />
     </LinearLayout>

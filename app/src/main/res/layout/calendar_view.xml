@@ -2,9 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/events_padding_vertical">
+    android:orientation="vertical">
 
     <include
         android:id="@+id/calendarHeader"
@@ -16,9 +14,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/calendar_grid_view_margin_horizontal"
         android:layout_marginRight="@dimen/calendar_grid_view_margin_horizontal"
+        android:background="@color/white"
         android:horizontalSpacing="@dimen/calendar_horizontal_spacing"
         android:listSelector="@android:color/transparent"
         android:numColumns="7"
+        android:paddingBottom="@dimen/events_padding_vertical"
         android:stretchMode="columnWidth"
         android:verticalSpacing="@dimen/calendar_vertical_spacing" />
 </LinearLayout>
