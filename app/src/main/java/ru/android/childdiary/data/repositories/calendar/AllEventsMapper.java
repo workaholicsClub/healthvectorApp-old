@@ -31,88 +31,108 @@ class AllEventsMapper {
         }
         switch (eventType) {
             case DIAPER:
-                return DiaperEvent.builder()
-                        .id(data.get(SleepEventEntity.ID.as("diaper_event_id")))
-                        .masterEventId(data.get(MasterEventEntity.ID))
-                        .eventType(data.get(MasterEventEntity.EVENT_TYPE))
-                        .description(data.get(MasterEventEntity.DESCRIPTION))
-                        .dateTime(data.get(MasterEventEntity.DATE_TIME))
-                        .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
-                        .note(data.get(MasterEventEntity.NOTE))
-                        .isDone(data.get(MasterEventEntity.DONE))
-                        .isDeleted(data.get(MasterEventEntity.DELETED))
-                        .child(mapToChild(data))
-                        .diaperState(data.get(DiaperEventEntity.DIAPER_STATE))
-                        .build();
+                return mapToDiaperEvent(data);
             case FEED:
-                return FeedEvent.builder()
-                        .id(data.get(SleepEventEntity.ID.as("feed_event_id")))
-                        .masterEventId(data.get(MasterEventEntity.ID))
-                        .eventType(data.get(MasterEventEntity.EVENT_TYPE))
-                        .description(data.get(MasterEventEntity.DESCRIPTION))
-                        .dateTime(data.get(MasterEventEntity.DATE_TIME))
-                        .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
-                        .note(data.get(MasterEventEntity.NOTE))
-                        .isDone(data.get(MasterEventEntity.DONE))
-                        .isDeleted(data.get(MasterEventEntity.DELETED))
-                        .child(mapToChild(data))
-                        .feedType(data.get(FeedEventEntity.FEED_TYPE))
-                        .breast(data.get(FeedEventEntity.BREAST.as("feed_event_breast")))
-                        .leftDurationInMinutes(data.get(FeedEventEntity.LEFT_DURATION_IN_MINUTES))
-                        .rightDurationInMinutes(data.get(FeedEventEntity.RIGHT_DURATION_IN_MINUTES))
-                        .amount(data.get(FeedEventEntity.AMOUNT))
-                        .amountMl(data.get(FeedEventEntity.AMOUNT_ML))
-                        .foodMeasure(mapToFoodMeasure(data))
-                        .food(mapToFood(data))
-                        .build();
+                return mapToFeedEvent(data);
             case OTHER:
-                return OtherEvent.builder()
-                        .id(data.get(SleepEventEntity.ID.as("other_event_id")))
-                        .masterEventId(data.get(MasterEventEntity.ID))
-                        .eventType(data.get(MasterEventEntity.EVENT_TYPE))
-                        .description(data.get(MasterEventEntity.DESCRIPTION))
-                        .dateTime(data.get(MasterEventEntity.DATE_TIME))
-                        .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
-                        .note(data.get(MasterEventEntity.NOTE))
-                        .isDone(data.get(MasterEventEntity.DONE))
-                        .isDeleted(data.get(MasterEventEntity.DELETED))
-                        .child(mapToChild(data))
-                        .name(data.get(OtherEventEntity.NAME.as("other_event_name")))
-                        .finishDateTime(data.get(OtherEventEntity.FINISH_DATE_TIME.as("other_event_finish_date_time")))
-                        .build();
+                return mapToOtherEvent(data);
             case PUMP:
-                return PumpEvent.builder()
-                        .id(data.get(SleepEventEntity.ID.as("pump_event_id")))
-                        .masterEventId(data.get(MasterEventEntity.ID))
-                        .eventType(data.get(MasterEventEntity.EVENT_TYPE))
-                        .description(data.get(MasterEventEntity.DESCRIPTION))
-                        .dateTime(data.get(MasterEventEntity.DATE_TIME))
-                        .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
-                        .note(data.get(MasterEventEntity.NOTE))
-                        .isDone(data.get(MasterEventEntity.DONE))
-                        .isDeleted(data.get(MasterEventEntity.DELETED))
-                        .child(mapToChild(data))
-                        .breast(data.get(PumpEventEntity.BREAST.as("pump_event_breast")))
-                        .leftAmountMl(data.get(PumpEventEntity.LEFT_AMOUNT_ML))
-                        .rightAmountMl(data.get(PumpEventEntity.RIGHT_AMOUNT_ML))
-                        .build();
+                return mapToPumpEvent(data);
             case SLEEP:
-                return SleepEvent.builder()
-                        .id(data.get(SleepEventEntity.ID.as("sleep_event_id")))
-                        .masterEventId(data.get(MasterEventEntity.ID))
-                        .eventType(data.get(MasterEventEntity.EVENT_TYPE))
-                        .description(data.get(MasterEventEntity.DESCRIPTION))
-                        .dateTime(data.get(MasterEventEntity.DATE_TIME))
-                        .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
-                        .note(data.get(MasterEventEntity.NOTE))
-                        .isDone(data.get(MasterEventEntity.DONE))
-                        .isDeleted(data.get(MasterEventEntity.DELETED))
-                        .child(mapToChild(data))
-                        .finishDateTime(data.get(SleepEventEntity.FINISH_DATE_TIME.as("sleep_event_finish_date_time")))
-                        .isTimerStarted(data.get(SleepEventEntity.TIMER_STARTED))
-                        .build();
+                return mapToSleepEvent(data);
         }
         throw new IllegalStateException("Unknown event type");
+    }
+
+    private static DiaperEvent mapToDiaperEvent(@NonNull Tuple data) {
+        DiaperEvent.builder()
+                .id(data.get(SleepEventEntity.ID.as("diaper_event_id")))
+                .masterEventId(data.get(MasterEventEntity.ID))
+                .eventType(data.get(MasterEventEntity.EVENT_TYPE))
+                .description(data.get(MasterEventEntity.DESCRIPTION))
+                .dateTime(data.get(MasterEventEntity.DATE_TIME))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
+                .note(data.get(MasterEventEntity.NOTE))
+                .isDone(data.get(MasterEventEntity.DONE))
+                .isDeleted(data.get(MasterEventEntity.DELETED))
+                .child(mapToChild(data))
+                .diaperState(data.get(DiaperEventEntity.DIAPER_STATE))
+                .build();
+    }
+
+    private static FeedEvent mapToFeedEvent(@NonNull Tuple data) {
+        return FeedEvent.builder()
+                .id(data.get(SleepEventEntity.ID.as("feed_event_id")))
+                .masterEventId(data.get(MasterEventEntity.ID))
+                .eventType(data.get(MasterEventEntity.EVENT_TYPE))
+                .description(data.get(MasterEventEntity.DESCRIPTION))
+                .dateTime(data.get(MasterEventEntity.DATE_TIME))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
+                .note(data.get(MasterEventEntity.NOTE))
+                .isDone(data.get(MasterEventEntity.DONE))
+                .isDeleted(data.get(MasterEventEntity.DELETED))
+                .child(mapToChild(data))
+                .feedType(data.get(FeedEventEntity.FEED_TYPE))
+                .breast(data.get(FeedEventEntity.BREAST.as("feed_event_breast")))
+                .leftDurationInMinutes(data.get(FeedEventEntity.LEFT_DURATION_IN_MINUTES))
+                .rightDurationInMinutes(data.get(FeedEventEntity.RIGHT_DURATION_IN_MINUTES))
+                .amount(data.get(FeedEventEntity.AMOUNT))
+                .amountMl(data.get(FeedEventEntity.AMOUNT_ML))
+                .foodMeasure(mapToFoodMeasure(data))
+                .food(mapToFood(data))
+                .build();
+    }
+
+    private static OtherEvent mapToOtherEvent(@NonNull Tuple data) {
+        return OtherEvent.builder()
+                .id(data.get(SleepEventEntity.ID.as("other_event_id")))
+                .masterEventId(data.get(MasterEventEntity.ID))
+                .eventType(data.get(MasterEventEntity.EVENT_TYPE))
+                .description(data.get(MasterEventEntity.DESCRIPTION))
+                .dateTime(data.get(MasterEventEntity.DATE_TIME))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
+                .note(data.get(MasterEventEntity.NOTE))
+                .isDone(data.get(MasterEventEntity.DONE))
+                .isDeleted(data.get(MasterEventEntity.DELETED))
+                .child(mapToChild(data))
+                .name(data.get(OtherEventEntity.NAME.as("other_event_name")))
+                .finishDateTime(data.get(OtherEventEntity.FINISH_DATE_TIME.as("other_event_finish_date_time")))
+                .build();
+    }
+
+    private static PumpEvent mapToPumpEvent(@NonNull Tuple data) {
+        return PumpEvent.builder()
+                .id(data.get(SleepEventEntity.ID.as("pump_event_id")))
+                .masterEventId(data.get(MasterEventEntity.ID))
+                .eventType(data.get(MasterEventEntity.EVENT_TYPE))
+                .description(data.get(MasterEventEntity.DESCRIPTION))
+                .dateTime(data.get(MasterEventEntity.DATE_TIME))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
+                .note(data.get(MasterEventEntity.NOTE))
+                .isDone(data.get(MasterEventEntity.DONE))
+                .isDeleted(data.get(MasterEventEntity.DELETED))
+                .child(mapToChild(data))
+                .breast(data.get(PumpEventEntity.BREAST.as("pump_event_breast")))
+                .leftAmountMl(data.get(PumpEventEntity.LEFT_AMOUNT_ML))
+                .rightAmountMl(data.get(PumpEventEntity.RIGHT_AMOUNT_ML))
+                .build();
+    }
+
+    private static SleepEvent mapToSleepEvent(@NonNull Tuple data) {
+        return SleepEvent.builder()
+                .id(data.get(SleepEventEntity.ID.as("sleep_event_id")))
+                .masterEventId(data.get(MasterEventEntity.ID))
+                .eventType(data.get(MasterEventEntity.EVENT_TYPE))
+                .description(data.get(MasterEventEntity.DESCRIPTION))
+                .dateTime(data.get(MasterEventEntity.DATE_TIME))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES))
+                .note(data.get(MasterEventEntity.NOTE))
+                .isDone(data.get(MasterEventEntity.DONE))
+                .isDeleted(data.get(MasterEventEntity.DELETED))
+                .child(mapToChild(data))
+                .finishDateTime(data.get(SleepEventEntity.FINISH_DATE_TIME.as("sleep_event_finish_date_time")))
+                .isTimerStarted(data.get(SleepEventEntity.TIMER_STARTED))
+                .build();
     }
 
     private static Child mapToChild(@NonNull Tuple childData) {
