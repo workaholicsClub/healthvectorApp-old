@@ -104,15 +104,15 @@ public class CalendarInteractor implements Interactor {
     private Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
         switch (eventType) {
             case DIAPER:
-                return Observable.just(5);
+                return Observable.just(0);
             case FEED:
-                return Observable.just(10);
+                return Observable.just(30);
             case OTHER:
-                return Observable.just(60);
-            case PUMP:
-                return Observable.just(20);
-            case SLEEP:
                 return Observable.just(10);
+            case PUMP:
+                return Observable.just(10);
+            case SLEEP:
+                return Observable.just(60);
         }
         throw new IllegalStateException("Unknown event type");
     }
