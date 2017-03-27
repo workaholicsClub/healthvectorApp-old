@@ -63,8 +63,8 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.getSelectedDate().first(LocalDate.now()).toObservable();
     }
 
-    public Observable<LocalDate> setSelectedDate(@NonNull LocalDate date) {
-        return calendarRepository.setSelectedDate(date);
+    public Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date) {
+        return calendarRepository.setSelectedDateObservable(date);
     }
 
     public Observable<List<FoodMeasure>> getFoodMeasureList() {
@@ -402,6 +402,7 @@ public class CalendarInteractor implements Interactor {
     @SuppressWarnings("unchecked")
     private <T extends MasterEvent> Observable<T> postprocess(@NonNull T event) {
         return Observable.fromCallable(() -> {
+            calendarRepository.setSelectedDate(event.getDateTime().toLocalDate());
             if (event.getEventType() == EventType.DIAPER) {
                 return event;
             } else if (event.getEventType() == EventType.FEED) {

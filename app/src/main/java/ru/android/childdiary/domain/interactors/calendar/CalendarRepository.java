@@ -21,7 +21,9 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public interface CalendarRepository extends Repository {
     Observable<LocalDate> getSelectedDate();
 
-    Observable<LocalDate> setSelectedDate(@NonNull LocalDate date);
+    void setSelectedDate(@NonNull LocalDate date);
+
+    Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date);
 
     Observable<List<FoodMeasure>> getFoodMeasureList();
 

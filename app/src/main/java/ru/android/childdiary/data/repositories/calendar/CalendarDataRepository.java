@@ -66,12 +66,17 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
-    public Observable<LocalDate> setSelectedDate(@NonNull LocalDate date) {
+    public void setSelectedDate(@NonNull LocalDate date) {
+        selectedDate = date;
+        for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
+            listener.onSelectedDateChanged(date);
+        }
+    }
+
+    @Override
+    public Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date) {
         return Observable.fromCallable(() -> {
-            selectedDate = date;
-            for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
-                listener.onSelectedDateChanged(date);
-            }
+            setSelectedDate(date);
             return date;
         });
     }

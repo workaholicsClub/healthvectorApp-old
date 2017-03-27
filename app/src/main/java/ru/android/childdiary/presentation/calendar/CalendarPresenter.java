@@ -79,7 +79,7 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
 
     public void switchDate(@NonNull LocalDate date) {
         logger.debug("user switch date: " + date);
-        unsubscribeOnDestroy(calendarInteractor.setSelectedDate(date)
+        unsubscribeOnDestroy(calendarInteractor.setSelectedDateObservable(date)
                 .ignoreElements()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
