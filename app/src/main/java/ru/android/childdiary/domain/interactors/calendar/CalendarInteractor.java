@@ -20,7 +20,6 @@ import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
@@ -76,28 +75,12 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.addFoodMeasure(foodMeasure);
     }
 
-    private Observable<FoodMeasure> getDefaultFoodMeasure() {
-        return calendarRepository.getFoodMeasureList()
-                .first(Collections.singletonList(FoodMeasure.NULL))
-                .flatMapObservable(Observable::fromIterable)
-                .first(FoodMeasure.NULL)
-                .toObservable();
-    }
-
     public Observable<List<Food>> getFoodList() {
         return calendarRepository.getFoodList();
     }
 
     public Observable<Food> addFood(@NonNull Food food) {
         return calendarRepository.addFood(food);
-    }
-
-    private Observable<Food> getDefaultFood() {
-        return calendarRepository.getFoodList()
-                .first(Collections.singletonList(Food.NULL))
-                .flatMapObservable(Observable::fromIterable)
-                .first(Food.NULL)
-                .toObservable();
     }
 
     private Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
@@ -153,13 +136,16 @@ public class CalendarInteractor implements Interactor {
                 getSelectedDate(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.FEED),
-                getDefaultFoodMeasure(),
-                (child, date, time, minutes, foodMeasure) -> FeedEvent.builder()
+                calendarRepository.getLastFeedType(),
+                calendarRepository.getLastFoodMeasure(),
+                calendarRepository.getLastFood(),
+                (child, date, time, minutes, feedType, foodMeasure, food) -> FeedEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time))
                         .notifyTimeInMinutes(minutes)
-                        .feedType(FeedType.BREAST_MILK)
+                        .feedType(feedType)
                         .foodMeasure(foodMeasure)
+                        .food(food)
                         .breast(Breast.LEFT)
                         .build());
     }
@@ -231,7 +217,8 @@ public class CalendarInteractor implements Interactor {
 
     public <T extends MasterEvent> Observable<T> add(@NonNull AddEventRequest<T> request) {
         return validate(preprocessInsert(request.getChild(), request.getEvent()))
-                .flatMap(this::addInternal);
+                .flatMap(this::addInternal)
+                .flatMap(this::postprocess);
     }
 
     @SuppressWarnings("unchecked")
@@ -252,7 +239,8 @@ public class CalendarInteractor implements Interactor {
 
     public <T extends MasterEvent> Observable<T> update(@NonNull T event) {
         return validate(preprocessUpdate(event))
-                .flatMap(this::updateInternal);
+                .flatMap(this::updateInternal)
+                .flatMap(this::postprocess);
     }
 
     @SuppressWarnings("unchecked")
@@ -409,5 +397,27 @@ public class CalendarInteractor implements Interactor {
         return sleepEvent.toBuilder()
                 .eventType(EventType.SLEEP)
                 .build();
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> Observable<T> postprocess(@NonNull T event) {
+        return Observable.fromCallable(() -> {
+            if (event.getEventType() == EventType.DIAPER) {
+                return event;
+            } else if (event.getEventType() == EventType.FEED) {
+                FeedEvent feedEvent = (FeedEvent) event;
+                calendarRepository.setLastFeedType(feedEvent.getFeedType());
+                calendarRepository.setLastFoodMeasure(feedEvent.getFoodMeasure());
+                calendarRepository.setLastFood(feedEvent.getFood());
+                return event;
+            } else if (event.getEventType() == EventType.OTHER) {
+                return event;
+            } else if (event.getEventType() == EventType.PUMP) {
+                return event;
+            } else if (event.getEventType() == EventType.SLEEP) {
+                return event;
+            }
+            throw new IllegalStateException("Unknown event type");
+        });
     }
 }

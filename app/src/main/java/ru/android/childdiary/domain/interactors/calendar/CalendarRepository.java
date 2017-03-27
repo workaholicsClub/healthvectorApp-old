@@ -1,12 +1,14 @@
 package ru.android.childdiary.domain.interactors.calendar;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.core.Repository;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -28,6 +30,18 @@ public interface CalendarRepository extends Repository {
     Observable<List<Food>> getFoodList();
 
     Observable<Food> addFood(@NonNull Food value);
+
+    Observable<FeedType> getLastFeedType();
+
+    Observable<FoodMeasure> getLastFoodMeasure();
+
+    Observable<Food> getLastFood();
+
+    FeedType setLastFeedType(@Nullable FeedType feedType);
+
+    FoodMeasure setLastFoodMeasure(@Nullable FoodMeasure foodMeasure);
+
+    Food setLastFood(@Nullable Food food);
 
     Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate);
 
