@@ -340,7 +340,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (event == null) {
-            return false;
+            return super.onCreateOptionsMenu(menu);
         }
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.event_detail, menu);
@@ -350,7 +350,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (event == null) {
-            return false;
+            return super.onPrepareOptionsMenu(menu);
         }
         MenuItem item = menu.findItem(R.id.menu_done);
         item.setVisible(EventHelper.canBeDone(getEventType()));
@@ -361,7 +361,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (event == null) {
-            return false;
+            return super.onOptionsItemSelected(item);
         }
         switch (item.getItemId()) {
             case R.id.menu_done:
