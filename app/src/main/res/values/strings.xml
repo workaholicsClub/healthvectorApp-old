@@ -116,6 +116,8 @@
     <string name="food_dialog_title">Введите наименование прикорма</string>
     <string name="duration_separator">:</string>
     <string name="child_sleep">%s спит</string>
+    <string name="timer_sleep">Таймер сна</string>
+    <string name="will_start">запустится через %s</string>
     <string name="days_short">%d д.</string>
     <string name="hours_short">%d ч.</string>
     <string name="minutes_short">%d мин.</string>

@@ -160,7 +160,12 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         if (isTimerStarted) {
             builder.finishDateTime(null);
         } else {
-            builder.finishDateTime(DateTime.now());
+            DateTime now = DateTime.now();
+            if (now.isAfter(event.getDateTime())) {
+                builder.finishDateTime(now);
+            } else {
+                builder.finishDateTime(null);
+            }
         }
 
         upsertEvent(builder.build(), false);

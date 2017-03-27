@@ -32,7 +32,7 @@ public class EventHelper {
     }
 
     public static boolean isExpired(@NonNull MasterEvent event) {
-        return TimeUtils.isBeforeOrEqualNow(event.getDateTime());
+        return event.getDateTime().isAfterNow();
     }
 
     public static boolean isTimerStarted(@Nullable SleepEvent event) {

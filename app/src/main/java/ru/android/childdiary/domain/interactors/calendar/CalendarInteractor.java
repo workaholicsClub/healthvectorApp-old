@@ -119,7 +119,7 @@ public class CalendarInteractor implements Interactor {
     private Observable<DiaperEvent> getDefaultDiaperEvent() {
         return Observable.combineLatest(
                 childInteractor.getActiveChildOnce(),
-                getSelectedDate(),
+                getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.DIAPER),
                 (child, date, time, minutes) -> DiaperEvent.builder()
@@ -133,7 +133,7 @@ public class CalendarInteractor implements Interactor {
     private Observable<FeedEvent> getDefaultFeedEvent() {
         return Observable.combineLatest(
                 childInteractor.getActiveChildOnce(),
-                getSelectedDate(),
+                getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.FEED),
                 calendarRepository.getLastFeedType(),
@@ -153,7 +153,7 @@ public class CalendarInteractor implements Interactor {
     private Observable<OtherEvent> getDefaultOtherEvent() {
         return Observable.combineLatest(
                 childInteractor.getActiveChildOnce(),
-                getSelectedDate(),
+                getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.OTHER),
                 (child, date, time, minutes) -> OtherEvent.builder()
@@ -166,7 +166,7 @@ public class CalendarInteractor implements Interactor {
     private Observable<PumpEvent> getDefaultPumpEvent() {
         return Observable.combineLatest(
                 childInteractor.getActiveChildOnce(),
-                getSelectedDate(),
+                getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.PUMP),
                 (child, date, time, minutes) -> PumpEvent.builder()
@@ -180,7 +180,7 @@ public class CalendarInteractor implements Interactor {
     private Observable<SleepEvent> getDefaultSleepEvent() {
         return Observable.combineLatest(
                 childInteractor.getActiveChildOnce(),
-                getSelectedDate(),
+                getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.SLEEP),
                 (child, date, time, minutes) -> SleepEvent.builder()
