@@ -25,6 +25,7 @@ import android.widget.PopupWindow;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -36,6 +37,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,6 +80,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         CloseMenuButtonClickListener,
         View.OnClickListener,
         FabController {
+    private static final String KEY_SELECTED_PAGE = "selected_page";
     private static final int REQUEST_ADD_EVENT = 1;
 
     private static final int PROFILE_SETTINGS_EDIT = 1;
@@ -104,6 +108,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                     .withName(R.string.drawer_item_help)
                     .withOnDrawerItemClickListener(this)
     };
+
+    @Inject
+    RxSharedPreferences preferences;
 
     @InjectPresenter
     MainPresenter presenter;
@@ -382,12 +389,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     private void setupViewPager() {
+        Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 2).get();
+        selectedPage = selectedPage == null ? 2 : selectedPage;
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new DayFragment(), getString(R.string.day));
         viewPagerAdapter.addFragment(new WeekFragment(), getString(R.string.week));
         viewPagerAdapter.addFragment(new MonthFragment(), getString(R.string.month));
         viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setCurrentItem(2, false);
+        viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -397,6 +406,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
             @Override
             public void onPageSelected(int position) {
+                preferences.getInteger(KEY_SELECTED_PAGE).set(position);
                 CalendarFragment fragment = (CalendarFragment) viewPagerAdapter.getItem(position);
                 EventAdapter eventAdapter = fragment.getEventAdapter();
                 if (eventAdapter != null) {

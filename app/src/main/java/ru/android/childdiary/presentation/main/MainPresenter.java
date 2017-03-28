@@ -60,7 +60,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void switchChild(@NonNull Child child) {
         logger.debug("user switch child: " + child);
-        unsubscribeOnDestroy(childInteractor.setActiveChild(child)
+        unsubscribeOnDestroy(childInteractor.setActiveChildObservable(child)
                 .ignoreElements()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -43,13 +43,17 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     @SuppressWarnings("unchecked")
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
         if (!isSubscribedToEventDetails) {
-            unsubscribeOnDestroy(childInteractor.setActiveChild(masterEvent.getChild())
-                    .flatMap(child -> calendarInteractor.setSelectedDateObservable(masterEvent.getDateTime().toLocalDate()))
-                    .flatMap(date -> calendarInteractor.getEventDetail(masterEvent)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnNext(event -> logger.debug("event details: " + event)))
-                    .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
+            unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
+                    .map(event -> {
+                        childInteractor.setActiveChild(event.getChild());
+                        calendarInteractor.setSelectedDate(event.getDateTime().toLocalDate());
+                        return event;
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(event -> logger.debug("event details: " + event))
+                    .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError))
+            ;
             isSubscribedToEventDetails = true;
         }
     }
