@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,7 @@ import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.NotificationUtils;
@@ -46,6 +48,8 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
         logger.debug("onStartCommand: " + intent);
+
+        handleIntent(intent);
 
         return START_STICKY;
     }
@@ -75,6 +79,28 @@ public class TimerService extends Service {
 
         updateNotifications(this, Collections.emptyList());
         stopTimer();
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+        SleepEvent event = (SleepEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
+        if (event == null) {
+            return;
+        }
+        SleepEvent.SleepEventBuilder builder = event.toBuilder();
+        builder.isTimerStarted(false).build();
+        DateTime now = DateTime.now();
+        if (now.isAfter(event.getDateTime())) {
+            builder.finishDateTime(now);
+        } else {
+            builder.finishDateTime(null);
+        }
+        unsubscribeOnDestroy(calendarInteractor.update(builder.build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stoppedEvent -> logger.debug("event stopped: " + stoppedEvent), this::onUnexpectedError));
     }
 
     private void unsubscribeOnDestroy(@NonNull Disposable disposable) {

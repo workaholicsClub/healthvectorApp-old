@@ -14,7 +14,9 @@ import org.joda.time.DateTime;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
+import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.utils.TimeUtils;
 
 public class NotificationUtils {
@@ -27,9 +29,19 @@ public class NotificationUtils {
         return pendingIntent;
     }
 
+    private static PendingIntent buildActionPendingIntent(Context context, int notificationId, @NonNull SleepEvent event) {
+        Intent intent = new Intent(context, TimerService.class);
+        intent.putExtra(ExtraConstants.EXTRA_EVENT, event);
+        PendingIntent pendingIntent = PendingIntent.getService(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return pendingIntent;
+    }
+
     public static NotificationCompat.Builder buildNotification(Context context, int notificationId, @NonNull SleepEvent event) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentIntent(buildPendingIntent(context, notificationId, event));
+        builder.setContentIntent(buildPendingIntent(context, notificationId, event))
+                .addAction(R.drawable.ic_action_stop_sleep_timer,
+                        context.getString(R.string.stop_sleep_timer),
+                        buildActionPendingIntent(context, notificationId, event));
         updateNotification(context, builder, event);
         return builder;
     }
@@ -41,7 +53,7 @@ public class NotificationUtils {
             contentTitle = context.getString(R.string.child_sleep, event.getChild().getName());
             contentText = TimeUtils.durationLong(context, event.getDateTime(), now);
         } else {
-            contentTitle = context.getString(R.string.timer_sleep);
+            contentTitle = context.getString(R.string.sleep_timer);
             String duration = TimeUtils.durationShort(context, now, event.getDateTime());
             contentText = context.getString(R.string.will_start, duration);
         }
