@@ -48,8 +48,8 @@ public class NotificationUtils {
 
     public static void updateNotification(Context context, NotificationCompat.Builder builder, @NonNull SleepEvent event) {
         String contentTitle, contentText;
-        DateTime now = DateTime.now();
-        if (now.isAfter(event.getDateTime())) {
+        DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
+        if (now.isAfter(event.getDateTime()) || now.isEqual(event.getDateTime())) {
             contentTitle = context.getString(R.string.child_sleep, event.getChild().getName());
             contentText = TimeUtils.durationLong(context, event.getDateTime(), now);
         } else {

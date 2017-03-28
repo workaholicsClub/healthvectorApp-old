@@ -91,7 +91,7 @@ public class TimerService extends Service {
         }
         SleepEvent.SleepEventBuilder builder = event.toBuilder();
         builder.isTimerStarted(false).build();
-        DateTime now = DateTime.now();
+        DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
         if (now.isAfter(event.getDateTime())) {
             builder.finishDateTime(now);
         } else {
