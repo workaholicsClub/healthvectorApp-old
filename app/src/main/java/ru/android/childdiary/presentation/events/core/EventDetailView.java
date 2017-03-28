@@ -15,6 +15,9 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showDefaultEventDetail(@NonNull T event);
 
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showNotifyTimeView(boolean visible);
+
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showEventDetail(@NonNull T event);
 

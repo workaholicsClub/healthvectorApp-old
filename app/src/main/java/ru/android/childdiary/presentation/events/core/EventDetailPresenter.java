@@ -30,6 +30,17 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     private boolean isSubscribedToEventDetails;
 
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+
+        unsubscribeOnDestroy(calendarInteractor.getDefaultNotifyTimeInMinutes(getEventType())
+                .map(defaultNotifyTime -> defaultNotifyTime > 0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showNotifyTimeView));
+    }
+
     @SuppressWarnings("unchecked")
     @CallSuper
     public void requestDefaultEventDetail(@NonNull EventType eventType) {
@@ -120,6 +131,8 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
             super.onUnexpectedError(e);
         }
     }
+
+    protected abstract EventType getEventType();
 
     protected void handleValidationResult(List<CalendarValidationResult> results) {
     }

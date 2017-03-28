@@ -6,6 +6,7 @@ import com.arellomobile.mvp.InjectViewState;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
@@ -63,5 +64,10 @@ public class FeedEventDetailPresenter extends EventDetailPresenter<FeedEventDeta
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(addedFood -> logger.debug("addFood: " + addedFood))
                 .subscribe(getViewState()::foodAdded, this::onUnexpectedError));
+    }
+
+    @Override
+    protected EventType getEventType() {
+        return EventType.FEED;
     }
 }

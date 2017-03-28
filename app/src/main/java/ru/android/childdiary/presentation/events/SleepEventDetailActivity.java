@@ -78,6 +78,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @BindView(R.id.buttonTimer)
     Button buttonTimer;
 
+    private boolean notifyTimeViewVisible;
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
@@ -205,6 +206,12 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
+    public void showNotifyTimeView(boolean visible) {
+        notifyTimeViewVisible = visible;
+        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
     protected SleepEvent buildEvent(SleepEvent event) {
         SleepEvent.SleepEventBuilder builder = event == null
                 ? SleepEvent.builder()
@@ -275,7 +282,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
-        notifyTimeView.setVisibility(visibility);
+        notifyTimeView.setVisibility(notifyTimeViewVisible ? visibility : View.GONE);
     }
 
     private void updateTimer(@NonNull SleepEvent event) {

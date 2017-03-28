@@ -87,7 +87,7 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.addFood(food);
     }
 
-    private Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
+    public Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
         switch (eventType) {
             case DIAPER:
                 return Observable.just(0);

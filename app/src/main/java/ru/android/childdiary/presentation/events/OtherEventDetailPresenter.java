@@ -9,6 +9,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
@@ -39,5 +40,10 @@ public class OtherEventDetailPresenter extends EventDetailPresenter<OtherEventDe
                     break;
             }
         }
+    }
+
+    @Override
+    protected EventType getEventType() {
+        return EventType.OTHER;
     }
 }
