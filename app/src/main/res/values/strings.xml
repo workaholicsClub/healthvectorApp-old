@@ -3,7 +3,7 @@
     <!-- file provider authorities -->
     <string name="file_provider_authorities" translatable="false">ru.android.childdiary</string>
     <!-- translatable strings -->
-    <string name="app_name">Развитие ребенка</string>
+    <string name="app_name">Вектор развития</string>
     <string name="drawer_item_calendar">Календарь</string>
     <string name="drawer_item_development_diary">Дневник развития</string>
     <string name="drawer_item_exercises">Занятия</string>
