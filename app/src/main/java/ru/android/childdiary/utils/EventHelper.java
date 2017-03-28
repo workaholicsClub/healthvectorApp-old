@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.joda.time.DateTime;
+
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
@@ -63,7 +65,11 @@ public class EventHelper {
             return StringUtils.breast(context, pumpEvent.getBreast());
         } else if (event instanceof SleepEvent) {
             SleepEvent sleepEvent = (SleepEvent) event;
-            return TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime());
+            if (EventHelper.isTimerStarted(sleepEvent)) {
+                return TimeUtils.timerString(context, event.getDateTime(), DateTime.now());
+            } else {
+                return TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime());
+            }
         }
         throw new IllegalStateException("Unknown event type");
     }

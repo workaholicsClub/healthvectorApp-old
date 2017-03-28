@@ -75,7 +75,7 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         this.eventActionListener = eventActionListener;
     }
 
-    public void bind(Context context, int position, Sex sex, MasterEvent event) {
+    public void bind(Context context, Sex sex, MasterEvent event) {
         this.event = event;
 
         //noinspection deprecation
@@ -106,6 +106,13 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         boolean isExpired = EventHelper.isExpired(event);
         int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
         textViewEventTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
+    }
+
+    public void updateDescription(Context context, MasterEvent event) {
+        EventType eventType = event.getEventType();
+        if (eventType != EventType.OTHER) {
+            textViewDescription.setText(EventHelper.getDescription(context, event));
+        }
     }
 
     private Drawable getEventViewBackgroundDrawable(@ColorInt int color) {

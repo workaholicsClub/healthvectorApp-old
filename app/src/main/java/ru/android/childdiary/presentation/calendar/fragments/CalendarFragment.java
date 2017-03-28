@@ -29,6 +29,7 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.CalendarView;
@@ -42,11 +43,13 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
+import ru.android.childdiary.services.TimerServiceConnection;
+import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
 
 public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> extends BaseMvpFragment<CalendarPresenter> implements CalendarView,
-        AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener {
+        AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener {
     @InjectPresenter
     CalendarPresenter presenter;
 
@@ -71,6 +74,7 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     private EventAdapter eventAdapter;
     private FabController fabController;
     private Sex sex;
+    private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(getContext(), this);
 
     @Override
     @Nullable
@@ -131,6 +135,24 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         if (context instanceof FabController) {
             fabController = (FabController) context;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        timerServiceConnection = new TimerServiceConnection(getContext(), this);
+        timerServiceConnection.open();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        timerServiceConnection.close();
+    }
+
+    @Override
+    public void onTimerTick(@NonNull SleepEvent event) {
+        eventAdapter.updateEvent(event);
     }
 
     @Override

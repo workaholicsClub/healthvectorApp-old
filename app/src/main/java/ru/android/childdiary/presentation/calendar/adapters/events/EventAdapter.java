@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.utils.EventHelper;
 
 public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implements EventViewHolder.SwipeActionListener {
     private final Context context;
@@ -32,7 +34,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
         this.inflater = LayoutInflater.from(context);
         this.eventActionListener = eventActionListener;
         this.swipeManager = new SwipeManager(fabController);
-        this.events = Collections.unmodifiableList(events);
+        this.events = new ArrayList<>(events);
     }
 
     public void setSex(@Nullable Sex sex) {
@@ -46,7 +48,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
         swipeManager.closeAllItems();
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new EventListDiff(this.events, events), false);
         diffResult.dispatchUpdatesTo(this);
-        this.events = Collections.unmodifiableList(events);
+        this.events = new ArrayList<>(events);
+    }
+
+    public void updateEvent(@NonNull MasterEvent event) {
+        for (int i = 0; i < events.size(); ++i) {
+            if (EventHelper.sameEvent(events.get(i), event)) {
+                events.set(i, event);
+                notifyItemChanged(i, new Object());
+            }
+        }
     }
 
     @Override
@@ -58,8 +69,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
 
     @Override
     public void onBindViewHolder(EventViewHolder viewHolder, int position) {
-        viewHolder.bind(context, position, sex, events.get(position));
+        viewHolder.bind(context, sex, events.get(position));
         swipeManager.bindViewHolder(viewHolder, position);
+    }
+
+    @Override
+    public void onBindViewHolder(EventViewHolder viewHolder, int position, List<Object> payloads) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(viewHolder, position);
+        } else {
+            viewHolder.updateDescription(context, events.get(position));
+        }
     }
 
     @Override
