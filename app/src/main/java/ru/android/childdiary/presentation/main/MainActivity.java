@@ -142,7 +142,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withNameShown(true)
                 .withTag(child)
                 .withIdentifier(mapToProfileId(child))
-                .withIcon(ResourcesUtils.getChildIcon(context, child));
+                .withIcon(ResourcesUtils.getChildIcon(context, child, true));
     }
 
     private static long mapToProfileId(@NonNull Child child) {
@@ -231,7 +231,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             hideToolbarLogo();
             setupToolbarTitle(R.string.app_name);
         } else {
-            setupToolbarLogo(ResourcesUtils.getChildIcon(this, child));
+            setupToolbarLogo(ResourcesUtils.getChildIcon(this, child, true));
             setupToolbarTitle(child.getName());
             if (accountHeader != null) {
                 accountHeader.setActiveProfile(mapToProfileId(child));

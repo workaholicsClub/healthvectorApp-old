@@ -17,9 +17,10 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class ResourcesUtils {
-    public static Drawable getChildIcon(Context context, @NonNull Child child) {
+    public static Drawable getChildIcon(Context context, @NonNull Child child, boolean toolbar) {
         if (child.getImageFileName() == null) {
-            return ContextCompat.getDrawable(context, R.drawable.child_profile_placeholder);
+            return ContextCompat.getDrawable(context,
+                    toolbar ? R.drawable.ic_placeholder_toolbar : R.drawable.ic_placeholder);
         }
         return Drawable.createFromPath(child.getImageFileName());
     }

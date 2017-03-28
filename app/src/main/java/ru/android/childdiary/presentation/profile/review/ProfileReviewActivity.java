@@ -88,7 +88,7 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     }
 
     private void setupViews(@NonNull Child child) {
-        imageViewPhoto.setImageDrawable(ResourcesUtils.getChildIcon(this, child));
+        imageViewPhoto.setImageDrawable(ResourcesUtils.getChildIcon(this, child, false));
 
         textViewName.setText(child.getName());
 
