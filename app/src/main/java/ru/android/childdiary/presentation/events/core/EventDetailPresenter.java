@@ -44,7 +44,8 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
         if (!isSubscribedToEventDetails) {
             unsubscribeOnDestroy(childInteractor.setActiveChild(masterEvent.getChild())
-                    .flatMap(child -> calendarInteractor.getEventDetail(masterEvent)
+                    .flatMap(child -> calendarInteractor.setSelectedDateObservable(masterEvent.getDateTime().toLocalDate()))
+                    .flatMap(date -> calendarInteractor.getEventDetail(masterEvent)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .doOnNext(event -> logger.debug("event details: " + event)))
