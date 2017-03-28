@@ -63,8 +63,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext(event -> logger.debug("event details: " + event))
-                    .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError))
-            ;
+                    .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
             isSubscribedToEventDetails = true;
         }
     }
