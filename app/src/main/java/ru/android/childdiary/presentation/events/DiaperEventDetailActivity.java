@@ -82,15 +82,15 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getDiaperEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getDiaperEventLogoRes(getSex()));
         setupToolbarTitle(R.string.event_diaper);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getDiaperEventLogoRes(sex));
-        diaperStateView.setSex(sex);
+        setupToolbarLogo(ResourcesUtils.getDiaperEventLogoRes(getSex()));
+        diaperStateView.setSex(getSex());
     }
 
     @Override

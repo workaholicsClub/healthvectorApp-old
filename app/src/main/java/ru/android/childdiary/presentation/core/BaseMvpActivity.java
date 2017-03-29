@@ -45,13 +45,15 @@ import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 @SuppressLint("Registered")
-public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseView {
+public abstract class BaseMvpActivity extends MvpAppCompatActivity implements BaseView {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @State
-    protected Sex sex;
+    @Nullable
+    @Getter(AccessLevel.PROTECTED)
+    Sex sex;
 
     @Nullable
     @BindView(R.id.toolbar)
@@ -138,7 +140,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     @CallSuper
     protected void themeChanged() {
-        logger.debug("setup theme");
+        logger.debug("setup theme: " + sex);
     }
 
     private void setupToolbarColor() {

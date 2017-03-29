@@ -28,7 +28,7 @@ import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresenter> implements ProfileReviewView {
+public class ProfileReviewActivity extends BaseMvpActivity implements ProfileReviewView {
     @InjectPresenter
     ProfileReviewPresenter presenter;
 
@@ -83,8 +83,8 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(sex));
-        buttonEdit.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(sex, true));
+        topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(getSex()));
+        buttonEdit.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
     private void setupViews(@NonNull Child child) {

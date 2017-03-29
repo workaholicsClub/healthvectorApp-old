@@ -11,7 +11,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.main.MainActivity;
 
-public class SplashActivity extends BaseMvpActivity<SplashPresenter> implements SplashView {
+public class SplashActivity extends BaseMvpActivity implements SplashView {
     @InjectPresenter
     SplashPresenter presenter;
 

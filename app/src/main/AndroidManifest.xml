@@ -33,13 +33,6 @@
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
-            android:name=".presentation.settings.SettingsActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.main.MainActivity" />
-        </activity>
-        <activity
             android:name=".presentation.profile.edit.ProfileEditActivity"
             android:parentActivityName=".presentation.main.MainActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">

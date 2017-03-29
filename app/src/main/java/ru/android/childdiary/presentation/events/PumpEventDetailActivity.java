@@ -87,15 +87,15 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(getSex()));
         setupToolbarTitle(R.string.event_pump);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(sex));
-        breastView.setSex(sex);
+        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(getSex()));
+        breastView.setSex(getSex());
     }
 
     @Override

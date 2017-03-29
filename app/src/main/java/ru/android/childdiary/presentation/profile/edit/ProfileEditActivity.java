@@ -62,7 +62,7 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> implements ProfileEditView,
+public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener,
         AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
@@ -179,8 +179,8 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(sex));
-        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
+        topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(getSex()));
+        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @Override
@@ -342,7 +342,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(false);
-        WidgetsUtils.setupDatePicker(this, dpd, sex);
+        WidgetsUtils.setupDatePicker(this, dpd, getSex());
         dpd.setMaxDate(Calendar.getInstance());
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
         hideKeyboardAndClearFocus(rootView.findFocus());
@@ -355,7 +355,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
         TimePickerDialog tpd = TimePickerDialog.newInstance(this,
                 time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
         tpd.vibrate(false);
-        WidgetsUtils.setupTimePicker(this, tpd, sex);
+        WidgetsUtils.setupTimePicker(this, tpd, getSex());
         tpd.show(getFragmentManager(), TAG_TIME_PICKER);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
@@ -406,7 +406,7 @@ public class ProfileEditActivity extends BaseMvpActivity<ProfileEditPresenter> i
     @Override
     public void setButtonDoneEnabled(boolean enabled) {
         isButtonDoneEnabled = enabled;
-        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(sex, isButtonDoneEnabled));
+        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @Override

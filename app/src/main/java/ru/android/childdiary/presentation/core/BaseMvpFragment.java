@@ -1,6 +1,8 @@
 package ru.android.childdiary.presentation.core;
 
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.compat.BuildConfig;
 import android.support.v7.app.AlertDialog;
@@ -18,20 +20,39 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import icepick.Icepick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCompatFragment implements BaseView {
+public abstract class BaseMvpFragment extends MvpAppCompatFragment implements BaseView {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private Unbinder unbinder;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        logger.debug("onCreate");
+        ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
+        injectFragment(component);
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Icepick.restoreInstanceState(this, savedInstanceState);
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public final View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        logger.debug("onCreateView");
+        init(savedInstanceState);
+        return inflater.inflate(getLayoutResourceId(), container, false);
     }
+
+    @CallSuper
+    protected void init(@Nullable Bundle savedInstanceState) {
+        Icepick.restoreInstanceState(this, savedInstanceState);
+    }
+
+    @LayoutRes
+    protected abstract int getLayoutResourceId();
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -48,6 +69,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        logger.debug("onDestroyView");
         unbinder.unbind();
     }
 
@@ -68,4 +90,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends MvpAppCom
 
     @Nullable
     protected abstract Sex getSex();
+
+    protected void injectFragment(ApplicationComponent component) {
+    }
 }

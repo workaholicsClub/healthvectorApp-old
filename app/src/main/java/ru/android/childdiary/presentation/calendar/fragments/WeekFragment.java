@@ -9,11 +9,11 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.calendar.adapters.calendar.WeekViewAdapter;
 import ru.android.childdiary.utils.DateUtils;
 
-public class WeekFragment extends CalendarFragment<WeekViewAdapter> {
+public class WeekFragment extends BaseCalendarFragment<WeekViewAdapter> {
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.fragment_week;
+        return R.layout.fragment_calendar_week;
     }
 
     @Override

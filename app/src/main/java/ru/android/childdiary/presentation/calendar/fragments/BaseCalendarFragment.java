@@ -2,16 +2,12 @@ package ru.android.childdiary.presentation.calendar.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -27,17 +23,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.calendar.CalendarPresenter;
-import ru.android.childdiary.presentation.calendar.CalendarView;
+import ru.android.childdiary.presentation.calendar.FabController;
 import ru.android.childdiary.presentation.calendar.adapters.calendar.CalendarViewAdapter;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
-import ru.android.childdiary.presentation.calendar.adapters.events.FabController;
-import ru.android.childdiary.presentation.core.BaseMvpFragment;
+import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
@@ -48,10 +41,10 @@ import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
 
-public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> extends BaseMvpFragment<CalendarPresenter> implements CalendarView,
+public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> extends AppPartitionFragment implements BaseCalendarView,
         AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener {
     @InjectPresenter
-    CalendarPresenter presenter;
+    BaseCalendarPresenter presenter;
 
     @Nullable
     @BindView(R.id.calendarHeader)
@@ -73,26 +66,11 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     @Getter
     private EventAdapter eventAdapter;
     private FabController fabController;
-    private Sex sex;
+
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(getContext(), this);
 
     @Override
-    @Nullable
-    protected Sex getSex() {
-        return sex;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutResourceId(), container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    protected void setupUi() {
         if (calendarHeader != null) {
             calendarTitle = ButterKnife.findById(calendarHeader, R.id.title);
             calendarHeader.findViewById(R.id.left).setOnClickListener(v -> moveLeft());
@@ -130,6 +108,13 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     }
 
     @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        calendarAdapter.setSex(getSex());
+        eventAdapter.setSex(getSex());
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof FabController) {
@@ -160,9 +145,6 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
         super.onDetach();
         fabController = null;
     }
-
-    @LayoutRes
-    protected abstract int getLayoutResourceId();
 
     protected abstract Adapter getCalendarViewAdapter();
 
@@ -212,16 +194,13 @@ public abstract class CalendarFragment<Adapter extends CalendarViewAdapter> exte
     }
 
     @Override
-    public void setActive(@NonNull Child child) {
-        logger.debug("setActive: " + child);
-        sex = child.getSex();
-        calendarAdapter.setSex(sex);
-        eventAdapter.setSex(sex);
+    public void showChild(@NonNull Child child) {
+        super.showChild(child);
         eventAdapter.getSwipeManager().setFabController(child.getId() == null ? null : fabController);
     }
 
     @Override
-    public void setSelected(@NonNull LocalDate date) {
+    public void setSelectedDate(@NonNull LocalDate date) {
         logger.debug("setSelected: " + date);
         calendarAdapter.setSelectedDate(date, false);
         updateCalendarTitle();

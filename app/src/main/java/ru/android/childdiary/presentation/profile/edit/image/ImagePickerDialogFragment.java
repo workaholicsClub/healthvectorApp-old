@@ -47,7 +47,9 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
 
     @Override
     @NonNull
-    public final Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        init(savedInstanceState);
+
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -62,7 +64,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
                 .titleResourceId(R.string.action_pick_image)
                 .iconResourceId(R.drawable.image_picker_action_pick_image)
                 .build());
-        if (child.getImageFileName() != null) {
+        if (getChild().getImageFileName() != null) {
             actions.add(ImagePickerAction.builder()
                     .type(ImagePickerActionType.DELETE)
                     .titleResourceId(R.string.action_delete_image)
@@ -200,7 +202,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         options.setCropGridRowCount(0);
         options.setShowCropFrame(false);
 
-        WidgetsUtils.setupCropActivityToolbar(getContext(), options, sex);
+        WidgetsUtils.setupCropActivityToolbar(getContext(), options, getSex());
 
         uCrop.withOptions(options);
 

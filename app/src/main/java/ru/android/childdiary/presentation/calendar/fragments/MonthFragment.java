@@ -7,11 +7,11 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.calendar.adapters.calendar.MonthViewAdapter;
 import ru.android.childdiary.utils.DateUtils;
 
-public class MonthFragment extends CalendarFragment<MonthViewAdapter> {
+public class MonthFragment extends BaseCalendarFragment<MonthViewAdapter> {
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.fragment_month;
+        return R.layout.fragment_calendar_month;
     }
 
     @Override

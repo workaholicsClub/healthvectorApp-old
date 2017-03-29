@@ -127,14 +127,14 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(getSex()));
         setupToolbarTitle(R.string.event_sleep);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(getSex()));
     }
 
     @Override
@@ -289,9 +289,9 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         if (EventHelper.isTimerStarted(event)) {
             String text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());
             buttonTimer.setText(text);
-            WidgetsUtils.setupTimer(this, buttonTimer, sex, true);
+            WidgetsUtils.setupTimer(this, buttonTimer, getSex(), true);
         } else {
-            WidgetsUtils.setupTimer(this, buttonTimer, sex, false);
+            WidgetsUtils.setupTimer(this, buttonTimer, getSex(), false);
         }
     }
 

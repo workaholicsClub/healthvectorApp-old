@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import lombok.Setter;
+import ru.android.childdiary.presentation.calendar.FabController;
 
 public class SwipeManager {
     private static final int INVALID_POSITION = -1;

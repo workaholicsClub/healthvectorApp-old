@@ -5,7 +5,10 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.di.modules.DataModule;
+import ru.android.childdiary.presentation.calendar.fragments.BaseCalendarPresenter;
+import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
+import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
@@ -16,13 +19,16 @@ import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailPresenter;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailPresenter;
+import ru.android.childdiary.presentation.exercises.ExercisesPresenter;
+import ru.android.childdiary.presentation.help.HelpPresenter;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.main.MainPresenter;
+import ru.android.childdiary.presentation.medical.MedicalDataPresenter;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditPresenter;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.presentation.profile.review.ProfileReviewPresenter;
-import ru.android.childdiary.presentation.settings.SettingsActivity;
+import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
@@ -36,13 +42,11 @@ public interface ApplicationComponent {
 
     void inject(MainPresenter presenter);
 
-    void inject(SettingsPresenter presenter);
-
     void inject(ProfileEditPresenter presenter);
 
     void inject(ProfileReviewPresenter presenter);
 
-    void inject(CalendarPresenter presenter);
+    void inject(BaseCalendarPresenter presenter);
 
     void inject(DiaperEventDetailPresenter presenter);
 
@@ -54,12 +58,24 @@ public interface ApplicationComponent {
 
     void inject(SleepEventDetailPresenter presenter);
 
+    void inject(CalendarPresenter presenter);
+
+    void inject(DevelopmentDiaryPresenter presenter);
+
+    void inject(ExercisesPresenter presenter);
+
+    void inject(MedicalDataPresenter presenter);
+
+    void inject(SettingsPresenter presenter);
+
+    void inject(HelpPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
     void inject(MainActivity activity);
 
-    void inject(SettingsActivity activity);
+    void inject(SettingsFragment activity);
 
     void inject(ProfileEditActivity activity);
 
@@ -74,6 +90,9 @@ public interface ApplicationComponent {
     void inject(PumpEventDetailActivity activity);
 
     void inject(SleepEventDetailActivity activity);
+
+    // fragments
+    void inject(CalendarFragment fragment);
 
     // services
     void inject(TimerService service);

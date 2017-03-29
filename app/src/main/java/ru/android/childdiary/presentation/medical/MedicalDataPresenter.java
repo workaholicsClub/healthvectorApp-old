@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.settings;
+package ru.android.childdiary.presentation.medical;
 
 import com.arellomobile.mvp.InjectViewState;
 
@@ -6,7 +6,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
 @InjectViewState
-public class SettingsPresenter extends AppPartitionPresenter<SettingsView> {
+public class MedicalDataPresenter extends AppPartitionPresenter<MedicalDataView> {
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);

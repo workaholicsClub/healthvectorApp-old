@@ -131,7 +131,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(sex, true));
+        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
     @OnClick(R.id.buttonDone)
@@ -258,7 +258,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(false);
-        WidgetsUtils.setupDatePicker(this, dpd, sex);
+        WidgetsUtils.setupDatePicker(this, dpd, getSex());
         if (minDate != null) {
             calendar = Calendar.getInstance();
             calendar.setTime(minDate.toDate());
@@ -291,7 +291,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         TimePickerDialog tpd = TimePickerDialog.newInstance(this,
                 time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
         tpd.vibrate(false);
-        WidgetsUtils.setupTimePicker(this, tpd, sex);
+        WidgetsUtils.setupTimePicker(this, tpd, getSex());
         tpd.show(getFragmentManager(), tag);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
