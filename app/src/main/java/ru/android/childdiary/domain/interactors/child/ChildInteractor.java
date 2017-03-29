@@ -35,13 +35,18 @@ public class ChildInteractor implements Interactor, ChildRepository {
         return childRepository.getActiveChild();
     }
 
+    @Override
+    public void setActiveChild(@NonNull Child child) {
+        childRepository.setActiveChild(child);
+    }
+
     public Observable<Child> getActiveChildOnce() {
         return childRepository.getActiveChild().first(Child.NULL).toObservable();
     }
 
     @Override
-    public Observable<Child> setActiveChild(@NonNull Child child) {
-        return childRepository.setActiveChild(child);
+    public Observable<Child> setActiveChildObservable(@NonNull Child child) {
+        return childRepository.setActiveChildObservable(child);
     }
 
     @Override
@@ -52,7 +57,7 @@ public class ChildInteractor implements Interactor, ChildRepository {
     public Observable<Child> add(@NonNull Child item) {
         return validate(item)
                 .flatMap(childRepository::add)
-                .flatMap(this::setActiveChild);
+                .flatMap(this::setActiveChildObservable);
     }
 
     public Observable<Child> update(@NonNull Child item) {

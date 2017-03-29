@@ -98,7 +98,6 @@ public class CalendarDbService {
                 // master event
                 MasterEventEntity.ID,
                 MasterEventEntity.EVENT_TYPE,
-                MasterEventEntity.DESCRIPTION,
                 MasterEventEntity.DATE_TIME,
                 MasterEventEntity.NOTIFY_TIME_IN_MINUTES,
                 MasterEventEntity.NOTE,

@@ -21,7 +21,6 @@ public class OtherEvent extends MasterEvent {
     @Builder(toBuilder = true)
     private OtherEvent(Long masterEventId,
                        EventType eventType,
-                       String description,
                        DateTime dateTime,
                        Integer notifyTimeInMinutes,
                        String note,
@@ -31,7 +30,7 @@ public class OtherEvent extends MasterEvent {
                        Long id,
                        String name,
                        DateTime finishDateTime) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.name = name;
         this.finishDateTime = finishDateTime;

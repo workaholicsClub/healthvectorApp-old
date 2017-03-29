@@ -1,10 +1,14 @@
 package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -14,6 +18,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
@@ -24,15 +29,22 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class CalendarDataRepository implements CalendarRepository {
+    private static final String KEY_LAST_FEED_TYPE = "last_feed_type";
+    private static final String KEY_LAST_FOOD_MEASURE_ID = "last_food_measure";
+    private static final String KEY_LAST_FOOD_ID = "last_food";
+
+    private final RxSharedPreferences preferences;
     private final CalendarDbService dbService;
     private final List<OnSelectedDateChangedListener> selectedDateChangedListeners = new ArrayList<>();
     private LocalDate selectedDate = LocalDate.now();
 
     @Inject
-    public CalendarDataRepository(CalendarDbService dbService) {
+    public CalendarDataRepository(RxSharedPreferences preferences, CalendarDbService dbService) {
+        this.preferences = preferences;
         this.dbService = dbService;
     }
 
@@ -54,12 +66,17 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
-    public Observable<LocalDate> setSelectedDate(@NonNull LocalDate date) {
+    public void setSelectedDate(@NonNull LocalDate date) {
+        selectedDate = date;
+        for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
+            listener.onSelectedDateChanged(date);
+        }
+    }
+
+    @Override
+    public Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date) {
         return Observable.fromCallable(() -> {
-            selectedDate = date;
-            for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
-                listener.onSelectedDateChanged(date);
-            }
+            setSelectedDate(date);
             return date;
         });
     }
@@ -82,6 +99,77 @@ public class CalendarDataRepository implements CalendarRepository {
     @Override
     public Observable<Food> addFood(@NonNull Food food) {
         return dbService.addFood(food);
+    }
+
+    @Override
+    public Observable<FeedType> getLastFeedType() {
+        return preferences
+                .getEnum(KEY_LAST_FEED_TYPE, FeedType.BREAST_MILK, FeedType.class)
+                .asObservable()
+                .first(FeedType.BREAST_MILK)
+                .toObservable();
+    }
+
+    @Override
+    public Observable<FoodMeasure> getLastFoodMeasure() {
+        return Observable.combineLatest(
+                getFoodMeasureList()
+                        .first(Collections.singletonList(FoodMeasure.NULL))
+                        .toObservable(),
+                preferences
+                        .getLong(KEY_LAST_FOOD_MEASURE_ID)
+                        .asObservable(),
+                this::getLastFoodMeasure)
+                .first(FoodMeasure.NULL)
+                .toObservable();
+    }
+
+    private FoodMeasure getLastFoodMeasure(@NonNull List<FoodMeasure> foodMeasureList, Long id) {
+        return Observable
+                .fromIterable(foodMeasureList)
+                .filter(food -> ObjectUtils.equals(food.getId(), id))
+                .first(foodMeasureList.get(0))
+                .blockingGet();
+    }
+
+    @Override
+    public Observable<Food> getLastFood() {
+        return Observable.combineLatest(
+                getFoodList()
+                        .first(Collections.singletonList(Food.NULL))
+                        .toObservable(),
+                preferences
+                        .getLong(KEY_LAST_FOOD_ID)
+                        .asObservable(),
+                this::getLastFood)
+                .first(Food.NULL)
+                .toObservable();
+    }
+
+    private Food getLastFood(@NonNull List<Food> foodList, Long id) {
+        return Observable
+                .fromIterable(foodList)
+                .filter(food -> ObjectUtils.equals(food.getId(), id))
+                .first(Food.NULL)
+                .blockingGet();
+    }
+
+    @Override
+    public FeedType setLastFeedType(@Nullable FeedType feedType) {
+        preferences.getEnum(KEY_LAST_FEED_TYPE, FeedType.BREAST_MILK, FeedType.class).set(feedType);
+        return feedType;
+    }
+
+    @Override
+    public FoodMeasure setLastFoodMeasure(@Nullable FoodMeasure foodMeasure) {
+        preferences.getLong(KEY_LAST_FOOD_MEASURE_ID).set(foodMeasure == null ? null : foodMeasure.getId());
+        return foodMeasure;
+    }
+
+    @Override
+    public Food setLastFood(@Nullable Food food) {
+        preferences.getLong(KEY_LAST_FOOD_ID).set(food == null ? null : food.getId());
+        return food;
     }
 
     @Override

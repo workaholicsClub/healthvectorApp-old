@@ -191,6 +191,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
+    public void showNotifyTimeView(boolean visible) {
+        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
     public void showFoodMeasureList(@NonNull List<FoodMeasure> foodMeasureList) {
         foodMeasureView.updateAdapter(foodMeasureList);
     }

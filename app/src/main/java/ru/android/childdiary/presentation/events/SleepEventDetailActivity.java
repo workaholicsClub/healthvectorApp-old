@@ -78,6 +78,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @BindView(R.id.buttonTimer)
     Button buttonTimer;
 
+    private boolean notifyTimeViewVisible;
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
@@ -160,7 +161,12 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         if (isTimerStarted) {
             builder.finishDateTime(null);
         } else {
-            builder.finishDateTime(DateTime.now());
+            DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
+            if (now.isAfter(event.getDateTime())) {
+                builder.finishDateTime(now);
+            } else {
+                builder.finishDateTime(null);
+            }
         }
 
         upsertEvent(builder.build(), false);
@@ -197,6 +203,12 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         noteView.setText(event.getNote());
         updateDuration();
         updateTimer(event);
+    }
+
+    @Override
+    public void showNotifyTimeView(boolean visible) {
+        notifyTimeViewVisible = visible;
+        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -270,7 +282,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
-        notifyTimeView.setVisibility(visibility);
+        notifyTimeView.setVisibility(notifyTimeViewVisible ? visibility : View.GONE);
     }
 
     private void updateTimer(@NonNull SleepEvent event) {

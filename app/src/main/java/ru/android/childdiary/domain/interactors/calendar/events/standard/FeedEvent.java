@@ -37,7 +37,6 @@ public class FeedEvent extends MasterEvent {
     @Builder(toBuilder = true)
     private FeedEvent(Long masterEventId,
                       EventType eventType,
-                      String description,
                       DateTime dateTime,
                       Integer notifyTimeInMinutes,
                       String note,
@@ -53,7 +52,7 @@ public class FeedEvent extends MasterEvent {
                       Double amountMl,
                       FoodMeasure foodMeasure,
                       Food food) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.feedType = feedType;
         this.breast = breast;

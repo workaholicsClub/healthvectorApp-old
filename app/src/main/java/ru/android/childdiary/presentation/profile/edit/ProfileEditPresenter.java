@@ -64,6 +64,9 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
     private void handleValidationResult(List<ChildValidationResult> results) {
         for (ChildValidationResult result : results) {
             boolean valid = result.isValid();
+            if (result.getFieldType() == null) {
+                return;
+            }
             switch (result.getFieldType()) {
                 case IMAGE:
                     // необязательное поле

@@ -20,20 +20,20 @@
 
         <com.mikepenz.materialdrawer.view.BezelImageView
             android:id="@+id/material_drawer_account_header_small_first"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:visibility="gone" />
 
         <com.mikepenz.materialdrawer.view.BezelImageView
             android:id="@+id/material_drawer_account_header_small_second"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:visibility="gone" />
 
         <com.mikepenz.materialdrawer.view.BezelImageView
             android:id="@+id/material_drawer_account_header_small_third"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:visibility="gone" />
 
         <com.mikepenz.materialdrawer.view.BezelImageView xmlns:app="http://schemas.android.com/apk/res-auto"

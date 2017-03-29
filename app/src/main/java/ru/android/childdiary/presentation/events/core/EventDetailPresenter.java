@@ -30,6 +30,17 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     private boolean isSubscribedToEventDetails;
 
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+
+        unsubscribeOnDestroy(calendarInteractor.getDefaultNotifyTimeInMinutes(getEventType())
+                .map(defaultNotifyTime -> defaultNotifyTime > 0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showNotifyTimeView));
+    }
+
     @SuppressWarnings("unchecked")
     @CallSuper
     public void requestDefaultEventDetail(@NonNull EventType eventType) {
@@ -43,11 +54,15 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     @SuppressWarnings("unchecked")
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
         if (!isSubscribedToEventDetails) {
-            unsubscribeOnDestroy(childInteractor.setActiveChild(masterEvent.getChild())
-                    .flatMap(child -> calendarInteractor.getEventDetail(masterEvent)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnNext(event -> logger.debug("event details: " + event)))
+            unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
+                    .map(event -> {
+                        childInteractor.setActiveChild(event.getChild());
+                        calendarInteractor.setSelectedDate(event.getDateTime().toLocalDate());
+                        return event;
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(event -> logger.debug("event details: " + event))
                     .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
             isSubscribedToEventDetails = true;
         }
@@ -104,13 +119,20 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 return;
             }
 
+            getViewState().validationFailed();
             String msg = Stream.of(results)
                     .filter(CalendarValidationResult::notValid)
                     .map(CalendarValidationResult::toString)
                     .findFirst().orElse(null);
             getViewState().showValidationErrorMessage(msg);
+            handleValidationResult(results);
         } else {
             super.onUnexpectedError(e);
         }
+    }
+
+    protected abstract EventType getEventType();
+
+    protected void handleValidationResult(List<CalendarValidationResult> results) {
     }
 }

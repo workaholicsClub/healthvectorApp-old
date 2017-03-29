@@ -24,7 +24,6 @@ public class PumpEvent extends MasterEvent {
     @Builder(toBuilder = true)
     private PumpEvent(Long masterEventId,
                       EventType eventType,
-                      String description,
                       DateTime dateTime,
                       Integer notifyTimeInMinutes,
                       String note,
@@ -35,7 +34,7 @@ public class PumpEvent extends MasterEvent {
                       Breast breast,
                       Double leftAmountMl,
                       Double rightAmountMl) {
-        super(masterEventId, eventType, description, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
         this.id = id;
         this.breast = breast;
         this.leftAmountMl = leftAmountMl;

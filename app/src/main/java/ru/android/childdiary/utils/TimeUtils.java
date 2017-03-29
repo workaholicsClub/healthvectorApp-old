@@ -210,14 +210,6 @@ public class TimeUtils {
         return minutes.getMinutes();
     }
 
-    public static boolean isBeforeOrEqualNow(@Nullable DateTime dateTime) {
-        if (dateTime == null) {
-            return false;
-        }
-        DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
-        return dateTime.isBefore(now) || dateTime.isEqual(now);
-    }
-
     public static boolean isStartTimeLessThanFinishTime(@Nullable DateTime start, @Nullable DateTime finish) {
         if (start == null || finish == null) {
             return false;

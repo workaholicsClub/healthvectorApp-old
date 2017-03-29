@@ -4,8 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.joda.time.DateTime;
+
+import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
+import ru.android.childdiary.domain.interactors.calendar.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -30,7 +34,7 @@ public class EventHelper {
     }
 
     public static boolean isExpired(@NonNull MasterEvent event) {
-        return TimeUtils.isBeforeOrEqualNow(event.getDateTime());
+        return event.getDateTime().isAfterNow();
     }
 
     public static boolean isTimerStarted(@Nullable SleepEvent event) {
@@ -46,8 +50,10 @@ public class EventHelper {
             FeedType feedType = feedEvent.getFeedType();
             if (feedType == BREAST_MILK) {
                 return StringUtils.breast(context, feedEvent.getBreast());
-            } else if (feedType == FOOD && feedEvent.getFood() != null) {
-                return feedEvent.getFood().getName();
+            } else if (feedType == FOOD) {
+                Food food = feedEvent.getFood();
+                return food == null || food.getName() == null
+                        ? context.getString(R.string.feed_type_food) : food.getName();
             } else {
                 return StringUtils.feedType(context, feedType);
             }
@@ -59,9 +65,13 @@ public class EventHelper {
             return StringUtils.breast(context, pumpEvent.getBreast());
         } else if (event instanceof SleepEvent) {
             SleepEvent sleepEvent = (SleepEvent) event;
-            return TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime());
+            if (EventHelper.isTimerStarted(sleepEvent)) {
+                return TimeUtils.timerString(context, event.getDateTime(), DateTime.now());
+            } else {
+                return TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime());
+            }
         }
-        return event.getDescription();
+        throw new IllegalStateException("Unknown event type");
     }
 
     public static boolean sameEvent(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {

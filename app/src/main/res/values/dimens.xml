@@ -43,10 +43,10 @@
     <dimen name="calendar_horizontal_spacing">1dp</dimen>
     <dimen name="calendar_vertical_spacing">1dp</dimen>
     <dimen name="calendar_cell_size">32dp</dimen>
-    <!-- calendar grid view height for month: 7 * 32dp + 6 * 1dp = 230dp -->
-    <dimen name="month_calendar_grid_view_height">230dp</dimen>
-    <!-- calendar grid view height for week: 2 * 32dp + 1 * 1dp = 65dp -->
-    <dimen name="week_calendar_grid_view_height">65dp</dimen>
+    <!-- calendar grid view height for month: 7 * 32dp + 6 * 1dp + 16dp = 246dp -->
+    <dimen name="month_calendar_grid_view_height">246dp</dimen>
+    <!-- calendar grid view height for week: 2 * 32dp + 1 * 1dp + 16dp = 81dp -->
+    <dimen name="week_calendar_grid_view_height">81dp</dimen>
     <!-- event row -->
     <dimen name="events_padding_vertical">16dp</dimen>
     <dimen name="event_row_height">42dp</dimen>

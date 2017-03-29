@@ -88,14 +88,14 @@ public class ProfileReviewActivity extends BaseMvpActivity<ProfileReviewPresente
     }
 
     private void setupViews(@NonNull Child child) {
-        imageViewPhoto.setImageDrawable(ResourcesUtils.getChildIcon(this, child));
+        imageViewPhoto.setImageDrawable(ResourcesUtils.getChildIcon(this, child, false));
 
         textViewName.setText(child.getName());
 
         textViewSex.setText(StringUtils.sex(this, child.getSex()));
 
-        textViewDate.setText(DateUtils.date(child.getBirthDate()));
-        textViewTime.setText(DateUtils.time(child.getBirthTime()));
+        textViewDate.setText(DateUtils.date(this, child.getBirthDate()));
+        textViewTime.setText(DateUtils.time(this, child.getBirthTime()));
 
         textViewBirthHeight.setText(DoubleUtils.heightReview(this, child.getBirthHeight()));
         textViewBirthWeight.setText(DoubleUtils.weightReview(this, child.getBirthWeight()));

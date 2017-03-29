@@ -11,30 +11,28 @@ import org.joda.time.format.DateTimeFormatter;
 import ru.android.childdiary.R;
 
 public class DateUtils {
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("dd.MM.yyyy");
-
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern("HH:mm");
-
     private static String[] nominativeMonthNames, genitiveMonthNames;
 
     @Nullable
-    public static String date(@Nullable LocalDate localDate) {
-        return date(localDate, null);
+    public static String date(Context context, @Nullable LocalDate localDate) {
+        return date(context, localDate, null);
     }
 
     @Nullable
-    public static String date(@Nullable LocalDate localDate, @Nullable String defaultValue) {
-        return localDate == null ? defaultValue : localDate.toString(DATE_FORMATTER);
+    public static String date(Context context, @Nullable LocalDate localDate, @Nullable String defaultValue) {
+        DateTimeFormatter formatter = getDateFormatter(context);
+        return localDate == null ? defaultValue : localDate.toString(formatter);
     }
 
     @Nullable
-    public static String time(@Nullable LocalTime localTime) {
-        return time(localTime, null);
+    public static String time(Context context, @Nullable LocalTime localTime) {
+        return time(context, localTime, null);
     }
 
     @Nullable
-    public static String time(@Nullable LocalTime localTime, @Nullable String defaultValue) {
-        return localTime == null ? defaultValue : localTime.toString(TIME_FORMATTER);
+    public static String time(Context context, @Nullable LocalTime localTime, @Nullable String defaultValue) {
+        DateTimeFormatter formatter = getTimeFormatter(context);
+        return localTime == null ? defaultValue : localTime.toString(formatter);
     }
 
     public static String monthNominativeName(Context context, int month) {
@@ -51,5 +49,15 @@ public class DateUtils {
             genitiveMonthNames = context.getResources().getStringArray(R.array.genitive_month_names);
         }
         return genitiveMonthNames[monthIndex];
+    }
+
+    private static DateTimeFormatter getDateFormatter(Context context) {
+        String pattern = context.getString(R.string.date_format);
+        return DateTimeFormat.forPattern(pattern);
+    }
+
+    private static DateTimeFormatter getTimeFormatter(Context context) {
+        String pattern = context.getString(R.string.time_format);
+        return DateTimeFormat.forPattern(pattern);
     }
 }

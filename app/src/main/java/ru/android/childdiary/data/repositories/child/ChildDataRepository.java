@@ -27,11 +27,17 @@ public class ChildDataRepository implements ChildRepository {
         this.dbService = dbService;
     }
 
+    @Override
     public Observable<Child> getActiveChild() {
         return Observable.combineLatest(
                 getAll(),
                 preferences.getLong(KEY_ACTIVE_CHILD_ID).asObservable(),
                 this::getActiveChild);
+    }
+
+    @Override
+    public void setActiveChild(@NonNull Child child) {
+        preferences.getLong(KEY_ACTIVE_CHILD_ID).set(child.getId());
     }
 
     private Child getActiveChild(@NonNull List<Child> childList, Long id) {
@@ -42,9 +48,10 @@ public class ChildDataRepository implements ChildRepository {
                 .blockingGet();
     }
 
-    public Observable<Child> setActiveChild(@NonNull Child child) {
+    @Override
+    public Observable<Child> setActiveChildObservable(@NonNull Child child) {
         return Observable.fromCallable(() -> {
-            preferences.getLong(KEY_ACTIVE_CHILD_ID).set(child.getId());
+            setActiveChild(child);
             return child;
         });
     }

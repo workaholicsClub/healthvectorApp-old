@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 
 public class DiaperEventValidator extends Validator<DiaperEvent, CalendarValidationResult> {
     private final Context context;

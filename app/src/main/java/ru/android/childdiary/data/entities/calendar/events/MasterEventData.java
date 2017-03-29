@@ -24,8 +24,6 @@ public interface MasterEventData {
 
     EventType getEventType();
 
-    String getDescription();
-
     DateTime getDateTime();
 
     Integer getNotifyTimeInMinutes();

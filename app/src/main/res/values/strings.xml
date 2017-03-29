@@ -3,7 +3,7 @@
     <!-- file provider authorities -->
     <string name="file_provider_authorities" translatable="false">ru.android.childdiary</string>
     <!-- translatable strings -->
-    <string name="app_name">Развитие ребенка</string>
+    <string name="app_name">Вектор развития</string>
     <string name="drawer_item_calendar">Календарь</string>
     <string name="drawer_item_development_diary">Дневник развития</string>
     <string name="drawer_item_exercises">Занятия</string>
@@ -116,6 +116,9 @@
     <string name="food_dialog_title">Введите наименование прикорма</string>
     <string name="duration_separator">:</string>
     <string name="child_sleep">%s спит</string>
+    <string name="sleep_timer">Таймер сна</string>
+    <string name="will_start">запустится через %s</string>
+    <string name="stop_sleep_timer">Остановить таймер сна</string>
     <string name="days_short">%d д.</string>
     <string name="hours_short">%d ч.</string>
     <string name="minutes_short">%d мин.</string>
@@ -126,6 +129,9 @@
     <string name="menu_title_delete">Удалить</string>
     <string name="event_is_done">Выполнено</string>
     <string name="event_is_not_done">Не выполнено</string>
+    <!-- TODO: pattern for English: "MMM d, yyyy" -->
+    <string name="date_format">d MMM yyyy</string>
+    <string name="time_format">HH:mm</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
