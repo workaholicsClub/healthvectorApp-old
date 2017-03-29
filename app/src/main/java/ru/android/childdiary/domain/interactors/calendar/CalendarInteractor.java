@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
+import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
@@ -39,20 +40,22 @@ import ru.android.childdiary.domain.interactors.calendar.validation.OtherEventVa
 import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.interactors.child.ChildRepository;
 
 public class CalendarInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final Context context;
-    private final CalendarDataRepository calendarRepository;
-    private final ChildInteractor childInteractor;
+    private final ChildRepository childRepository;
+    private final CalendarRepository calendarRepository;
 
     @Inject
-    public CalendarInteractor(Context context, CalendarDataRepository calendarRepository, ChildInteractor childInteractor) {
+    public CalendarInteractor(Context context,
+                              ChildDataRepository childRepository,
+                              CalendarDataRepository calendarRepository) {
         this.context = context;
+        this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
-        this.childInteractor = childInteractor;
     }
 
     public Observable<LocalDate> getSelectedDate() {
@@ -64,7 +67,7 @@ public class CalendarInteractor implements Interactor {
     }
 
     public Observable<LocalDate> getSelectedDateOnce() {
-        return calendarRepository.getSelectedDate().first(LocalDate.now()).toObservable();
+        return calendarRepository.getSelectedDateOnce();
     }
 
     public Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date) {
@@ -122,7 +125,7 @@ public class CalendarInteractor implements Interactor {
 
     private Observable<DiaperEvent> getDefaultDiaperEvent() {
         return Observable.combineLatest(
-                childInteractor.getActiveChildOnce(),
+                childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.DIAPER),
@@ -136,7 +139,7 @@ public class CalendarInteractor implements Interactor {
 
     private Observable<FeedEvent> getDefaultFeedEvent() {
         return Observable.combineLatest(
-                childInteractor.getActiveChildOnce(),
+                childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.FEED),
@@ -156,7 +159,7 @@ public class CalendarInteractor implements Interactor {
 
     private Observable<OtherEvent> getDefaultOtherEvent() {
         return Observable.combineLatest(
-                childInteractor.getActiveChildOnce(),
+                childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.OTHER),
@@ -169,7 +172,7 @@ public class CalendarInteractor implements Interactor {
 
     private Observable<PumpEvent> getDefaultPumpEvent() {
         return Observable.combineLatest(
-                childInteractor.getActiveChildOnce(),
+                childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.PUMP),
@@ -183,7 +186,7 @@ public class CalendarInteractor implements Interactor {
 
     private Observable<SleepEvent> getDefaultSleepEvent() {
         return Observable.combineLatest(
-                childInteractor.getActiveChildOnce(),
+                childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
                 getDefaultNotifyTimeInMinutes(EventType.SLEEP),

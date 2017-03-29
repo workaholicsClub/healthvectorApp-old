@@ -74,6 +74,11 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
+    public Observable<LocalDate> getSelectedDateOnce() {
+        return getSelectedDate().first(LocalDate.now()).toObservable();
+    }
+
+    @Override
     public Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date) {
         return Observable.fromCallable(() -> {
             setSelectedDate(date);
@@ -257,12 +262,20 @@ public class CalendarDataRepository implements CalendarRepository {
         return dbService.update(event);
     }
 
+    @Override
     public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
         return dbService.delete(event);
     }
 
+    @Override
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         return dbService.done(event);
+    }
+
+    @Override
+    public SleepEvent stopTimer(@NonNull SleepEvent event) {
+        event = event.toBuilder().isTimerStarted(false).build();
+        return dbService.updateSleepEvent(event);
     }
 
     private interface OnSelectedDateChangedListener {

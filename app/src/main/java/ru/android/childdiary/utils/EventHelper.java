@@ -16,6 +16,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 import static ru.android.childdiary.data.types.FeedType.BREAST_MILK;
 import static ru.android.childdiary.data.types.FeedType.FOOD;
@@ -34,7 +35,8 @@ public class EventHelper {
     }
 
     public static boolean isExpired(@NonNull MasterEvent event) {
-        return event.getDateTime().isAfterNow();
+        DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
+        return now.isAfter(event.getDateTime());
     }
 
     public static boolean isTimerStarted(@Nullable SleepEvent event) {
@@ -83,5 +85,10 @@ public class EventHelper {
         return event1 != null && event2 != null
                 && event1.getChild() != null && event2.getChild() != null
                 && ObjectUtils.equals(event1.getChild().getId(), event2.getChild().getId());
+    }
+
+    public static boolean sameChild(@Nullable Child child, @Nullable MasterEvent event) {
+        return child != null && event != null && event.getChild() != null
+                && ObjectUtils.equals(child.getId(), event.getChild().getId());
     }
 }
