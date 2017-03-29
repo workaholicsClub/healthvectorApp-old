@@ -7,26 +7,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.domain.core.Interactor;
+import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
+import ru.android.childdiary.utils.EventHelper;
 
 public class ChildInteractor implements Interactor, ChildRepository {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
-    private final ChildDataRepository childRepository;
+    private final ChildRepository childRepository;
+    private final CalendarRepository calendarRepository;
     private final ChildValidator childValidator;
 
     @Inject
-    public ChildInteractor(ChildDataRepository childRepository, ChildValidator childValidator) {
+    public ChildInteractor(ChildDataRepository childRepository,
+                           CalendarDataRepository calendarRepository,
+                           ChildValidator childValidator) {
         this.childRepository = childRepository;
+        this.calendarRepository = calendarRepository;
         this.childValidator = childValidator;
     }
 
@@ -40,8 +48,9 @@ public class ChildInteractor implements Interactor, ChildRepository {
         childRepository.setActiveChild(child);
     }
 
+    @Override
     public Observable<Child> getActiveChildOnce() {
-        return childRepository.getActiveChild().first(Child.NULL).toObservable();
+        return childRepository.getActiveChildOnce();
     }
 
     @Override
@@ -65,10 +74,27 @@ public class ChildInteractor implements Interactor, ChildRepository {
                 .flatMap(childRepository::update);
     }
 
-    public Observable<Child> delete(@NonNull Child item) {
-        return childRepository.delete(item)
-                .doOnNext(child -> {
-                    String path = child.getImageFileName();
+    public Observable<Child> delete(@NonNull Child child) {
+        return stopSleepTimers(child)
+                .flatMap(this::deleteInternal);
+    }
+
+    private Observable<Child> stopSleepTimers(@NonNull Child child) {
+        return calendarRepository.getSleepEventsWithTimer()
+                .first(Collections.emptyList())
+                .flatMapObservable(Observable::fromIterable)
+                .filter(event -> EventHelper.sameChild(child, event))
+                .map(calendarRepository::stopTimer)
+                .count()
+                .toObservable()
+                .doOnNext(count -> logger.debug("stopped sleep timers count: " + count))
+                .map(count -> child);
+    }
+
+    private Observable<Child> deleteInternal(@NonNull Child child) {
+        return childRepository.delete(child)
+                .doOnNext(deletedChild -> {
+                    String path = deletedChild.getImageFileName();
                     if (path != null) {
                         boolean result = new File(path).delete();
                         if (result) {

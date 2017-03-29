@@ -23,6 +23,8 @@ public interface CalendarRepository extends Repository {
 
     void setSelectedDate(@NonNull LocalDate date);
 
+    Observable<LocalDate> getSelectedDateOnce();
+
     Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date);
 
     Observable<List<FoodMeasure>> getFoodMeasureList();
@@ -82,4 +84,6 @@ public interface CalendarRepository extends Repository {
     Observable<MasterEvent> delete(@NonNull MasterEvent event);
 
     Observable<MasterEvent> done(@NonNull MasterEvent event);
+
+    SleepEvent stopTimer(@NonNull SleepEvent event);
 }

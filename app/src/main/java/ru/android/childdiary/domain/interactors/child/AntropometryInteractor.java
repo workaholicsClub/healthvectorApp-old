@@ -11,7 +11,7 @@ import ru.android.childdiary.data.repositories.child.AntropometryDataRepository;
 import ru.android.childdiary.domain.core.Interactor;
 
 public class AntropometryInteractor implements Interactor, AntropometryRepository {
-    private final AntropometryDataRepository antropometryRepository;
+    private final AntropometryRepository antropometryRepository;
 
     @Inject
     public AntropometryInteractor(AntropometryDataRepository antropometryRepository) {

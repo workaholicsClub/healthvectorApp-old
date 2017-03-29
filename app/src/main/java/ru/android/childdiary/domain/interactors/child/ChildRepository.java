@@ -12,6 +12,8 @@ public interface ChildRepository extends Repository {
 
     void setActiveChild(@NonNull Child child);
 
+    Observable<Child> getActiveChildOnce();
+
     Observable<Child> setActiveChildObservable(@NonNull Child child);
 
     Observable<List<Child>> getAll();

@@ -49,6 +49,11 @@ public class ChildDataRepository implements ChildRepository {
     }
 
     @Override
+    public Observable<Child> getActiveChildOnce() {
+        return getActiveChild().first(Child.NULL).toObservable();
+    }
+
+    @Override
     public Observable<Child> setActiveChildObservable(@NonNull Child child) {
         return Observable.fromCallable(() -> {
             setActiveChild(child);
