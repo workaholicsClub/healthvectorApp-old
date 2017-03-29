@@ -534,7 +534,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_filter:
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
