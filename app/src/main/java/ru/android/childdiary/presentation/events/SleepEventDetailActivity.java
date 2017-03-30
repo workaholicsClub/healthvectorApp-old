@@ -208,7 +208,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     public void showNotifyTimeView(boolean visible) {
         notifyTimeViewVisible = visible;
-        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
+        notifyTimeView.setVisibility(visible ? visibility : View.GONE);
     }
 
     @Override
