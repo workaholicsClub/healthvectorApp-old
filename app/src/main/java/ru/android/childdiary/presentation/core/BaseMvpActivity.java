@@ -147,9 +147,9 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         logger.debug("setup toolbar color");
         if (toolbar != null) {
             toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
+            }
         }
     }
 

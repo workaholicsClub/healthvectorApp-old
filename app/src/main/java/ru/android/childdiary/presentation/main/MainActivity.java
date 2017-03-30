@@ -64,7 +64,6 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MainActivity extends BaseMvpActivity implements MainView,
         Drawer.OnDrawerItemClickListener,
-        Drawer.OnDrawerListener,
         AccountHeader.OnAccountHeaderProfileImageListener,
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
@@ -113,6 +112,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     private DrawerBuilder drawerBuilder;
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
+    private AppPartition selectedPartition;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -146,7 +146,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buildUi();
-        drawer.setSelectionAtPosition(1, true);
     }
 
     @Override
@@ -218,6 +217,9 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 accountHeader.setActiveProfile(mapToProfileId(child));
             }
         }
+        if (selectedPartition == null) {
+            drawer.setSelectionAtPosition(1, true);
+        }
     }
 
     @Override
@@ -251,35 +253,37 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public void navigateToCalendar(@NonNull Child child) {
-        openAppPartition(child, new CalendarFragment());
+        openAppPartition(AppPartition.CALENDAR, child, new CalendarFragment());
     }
 
     @Override
     public void navigateToDevelopmentDiary(@NonNull Child child) {
-        openAppPartition(child, new DevelopmentDiaryFragment());
+        openAppPartition(AppPartition.DEVELOPMENT_DIARY, child, new DevelopmentDiaryFragment());
     }
 
     @Override
     public void navigateToExercises(@NonNull Child child) {
-        openAppPartition(child, new ExercisesFragment());
+        openAppPartition(AppPartition.EXERCISES, child, new ExercisesFragment());
     }
 
     @Override
     public void navigateToMedicalData(@NonNull Child child) {
-        openAppPartition(child, new MedicalDataFragment());
+        openAppPartition(AppPartition.MEDICAL_DATA, child, new MedicalDataFragment());
     }
 
     @Override
     public void navigateToSettings(@NonNull Child child) {
-        openAppPartition(child, new SettingsFragment());
+        openAppPartition(AppPartition.SETTINGS, child, new SettingsFragment());
     }
 
     @Override
     public void navigateToHelp(@NonNull Child child) {
-        openAppPartition(child, new HelpFragment());
+        openAppPartition(AppPartition.HELP, child, new HelpFragment());
     }
 
-    private void openAppPartition(@NonNull Child child, Fragment fragment) {
+    private void openAppPartition(AppPartition appPartition, @NonNull Child child, Fragment fragment) {
+        selectedPartition = appPartition;
+
         Bundle arguments = new Bundle();
         arguments.putSerializable(ExtraConstants.EXTRA_CHILD, child);
         fragment.setArguments(arguments);
@@ -288,6 +292,10 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         ft.setTransition(FragmentTransaction.TRANSIT_UNSET);
         ft.replace(R.id.mainContent, fragment);
         ft.commit();
+
+        invalidateOptionsMenu();
+
+        closeDrawer();
     }
 
     @Override
@@ -368,40 +376,31 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
         AppPartition tag = (AppPartition) drawerItem.getTag();
+        if (selectedPartition == tag) {
+            return false;
+        }
         switch (tag) {
             case CALENDAR:
                 presenter.openCalendar();
-                return false;
+                return true;
             case DEVELOPMENT_DIARY:
-                presenter.openDevelopmentDiary();
-                return false;
+                //presenter.openDevelopmentDiary();
+                return true;
             case EXERCISES:
-                presenter.openExercises();
-                return false;
+                //presenter.openExercises();
+                return true;
             case MEDICAL_DATA:
-                presenter.openMedicalData();
-                return false;
+                //presenter.openMedicalData();
+                return true;
             case SETTINGS:
-                presenter.openSettings();
-                return false;
+                //presenter.openSettings();
+                return true;
             case HELP:
-                presenter.openHelp();
-                return false;
+                //presenter.openHelp();
+                return true;
             default:
                 return false;
         }
-    }
-
-    @Override
-    public void onDrawerOpened(View drawerView) {
-    }
-
-    @Override
-    public void onDrawerClosed(View drawerView) {
-    }
-
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
     }
 
     private void buildUi() {
@@ -442,7 +441,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .withActivity(this)
                 .withToolbar(getToolbar())
                 .withAccountHeader(accountHeader)
-                .withOnDrawerListener(this)
                 .addDrawerItems(drawerItems);
         drawer = drawerBuilder.build();
     }
@@ -483,16 +481,21 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
+        if (selectedPartition == AppPartition.CALENDAR) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.main, menu);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_filter:
-                return true;
+        if (selectedPartition == AppPartition.CALENDAR) {
+            switch (item.getItemId()) {
+                case R.id.menu_filter:
+                    return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }

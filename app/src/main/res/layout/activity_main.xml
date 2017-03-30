@@ -3,18 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <FrameLayout
+        android:id="@+id/toolbarWrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        android:layout_height="wrap_content">
 
         <include layout="@layout/toolbar" />
-    </android.support.design.widget.AppBarLayout>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/mainContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/appBarLayout" />
+        android:layout_below="@+id/toolbarWrapper" />
 </RelativeLayout>
