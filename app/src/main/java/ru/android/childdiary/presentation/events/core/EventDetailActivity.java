@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +36,8 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
+import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
@@ -46,7 +47,6 @@ import ru.android.childdiary.presentation.events.widgets.ReadOnlyView;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
-import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
@@ -249,26 +249,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     protected void showDatePicker(String tag, @Nullable LocalDate date,
                                   @Nullable LocalDate minDate, @Nullable LocalDate maxDate) {
-        Calendar calendar = Calendar.getInstance();
-        if (date != null) {
-            calendar.setTime(date.toDate());
-        }
-        DatePickerDialog dpd = DatePickerDialog.newInstance(this,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
-        dpd.vibrate(false);
-        WidgetsUtils.setupDatePicker(this, dpd, getSex());
-        if (minDate != null) {
-            calendar = Calendar.getInstance();
-            calendar.setTime(minDate.toDate());
-            dpd.setMinDate(calendar);
-        }
-        if (maxDate != null) {
-            calendar = Calendar.getInstance();
-            calendar.setTime(maxDate.toDate());
-            dpd.setMaxDate(calendar);
-        }
+        DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, date, getSex(),
+                minDate, maxDate);
         dpd.show(getFragmentManager(), tag);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
@@ -285,13 +267,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected void showTimePicker(String tag, @Nullable LocalTime time) {
-        if (time == null) {
-            time = LocalTime.now();
-        }
-        TimePickerDialog tpd = TimePickerDialog.newInstance(this,
-                time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
-        tpd.vibrate(false);
-        WidgetsUtils.setupTimePicker(this, tpd, getSex());
+        TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, time, getSex());
         tpd.show(getFragmentManager(), tag);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }

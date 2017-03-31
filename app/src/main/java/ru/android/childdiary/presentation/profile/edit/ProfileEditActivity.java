@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.InputFilter;
-import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +51,7 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
 import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
@@ -334,17 +334,8 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     @OnClick(R.id.textViewDateWrapper)
     void onDateClick() {
         LocalDate birthDate = editedChild.getBirthDate();
-        Calendar calendar = Calendar.getInstance();
-        if (birthDate != null) {
-            calendar.setTime(birthDate.toDate());
-        }
-        DatePickerDialog dpd = CustomDatePickerDialog.newInstance(this,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
-        dpd.vibrate(false);
-        WidgetsUtils.setupDatePicker(this, dpd, getSex());
-        dpd.setMaxDate(Calendar.getInstance());
+        DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, birthDate, getSex(),
+                null, LocalDate.now());
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
@@ -352,11 +343,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     @OnClick(R.id.textViewTimeWrapper)
     void onTimeClick() {
         LocalTime birthTime = editedChild.getBirthTime();
-        LocalTime time = birthTime == null ? LocalTime.now() : birthTime;
-        TimePickerDialog tpd = TimePickerDialog.newInstance(this,
-                time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
-        tpd.vibrate(false);
-        WidgetsUtils.setupTimePicker(this, tpd, getSex());
+        TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, birthTime, getSex());
         tpd.show(getFragmentManager(), TAG_TIME_PICKER);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }

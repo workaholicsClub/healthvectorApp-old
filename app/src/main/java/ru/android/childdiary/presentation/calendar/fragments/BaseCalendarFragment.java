@@ -40,7 +40,6 @@ import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
-import ru.android.childdiary.utils.ui.FontUtils;
 
 public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> extends AppPartitionFragment implements BaseCalendarView,
         AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener {
@@ -74,14 +73,12 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     protected void setupUi() {
         if (calendarHeader != null) {
             calendarTitle = ButterKnife.findById(calendarHeader, R.id.title);
-            calendarTitle.setTypeface(FontUtils.getTypefaceBold(getContext()));
             calendarHeader.findViewById(R.id.left).setOnClickListener(v -> moveLeft());
             calendarHeader.findViewById(R.id.right).setOnClickListener(v -> moveRight());
             calendarHeader.findViewById(R.id.today).setOnClickListener(v -> moveToday());
         }
 
         eventsTitle = ButterKnife.findById(eventsHeader, R.id.title);
-        eventsTitle.setTypeface(FontUtils.getTypefaceBold(getContext()));
         if (showEventsHeaderNavigationButtons()) {
             eventsHeader.findViewById(R.id.left).setOnClickListener(v -> moveLeft());
             eventsHeader.findViewById(R.id.right).setOnClickListener(v -> moveRight());

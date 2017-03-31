@@ -43,7 +43,6 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ui.ConfigUtils;
-import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -121,7 +120,6 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         toolbarLogo.setVisibility(View.GONE);
         toolbarTitle = ButterKnife.findById(toolbar, R.id.toolbarTitle);
         toolbarTitle.setText(R.string.app_name);
-        toolbarTitle.setTypeface(FontUtils.getTypefaceBold(this));
     }
 
     protected final void setupToolbarLogo(@NonNull Drawable drawable) {

@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.yalantis.ucrop.UCrop;
 
 import ru.android.childdiary.R;
@@ -29,38 +27,6 @@ public class WidgetsUtils {
         options.setToolbarColor(ThemeUtils.getColorPrimary(context, sex));
         options.setStatusBarColor(ThemeUtils.getColorPrimaryDark(context, sex));
         options.setToolbarTitle(context.getString(R.string.crop_image_title));
-    }
-
-    public static void setupDatePicker(Context context, DatePickerDialog dpd, @Nullable Sex sex) {
-        dpd.setVersion(DatePickerDialog.Version.VERSION_2);
-        dpd.setAccentColor(ThemeUtils.getColorPrimary(context, sex));
-    }
-
-    public static void setupDatePickerAfterShow(Context context, View view) {
-        View viewOk = view.findViewById(R.id.ok);
-        if (viewOk != null && viewOk instanceof Button) {
-            ((Button) viewOk).setTypeface(FontUtils.getTypefaceRegular(context));
-        }
-        View viewCancel = view.findViewById(R.id.cancel);
-        if (viewCancel != null && viewCancel instanceof Button) {
-            ((Button) viewCancel).setTypeface(FontUtils.getTypefaceRegular(context));
-        }
-    }
-
-    public static void setupTimePicker(Context context, TimePickerDialog tpd, @Nullable Sex sex) {
-        tpd.setVersion(TimePickerDialog.Version.VERSION_2);
-        tpd.setAccentColor(ThemeUtils.getColorPrimary(context, sex));
-    }
-
-    public static void setupTimePickerAfterShow(Context context, View view) {
-        View viewOk = view.findViewById(R.id.ok);
-        if (viewOk != null && viewOk instanceof Button) {
-            ((Button) viewOk).setTypeface(FontUtils.getTypefaceRegular(context));
-        }
-        View viewCancel = view.findViewById(R.id.cancel);
-        if (viewCancel != null && viewCancel instanceof Button) {
-            ((Button) viewCancel).setTypeface(FontUtils.getTypefaceRegular(context));
-        }
     }
 
     public static void setupTimer(Context context, Button buttonTimer, @Nullable Sex sex, boolean on) {

@@ -26,7 +26,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.StringUtils;
-import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -107,10 +106,6 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         boolean isExpired = EventHelper.isExpired(event);
         int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
         textViewTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
-
-        textViewTime.setTypeface(FontUtils.getTypefaceBold(context));
-        textViewTitle.setTypeface(FontUtils.getTypefaceBold(context));
-        textViewDescription.setTypeface(FontUtils.getTypefaceRegular(context));
     }
 
     public void updateDescription(Context context, MasterEvent event) {

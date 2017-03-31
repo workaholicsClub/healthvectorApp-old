@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.ui.ConfigUtils;
-import ru.android.childdiary.utils.ui.FontUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class CropActivity extends UCropActivity {
@@ -57,7 +56,6 @@ public class CropActivity extends UCropActivity {
         toolbarTitle.setText(R.string.crop_image_title);
         //noinspection deprecation
         toolbarTitle.setTextAppearance(this, R.style.ToolbarTitleTextAppearance);
-        toolbarTitle.setTypeface(FontUtils.getTypefaceBold(this));
 
         toolbar.setContentInsetStartWithNavigation(0);
         Toolbar.LayoutParams params = (Toolbar.LayoutParams) toolbarTitle.getLayoutParams();
