@@ -31,6 +31,7 @@ import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.utils.ui.ThemeUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class CalendarFragment extends AppPartitionFragment implements CalendarView,
         FabController {
@@ -80,6 +81,7 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
         viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+        WidgetsUtils.setupTabLayoutFont(tabLayout);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

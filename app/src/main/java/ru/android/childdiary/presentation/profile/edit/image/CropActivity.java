@@ -1,7 +1,7 @@
 package ru.android.childdiary.presentation.profile.edit.image;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +19,8 @@ import java.lang.reflect.Method;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.ui.ConfigUtils;
+import ru.android.childdiary.utils.ui.FontUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class CropActivity extends UCropActivity {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -38,6 +40,11 @@ public class CropActivity extends UCropActivity {
     }
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         ConfigUtils.setupOrientation(this);
         super.onCreate(savedInstanceState);
@@ -46,16 +53,10 @@ public class CropActivity extends UCropActivity {
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
 
         final TextView toolbarTitle = ButterKnife.findById(this, com.yalantis.ucrop.R.id.toolbar_title);
-        toolbarTitle.setText(null);
-
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle(R.string.crop_image_title);
-        }
-
-        toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance);
-        toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleTextAppearance);
+        toolbarTitle.setText(R.string.crop_image_title);
+        //noinspection deprecation
+        toolbarTitle.setTextAppearance(this, R.style.ToolbarTitleTextAppearance);
+        toolbarTitle.setTypeface(FontUtils.getTypefaceBold(this));
 
         try {
             rotateByAngle = UCropActivity.class.getDeclaredMethod("rotateByAngle", int.class);

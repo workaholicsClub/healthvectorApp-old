@@ -26,6 +26,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -49,7 +50,7 @@ class EventViewHolder extends RecyclerView.ViewHolder {
     TextView textViewTime;
 
     @BindView(R.id.textViewEventTitle)
-    TextView textViewEventTitle;
+    TextView textViewTitle;
 
     @BindView(R.id.textViewDescription)
     TextView textViewDescription;
@@ -88,10 +89,10 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         textViewTime.setText(DateUtils.time(context, event.getDateTime().toLocalTime()));
         EventType eventType = event.getEventType();
         if (eventType == EventType.OTHER) {
-            textViewEventTitle.setText(EventHelper.getDescription(context, event));
+            textViewTitle.setText(EventHelper.getDescription(context, event));
             textViewDescription.setText(null);
         } else {
-            textViewEventTitle.setText(StringUtils.eventType(context, eventType));
+            textViewTitle.setText(StringUtils.eventType(context, eventType));
             textViewDescription.setText(EventHelper.getDescription(context, event));
         }
 
@@ -105,7 +106,11 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         boolean isDone = EventHelper.isDone(event);
         boolean isExpired = EventHelper.isExpired(event);
         int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
-        textViewEventTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
+        textViewTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
+
+        textViewTime.setTypeface(FontUtils.getTypefaceBold(context));
+        textViewTitle.setTypeface(FontUtils.getTypefaceBold(context));
+        textViewDescription.setTypeface(FontUtils.getTypefaceRegular(context));
     }
 
     public void updateDescription(Context context, MasterEvent event) {

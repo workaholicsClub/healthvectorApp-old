@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -16,9 +17,11 @@ import butterknife.ButterKnife;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayout implements View.OnClickListener, ReadOnlyView {
+    private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
     private final List<View> items = new ArrayList<>();
     private final List<TextView> texts = new ArrayList<>();
     private final List<ImageView> radios = new ArrayList<>();
@@ -93,6 +96,7 @@ public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayo
             boolean enabled = value == selected || !isReadOnly;
             //noinspection deprecation
             texts.get(i).setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
+            texts.get(i).setTypeface(typeface);
             ++i;
         }
     }
@@ -107,6 +111,7 @@ public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayo
             boolean enabled = value == selected || !readOnly;
             //noinspection deprecation
             texts.get(i).setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
+            texts.get(i).setTypeface(typeface);
             ++i;
         }
     }

@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -42,7 +43,9 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ui.ConfigUtils;
+import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 @SuppressLint("Registered")
 public abstract class BaseMvpActivity extends MvpAppCompatActivity implements BaseView {
@@ -69,6 +72,11 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
     }
 
     protected abstract void injectActivity(ApplicationComponent applicationComponent);
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +121,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         toolbarLogo.setVisibility(View.GONE);
         toolbarTitle = ButterKnife.findById(toolbar, R.id.toolbarTitle);
         toolbarTitle.setText(R.string.app_name);
+        toolbarTitle.setTypeface(FontUtils.getTypefaceBold(this));
     }
 
     protected final void setupToolbarLogo(@NonNull Drawable drawable) {

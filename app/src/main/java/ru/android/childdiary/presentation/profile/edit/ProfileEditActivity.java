@@ -50,6 +50,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
@@ -337,7 +338,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         if (birthDate != null) {
             calendar.setTime(birthDate.toDate());
         }
-        DatePickerDialog dpd = DatePickerDialog.newInstance(this,
+        DatePickerDialog dpd = CustomDatePickerDialog.newInstance(this,
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
