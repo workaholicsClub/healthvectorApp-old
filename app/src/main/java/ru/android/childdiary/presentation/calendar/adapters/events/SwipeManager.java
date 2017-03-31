@@ -8,14 +8,12 @@ import com.daimajia.swipe.SwipeLayout;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Setter;
 import ru.android.childdiary.presentation.calendar.FabController;
 
 public class SwipeManager {
     private static final int INVALID_POSITION = -1;
     private final Set<SwipeLayout> shownLayouts = new HashSet<>();
     private final Set<Integer> openedOrOpeningPositions = new HashSet<>();
-    @Setter
     private FabController fabController;
     private int openPosition = INVALID_POSITION;
 
@@ -59,8 +57,9 @@ public class SwipeManager {
         showFabIfPossible();
     }
 
-    private boolean hasOpenedItems() {
-        return !openedOrOpeningPositions.isEmpty();
+    public void setFabController(FabController fabController) {
+        this.fabController = fabController;
+        update();
     }
 
     public void update() {
@@ -69,6 +68,10 @@ public class SwipeManager {
         } else {
             showFabIfPossible();
         }
+    }
+
+    private boolean hasOpenedItems() {
+        return !openedOrOpeningPositions.isEmpty();
     }
 
     private void showFabIfPossible() {

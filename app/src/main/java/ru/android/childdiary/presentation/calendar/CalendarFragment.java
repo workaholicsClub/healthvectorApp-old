@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,6 +17,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.calendar.fragments.BaseCalendarFragment;
 import ru.android.childdiary.presentation.calendar.fragments.DayFragment;
@@ -68,6 +70,7 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     @Override
     protected void setupUi() {
         setupViewPager();
+        hideFabBar();
     }
 
     private void setupViewPager() {
@@ -117,6 +120,14 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
         super.themeChanged();
         tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(getContext(), getSex()));
         fabToolbar.setColor(ThemeUtils.getColorAccent(getContext(), getSex()));
+    }
+
+    @Override
+    public void showChild(@NonNull Child child) {
+        super.showChild(child);
+        if (child.getId() == null) {
+            hideFabBar();
+        }
     }
 
     @OnClick(R.id.addDiaperEvent)
