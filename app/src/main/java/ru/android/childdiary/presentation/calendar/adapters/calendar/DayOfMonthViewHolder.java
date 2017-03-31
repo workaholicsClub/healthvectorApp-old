@@ -27,7 +27,7 @@ class DayOfMonthViewHolder extends BaseViewHolder<LocalDate> {
 
     public void select(CalendarViewAdapter adapter, LocalDate item) {
         Context context = adapter.getContext();
-        boolean isSelected = adapter.getSelectedDate().isEqual(item);
+        boolean isSelected = adapter.isSelected() && adapter.getSelectedDate().isEqual(item);
         textViewDayOfMonth.setBackgroundResource(isSelected
                 ? ResourcesUtils.getSelectedDateBackgroundRes(adapter.getSex())
                 : R.drawable.calendar_cell_background_clickable);
