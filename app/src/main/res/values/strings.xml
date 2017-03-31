@@ -70,8 +70,8 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="calendar_month_title">%1$s %2$d</string>
-    <string name="calendar_week_title_one_month">%1$d\u2014%2$d %3$s</string>
-    <string name="calendar_week_title_two_month">%1$d %2$s\u2014%3$d %4$s</string>
+    <string name="calendar_week_title_one_month">%1$d \u2014 %2$d %3$s</string>
+    <string name="calendar_week_title_two_month">%1$d %2$s \u2014 %3$d %4$s</string>
     <string name="calendar_selected_date_format">%1$d %2$s</string>
     <string name="breast_left">Левая</string>
     <string name="breast_right">Правая</string>
