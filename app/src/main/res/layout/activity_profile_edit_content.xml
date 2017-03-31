@@ -10,29 +10,28 @@
 
     <include layout="@layout/request_focus_view_dummy" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/topPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="@dimen/toolbar_elevation"
+        android:gravity="center_vertical"
         android:minHeight="@dimen/profile_top_panel_height"
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:id="@+id/imageViewPhotoWrapper"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/profile_top_panel_height"
-            android:layout_centerVertical="true">
+            android:layout_marginEnd="@dimen/profile_margin_horizontal"
+            android:layout_marginLeft="@dimen/profile_margin_horizontal"
+            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_marginStart="@dimen/profile_margin_horizontal">
 
             <com.mikepenz.materialdrawer.view.BezelImageView
                 android:id="@+id/imageViewPhoto"
                 android:layout_width="@dimen/profile_image_size"
                 android:layout_height="@dimen/profile_image_size"
                 android:layout_centerInParent="true"
-                android:layout_marginEnd="@dimen/profile_margin_horizontal"
-                android:layout_marginLeft="@dimen/profile_margin_horizontal"
-                android:layout_marginRight="@dimen/profile_margin_horizontal"
-                android:layout_marginStart="@dimen/profile_margin_horizontal"
                 android:elevation="@dimen/image_elevation"
                 android:src="@color/white"
                 app:biv_selectorOnPress="@android:color/transparent" />
@@ -51,23 +50,19 @@
         <ru.android.childdiary.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextChildName"
             style="@style/NameEditTextStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:layout_marginBottom="@dimen/profile_margin_vertical"
             android:layout_marginEnd="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_marginTop="@dimen/profile_margin_vertical"
-            android:layout_toEndOf="@+id/imageViewPhotoWrapper"
-            android:layout_toRightOf="@+id/imageViewPhotoWrapper"
+            android:layout_weight="1"
             android:hint="@string/child_name"
             android:imeOptions="actionNext"
             android:inputType="textCapWords|textMultiLine"
             android:maxLength="@integer/max_length_child_name"
             android:textCursorDrawable="@drawable/name_edit_text_cursor" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
