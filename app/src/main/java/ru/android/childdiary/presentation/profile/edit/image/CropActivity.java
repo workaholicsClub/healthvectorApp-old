@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.profile.edit.image;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -57,6 +58,11 @@ public class CropActivity extends UCropActivity {
         //noinspection deprecation
         toolbarTitle.setTextAppearance(this, R.style.ToolbarTitleTextAppearance);
         toolbarTitle.setTypeface(FontUtils.getTypefaceBold(this));
+
+        toolbar.setContentInsetStartWithNavigation(0);
+        Toolbar.LayoutParams params = (Toolbar.LayoutParams) toolbarTitle.getLayoutParams();
+        params.gravity = Gravity.START;
+        toolbarTitle.setLayoutParams(params);
 
         try {
             rotateByAngle = UCropActivity.class.getDeclaredMethod("rotateByAngle", int.class);
