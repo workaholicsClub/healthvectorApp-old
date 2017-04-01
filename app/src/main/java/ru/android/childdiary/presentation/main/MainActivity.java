@@ -64,6 +64,7 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MainActivity extends BaseMvpActivity implements MainView,
         Drawer.OnDrawerItemClickListener,
+        Drawer.OnDrawerListener,
         AccountHeader.OnAccountHeaderProfileImageListener,
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
@@ -113,6 +114,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
     private AppPartition selectedPartition;
+    private Runnable navigationCommand;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -217,7 +219,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             }
         }
         if (selectedPartition == null) {
-            drawer.setSelectionAtPosition(1, true);
+            drawer.setSelectionAtPosition(1, false);
+            navigateToCalendar(child);
         }
     }
 
@@ -296,13 +299,25 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             logger.debug("fragment cache: show fragment: " + fragment);
         }
 
-        getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager()
+                .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_UNSET)
                 .replace(R.id.mainContent, fragment, tag)
                 .addToBackStack(null)
                 .commit();
 
         invalidateOptionsMenu();
+    }
+
+    private void hidePreviousPartition() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainContent);
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_UNSET)
+                    .remove(fragment)
+                    .commit();
+        }
     }
 
     private Fragment createAppPartition(@NonNull AppPartition appPartition) {
@@ -406,25 +421,42 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         }
         switch (tag) {
             case CALENDAR:
-                presenter.openCalendar();
+                hidePreviousPartition();
+                navigationCommand = () -> presenter.openCalendar();
                 return false;
             case DEVELOPMENT_DIARY:
-                presenter.openDevelopmentDiary();
+                navigationCommand = () -> presenter.openDevelopmentDiary();
                 return false;
             case EXERCISES:
-                presenter.openExercises();
+                navigationCommand = () -> presenter.openExercises();
                 return false;
             case MEDICAL_DATA:
-                presenter.openMedicalData();
+                navigationCommand = () -> presenter.openMedicalData();
                 return false;
             case SETTINGS:
-                presenter.openSettings();
+                navigationCommand = () -> presenter.openSettings();
                 return false;
             case HELP:
-                presenter.openHelp();
+                navigationCommand = () -> presenter.openHelp();
                 return false;
             default:
                 return false;
+        }
+    }
+
+    @Override
+    public void onDrawerSlide(View view, float v) {
+    }
+
+    @Override
+    public void onDrawerOpened(View view) {
+    }
+
+    @Override
+    public void onDrawerClosed(View view) {
+        if (navigationCommand != null) {
+            navigationCommand.run();
+            navigationCommand = null;
         }
     }
 
@@ -464,6 +496,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         updateDrawerItems(false);
         drawerBuilder = new CustomDrawerBuilder()
                 .withActivity(this)
+                .withOnDrawerListener(this)
                 .withToolbar(getToolbar())
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(drawerItems);
@@ -536,10 +569,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @Override
     public boolean hideBar() {
         FabController fabController = findFabController();
-        if (fabController != null) {
-            return fabController.hideBar();
-        }
-        return false;
+        return fabController != null && fabController.hideBar();
     }
 
     @Override
