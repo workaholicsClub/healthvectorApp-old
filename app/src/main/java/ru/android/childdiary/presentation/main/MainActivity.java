@@ -252,49 +252,75 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public void navigateToCalendar(@NonNull Child child) {
-        openAppPartition(AppPartition.CALENDAR, child, new CalendarFragment());
+        openAppPartition(AppPartition.CALENDAR, child);
     }
 
     @Override
     public void navigateToDevelopmentDiary(@NonNull Child child) {
-        openAppPartition(AppPartition.DEVELOPMENT_DIARY, child, new DevelopmentDiaryFragment());
+        openAppPartition(AppPartition.DEVELOPMENT_DIARY, child);
     }
 
     @Override
     public void navigateToExercises(@NonNull Child child) {
-        openAppPartition(AppPartition.EXERCISES, child, new ExercisesFragment());
+        openAppPartition(AppPartition.EXERCISES, child);
     }
 
     @Override
     public void navigateToMedicalData(@NonNull Child child) {
-        openAppPartition(AppPartition.MEDICAL_DATA, child, new MedicalDataFragment());
+        openAppPartition(AppPartition.MEDICAL_DATA, child);
     }
 
     @Override
     public void navigateToSettings(@NonNull Child child) {
-        openAppPartition(AppPartition.SETTINGS, child, new SettingsFragment());
+        openAppPartition(AppPartition.SETTINGS, child);
     }
 
     @Override
     public void navigateToHelp(@NonNull Child child) {
-        openAppPartition(AppPartition.HELP, child, new HelpFragment());
+        openAppPartition(AppPartition.HELP, child);
     }
 
-    private void openAppPartition(AppPartition appPartition, @NonNull Child child, Fragment fragment) {
+    private void openAppPartition(@NonNull AppPartition appPartition, @NonNull Child child) {
         selectedPartition = appPartition;
 
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, child);
-        fragment.setArguments(arguments);
+        String tag = appPartition.toString();
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setTransition(FragmentTransaction.TRANSIT_UNSET);
-        ft.replace(R.id.mainContent, fragment);
-        ft.commit();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            Bundle arguments = new Bundle();
+            arguments.putSerializable(ExtraConstants.EXTRA_CHILD, child);
+            fragment = createAppPartition(appPartition);
+            fragment.setArguments(arguments);
+            logger.debug("fragment cache: create new fragment: " + fragment);
+        } else {
+            logger.debug("fragment cache: show fragment: " + fragment);
+        }
+
+        getSupportFragmentManager().beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_UNSET)
+                .replace(R.id.mainContent, fragment, tag)
+                .addToBackStack(null)
+                .commit();
 
         invalidateOptionsMenu();
+    }
 
-        closeDrawer();
+    private Fragment createAppPartition(@NonNull AppPartition appPartition) {
+        switch (appPartition) {
+            case CALENDAR:
+                return new CalendarFragment();
+            case DEVELOPMENT_DIARY:
+                return new DevelopmentDiaryFragment();
+            case EXERCISES:
+                return new ExercisesFragment();
+            case MEDICAL_DATA:
+                return new MedicalDataFragment();
+            case SETTINGS:
+                return new SettingsFragment();
+            case HELP:
+                return new HelpFragment();
+        }
+        throw new IllegalStateException("Unknown app partition");
     }
 
     @Override
@@ -381,22 +407,22 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         switch (tag) {
             case CALENDAR:
                 presenter.openCalendar();
-                return true;
+                return false;
             case DEVELOPMENT_DIARY:
-                //presenter.openDevelopmentDiary();
-                return true;
+                presenter.openDevelopmentDiary();
+                return false;
             case EXERCISES:
-                //presenter.openExercises();
-                return true;
+                presenter.openExercises();
+                return false;
             case MEDICAL_DATA:
-                //presenter.openMedicalData();
-                return true;
+                presenter.openMedicalData();
+                return false;
             case SETTINGS:
-                //presenter.openSettings();
-                return true;
+                presenter.openSettings();
+                return false;
             case HELP:
-                //presenter.openHelp();
-                return true;
+                presenter.openHelp();
+                return false;
             default:
                 return false;
         }
@@ -475,7 +501,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             return;
         }
 
-        super.onBackPressed();
+        finish();
     }
 
     @Override

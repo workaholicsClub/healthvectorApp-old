@@ -61,6 +61,12 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        logger.debug("onActivityCreated");
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
