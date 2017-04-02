@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class RegExpInputFilter implements InputFilter {
-    private final Pattern pattern;
+    protected final Pattern pattern;
 
     public RegExpInputFilter() {
         pattern = getPattern();
@@ -36,9 +36,47 @@ public abstract class RegExpInputFilter implements InputFilter {
     }
 
     public static class WeightInputFilter extends RegExpInputFilter {
+        private static boolean contains(CharSequence s, char ch) {
+            for (int i = 0; i < s.length(); ++i) {
+                if (s.charAt(i) == ch) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         @Override
         protected Pattern getPattern() {
             return Pattern.compile("\\d?(\\.\\d{0,3})?(\\s\\w+)?");
+        }
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            StringBuilder sb = new StringBuilder();
+            CharSequence head = dest.subSequence(0, dstart);
+            sb.append(head);
+            CharSequence replacement = source.subSequence(start, end);
+            sb.append(replacement);
+            CharSequence tail = dest.subSequence(dend, dest.length());
+            sb.append(tail);
+
+            // уже введена одна цифра И вводим/вставляем из буфера еще несколько цифр
+            if (head.length() == 1 && replacement.length() > 0) {
+                // добавляем точку
+                return tail.length() > 0 && tail.charAt(0) == '.' ? "" : "." + replacement;
+            }
+
+            // удаляем середину, содержащую точку
+            CharSequence middle = dest.subSequence(dstart, dend);
+            if (replacement.length() == 0 && contains(middle, '.')) {
+                // нельзя удалить точку, если останется более одной цифры
+                return head.length() + tail.length() > 1 ? "." : "";
+            }
+
+            Matcher matcher = pattern.matcher(sb);
+            boolean matches = matcher.matches();
+
+            return matches ? null : "";
         }
     }
 
