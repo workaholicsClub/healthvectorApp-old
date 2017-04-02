@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
@@ -61,6 +60,9 @@ import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
+
+import static android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
+import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
 public class MainActivity extends BaseMvpActivity implements MainView,
         Drawer.OnDrawerItemClickListener,
@@ -301,7 +303,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_UNSET)
+                .setTransition(TRANSIT_FRAGMENT_OPEN)
                 .replace(R.id.mainContent, fragment, tag)
                 .addToBackStack(null)
                 .commit();
@@ -314,7 +316,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_UNSET)
+                    .setTransition(TRANSIT_UNSET)
                     .remove(fragment)
                     .commit();
         }
