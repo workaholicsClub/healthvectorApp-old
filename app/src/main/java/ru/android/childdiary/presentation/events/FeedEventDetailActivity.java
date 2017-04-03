@@ -43,6 +43,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailFoodView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailSpinnerView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
@@ -364,5 +365,10 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    protected boolean contentEquals(FeedEvent event1, FeedEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }

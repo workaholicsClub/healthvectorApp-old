@@ -29,7 +29,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
@@ -55,6 +54,7 @@ import static android.view.View.VISIBLE;
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
     protected T event;
+    protected T defaultEvent;
 
     @BindView(R.id.noteView)
     protected EventDetailNoteView noteView;
@@ -79,6 +79,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         if (savedInstanceState == null) {
             if (masterEvent == null) {
                 buttonAdd.setVisibility(VISIBLE);
+                buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
                 getPresenter().requestDefaultEventDetail(getEventType());
             } else {
                 buttonAdd.setVisibility(GONE);
@@ -135,11 +136,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
-    @OnClick(R.id.buttonAdd)
-    void onButtonAddClick() {
-        addEvent(buildEvent(), true);
-    }
-
     protected final T buildEvent() {
         if (event == null) {
             return buildEvent(null);
@@ -148,28 +144,24 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
     }
 
-    protected final void addEvent(@NonNull T event, boolean afterButtonPressed) {
-        getPresenter().addEvent(event, afterButtonPressed);
-    }
-
-    protected final void updateEvent(@NonNull T event, boolean afterButtonPressed) {
-        getPresenter().updateEvent(event, afterButtonPressed);
-    }
-
     @Override
     public final void showDefaultEventDetail(@NonNull T event) {
         this.event = null;
+        defaultEvent = event;
         changeThemeIfNeeded(event.getChild());
         setupEventDetail(event);
+        invalidateOptionsMenu();
     }
 
     @Override
     public final void showEventDetail(@NonNull T event) {
         this.event = event;
+        defaultEvent = null;
         changeThemeIfNeeded(event.getChild());
         setupEventDetail(event);
         invalidateOptionsMenu();
         getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
+        buttonAdd.setVisibility(GONE);
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
@@ -188,8 +180,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         if (afterButtonPressed) {
             setResult(RESULT_OK);
             finish();
-        } else {
-            getPresenter().requestEventDetails(event);
         }
     }
 
@@ -292,15 +282,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public void onBackPressed() {
-        T editedEvent = buildEvent();
-        if (event != null && event.equals(editedEvent)) {
-            new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                    .setMessage(R.string.save_changes_dialog_text)
-                    .setPositiveButton(R.string.Yes,
-                            (DialogInterface dialog, int which) -> getPresenter().updateEvent(editedEvent, true))
-                    .setNegativeButton(R.string.No, (dialog, which) -> finish())
-                    .show();
-        }
+        saveChangesOrExit();
     }
 
     @Override
@@ -338,8 +320,37 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             case R.id.menu_delete:
                 getPresenter().deleteEvent(event);
                 return true;
+            case android.R.id.home:
+                saveChangesOrExit();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void saveChangesOrExit() {
+        T editedEvent = buildEvent();
+        if (defaultEvent != null && contentEquals(editedEvent, defaultEvent)) {
+            finish();
+            return;
+        }
+        if (event != null && contentEquals(editedEvent, event)) {
+            finish();
+            return;
+        }
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.save_changes_dialog_text)
+                .setPositiveButton(R.string.Yes,
+                        (DialogInterface dialog, int which) -> {
+                            if (event == null) {
+                                getPresenter().addEvent(editedEvent, true);
+                            } else {
+                                getPresenter().updateEvent(editedEvent, true);
+                            }
+                        })
+                .setNegativeButton(R.string.No, (dialog, which) -> finish())
+                .show();
+    }
+
+    protected abstract boolean contentEquals(T event1, T event2);
 }

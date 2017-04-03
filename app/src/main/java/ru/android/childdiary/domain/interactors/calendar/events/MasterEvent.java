@@ -37,6 +37,10 @@ public class MasterEvent implements Serializable {
 
     Child child;
 
+    public MasterEvent getMasterEvent() {
+        return this;
+    }
+
     public MasterEvent.MasterEventBuilder toMasterBuilder() {
         return MasterEvent.masterBuilder()
                 .masterEventId(masterEventId)

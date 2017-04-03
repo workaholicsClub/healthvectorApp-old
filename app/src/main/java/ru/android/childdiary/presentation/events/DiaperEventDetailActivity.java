@@ -29,6 +29,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDiaperStateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailView<DiaperEvent>, DiaperEvent> implements EventDetailView<DiaperEvent> {
@@ -150,5 +151,10 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @Override
     public void onSetTime(String tag, int minutes) {
         notifyTimeView.setValue(minutes);
+    }
+
+    @Override
+    protected boolean contentEquals(DiaperEvent event1, DiaperEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }

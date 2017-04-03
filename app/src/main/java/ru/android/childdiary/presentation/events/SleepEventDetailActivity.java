@@ -35,6 +35,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -151,23 +152,25 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @OnClick(R.id.buttonTimer)
     void onTimerClick() {
-        SleepEvent event = buildEvent();
-        boolean isTimerStarted = EventHelper.isTimerStarted(event);
-
         DateTime now = DateTime.now();
-        SleepEvent.SleepEventBuilder builder = event.toBuilder();
-        builder.isTimerStarted(!isTimerStarted);
-        if (isTimerStarted) {
+        SleepEvent event = buildEvent();
+        boolean timerWasStarted = EventHelper.isTimerStarted(event);
+        if (timerWasStarted) {
             // выключаем таймер
-            builder.finishDateTime(now);
+            event = event.toBuilder()
+                    .isTimerStarted(false)
+                    .finishDateTime(now.isAfter(event.getDateTime()) ? now : null)
+                    .build();
+            presenter.updateEvent(event, false);
         } else {
             // включаем таймер
-            builder.dateTime(now);
-            builder.finishDateTime(null);
+            event = event.toBuilder()
+                    .isTimerStarted(true)
+                    .dateTime(now)
+                    .finishDateTime(null)
+                    .build();
+            presenter.addEvent(event, false);
         }
-        event = builder.build();
-
-        addEvent(event, false);
     }
 
     @Override
@@ -296,7 +299,12 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     private void updateIfNeeded() {
         if (EventHelper.isTimerStarted(event)) {
-            updateEvent(buildEvent(), false);
+            presenter.updateEvent(buildEvent(), false);
         }
+    }
+
+    @Override
+    protected boolean contentEquals(SleepEvent event1, SleepEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }

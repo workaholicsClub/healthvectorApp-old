@@ -23,7 +23,7 @@
     <dimen name="account_header_action_item_image_size">44dp</dimen>
     <dimen name="account_header_action_item_height">54dp</dimen>
     <dimen name="account_header_action_item_width_wide">240dp</dimen>
-    <dimen name="account_header_action_item_width_narrow">200dp</dimen>
+    <dimen name="account_header_action_item_width_narrow">210dp</dimen>
     <!-- fab toolbar -->
     <dimen name="fab_size">56dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

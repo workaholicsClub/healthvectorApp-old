@@ -60,6 +60,7 @@ import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFr
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -125,6 +126,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     @State
     Child editedChild = Child.NULL;
 
+    private Child child;
     private boolean isValidationStarted;
 
     private ListPopupWindow popupWindow;
@@ -153,14 +155,19 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_edit);
 
-        Child child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
+        child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
         if (savedInstanceState == null && child != null) {
             editedChild = child.toBuilder().build();
         }
 
-        setupToolbarTitle(child == null ? R.string.add_profile : R.string.profile);
-        buttonAdd.setVisibility(child == null ? VISIBLE : GONE);
-        buttonAdd.setOnClickListener(v -> presenter.addChild(editedChild));
+        if (child == null) {
+            setupToolbarTitle(R.string.add_profile);
+            buttonAdd.setVisibility(VISIBLE);
+            buttonAdd.setOnClickListener(v -> presenter.addChild(editedChild));
+        } else {
+            setupToolbarTitle(R.string.profile);
+            buttonAdd.setVisibility(GONE);
+        }
 
         setupTextViews();
         setupSex();
@@ -447,14 +454,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
             return;
         }
 
-        if (editedChild.getId() != null) {
-            new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                    .setMessage(R.string.save_changes_dialog_text)
-                    .setPositiveButton(R.string.Yes,
-                            (DialogInterface dialog, int which) -> presenter.updateChild(editedChild))
-                    .setNegativeButton(R.string.No, (dialog, which) -> finish())
-                    .show();
-        }
+        saveChangesOrExit();
     }
 
     @Override
@@ -468,10 +468,33 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_close:
-                finish();
+                saveChangesOrExit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void saveChangesOrExit() {
+        if (child == null && ObjectUtils.isEmpty(editedChild)) {
+            finish();
+            return;
+        }
+        if (child != null && ObjectUtils.contentEquals(editedChild, child)) {
+            finish();
+            return;
+        }
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.save_changes_dialog_text)
+                .setPositiveButton(R.string.Yes,
+                        (DialogInterface dialog, int which) -> {
+                            if (child == null) {
+                                presenter.addChild(editedChild);
+                            } else {
+                                presenter.updateChild(editedChild);
+                            }
+                        })
+                .setNegativeButton(R.string.No, (dialog, which) -> finish())
+                .show();
     }
 }

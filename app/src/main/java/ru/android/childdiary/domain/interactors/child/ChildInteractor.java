@@ -75,16 +75,17 @@ public class ChildInteractor implements Interactor, ChildRepository {
     }
 
     public Observable<Child> delete(@NonNull Child child) {
-        return stopSleepTimers(child)
+        return stopSleepTimersBeforeChildDelete(child)
                 .flatMap(this::deleteInternal);
     }
 
-    private Observable<Child> stopSleepTimers(@NonNull Child child) {
+    private Observable<Child> stopSleepTimersBeforeChildDelete(@NonNull Child child) {
         return calendarRepository.getSleepEventsWithTimer()
                 .first(Collections.emptyList())
                 .flatMapObservable(Observable::fromIterable)
                 .filter(event -> EventHelper.sameChild(child, event))
-                .map(calendarRepository::stopTimer)
+                .map(event -> event.toBuilder().isTimerStarted(false).build())
+                .map(event -> calendarRepository.update(event).blockingFirst())
                 .count()
                 .toObservable()
                 .doOnNext(count -> logger.debug("stopped sleep timers count: " + count))

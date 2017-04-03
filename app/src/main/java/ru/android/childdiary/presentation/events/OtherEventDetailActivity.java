@@ -29,6 +29,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeVi
 import ru.android.childdiary.presentation.events.widgets.EventDetailOtherEventNameView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDetailView, OtherEvent> implements OtherEventDetailView {
@@ -203,5 +204,10 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     @Override
     public void onSetTime(String tag, int minutes) {
         notifyTimeView.setValue(minutes);
+    }
+
+    @Override
+    protected boolean contentEquals(OtherEvent event1, OtherEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }

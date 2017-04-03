@@ -131,7 +131,7 @@ public class CalendarInteractor implements Interactor {
                 getDefaultNotifyTimeInMinutes(EventType.DIAPER),
                 (child, date, time, minutes) -> DiaperEvent.builder()
                         .child(child)
-                        .dateTime(date.toDateTime(time))
+                        .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
                         .notifyTimeInMinutes(minutes)
                         .diaperState(DiaperState.WET)
                         .build());
@@ -148,7 +148,7 @@ public class CalendarInteractor implements Interactor {
                 calendarRepository.getLastFood(),
                 (child, date, time, minutes, feedType, foodMeasure, food) -> FeedEvent.builder()
                         .child(child)
-                        .dateTime(date.toDateTime(time))
+                        .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
                         .notifyTimeInMinutes(minutes)
                         .feedType(feedType)
                         .foodMeasure(foodMeasure)
@@ -165,7 +165,7 @@ public class CalendarInteractor implements Interactor {
                 getDefaultNotifyTimeInMinutes(EventType.OTHER),
                 (child, date, time, minutes) -> OtherEvent.builder()
                         .child(child)
-                        .dateTime(date.toDateTime(time))
+                        .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
                         .notifyTimeInMinutes(minutes)
                         .build());
     }
@@ -178,7 +178,7 @@ public class CalendarInteractor implements Interactor {
                 getDefaultNotifyTimeInMinutes(EventType.PUMP),
                 (child, date, time, minutes) -> PumpEvent.builder()
                         .child(child)
-                        .dateTime(date.toDateTime(time))
+                        .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
                         .notifyTimeInMinutes(minutes)
                         .breast(Breast.LEFT)
                         .build());
@@ -192,7 +192,7 @@ public class CalendarInteractor implements Interactor {
                 getDefaultNotifyTimeInMinutes(EventType.SLEEP),
                 (child, date, time, minutes) -> SleepEvent.builder()
                         .child(child)
-                        .dateTime(date.toDateTime(time))
+                        .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
                         .notifyTimeInMinutes(minutes)
                         .build());
     }
@@ -427,13 +427,5 @@ public class CalendarInteractor implements Interactor {
             }
             throw new IllegalStateException("Unknown event type");
         });
-    }
-
-    public Observable<SleepEvent> startTimer(@NonNull SleepEvent event) {
-        return calendarRepository.startTimer(event);
-    }
-
-    public Observable<SleepEvent> stopTimer(@NonNull SleepEvent event) {
-        return calendarRepository.stopTimer(event);
     }
 }

@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.events.core;
 
-import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
 import com.annimon.stream.Stream;
@@ -10,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
@@ -28,7 +28,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     @Inject
     protected CalendarInteractor calendarInteractor;
 
-    private boolean isSubscribedToEventDetails;
+    private Disposable subscription;
 
     @Override
     protected void onFirstViewAttach() {
@@ -50,21 +50,25 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribe(event -> getViewState().showDefaultEventDetail((T) event)));
     }
 
+    private void unsubscribe() {
+        if (subscription != null && !subscription.isDisposed()) {
+            subscription.dispose();
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
-        if (!isSubscribedToEventDetails) {
-            unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
-                    .map(event -> {
-                        childInteractor.setActiveChild(event.getChild());
-                        calendarInteractor.setSelectedDate(event.getDateTime().toLocalDate());
-                        return event;
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(event -> logger.debug("event details: " + event))
-                    .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
-            isSubscribedToEventDetails = true;
-        }
+        unsubscribe();
+        subscription = unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
+                .map(event -> {
+                    childInteractor.setActiveChild(event.getChild());
+                    calendarInteractor.setSelectedDate(event.getDateTime().toLocalDate());
+                    return event;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(event -> logger.debug("event details: " + event))
+                .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
     }
 
     public void requestTimeDialog(String tag, TimeDialog.Parameters parameters) {
@@ -82,6 +86,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(addedEvent -> logger.debug("event added: " + addedEvent))
+                .doOnNext(this::requestEventDetails)
                 .subscribe(addedEvent -> getViewState().eventAdded((T) addedEvent, afterButtonPressed), this::onUnexpectedError));
     }
 
@@ -90,6 +95,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(updatedEvent -> logger.debug("event updated: " + updatedEvent))
+                .doOnNext(this::requestEventDetails)
                 .subscribe(updatedEvent -> getViewState().eventUpdated(updatedEvent, afterButtonPressed), this::onUnexpectedError));
     }
 

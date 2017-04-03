@@ -18,14 +18,14 @@ import android.widget.TextView;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
 
 public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         AdapterView.OnItemClickListener,
-        PopupWindow.OnDismissListener,
-        View.OnClickListener {
+        PopupWindow.OnDismissListener {
     @BindView(R.id.textViewWrapper)
     View textViewWrapper;
 
@@ -90,24 +90,22 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         return false;
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view == textViewWrapper) {
-            dismissPopupWindow();
-            View anchor = view;
-            int width = spinnerItemWidth;
-            int gravity = Gravity.END;
+    @OnClick(R.id.textViewWrapper)
+    void onClick(View view) {
+        dismissPopupWindow();
+        View anchor = view;
+        int width = spinnerItemWidth;
+        int gravity = Gravity.END;
 
-            popupWindow = new android.support.v7.widget.ListPopupWindow(getContext(), null, R.attr.actionOverflowMenuStyle, R.style.OverflowMenu);
-            popupWindow.setWidth(width);
-            popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-            popupWindow.setAdapter(getAdapter());
-            popupWindow.setAnchorView(anchor);
-            popupWindow.setDropDownGravity(gravity);
-            popupWindow.setOnItemClickListener(this);
-            popupWindow.setOnDismissListener(this);
-            popupWindow.show();
-        }
+        popupWindow = new android.support.v7.widget.ListPopupWindow(getContext(), null, R.attr.actionOverflowMenuStyle, R.style.OverflowMenu);
+        popupWindow.setWidth(width);
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setAdapter(getAdapter());
+        popupWindow.setAnchorView(anchor);
+        popupWindow.setDropDownGravity(gravity);
+        popupWindow.setOnItemClickListener(this);
+        popupWindow.setOnDismissListener(this);
+        popupWindow.show();
     }
 
     @Override
