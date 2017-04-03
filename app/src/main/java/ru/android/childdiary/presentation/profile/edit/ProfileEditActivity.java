@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.profile.edit;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.InputFilter;
 import android.view.Gravity;
@@ -63,6 +65,9 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditView,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener,
         AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
@@ -81,8 +86,8 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     @BindView(R.id.topPanel)
     View topPanel;
 
-    @BindView(R.id.buttonDone)
-    Button buttonDone;
+    @BindView(R.id.buttonAdd)
+    Button buttonAdd;
 
     @BindView(R.id.imageViewPhoto)
     ImageView imageViewPhoto;
@@ -154,19 +159,8 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         }
 
         setupToolbarTitle(child == null ? R.string.add_profile : R.string.profile);
-        buttonDone.setText(child == null ? R.string.add : R.string.save);
-        buttonDone.setOnClickListener(v -> {
-            hideKeyboardAndClearFocus(rootView.findFocus());
-            if (child == null) {
-                presenter.addChild(editedChild);
-            } else {
-                if (child.equals(editedChild)) {
-                    finish();
-                } else {
-                    presenter.updateChild(editedChild);
-                }
-            }
-        });
+        buttonAdd.setVisibility(child == null ? VISIBLE : GONE);
+        buttonAdd.setOnClickListener(v -> presenter.addChild(editedChild));
 
         setupTextViews();
         setupSex();
@@ -181,7 +175,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     protected void themeChanged() {
         super.themeChanged();
         topPanel.setBackgroundResource(ThemeUtils.getColorPrimaryRes(getSex()));
-        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @Override
@@ -310,7 +304,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         } else {
             imageViewPhoto.setImageDrawable(Drawable.createFromPath(imageFileName));
         }
-        textViewPhoto.setVisibility(imageFileName == null ? View.VISIBLE : View.GONE);
+        textViewPhoto.setVisibility(imageFileName == null ? VISIBLE : GONE);
     }
 
     private void setupDate() {
@@ -394,7 +388,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     @Override
     public void setButtonDoneEnabled(boolean enabled) {
         isButtonDoneEnabled = enabled;
-        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @Override
@@ -453,7 +447,14 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
             return;
         }
 
-        super.onBackPressed();
+        if (editedChild.getId() != null) {
+            new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                    .setMessage(R.string.save_changes_dialog_text)
+                    .setPositiveButton(R.string.Yes,
+                            (DialogInterface dialog, int which) -> presenter.updateChild(editedChild))
+                    .setNegativeButton(R.string.No, (dialog, which) -> finish())
+                    .show();
+        }
     }
 
     @Override

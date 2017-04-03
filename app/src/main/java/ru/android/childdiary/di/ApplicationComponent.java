@@ -5,9 +5,9 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.di.modules.DataModule;
-import ru.android.childdiary.presentation.calendar.fragments.BaseCalendarPresenter;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
+import ru.android.childdiary.presentation.calendar.fragments.BaseCalendarPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
@@ -26,8 +26,6 @@ import ru.android.childdiary.presentation.main.MainPresenter;
 import ru.android.childdiary.presentation.medical.MedicalDataPresenter;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditPresenter;
-import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
-import ru.android.childdiary.presentation.profile.review.ProfileReviewPresenter;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
@@ -43,8 +41,6 @@ public interface ApplicationComponent {
     void inject(MainPresenter presenter);
 
     void inject(ProfileEditPresenter presenter);
-
-    void inject(ProfileReviewPresenter presenter);
 
     void inject(BaseCalendarPresenter presenter);
 
@@ -78,8 +74,6 @@ public interface ApplicationComponent {
     void inject(SettingsFragment activity);
 
     void inject(ProfileEditActivity activity);
-
-    void inject(ProfileReviewActivity activity);
 
     void inject(DiaperEventDetailActivity activity);
 

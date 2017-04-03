@@ -47,14 +47,14 @@
         android:layout_marginLeft="@dimen/timer_margin_horizontal"
         android:layout_marginRight="@dimen/timer_margin_horizontal"
         android:layout_marginTop="@dimen/timer_margin_vertical"
-        android:background="@drawable/background_timer_on_boy"
-        android:drawableLeft="@drawable/timer_on_boy"
-        android:drawableStart="@drawable/timer_on_boy"
+        android:background="@drawable/background_timer_off_boy"
+        android:drawableLeft="@drawable/timer_off_boy"
+        android:drawableStart="@drawable/timer_off_boy"
         android:gravity="center_vertical|end"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="@string/duration_format"
-        android:textColor="@color/timer_on_boy"
+        android:textColor="@color/timer_off_boy"
         android:textSize="@dimen/timer_text_size" />
 
     <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView

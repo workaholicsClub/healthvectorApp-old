@@ -55,10 +55,9 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, PumpEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 

@@ -206,6 +206,8 @@ public class TimeUtils {
             return null;
         }
 
+        start = start.withSecondOfMinute(0).withMillisOfSecond(0);
+        finish = finish.withSecondOfMinute(0).withMillisOfSecond(0);
         Minutes minutes = Minutes.minutesBetween(start, finish);
         return minutes.getMinutes();
     }

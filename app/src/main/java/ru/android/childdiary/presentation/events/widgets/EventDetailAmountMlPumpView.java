@@ -135,12 +135,4 @@ public class EventDetailAmountMlPumpView extends EventDetailEditTextView {
 
         return disposables;
     }
-
-    @Override
-    public void setReadOnly(boolean readOnly) {
-        editTextAmountMlLeft.setEnabled(!readOnly);
-        editTextAmountMlRight.setEnabled(!readOnly);
-        imageViewLeft.setVisibility(readOnly ? INVISIBLE : VISIBLE);
-        imageViewRight.setVisibility(readOnly ? INVISIBLE : VISIBLE);
-    }
 }

@@ -1,11 +1,13 @@
 package ru.android.childdiary.presentation.events.core;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +30,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import icepick.State;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
@@ -43,10 +44,13 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNoteView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
-import ru.android.childdiary.presentation.events.widgets.ReadOnlyView;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
@@ -58,14 +62,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @BindView(R.id.rootView)
     View rootView;
 
-    @BindView(R.id.buttonDone)
-    Button buttonDone;
+    @BindView(R.id.buttonAdd)
+    Button buttonAdd;
 
     @BindView(R.id.dummy)
     View dummy;
-
-    @State
-    boolean readOnly;
 
     private ViewGroup eventDetailsView;
 
@@ -77,13 +78,13 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             if (masterEvent == null) {
+                buttonAdd.setVisibility(VISIBLE);
                 getPresenter().requestDefaultEventDetail(getEventType());
             } else {
+                buttonAdd.setVisibility(GONE);
                 getPresenter().requestEventDetails(masterEvent);
-                readOnly = getIntent().getBooleanExtra(ExtraConstants.EXTRA_READ_ONLY, false);
             }
         }
-        setupReadOnlyFields();
     }
 
     @Override
@@ -131,17 +132,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
-    @OnClick(R.id.buttonDone)
-    void onButtonDoneClick() {
-        if (readOnly) {
-            readOnly = false;
-            setupReadOnlyFields();
-        } else {
-            upsertEvent(buildEvent(), true);
-        }
+    @OnClick(R.id.buttonAdd)
+    void onButtonAddClick() {
+        addEvent(buildEvent(), true);
     }
 
     protected final T buildEvent() {
@@ -152,18 +148,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
     }
 
-    protected final void upsertEvent(@NonNull T event, boolean afterButtonPressed) {
-        if (this.event == null) {
-            getPresenter().addEvent(event, afterButtonPressed);
-        } else {
-            if (this.event.equals(event)) {
-                if (afterButtonPressed) {
-                    finish();
-                }
-            } else {
-                getPresenter().updateEvent(event, afterButtonPressed);
-            }
-        }
+    protected final void addEvent(@NonNull T event, boolean afterButtonPressed) {
+        getPresenter().addEvent(event, afterButtonPressed);
+    }
+
+    protected final void updateEvent(@NonNull T event, boolean afterButtonPressed) {
+        getPresenter().updateEvent(event, afterButtonPressed);
     }
 
     @Override
@@ -300,20 +290,16 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     public void onSetTime(String tag, int minutes) {
     }
 
-    private void setupReadOnlyFields() {
-        setReadOnly(rootView);
-        buttonDone.setText(readOnly ? R.string.edit : R.string.save);
-    }
-
-    private void setReadOnly(View view) {
-        if (view instanceof ReadOnlyView) {
-            ((ReadOnlyView) view).setReadOnly(readOnly);
-        } else if (view instanceof ViewGroup) {
-            ViewGroup viewGroup = (ViewGroup) view;
-            for (int i = 0; i < viewGroup.getChildCount(); ++i) {
-                View viewChild = viewGroup.getChildAt(i);
-                setReadOnly(viewChild);
-            }
+    @Override
+    public void onBackPressed() {
+        T editedEvent = buildEvent();
+        if (event != null && event.equals(editedEvent)) {
+            new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                    .setMessage(R.string.save_changes_dialog_text)
+                    .setPositiveButton(R.string.Yes,
+                            (DialogInterface dialog, int which) -> getPresenter().updateEvent(editedEvent, true))
+                    .setNegativeButton(R.string.No, (dialog, which) -> finish())
+                    .show();
         }
     }
 

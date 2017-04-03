@@ -84,13 +84,6 @@ public class EventDetailOtherEventNameView extends EventDetailEditTextView {
         return RxTextView.afterTextChangeEvents(editText);
     }
 
-    @Override
-    public void setReadOnly(boolean readOnly) {
-        editText.setEnabled(!readOnly);
-        editText.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
-        editText.setPadding(0, 0, 0, editTextBottomPadding);
-    }
-
     public void validated(boolean valid) {
         editText.setBackgroundResource(valid ? R.drawable.edit_text_background : R.drawable.edit_text_background_error);
         editText.setPadding(0, 0, 0, editTextBottomPadding);

@@ -20,7 +20,7 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayout implements View.OnClickListener, ReadOnlyView {
+public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayout implements View.OnClickListener {
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
     private final List<View> items = new ArrayList<>();
     private final List<TextView> texts = new ArrayList<>();
@@ -94,21 +94,6 @@ public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayo
         for (T value : getEnumType().getEnumConstants()) {
             radios.get(i).setImageResource(ResourcesUtils.getRadioRes(sex, value == selected));
             boolean enabled = value == selected || !isReadOnly;
-            //noinspection deprecation
-            texts.get(i).setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
-            texts.get(i).setTypeface(typeface);
-            ++i;
-        }
-    }
-
-    @Override
-    public void setReadOnly(boolean readOnly) {
-        isReadOnly = readOnly;
-        int i = 0;
-        for (T value : getEnumType().getEnumConstants()) {
-            items.get(i).setOnClickListener(readOnly ? null : this);
-            items.get(i).setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
-            boolean enabled = value == selected || !readOnly;
             //noinspection deprecation
             texts.get(i).setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
             texts.get(i).setTypeface(typeface);

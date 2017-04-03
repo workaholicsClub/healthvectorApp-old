@@ -14,7 +14,7 @@ import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.TimeUtils;
 
-public class EventDetailBreastFeedDurationView extends LinearLayout implements View.OnClickListener, ReadOnlyView {
+public class EventDetailBreastFeedDurationView extends LinearLayout implements View.OnClickListener {
     private TextView textViewDuration;
     private TextView textViewDurationLeft, textViewDurationRight;
     private View textViewDurationLeftWrapper, textViewDurationRightWrapper;
@@ -101,16 +101,6 @@ public class EventDetailBreastFeedDurationView extends LinearLayout implements V
                 eventDetailDurationListener.requestRightValueChange(this);
             }
         }
-    }
-
-    @Override
-    public void setReadOnly(boolean readOnly) {
-        textViewDurationLeftWrapper.setOnClickListener(readOnly ? null : this);
-        textViewDurationRightWrapper.setOnClickListener(readOnly ? null : this);
-        textViewDurationLeftWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
-        textViewDurationRightWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
-        imageViewLeft.setVisibility(readOnly ? INVISIBLE : VISIBLE);
-        imageViewRight.setVisibility(readOnly ? INVISIBLE : VISIBLE);
     }
 
     public interface EventDetailDurationListener {

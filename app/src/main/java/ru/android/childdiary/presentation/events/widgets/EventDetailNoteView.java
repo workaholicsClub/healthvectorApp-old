@@ -2,10 +2,8 @@ package ru.android.childdiary.presentation.events.widgets;
 
 import android.content.Context;
 import android.support.design.widget.TextInputLayout;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -25,11 +23,6 @@ public class EventDetailNoteView extends EventDetailEditTextView {
 
     @BindView(R.id.editText)
     CustomEditText editText;
-
-    @BindView(R.id.placeholder)
-    TextView placeholder;
-
-    private boolean readOnly;
 
     public EventDetailNoteView(Context context) {
         super(context);
@@ -62,7 +55,6 @@ public class EventDetailNoteView extends EventDetailEditTextView {
 
     public void setText(String text) {
         editText.setText(text);
-        setReadOnly(readOnly);
     }
 
     @Override
@@ -84,15 +76,5 @@ public class EventDetailNoteView extends EventDetailEditTextView {
         }));
 
         return disposables;
-    }
-
-    @Override
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
-        editTextWrapper.setEnabled(!readOnly);
-        editTextWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.edit_text_background);
-        boolean isTextEmpty = TextUtils.isEmpty(editText.getText());
-        editTextWrapper.setVisibility(isTextEmpty && readOnly ? GONE : VISIBLE);
-        placeholder.setVisibility(isTextEmpty && readOnly ? VISIBLE : GONE);
     }
 }

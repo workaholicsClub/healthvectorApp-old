@@ -428,4 +428,12 @@ public class CalendarInteractor implements Interactor {
             throw new IllegalStateException("Unknown event type");
         });
     }
+
+    public Observable<SleepEvent> startTimer(@NonNull SleepEvent event) {
+        return calendarRepository.startTimer(event);
+    }
+
+    public Observable<SleepEvent> stopTimer(@NonNull SleepEvent event) {
+        return calendarRepository.stopTimer(event);
+    }
 }

@@ -25,9 +25,6 @@ public interface MainView extends BaseView {
     void navigateToProfileEdit(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToProfileReview();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
     void showDeleteChildConfirmation(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

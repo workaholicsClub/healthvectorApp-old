@@ -54,7 +54,6 @@ import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomPrimaryDrawerItem;
 import ru.android.childdiary.presentation.medical.MedicalDataFragment;
 import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
-import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.TimeUtils;
@@ -129,7 +128,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .withNameShown(true)
                 .withTag(child)
                 .withIdentifier(mapToProfileId(child))
-                .withIcon(ResourcesUtils.getChildIcon(context, child, true));
+                .withIcon(ResourcesUtils.getChildIcon(context, child, false));
     }
 
     private static long mapToProfileId(@NonNull Child child) {
@@ -239,12 +238,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     }
 
     @Override
-    public void navigateToProfileReview() {
-        Intent intent = ProfileReviewActivity.getIntent(this);
-        startActivity(intent);
-    }
-
-    @Override
     public void showDeleteChildConfirmation(@NonNull Child child) {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(getString(R.string.remove_child_confirmation_title, child.getName()))
@@ -342,7 +335,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
-        presenter.reviewChild();
+        presenter.editChild();
         return false;
     }
 

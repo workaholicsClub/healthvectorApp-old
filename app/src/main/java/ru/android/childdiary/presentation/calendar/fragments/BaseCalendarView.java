@@ -21,17 +21,17 @@ public interface BaseCalendarView extends AppPartitionView {
     void showEvents(@NonNull LocalDate date, @NonNull List<MasterEvent> events);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToDiaperEvent(@NonNull MasterEvent event, boolean readOnly);
+    void navigateToDiaperEvent(@NonNull MasterEvent event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToFeedEvent(@NonNull MasterEvent event, boolean readOnly);
+    void navigateToFeedEvent(@NonNull MasterEvent event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToOtherEvent(@NonNull MasterEvent event, boolean readOnly);
+    void navigateToOtherEvent(@NonNull MasterEvent event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToPumpEvent(@NonNull MasterEvent event, boolean readOnly);
+    void navigateToPumpEvent(@NonNull MasterEvent event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToSleepEvent(@NonNull MasterEvent event, boolean readOnly);
+    void navigateToSleepEvent(@NonNull MasterEvent event);
 }

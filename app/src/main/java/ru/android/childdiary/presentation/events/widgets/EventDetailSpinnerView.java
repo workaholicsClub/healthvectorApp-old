@@ -25,8 +25,7 @@ import ru.android.childdiary.R;
 public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
-        View.OnClickListener,
-        ReadOnlyView {
+        View.OnClickListener {
     @BindView(R.id.textViewWrapper)
     View textViewWrapper;
 
@@ -132,13 +131,6 @@ public abstract class EventDetailSpinnerView<T> extends LinearLayout implements
     protected abstract String getTextForValue(@Nullable T value);
 
     protected abstract ListAdapter getAdapter();
-
-    @Override
-    public void setReadOnly(boolean readOnly) {
-        textViewWrapper.setOnClickListener(readOnly ? null : this);
-        textViewWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
-        imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
-    }
 
     public interface EventDetailSpinnerListener<T> {
         void onSpinnerItemClick(EventDetailSpinnerView view, T item);

@@ -67,10 +67,9 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
 
     private boolean isValidationStarted;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, OtherEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 

@@ -35,7 +35,7 @@ public class EventHelper {
     }
 
     public static boolean isExpired(@NonNull MasterEvent event) {
-        DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
+        DateTime now = DateTime.now();
         return now.isAfter(event.getDateTime());
     }
 

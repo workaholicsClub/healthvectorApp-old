@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -38,6 +40,8 @@ import ru.android.childdiary.utils.EventHelper;
 
 @Singleton
 public class CalendarDbService {
+    private final Logger logger = LoggerFactory.getLogger(toString());
+
     private final ReactiveEntityStore<Persistable> dataStore;
 
     @Inject
@@ -351,5 +355,47 @@ public class CalendarDbService {
     public SleepEvent updateSleepEvent(@NonNull SleepEvent event) {
         return DbUtils.update(dataStore, event,
                 SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject);
+    }
+
+    public Observable<SleepEvent> startTimer(@NonNull SleepEvent event) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            SleepEventEntity sleepEventEntity = dataStore.select(SleepEventEntity.class)
+                    .where(SleepEventEntity.ID.eq(event.getId()))
+                    .get()
+                    .first();
+            SleepEvent sleepEvent = SleepEventMapper.mapToPlainObject(sleepEventEntity);
+            return startTimerInternal(sleepEvent);
+        }));
+    }
+
+    private SleepEvent startTimerInternal(@NonNull SleepEvent event) {
+        if (event.getIsTimerStarted()) {
+            logger.debug("sleep event with id " + event.getId() + " is already started");
+            return event;
+        }
+        event = event.toBuilder().isTimerStarted(true).dateTime(DateTime.now()).finishDateTime(null).build();
+        logger.debug("sleep event with id " + event.getId() + " started");
+        return insertSleepEvent(event, event);
+    }
+
+    public Observable<SleepEvent> stopTimer(@NonNull SleepEvent event) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            SleepEventEntity sleepEventEntity = dataStore.select(SleepEventEntity.class)
+                    .where(SleepEventEntity.ID.eq(event.getId()))
+                    .get()
+                    .first();
+            SleepEvent sleepEvent = SleepEventMapper.mapToPlainObject(sleepEventEntity);
+            return stopTimerInternal(sleepEvent);
+        }));
+    }
+
+    private SleepEvent stopTimerInternal(@NonNull SleepEvent event) {
+        if (!event.getIsTimerStarted()) {
+            logger.debug("sleep event with id " + event.getId() + " is already stopped");
+            return event;
+        }
+        event = event.toBuilder().isTimerStarted(false).finishDateTime(DateTime.now()).build();
+        logger.debug("sleep event with id " + event.getId() + " stopped");
+        return updateSleepEvent(event);
     }
 }

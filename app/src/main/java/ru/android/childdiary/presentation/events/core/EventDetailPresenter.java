@@ -42,7 +42,6 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     @SuppressWarnings("unchecked")
-    @CallSuper
     public void requestDefaultEventDetail(@NonNull EventType eventType) {
         unsubscribeOnDestroy(calendarInteractor.getDefaultEventDetail(eventType)
                 .subscribeOn(Schedulers.io())

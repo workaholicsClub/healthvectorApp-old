@@ -81,10 +81,9 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     private boolean notifyTimeViewVisible;
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, SleepEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 
@@ -153,23 +152,22 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @OnClick(R.id.buttonTimer)
     void onTimerClick() {
         SleepEvent event = buildEvent();
-        boolean isTimerStarted = !EventHelper.isTimerStarted(event);
+        boolean isTimerStarted = EventHelper.isTimerStarted(event);
 
+        DateTime now = DateTime.now();
         SleepEvent.SleepEventBuilder builder = event.toBuilder();
-        builder.isTimerStarted(isTimerStarted);
-
+        builder.isTimerStarted(!isTimerStarted);
         if (isTimerStarted) {
-            builder.finishDateTime(null);
+            // выключаем таймер
+            builder.finishDateTime(now);
         } else {
-            DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
-            if (now.isAfter(event.getDateTime())) {
-                builder.finishDateTime(now);
-            } else {
-                builder.finishDateTime(null);
-            }
+            // включаем таймер
+            builder.dateTime(now);
+            builder.finishDateTime(null);
         }
+        event = builder.build();
 
-        upsertEvent(builder.build(), false);
+        addEvent(event, false);
     }
 
     @Override
@@ -298,7 +296,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     private void updateIfNeeded() {
         if (EventHelper.isTimerStarted(event)) {
-            upsertEvent(buildEvent(), false);
+            updateEvent(buildEvent(), false);
         }
     }
 }

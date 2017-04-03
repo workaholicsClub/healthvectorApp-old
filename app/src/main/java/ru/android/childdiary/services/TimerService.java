@@ -85,19 +85,18 @@ public class TimerService extends Service {
         if (intent == null) {
             return;
         }
+
         SleepEvent event = (SleepEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
         if (event == null) {
             return;
         }
+
         SleepEvent.SleepEventBuilder builder = event.toBuilder();
-        builder.isTimerStarted(false).build();
-        DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
-        if (now.isAfter(event.getDateTime())) {
-            builder.finishDateTime(now);
-        } else {
-            builder.finishDateTime(null);
-        }
-        unsubscribeOnDestroy(calendarInteractor.update(builder.build())
+        builder.isTimerStarted(false);
+        builder.finishDateTime(DateTime.now());
+        event = builder.build();
+
+        unsubscribeOnDestroy(calendarInteractor.update(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stoppedEvent -> logger.debug("event stopped: " + stoppedEvent), this::onUnexpectedError));

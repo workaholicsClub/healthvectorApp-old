@@ -149,14 +149,9 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         swipeActionListener.move(this);
     }
 
-    @OnClick(R.id.eventRowActionEdit)
-    void onEditClick() {
-        swipeActionListener.edit(this);
-    }
-
     @OnClick(R.id.eventView)
     void onEventViewClick() {
-        eventActionListener.review(event);
+        eventActionListener.edit(event);
     }
 
     @OnClick(R.id.eventRowActionDelete)
@@ -168,8 +163,6 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         void done(EventViewHolder viewHolder);
 
         void move(EventViewHolder viewHolder);
-
-        void edit(EventViewHolder viewHolder);
 
         void delete(EventViewHolder viewHolder);
     }

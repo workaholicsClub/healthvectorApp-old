@@ -91,10 +91,4 @@ public class EventDetailAmountMlView extends EventDetailEditTextView {
 
         return disposables;
     }
-
-    @Override
-    public void setReadOnly(boolean readOnly) {
-        editText.setEnabled(!readOnly);
-        imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
-    }
 }

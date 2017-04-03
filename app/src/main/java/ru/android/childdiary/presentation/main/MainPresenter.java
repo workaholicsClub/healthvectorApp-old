@@ -78,10 +78,6 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribe(getViewState()::navigateToProfileEdit, this::onUnexpectedError));
     }
 
-    public void reviewChild() {
-        getViewState().navigateToProfileReview();
-    }
-
     public void deleteChild() {
         unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
                 .subscribeOn(Schedulers.io())

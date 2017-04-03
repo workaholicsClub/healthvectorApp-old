@@ -101,12 +101,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
     }
 
     @Override
-    public void edit(EventViewHolder viewHolder) {
-        viewHolder.swipeLayout.addSwipeListener(new SwipeEditAction(eventActionListener, viewHolder.getEvent()));
-        swipeManager.closeAllItems();
-    }
-
-    @Override
     public void delete(EventViewHolder viewHolder) {
         viewHolder.swipeLayout.addSwipeListener(new SwipeDeleteAction(eventActionListener, viewHolder.getEvent()));
         swipeManager.closeAllItems();

@@ -157,31 +157,31 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
 
     @Override
     public void navigateToDiaperEventAdd() {
-        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), null, true);
+        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), null);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToFeedEventAdd() {
-        Intent intent = FeedEventDetailActivity.getIntent(getContext(), null, true);
+        Intent intent = FeedEventDetailActivity.getIntent(getContext(), null);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToOtherEventAdd() {
-        Intent intent = OtherEventDetailActivity.getIntent(getContext(), null, true);
+        Intent intent = OtherEventDetailActivity.getIntent(getContext(), null);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToPumpEventAdd() {
-        Intent intent = PumpEventDetailActivity.getIntent(getContext(), null, true);
+        Intent intent = PumpEventDetailActivity.getIntent(getContext(), null);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
     public void navigateToSleepEventAdd() {
-        Intent intent = SleepEventDetailActivity.getIntent(getContext(), null, true);
+        Intent intent = SleepEventDetailActivity.getIntent(getContext(), null);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 

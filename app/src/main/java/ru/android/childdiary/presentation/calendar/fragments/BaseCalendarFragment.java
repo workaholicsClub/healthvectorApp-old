@@ -214,32 +214,32 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
-    public void navigateToDiaperEvent(@NonNull MasterEvent event, boolean readOnly) {
-        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event, readOnly);
+    public void navigateToDiaperEvent(@NonNull MasterEvent event) {
+        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToFeedEvent(@NonNull MasterEvent event, boolean readOnly) {
-        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event, readOnly);
+    public void navigateToFeedEvent(@NonNull MasterEvent event) {
+        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToOtherEvent(@NonNull MasterEvent event, boolean readOnly) {
-        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event, readOnly);
+    public void navigateToOtherEvent(@NonNull MasterEvent event) {
+        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToPumpEvent(@NonNull MasterEvent event, boolean readOnly) {
-        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event, readOnly);
+    public void navigateToPumpEvent(@NonNull MasterEvent event) {
+        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToSleepEvent(@NonNull MasterEvent event, boolean readOnly) {
-        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event, readOnly);
+    public void navigateToSleepEvent(@NonNull MasterEvent event) {
+        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event);
         startActivity(intent);
     }
 
@@ -254,12 +254,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
 
     @Override
     public void edit(MasterEvent event) {
-        presenter.requestEventDetail(event, false);
-    }
-
-    @Override
-    public void review(MasterEvent event) {
-        presenter.requestEventDetail(event, true);
+        presenter.requestEventDetail(event);
     }
 
     @Override

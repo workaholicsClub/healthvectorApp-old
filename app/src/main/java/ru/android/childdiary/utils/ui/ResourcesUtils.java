@@ -20,7 +20,7 @@ public class ResourcesUtils {
     public static Drawable getChildIcon(Context context, @NonNull Child child, boolean toolbar) {
         if (child.getImageFileName() == null) {
             return ContextCompat.getDrawable(context,
-                    toolbar ? R.drawable.ic_placeholder_toolbar : R.drawable.ic_placeholder);
+                    toolbar ? R.drawable.ic_placeholder_toolbar : R.drawable.ic_placeholder_header);
         }
         return Drawable.createFromPath(child.getImageFileName());
     }

@@ -273,9 +273,13 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
-    public SleepEvent stopTimer(@NonNull SleepEvent event) {
-        event = event.toBuilder().isTimerStarted(false).build();
-        return dbService.updateSleepEvent(event);
+    public Observable<SleepEvent> startTimer(@NonNull SleepEvent event) {
+        return dbService.startTimer(event);
+    }
+
+    @Override
+    public Observable<SleepEvent> stopTimer(@NonNull SleepEvent event) {
+        return dbService.stopTimer(event);
     }
 
     private interface OnSelectedDateChangedListener {
