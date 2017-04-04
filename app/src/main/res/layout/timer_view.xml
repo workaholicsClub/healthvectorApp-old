@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/buttonTimer"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/timer_height"
+    android:layout_marginBottom="@dimen/timer_margin_vertical"
+    android:layout_marginLeft="@dimen/timer_margin_horizontal"
+    android:layout_marginRight="@dimen/timer_margin_horizontal"
+    android:layout_marginTop="@dimen/timer_margin_vertical"
+    android:background="@drawable/background_timer_off_boy">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageViewTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/timer_off_boy" />
+
+        <TextView
+            android:id="@+id/textViewLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_timer"
+            android:textColor="@color/timer_off_boy"
+            android:textSize="@dimen/timer_text_size_base"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/duration_format"
+        android:textColor="@color/timer_off_boy"
+        android:textSize="@dimen/timer_text_size_large" />
+</RelativeLayout>

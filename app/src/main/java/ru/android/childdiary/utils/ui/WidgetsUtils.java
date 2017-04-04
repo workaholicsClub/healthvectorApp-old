@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.yalantis.ucrop.UCrop;
@@ -27,12 +26,6 @@ public class WidgetsUtils {
         options.setToolbarColor(ThemeUtils.getColorPrimary(context, sex));
         options.setStatusBarColor(ThemeUtils.getColorPrimaryDark(context, sex));
         options.setToolbarTitle(context.getString(R.string.crop_image_title));
-    }
-
-    public static void setupTimer(Context context, Button buttonTimer, @Nullable Sex sex, boolean on) {
-        buttonTimer.setTextColor(ResourcesUtils.getTimerTextColor(context, sex, on));
-        buttonTimer.setBackgroundResource(ResourcesUtils.getTimerBackgroundRes(sex, on));
-        buttonTimer.setCompoundDrawablesWithIntrinsicBounds(ResourcesUtils.getTimerIcon(sex, on), 0, 0, 0);
     }
 
     public static void setupTabLayoutFont(TabLayout tabLayout) {

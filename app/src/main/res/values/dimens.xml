@@ -69,7 +69,8 @@
     <dimen name="timer_height">77dp</dimen>
     <dimen name="timer_margin_horizontal">16dp</dimen>
     <dimen name="timer_margin_vertical">8dp</dimen>
-    <dimen name="timer_text_size">44sp</dimen>
+    <dimen name="timer_text_size_large">44sp</dimen>
+    <dimen name="timer_text_size_base">18sp</dimen>
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>

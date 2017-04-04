@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -32,13 +31,13 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailDurationView
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
+import ru.android.childdiary.presentation.events.widgets.TimerView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
-import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class SleepEventDetailActivity extends EventDetailActivity<EventDetailView<SleepEvent>, SleepEvent> implements EventDetailView<SleepEvent>,
         TimerServiceListener {
@@ -76,8 +75,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
-    @BindView(R.id.buttonTimer)
-    Button buttonTimer;
+    @BindView(R.id.timerView)
+    TimerView timerView;
 
     private boolean notifyTimeViewVisible;
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
@@ -134,6 +133,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     protected void themeChanged() {
         super.themeChanged();
+        timerView.setSex(getSex());
         setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(getSex()));
     }
 
@@ -288,12 +288,10 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     private void updateTimer(@NonNull SleepEvent event) {
-        if (EventHelper.isTimerStarted(event)) {
+        boolean isTimerStarted = EventHelper.isTimerStarted(event);
+        timerView.setOn(isTimerStarted);
+        if (isTimerStarted) {
             String text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());
-            buttonTimer.setText(text);
-            WidgetsUtils.setupTimer(this, buttonTimer, getSex(), true);
-        } else {
-            WidgetsUtils.setupTimer(this, buttonTimer, getSex(), false);
         }
     }
 

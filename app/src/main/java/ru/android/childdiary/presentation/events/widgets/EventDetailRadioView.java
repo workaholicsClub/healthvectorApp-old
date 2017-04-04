@@ -22,13 +22,11 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayout implements View.OnClickListener {
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
-    private final List<View> items = new ArrayList<>();
     private final List<TextView> texts = new ArrayList<>();
     private final List<ImageView> radios = new ArrayList<>();
     private Sex sex;
     @Getter
     private T selected;
-    private boolean isReadOnly;
 
     public EventDetailRadioView(Context context) {
         super(context);
@@ -55,7 +53,6 @@ public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayo
             addView(child);
             child.setOnClickListener(this);
             child.setTag(value);
-            items.add(child);
             TextView textView = ButterKnife.findById(child, R.id.textView);
             textView.setText(getTextForValue(value));
             texts.add(textView);
@@ -93,7 +90,7 @@ public abstract class EventDetailRadioView<T extends Enum<T>> extends LinearLayo
         int i = 0;
         for (T value : getEnumType().getEnumConstants()) {
             radios.get(i).setImageResource(ResourcesUtils.getRadioRes(sex, value == selected));
-            boolean enabled = value == selected || !isReadOnly;
+            boolean enabled = value == selected;
             //noinspection deprecation
             texts.get(i).setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
             texts.get(i).setTypeface(typeface);

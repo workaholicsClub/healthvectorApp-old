@@ -41,13 +41,6 @@
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
-            android:name=".presentation.profile.review.ProfileReviewActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.main.MainActivity" />
-        </activity>
-        <activity
             android:name=".presentation.events.DiaperEventDetailActivity"
             android:parentActivityName=".presentation.main.MainActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">

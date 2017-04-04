@@ -128,6 +128,8 @@
     <string name="event_is_done">Выполнено</string>
     <string name="event_is_not_done">Не выполнено</string>
     <string name="save_changes_dialog_text">Сохранить изменения?</string>
+    <string name="start_timer">СТАРТ</string>
+    <string name="stop_timer">СТОП</string>
     <!-- TODO: pattern for English: "MMM d, yyyy" -->
     <string name="date_format">d MMM yyyy</string>
     <string name="time_format">HH:mm</string>
