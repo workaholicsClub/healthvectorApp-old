@@ -53,7 +53,7 @@ import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder
 import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomPrimaryDrawerItem;
 import ru.android.childdiary.presentation.medical.MedicalDataFragment;
-import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.TimeUtils;
@@ -240,11 +240,11 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @Override
     public void showDeleteChildConfirmation(@NonNull Child child) {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(getString(R.string.remove_child_confirmation_title, child.getName()))
-                .setMessage(R.string.remove_child_confirmation_text)
-                .setPositiveButton(R.string.Yes,
+                .setTitle(getString(R.string.remove_child_confirmation_dialog_title, child.getName()))
+                .setMessage(R.string.remove_child_confirmation_dialog_text)
+                .setPositiveButton(R.string.remove_child_confirmation_dialog_positive_button_text,
                         (DialogInterface dialog, int which) -> presenter.deleteChild(child))
-                .setNegativeButton(R.string.Cancel, null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 

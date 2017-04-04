@@ -16,6 +16,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import butterknife.BindView;
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -66,6 +67,9 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
+    @State
+    boolean isButtonDoneEnabled;
+
     private boolean isValidationStarted;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
@@ -101,6 +105,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
+
+        unsubscribeOnDestroy(presenter.listenForDoneButtonUpdate(otherEventNameView.otherEventNameObservable()));
     }
 
     @Override
@@ -114,6 +120,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     protected void themeChanged() {
         super.themeChanged();
         setupToolbarLogo(ResourcesUtils.getOtherEventLogoRes(getSex()));
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @Override
@@ -162,6 +169,12 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                 .note(noteView.getText());
 
         return builder.build();
+    }
+
+    @Override
+    public void setButtonDoneEnabled(boolean enabled) {
+        isButtonDoneEnabled = enabled;
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @Override

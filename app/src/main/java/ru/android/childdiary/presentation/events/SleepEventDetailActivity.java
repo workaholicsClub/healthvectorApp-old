@@ -281,6 +281,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         Integer minutes = TimeUtils.durationInMinutes(start, finish);
         durationView.setValue(minutes);
         int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
+        finishTitleView.setVisibility(visibility);
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
@@ -292,6 +293,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         timerView.setOn(isTimerStarted);
         if (isTimerStarted) {
             String text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());
+            timerView.setText(text);
         }
     }
 

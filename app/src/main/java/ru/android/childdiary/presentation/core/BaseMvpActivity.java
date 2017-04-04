@@ -225,7 +225,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         if (BuildConfig.DEBUG) {
             new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(sex))
                     .setMessage(e.toString())
-                    .setPositiveButton(R.string.OK, null)
+                    .setPositiveButton(R.string.ok, null)
                     .show();
         }
     }

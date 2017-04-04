@@ -59,11 +59,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @BindView(R.id.noteView)
     protected EventDetailNoteView noteView;
 
+    @BindView(R.id.buttonAdd)
+    protected Button buttonAdd;
+
     @BindView(R.id.rootView)
     View rootView;
-
-    @BindView(R.id.buttonAdd)
-    Button buttonAdd;
 
     @BindView(R.id.dummy)
     View dummy;
@@ -75,14 +75,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         setupEditTextView(noteView);
+        buttonAdd.setVisibility(GONE);
         MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             if (masterEvent == null) {
-                buttonAdd.setVisibility(VISIBLE);
-                buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
                 getPresenter().requestDefaultEventDetail(getEventType());
             } else {
-                buttonAdd.setVisibility(GONE);
                 getPresenter().requestEventDetails(masterEvent);
             }
         }
@@ -137,11 +135,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected final T buildEvent() {
-        if (event == null) {
-            return buildEvent(null);
-        } else {
-            return buildEvent(event);
-        }
+        return buildEvent(event == null ? defaultEvent : event);
     }
 
     @Override
@@ -151,6 +145,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         changeThemeIfNeeded(event.getChild());
         setupEventDetail(event);
         invalidateOptionsMenu();
+        buttonAdd.setVisibility(VISIBLE);
+        buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
     }
 
     @Override
@@ -162,6 +158,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         invalidateOptionsMenu();
         getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
         buttonAdd.setVisibility(GONE);
+        buttonAdd.setOnClickListener(null);
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
@@ -340,7 +337,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.save_changes_dialog_text)
-                .setPositiveButton(R.string.Yes,
+                .setPositiveButton(R.string.save_changes_dialog_positive_button_text,
                         (DialogInterface dialog, int which) -> {
                             if (event == null) {
                                 getPresenter().addEvent(editedEvent, true);
@@ -348,7 +345,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                                 getPresenter().updateEvent(editedEvent, true);
                             }
                         })
-                .setNegativeButton(R.string.No, (dialog, which) -> finish())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
                 .show();
     }
 

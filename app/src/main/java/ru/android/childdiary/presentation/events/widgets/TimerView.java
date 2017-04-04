@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.events.widgets;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +15,9 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class TimerView extends RelativeLayout {
+    @BindView(R.id.buttonTimer)
+    View buttonTimer;
+
     @BindView(R.id.imageViewTimer)
     ImageView imageViewTimer;
 
@@ -70,10 +74,10 @@ public class TimerView extends RelativeLayout {
     }
 
     private void setupUi(Context context) {
-        textViewLabel.setText(isOn ? R.string.start_timer : R.string.stop_timer);
+        textViewLabel.setText(isOn ? R.string.stop_timer : R.string.start_timer);
         textViewLabel.setTextColor(ResourcesUtils.getTimerTextColor(context, sex, isOn));
         textViewTimer.setTextColor(ResourcesUtils.getTimerTextColor(context, sex, isOn));
-        setBackgroundResource(ResourcesUtils.getTimerBackgroundRes(sex, isOn));
+        buttonTimer.setBackgroundResource(ResourcesUtils.getTimerBackgroundRes(sex, isOn));
         imageViewTimer.setImageResource(ResourcesUtils.getTimerIcon(sex, isOn));
     }
 }

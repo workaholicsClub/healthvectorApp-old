@@ -29,7 +29,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.AddEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
@@ -39,7 +38,6 @@ import ru.android.childdiary.domain.interactors.calendar.validation.FeedEventVal
 import ru.android.childdiary.domain.interactors.calendar.validation.OtherEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
 
 public class CalendarInteractor implements Interactor {
@@ -222,8 +220,9 @@ public class CalendarInteractor implements Interactor {
         throw new IllegalStateException("Unknown event type");
     }
 
-    public <T extends MasterEvent> Observable<T> add(@NonNull AddEventRequest<T> request) {
-        return validate(preprocessInsert(request.getChild(), request.getEvent()))
+    public <T extends MasterEvent> Observable<T> add(@NonNull T event) {
+        return preprocess(event)
+                .flatMap(this::validate)
                 .flatMap(this::addInternal)
                 .flatMap(this::postprocess);
     }
@@ -245,7 +244,8 @@ public class CalendarInteractor implements Interactor {
     }
 
     public <T extends MasterEvent> Observable<T> update(@NonNull T event) {
-        return validate(preprocessUpdate(event))
+        return preprocess(event)
+                .flatMap(this::validate)
                 .flatMap(this::updateInternal)
                 .flatMap(this::postprocess);
     }
@@ -274,10 +274,17 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.done(event);
     }
 
-    public Observable<List<CalendarValidationResult>> controlFields(Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
+    public Observable<Boolean> controlOtherEventDoneButton(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
         return otherEventNameObservable
-                .filter(textViewAfterTextChangeEvent -> textViewAfterTextChangeEvent.editable() != null)
-                .map(textViewAfterTextChangeEvent -> textViewAfterTextChangeEvent.editable().toString())
+                .map(otherEventNameAfterTextChangeEvent -> otherEventNameAfterTextChangeEvent.editable() != null
+                        && !otherEventNameAfterTextChangeEvent.editable().toString().isEmpty())
+                .distinctUntilChanged();
+    }
+
+    public Observable<List<CalendarValidationResult>> controlOtherEventFields(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
+        return otherEventNameObservable
+                .filter(otherEventNameAfterTextChangeEvent -> otherEventNameAfterTextChangeEvent.editable() != null)
+                .map(otherEventNameAfterTextChangeEvent -> otherEventNameAfterTextChangeEvent.editable().toString())
                 .map(otherEventName -> Collections.singletonList(new OtherEventValidator(context).validateOtherEventName(otherEventName)));
     }
 
@@ -310,97 +317,48 @@ public class CalendarInteractor implements Interactor {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends MasterEvent> T preprocessInsert(@NonNull Child child, @NonNull T event) {
-        if (event instanceof DiaperEvent) {
-            return (T) preprocessInsertDiaperEvent(child, (DiaperEvent) event);
-        } else if (event instanceof FeedEvent) {
-            return (T) preprocessInsertFeedEvent(child, (FeedEvent) event);
-        } else if (event instanceof OtherEvent) {
-            return (T) preprocessInsertOtherEvent(child, (OtherEvent) event);
-        } else if (event instanceof PumpEvent) {
-            return (T) preprocessInsertPumpEvent(child, (PumpEvent) event);
-        } else if (event instanceof SleepEvent) {
-            return (T) preprocessInsertSleepEvent(child, (SleepEvent) event);
-        }
-        throw new IllegalStateException("Unknown event type");
+    private <T extends MasterEvent> Observable<T> preprocess(@NonNull T event) {
+        return Observable.fromCallable(() -> {
+            if (event instanceof DiaperEvent) {
+                return (T) preprocessDiaperEvent((DiaperEvent) event);
+            } else if (event instanceof FeedEvent) {
+                return (T) preprocessFeedEvent((FeedEvent) event);
+            } else if (event instanceof OtherEvent) {
+                return (T) preprocessOtherEvent((OtherEvent) event);
+            } else if (event instanceof PumpEvent) {
+                return (T) preprocessPumpEvent((PumpEvent) event);
+            } else if (event instanceof SleepEvent) {
+                return (T) preprocessSleepEvent((SleepEvent) event);
+            }
+            throw new IllegalStateException("Unknown event type");
+        });
     }
 
-    @SuppressWarnings("unchecked")
-    private <T extends MasterEvent> T preprocessUpdate(@NonNull T event) {
-        if (event instanceof DiaperEvent) {
-            return (T) preprocessUpdateDiaperEvent((DiaperEvent) event);
-        } else if (event instanceof FeedEvent) {
-            return (T) preprocessUpdateFeedEvent((FeedEvent) event);
-        } else if (event instanceof OtherEvent) {
-            return (T) preprocessUpdateOtherEvent((OtherEvent) event);
-        } else if (event instanceof PumpEvent) {
-            return (T) preprocessUpdatePumpEvent((PumpEvent) event);
-        } else if (event instanceof SleepEvent) {
-            return (T) preprocessUpdateSleepEvent((SleepEvent) event);
-        }
-        throw new IllegalStateException("Unknown event type");
-    }
-
-    private DiaperEvent preprocessInsertDiaperEvent(@NonNull Child child, DiaperEvent diaperEvent) {
-        return diaperEvent.toBuilder()
-                .eventType(EventType.DIAPER)
-                .child(child)
-                .build();
-    }
-
-    private FeedEvent preprocessInsertFeedEvent(@NonNull Child child, FeedEvent feedEvent) {
-        return feedEvent.toBuilder()
-                .eventType(EventType.FEED)
-                .child(child)
-                .build();
-    }
-
-    private OtherEvent preprocessInsertOtherEvent(@NonNull Child child, OtherEvent otherEvent) {
-        return otherEvent.toBuilder()
-                .eventType(EventType.OTHER)
-                .child(child)
-                .build();
-    }
-
-    private PumpEvent preprocessInsertPumpEvent(@NonNull Child child, PumpEvent pumpEvent) {
-        return pumpEvent.toBuilder()
-                .eventType(EventType.PUMP)
-                .child(child)
-                .build();
-    }
-
-    private SleepEvent preprocessInsertSleepEvent(@NonNull Child child, SleepEvent sleepEvent) {
-        return sleepEvent.toBuilder()
-                .eventType(EventType.SLEEP)
-                .child(child)
-                .build();
-    }
-
-    private DiaperEvent preprocessUpdateDiaperEvent(DiaperEvent diaperEvent) {
+    private DiaperEvent preprocessDiaperEvent(DiaperEvent diaperEvent) {
         return diaperEvent.toBuilder()
                 .eventType(EventType.DIAPER)
                 .build();
     }
 
-    private FeedEvent preprocessUpdateFeedEvent(FeedEvent feedEvent) {
+    private FeedEvent preprocessFeedEvent(FeedEvent feedEvent) {
         return feedEvent.toBuilder()
                 .eventType(EventType.FEED)
                 .build();
     }
 
-    private OtherEvent preprocessUpdateOtherEvent(OtherEvent otherEvent) {
+    private OtherEvent preprocessOtherEvent(OtherEvent otherEvent) {
         return otherEvent.toBuilder()
                 .eventType(EventType.OTHER)
                 .build();
     }
 
-    private PumpEvent preprocessUpdatePumpEvent(PumpEvent pumpEvent) {
+    private PumpEvent preprocessPumpEvent(PumpEvent pumpEvent) {
         return pumpEvent.toBuilder()
                 .eventType(EventType.PUMP)
                 .build();
     }
 
-    private SleepEvent preprocessUpdateSleepEvent(SleepEvent sleepEvent) {
+    private SleepEvent preprocessSleepEvent(SleepEvent sleepEvent) {
         return sleepEvent.toBuilder()
                 .eventType(EventType.SLEEP)
                 .build();

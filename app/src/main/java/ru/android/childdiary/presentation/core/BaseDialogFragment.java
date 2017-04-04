@@ -85,9 +85,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(sex))
                         .setTitle(permissionInfo.getTitleResourceId())
                         .setMessage(permissionInfo.getTextResourceId())
-                        .setPositiveButton(R.string.OK,
+                        .setPositiveButton(R.string.ok,
                                 (DialogInterface dialog, int which) -> requestPermissions(new String[]{permission}, permissionInfo.getRequestCode()))
-                        .setNegativeButton(R.string.Cancel, null)
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             } else {
                 requestPermissions(new String[]{permission}, permissionInfo.getRequestCode());

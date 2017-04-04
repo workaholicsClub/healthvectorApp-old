@@ -88,7 +88,7 @@ public class TimeDialog extends BaseDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setView(view)
                 .setTitle(parameters.getTitle())
-                .setPositiveButton(R.string.OK, (dialog, which) -> {
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
                     hideKeyboardAndClearFocus(rootView.findFocus());
                     int resultMinutes = numberPickerDays.getValue() * TimeUtils.MINUTES_IN_DAY
                             + numberPickerHours.getValue() * TimeUtils.MINUTES_IN_HOUR
@@ -97,7 +97,7 @@ public class TimeDialog extends BaseDialogFragment {
                         listener.onSetTime(getTag(), resultMinutes);
                     }
                 })
-                .setNegativeButton(R.string.Cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
+                .setNegativeButton(R.string.cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
 
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false);

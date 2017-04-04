@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.edit;
+package ru.android.childdiary.presentation.profile;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -55,8 +55,8 @@ import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
-import ru.android.childdiary.presentation.profile.edit.adapters.SexAdapter;
-import ru.android.childdiary.presentation.profile.edit.image.ImagePickerDialogFragment;
+import ru.android.childdiary.presentation.profile.adapters.SexAdapter;
+import ru.android.childdiary.presentation.profile.image.ImagePickerDialogFragment;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.KeyboardUtils;
@@ -309,6 +309,10 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         if (imageFileName == null) {
             imageViewPhoto.setImageDrawable(ContextCompat.getDrawable(this, R.color.white));
         } else {
+            // TODO: использовать относительное имя
+            // т.к. в будущем надо будет добавить
+            // сохранение данных в облако и восстановление данных из облака;
+            // в общем случае полный путь к файлу для разных устройств будет разный
             imageViewPhoto.setImageDrawable(Drawable.createFromPath(imageFileName));
         }
         textViewPhoto.setVisibility(imageFileName == null ? VISIBLE : GONE);
@@ -361,6 +365,10 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
 
     @Override
     public void onSetImage(@Nullable File resultFile) {
+        // TODO: использовать относительное имя
+        // т.к. в будущем надо будет добавить
+        // сохранение данных в облако и восстановление данных из облака;
+        // в общем случае полный путь к файлу для разных устройств будет разный
         String imageFileName = resultFile == null ? null : resultFile.getAbsolutePath();
         updateChild(editedChild.toBuilder().imageFileName(imageFileName).build());
         setupImage();
@@ -486,7 +494,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         }
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.save_changes_dialog_text)
-                .setPositiveButton(R.string.Yes,
+                .setPositiveButton(R.string.save_changes_dialog_positive_button_text,
                         (DialogInterface dialog, int which) -> {
                             if (child == null) {
                                 presenter.addChild(editedChild);
@@ -494,7 +502,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
                                 presenter.updateChild(editedChild);
                             }
                         })
-                .setNegativeButton(R.string.No, (dialog, which) -> finish())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
                 .show();
     }
 }

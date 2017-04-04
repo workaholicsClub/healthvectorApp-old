@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.edit.image;
+package ru.android.childdiary.presentation.profile.image;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;

@@ -44,7 +44,7 @@ public abstract class AddValueDialog extends BaseDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setView(view)
                 .setTitle(getTitle())
-                .setPositiveButton(R.string.OK, (dialog, which) -> {
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
                     hideKeyboardAndClearFocus(rootView.findFocus());
                     String text = editText.getText().toString().trim();
                     if (TextUtils.isEmpty(text)) {
@@ -52,7 +52,7 @@ public abstract class AddValueDialog extends BaseDialogFragment {
                     }
                     addValue(text);
                 })
-                .setNegativeButton(R.string.Cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
+                .setNegativeButton(R.string.cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
 
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false);

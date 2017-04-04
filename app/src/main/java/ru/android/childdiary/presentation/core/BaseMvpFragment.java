@@ -85,7 +85,7 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
         if (BuildConfig.DEBUG) {
             new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                     .setMessage(e.toString())
-                    .setPositiveButton(R.string.OK, null)
+                    .setPositiveButton(R.string.ok, null)
                     .show();
         }
     }

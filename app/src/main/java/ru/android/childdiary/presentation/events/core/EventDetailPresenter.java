@@ -14,7 +14,6 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.AddEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
@@ -80,9 +79,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     @SuppressWarnings("unchecked")
     public void addEvent(@NonNull T event, boolean afterButtonPressed) {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .map(child -> AddEventRequest.builder().child(child).event(event).build())
-                .flatMap(calendarInteractor::add)
+        unsubscribeOnDestroy(calendarInteractor.add(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(addedEvent -> logger.debug("event added: " + addedEvent))
