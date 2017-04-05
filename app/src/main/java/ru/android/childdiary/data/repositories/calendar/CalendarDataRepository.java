@@ -68,8 +68,10 @@ public class CalendarDataRepository implements CalendarRepository {
     @Override
     public void setSelectedDate(@NonNull LocalDate date) {
         selectedDate = date;
-        for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
-            listener.onSelectedDateChanged(date);
+        synchronized (selectedDateChangedListeners) {
+            for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
+                listener.onSelectedDateChanged(date);
+            }
         }
     }
 
