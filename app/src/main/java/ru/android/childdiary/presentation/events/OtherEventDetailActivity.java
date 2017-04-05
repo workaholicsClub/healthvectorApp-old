@@ -157,6 +157,18 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
 
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
+        if (finishDateTime == null) {
+            LocalDate finishDate = finishDateView.getValue();
+            LocalTime finishTime = finishTimeView.getValue();
+            if (finishDate == null && finishTime != null) {
+                finishDateTime = startDateTime.withTime(finishTime);
+                if (finishDateTime.isBefore(startDateTime)) {
+                    finishDateTime = finishDateTime.plusDays(1);
+                }
+            } else if (finishDate != null && finishTime == null) {
+                finishDateTime = finishDate.toDateTime(startDateTime.toLocalTime());
+            }
+        }
 
         builder.name(otherEventNameView.getText())
                 .dateTime(startDateTime)

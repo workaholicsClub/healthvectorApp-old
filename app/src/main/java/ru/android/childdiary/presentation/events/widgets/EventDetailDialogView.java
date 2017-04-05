@@ -26,8 +26,10 @@ public abstract class EventDetailDialogView<T> extends LinearLayout {
     @BindView(R.id.imageView)
     ImageView imageView;
 
+    @Nullable
     @Setter
     private EventDetailDialogListener eventDetailDialogListener;
+    @Nullable
     @Getter
     private T value;
 
