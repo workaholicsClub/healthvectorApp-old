@@ -59,7 +59,7 @@ public class CalendarDbService {
 
     public Observable<List<FoodMeasure>> getFoodMeasureList() {
         return dataStore.select(FoodMeasureEntity.class)
-                .orderBy(FoodMeasureEntity.NAME)
+                .orderBy(FoodMeasureEntity.NAME, FoodMeasureEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, FoodMeasureMapper::mapToPlainObject));
@@ -72,7 +72,7 @@ public class CalendarDbService {
 
     public Observable<List<Food>> getFoodList() {
         return dataStore.select(FoodEntity.class)
-                .orderBy(FoodEntity.NAME)
+                .orderBy(FoodEntity.NAME, FoodEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, FoodMapper::mapToPlainObject));
@@ -90,7 +90,7 @@ public class CalendarDbService {
                 .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
                 .and(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
                 .and(MasterEventEntity.EVENT_TYPE.notNull())
-                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE)
+                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MasterEventMapper::mapToPlainObject));
@@ -159,7 +159,7 @@ public class CalendarDbService {
                 .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
                 .and(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
                 .and(MasterEventEntity.EVENT_TYPE.notNull())
-                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE)
+                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, AllEventsMapper::mapToPlainObject));
@@ -171,7 +171,7 @@ public class CalendarDbService {
                 .where(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
                 .and(MasterEventEntity.EVENT_TYPE.eq(EventType.SLEEP))
                 .and(SleepEventEntity.TIMER_STARTED.eq(true))
-                .orderBy(MasterEventEntity.DATE_TIME)
+                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, SleepEventMapper::mapToPlainObject));

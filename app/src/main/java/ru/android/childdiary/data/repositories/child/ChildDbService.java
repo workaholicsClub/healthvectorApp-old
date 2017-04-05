@@ -25,7 +25,7 @@ public class ChildDbService {
 
     public Observable<List<Child>> getAll() {
         return dataStore.select(ChildEntity.class)
-                .orderBy(ChildEntity.NAME)
+                .orderBy(ChildEntity.NAME, ChildEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, ChildMapper::mapToPlainObject));
