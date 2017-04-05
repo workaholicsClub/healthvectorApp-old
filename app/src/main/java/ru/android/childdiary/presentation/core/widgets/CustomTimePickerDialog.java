@@ -30,6 +30,8 @@ public class CustomTimePickerDialog extends TimePickerDialog {
         dialog.vibrate(false);
         dialog.setVersion(TimePickerDialog.Version.VERSION_2);
         dialog.setAccentColor(ThemeUtils.getColorPrimary(context, sex));
+        dialog.setOkText(R.string.ok);
+        dialog.setCancelText(R.string.cancel);
         return dialog;
     }
 

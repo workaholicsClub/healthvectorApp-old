@@ -36,6 +36,8 @@ public class CustomDatePickerDialog extends DatePickerDialog {
         dialog.vibrate(false);
         dialog.setVersion(DatePickerDialog.Version.VERSION_2);
         dialog.setAccentColor(ThemeUtils.getColorPrimary(context, sex));
+        dialog.setOkText(R.string.ok);
+        dialog.setCancelText(R.string.cancel);
 
         if (minDate != null) {
             calendar = Calendar.getInstance();
