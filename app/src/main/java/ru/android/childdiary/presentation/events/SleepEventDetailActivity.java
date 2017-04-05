@@ -166,16 +166,27 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                     .build();
             presenter.updateEvent(event, false);
         } else {
-            Integer notifyTime = defaultEvent != null ? defaultEvent.getNotifyTimeInMinutes() : event.getNotifyTimeInMinutes();
             // включаем таймер
-            event = event.toBuilder()
-                    .isTimerStarted(true)
-                    .dateTime(now)
-                    .finishDateTime(null)
-                    .note(null)
-                    .notifyTimeInMinutes(notifyTime)
-                    .build();
-            presenter.addEvent(event, false);
+            if (event.getFinishDateTime() == null) {
+                // обновляем то же событие
+                event = event.toBuilder()
+                        .isTimerStarted(true)
+                        .dateTime(now)
+                        .finishDateTime(null)
+                        .build();
+                presenter.updateEvent(event, false);
+            } else {
+                // добавляем новое событие
+                Integer notifyTime = defaultEvent != null ? defaultEvent.getNotifyTimeInMinutes() : event.getNotifyTimeInMinutes();
+                event = event.toBuilder()
+                        .isTimerStarted(true)
+                        .dateTime(now)
+                        .finishDateTime(null)
+                        .note(null)
+                        .notifyTimeInMinutes(notifyTime)
+                        .build();
+                presenter.addEvent(event, false);
+            }
         }
     }
 
