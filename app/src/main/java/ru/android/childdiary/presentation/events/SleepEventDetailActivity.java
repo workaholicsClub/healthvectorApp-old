@@ -180,8 +180,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                 String note = noteView.getText();
                 Integer notifyTime = notifyTimeView.getValue();
                 if (event.getId() != null) {
-                    note = null;
-                    notifyTime = defaultEvent != null ? defaultEvent.getNotifyTimeInMinutes() : event.getNotifyTimeInMinutes();
+                    note = defaultEvent == null ? event.getNote() : defaultEvent.getNote();
+                    notifyTime = defaultEvent == null ? event.getNotifyTimeInMinutes() : defaultEvent.getNotifyTimeInMinutes();
                 }
                 event = event.toBuilder()
                         .isTimerStarted(true)
