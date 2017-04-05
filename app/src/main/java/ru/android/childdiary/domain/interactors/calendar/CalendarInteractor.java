@@ -221,7 +221,7 @@ public class CalendarInteractor implements Interactor {
     }
 
     public <T extends MasterEvent> Observable<T> add(@NonNull T event) {
-        return preprocess(event)
+        return preprocessOnInsert(event)
                 .flatMap(this::validate)
                 .flatMap(this::addInternal)
                 .flatMap(this::postprocess);
@@ -244,7 +244,7 @@ public class CalendarInteractor implements Interactor {
     }
 
     public <T extends MasterEvent> Observable<T> update(@NonNull T event) {
-        return preprocess(event)
+        return preprocessOnUpdate(event)
                 .flatMap(this::validate)
                 .flatMap(this::updateInternal)
                 .flatMap(this::postprocess);
@@ -317,48 +317,106 @@ public class CalendarInteractor implements Interactor {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends MasterEvent> Observable<T> preprocess(@NonNull T event) {
+    private <T extends MasterEvent> Observable<T> preprocessOnInsert(@NonNull T event) {
         return Observable.fromCallable(() -> {
             if (event instanceof DiaperEvent) {
-                return (T) preprocessDiaperEvent((DiaperEvent) event);
+                return (T) preprocessDiaperEventOnInsert((DiaperEvent) event);
             } else if (event instanceof FeedEvent) {
-                return (T) preprocessFeedEvent((FeedEvent) event);
+                return (T) preprocessFeedEventOnInsert((FeedEvent) event);
             } else if (event instanceof OtherEvent) {
-                return (T) preprocessOtherEvent((OtherEvent) event);
+                return (T) preprocessOtherEventOnInsert((OtherEvent) event);
             } else if (event instanceof PumpEvent) {
-                return (T) preprocessPumpEvent((PumpEvent) event);
+                return (T) preprocessPumpEventOnInsert((PumpEvent) event);
             } else if (event instanceof SleepEvent) {
-                return (T) preprocessSleepEvent((SleepEvent) event);
+                return (T) preprocessSleepEventOnInsert((SleepEvent) event);
             }
             throw new IllegalStateException("Unknown event type");
         });
     }
 
-    private DiaperEvent preprocessDiaperEvent(DiaperEvent diaperEvent) {
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> Observable<T> preprocessOnUpdate(@NonNull T event) {
+        return Observable.fromCallable(() -> {
+            if (event instanceof DiaperEvent) {
+                return (T) preprocessDiaperEventOnUpdate((DiaperEvent) event);
+            } else if (event instanceof FeedEvent) {
+                return (T) preprocessFeedEventOnUpdate((FeedEvent) event);
+            } else if (event instanceof OtherEvent) {
+                return (T) preprocessOtherEventOnUpdate((OtherEvent) event);
+            } else if (event instanceof PumpEvent) {
+                return (T) preprocessPumpEventOnUpdate((PumpEvent) event);
+            } else if (event instanceof SleepEvent) {
+                return (T) preprocessSleepEventOnUpdate((SleepEvent) event);
+            }
+            throw new IllegalStateException("Unknown event type");
+        });
+    }
+
+    private DiaperEvent preprocessDiaperEventOnInsert(DiaperEvent diaperEvent) {
+        return diaperEvent.toBuilder()
+                .id(null)
+                .masterEventId(null)
+                .eventType(EventType.DIAPER)
+                .build();
+    }
+
+    private FeedEvent preprocessFeedEventOnInsert(FeedEvent feedEvent) {
+        return feedEvent.toBuilder()
+                .id(null)
+                .masterEventId(null)
+                .eventType(EventType.FEED)
+                .build();
+    }
+
+    private OtherEvent preprocessOtherEventOnInsert(OtherEvent otherEvent) {
+        return otherEvent.toBuilder()
+                .id(null)
+                .masterEventId(null)
+                .eventType(EventType.OTHER)
+                .build();
+    }
+
+    private PumpEvent preprocessPumpEventOnInsert(PumpEvent pumpEvent) {
+        return pumpEvent.toBuilder()
+                .id(null)
+                .masterEventId(null)
+                .eventType(EventType.PUMP)
+                .build();
+    }
+
+    private SleepEvent preprocessSleepEventOnInsert(SleepEvent sleepEvent) {
+        return sleepEvent.toBuilder()
+                .id(null)
+                .masterEventId(null)
+                .eventType(EventType.SLEEP)
+                .build();
+    }
+
+    private DiaperEvent preprocessDiaperEventOnUpdate(DiaperEvent diaperEvent) {
         return diaperEvent.toBuilder()
                 .eventType(EventType.DIAPER)
                 .build();
     }
 
-    private FeedEvent preprocessFeedEvent(FeedEvent feedEvent) {
+    private FeedEvent preprocessFeedEventOnUpdate(FeedEvent feedEvent) {
         return feedEvent.toBuilder()
                 .eventType(EventType.FEED)
                 .build();
     }
 
-    private OtherEvent preprocessOtherEvent(OtherEvent otherEvent) {
+    private OtherEvent preprocessOtherEventOnUpdate(OtherEvent otherEvent) {
         return otherEvent.toBuilder()
                 .eventType(EventType.OTHER)
                 .build();
     }
 
-    private PumpEvent preprocessPumpEvent(PumpEvent pumpEvent) {
+    private PumpEvent preprocessPumpEventOnUpdate(PumpEvent pumpEvent) {
         return pumpEvent.toBuilder()
                 .eventType(EventType.PUMP)
                 .build();
     }
 
-    private SleepEvent preprocessSleepEvent(SleepEvent sleepEvent) {
+    private SleepEvent preprocessSleepEventOnUpdate(SleepEvent sleepEvent) {
         return sleepEvent.toBuilder()
                 .eventType(EventType.SLEEP)
                 .build();

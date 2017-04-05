@@ -297,62 +297,62 @@ public class CalendarDbService {
         return Observable.fromCallable(() -> updateMasterEvent(masterEvent));
     }
 
-    public MasterEvent insertMasterEvent(@NonNull MasterEvent event) {
+    private MasterEvent insertMasterEvent(@NonNull MasterEvent event) {
         return DbUtils.insert(dataStore, event,
                 MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
     }
 
-    public MasterEvent updateMasterEvent(@NonNull MasterEvent event) {
+    private MasterEvent updateMasterEvent(@NonNull MasterEvent event) {
         return DbUtils.update(dataStore, event,
                 MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
     }
 
-    public DiaperEvent insertDiaperEvent(@NonNull DiaperEvent event, @NonNull MasterEvent masterEvent) {
+    private DiaperEvent insertDiaperEvent(@NonNull DiaperEvent event, @NonNull MasterEvent masterEvent) {
         return DbUtils.insert(dataStore, event, masterEvent,
                 DiaperEventMapper::mapToEntity, DiaperEventMapper::mapToPlainObject);
     }
 
-    public FeedEvent insertFeedEvent(@NonNull FeedEvent event, @NonNull MasterEvent masterEvent) {
+    private FeedEvent insertFeedEvent(@NonNull FeedEvent event, @NonNull MasterEvent masterEvent) {
         return DbUtils.insert(dataStore, event, masterEvent,
                 FeedEventMapper::mapToEntity, FeedEventMapper::mapToPlainObject);
     }
 
-    public OtherEvent insertOtherEvent(@NonNull OtherEvent event, @NonNull MasterEvent masterEvent) {
+    private OtherEvent insertOtherEvent(@NonNull OtherEvent event, @NonNull MasterEvent masterEvent) {
         return DbUtils.insert(dataStore, event, masterEvent,
                 OtherEventMapper::mapToEntity, OtherEventMapper::mapToPlainObject);
     }
 
-    public PumpEvent insertPumpEvent(@NonNull PumpEvent event, @NonNull MasterEvent masterEvent) {
+    private PumpEvent insertPumpEvent(@NonNull PumpEvent event, @NonNull MasterEvent masterEvent) {
         return DbUtils.insert(dataStore, event, masterEvent,
                 PumpEventMapper::mapToEntity, PumpEventMapper::mapToPlainObject);
     }
 
-    public SleepEvent insertSleepEvent(@NonNull SleepEvent event, @NonNull MasterEvent masterEvent) {
+    private SleepEvent insertSleepEvent(@NonNull SleepEvent event, @NonNull MasterEvent masterEvent) {
         return DbUtils.insert(dataStore, event, masterEvent,
                 SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject);
     }
 
-    public DiaperEvent updateDiaperEvent(@NonNull DiaperEvent event) {
+    private DiaperEvent updateDiaperEvent(@NonNull DiaperEvent event) {
         return DbUtils.update(dataStore, event,
                 DiaperEventMapper::mapToEntity, DiaperEventMapper::mapToPlainObject);
     }
 
-    public FeedEvent updateFeedEvent(@NonNull FeedEvent event) {
+    private FeedEvent updateFeedEvent(@NonNull FeedEvent event) {
         return DbUtils.update(dataStore, event,
                 FeedEventMapper::mapToEntity, FeedEventMapper::mapToPlainObject);
     }
 
-    public OtherEvent updateOtherEvent(@NonNull OtherEvent event) {
+    private OtherEvent updateOtherEvent(@NonNull OtherEvent event) {
         return DbUtils.update(dataStore, event,
                 OtherEventMapper::mapToEntity, OtherEventMapper::mapToPlainObject);
     }
 
-    public PumpEvent updatePumpEvent(@NonNull PumpEvent event) {
+    private PumpEvent updatePumpEvent(@NonNull PumpEvent event) {
         return DbUtils.update(dataStore, event,
                 PumpEventMapper::mapToEntity, PumpEventMapper::mapToPlainObject);
     }
 
-    public SleepEvent updateSleepEvent(@NonNull SleepEvent event) {
+    private SleepEvent updateSleepEvent(@NonNull SleepEvent event) {
         return DbUtils.update(dataStore, event,
                 SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject);
     }

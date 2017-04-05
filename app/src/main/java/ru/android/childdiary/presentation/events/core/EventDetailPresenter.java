@@ -66,14 +66,13 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribe(child -> getViewState().showTimeDialog(tag, child, parameters), this::onUnexpectedError));
     }
 
-    @SuppressWarnings("unchecked")
     public void addEvent(@NonNull T event, boolean afterButtonPressed) {
         unsubscribeOnDestroy(calendarInteractor.add(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(addedEvent -> logger.debug("event added: " + addedEvent))
                 .doOnNext(this::requestEventDetails)
-                .subscribe(addedEvent -> getViewState().eventAdded((T) addedEvent, afterButtonPressed), this::onUnexpectedError));
+                .subscribe(addedEvent -> getViewState().eventAdded(addedEvent, afterButtonPressed), this::onUnexpectedError));
     }
 
     public void updateEvent(@NonNull T event, boolean afterButtonPressed) {

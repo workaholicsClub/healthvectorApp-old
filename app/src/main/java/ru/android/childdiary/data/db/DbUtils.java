@@ -34,8 +34,10 @@ public class DbUtils {
         return dataStore;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, E> Observable<T> deleteObservable(EntityStore dataStore, Class<E> entityClass, T object, long objectId) {
-        return Observable.fromCallable(() -> delete(dataStore, entityClass, object, objectId));
+        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
+                delete(dataStore, entityClass, object, objectId)));
     }
 
     private static <T, E> T delete(EntityStore dataStore,
@@ -49,10 +51,12 @@ public class DbUtils {
         throw new RuntimeException(object.getClass() + " not found while deleting");
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, E> Observable<T> insertObservable(EntityStore dataStore, T object,
                                                         @NonNull BiFunction<BlockingEntityStore, T, E> mapToEntity,
                                                         @NonNull Function<E, T> mapToPlainObject) {
-        return Observable.fromCallable(() -> insert(dataStore, object, mapToEntity, mapToPlainObject));
+        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
+                insert(dataStore, object, mapToEntity, mapToPlainObject)));
     }
 
     @SuppressWarnings("unchecked")
@@ -69,10 +73,12 @@ public class DbUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, E, PT> Observable<T> insertObservable(EntityStore dataStore, T object, PT parentObject,
                                                             @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
                                                             @NonNull Function<E, T> mapToPlainObject) {
-        return Observable.fromCallable(() -> insert(dataStore, object, parentObject, mapToEntity, mapToPlainObject));
+        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
+                insert(dataStore, object, parentObject, mapToEntity, mapToPlainObject)));
     }
 
     @SuppressWarnings("unchecked")
@@ -89,10 +95,12 @@ public class DbUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, E> Observable<T> updateObservable(EntityStore dataStore, T object,
                                                         @NonNull BiFunction<BlockingEntityStore, T, E> mapToEntity,
                                                         @NonNull Function<E, T> mapToPlainObject) {
-        return Observable.fromCallable(() -> update(dataStore, object, mapToEntity, mapToPlainObject));
+        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
+                update(dataStore, object, mapToEntity, mapToPlainObject)));
     }
 
     @SuppressWarnings("unchecked")
@@ -109,10 +117,12 @@ public class DbUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, E, PT> Observable<T> updateObservable(EntityStore dataStore, T object, PT parentObject,
                                                             @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
                                                             @NonNull Function<E, T> mapToPlainObject) {
-        return Observable.fromCallable(() -> update(dataStore, object, parentObject, mapToEntity, mapToPlainObject));
+        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
+                update(dataStore, object, parentObject, mapToEntity, mapToPlainObject)));
     }
 
     @SuppressWarnings("unchecked")
