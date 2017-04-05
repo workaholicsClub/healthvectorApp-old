@@ -167,7 +167,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
             presenter.updateEvent(event, false);
         } else {
             // включаем таймер
-            if (event.getFinishDateTime() == null) {
+            if (event.getFinishDateTime() == null && event.getId() != null) {
                 // обновляем то же событие
                 event = event.toBuilder()
                         .isTimerStarted(true)
