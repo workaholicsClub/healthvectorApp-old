@@ -29,16 +29,6 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     private Disposable subscription;
 
-    @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
-
-        unsubscribeOnDestroy(calendarInteractor.getDefaultNotifyTimeInMinutes(getEventType())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::showNotifyTimeView));
-    }
-
     @SuppressWarnings("unchecked")
     public void requestDefaultEventDetail(@NonNull EventType eventType) {
         unsubscribeOnDestroy(calendarInteractor.getDefaultEventDetail(eventType)

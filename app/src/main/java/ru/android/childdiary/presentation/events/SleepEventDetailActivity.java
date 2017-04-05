@@ -166,13 +166,14 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                     .build();
             presenter.updateEvent(event, false);
         } else {
+            Integer notifyTime = defaultEvent != null ? defaultEvent.getNotifyTimeInMinutes() : event.getNotifyTimeInMinutes();
             // включаем таймер
             event = event.toBuilder()
                     .isTimerStarted(true)
                     .dateTime(now)
                     .finishDateTime(null)
                     .note(null)
-                    .notifyTimeInMinutes(defaultNotifyTime)
+                    .notifyTimeInMinutes(notifyTime)
                     .build();
             presenter.addEvent(event, false);
         }
@@ -206,16 +207,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
+        int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
+        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? visibility : View.GONE);
         noteView.setText(event.getNote());
         updateDuration();
         updateTimer(event);
-    }
-
-    @Override
-    public void showNotifyTimeView(int minutes) {
-        defaultNotifyTime = minutes;
-        int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
-        notifyTimeView.setVisibility(defaultNotifyTime > 0 ? visibility : View.GONE);
     }
 
     @Override
@@ -290,7 +286,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
-        notifyTimeView.setVisibility(defaultNotifyTime > 0 ? visibility : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? visibility : View.GONE);
     }
 
     private void updateTimer(@NonNull SleepEvent event) {

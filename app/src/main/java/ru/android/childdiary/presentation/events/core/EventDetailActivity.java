@@ -45,6 +45,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailNoteView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.KeyboardUtils;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -78,9 +79,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         buttonAdd.setVisibility(GONE);
         MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
-            if (masterEvent == null) {
-                getPresenter().requestDefaultEventDetail(getEventType());
-            } else {
+            getPresenter().requestDefaultEventDetail(getEventType());
+            if (masterEvent != null) {
                 getPresenter().requestEventDetails(masterEvent);
             }
         }
@@ -140,25 +140,30 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public final void showDefaultEventDetail(@NonNull T event) {
-        this.event = null;
         defaultEvent = event;
-        changeThemeIfNeeded(event.getChild());
-        setupEventDetail(event);
-        invalidateOptionsMenu();
-        buttonAdd.setVisibility(VISIBLE);
-        buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
+        if (this.event == null) {
+            setupUi(event);
+        }
     }
 
     @Override
     public final void showEventDetail(@NonNull T event) {
         this.event = event;
-        defaultEvent = null;
+        setupUi(event);
+    }
+
+    private void setupUi(@NonNull T event) {
         changeThemeIfNeeded(event.getChild());
         setupEventDetail(event);
         invalidateOptionsMenu();
-        getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
-        buttonAdd.setVisibility(GONE);
-        buttonAdd.setOnClickListener(null);
+        if (this.event == null) {
+            buttonAdd.setVisibility(VISIBLE);
+            buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
+        } else {
+            getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
+            buttonAdd.setVisibility(GONE);
+            buttonAdd.setOnClickListener(null);
+        }
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
@@ -328,7 +333,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     private void saveChangesOrExit() {
         T editedEvent = buildEvent();
-        if (defaultEvent != null && contentEquals(editedEvent, defaultEvent)) {
+        if (event == null && defaultEvent != null && contentEquals(editedEvent, defaultEvent)) {
             finish();
             return;
         }
@@ -351,4 +356,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected abstract boolean contentEquals(T event1, T event2);
+
+    protected final boolean notifyTimeViewVisisble() {
+        return defaultEvent != null && ObjectUtils.isPositive(defaultEvent.getNotifyTimeInMinutes());
+    }
 }

@@ -187,12 +187,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         durationView.setLeftDuration(event.getLeftDurationInMinutes());
         durationView.setRightDuration(event.getRightDurationInMinutes());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
+        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
-    }
-
-    @Override
-    public void showNotifyTimeView(int minutes) {
-        notifyTimeView.setVisibility(minutes > 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
