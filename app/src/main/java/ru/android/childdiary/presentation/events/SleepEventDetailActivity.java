@@ -17,6 +17,7 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -78,7 +79,9 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @BindView(R.id.timerView)
     TimerView timerView;
 
-    private boolean notifyTimeViewVisible;
+    @State
+    int defaultNotifyTime;
+
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
@@ -168,6 +171,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                     .isTimerStarted(true)
                     .dateTime(now)
                     .finishDateTime(null)
+                    .note(null)
+                    .notifyTimeInMinutes(defaultNotifyTime)
                     .build();
             presenter.addEvent(event, false);
         }
@@ -207,10 +212,10 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
-    public void showNotifyTimeView(boolean visible) {
-        notifyTimeViewVisible = visible;
+    public void showNotifyTimeView(int minutes) {
+        defaultNotifyTime = minutes;
         int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
-        notifyTimeView.setVisibility(visible ? visibility : View.GONE);
+        notifyTimeView.setVisibility(defaultNotifyTime > 0 ? visibility : View.GONE);
     }
 
     @Override
@@ -285,7 +290,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
-        notifyTimeView.setVisibility(notifyTimeViewVisible ? visibility : View.GONE);
+        notifyTimeView.setVisibility(defaultNotifyTime > 0 ? visibility : View.GONE);
     }
 
     private void updateTimer(@NonNull SleepEvent event) {

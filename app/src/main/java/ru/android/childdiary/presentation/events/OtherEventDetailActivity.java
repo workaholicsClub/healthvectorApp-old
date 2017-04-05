@@ -149,8 +149,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     }
 
     @Override
-    public void showNotifyTimeView(boolean visible) {
-        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
+    public void showNotifyTimeView(int minutes) {
+        notifyTimeView.setVisibility(minutes > 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override

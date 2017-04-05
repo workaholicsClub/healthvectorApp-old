@@ -34,7 +34,6 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
         super.onFirstViewAttach();
 
         unsubscribeOnDestroy(calendarInteractor.getDefaultNotifyTimeInMinutes(getEventType())
-                .map(defaultNotifyTime -> defaultNotifyTime > 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showNotifyTimeView));
