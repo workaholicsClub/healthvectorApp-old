@@ -305,6 +305,10 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            saveChangesOrExit();
+            return true;
+        }
         if (event == null) {
             return super.onOptionsItemSelected(item);
         }
@@ -316,9 +320,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 return true;
             case R.id.menu_delete:
                 getPresenter().deleteEvent(event);
-                return true;
-            case android.R.id.home:
-                saveChangesOrExit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
