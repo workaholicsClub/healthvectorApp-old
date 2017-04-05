@@ -177,12 +177,17 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                 presenter.updateEvent(event, false);
             } else {
                 // добавляем новое событие
-                Integer notifyTime = defaultEvent != null ? defaultEvent.getNotifyTimeInMinutes() : event.getNotifyTimeInMinutes();
+                String note = noteView.getText();
+                Integer notifyTime = notifyTimeView.getValue();
+                if (event.getId() != null) {
+                    note = null;
+                    notifyTime = defaultEvent != null ? defaultEvent.getNotifyTimeInMinutes() : event.getNotifyTimeInMinutes();
+                }
                 event = event.toBuilder()
                         .isTimerStarted(true)
                         .dateTime(now)
                         .finishDateTime(null)
-                        .note(null)
+                        .note(note)
                         .notifyTimeInMinutes(notifyTime)
                         .build();
                 presenter.addEvent(event, false);
