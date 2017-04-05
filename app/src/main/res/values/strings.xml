@@ -125,7 +125,7 @@
     <string name="menu_title_delete">Удалить</string>
     <string name="event_is_done">Выполнено</string>
     <string name="event_is_not_done">Не выполнено</string>
-    <string name="save_changes_dialog_text">Сохранить изменения?</string>
+    <string name="save_changes_dialog_title">Сохранить изменения?</string>
     <string name="save_changes_dialog_positive_button_text">Сохранить</string>
     <string name="start_timer">СТАРТ</string>
     <string name="stop_timer">СТОП</string>

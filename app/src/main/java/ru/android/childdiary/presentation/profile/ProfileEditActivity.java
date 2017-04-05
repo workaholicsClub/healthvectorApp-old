@@ -493,7 +493,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
             return;
         }
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.save_changes_dialog_text)
+                .setTitle(R.string.save_changes_dialog_title)
                 .setPositiveButton(R.string.save_changes_dialog_positive_button_text,
                         (DialogInterface dialog, int which) -> {
                             if (child == null) {
