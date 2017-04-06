@@ -91,12 +91,15 @@ public class TimerService extends Service {
             return;
         }
 
-        SleepEvent.SleepEventBuilder builder = event.toBuilder();
-        builder.isTimerStarted(false);
-        builder.finishDateTime(DateTime.now());
-        event = builder.build();
-
-        unsubscribeOnDestroy(calendarInteractor.update(event)
+        DateTime now = DateTime.now();
+        unsubscribeOnDestroy(calendarInteractor.getEventDetail(event)
+                .firstOrError()
+                .map(sleepEvent -> (SleepEvent) sleepEvent)
+                .map(sleepEvent -> sleepEvent.toBuilder()
+                        .isTimerStarted(false)
+                        .finishDateTime(now.isAfter(sleepEvent.getDateTime()) ? now : null)
+                        .build())
+                .flatMapObservable(calendarInteractor::update)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stoppedEvent -> logger.debug("event stopped: " + stoppedEvent), this::onUnexpectedError));
