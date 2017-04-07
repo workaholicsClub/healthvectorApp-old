@@ -29,5 +29,5 @@
     <color name="event_other_row_background_girl">#80C2742C</color>
     <color name="timer_on">#FF4335</color>
     <color name="timer_off">#6EC86A</color>
-    <color name="current_day_background_color">#EEF1F3</color>
+    <color name="current_day_background">#EEF1F3</color>
 </resources>

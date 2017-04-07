@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/current_day_background_color" />
+            <solid android:color="@color/current_day_background" />
         </shape>
     </item>
 </selector>
