@@ -42,6 +42,8 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
     protected LocalDate selectedDate = LocalDate.now();
     @Getter
     protected Sex sex;
+    @Getter
+    private boolean isSelected;
     private OnSelectedDateChanged onSelectedDateChanged;
 
     public CalendarViewAdapter(Context context, OnSelectedDateChanged onSelectedDateChanged) {
@@ -69,7 +71,11 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
     }
 
     public final void setSelectedDate(@NonNull LocalDate value, boolean fire) {
-        if (!value.isEqual(selectedDate)) {
+        if (value.isEqual(selectedDate)) {
+            isSelected = true;
+            notifyDataSetChanged();
+        } else {
+            isSelected = true;
             selectedDate = value;
             selectedDateChanged();
             notifyDataSetChanged();

@@ -84,6 +84,4 @@ public interface CalendarRepository extends Repository {
     Observable<MasterEvent> delete(@NonNull MasterEvent event);
 
     Observable<MasterEvent> done(@NonNull MasterEvent event);
-
-    SleepEvent stopTimer(@NonNull SleepEvent event);
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
+import ru.android.childdiary.utils.ui.FontUtils;
 
 public class CustomPrimaryDrawerItem extends PrimaryDrawerItem {
     @Override
@@ -20,6 +21,7 @@ public class CustomPrimaryDrawerItem extends PrimaryDrawerItem {
         TextView textView = ButterKnife.findById(viewHolder.itemView, R.id.material_drawer_name);
         //noinspection deprecation
         textView.setTextAppearance(context, R.style.DrawerItemTextAppearance);
+        textView.setTypeface(FontUtils.getTypefaceBold(context));
         viewHolder.itemView.setBackgroundResource(R.drawable.background_selectable);
 
         onPostBindView(this, viewHolder.itemView);

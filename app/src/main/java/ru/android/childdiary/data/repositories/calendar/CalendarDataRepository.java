@@ -68,8 +68,10 @@ public class CalendarDataRepository implements CalendarRepository {
     @Override
     public void setSelectedDate(@NonNull LocalDate date) {
         selectedDate = date;
-        for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
-            listener.onSelectedDateChanged(date);
+        synchronized (selectedDateChangedListeners) {
+            for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
+                listener.onSelectedDateChanged(date);
+            }
         }
     }
 
@@ -270,12 +272,6 @@ public class CalendarDataRepository implements CalendarRepository {
     @Override
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         return dbService.done(event);
-    }
-
-    @Override
-    public SleepEvent stopTimer(@NonNull SleepEvent event) {
-        event = event.toBuilder().isTimerStarted(false).build();
-        return dbService.updateSleepEvent(event);
     }
 
     private interface OnSelectedDateChangedListener {

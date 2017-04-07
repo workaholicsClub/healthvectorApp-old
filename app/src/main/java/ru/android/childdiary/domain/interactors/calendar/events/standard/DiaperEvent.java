@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
@@ -12,6 +13,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class DiaperEvent extends MasterEvent {
     Long id;
 

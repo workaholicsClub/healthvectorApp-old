@@ -26,6 +26,7 @@
         <item name="android:background">@drawable/name_edit_text_background</item>
         <item name="android:paddingBottom">@dimen/name_edit_text_padding_bottom</item>
         <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="fontPath">@string/font_path_bold</item>
     </style>
 
     <style name="NameTextViewStyle">
@@ -34,6 +35,7 @@
         <item name="android:background">@drawable/name_text_view_background</item>
         <item name="android:paddingBottom">@dimen/name_edit_text_padding_bottom</item>
         <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="fontPath">@string/font_path_bold</item>
     </style>
 
     <style name="ButtonStyle">
@@ -42,60 +44,65 @@
         <item name="android:background">@drawable/button_background_boy</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="fontPath">@string/font_path_bold</item>
     </style>
 
     <style name="DrawerItemTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_base</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontPath">@string/font_path_bold</item>
     </style>
 
     <style name="TitleTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontPath">@string/font_path_bold</item>
     </style>
 
     <style name="CalendarDayOfWeekTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_calendar</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontPath">@string/font_path_bold</item>
     </style>
 
     <style name="CalendarDayOfMonthTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_calendar</item>
-        <item name="android:textStyle">normal</item>
+        <item name="fontPath">@string/font_path_regular</item>
     </style>
 
     <style name="CalendarDayOfMonthSelectedTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_calendar</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontPath">@string/font_path_bold</item>
     </style>
 
     <style name="ToolbarTitleTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontPath">@string/font_path_bold</item>
     </style>
 
     <style name="ToolbarSubtitleTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_small</item>
-        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="EventRowTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_base</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontPath">@string/font_path_bold</item>
     </style>
 
     <style name="EventRowDescriptionTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_base</item>
-        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="PrimaryTextAppearance" parent="@android:style/TextAppearance">

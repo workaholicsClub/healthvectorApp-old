@@ -17,6 +17,7 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.presentation.calendar.FabController;
 import ru.android.childdiary.utils.EventHelper;
 
 public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implements EventViewHolder.SwipeActionListener {
@@ -96,12 +97,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
     @Override
     public void move(EventViewHolder viewHolder) {
         viewHolder.swipeLayout.addSwipeListener(new SwipeMoveAction(eventActionListener, viewHolder.getEvent()));
-        swipeManager.closeAllItems();
-    }
-
-    @Override
-    public void edit(EventViewHolder viewHolder) {
-        viewHolder.swipeLayout.addSwipeListener(new SwipeEditAction(eventActionListener, viewHolder.getEvent()));
         swipeManager.closeAllItems();
     }
 

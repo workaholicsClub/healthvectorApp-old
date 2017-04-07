@@ -20,8 +20,12 @@ public class ResourcesUtils {
     public static Drawable getChildIcon(Context context, @NonNull Child child, boolean toolbar) {
         if (child.getImageFileName() == null) {
             return ContextCompat.getDrawable(context,
-                    toolbar ? R.drawable.ic_placeholder_toolbar : R.drawable.ic_placeholder);
+                    toolbar ? R.drawable.ic_placeholder_toolbar : R.drawable.ic_placeholder_header);
         }
+        // TODO: использовать относительное имя
+        // т.к. в будущем надо будет добавить
+        // сохранение данных в облако и восстановление данных из облака;
+        // в общем случае полный путь к файлу для разных устройств будет разный
         return Drawable.createFromPath(child.getImageFileName());
     }
 

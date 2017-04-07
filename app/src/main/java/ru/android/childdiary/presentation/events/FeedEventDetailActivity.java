@@ -43,6 +43,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailFoodView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailSpinnerView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
@@ -88,10 +89,9 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, FeedEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 
@@ -155,7 +155,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        breastView.setSex(sex);
+        breastView.setSex(getSex());
     }
 
     @Override
@@ -187,12 +187,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         durationView.setLeftDuration(event.getLeftDurationInMinutes());
         durationView.setRightDuration(event.getRightDurationInMinutes());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
+        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
-    }
-
-    @Override
-    public void showNotifyTimeView(boolean visible) {
-        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -310,7 +306,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
     public void setupFeedType() {
         FeedType feedType = feedTypeView.getValue();
-        setupToolbarLogo(ResourcesUtils.getFeedEventLogoRes(sex, feedType));
+        setupToolbarLogo(ResourcesUtils.getFeedEventLogoRes(getSex(), feedType));
         switch (feedType) {
             case BREAST_MILK:
                 breastView.setVisibility(View.VISIBLE);
@@ -365,5 +361,10 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    protected boolean contentEquals(FeedEvent event1, FeedEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }

@@ -16,6 +16,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import butterknife.BindView;
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -29,6 +30,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeVi
 import ru.android.childdiary.presentation.events.widgets.EventDetailOtherEventNameView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDetailView, OtherEvent> implements OtherEventDetailView {
@@ -65,12 +67,14 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
+    @State
+    boolean isButtonDoneEnabled;
+
     private boolean isValidationStarted;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, OtherEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 
@@ -101,19 +105,22 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                         .showMinutes(true)
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
+
+        unsubscribeOnDestroy(presenter.listenForDoneButtonUpdate(otherEventNameView.otherEventNameObservable()));
     }
 
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getOtherEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getOtherEventLogoRes(getSex()));
         setupToolbarTitle(R.string.event_other);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getOtherEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getOtherEventLogoRes(getSex()));
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @Override
@@ -138,12 +145,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
+        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
-    }
-
-    @Override
-    public void showNotifyTimeView(boolean visible) {
-        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -154,6 +157,18 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
 
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
+        if (finishDateTime == null) {
+            LocalDate finishDate = finishDateView.getValue();
+            LocalTime finishTime = finishTimeView.getValue();
+            if (finishDate == null && finishTime != null) {
+                finishDateTime = startDateTime.withTime(finishTime);
+                if (finishDateTime.isBefore(startDateTime)) {
+                    finishDateTime = finishDateTime.plusDays(1);
+                }
+            } else if (finishDate != null && finishTime == null) {
+                finishDateTime = finishDate.toDateTime(startDateTime.toLocalTime());
+            }
+        }
 
         builder.name(otherEventNameView.getText())
                 .dateTime(startDateTime)
@@ -162,6 +177,12 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                 .note(noteView.getText());
 
         return builder.build();
+    }
+
+    @Override
+    public void setButtonDoneEnabled(boolean enabled) {
+        isButtonDoneEnabled = enabled;
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @Override
@@ -204,5 +225,10 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     @Override
     public void onSetTime(String tag, int minutes) {
         notifyTimeView.setValue(minutes);
+    }
+
+    @Override
+    protected boolean contentEquals(OtherEvent event1, OtherEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }

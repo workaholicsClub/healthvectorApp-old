@@ -9,7 +9,5 @@ public interface EventActionListener {
 
     void edit(MasterEvent event);
 
-    void review(MasterEvent event);
-
     void delete(MasterEvent event);
 }

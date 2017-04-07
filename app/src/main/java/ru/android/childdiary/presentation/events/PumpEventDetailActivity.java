@@ -30,6 +30,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView<PumpEvent>, PumpEvent> implements EventDetailView<PumpEvent> {
@@ -55,10 +56,9 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, PumpEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 
@@ -87,15 +87,15 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(getSex()));
         setupToolbarTitle(R.string.event_pump);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(sex));
-        breastView.setSex(sex);
+        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(getSex()));
+        breastView.setSex(getSex());
     }
 
     @Override
@@ -121,12 +121,8 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
         amountMlPumpView.setAmountMlLeft(event.getLeftAmountMl());
         amountMlPumpView.setAmountMlRight(event.getRightAmountMl());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
+        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
-    }
-
-    @Override
-    public void showNotifyTimeView(boolean visible) {
-        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -160,5 +156,10 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @Override
     public void onSetTime(String tag, int minutes) {
         notifyTimeView.setValue(minutes);
+    }
+
+    @Override
+    protected boolean contentEquals(PumpEvent event1, PumpEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }

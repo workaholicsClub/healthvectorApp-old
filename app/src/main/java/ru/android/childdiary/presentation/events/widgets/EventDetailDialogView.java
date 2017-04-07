@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
 
-public abstract class EventDetailDialogView<T> extends LinearLayout implements
-        View.OnClickListener, ReadOnlyView {
+public abstract class EventDetailDialogView<T> extends LinearLayout {
     @BindView(R.id.textViewWrapper)
     View textViewWrapper;
 
@@ -26,8 +26,10 @@ public abstract class EventDetailDialogView<T> extends LinearLayout implements
     @BindView(R.id.imageView)
     ImageView imageView;
 
+    @Nullable
     @Setter
     private EventDetailDialogListener eventDetailDialogListener;
+    @Nullable
     @Getter
     private T value;
 
@@ -61,12 +63,10 @@ public abstract class EventDetailDialogView<T> extends LinearLayout implements
         textView.setText(getTextForValue(value));
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view == textViewWrapper) {
-            if (eventDetailDialogListener != null) {
-                eventDetailDialogListener.requestValueChange(this);
-            }
+    @OnClick(R.id.textViewWrapper)
+    void onClick() {
+        if (eventDetailDialogListener != null) {
+            eventDetailDialogListener.requestValueChange(this);
         }
     }
 
@@ -74,13 +74,6 @@ public abstract class EventDetailDialogView<T> extends LinearLayout implements
     protected abstract int getLayoutResourceId();
 
     protected abstract String getTextForValue(@Nullable T value);
-
-    @Override
-    public void setReadOnly(boolean readOnly) {
-        textViewWrapper.setOnClickListener(readOnly ? null : this);
-        textViewWrapper.setBackgroundResource(readOnly ? 0 : R.drawable.background_clickable);
-        imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
-    }
 
     public interface EventDetailDialogListener {
         void requestValueChange(EventDetailDialogView view);

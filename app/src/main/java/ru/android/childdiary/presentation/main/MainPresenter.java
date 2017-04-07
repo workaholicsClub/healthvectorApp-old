@@ -12,7 +12,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -79,10 +78,6 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribe(getViewState()::navigateToProfileEdit, this::onUnexpectedError));
     }
 
-    public void reviewChild() {
-        getViewState().navigateToProfileReview();
-    }
-
     public void deleteChild() {
         unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
                 .subscribeOn(Schedulers.io())
@@ -97,27 +92,45 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .subscribe(deletedChild -> logger.debug("child deleted: " + deletedChild), this::onUnexpectedError));
     }
 
-    public void addDiaperEvent() {
-        getViewState().navigateToDiaperEventAdd();
+    public void openCalendar() {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToCalendar, this::onUnexpectedError));
     }
 
-    public void addSleepEvent() {
-        getViewState().navigateToSleepEventAdd();
+    public void openDevelopmentDiary() {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToDevelopmentDiary, this::onUnexpectedError));
     }
 
-    public void addFeedEvent() {
-        getViewState().navigateToFeedEventAdd();
+    public void openExercises() {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToExercises, this::onUnexpectedError));
     }
 
-    public void addPumpEventClick() {
-        getViewState().navigateToPumpEventAdd();
+    public void openMedicalData() {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToMedicalData, this::onUnexpectedError));
     }
 
-    public void addOtherEventClick() {
-        getViewState().navigateToOtherEventAdd();
+    public void openSettings() {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToSettings, this::onUnexpectedError));
     }
 
-    private void onEventAdded(@NonNull MasterEvent event) {
-        logger.debug("onEventAdded: " + event);
+    public void openHelp() {
+        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToHelp, this::onUnexpectedError));
     }
 }

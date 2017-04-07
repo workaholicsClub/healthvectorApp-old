@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ru.android.childdiary.presentation.events.widgets.TimerView
+        android:id="@+id/timerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ru.android.childdiary.presentation.events.widgets.EventDetailTitleView
         android:id="@+id/startTitleView"
         android:layout_width="match_parent"
@@ -38,24 +43,6 @@
         android:id="@+id/durationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/buttonTimer"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/timer_height"
-        android:layout_marginBottom="@dimen/timer_margin_vertical"
-        android:layout_marginLeft="@dimen/timer_margin_horizontal"
-        android:layout_marginRight="@dimen/timer_margin_horizontal"
-        android:layout_marginTop="@dimen/timer_margin_vertical"
-        android:background="@drawable/background_timer_on_boy"
-        android:drawableLeft="@drawable/timer_on_boy"
-        android:drawableStart="@drawable/timer_on_boy"
-        android:gravity="center_vertical|end"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:text="@string/duration_format"
-        android:textColor="@color/timer_on_boy"
-        android:textSize="@dimen/timer_text_size" />
 
     <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView
         android:id="@+id/notifyTimeView"

@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.utils.ValueUtils;
+import ru.android.childdiary.utils.ObjectUtils;
 
 public class ChildValidator extends Validator<Child, ChildValidationResult> {
     private final Context context;
@@ -59,12 +59,12 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
                 // необязательное поле
                 break;
             case BIRTH_HEIGHT:
-                if (!ValueUtils.hasValue(child.getBirthHeight())) {
+                if (!ObjectUtils.isPositive(child.getBirthHeight())) {
                     result.addMessage(context.getString(R.string.validate_child_birth_height_empty));
                 }
                 break;
             case BIRTH_WEIGHT:
-                if (!ValueUtils.hasValue(child.getBirthWeight())) {
+                if (!ObjectUtils.isPositive(child.getBirthWeight())) {
                     result.addMessage(context.getString(R.string.validate_child_birth_weight_empty));
                 }
                 break;

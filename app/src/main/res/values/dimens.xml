@@ -8,7 +8,7 @@
     <dimen name="profile_margin_horizontal">16dp</dimen>
     <dimen name="profile_margin_vertical">26dp</dimen>
     <dimen name="profile_field_height">30dp</dimen>
-    <dimen name="name_edit_text_padding_bottom">6dp</dimen>
+    <dimen name="name_edit_text_padding_bottom">4dp</dimen>
     <dimen name="name_edit_text_stroke_width">1dp</dimen>
     <dimen name="name_edit_text_stroke_width_negative">-2dp</dimen>
     <dimen name="sex_item_text_padding_horizontal">10dp</dimen>
@@ -23,7 +23,7 @@
     <dimen name="account_header_action_item_image_size">44dp</dimen>
     <dimen name="account_header_action_item_height">54dp</dimen>
     <dimen name="account_header_action_item_width_wide">240dp</dimen>
-    <dimen name="account_header_action_item_width_narrow">200dp</dimen>
+    <dimen name="account_header_action_item_width_narrow">210dp</dimen>
     <!-- fab toolbar -->
     <dimen name="fab_size">56dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
@@ -66,10 +66,11 @@
     <!-- timer -->
     <dimen name="timer_stroke_width">2dp</dimen>
     <dimen name="timer_corner_radius">8dp</dimen>
-    <dimen name="timer_height">77dp</dimen>
+    <dimen name="timer_height">100dp</dimen>
     <dimen name="timer_margin_horizontal">16dp</dimen>
     <dimen name="timer_margin_vertical">8dp</dimen>
-    <dimen name="timer_text_size">44sp</dimen>
+    <dimen name="timer_text_size_large">44sp</dimen>
+    <dimen name="timer_text_size_base">18sp</dimen>
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>

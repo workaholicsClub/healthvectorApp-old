@@ -32,17 +32,4 @@
             android:textColorHint="@color/placeholder_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
     </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:id="@+id/placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_margin="@dimen/event_detail_margin_base"
-        android:paddingBottom="@dimen/name_edit_text_padding_bottom"
-        android:paddingTop="12dp"
-        android:text="@string/note"
-        android:textColor="@color/placeholder_text"
-        android:textColorHint="@color/placeholder_text"
-        android:textSize="@dimen/text_size_base" />
 </LinearLayout>

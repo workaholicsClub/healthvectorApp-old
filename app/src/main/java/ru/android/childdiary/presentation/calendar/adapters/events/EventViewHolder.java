@@ -49,7 +49,7 @@ class EventViewHolder extends RecyclerView.ViewHolder {
     TextView textViewTime;
 
     @BindView(R.id.textViewEventTitle)
-    TextView textViewEventTitle;
+    TextView textViewTitle;
 
     @BindView(R.id.textViewDescription)
     TextView textViewDescription;
@@ -88,10 +88,10 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         textViewTime.setText(DateUtils.time(context, event.getDateTime().toLocalTime()));
         EventType eventType = event.getEventType();
         if (eventType == EventType.OTHER) {
-            textViewEventTitle.setText(EventHelper.getDescription(context, event));
+            textViewTitle.setText(EventHelper.getDescription(context, event));
             textViewDescription.setText(null);
         } else {
-            textViewEventTitle.setText(StringUtils.eventType(context, eventType));
+            textViewTitle.setText(StringUtils.eventType(context, eventType));
             textViewDescription.setText(EventHelper.getDescription(context, event));
         }
 
@@ -105,7 +105,7 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         boolean isDone = EventHelper.isDone(event);
         boolean isExpired = EventHelper.isExpired(event);
         int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
-        textViewEventTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
+        textViewTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
     }
 
     public void updateDescription(Context context, MasterEvent event) {
@@ -149,14 +149,9 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         swipeActionListener.move(this);
     }
 
-    @OnClick(R.id.eventRowActionEdit)
-    void onEditClick() {
-        swipeActionListener.edit(this);
-    }
-
     @OnClick(R.id.eventView)
     void onEventViewClick() {
-        eventActionListener.review(event);
+        eventActionListener.edit(event);
     }
 
     @OnClick(R.id.eventRowActionDelete)
@@ -168,8 +163,6 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         void done(EventViewHolder viewHolder);
 
         void move(EventViewHolder viewHolder);
-
-        void edit(EventViewHolder viewHolder);
 
         void delete(EventViewHolder viewHolder);
     }

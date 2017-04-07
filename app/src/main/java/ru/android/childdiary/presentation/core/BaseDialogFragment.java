@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import icepick.Icepick;
+import lombok.AccessLevel;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -30,8 +34,13 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     private final Map<Integer, RequestPermissionInfo> permissionInfoMap = new HashMap<>();
 
-    protected Child child;
-    protected Sex sex;
+    @NonNull
+    @Getter(AccessLevel.PROTECTED)
+    private Child child;
+
+    @Nullable
+    @Getter(AccessLevel.PROTECTED)
+    private Sex sex;
 
     public void showAllowingStateLoss(FragmentManager manager, String tag, @NonNull Child child) {
         Bundle arguments = new Bundle();
@@ -44,11 +53,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     @Override
     @NonNull
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         init(savedInstanceState);
         return super.onCreateDialog(savedInstanceState);
     }
 
+    @CallSuper
     protected void init(Bundle savedInstanceState) {
         child = (Child) getArguments().getSerializable(ExtraConstants.EXTRA_CHILD);
         sex = child.getSex();
@@ -75,9 +85,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(sex))
                         .setTitle(permissionInfo.getTitleResourceId())
                         .setMessage(permissionInfo.getTextResourceId())
-                        .setPositiveButton(R.string.OK,
+                        .setPositiveButton(R.string.ok,
                                 (DialogInterface dialog, int which) -> requestPermissions(new String[]{permission}, permissionInfo.getRequestCode()))
-                        .setNegativeButton(R.string.Cancel, null)
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             } else {
                 requestPermissions(new String[]{permission}, permissionInfo.getRequestCode());

@@ -22,8 +22,13 @@ public class OtherEventDetailPresenter extends EventDetailPresenter<OtherEventDe
         applicationComponent.inject(this);
     }
 
+    public Disposable listenForDoneButtonUpdate(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
+        return calendarInteractor.controlOtherEventDoneButton(otherEventNameObservable)
+                .subscribe(getViewState()::setButtonDoneEnabled, this::onUnexpectedError);
+    }
+
     public Disposable listenForFieldsUpdate(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
-        return calendarInteractor.controlFields(otherEventNameObservable)
+        return calendarInteractor.controlOtherEventFields(otherEventNameObservable)
                 .subscribe(this::handleValidationResult, this::onUnexpectedError);
     }
 

@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -43,15 +44,18 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 @SuppressLint("Registered")
-public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCompatActivity implements BaseView {
+public abstract class BaseMvpActivity extends MvpAppCompatActivity implements BaseView {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @State
-    protected Sex sex;
+    @Nullable
+    @Getter(AccessLevel.PROTECTED)
+    Sex sex;
 
     @Nullable
     @BindView(R.id.toolbar)
@@ -67,6 +71,11 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
     }
 
     protected abstract void injectActivity(ApplicationComponent applicationComponent);
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -138,16 +147,16 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
 
     @CallSuper
     protected void themeChanged() {
-        logger.debug("setup theme");
+        logger.debug("setup theme: " + sex);
     }
 
     private void setupToolbarColor() {
         logger.debug("setup toolbar color");
         if (toolbar != null) {
             toolbar.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(ThemeUtils.getColorPrimaryDark(this, sex));
+            }
         }
     }
 
@@ -216,7 +225,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends MvpAppCom
         if (BuildConfig.DEBUG) {
             new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(sex))
                     .setMessage(e.toString())
-                    .setPositiveButton(R.string.OK, null)
+                    .setPositiveButton(R.string.ok, null)
                     .show();
         }
     }

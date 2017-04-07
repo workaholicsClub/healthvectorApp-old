@@ -1,13 +1,14 @@
 package ru.android.childdiary.presentation.events.core;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,8 +29,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import icepick.State;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
@@ -37,35 +36,38 @@ import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
+import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNoteView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
-import ru.android.childdiary.presentation.events.widgets.ReadOnlyView;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.KeyboardUtils;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
-import ru.android.childdiary.utils.ui.WidgetsUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
     protected T event;
+    protected T defaultEvent;
 
     @BindView(R.id.noteView)
     protected EventDetailNoteView noteView;
 
+    @BindView(R.id.buttonAdd)
+    protected Button buttonAdd;
+
     @BindView(R.id.rootView)
     View rootView;
 
-    @BindView(R.id.buttonDone)
-    Button buttonDone;
-
     @BindView(R.id.dummy)
     View dummy;
-
-    @State
-    boolean readOnly;
 
     private ViewGroup eventDetailsView;
 
@@ -74,16 +76,14 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         setupEditTextView(noteView);
+        buttonAdd.setVisibility(GONE);
         MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
-            if (masterEvent == null) {
-                getPresenter().requestDefaultEventDetail(getEventType());
-            } else {
+            getPresenter().requestDefaultEventDetail(getEventType());
+            if (masterEvent != null) {
                 getPresenter().requestEventDetails(masterEvent);
-                readOnly = getIntent().getBooleanExtra(ExtraConstants.EXTRA_READ_ONLY, false);
             }
         }
-        setupReadOnlyFields();
     }
 
     @Override
@@ -131,55 +131,39 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(sex, true));
-    }
-
-    @OnClick(R.id.buttonDone)
-    void onButtonDoneClick() {
-        if (readOnly) {
-            readOnly = false;
-            setupReadOnlyFields();
-        } else {
-            upsertEvent(buildEvent(), true);
-        }
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
     protected final T buildEvent() {
-        if (event == null) {
-            return buildEvent(null);
-        } else {
-            return buildEvent(event);
-        }
-    }
-
-    protected final void upsertEvent(@NonNull T event, boolean afterButtonPressed) {
-        if (this.event == null) {
-            getPresenter().addEvent(event, afterButtonPressed);
-        } else {
-            if (this.event.equals(event)) {
-                if (afterButtonPressed) {
-                    finish();
-                }
-            } else {
-                getPresenter().updateEvent(event, afterButtonPressed);
-            }
-        }
+        return buildEvent(event == null ? defaultEvent : event);
     }
 
     @Override
     public final void showDefaultEventDetail(@NonNull T event) {
-        this.event = null;
-        changeThemeIfNeeded(event.getChild());
-        setupEventDetail(event);
+        defaultEvent = event;
+        if (this.event == null) {
+            setupUi(event);
+        }
     }
 
     @Override
     public final void showEventDetail(@NonNull T event) {
         this.event = event;
+        setupUi(event);
+    }
+
+    private void setupUi(@NonNull T event) {
         changeThemeIfNeeded(event.getChild());
         setupEventDetail(event);
         invalidateOptionsMenu();
-        getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
+        if (this.event == null) {
+            buttonAdd.setVisibility(VISIBLE);
+            buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
+        } else {
+            getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
+            buttonAdd.setVisibility(GONE);
+            buttonAdd.setOnClickListener(null);
+        }
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
@@ -198,8 +182,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         if (afterButtonPressed) {
             setResult(RESULT_OK);
             finish();
-        } else {
-            getPresenter().requestEventDetails(event);
         }
     }
 
@@ -249,26 +231,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     protected void showDatePicker(String tag, @Nullable LocalDate date,
                                   @Nullable LocalDate minDate, @Nullable LocalDate maxDate) {
-        Calendar calendar = Calendar.getInstance();
-        if (date != null) {
-            calendar.setTime(date.toDate());
-        }
-        DatePickerDialog dpd = DatePickerDialog.newInstance(this,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
-        dpd.vibrate(false);
-        WidgetsUtils.setupDatePicker(this, dpd, sex);
-        if (minDate != null) {
-            calendar = Calendar.getInstance();
-            calendar.setTime(minDate.toDate());
-            dpd.setMinDate(calendar);
-        }
-        if (maxDate != null) {
-            calendar = Calendar.getInstance();
-            calendar.setTime(maxDate.toDate());
-            dpd.setMaxDate(calendar);
-        }
+        DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, date, getSex(),
+                minDate, maxDate);
         dpd.show(getFragmentManager(), tag);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
@@ -285,13 +249,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected void showTimePicker(String tag, @Nullable LocalTime time) {
-        if (time == null) {
-            time = LocalTime.now();
-        }
-        TimePickerDialog tpd = TimePickerDialog.newInstance(this,
-                time.getHourOfDay(), time.getMinuteOfHour(), DateFormat.is24HourFormat(this));
-        tpd.vibrate(false);
-        WidgetsUtils.setupTimePicker(this, tpd, sex);
+        TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, time, getSex());
         tpd.show(getFragmentManager(), tag);
         hideKeyboardAndClearFocus(rootView.findFocus());
     }
@@ -324,21 +282,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     public void onSetTime(String tag, int minutes) {
     }
 
-    private void setupReadOnlyFields() {
-        setReadOnly(rootView);
-        buttonDone.setText(readOnly ? R.string.edit : R.string.save);
-    }
-
-    private void setReadOnly(View view) {
-        if (view instanceof ReadOnlyView) {
-            ((ReadOnlyView) view).setReadOnly(readOnly);
-        } else if (view instanceof ViewGroup) {
-            ViewGroup viewGroup = (ViewGroup) view;
-            for (int i = 0; i < viewGroup.getChildCount(); ++i) {
-                View viewChild = viewGroup.getChildAt(i);
-                setReadOnly(viewChild);
-            }
-        }
+    @Override
+    public void onBackPressed() {
+        saveChangesOrExit();
     }
 
     @Override
@@ -364,6 +310,10 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            saveChangesOrExit();
+            return true;
+        }
         if (event == null) {
             return super.onOptionsItemSelected(item);
         }
@@ -379,5 +329,35 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void saveChangesOrExit() {
+        T editedEvent = buildEvent();
+        if (event == null && defaultEvent != null && contentEquals(editedEvent, defaultEvent)) {
+            finish();
+            return;
+        }
+        if (event != null && contentEquals(editedEvent, event)) {
+            finish();
+            return;
+        }
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.save_changes_dialog_title)
+                .setPositiveButton(R.string.save_changes_dialog_positive_button_text,
+                        (DialogInterface dialog, int which) -> {
+                            if (event == null) {
+                                getPresenter().addEvent(editedEvent, true);
+                            } else {
+                                getPresenter().updateEvent(editedEvent, true);
+                            }
+                        })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
+                .show();
+    }
+
+    protected abstract boolean contentEquals(T event1, T event2);
+
+    protected final boolean notifyTimeViewVisisble() {
+        return defaultEvent != null && ObjectUtils.isPositive(defaultEvent.getNotifyTimeInMinutes());
     }
 }

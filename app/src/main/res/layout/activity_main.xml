@@ -1,37 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
+    <FrameLayout
+        android:id="@+id/toolbarWrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        android:layout_height="wrap_content">
 
         <include layout="@layout/toolbar" />
+    </FrameLayout>
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@color/white"
-            app:tabIndicatorHeight="@dimen/selected_tab_indicator_height"
-            app:tabMaxWidth="0dp"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/white_transparent" />
-    </android.support.design.widget.AppBarLayout>
-
-    <ru.android.childdiary.presentation.main.widgets.NotSwipeableViewPager
-        android:id="@+id/viewPager"
+    <FrameLayout
+        android:id="@+id/mainContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <ru.android.childdiary.presentation.main.widgets.FabToolbar
-        android:id="@+id/fabToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_below="@+id/toolbarWrapper" />
+</RelativeLayout>

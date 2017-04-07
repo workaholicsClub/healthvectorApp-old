@@ -21,7 +21,7 @@ import ru.android.childdiary.utils.TimeUtils;
 
 public class NotificationUtils {
     private static PendingIntent buildPendingIntent(Context context, int notificationId, @NonNull SleepEvent event) {
-        Intent intent = SleepEventDetailActivity.getIntent(context, event, true);
+        Intent intent = SleepEventDetailActivity.getIntent(context, event);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(SleepEventDetailActivity.class);
         stackBuilder.addNextIntent(intent);
@@ -48,13 +48,14 @@ public class NotificationUtils {
 
     public static void updateNotification(Context context, NotificationCompat.Builder builder, @NonNull SleepEvent event) {
         String contentTitle, contentText;
-        DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
-        if (now.isAfter(event.getDateTime()) || now.isEqual(event.getDateTime())) {
+        DateTime now = DateTime.now();
+        DateTime start = event.getDateTime();
+        if (now.isAfter(start) || now.isEqual(start)) {
             contentTitle = context.getString(R.string.child_sleep, event.getChild().getName());
-            contentText = TimeUtils.durationLong(context, event.getDateTime(), now);
+            contentText = TimeUtils.timerString(context, start, now);
         } else {
             contentTitle = context.getString(R.string.sleep_timer);
-            String duration = TimeUtils.durationShort(context, now, event.getDateTime());
+            String duration = TimeUtils.timerString(context, now, start);
             contentText = context.getString(R.string.will_start, duration);
         }
         builder.setSmallIcon(ResourcesUtils.getNotificationSleepRes(event.getChild().getSex()))

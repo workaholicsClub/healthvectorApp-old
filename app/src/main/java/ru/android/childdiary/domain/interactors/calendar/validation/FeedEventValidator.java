@@ -12,7 +12,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
-import ru.android.childdiary.utils.ValueUtils;
+import ru.android.childdiary.utils.ObjectUtils;
 
 public class FeedEventValidator extends Validator<FeedEvent, CalendarValidationResult> {
     private final Context context;
@@ -29,16 +29,16 @@ public class FeedEventValidator extends Validator<FeedEvent, CalendarValidationR
         if (event.getFeedType() == FeedType.BREAST_MILK) {
             switch (event.getBreast()) {
                 case LEFT:
-                    if (!ValueUtils.hasValue(event.getLeftDurationInMinutes())
-                            && ValueUtils.hasValue(event.getRightDurationInMinutes())) {
+                    if (!ObjectUtils.isPositive(event.getLeftDurationInMinutes())
+                            && ObjectUtils.isPositive(event.getRightDurationInMinutes())) {
                         CalendarValidationResult result = new CalendarValidationResult();
                         result.addMessage(context.getString(R.string.validate_event_feed_breast_milk_fill_left_duration));
                         results.add(result);
                     }
                     break;
                 case RIGHT:
-                    if (!ValueUtils.hasValue(event.getRightDurationInMinutes())
-                            && ValueUtils.hasValue(event.getLeftDurationInMinutes())) {
+                    if (!ObjectUtils.isPositive(event.getRightDurationInMinutes())
+                            && ObjectUtils.isPositive(event.getLeftDurationInMinutes())) {
                         CalendarValidationResult result = new CalendarValidationResult();
                         result.addMessage(context.getString(R.string.validate_event_feed_breast_milk_fill_right_duration));
                         results.add(result);

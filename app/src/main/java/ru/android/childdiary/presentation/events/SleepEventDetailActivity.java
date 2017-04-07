@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -18,6 +17,7 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -32,12 +32,13 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailDurationView
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
+import ru.android.childdiary.presentation.events.widgets.TimerView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
-import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class SleepEventDetailActivity extends EventDetailActivity<EventDetailView<SleepEvent>, SleepEvent> implements EventDetailView<SleepEvent>,
         TimerServiceListener {
@@ -75,16 +76,17 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
-    @BindView(R.id.buttonTimer)
-    Button buttonTimer;
+    @BindView(R.id.timerView)
+    TimerView timerView;
 
-    private boolean notifyTimeViewVisible;
+    @State
+    int defaultNotifyTime;
+
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, SleepEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 
@@ -127,14 +129,15 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(getSex()));
         setupToolbarTitle(R.string.event_sleep);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(sex));
+        timerView.setSex(getSex());
+        setupToolbarLogo(ResourcesUtils.getSleepEventLogoRes(getSex()));
     }
 
     @Override
@@ -152,24 +155,44 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @OnClick(R.id.buttonTimer)
     void onTimerClick() {
+        DateTime now = DateTime.now();
         SleepEvent event = buildEvent();
-        boolean isTimerStarted = !EventHelper.isTimerStarted(event);
-
-        SleepEvent.SleepEventBuilder builder = event.toBuilder();
-        builder.isTimerStarted(isTimerStarted);
-
-        if (isTimerStarted) {
-            builder.finishDateTime(null);
+        boolean timerWasStarted = EventHelper.isTimerStarted(event);
+        if (timerWasStarted) {
+            // выключаем таймер
+            event = event.toBuilder()
+                    .isTimerStarted(false)
+                    .finishDateTime(now.isAfter(event.getDateTime()) ? now : null)
+                    .build();
+            presenter.updateEvent(event, false);
         } else {
-            DateTime now = DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0);
-            if (now.isAfter(event.getDateTime())) {
-                builder.finishDateTime(now);
+            // включаем таймер
+            if (event.getFinishDateTime() == null && event.getId() != null) {
+                // обновляем то же событие
+                event = event.toBuilder()
+                        .isTimerStarted(true)
+                        .dateTime(now)
+                        .finishDateTime(null)
+                        .build();
+                presenter.updateEvent(event, false);
             } else {
-                builder.finishDateTime(null);
+                // добавляем новое событие
+                String note = noteView.getText();
+                Integer notifyTime = notifyTimeView.getValue();
+                if (event.getId() != null) {
+                    note = defaultEvent == null ? event.getNote() : defaultEvent.getNote();
+                    notifyTime = defaultEvent == null ? event.getNotifyTimeInMinutes() : defaultEvent.getNotifyTimeInMinutes();
+                }
+                event = event.toBuilder()
+                        .isTimerStarted(true)
+                        .dateTime(now)
+                        .finishDateTime(null)
+                        .note(note)
+                        .notifyTimeInMinutes(notifyTime)
+                        .build();
+                presenter.addEvent(event, false);
             }
         }
-
-        upsertEvent(builder.build(), false);
     }
 
     @Override
@@ -200,15 +223,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
+        int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
+        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? visibility : View.GONE);
         noteView.setText(event.getNote());
         updateDuration();
         updateTimer(event);
-    }
-
-    @Override
-    public void showNotifyTimeView(boolean visible) {
-        notifyTimeViewVisible = visible;
-        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -219,6 +238,18 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
         DateTime startDateTime = getDateTime(startDateView, startTimeView);
         DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
+        if (finishDateTime == null) {
+            LocalDate finishDate = finishDateView.getValue();
+            LocalTime finishTime = finishTimeView.getValue();
+            if (finishDate == null && finishTime != null) {
+                finishDateTime = startDateTime.withTime(finishTime);
+                if (finishDateTime.isBefore(startDateTime)) {
+                    finishDateTime = finishDateTime.plusDays(1);
+                }
+            } else if (finishDate != null && finishTime == null) {
+                finishDateTime = finishDate.toDateTime(startDateTime.toLocalTime());
+            }
+        }
 
         builder.dateTime(startDateTime)
                 .finishDateTime(finishDateTime)
@@ -279,25 +310,30 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         Integer minutes = TimeUtils.durationInMinutes(start, finish);
         durationView.setValue(minutes);
         int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
+        finishTitleView.setVisibility(visibility);
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
-        notifyTimeView.setVisibility(notifyTimeViewVisible ? visibility : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? visibility : View.GONE);
     }
 
     private void updateTimer(@NonNull SleepEvent event) {
-        if (EventHelper.isTimerStarted(event)) {
+        boolean isTimerStarted = EventHelper.isTimerStarted(event);
+        timerView.setOn(isTimerStarted);
+        if (isTimerStarted) {
             String text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());
-            buttonTimer.setText(text);
-            WidgetsUtils.setupTimer(this, buttonTimer, sex, true);
-        } else {
-            WidgetsUtils.setupTimer(this, buttonTimer, sex, false);
+            timerView.setText(text);
         }
     }
 
     private void updateIfNeeded() {
         if (EventHelper.isTimerStarted(event)) {
-            upsertEvent(buildEvent(), false);
+            presenter.updateEvent(buildEvent(), false);
         }
+    }
+
+    @Override
+    protected boolean contentEquals(SleepEvent event1, SleepEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }

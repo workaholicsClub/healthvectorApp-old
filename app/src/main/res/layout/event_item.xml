@@ -54,20 +54,6 @@
                 android:background="#33FFFFFF" />
 
             <ImageView
-                android:id="@+id/eventRowActionEdit"
-                android:layout_width="@dimen/event_row_height"
-                android:layout_height="@dimen/event_row_height"
-                android:background="@drawable/background_clickable"
-                android:scaleType="center"
-                android:src="@drawable/event_row_action_edit" />
-
-            <View
-                android:id="@+id/delimiter3"
-                android:layout_width="1dp"
-                android:layout_height="@dimen/event_row_action_delimiter_height"
-                android:background="#33FFFFFF" />
-
-            <ImageView
                 android:id="@+id/eventRowActionDelete"
                 android:layout_width="@dimen/event_row_height"
                 android:layout_height="@dimen/event_row_height"
@@ -88,6 +74,7 @@
             android:id="@+id/textViewTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
             android:textAppearance="@style/EventRowTextAppearance" />
@@ -98,6 +85,7 @@
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/event_row_padding_horizontal"
             android:ellipsize="end"
+            android:gravity="center_vertical"
             android:maxLines="1"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"
@@ -111,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ellipsize="end"
-            android:gravity="end"
+            android:gravity="center_vertical|end"
             android:maxLines="1"
             android:paddingLeft="@dimen/event_row_padding_horizontal"
             android:paddingRight="@dimen/event_row_padding_horizontal"

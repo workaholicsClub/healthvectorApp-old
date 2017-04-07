@@ -5,9 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +24,6 @@ import android.widget.PopupWindow;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -38,98 +36,86 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
-import ru.android.childdiary.presentation.calendar.adapters.events.FabController;
-import ru.android.childdiary.presentation.calendar.fragments.CalendarFragment;
-import ru.android.childdiary.presentation.calendar.fragments.DayFragment;
-import ru.android.childdiary.presentation.calendar.fragments.MonthFragment;
-import ru.android.childdiary.presentation.calendar.fragments.WeekFragment;
+import ru.android.childdiary.presentation.calendar.CalendarFragment;
+import ru.android.childdiary.presentation.calendar.FabController;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
-import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
-import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
-import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
-import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
-import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
-import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
+import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
+import ru.android.childdiary.presentation.exercises.ExercisesFragment;
+import ru.android.childdiary.presentation.help.HelpFragment;
 import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
 import ru.android.childdiary.presentation.main.drawer.CloseMenuButtonClickListener;
 import ru.android.childdiary.presentation.main.drawer.CustomAccountHeaderBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomDrawerBuilder;
 import ru.android.childdiary.presentation.main.drawer.CustomPrimaryDrawerItem;
-import ru.android.childdiary.presentation.main.widgets.FabToolbar;
-import ru.android.childdiary.presentation.profile.edit.ProfileEditActivity;
-import ru.android.childdiary.presentation.profile.review.ProfileReviewActivity;
+import ru.android.childdiary.presentation.medical.MedicalDataFragment;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
+import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainView,
+import static android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
+import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
+
+public class MainActivity extends BaseMvpActivity implements MainView,
         Drawer.OnDrawerItemClickListener,
+        Drawer.OnDrawerListener,
         AccountHeader.OnAccountHeaderProfileImageListener,
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
         CloseMenuButtonClickListener,
         View.OnClickListener,
         FabController {
-    private static final String KEY_SELECTED_PAGE = "selected_page";
-    private static final int REQUEST_ADD_EVENT = 1;
-
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
     private static final int PROFILE_SETTINGS_USER = 10;
 
+    private static final int FRAGMENT_CONTAINER_ID = R.id.mainContent;
+
     private final PrimaryDrawerItem[] drawerItems = new PrimaryDrawerItem[]{
             new CustomPrimaryDrawerItem()
+                    .withTag(AppPartition.CALENDAR)
                     .withName(R.string.drawer_item_calendar)
                     .withOnDrawerItemClickListener(this),
             new CustomPrimaryDrawerItem()
+                    .withTag(AppPartition.DEVELOPMENT_DIARY)
                     .withName(R.string.drawer_item_development_diary)
                     .withOnDrawerItemClickListener(this),
             new CustomPrimaryDrawerItem()
+                    .withTag(AppPartition.EXERCISES)
                     .withName(R.string.drawer_item_exercises)
                     .withOnDrawerItemClickListener(this),
             new CustomPrimaryDrawerItem()
+                    .withTag(AppPartition.MEDICAL_DATA)
                     .withName(R.string.drawer_item_medical_data)
                     .withOnDrawerItemClickListener(this),
             new CustomPrimaryDrawerItem()
+                    .withTag(AppPartition.SETTINGS)
                     .withName(R.string.drawer_item_settings)
                     .withOnDrawerItemClickListener(this),
             new CustomPrimaryDrawerItem()
+                    .withTag(AppPartition.HELP)
                     .withName(R.string.drawer_item_help)
                     .withOnDrawerItemClickListener(this)
     };
 
-    @Inject
-    RxSharedPreferences preferences;
-
     @InjectPresenter
     MainPresenter presenter;
 
-    @BindView(R.id.tabLayout)
-    TabLayout tabLayout;
-
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
-
-    @BindView(R.id.fabToolbar)
-    FabToolbar fabToolbar;
-
-    private ViewPagerAdapter viewPagerAdapter;
     private AccountHeader accountHeader;
     private Drawer drawer;
     private DrawerBuilder drawerBuilder;
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
+    private AppPartition selectedPartition;
+    private Runnable navigationCommand;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -142,7 +128,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withNameShown(true)
                 .withTag(child)
                 .withIdentifier(mapToProfileId(child))
-                .withIcon(ResourcesUtils.getChildIcon(context, child, true));
+                .withIcon(ResourcesUtils.getChildIcon(context, child, false));
     }
 
     private static long mapToProfileId(@NonNull Child child) {
@@ -162,7 +148,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupViewPager();
         buildUi();
     }
 
@@ -175,16 +160,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(this, sex));
-        fabToolbar.setColor(ThemeUtils.getColorAccent(this, sex));
         if (accountHeader != null) {
-            accountHeader.setBackground(ThemeUtils.getColorPrimaryDrawable(this, sex));
+            accountHeader.setBackground(ThemeUtils.getColorPrimaryDrawable(this, getSex()));
         }
         updateDrawerItems(true);
     }
 
     private void updateDrawerItems(boolean notify) {
-        int[] icons = ResourcesUtils.getNavigationDrawerItemResources(sex);
+        int[] icons = ResourcesUtils.getNavigationDrawerItemResources(getSex());
         for (int i = 0; i < Math.min(icons.length, drawerItems.length); ++i) {
             drawerItems[i].withIcon(icons[i]);
         }
@@ -227,7 +210,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
         if (child.getId() == null) {
-            hideFabBar();
             hideToolbarLogo();
             setupToolbarTitle(R.string.app_name);
         } else {
@@ -236,6 +218,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             if (accountHeader != null) {
                 accountHeader.setActiveProfile(mapToProfileId(child));
             }
+        }
+        if (selectedPartition == null) {
+            drawer.setSelectionAtPosition(1, false);
+            navigateToCalendar(child);
         }
     }
 
@@ -252,70 +238,104 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public void navigateToProfileReview() {
-        Intent intent = ProfileReviewActivity.getIntent(this);
-        startActivity(intent);
-    }
-
-    @Override
     public void showDeleteChildConfirmation(@NonNull Child child) {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(sex))
-                .setTitle(getString(R.string.remove_child_confirmation_title, child.getName()))
-                .setMessage(R.string.remove_child_confirmation_text)
-                .setPositiveButton(R.string.Yes,
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(getString(R.string.remove_child_confirmation_dialog_title, child.getName()))
+                .setMessage(R.string.remove_child_confirmation_dialog_text)
+                .setPositiveButton(R.string.remove_child_confirmation_dialog_positive_button_text,
                         (DialogInterface dialog, int which) -> presenter.deleteChild(child))
-                .setNegativeButton(R.string.Cancel, null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
     @Override
-    public void navigateToDiaperEventAdd() {
-        Intent intent = DiaperEventDetailActivity.getIntent(this, null, true);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
+    public void navigateToCalendar(@NonNull Child child) {
+        openAppPartition(AppPartition.CALENDAR, child);
     }
 
     @Override
-    public void navigateToFeedEventAdd() {
-        Intent intent = FeedEventDetailActivity.getIntent(this, null, true);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
+    public void navigateToDevelopmentDiary(@NonNull Child child) {
+        openAppPartition(AppPartition.DEVELOPMENT_DIARY, child);
     }
 
     @Override
-    public void navigateToOtherEventAdd() {
-        Intent intent = OtherEventDetailActivity.getIntent(this, null, true);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
+    public void navigateToExercises(@NonNull Child child) {
+        openAppPartition(AppPartition.EXERCISES, child);
     }
 
     @Override
-    public void navigateToPumpEventAdd() {
-        Intent intent = PumpEventDetailActivity.getIntent(this, null, true);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
+    public void navigateToMedicalData(@NonNull Child child) {
+        openAppPartition(AppPartition.MEDICAL_DATA, child);
     }
 
     @Override
-    public void navigateToSleepEventAdd() {
-        Intent intent = SleepEventDetailActivity.getIntent(this, null, true);
-        startActivityForResult(intent, REQUEST_ADD_EVENT);
+    public void navigateToSettings(@NonNull Child child) {
+        openAppPartition(AppPartition.SETTINGS, child);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ADD_EVENT && resultCode == RESULT_OK) {
-            fabToolbar.hideBarWithoutAnimation();
+    public void navigateToHelp(@NonNull Child child) {
+        openAppPartition(AppPartition.HELP, child);
+    }
+
+    private void openAppPartition(@NonNull AppPartition appPartition, @NonNull Child child) {
+        selectedPartition = appPartition;
+
+        String tag = appPartition.toString();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            Bundle arguments = new Bundle();
+            arguments.putSerializable(ExtraConstants.EXTRA_CHILD, child);
+            fragment = createAppPartition(appPartition);
+            fragment.setArguments(arguments);
+            logger.debug("fragment cache: create new fragment: " + fragment);
+        } else {
+            logger.debug("fragment cache: show fragment: " + fragment);
+        }
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setTransition(TRANSIT_FRAGMENT_OPEN)
+                .replace(R.id.mainContent, fragment, tag)
+                .addToBackStack(null)
+                .commit();
+
+        invalidateOptionsMenu();
+    }
+
+    private void hidePreviousPartition() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainContent);
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setTransition(TRANSIT_UNSET)
+                    .remove(fragment)
+                    .commit();
         }
     }
 
-    @Override
-    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-        // TODO: navigation
-        showToast(((PrimaryDrawerItem) drawerItem).getName().getText());
-        return false;
+    private Fragment createAppPartition(@NonNull AppPartition appPartition) {
+        switch (appPartition) {
+            case CALENDAR:
+                return new CalendarFragment();
+            case DEVELOPMENT_DIARY:
+                return new DevelopmentDiaryFragment();
+            case EXERCISES:
+                return new ExercisesFragment();
+            case MEDICAL_DATA:
+                return new MedicalDataFragment();
+            case SETTINGS:
+                return new SettingsFragment();
+            case HELP:
+                return new HelpFragment();
+        }
+        throw new IllegalStateException("Unknown app partition");
     }
 
     @Override
     public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
-        presenter.reviewChild();
+        presenter.editChild();
         return false;
     }
 
@@ -388,38 +408,51 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         return false;
     }
 
-    private void setupViewPager() {
-        Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 2).get();
-        selectedPage = selectedPage == null ? 2 : selectedPage;
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new DayFragment(), getString(R.string.day));
-        viewPagerAdapter.addFragment(new WeekFragment(), getString(R.string.week));
-        viewPagerAdapter.addFragment(new MonthFragment(), getString(R.string.month));
-        viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setCurrentItem(selectedPage, false);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+    @Override
+    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+        AppPartition tag = (AppPartition) drawerItem.getTag();
+        if (selectedPartition == tag) {
+            return false;
+        }
+        switch (tag) {
+            case CALENDAR:
+                hidePreviousPartition();
+                navigationCommand = () -> presenter.openCalendar();
+                return false;
+            case DEVELOPMENT_DIARY:
+                navigationCommand = () -> presenter.openDevelopmentDiary();
+                return false;
+            case EXERCISES:
+                navigationCommand = () -> presenter.openExercises();
+                return false;
+            case MEDICAL_DATA:
+                navigationCommand = () -> presenter.openMedicalData();
+                return false;
+            case SETTINGS:
+                navigationCommand = () -> presenter.openSettings();
+                return false;
+            case HELP:
+                navigationCommand = () -> presenter.openHelp();
+                return false;
+            default:
+                return false;
+        }
+    }
 
-            @Override
-            public void onPageSelected(int position) {
-                preferences.getInteger(KEY_SELECTED_PAGE).set(position);
-                CalendarFragment fragment = (CalendarFragment) viewPagerAdapter.getItem(position);
-                EventAdapter eventAdapter = fragment.getEventAdapter();
-                if (eventAdapter != null) {
-                    eventAdapter.getSwipeManager().update();
-                } else {
-                    logger.error("selected page: " + position + "; event adapter is null");
-                }
-            }
+    @Override
+    public void onDrawerSlide(View view, float v) {
+    }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+    @Override
+    public void onDrawerOpened(View view) {
+    }
+
+    @Override
+    public void onDrawerClosed(View view) {
+        if (navigationCommand != null) {
+            navigationCommand.run();
+            navigationCommand = null;
+        }
     }
 
     private void buildUi() {
@@ -450,7 +483,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                 .withOnAccountHeaderProfileImageListener(this)
                 .withAccountHeader(R.layout.account_header)
                 .withHeightRes(R.dimen.account_header_height)
-                .withHeaderBackground(ThemeUtils.getColorPrimaryDrawable(this, sex))
+                .withHeaderBackground(ThemeUtils.getColorPrimaryDrawable(this, getSex()))
                 .build();
     }
 
@@ -458,35 +491,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         updateDrawerItems(false);
         drawerBuilder = new CustomDrawerBuilder()
                 .withActivity(this)
+                .withOnDrawerListener(this)
                 .withToolbar(getToolbar())
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(drawerItems);
         drawer = drawerBuilder.build();
-    }
-
-    @OnClick(R.id.addDiaperEvent)
-    void onAddDiaperEventClick() {
-        presenter.addDiaperEvent();
-    }
-
-    @OnClick(R.id.addSleepEvent)
-    void onAddSleepEventClick() {
-        presenter.addSleepEvent();
-    }
-
-    @OnClick(R.id.addFeedEvent)
-    void onAddFeedEventClick() {
-        presenter.addFeedEvent();
-    }
-
-    @OnClick(R.id.addPumpEvent)
-    void onAddPumpEventClick() {
-        presenter.addPumpEventClick();
-    }
-
-    @OnClick(R.id.addOtherEvent)
-    void onAddOtherEventClick() {
-        presenter.addOtherEventClick();
     }
 
     private void closeDrawerWithoutAnimation() {
@@ -515,37 +524,59 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             return;
         }
 
-        processed = fabToolbar.hideBar();
+        processed = hideBar();
         if (processed) {
             return;
         }
 
-        super.onBackPressed();
+        finish();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
+        if (selectedPartition == AppPartition.CALENDAR) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.main, menu);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_filter:
-                break;
+        if (selectedPartition == AppPartition.CALENDAR) {
+            switch (item.getItemId()) {
+                case R.id.menu_filter:
+                    return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void showFab() {
-        fabToolbar.showFab();
+        FabController fabController = findFabController();
+        if (fabController != null) {
+            fabController.showFab();
+        }
+    }
+
+    @Override
+    public boolean hideBar() {
+        FabController fabController = findFabController();
+        return fabController != null && fabController.hideBar();
     }
 
     @Override
     public void hideFabBar() {
-        fabToolbar.hideFabBar();
+        FabController fabController = findFabController();
+        if (fabController != null) {
+            fabController.hideFabBar();
+        }
+    }
+
+    private FabController findFabController() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(FRAGMENT_CONTAINER_ID);
+        return fragment != null && fragment instanceof FabController ? (FabController) fragment : null;
     }
 }

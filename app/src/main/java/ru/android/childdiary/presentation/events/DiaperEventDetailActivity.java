@@ -29,6 +29,7 @@ import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailDiaperStateView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
 import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailView<DiaperEvent>, DiaperEvent> implements EventDetailView<DiaperEvent> {
@@ -51,10 +52,9 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @BindView(R.id.notifyTimeView)
     EventDetailNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent, boolean readOnly) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, DiaperEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
         return intent;
     }
 
@@ -82,15 +82,15 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getDiaperEventLogoRes(sex));
+        setupToolbarLogo(ResourcesUtils.getDiaperEventLogoRes(getSex()));
         setupToolbarTitle(R.string.event_diaper);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getDiaperEventLogoRes(sex));
-        diaperStateView.setSex(sex);
+        setupToolbarLogo(ResourcesUtils.getDiaperEventLogoRes(getSex()));
+        diaperStateView.setSex(getSex());
     }
 
     @Override
@@ -114,12 +114,8 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
         setDateTime(event.getDateTime(), dateView, timeView);
         diaperStateView.setSelected(event.getDiaperState());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
+        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
-    }
-
-    @Override
-    public void showNotifyTimeView(boolean visible) {
-        notifyTimeView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -151,5 +147,10 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @Override
     public void onSetTime(String tag, int minutes) {
         notifyTimeView.setValue(minutes);
+    }
+
+    @Override
+    protected boolean contentEquals(DiaperEvent event1, DiaperEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }

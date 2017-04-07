@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- file provider authorities -->
-    <string name="file_provider_authorities" translatable="false">ru.android.childdiary</string>
-    <!-- translatable strings -->
     <string name="app_name">Вектор развития</string>
     <string name="drawer_item_calendar">Календарь</string>
     <string name="drawer_item_development_diary">Дневник развития</string>
@@ -14,10 +11,10 @@
     <string name="add_profile">Добавить профиль</string>
     <string name="edit">Редактировать</string>
     <string name="remove_child">Удалить профиль</string>
-    <string name="remove_child_confirmation_title">Удалить профиль %s?</string>
-    <string name="remove_child_confirmation_text">Все данные профиля будут удалены без возможности восстановления.</string>
+    <string name="remove_child_confirmation_dialog_title">Удалить профиль %s?</string>
+    <string name="remove_child_confirmation_dialog_text">Все данные профиля будут удалены без возможности восстановления.</string>
+    <string name="remove_child_confirmation_dialog_positive_button_text">Удалить</string>
     <string name="add">Добавить</string>
-    <string name="save">Сохранить</string>
     <string name="sex">Пол</string>
     <string name="child_name">Имя ребенка</string>
     <string name="birth_date_and_time">Дата и время рождения</string>
@@ -27,9 +24,8 @@
     <string name="enter_height">Введите рост</string>
     <string name="enter_weight">Введите вес</string>
     <string name="add_image_button_title">Добавить\nфото</string>
-    <string name="OK">OK</string>
-    <string name="Yes">Да</string>
-    <string name="Cancel">Отмена</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Отмена</string>
     <string name="request_read_external_storage_permission_title">Запрос на чтение SD-карты</string>
     <string name="request_read_external_storage_permission_text">Необходимо для чтения файлов с SD-карты.</string>
     <string name="camera_not_available">Камера не доступна</string>
@@ -73,8 +69,8 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="calendar_month_title">%1$s %2$d</string>
-    <string name="calendar_week_title_one_month">%1$d\u2014%2$d %3$s</string>
-    <string name="calendar_week_title_two_month">%1$d %2$s\u2014%3$d %4$s</string>
+    <string name="calendar_week_title_one_month">%1$d \u2014 %2$d %3$s</string>
+    <string name="calendar_week_title_two_month">%1$d %2$s \u2014 %3$d %4$s</string>
     <string name="calendar_selected_date_format">%1$d %2$s</string>
     <string name="breast_left">Левая</string>
     <string name="breast_right">Правая</string>
@@ -129,6 +125,14 @@
     <string name="menu_title_delete">Удалить</string>
     <string name="event_is_done">Выполнено</string>
     <string name="event_is_not_done">Не выполнено</string>
+    <string name="save_changes_dialog_title">Сохранить изменения?</string>
+    <string name="save_changes_dialog_positive_button_text">Сохранить</string>
+    <string name="start_timer">СТАРТ</string>
+    <string name="stop_timer">СТОП</string>
+    <string name="menu_close">Закрыть</string>
+    <string name="menu_filter">Фильтр</string>
+    <string name="menu_rotate">Повернуть</string>
+    <string name="menu_save">Сохранить</string>
     <!-- TODO: pattern for English: "MMM d, yyyy" -->
     <string name="date_format">d MMM yyyy</string>
     <string name="time_format">HH:mm</string>

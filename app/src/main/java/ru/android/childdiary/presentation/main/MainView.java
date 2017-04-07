@@ -25,23 +25,23 @@ public interface MainView extends BaseView {
     void navigateToProfileEdit(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToProfileReview();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
     void showDeleteChildConfirmation(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToDiaperEventAdd();
+    void navigateToCalendar(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToFeedEventAdd();
+    void navigateToDevelopmentDiary(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToOtherEventAdd();
+    void navigateToExercises(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToPumpEventAdd();
+    void navigateToMedicalData(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToSleepEventAdd();
+    void navigateToSettings(@NonNull Child child);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToHelp(@NonNull Child child);
 }

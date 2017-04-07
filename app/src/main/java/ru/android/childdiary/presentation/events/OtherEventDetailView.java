@@ -8,5 +8,8 @@ import ru.android.childdiary.presentation.events.core.EventDetailView;
 
 public interface OtherEventDetailView extends EventDetailView<OtherEvent> {
     @StateStrategyType(AddToEndSingleStrategy.class)
+    void setButtonDoneEnabled(boolean enabled);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void otherEventNameValidated(boolean valid);
 }
