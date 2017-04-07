@@ -66,11 +66,12 @@
     <!-- timer -->
     <dimen name="timer_stroke_width">2dp</dimen>
     <dimen name="timer_corner_radius">8dp</dimen>
-    <dimen name="timer_height">100dp</dimen>
+    <dimen name="timer_height">97dp</dimen>
+    <dimen name="timer_width">60dp</dimen>
     <dimen name="timer_margin_horizontal">16dp</dimen>
     <dimen name="timer_margin_vertical">8dp</dimen>
-    <dimen name="timer_text_size_large">44sp</dimen>
-    <dimen name="timer_text_size_base">18sp</dimen>
+    <dimen name="timer_text_size">40sp</dimen>
+    <dimen name="timer_label_text_size">16sp</dimen>
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>

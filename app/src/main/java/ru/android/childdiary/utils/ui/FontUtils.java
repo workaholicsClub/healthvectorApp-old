@@ -6,7 +6,7 @@ import android.graphics.Typeface;
 import ru.android.childdiary.R;
 
 public class FontUtils {
-    private static Typeface typefaceRegular, typefaceBold;
+    private static Typeface typefaceRegular, typefaceBold, typefaceMedium;
 
     public static Typeface getTypefaceRegular(Context context) {
         if (typefaceRegular == null) {
@@ -22,12 +22,23 @@ public class FontUtils {
         return typefaceBold;
     }
 
+    public static Typeface getTypefaceMedium(Context context) {
+        if (typefaceMedium == null) {
+            typefaceMedium = getTypeface(context, getFontPathMedium(context));
+        }
+        return typefaceMedium;
+    }
+
     public static String getFontPathRegular(Context context) {
         return context.getString(R.string.font_path_regular);
     }
 
     public static String getFontPathBold(Context context) {
         return context.getString(R.string.font_path_bold);
+    }
+
+    public static String getFontPathMedium(Context context) {
+        return context.getString(R.string.font_path_medium);
     }
 
     private static Typeface getTypeface(Context context, String path) {

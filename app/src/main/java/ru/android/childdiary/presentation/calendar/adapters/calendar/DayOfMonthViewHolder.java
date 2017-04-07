@@ -27,16 +27,20 @@ class DayOfMonthViewHolder extends BaseViewHolder<LocalDate> {
 
     public void select(CalendarViewAdapter adapter, LocalDate item) {
         Context context = adapter.getContext();
+        boolean isCurrent = LocalDate.now().isEqual(item);
         boolean isSelected = adapter.isSelected() && adapter.getSelectedDate().isEqual(item);
-        textViewDayOfMonth.setBackgroundResource(isSelected
-                ? ResourcesUtils.getSelectedDateBackgroundRes(adapter.getSex())
-                : R.drawable.calendar_cell_background_clickable);
+        textViewDayOfMonth.setBackgroundResource(
+                isSelected
+                        ? ResourcesUtils.getSelectedDateBackgroundRes(adapter.getSex())
+                        : (isCurrent ? R.drawable.calendar_cell_background_current_day : R.drawable.calendar_cell_background_clickable));
         //noinspection deprecation
-        textViewDayOfMonth.setTextAppearance(context, isSelected
-                ? R.style.CalendarDayOfMonthSelectedTextAppearance
-                : R.style.CalendarDayOfMonthTextAppearance);
-        textViewDayOfMonth.setTypeface(isSelected
-                ? FontUtils.getTypefaceBold(context)
-                : FontUtils.getTypefaceRegular(context));
+        textViewDayOfMonth.setTextAppearance(context,
+                isSelected
+                        ? R.style.CalendarDayOfMonthSelectedTextAppearance
+                        : (isCurrent ? R.style.CalendarDayOfMonthCurrentTextAppearance : R.style.CalendarDayOfMonthTextAppearance));
+        textViewDayOfMonth.setTypeface(
+                isCurrent || isSelected
+                        ? FontUtils.getTypefaceBold(context)
+                        : FontUtils.getTypefaceRegular(context));
     }
 }

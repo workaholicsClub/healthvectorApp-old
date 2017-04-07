@@ -16,7 +16,7 @@ android {
         applicationId "ru.android.childdiary"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 8
+        versionCode 9
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField "int", "DB_VERSION", "1"
@@ -24,6 +24,7 @@ android {
         resValue "string", "file_provider_authorities", "ru.android.childdiary"
         resValue "string", "font_path_regular", "fonts/Roboto-Regular.ttf"
         resValue "string", "font_path_bold", "fonts/Roboto-Bold.ttf"
+        resValue "string", "font_path_medium", "fonts/Roboto-Medium.ttf"
     }
     buildTypes {
         debug {

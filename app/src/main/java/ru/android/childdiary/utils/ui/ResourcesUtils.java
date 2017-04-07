@@ -206,22 +206,22 @@ public class ResourcesUtils {
     @ColorRes
     private static int getTimerTextColorRes(@Nullable Sex sex, boolean on) {
         return sex == null || sex == Sex.MALE
-                ? (on ? R.color.timer_on_boy : R.color.timer_off_boy)
-                : (on ? R.color.timer_on_girl : R.color.timer_off_girl);
+                ? (on ? R.color.timer_on : R.color.timer_off)
+                : (on ? R.color.timer_on : R.color.timer_off);
     }
 
     @DrawableRes
     public static int getTimerIcon(@Nullable Sex sex, boolean on) {
         return sex == null || sex == Sex.MALE
-                ? (on ? R.drawable.timer_on_boy : R.drawable.timer_off_boy)
-                : (on ? R.drawable.timer_on_girl : R.drawable.timer_off_girl);
+                ? (on ? R.drawable.timer_on : R.drawable.timer_off)
+                : (on ? R.drawable.timer_on : R.drawable.timer_off);
     }
 
     @DrawableRes
     public static int getTimerBackgroundRes(@Nullable Sex sex, boolean on) {
         return sex == null || sex == Sex.MALE
-                ? (on ? R.drawable.background_timer_on_boy : R.drawable.background_timer_off_boy)
-                : (on ? R.drawable.background_timer_on_girl : R.drawable.background_timer_off_girl);
+                ? (on ? R.drawable.background_timer_on : R.drawable.background_timer_off)
+                : (on ? R.drawable.background_timer_on : R.drawable.background_timer_off);
     }
 
     @DrawableRes

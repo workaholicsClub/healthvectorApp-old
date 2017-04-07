@@ -12,6 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class TimerView extends RelativeLayout {
@@ -53,6 +54,7 @@ public class TimerView extends RelativeLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        textViewLabel.setTypeface(FontUtils.getTypefaceMedium(getContext()));
     }
 
     public void setOn(boolean isOn) {
