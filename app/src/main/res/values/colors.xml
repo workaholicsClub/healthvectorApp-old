@@ -27,8 +27,7 @@
     <color name="event_feed_row_background_girl">#80A9A124</color>
     <color name="event_pump_row_background_girl">#60D16A0C</color>
     <color name="event_other_row_background_girl">#80C2742C</color>
-    <color name="timer_on_boy">#38A9F6</color>
-    <color name="timer_on_girl">#ff658c</color>
-    <color name="timer_off_boy">#6038A9F6</color>
-    <color name="timer_off_girl">#60ff658c</color>
+    <color name="timer_on">#FF4335</color>
+    <color name="timer_off">#6EC86A</color>
+    <color name="current_day_background">#EEF1F3</color>
 </resources>

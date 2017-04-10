@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -22,6 +23,7 @@ import ru.android.childdiary.utils.TimeUtils;
 public class NotificationUtils {
     private static PendingIntent buildPendingIntent(Context context, int notificationId, @NonNull SleepEvent event) {
         Intent intent = SleepEventDetailActivity.getIntent(context, event);
+        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(SleepEventDetailActivity.class);
         stackBuilder.addNextIntent(intent);
@@ -31,6 +33,7 @@ public class NotificationUtils {
 
     private static PendingIntent buildActionPendingIntent(Context context, int notificationId, @NonNull SleepEvent event) {
         Intent intent = new Intent(context, TimerService.class);
+        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
         intent.putExtra(ExtraConstants.EXTRA_EVENT, event);
         PendingIntent pendingIntent = PendingIntent.getService(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;

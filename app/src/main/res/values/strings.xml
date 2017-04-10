@@ -51,7 +51,7 @@
     <string name="validate_event_pump_fill_left_amount">Введите количество сцеженного молока для левой груди</string>
     <string name="validate_event_pump_fill_right_amount">Введите количество сцеженного молока для правой груди</string>
     <string name="validate_event_sleep_timer_already_started">Таймер сна уже запущен</string>
-    <string name="validate_event_other_title_empty">Введите наименование события</string>
+    <string name="validate_event_other_title_empty">Введите название события</string>
     <string name="validate_start_finish_time">Время окончания не может быть меньше, чем время начала события</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
@@ -119,7 +119,7 @@
     <string name="hours_short">%d ч.</string>
     <string name="minutes_short">%d мин.</string>
     <string name="duration_format">00:00:00</string>
-    <string name="other_event_title_hint">Введите наименование</string>
+    <string name="other_event_title_hint">Введите название события</string>
     <string name="menu_title_done">Выполнено</string>
     <string name="menu_title_move">Перенести</string>
     <string name="menu_title_delete">Удалить</string>
