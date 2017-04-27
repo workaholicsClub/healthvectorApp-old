@@ -296,7 +296,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .setTransition(TRANSIT_FRAGMENT_OPEN)
+                .setTransition(TRANSIT_UNSET)
                 .replace(R.id.mainContent, fragment, tag)
                 .addToBackStack(null)
                 .commit();

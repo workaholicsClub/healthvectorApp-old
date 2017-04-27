@@ -70,6 +70,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     View dummy;
 
     private ViewGroup eventDetailsView;
+    private MasterEvent masterEvent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         setContentView(R.layout.activity_event_detail);
         setupEditTextView(noteView);
         buttonAdd.setVisibility(GONE);
-        MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
+        masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             getPresenter().requestDefaultEventDetail(getEventType());
             if (masterEvent != null) {
@@ -141,7 +142,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public final void showDefaultEventDetail(@NonNull T event) {
         defaultEvent = event;
-        if (this.event == null) {
+        if (masterEvent == null) {
             setupUi(event);
         }
     }

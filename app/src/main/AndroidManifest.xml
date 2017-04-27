@@ -81,6 +81,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
+        <activity
+            android:name=".presentation.medical.AddDoctorVisitActivity"
+            android:exported="true"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.medical.AddMedicineTakingActivity"
+            android:exported="true"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
         <activity android:name=".presentation.profile.image.CropActivity" />
 
         <provider

@@ -182,6 +182,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                 if (event.getId() != null) {
                     note = defaultEvent == null ? event.getNote() : defaultEvent.getNote();
                     notifyTime = defaultEvent == null ? event.getNotifyTimeInMinutes() : defaultEvent.getNotifyTimeInMinutes();
+
+                    presenter.updateEvent(event, false);
                 }
                 event = event.toBuilder()
                         .isTimerStarted(true)

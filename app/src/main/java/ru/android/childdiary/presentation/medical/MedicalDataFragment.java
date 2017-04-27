@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.medical;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -117,10 +118,14 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
 
     @Override
     public void navigateToMedicineTakingAdd() {
+        Intent intent = AddMedicineTakingActivity.getIntent(getContext());
+        startActivity(intent);
     }
 
     @Override
     public void navigateToDoctorVisitAdd() {
+        Intent intent = AddDoctorVisitActivity.getIntent(getContext());
+        startActivity(intent);
     }
 
     @OnClick(R.id.fab)
