@@ -60,7 +60,6 @@ import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-import static android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
 import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
 public class MainActivity extends BaseMvpActivity implements MainView,
@@ -534,7 +533,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (selectedPartition == AppPartition.CALENDAR) {
+        if (selectedPartition == AppPartition.CALENDAR
+                || selectedPartition == AppPartition.MEDICAL_DATA) {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.main, menu);
             return true;
@@ -544,7 +544,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (selectedPartition == AppPartition.CALENDAR) {
+        if (selectedPartition == AppPartition.CALENDAR
+                || selectedPartition == AppPartition.MEDICAL_DATA) {
             switch (item.getItemId()) {
                 case R.id.menu_filter:
                     return true;
@@ -565,6 +566,14 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     public boolean hideBar() {
         FabController fabController = findFabController();
         return fabController != null && fabController.hideBar();
+    }
+
+    @Override
+    public void hideBarWithoutAnimation() {
+        FabController fabController = findFabController();
+        if (fabController != null) {
+            fabController.hideBarWithoutAnimation();
+        }
     }
 
     @Override

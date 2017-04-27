@@ -5,5 +5,7 @@ public interface FabController {
 
     boolean hideBar();
 
+    void hideBarWithoutAnimation();
+
     void hideFabBar();
 }

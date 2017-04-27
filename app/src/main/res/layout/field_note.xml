@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/field_margin_base"
+    android:background="@drawable/note_background"
+    android:minHeight="@dimen/field_height"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/editTextWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/field_margin_base"
+        android:background="@drawable/edit_text_background"
+        app:hintTextAppearance="@style/PlaceholderTextAppearance">
+
+        <ru.android.childdiary.presentation.core.widgets.CustomEditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/note"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="@integer/max_length_field_note"
+            android:paddingBottom="@dimen/name_edit_text_padding_bottom"
+            android:textAppearance="@style/PrimaryTextAppearance"
+            android:textColor="@drawable/field_editable_text_color"
+            android:textColorHint="@color/placeholder_text"
+            android:textCursorDrawable="@drawable/edit_text_cursor" />
+    </android.support.design.widget.TextInputLayout>
+</LinearLayout>

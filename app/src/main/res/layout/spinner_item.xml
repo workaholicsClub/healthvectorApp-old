@@ -9,7 +9,7 @@
     <TextView
         android:id="@android:id/text1"
         android:layout_width="0dp"
-        android:layout_height="@dimen/event_detail_height"
+        android:layout_height="@dimen/field_height"
         android:layout_marginLeft="@dimen/base_margin_horizontal"
         android:layout_marginStart="@dimen/base_margin_horizontal"
         android:layout_weight="1"
@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/imageViewDropdown"
-        android:layout_width="@dimen/event_detail_height"
-        android:layout_height="@dimen/event_detail_height"
+        android:layout_width="@dimen/field_height"
+        android:layout_height="@dimen/field_height"
         android:scaleType="center"
         android:src="@drawable/arrow_up_black" />
 </LinearLayout>

@@ -26,10 +26,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/event_detail_margin_base"
-                android:paddingTop="@dimen/event_detail_margin_base" />
+                android:paddingBottom="@dimen/field_margin_base"
+                android:paddingTop="@dimen/field_margin_base" />
 
-            <ru.android.childdiary.presentation.events.widgets.EventDetailNoteView
+            <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView
                 android:id="@+id/noteView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -46,5 +46,6 @@
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:layout_marginTop="@dimen/button_margin_vertical"
         android:text="@string/add"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:visibility="gone" />
 </LinearLayout>

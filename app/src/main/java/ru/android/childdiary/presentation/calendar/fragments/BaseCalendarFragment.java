@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.calendar.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -43,6 +44,8 @@ import ru.android.childdiary.utils.StringUtils;
 
 public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> extends AppPartitionFragment implements BaseCalendarView,
         AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener {
+    private static final int REQUEST_UPDATE_EVENT = 1;
+
     @InjectPresenter
     BaseCalendarPresenter presenter;
 
@@ -216,31 +219,41 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     @Override
     public void navigateToDiaperEvent(@NonNull MasterEvent event) {
         Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
     public void navigateToFeedEvent(@NonNull MasterEvent event) {
         Intent intent = FeedEventDetailActivity.getIntent(getContext(), event);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
     public void navigateToOtherEvent(@NonNull MasterEvent event) {
         Intent intent = OtherEventDetailActivity.getIntent(getContext(), event);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
     public void navigateToPumpEvent(@NonNull MasterEvent event) {
         Intent intent = PumpEventDetailActivity.getIntent(getContext(), event);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
     public void navigateToSleepEvent(@NonNull MasterEvent event) {
         Intent intent = SleepEventDetailActivity.getIntent(getContext(), event);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_UPDATE_EVENT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_UPDATE_EVENT && resultCode == Activity.RESULT_OK) {
+            if (fabController != null) {
+                fabController.hideBarWithoutAnimation();
+            }
+        }
     }
 
     @Override

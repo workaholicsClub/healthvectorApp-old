@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/field_margin_base"
+    android:layout_marginLeft="@dimen/field_margin_base"
+    android:layout_marginRight="@dimen/field_margin_base"
+    android:layout_marginStart="@dimen/field_margin_base"
+    android:layout_weight="1"
+    android:background="@drawable/background_clickable"
+    android:gravity="center_vertical|end"
+    android:orientation="horizontal">
+
+    <ru.android.childdiary.presentation.core.widgets.CustomEditText
+        android:id="@+id/editText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/field_height"
+        android:layout_marginLeft="@dimen/base_margin_horizontal"
+        android:layout_marginStart="@dimen/base_margin_horizontal"
+        android:layout_weight="1"
+        android:background="@null"
+        android:gravity="center_vertical|end"
+        android:inputType="numberDecimal"
+        android:textAppearance="@style/PrimaryTextAppearance"
+        android:textColor="@drawable/field_editable_text_color"
+        android:textCursorDrawable="@drawable/edit_text_cursor" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/arrow_icon_size"
+        android:layout_height="@dimen/arrow_icon_size"
+        android:layout_marginEnd="@dimen/field_margin_base"
+        android:layout_marginRight="@dimen/field_margin_base"
+        android:scaleType="center"
+        android:src="@drawable/arrow_down_black" />
+</LinearLayout>

@@ -24,12 +24,12 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEve
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlPumpView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldAmountMlPumpView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldBreastView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
@@ -42,19 +42,19 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     PumpEventDetailPresenter presenter;
 
     @BindView(R.id.dateView)
-    EventDetailDateView dateView;
+    FieldDateView dateView;
 
     @BindView(R.id.timeView)
-    EventDetailTimeView timeView;
+    FieldTimeView timeView;
 
     @BindView(R.id.breastView)
-    EventDetailBreastView breastView;
+    FieldBreastView breastView;
 
     @BindView(R.id.amountMlPumpView)
-    EventDetailAmountMlPumpView amountMlPumpView;
+    FieldAmountMlPumpView amountMlPumpView;
 
     @BindView(R.id.notifyTimeView)
-    EventDetailNotifyTimeView notifyTimeView;
+    FieldNotifyTimeView notifyTimeView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, PumpEventDetailActivity.class);
@@ -121,7 +121,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
         amountMlPumpView.setAmountMlLeft(event.getLeftAmountMl());
         amountMlPumpView.setAmountMlRight(event.getRightAmountMl());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
     }
 

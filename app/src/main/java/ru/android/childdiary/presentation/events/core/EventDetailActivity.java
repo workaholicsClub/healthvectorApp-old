@@ -36,13 +36,13 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNoteView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -58,7 +58,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected T defaultEvent;
 
     @BindView(R.id.noteView)
-    protected EventDetailNoteView noteView;
+    protected FieldNoteView noteView;
 
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
@@ -71,35 +71,37 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     private ViewGroup eventDetailsView;
     private MasterEvent masterEvent;
+    private T editedEvent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         setupEditTextView(noteView);
-        buttonAdd.setVisibility(GONE);
         masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         if (savedInstanceState == null) {
             getPresenter().requestDefaultEventDetail(getEventType());
             if (masterEvent != null) {
                 getPresenter().requestEventDetails(masterEvent);
             }
+        } else {
+            //noinspection unchecked
+            editedEvent = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_EVENT);
         }
+        logger.debug("master event: " + masterEvent);
+        logger.debug("edited event: " + editedEvent);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        //noinspection unchecked
-        T event = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_EVENT);
-        showEventDetail(event);
-        dummy.requestFocus();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent());
+        T event = buildEvent();
+        outState.putSerializable(ExtraConstants.EXTRA_EVENT, event);
+        logger.debug("save event: " + event);
     }
 
     @Override
@@ -116,7 +118,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         dummy.requestFocus();
     }
 
-    protected void setupEditTextView(EventDetailEditTextView view) {
+    protected void setupEditTextView(FieldEditTextView view) {
         List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
         for (Disposable disposable : disposables) {
             unsubscribeOnDestroy(disposable);
@@ -141,6 +143,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public final void showDefaultEventDetail(@NonNull T event) {
+        logger.debug("show default event: " + event);
         defaultEvent = event;
         if (masterEvent == null) {
             setupUi(event);
@@ -149,13 +152,14 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public final void showEventDetail(@NonNull T event) {
+        logger.debug("show event: " + event);
         this.event = event;
         setupUi(event);
     }
 
     private void setupUi(@NonNull T event) {
         changeThemeIfNeeded(event.getChild());
-        setupEventDetail(event);
+        setupEventDetail(editedEvent == null ? event : editedEvent);
         invalidateOptionsMenu();
         if (this.event == null) {
             buttonAdd.setVisibility(VISIBLE);
@@ -180,16 +184,16 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public void eventAdded(@NonNull T event, boolean afterButtonPressed) {
+        setResult(RESULT_OK);
         if (afterButtonPressed) {
-            setResult(RESULT_OK);
             finish();
         }
     }
 
     @Override
     public void eventUpdated(@NonNull T event, boolean afterButtonPressed) {
+        setResult(RESULT_OK);
         if (afterButtonPressed) {
-            setResult(RESULT_OK);
             finish();
         }
     }
@@ -265,7 +269,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Nullable
-    protected DateTime getDateTime(EventDetailDateView dateView, EventDetailTimeView timeView) {
+    protected DateTime getDateTime(FieldDateView dateView, FieldTimeView timeView) {
         LocalDate date = dateView.getValue();
         LocalTime time = timeView.getValue();
         return date == null || time == null
@@ -274,7 +278,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 time.getHourOfDay(), time.getMinuteOfHour());
     }
 
-    protected void setDateTime(@Nullable DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
+    protected void setDateTime(@Nullable DateTime dateTime, FieldDateView dateView, FieldTimeView timeView) {
         dateView.setValue(dateTime == null ? null : dateTime.toLocalDate());
         timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
     }
@@ -358,7 +362,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     protected abstract boolean contentEquals(T event1, T event2);
 
-    protected final boolean notifyTimeViewVisisble() {
+    protected final boolean notifyTimeViewVisible() {
         return defaultEvent != null && ObjectUtils.isPositive(defaultEvent.getNotifyTimeInMinutes());
     }
 }

@@ -24,12 +24,12 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailOtherEventNameView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldOtherEventNameView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
@@ -44,28 +44,28 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     OtherEventDetailPresenter presenter;
 
     @BindView(R.id.otherEventNameView)
-    EventDetailOtherEventNameView otherEventNameView;
+    FieldOtherEventNameView otherEventNameView;
 
     @BindView(R.id.startTitleView)
-    EventDetailTitleView startTitleView;
+    FieldTitleView startTitleView;
 
     @BindView(R.id.startDateView)
-    EventDetailDateView startDateView;
+    FieldDateView startDateView;
 
     @BindView(R.id.startTimeView)
-    EventDetailTimeView startTimeView;
+    FieldTimeView startTimeView;
 
     @BindView(R.id.finishTitleView)
-    EventDetailTitleView finishTitleView;
+    FieldTitleView finishTitleView;
 
     @BindView(R.id.finishDateView)
-    EventDetailDateView finishDateView;
+    FieldDateView finishDateView;
 
     @BindView(R.id.finishTimeView)
-    EventDetailTimeView finishTimeView;
+    FieldTimeView finishTimeView;
 
     @BindView(R.id.notifyTimeView)
-    EventDetailNotifyTimeView notifyTimeView;
+    FieldNotifyTimeView notifyTimeView;
 
     @State
     boolean isButtonDoneEnabled;
@@ -145,7 +145,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
         setDateTime(event.getDateTime(), startDateView, startTimeView);
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
     }
 

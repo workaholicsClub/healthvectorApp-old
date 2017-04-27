@@ -18,10 +18,7 @@
 
             <include layout="@layout/request_focus_view_dummy" />
 
-            <ru.android.childdiary.presentation.events.widgets.EventDetailNoteView
-                android:id="@+id/noteView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <include layout="@layout/activity_add_medicine_taking_content" />
         </LinearLayout>
     </ScrollView>
 

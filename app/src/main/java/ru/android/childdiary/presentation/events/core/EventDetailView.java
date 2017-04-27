@@ -9,13 +9,13 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseView;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
 
 public interface EventDetailView<T extends MasterEvent> extends BaseView {
-    @StateStrategyType(OneExecutionStateStrategy.class)
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void showDefaultEventDetail(@NonNull T event);
 
-    @StateStrategyType(OneExecutionStateStrategy.class)
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void showEventDetail(@NonNull T event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

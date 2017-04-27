@@ -4,27 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDateView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
         android:id="@+id/dateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailTimeView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
         android:id="@+id/timeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailBreastView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldBreastView
         android:id="@+id/breastView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlPumpView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldAmountMlPumpView
         android:id="@+id/amountMlPumpView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
         android:id="@+id/notifyTimeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

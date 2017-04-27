@@ -189,7 +189,7 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ADD_EVENT && resultCode == Activity.RESULT_OK) {
-            fabToolbar.hideBarWithoutAnimation();
+            hideBarWithoutAnimation();
         }
     }
 
@@ -201,6 +201,11 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     @Override
     public boolean hideBar() {
         return fabToolbar.hideBar();
+    }
+
+    @Override
+    public void hideBarWithoutAnimation() {
+        fabToolbar.hideBarWithoutAnimation();
     }
 
     @Override

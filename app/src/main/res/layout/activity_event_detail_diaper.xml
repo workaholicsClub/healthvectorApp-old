@@ -4,22 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDateView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
         android:id="@+id/dateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailTimeView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
         android:id="@+id/timeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDiaperStateView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldDiaperStateView
         android:id="@+id/diaperStateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
         android:id="@+id/notifyTimeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -24,11 +24,11 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperE
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDiaperStateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDiaperStateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
@@ -41,16 +41,16 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     DiaperEventDetailPresenter presenter;
 
     @BindView(R.id.dateView)
-    EventDetailDateView dateView;
+    FieldDateView dateView;
 
     @BindView(R.id.timeView)
-    EventDetailTimeView timeView;
+    FieldTimeView timeView;
 
     @BindView(R.id.diaperStateView)
-    EventDetailDiaperStateView diaperStateView;
+    FieldDiaperStateView diaperStateView;
 
     @BindView(R.id.notifyTimeView)
-    EventDetailNotifyTimeView notifyTimeView;
+    FieldNotifyTimeView notifyTimeView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, DiaperEventDetailActivity.class);
@@ -114,7 +114,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
         setDateTime(event.getDateTime(), dateView, timeView);
         diaperStateView.setSelected(event.getDiaperState());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
     }
 

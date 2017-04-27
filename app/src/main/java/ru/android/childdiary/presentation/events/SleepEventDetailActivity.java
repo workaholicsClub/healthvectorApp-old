@@ -26,13 +26,13 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDurationView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
-import ru.android.childdiary.presentation.events.widgets.TimerView;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView;
+import ru.android.childdiary.presentation.core.fields.widgets.TimerView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
@@ -53,28 +53,28 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     SleepEventDetailPresenter presenter;
 
     @BindView(R.id.startTitleView)
-    EventDetailTitleView startTitleView;
+    FieldTitleView startTitleView;
 
     @BindView(R.id.startDateView)
-    EventDetailDateView startDateView;
+    FieldDateView startDateView;
 
     @BindView(R.id.startTimeView)
-    EventDetailTimeView startTimeView;
+    FieldTimeView startTimeView;
 
     @BindView(R.id.finishTitleView)
-    EventDetailTitleView finishTitleView;
+    FieldTitleView finishTitleView;
 
     @BindView(R.id.finishDateView)
-    EventDetailDateView finishDateView;
+    FieldDateView finishDateView;
 
     @BindView(R.id.finishTimeView)
-    EventDetailTimeView finishTimeView;
+    FieldTimeView finishTimeView;
 
     @BindView(R.id.durationView)
-    EventDetailDurationView durationView;
+    FieldDurationView durationView;
 
     @BindView(R.id.notifyTimeView)
-    EventDetailNotifyTimeView notifyTimeView;
+    FieldNotifyTimeView notifyTimeView;
 
     @BindView(R.id.timerView)
     TimerView timerView;
@@ -226,7 +226,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
-        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? visibility : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisible() ? visibility : View.GONE);
         noteView.setText(event.getNote());
         updateDuration();
         updateTimer(event);
@@ -316,7 +316,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
-        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? visibility : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisible() ? visibility : View.GONE);
     }
 
     private void updateTimer(@NonNull SleepEvent event) {

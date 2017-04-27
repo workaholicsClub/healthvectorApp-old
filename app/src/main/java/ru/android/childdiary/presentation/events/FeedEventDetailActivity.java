@@ -29,25 +29,25 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
-import ru.android.childdiary.presentation.events.dialogs.FoodDialog;
-import ru.android.childdiary.presentation.events.dialogs.FoodMeasureDialog;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailAmountView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailBreastFeedDurationView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailFeedTypeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailFoodMeasureView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailFoodView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailSpinnerView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
+import ru.android.childdiary.presentation.core.fields.dialogs.FoodDialog;
+import ru.android.childdiary.presentation.core.fields.dialogs.FoodMeasureDialog;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldAmountMlView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldAmountView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldBreastFeedDurationView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldBreastView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldFeedTypeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldFoodMeasureView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldFoodView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldSpinnerView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
-        EventDetailSpinnerView.EventDetailSpinnerListener, FoodMeasureDialog.Listener, FoodDialog.Listener {
+        FieldSpinnerView.EventDetailSpinnerListener, FoodMeasureDialog.Listener, FoodDialog.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_FOOD_MEASURE_DIALOG = "FOOD_MEASURE_DIALOG";
@@ -60,34 +60,34 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     FeedEventDetailPresenter presenter;
 
     @BindView(R.id.dateView)
-    EventDetailDateView dateView;
+    FieldDateView dateView;
 
     @BindView(R.id.timeView)
-    EventDetailTimeView timeView;
+    FieldTimeView timeView;
 
     @BindView(R.id.feedTypeView)
-    EventDetailFeedTypeView feedTypeView;
+    FieldFeedTypeView feedTypeView;
 
     @BindView(R.id.foodMeasureView)
-    EventDetailFoodMeasureView foodMeasureView;
+    FieldFoodMeasureView foodMeasureView;
 
     @BindView(R.id.foodView)
-    EventDetailFoodView foodView;
+    FieldFoodView foodView;
 
     @BindView(R.id.amountMlView)
-    EventDetailAmountMlView amountMlView;
+    FieldAmountMlView amountMlView;
 
     @BindView(R.id.amountView)
-    EventDetailAmountView amountView;
+    FieldAmountView amountView;
 
     @BindView(R.id.breastView)
-    EventDetailBreastView breastView;
+    FieldBreastView breastView;
 
     @BindView(R.id.durationView)
-    EventDetailBreastFeedDurationView durationView;
+    FieldBreastFeedDurationView durationView;
 
     @BindView(R.id.notifyTimeView)
-    EventDetailNotifyTimeView notifyTimeView;
+    FieldNotifyTimeView notifyTimeView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
         Intent intent = new Intent(context, FeedEventDetailActivity.class);
@@ -111,9 +111,9 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         foodView.setEventDetailSpinnerListener(this);
         setupEditTextView(amountMlView);
         setupEditTextView(amountView);
-        durationView.setEventDetailDurationListener(new EventDetailBreastFeedDurationView.EventDetailDurationListener() {
+        durationView.setFieldDurationListener(new FieldBreastFeedDurationView.FieldDurationListener() {
             @Override
-            public void requestLeftValueChange(EventDetailBreastFeedDurationView view) {
+            public void requestLeftValueChange(FieldBreastFeedDurationView view) {
                 presenter.requestTimeDialog(TAG_LEFT_DURATION_DIALOG,
                         TimeDialog.Parameters.builder()
                                 .minutes(durationView.getDurationLeftInt())
@@ -125,7 +125,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
             }
 
             @Override
-            public void requestRightValueChange(EventDetailBreastFeedDurationView view) {
+            public void requestRightValueChange(FieldBreastFeedDurationView view) {
                 presenter.requestTimeDialog(TAG_RIGHT_DURATION_DIALOG,
                         TimeDialog.Parameters.builder()
                                 .minutes(durationView.getDurationRightInt())
@@ -187,7 +187,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         durationView.setLeftDuration(event.getLeftDurationInMinutes());
         durationView.setRightDuration(event.getRightDurationInMinutes());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
     }
 
@@ -262,7 +262,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
-    public void onSpinnerItemClick(EventDetailSpinnerView view, Object item) {
+    public void onSpinnerItemClick(FieldSpinnerView view, Object item) {
         if (view == feedTypeView) {
             FeedType feedType = (FeedType) item;
             feedTypeView.setValue(feedType);
