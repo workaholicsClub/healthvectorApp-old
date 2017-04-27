@@ -3,9 +3,9 @@ package ru.android.childdiary.data.repositories.calendar;
 import android.support.annotation.NonNull;
 
 import io.requery.query.Tuple;
-import ru.android.childdiary.data.entities.calendar.FoodEntity;
-import ru.android.childdiary.data.entities.calendar.FoodMeasureEntity;
-import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.DiaperEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
@@ -13,9 +13,9 @@ import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEnt
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.Food;
-import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
+import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;

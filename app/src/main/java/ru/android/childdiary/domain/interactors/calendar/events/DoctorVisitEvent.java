@@ -1,0 +1,37 @@
+package ru.android.childdiary.domain.interactors.calendar.events;
+
+import org.joda.time.DateTime;
+
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class DoctorVisitEvent extends MasterEvent {
+    Long id;
+
+    DoctorVisit doctorVisit;
+
+    @Builder(toBuilder = true)
+    private DoctorVisitEvent(Long masterEventId,
+                             EventType eventType,
+                             DateTime dateTime,
+                             Integer notifyTimeInMinutes,
+                             String note,
+                             Boolean isDone,
+                             Boolean isDeleted,
+                             Child child,
+                             Long id,
+                             DoctorVisit doctorVisit) {
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
+        this.id = id;
+        this.doctorVisit = doctorVisit;
+    }
+}

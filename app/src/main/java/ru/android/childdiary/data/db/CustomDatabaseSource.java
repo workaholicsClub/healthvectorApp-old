@@ -2,6 +2,7 @@ package ru.android.childdiary.data.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
 
 import io.requery.android.sqlite.DatabaseSource;
@@ -38,15 +39,18 @@ public class CustomDatabaseSource extends DatabaseSource {
     public void onCreate(SQLiteDatabase db) {
         super.onCreate(db);
 
-        // TODO: translation table
-        db.execSQL("insert into food_measure (name) values ('" + context.getString(R.string.food_measure_grams) + "');");
-        db.execSQL("insert into food_measure (name) values ('" + context.getString(R.string.food_measure_millilitres) + "');");
+        // TODO: translation tables
+        fillTableWithValues(db, R.array.food, "food", "name");
+        fillTableWithValues(db, R.array.food_measure, "food_measure", "name");
+        fillTableWithValues(db, R.array.doctor, "doctor", "name");
+        fillTableWithValues(db, R.array.medicine, "medicine", "name");
+    }
 
-        // TODO: translation table
-        db.execSQL("insert into food (name) values ('" + context.getString(R.string.food_porridge) + "');");
-        db.execSQL("insert into food (name) values ('" + context.getString(R.string.food_vegetables) + "');");
-        db.execSQL("insert into food (name) values ('" + context.getString(R.string.food_fruits) + "');");
-        db.execSQL("insert into food (name) values ('" + context.getString(R.string.food_meat) + "');");
+    private void fillTableWithValues(SQLiteDatabase db, @ArrayRes int arrayResId, String table, String column) {
+        String[] values = context.getResources().getStringArray(R.array.food);
+        for (String value : values) {
+            db.execSQL("insert into " + table + " (" + column + ") values ('" + value + "');");
+        }
     }
 
     @Override

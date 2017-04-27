@@ -23,7 +23,10 @@ import ru.android.childdiary.presentation.exercises.ExercisesPresenter;
 import ru.android.childdiary.presentation.help.HelpPresenter;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.main.MainPresenter;
+import ru.android.childdiary.presentation.medical.MedicalDataFragment;
 import ru.android.childdiary.presentation.medical.MedicalDataPresenter;
+import ru.android.childdiary.presentation.medical.fragments.medicines.MedicineTakingListPresenter;
+import ru.android.childdiary.presentation.medical.fragments.visits.DoctorVisitsPresenter;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditPresenter;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
@@ -62,6 +65,10 @@ public interface ApplicationComponent {
 
     void inject(MedicalDataPresenter presenter);
 
+    void inject(MedicineTakingListPresenter presenter);
+
+    void inject(DoctorVisitsPresenter presenter);
+
     void inject(SettingsPresenter presenter);
 
     void inject(HelpPresenter presenter);
@@ -87,6 +94,8 @@ public interface ApplicationComponent {
 
     // fragments
     void inject(CalendarFragment fragment);
+
+    void inject(MedicalDataFragment fragment);
 
     // services
     void inject(TimerService service);

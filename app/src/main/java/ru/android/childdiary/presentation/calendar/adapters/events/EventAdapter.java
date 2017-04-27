@@ -16,7 +16,7 @@ import java.util.List;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.presentation.calendar.FabController;
 import ru.android.childdiary.utils.EventHelper;
 

@@ -82,13 +82,7 @@
     <string name="feed_type_pumped_milk">Сцеженное</string>
     <string name="feed_type_milk_formula">Смесь</string>
     <string name="feed_type_food">Прикорм</string>
-    <string name="food_measure_grams">граммы</string>
-    <string name="food_measure_millilitres">миллилитры</string>
     <string name="food_measure_other">Другое</string>
-    <string name="food_porridge">Каша</string>
-    <string name="food_vegetables">Овощное пюре</string>
-    <string name="food_fruits">Фруктовое пюре</string>
-    <string name="food_meat">Мясное пюре</string>
     <string name="food_other">Другое</string>
     <string name="notify_time">Оповещение</string>
     <string name="diaper_state">Состояние подгузника</string>
@@ -136,6 +130,8 @@
     <!-- TODO: pattern for English: "MMM d, yyyy" -->
     <string name="date_format">d MMM yyyy</string>
     <string name="time_format">HH:mm</string>
+    <string name="visits">Визиты к врачу</string>
+    <string name="medicines">Лекарства</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
@@ -163,6 +159,111 @@
         <item>Октября</item>
         <item>Ноября</item>
         <item>Декабря</item>
+    </string-array>
+    <string-array name="food">
+        <item>Каша</item>
+        <item>Овощное пюре</item>
+        <item>Фруктовое пюре</item>
+        <item>Мясное пюре</item>
+    </string-array>
+    <string-array name="food_measure">
+        <item>граммы</item>
+        <item>миллилитры</item>
+    </string-array>
+    <string-array name="doctor">
+        <item>ЛОР</item>
+        <item>Аллерголог-иммунолог</item>
+        <item>Аллерголог</item>
+        <item>Андролог</item>
+        <item>Аритмолог</item>
+        <item>Вертебролог</item>
+        <item>Вирусолог</item>
+        <item>Гастроэнтеролог</item>
+        <item>Гематолог</item>
+        <item>Гепатолог</item>
+        <item>Гинеколог-эндокринолог</item>
+        <item>Гинеколог</item>
+        <item>Гомеопат</item>
+        <item>Дерматолог</item>
+        <item>Зубной врач</item>
+        <item>Иммунолог</item>
+        <item>Инфекционист</item>
+        <item>Кардиолог</item>
+        <item>Кардиоревматолог</item>
+        <item>Косметолог</item>
+        <item>Логопед</item>
+        <item>Маммолог</item>
+        <item>Массажист</item>
+        <item>Миколог</item>
+        <item>Нарколог</item>
+        <item>Невролог</item>
+        <item>Невропатолог</item>
+        <item>Нейрохирург</item>
+        <item>Нефролог</item>
+        <item>Окулист</item>
+        <item>Онколог</item>
+        <item>Ортопед-травматолог</item>
+        <item>Ортопед</item>
+        <item>Остеопат</item>
+        <item>Офтальмолог</item>
+        <item>Паразитолог</item>
+        <item>Проктолог</item>
+        <item>Психиатр</item>
+        <item>Психолог</item>
+        <item>Психотерапевт</item>
+        <item>Пульмонолог</item>
+        <item>Ревматолог</item>
+        <item>Рефлексотерапевт</item>
+        <item>Сосудистый хирург</item>
+        <item>Стоматолог-хирург</item>
+        <item>Стоматолог</item>
+        <item>Сурдолог</item>
+        <item>Травматолог</item>
+        <item>Уролог</item>
+        <item>Физиотерапевт</item>
+        <item>Флеболог</item>
+        <item>Фониатр</item>
+        <item>Фтизиатр</item>
+        <item>Хирург-ортопед</item>
+        <item>Хирург-уролог</item>
+        <item>Хирург</item>
+        <item>Эндокринолог</item>
+        <item>Эпилептолог</item>
+        <item>Неонатолог</item>
+        <item>Педиатр-неонатолог</item>
+        <item>Педиатр</item>
+        <item>Перинатолог</item>
+        <item>Сурдопедагог</item>
+        <item>Фтизиопедиатр</item>
+        <item>Хирург</item>
+    </string-array>
+    <string-array name="medicine">
+        <item>Активированный уголь</item>
+        <item>Нурофен</item>
+        <item>Ибупрофен</item>
+        <item>Йод</item>
+        <item>Смекта</item>
+        <item>Мирамистин</item>
+        <item>Альбуцид</item>
+        <item>Фурацилин (таблетки)</item>
+        <item>Фурацилиновый спирт</item>
+        <item>Изофра</item>
+        <item>Аквалор</item>
+        <item>Флемоклав</item>
+        <item>Амоксиклав</item>
+        <item>Рибоксин</item>
+        <item>Веторон</item>
+        <item>Алмагель</item>
+        <item>Креон</item>
+        <item>Виброцил</item>
+        <item>Називин</item>
+        <item>Нафтизин</item>
+        <item>Супрастин</item>
+        <item>Фенистил (гель)</item>
+        <item>Виферон (свечи)</item>
+        <item>Парацетамол</item>
+        <item>Эспумизан</item>
+        <item>Линекс</item>
     </string-array>
     <plurals name="numberOfYears">
         <item quantity="one">%d год</item>

@@ -6,7 +6,7 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.OneToOne;
 import io.requery.Table;
-import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
+import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.types.DiaperState;
 
 @Table(name = "diaper_event")

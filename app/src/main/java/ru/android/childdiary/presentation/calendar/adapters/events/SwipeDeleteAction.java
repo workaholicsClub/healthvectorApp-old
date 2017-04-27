@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.daimajia.swipe.SwipeLayout;
 
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 
 class SwipeDeleteAction extends SwipeAction {
     public SwipeDeleteAction(@NonNull EventActionListener listener, @NonNull MasterEvent event) {

@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.daimajia.swipe.SimpleSwipeListener;
 
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 
 class SwipeAction extends SimpleSwipeListener {
     protected final EventActionListener listener;

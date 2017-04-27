@@ -37,7 +37,7 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class CalendarFragment extends AppPartitionFragment implements CalendarView,
         FabController {
-    private static final String KEY_SELECTED_PAGE = "selected_page";
+    private static final String KEY_SELECTED_PAGE = "calendar.selected_page";
     private static final int REQUEST_ADD_EVENT = 1;
 
     @Inject
@@ -147,12 +147,12 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
 
     @OnClick(R.id.addPumpEvent)
     void onAddPumpEventClick() {
-        presenter.addPumpEventClick();
+        presenter.addPumpEvent();
     }
 
     @OnClick(R.id.addOtherEvent)
     void onAddOtherEventClick() {
-        presenter.addOtherEventClick();
+        presenter.addOtherEvent();
     }
 
     @Override

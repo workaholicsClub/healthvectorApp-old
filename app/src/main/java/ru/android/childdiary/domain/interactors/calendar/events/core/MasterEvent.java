@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.interactors.calendar.events;
+package ru.android.childdiary.domain.interactors.calendar.events.core;
 
 import org.joda.time.DateTime;
 

@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -17,9 +15,9 @@ import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
-import ru.android.childdiary.data.entities.calendar.FoodEntity;
-import ru.android.childdiary.data.entities.calendar.FoodMeasureEntity;
-import ru.android.childdiary.data.entities.calendar.events.MasterEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.DiaperEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
@@ -27,9 +25,9 @@ import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEnt
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.Food;
-import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
+import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
@@ -40,8 +38,6 @@ import ru.android.childdiary.utils.EventHelper;
 
 @Singleton
 public class CalendarDbService {
-    private final Logger logger = LoggerFactory.getLogger(toString());
-
     private final ReactiveEntityStore<Persistable> dataStore;
 
     @Inject

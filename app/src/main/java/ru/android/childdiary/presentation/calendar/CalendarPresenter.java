@@ -26,11 +26,11 @@ public class CalendarPresenter extends AppPartitionPresenter<CalendarView> {
         getViewState().navigateToFeedEventAdd();
     }
 
-    public void addPumpEventClick() {
+    public void addPumpEvent() {
         getViewState().navigateToPumpEventAdd();
     }
 
-    public void addOtherEventClick() {
+    public void addOtherEvent() {
         getViewState().navigateToOtherEventAdd();
     }
 }

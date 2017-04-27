@@ -10,7 +10,7 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.presentation.core.AppPartitionView;
 
 public interface BaseCalendarView extends AppPartitionView {

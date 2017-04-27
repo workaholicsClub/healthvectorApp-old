@@ -4,7 +4,7 @@ import android.support.v7.util.DiffUtil;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.utils.EventHelper;
 
 public class EventListDiff extends DiffUtil.Callback {

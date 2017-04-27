@@ -4,7 +4,7 @@ import java.util.List;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 
 @Value
 @Builder

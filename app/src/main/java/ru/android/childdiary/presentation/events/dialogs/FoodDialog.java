@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.Food;
+import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 
 public class FoodDialog extends AddValueDialog {
     private Listener listener;

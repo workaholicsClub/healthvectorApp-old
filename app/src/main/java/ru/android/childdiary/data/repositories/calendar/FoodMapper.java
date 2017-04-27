@@ -3,9 +3,9 @@ package ru.android.childdiary.data.repositories.calendar;
 import android.support.annotation.NonNull;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.entities.calendar.FoodData;
-import ru.android.childdiary.data.entities.calendar.FoodEntity;
-import ru.android.childdiary.domain.interactors.calendar.Food;
+import ru.android.childdiary.data.entities.calendar.events.core.FoodData;
+import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
+import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 
 class FoodMapper {
     public static Food mapToPlainObject(@NonNull FoodData foodData) {

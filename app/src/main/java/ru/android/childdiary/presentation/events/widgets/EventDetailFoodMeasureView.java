@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
 import ru.android.childdiary.presentation.events.adapters.FoodMeasureAdapter;
 
 public class EventDetailFoodMeasureView extends EventDetailSpinnerView<FoodMeasure> {

@@ -1,6 +1,6 @@
 package ru.android.childdiary.presentation.calendar.adapters.events;
 
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 
 public interface EventActionListener {
     void done(MasterEvent event);

@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.entities.calendar.events;
+package ru.android.childdiary.data.entities.calendar.events.core;
 
 import org.joda.time.DateTime;
 

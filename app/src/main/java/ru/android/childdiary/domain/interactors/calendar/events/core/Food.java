@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.interactors.calendar;
+package ru.android.childdiary.domain.interactors.calendar.events.core;
 
 import java.io.Serializable;
 

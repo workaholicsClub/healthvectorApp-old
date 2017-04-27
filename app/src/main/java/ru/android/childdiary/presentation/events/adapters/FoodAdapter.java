@@ -11,7 +11,7 @@ import java.util.List;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.Food;
+import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.presentation.core.adapters.BaseArrayAdapter;
 import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
 

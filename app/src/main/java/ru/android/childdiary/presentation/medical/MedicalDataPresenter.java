@@ -11,4 +11,12 @@ public class MedicalDataPresenter extends AppPartitionPresenter<MedicalDataView>
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
     }
+
+    public void addDoctorVisit() {
+        getViewState().navigateToDoctorVisitAdd();
+    }
+
+    public void addMedicineTaking() {
+        getViewState().navigateToMedicineTakingAdd();
+    }
 }
