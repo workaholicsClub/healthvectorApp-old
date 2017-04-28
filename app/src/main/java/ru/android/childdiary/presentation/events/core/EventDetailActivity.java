@@ -33,6 +33,7 @@ import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -54,9 +55,6 @@ import static android.view.View.VISIBLE;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
-    protected T event;
-    protected T defaultEvent;
-
     @BindView(R.id.noteView)
     protected FieldNoteView noteView;
 
@@ -70,30 +68,46 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     View dummy;
 
     private ViewGroup eventDetailsView;
-    private MasterEvent masterEvent;
-    private T editedEvent;
+
+    private T defaultEvent;
+    @Nullable
+    private T event;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-        setupEditTextView(noteView);
-        masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
-        if (savedInstanceState == null) {
-            getPresenter().requestDefaultEventDetail(getEventType());
-            if (masterEvent != null) {
+
+        MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
+        //noinspection unchecked
+        defaultEvent = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_EVENT);
+
+        if (masterEvent == null) {
+            buttonAdd.setVisibility(VISIBLE);
+            buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
+        } else {
+            if (savedInstanceState == null) {
                 getPresenter().requestEventDetails(masterEvent);
             }
-        } else {
-            //noinspection unchecked
-            editedEvent = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_EVENT);
         }
+
+        changeThemeIfNeeded(defaultEvent.getChild());
+        setupEventDetail(defaultEvent);
+
         logger.debug("master event: " + masterEvent);
-        logger.debug("edited event: " + editedEvent);
+        logger.debug("default event: " + defaultEvent);
+
+        setupEditTextView(noteView);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        //noinspection unchecked
+        T event = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_EVENT);
+        setupEventDetail(event); // в таймере сна дергается время
+        dummy.requestFocus();
+        logger.debug("restore event: " + event);
     }
 
     @Override
@@ -142,33 +156,17 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public final void showDefaultEventDetail(@NonNull T event) {
-        logger.debug("show default event: " + event);
-        defaultEvent = event;
-        if (masterEvent == null) {
-            setupUi(event);
-        }
-    }
-
-    @Override
     public final void showEventDetail(@NonNull T event) {
         logger.debug("show event: " + event);
         this.event = event;
-        setupUi(event);
-    }
 
-    private void setupUi(@NonNull T event) {
         changeThemeIfNeeded(event.getChild());
-        setupEventDetail(editedEvent == null ? event : editedEvent);
+        setupEventDetail(event);
+
         invalidateOptionsMenu();
-        if (this.event == null) {
-            buttonAdd.setVisibility(VISIBLE);
-            buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
-        } else {
-            getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
-            buttonAdd.setVisibility(GONE);
-            buttonAdd.setOnClickListener(null);
-        }
+        getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
+        buttonAdd.setVisibility(GONE);
+        buttonAdd.setOnClickListener(null);
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
@@ -271,7 +269,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Nullable
     protected DateTime getDateTime(FieldDateView dateView, FieldTimeView timeView) {
         LocalDate date = dateView.getValue();
-        LocalTime time = timeView.getValue();
+        LocalTime time = timeView.getValue(); // подставлять секунды, если время совпадает с текущим?
         return date == null || time == null
                 ? null
                 : new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
@@ -338,7 +336,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     private void saveChangesOrExit() {
         T editedEvent = buildEvent();
-        if (event == null && defaultEvent != null && contentEquals(editedEvent, defaultEvent)) {
+        if (event == null && contentEquals(editedEvent, defaultEvent)) {
             finish();
             return;
         }
@@ -364,5 +362,23 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     protected final boolean notifyTimeViewVisible() {
         return defaultEvent != null && ObjectUtils.isPositive(defaultEvent.getNotifyTimeInMinutes());
+    }
+
+    @Nullable
+    protected final String getDefaultNote() {
+        return defaultEvent == null ? null : defaultEvent.getNote();
+    }
+
+    @Nullable
+    protected final Integer getDefaultNotifyTimeInMinutes() {
+        return defaultEvent == null ? null : defaultEvent.getNotifyTimeInMinutes();
+    }
+
+    protected final boolean sameEvent(@NonNull SleepEvent event) {
+        return EventHelper.sameEvent(this.event, event);
+    }
+
+    protected final boolean isTimerStarted() {
+        return event instanceof SleepEvent && EventHelper.isTimerStarted((SleepEvent) event);
     }
 }

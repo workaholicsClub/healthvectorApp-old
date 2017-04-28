@@ -13,9 +13,6 @@ import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
 
 public interface EventDetailView<T extends MasterEvent> extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showDefaultEventDetail(@NonNull T event);
-
-    @StateStrategyType(AddToEndSingleStrategy.class)
     void showEventDetail(@NonNull T event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

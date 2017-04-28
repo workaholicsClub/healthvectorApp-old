@@ -6,11 +6,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import java.util.List;
+
+import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 
-public class AddMedicineTakingActivity extends BaseMvpActivity {
+public class AddMedicineTakingActivity extends BaseMvpActivity implements AddMedicineTakingView {
+    @InjectPresenter
+    AddMedicineTakingPresenter presenter;
+
+    @BindView(R.id.medicineView)
+    FieldMedicineView medicineView;
+
     public static Intent getIntent(Context context) {
         return new Intent(context, AddMedicineTakingActivity.class);
     }
@@ -36,5 +49,10 @@ public class AddMedicineTakingActivity extends BaseMvpActivity {
     protected void themeChanged() {
         super.themeChanged();
         // TODO checkbox color
+    }
+
+    @Override
+    public void showMedicines(List<Medicine> medicines) {
+        medicineView.updateAdapter(medicines);
     }
 }

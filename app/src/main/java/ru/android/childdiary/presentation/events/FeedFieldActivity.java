@@ -28,7 +28,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.core.fields.dialogs.FoodDialog;
 import ru.android.childdiary.presentation.core.fields.dialogs.FoodMeasureDialog;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
@@ -43,11 +42,12 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldFoodView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldSpinnerView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
-        FieldSpinnerView.EventDetailSpinnerListener, FoodMeasureDialog.Listener, FoodDialog.Listener {
+public class FeedFieldActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
+        FieldSpinnerView.FieldSpinnerListener, FoodMeasureDialog.Listener, FoodDialog.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_FOOD_MEASURE_DIALOG = "FOOD_MEASURE_DIALOG";
@@ -89,9 +89,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
-        Intent intent = new Intent(context, FeedEventDetailActivity.class);
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
+                                   @NonNull FeedEvent defaultEvent) {
+        Intent intent = new Intent(context, FeedFieldActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
+        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
         return intent;
     }
 
@@ -104,11 +106,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(), null, null));
-        timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
-        feedTypeView.setEventDetailSpinnerListener(this);
-        foodMeasureView.setEventDetailSpinnerListener(this);
-        foodView.setEventDetailSpinnerListener(this);
+        dateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(), null, null));
+        timeView.setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
+        feedTypeView.setFieldSpinnerListener(this);
+        foodMeasureView.setFieldSpinnerListener(this);
+        foodView.setFieldSpinnerListener(this);
         setupEditTextView(amountMlView);
         setupEditTextView(amountView);
         durationView.setFieldDurationListener(new FieldBreastFeedDurationView.FieldDurationListener() {
@@ -136,7 +138,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                                 .build());
             }
         });
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
+        notifyTimeView.setFieldDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
                 TimeDialog.Parameters.builder()
                         .minutes(notifyTimeView.getValueInt())
                         .showDays(true)

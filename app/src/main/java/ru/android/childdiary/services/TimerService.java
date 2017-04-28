@@ -183,7 +183,8 @@ public class TimerService extends Service {
             int notificationId = (int) (masterEventId % Integer.MAX_VALUE);
             NotificationCompat.Builder builder = notificationBuilders.get(masterEventId);
             if (builder == null) {
-                builder = NotificationUtils.buildNotification(context, notificationId, event);
+                SleepEvent defaultEvent = calendarInteractor.getDefaultSleepEvent().blockingFirst();
+                builder = NotificationUtils.buildNotification(context, notificationId, event, defaultEvent);
                 notificationBuilders.put(masterEventId, builder);
             } else {
                 NotificationUtils.updateNotification(context, builder, event);

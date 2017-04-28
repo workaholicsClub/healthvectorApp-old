@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.repositories.calendar;
+package ru.android.childdiary.data.repositories.calendar.mappers;
 
 import android.support.annotation.NonNull;
 
@@ -23,7 +23,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
-class AllEventsMapper {
+public class AllEventsMapper {
     public static MasterEvent mapToPlainObject(@NonNull Tuple data) {
         EventType eventType = data.get(MasterEventEntity.EVENT_TYPE);
         if (eventType == null) {

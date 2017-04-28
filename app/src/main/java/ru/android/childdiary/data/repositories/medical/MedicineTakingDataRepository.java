@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
@@ -15,6 +16,7 @@ import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 public class MedicineTakingDataRepository implements MedicineTakingRepository {
     private final MedicineTakingDbService dbService;
 
+    @Inject
     public MedicineTakingDataRepository(MedicineTakingDbService dbService) {
         this.dbService = dbService;
     }

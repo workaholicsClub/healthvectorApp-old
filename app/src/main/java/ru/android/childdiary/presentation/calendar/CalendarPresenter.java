@@ -2,35 +2,56 @@ package ru.android.childdiary.presentation.calendar;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
-import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
 public class CalendarPresenter extends AppPartitionPresenter<CalendarView> {
+    @Inject
+    CalendarInteractor calendarInteractor;
+
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
     }
 
     public void addDiaperEvent() {
-        getViewState().navigateToDiaperEventAdd();
+        unsubscribeOnDestroy(calendarInteractor.getDefaultDiaperEvent()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToDiaperEventAdd, this::onUnexpectedError));
     }
 
     public void addSleepEvent() {
-        getViewState().navigateToSleepEventAdd();
+        unsubscribeOnDestroy(calendarInteractor.getDefaultSleepEvent()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToSleepEventAdd, this::onUnexpectedError));
     }
 
     public void addFeedEvent() {
-        getViewState().navigateToFeedEventAdd();
+        unsubscribeOnDestroy(calendarInteractor.getDefaultFeedEvent()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToFeedEventAdd, this::onUnexpectedError));
     }
 
     public void addPumpEvent() {
-        getViewState().navigateToPumpEventAdd();
+        unsubscribeOnDestroy(calendarInteractor.getDefaultPumpEvent()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToPumpEventAdd, this::onUnexpectedError));
     }
 
     public void addOtherEvent() {
-        getViewState().navigateToOtherEventAdd();
+        unsubscribeOnDestroy(calendarInteractor.getDefaultOtherEvent()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::navigateToOtherEventAdd, this::onUnexpectedError));
     }
 }

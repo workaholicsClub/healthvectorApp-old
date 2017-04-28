@@ -6,6 +6,7 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.ManyToOne;
 import io.requery.OneToOne;
+import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.medical.MedicineTakingData;
@@ -21,7 +22,7 @@ public interface MedicineTakingEventData {
     @OneToOne
     MasterEventData getMasterEvent();
 
-    @ForeignKey
+    @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
     MedicineTakingData getMedicineTakingData();
 

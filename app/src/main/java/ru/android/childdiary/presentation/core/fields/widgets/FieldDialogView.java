@@ -28,7 +28,7 @@ public abstract class FieldDialogView<T> extends LinearLayout {
 
     @Nullable
     @Setter
-    private EventDetailDialogListener eventDetailDialogListener;
+    private FieldDialogListener fieldDialogListener;
     @Nullable
     @Getter
     private T value;
@@ -65,8 +65,8 @@ public abstract class FieldDialogView<T> extends LinearLayout {
 
     @OnClick(R.id.textViewWrapper)
     void onClick() {
-        if (eventDetailDialogListener != null) {
-            eventDetailDialogListener.requestValueChange(this);
+        if (fieldDialogListener != null) {
+            fieldDialogListener.requestValueChange(this);
         }
     }
 
@@ -75,7 +75,7 @@ public abstract class FieldDialogView<T> extends LinearLayout {
 
     protected abstract String getTextForValue(@Nullable T value);
 
-    public interface EventDetailDialogListener {
+    public interface FieldDialogListener {
         void requestValueChange(FieldDialogView view);
     }
 }

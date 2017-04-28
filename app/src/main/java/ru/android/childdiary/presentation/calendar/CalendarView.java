@@ -1,23 +1,30 @@
 package ru.android.childdiary.presentation.calendar;
 
+import android.support.annotation.NonNull;
+
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.AppPartitionView;
 
 public interface CalendarView extends AppPartitionView {
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToDiaperEventAdd();
+    void navigateToDiaperEventAdd(@NonNull DiaperEvent defaultEvent);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToFeedEventAdd();
+    void navigateToFeedEventAdd(@NonNull FeedEvent defaultEvent);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToOtherEventAdd();
+    void navigateToOtherEventAdd(@NonNull OtherEvent defaultEvent);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToPumpEventAdd();
+    void navigateToPumpEventAdd(@NonNull PumpEvent defaultEvent);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToSleepEventAdd();
+    void navigateToSleepEventAdd(@NonNull SleepEvent defaultEvent);
 }

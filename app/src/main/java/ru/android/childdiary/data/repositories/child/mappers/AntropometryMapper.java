@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.repositories.child;
+package ru.android.childdiary.data.repositories.child.mappers;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +10,7 @@ import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.Child;
 
-class AntropometryMapper {
+public class AntropometryMapper {
     public static Antropometry mapToPlainObject(@NonNull AntropometryData antropometryData) {
         return Antropometry.builder()
                 .id(antropometryData.getId())

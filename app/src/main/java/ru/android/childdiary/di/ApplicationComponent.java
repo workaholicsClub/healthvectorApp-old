@@ -11,8 +11,9 @@ import ru.android.childdiary.presentation.calendar.fragments.BaseCalendarPresent
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
-import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.FeedFieldActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailPresenter;
+import ru.android.childdiary.presentation.events.FeedFieldActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailPresenter;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
@@ -92,7 +93,7 @@ public interface ApplicationComponent {
 
     void inject(DiaperEventDetailActivity activity);
 
-    void inject(FeedEventDetailActivity activity);
+    void inject(FeedFieldActivity activity);
 
     void inject(OtherEventDetailActivity activity);
 

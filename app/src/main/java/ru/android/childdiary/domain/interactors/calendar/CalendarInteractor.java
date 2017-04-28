@@ -123,7 +123,7 @@ public class CalendarInteractor implements Interactor {
         throw new IllegalStateException("Unknown event type");
     }
 
-    private Observable<DiaperEvent> getDefaultDiaperEvent() {
+    public Observable<DiaperEvent> getDefaultDiaperEvent() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
@@ -137,7 +137,7 @@ public class CalendarInteractor implements Interactor {
                         .build());
     }
 
-    private Observable<FeedEvent> getDefaultFeedEvent() {
+    public Observable<FeedEvent> getDefaultFeedEvent() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
@@ -157,7 +157,7 @@ public class CalendarInteractor implements Interactor {
                         .build());
     }
 
-    private Observable<OtherEvent> getDefaultOtherEvent() {
+    public Observable<OtherEvent> getDefaultOtherEvent() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
@@ -170,7 +170,7 @@ public class CalendarInteractor implements Interactor {
                         .build());
     }
 
-    private Observable<PumpEvent> getDefaultPumpEvent() {
+    public Observable<PumpEvent> getDefaultPumpEvent() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
@@ -184,7 +184,7 @@ public class CalendarInteractor implements Interactor {
                         .build());
     }
 
-    private Observable<SleepEvent> getDefaultSleepEvent() {
+    public Observable<SleepEvent> getDefaultSleepEvent() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),

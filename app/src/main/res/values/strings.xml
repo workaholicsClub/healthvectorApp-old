@@ -130,8 +130,10 @@
     <!-- TODO: pattern for English: "MMM d, yyyy" -->
     <string name="date_format">d MMM yyyy</string>
     <string name="time_format">HH:mm</string>
-    <string name="visits">Визиты к врачу</string>
-    <string name="medicines">Лекарства</string>
+    <string name="medical_tab_title_doctor_visits">Визиты к врачу</string>
+    <string name="medical_tab_title_medicine_taking_list">Лекарства</string>
+    <string name="medicine">Лекарство</string>
+    <string name="doctor">Специализация</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

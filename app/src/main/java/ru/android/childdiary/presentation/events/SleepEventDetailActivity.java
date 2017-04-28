@@ -24,8 +24,6 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.events.core.EventDetailActivity;
-import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
@@ -33,6 +31,8 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeVie
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView;
 import ru.android.childdiary.presentation.core.fields.widgets.TimerView;
+import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
@@ -84,9 +84,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
+                                   @NonNull SleepEvent defaultEvent) {
         Intent intent = new Intent(context, SleepEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
+        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
         return intent;
     }
 
@@ -102,13 +104,13 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         startTitleView.setTitle(R.string.asleep);
         finishTitleView.setTitle(R.string.awoke);
 
-        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue(),
+        startDateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue(),
                 null, finishDateView.getValue()));
-        startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
-        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue(),
+        startTimeView.setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
+        finishDateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue(),
                 startDateView.getValue(), null));
-        finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
-        durationView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_DURATION_DIALOG,
+        finishTimeView.setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
+        durationView.setFieldDialogListener(v -> presenter.requestTimeDialog(TAG_DURATION_DIALOG,
                 TimeDialog.Parameters.builder()
                         .minutes(durationView.getValueInt())
                         .showDays(durationView.getValueInt() >= TimeUtils.MINUTES_IN_DAY)
@@ -116,7 +118,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                         .showMinutes(true)
                         .title(getString(R.string.duration))
                         .build()));
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
+        notifyTimeView.setFieldDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
                 TimeDialog.Parameters.builder()
                         .minutes(notifyTimeView.getValueInt())
                         .showDays(true)
@@ -180,10 +182,10 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                 String note = noteView.getText();
                 Integer notifyTime = notifyTimeView.getValue();
                 if (event.getId() != null) {
-                    note = defaultEvent == null ? event.getNote() : defaultEvent.getNote();
-                    notifyTime = defaultEvent == null ? event.getNotifyTimeInMinutes() : defaultEvent.getNotifyTimeInMinutes();
+                    note = getDefaultNote();
+                    notifyTime = getDefaultNotifyTimeInMinutes();
 
-                    presenter.updateEvent(event, false);
+                    presenter.updateEventSilently(event);
                 }
                 event = event.toBuilder()
                         .isTimerStarted(true)
@@ -199,7 +201,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @Override
     public void onTimerTick(@NonNull SleepEvent event) {
-        if (EventHelper.sameEvent(this.event, event)) {
+        if (sameEvent(event)) {
             updateTimer(event);
         }
     }
@@ -311,7 +313,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         DateTime finish = getDateTime(finishDateView, finishTimeView);
         Integer minutes = TimeUtils.durationInMinutes(start, finish);
         durationView.setValue(minutes);
-        int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
+        int visibility = isTimerStarted() ? View.GONE : View.VISIBLE;
         finishTitleView.setVisibility(visibility);
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
@@ -329,7 +331,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     private void updateIfNeeded() {
-        if (EventHelper.isTimerStarted(event)) {
+        if (isTimerStarted()) {
             presenter.updateEvent(buildEvent(), false);
         }
     }

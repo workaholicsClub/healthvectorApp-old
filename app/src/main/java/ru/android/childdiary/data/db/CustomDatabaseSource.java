@@ -47,7 +47,7 @@ public class CustomDatabaseSource extends DatabaseSource {
     }
 
     private void fillTableWithValues(SQLiteDatabase db, @ArrayRes int arrayResId, String table, String column) {
-        String[] values = context.getResources().getStringArray(R.array.food);
+        String[] values = context.getResources().getStringArray(arrayResId);
         for (String value : values) {
             db.execSQL("insert into " + table + " (" + column + ") values ('" + value + "');");
         }

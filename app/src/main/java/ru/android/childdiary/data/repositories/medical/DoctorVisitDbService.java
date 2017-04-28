@@ -10,6 +10,9 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
+import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
+import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
@@ -23,7 +26,11 @@ public class DoctorVisitDbService {
     }
 
     public Observable<List<Doctor>> getDoctors() {
-        return null;
+        return dataStore.select(DoctorEntity.class)
+                .orderBy(DoctorEntity.NAME, DoctorEntity.ID)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, DoctorMapper::mapToPlainObject));
     }
 
     public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {

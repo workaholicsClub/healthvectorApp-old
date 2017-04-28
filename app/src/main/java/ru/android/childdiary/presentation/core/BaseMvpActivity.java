@@ -188,6 +188,12 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        logger.debug("onRestoreInstanceState");
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         logger.debug("onResume");

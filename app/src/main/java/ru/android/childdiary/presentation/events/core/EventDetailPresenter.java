@@ -29,15 +29,6 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     private Disposable subscription;
 
-    @SuppressWarnings("unchecked")
-    public void requestDefaultEventDetail(@NonNull EventType eventType) {
-        unsubscribeOnDestroy(calendarInteractor.getDefaultEventDetail(eventType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(event -> logger.debug("default event details: " + event))
-                .subscribe(event -> getViewState().showDefaultEventDetail((T) event)));
-    }
-
     private void unsubscribe() {
         if (subscription != null && !subscription.isDisposed()) {
             subscription.dispose();
@@ -81,6 +72,13 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(updatedEvent -> logger.debug("event updated: " + updatedEvent))
                 .subscribe(updatedEvent -> getViewState().eventUpdated(updatedEvent, afterButtonPressed), this::onUnexpectedError));
+    }
+
+    public void updateEventSilently(@NonNull T event) {
+        unsubscribeOnDestroy(calendarInteractor.update(event)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(updatedEvent -> logger.debug("event updated silently: " + updatedEvent), this::onUnexpectedError));
     }
 
     public void deleteEvent(@NonNull T event) {

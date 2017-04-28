@@ -21,8 +21,9 @@ import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.utils.TimeUtils;
 
 public class NotificationUtils {
-    private static PendingIntent buildPendingIntent(Context context, int notificationId, @NonNull SleepEvent event) {
-        Intent intent = SleepEventDetailActivity.getIntent(context, event);
+    private static PendingIntent buildPendingIntent(Context context, int notificationId,
+                                                    @NonNull SleepEvent event, @NonNull SleepEvent defaultEvent) {
+        Intent intent = SleepEventDetailActivity.getIntent(context, event, defaultEvent);
         intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(SleepEventDetailActivity.class);
@@ -39,9 +40,10 @@ public class NotificationUtils {
         return pendingIntent;
     }
 
-    public static NotificationCompat.Builder buildNotification(Context context, int notificationId, @NonNull SleepEvent event) {
+    public static NotificationCompat.Builder buildNotification(Context context, int notificationId,
+                                                               @NonNull SleepEvent event, @NonNull SleepEvent defaultEvent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentIntent(buildPendingIntent(context, notificationId, event))
+        builder.setContentIntent(buildPendingIntent(context, notificationId, event, defaultEvent))
                 .addAction(R.drawable.ic_action_stop_sleep_timer,
                         context.getString(R.string.stop_sleep_timer),
                         buildActionPendingIntent(context, notificationId, event));

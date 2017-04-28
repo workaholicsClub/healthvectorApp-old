@@ -24,6 +24,15 @@ import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEn
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.data.repositories.calendar.mappers.AllEventsMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.DiaperEventMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.FeedEventMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.FoodMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.FoodMeasureMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.OtherEventMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.PumpEventMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.SleepEventMapper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;

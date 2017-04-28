@@ -39,7 +39,7 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements
     int spinnerItemWidth;
 
     @Setter
-    private EventDetailSpinnerListener<T> eventDetailSpinnerListener;
+    private FieldSpinnerListener<T> fieldSpinnerListener;
     @Getter
     private T value;
 
@@ -113,8 +113,8 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements
         dismissPopupWindow();
         //noinspection unchecked
         T value = (T) parent.getAdapter().getItem(position);
-        if (eventDetailSpinnerListener != null) {
-            eventDetailSpinnerListener.onSpinnerItemClick(this, value);
+        if (fieldSpinnerListener != null) {
+            fieldSpinnerListener.onSpinnerItemClick(this, value);
         }
     }
 
@@ -130,7 +130,7 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements
 
     protected abstract ListAdapter getAdapter();
 
-    public interface EventDetailSpinnerListener<T> {
+    public interface FieldSpinnerListener<T> {
         void onSpinnerItemClick(FieldSpinnerView view, T item);
     }
 }

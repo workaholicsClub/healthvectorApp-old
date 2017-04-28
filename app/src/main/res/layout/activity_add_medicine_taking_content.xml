@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView
+        android:id="@+id/medicineView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
         android:id="@+id/dateView"
         android:layout_width="match_parent"
@@ -11,8 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldDiaperStateView
-        android:id="@+id/diaperStateView"
+    <!-- TODO medicine measure -->
+    <!-- TODO repeat parameters -->
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView
+        android:id="@+id/noteView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

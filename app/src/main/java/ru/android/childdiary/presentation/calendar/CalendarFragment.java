@@ -17,6 +17,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.calendar.fragments.BaseCalendarFragment;
@@ -27,7 +32,7 @@ import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
-import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.FeedFieldActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
@@ -156,32 +161,32 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     }
 
     @Override
-    public void navigateToDiaperEventAdd() {
-        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), null);
+    public void navigateToDiaperEventAdd(@NonNull DiaperEvent defaultEvent) {
+        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), null, defaultEvent);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
-    public void navigateToFeedEventAdd() {
-        Intent intent = FeedEventDetailActivity.getIntent(getContext(), null);
+    public void navigateToFeedEventAdd(@NonNull FeedEvent defaultEvent) {
+        Intent intent = FeedFieldActivity.getIntent(getContext(), null, defaultEvent);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
-    public void navigateToOtherEventAdd() {
-        Intent intent = OtherEventDetailActivity.getIntent(getContext(), null);
+    public void navigateToOtherEventAdd(@NonNull OtherEvent defaultEvent) {
+        Intent intent = OtherEventDetailActivity.getIntent(getContext(), null, defaultEvent);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
-    public void navigateToPumpEventAdd() {
-        Intent intent = PumpEventDetailActivity.getIntent(getContext(), null);
+    public void navigateToPumpEventAdd(@NonNull PumpEvent defaultEvent) {
+        Intent intent = PumpEventDetailActivity.getIntent(getContext(), null, defaultEvent);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 
     @Override
-    public void navigateToSleepEventAdd() {
-        Intent intent = SleepEventDetailActivity.getIntent(getContext(), null);
+    public void navigateToSleepEventAdd(@NonNull SleepEvent defaultEvent) {
+        Intent intent = SleepEventDetailActivity.getIntent(getContext(), null, defaultEvent);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 

@@ -100,19 +100,39 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     public void requestEventDetail(@NonNull MasterEvent event) {
         switch (event.getEventType()) {
             case DIAPER:
-                getViewState().navigateToDiaperEvent(event);
+                unsubscribeOnDestroy(calendarInteractor.getDefaultDiaperEvent()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(defaultEvent -> getViewState().navigateToDiaperEvent(event, defaultEvent),
+                                this::onUnexpectedError));
                 break;
             case FEED:
-                getViewState().navigateToFeedEvent(event);
+                unsubscribeOnDestroy(calendarInteractor.getDefaultFeedEvent()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(defaultEvent -> getViewState().navigateToFeedEvent(event, defaultEvent),
+                                this::onUnexpectedError));
                 break;
             case OTHER:
-                getViewState().navigateToOtherEvent(event);
+                unsubscribeOnDestroy(calendarInteractor.getDefaultOtherEvent()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(defaultEvent -> getViewState().navigateToOtherEvent(event, defaultEvent),
+                                this::onUnexpectedError));
                 break;
             case PUMP:
-                getViewState().navigateToPumpEvent(event);
+                unsubscribeOnDestroy(calendarInteractor.getDefaultPumpEvent()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(defaultEvent -> getViewState().navigateToPumpEvent(event, defaultEvent),
+                                this::onUnexpectedError));
                 break;
             case SLEEP:
-                getViewState().navigateToSleepEvent(event);
+                unsubscribeOnDestroy(calendarInteractor.getDefaultSleepEvent()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(defaultEvent -> getViewState().navigateToSleepEvent(event, defaultEvent),
+                                this::onUnexpectedError));
                 break;
         }
     }

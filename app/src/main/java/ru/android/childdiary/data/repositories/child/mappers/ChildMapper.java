@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.repositories.child;
+package ru.android.childdiary.data.repositories.child.mappers;
 
 import android.support.annotation.NonNull;
 

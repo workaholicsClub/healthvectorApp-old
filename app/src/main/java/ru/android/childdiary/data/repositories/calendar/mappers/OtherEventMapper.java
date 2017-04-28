@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.repositories.calendar;
+package ru.android.childdiary.data.repositories.calendar.mappers;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,12 +9,12 @@ import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntit
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
-import ru.android.childdiary.data.repositories.child.ChildMapper;
+import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
-class OtherEventMapper {
+public class OtherEventMapper {
     public static OtherEvent mapToPlainObject(@NonNull OtherEventData eventData) {
         MasterEventData masterEventData = eventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();

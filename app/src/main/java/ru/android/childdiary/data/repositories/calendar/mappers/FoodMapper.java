@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.repositories.calendar;
+package ru.android.childdiary.data.repositories.calendar.mappers;
 
 import android.support.annotation.NonNull;
 
@@ -7,7 +7,7 @@ import ru.android.childdiary.data.entities.calendar.events.core.FoodData;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 
-class FoodMapper {
+public class FoodMapper {
     public static Food mapToPlainObject(@NonNull FoodData foodData) {
         return Food.builder()
                 .id(foodData.getId())

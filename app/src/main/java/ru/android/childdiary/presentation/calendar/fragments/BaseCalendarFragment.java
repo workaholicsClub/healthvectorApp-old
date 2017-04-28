@@ -25,6 +25,10 @@ import butterknife.ButterKnife;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.FabController;
@@ -33,7 +37,8 @@ import ru.android.childdiary.presentation.calendar.adapters.events.EventActionLi
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
-import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.FeedFieldActivity;
+import ru.android.childdiary.presentation.events.FeedFieldActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
@@ -217,32 +222,32 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
-    public void navigateToDiaperEvent(@NonNull MasterEvent event) {
-        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToDiaperEvent(@NonNull MasterEvent event, @NonNull DiaperEvent defaultEvent) {
+        Intent intent = DiaperEventDetailActivity.getIntent(getContext(), event, defaultEvent);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
-    public void navigateToFeedEvent(@NonNull MasterEvent event) {
-        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToFeedEvent(@NonNull MasterEvent event, @NonNull FeedEvent defaultEvent) {
+        Intent intent = FeedFieldActivity.getIntent(getContext(), event, defaultEvent);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
-    public void navigateToOtherEvent(@NonNull MasterEvent event) {
-        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToOtherEvent(@NonNull MasterEvent event, @NonNull OtherEvent defaultEvent) {
+        Intent intent = OtherEventDetailActivity.getIntent(getContext(), event, defaultEvent);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
-    public void navigateToPumpEvent(@NonNull MasterEvent event) {
-        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToPumpEvent(@NonNull MasterEvent event, @NonNull PumpEvent defaultEvent) {
+        Intent intent = PumpEventDetailActivity.getIntent(getContext(), event, defaultEvent);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
-    public void navigateToSleepEvent(@NonNull MasterEvent event) {
-        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event);
+    public void navigateToSleepEvent(@NonNull MasterEvent event, @NonNull SleepEvent defaultEvent) {
+        Intent intent = SleepEventDetailActivity.getIntent(getContext(), event, defaultEvent);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 

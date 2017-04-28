@@ -49,7 +49,7 @@
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
-            android:name=".presentation.events.FeedEventDetailActivity"
+            android:name=".presentation.events.FeedFieldActivity"
             android:parentActivityName=".presentation.main.MainActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
