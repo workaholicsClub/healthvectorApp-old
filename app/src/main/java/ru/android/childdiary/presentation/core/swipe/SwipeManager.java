@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.calendar.adapters.events;
+package ru.android.childdiary.presentation.core.swipe;
 
 import android.support.annotation.Nullable;
 
@@ -7,8 +7,6 @@ import com.daimajia.swipe.SwipeLayout;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import ru.android.childdiary.presentation.calendar.FabController;
 
 public class SwipeManager {
     private static final int INVALID_POSITION = -1;
@@ -21,8 +19,8 @@ public class SwipeManager {
         this.fabController = fabController;
     }
 
-    public void bindViewHolder(EventViewHolder viewHolder, int position) {
-        SwipeLayout swipeLayout = viewHolder.swipeLayout;
+    public void bindViewHolder(SwipeViewHolder viewHolder, int position) {
+        SwipeLayout swipeLayout = viewHolder.getSwipeLayout();
         ValueBox valueBox;
         if (swipeLayout.getTag() == null) {
             valueBox = new ValueBox();

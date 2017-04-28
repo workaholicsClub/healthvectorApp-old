@@ -31,7 +31,7 @@ public class MedicineTakingInteractor implements Interactor {
         return medicineTakingRepository.getMedicineTakingList();
     }
 
-    public Observable<Medicine> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+    public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
         return medicineTakingRepository.addMedicineTaking(medicineTaking);
     }
 }

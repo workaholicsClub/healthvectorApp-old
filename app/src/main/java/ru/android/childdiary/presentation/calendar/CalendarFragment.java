@@ -30,6 +30,7 @@ import ru.android.childdiary.presentation.calendar.fragments.MonthFragment;
 import ru.android.childdiary.presentation.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedFieldActivity;

@@ -17,7 +17,8 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.presentation.calendar.FabController;
+import ru.android.childdiary.presentation.core.swipe.FabController;
+import ru.android.childdiary.presentation.core.swipe.SwipeManager;
 import ru.android.childdiary.utils.EventHelper;
 
 public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implements EventViewHolder.SwipeActionListener {

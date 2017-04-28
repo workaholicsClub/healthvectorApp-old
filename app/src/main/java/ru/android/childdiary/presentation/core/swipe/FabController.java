@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.calendar;
+package ru.android.childdiary.presentation.core.swipe;
 
 public interface FabController {
     void showFab();

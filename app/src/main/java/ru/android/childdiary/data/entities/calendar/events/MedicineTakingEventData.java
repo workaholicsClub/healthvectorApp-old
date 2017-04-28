@@ -24,7 +24,7 @@ public interface MedicineTakingEventData {
 
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
-    MedicineTakingData getMedicineTakingData();
+    MedicineTakingData getMedicineTaking();
 
     // TODO: периодичность
 }

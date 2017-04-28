@@ -11,8 +11,10 @@ import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
+import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
@@ -34,14 +36,18 @@ public class DoctorVisitDbService {
     }
 
     public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {
-        return null;
+        return DbUtils.insertObservable(dataStore, doctor, DoctorMapper::mapToEntity, DoctorMapper::mapToPlainObject);
     }
 
     public Observable<List<DoctorVisit>> getDoctorVisits() {
-        return null;
+        return dataStore.select(DoctorVisitEntity.class)
+                .orderBy(DoctorVisitEntity.ID)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, DoctorVisitMapper::mapToPlainObject));
     }
 
     public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return null;
+        return DbUtils.insertObservable(dataStore, doctorVisit, DoctorVisitMapper::mapToEntity, DoctorVisitMapper::mapToPlainObject);
     }
 }

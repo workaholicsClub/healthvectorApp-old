@@ -20,6 +20,8 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
@@ -215,6 +217,16 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
+    public Observable<DoctorVisitEvent> getDoctorVisitEventDetail(@NonNull MasterEvent event) {
+        return dbService.getDoctorVisitEventDetail(event);
+    }
+
+    @Override
+    public Observable<MedicineTakingEvent> getMedicineTakingEventDetail(@NonNull MasterEvent event) {
+        return dbService.getMedicineTakingEventDetail(event);
+    }
+
+    @Override
     public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
         return dbService.add(event);
     }
@@ -240,6 +252,16 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
+    public Observable<DoctorVisitEvent> add(@NonNull DoctorVisitEvent event) {
+        return dbService.add(event);
+    }
+
+    @Override
+    public Observable<MedicineTakingEvent> add(@NonNull MedicineTakingEvent event) {
+        return dbService.add(event);
+    }
+
+    @Override
     public Observable<DiaperEvent> update(@NonNull DiaperEvent event) {
         return dbService.update(event);
     }
@@ -261,6 +283,16 @@ public class CalendarDataRepository implements CalendarRepository {
 
     @Override
     public Observable<SleepEvent> update(@NonNull SleepEvent event) {
+        return dbService.update(event);
+    }
+
+    @Override
+    public Observable<DoctorVisitEvent> update(@NonNull DoctorVisitEvent event) {
+        return dbService.update(event);
+    }
+
+    @Override
+    public Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event) {
         return dbService.update(event);
     }
 

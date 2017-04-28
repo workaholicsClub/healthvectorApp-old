@@ -37,7 +37,7 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     }
 
     @Override
-    public Observable<Medicine> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+    public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
         return dbService.addMedicineTaking(medicineTaking);
     }
 }

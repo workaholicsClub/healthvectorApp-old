@@ -25,9 +25,9 @@ public class FeedEventMapper {
         MasterEventData masterEventData = eventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
-        FoodMeasureData foodMeasureData = eventData.getFoodMeasureData();
+        FoodMeasureData foodMeasureData = eventData.getFoodMeasure();
         FoodMeasure foodMeasure = foodMeasureData == null ? null : FoodMeasureMapper.mapToPlainObject(foodMeasureData);
-        FoodData foodData = eventData.getFoodData();
+        FoodData foodData = eventData.getFood();
         Food food = foodData == null ? null : FoodMapper.mapToPlainObject(foodData);
         return FeedEvent.builder()
                 .id(eventData.getId())
@@ -72,12 +72,12 @@ public class FeedEventMapper {
         FoodMeasure foodMeasure = feedEvent.getFoodMeasure();
         if (foodMeasure != null) {
             FoodMeasureEntity foodMeasureEntity = (FoodMeasureEntity) blockingEntityStore.findByKey(FoodMeasureEntity.class, foodMeasure.getId());
-            feedEventEntity.setFoodMeasureData(foodMeasureEntity);
+            feedEventEntity.setFoodMeasure(foodMeasureEntity);
         }
         Food food = feedEvent.getFood();
         if (food != null) {
             FoodEntity foodEntity = (FoodEntity) blockingEntityStore.findByKey(FoodEntity.class, food.getId());
-            feedEventEntity.setFoodData(foodEntity);
+            feedEventEntity.setFood(foodEntity);
         }
         return feedEventEntity;
     }

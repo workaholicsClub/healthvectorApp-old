@@ -15,6 +15,8 @@ import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
@@ -24,16 +26,24 @@ import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEn
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
+import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
+import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
+import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.AllEventsMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.DiaperEventMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.DoctorVisitEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.FeedEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.FoodMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.FoodMeasureMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.MedicineTakingEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.OtherEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.PumpEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.SleepEventMapper;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
@@ -149,16 +159,37 @@ public class CalendarDbService {
                 // sleep event
                 SleepEventEntity.ID.as("sleep_event_id"),
                 SleepEventEntity.FINISH_DATE_TIME.as("sleep_event_finish_date_time"),
-                SleepEventEntity.TIMER_STARTED)
+                SleepEventEntity.TIMER_STARTED,
+                // doctor visit event
+                DoctorVisitEventEntity.ID.as("doctor_visit_event_id"),
+                // doctor visit
+                DoctorVisitEntity.ID.as("doctor_visit_id"),
+                // doctor
+                DoctorEntity.ID.as("doctor_id"),
+                DoctorEntity.NAME.as("doctor_name"),
+                // medicine taking event
+                MedicineTakingEventEntity.ID.as("medicine_taking_event_id"),
+                // medicine taking
+                MedicineTakingEntity.ID.as("medicine_taking_id"),
+                // medicine
+                MedicineEntity.ID.as("medicine_id"),
+                MedicineEntity.NAME.as("medicine_name")
+        )
                 .from(MasterEventEntity.class)
                 .join(ChildEntity.class).on(ChildEntity.ID.eq(MasterEventEntity.CHILD_ID))
                 .leftJoin(DiaperEventEntity.class).on(DiaperEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .leftJoin(FeedEventEntity.class).on(FeedEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .leftJoin(FoodMeasureEntity.class).on(FoodMeasureEntity.ID.eq(FeedEventEntity.FOOD_MEASURE_DATA_ID))
-                .leftJoin(FoodEntity.class).on(FoodEntity.ID.eq(FeedEventEntity.FOOD_DATA_ID))
+                .leftJoin(FoodMeasureEntity.class).on(FoodMeasureEntity.ID.eq(FeedEventEntity.FOOD_MEASURE_ID))
+                .leftJoin(FoodEntity.class).on(FoodEntity.ID.eq(FeedEventEntity.FOOD_ID))
                 .leftJoin(OtherEventEntity.class).on(OtherEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .leftJoin(PumpEventEntity.class).on(PumpEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .leftJoin(SleepEventEntity.class).on(SleepEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .leftJoin(DoctorVisitEventEntity.class).on(DoctorVisitEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .leftJoin(DoctorVisitEntity.class).on(DoctorVisitEntity.ID.eq(DoctorVisitEventEntity.DOCTOR_VISIT_ID))
+                .leftJoin(DoctorEntity.class).on(DoctorEntity.ID.eq(DoctorVisitEntity.DOCTOR_ID))
+                .leftJoin(MedicineTakingEventEntity.class).on(MedicineTakingEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .leftJoin(MedicineTakingEntity.class).on(MedicineTakingEntity.ID.eq(MedicineTakingEventEntity.MEDICINE_TAKING_ID))
+                .leftJoin(MedicineEntity.class).on(MedicineEntity.ID.eq(MedicineTakingEntity.MEDICINE_ID))
                 .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
                 .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
                 .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
@@ -222,6 +253,22 @@ public class CalendarDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, SleepEventMapper::mapToPlainObject));
     }
 
+    public Observable<DoctorVisitEvent> getDoctorVisitEventDetail(@NonNull MasterEvent event) {
+        return dataStore.select(DoctorVisitEventEntity.class)
+                .where(DoctorVisitEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, DoctorVisitEventMapper::mapToPlainObject));
+    }
+
+    public Observable<MedicineTakingEvent> getMedicineTakingEventDetail(@NonNull MasterEvent event) {
+        return dataStore.select(MedicineTakingEventEntity.class)
+                .where(MedicineTakingEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, MedicineTakingEventMapper::mapToPlainObject));
+    }
+
     public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
@@ -257,6 +304,20 @@ public class CalendarDbService {
         }));
     }
 
+    public Observable<DoctorVisitEvent> add(@NonNull DoctorVisitEvent event) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            MasterEvent masterEvent = insertMasterEvent(event);
+            return insertDoctorVisitEvent(event, masterEvent);
+        }));
+    }
+
+    public Observable<MedicineTakingEvent> add(@NonNull MedicineTakingEvent event) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            MasterEvent masterEvent = insertMasterEvent(event);
+            return insertMedicineTakingEvent(event, masterEvent);
+        }));
+    }
+
     public Observable<DiaperEvent> update(@NonNull DiaperEvent event) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             updateMasterEvent(event);
@@ -289,6 +350,20 @@ public class CalendarDbService {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             updateMasterEvent(event);
             return updateSleepEvent(event);
+        }));
+    }
+
+    public Observable<DoctorVisitEvent> update(@NonNull DoctorVisitEvent event) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            updateMasterEvent(event);
+            return updateDoctorVisitEvent(event);
+        }));
+    }
+
+    public Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            updateMasterEvent(event);
+            return updateMedicineTakingEvent(event);
         }));
     }
 
@@ -337,6 +412,16 @@ public class CalendarDbService {
                 SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject);
     }
 
+    private DoctorVisitEvent insertDoctorVisitEvent(@NonNull DoctorVisitEvent event, @NonNull MasterEvent masterEvent) {
+        return DbUtils.insert(dataStore, event, masterEvent,
+                DoctorVisitEventMapper::mapToEntity, DoctorVisitEventMapper::mapToPlainObject);
+    }
+
+    private MedicineTakingEvent insertMedicineTakingEvent(@NonNull MedicineTakingEvent event, @NonNull MasterEvent masterEvent) {
+        return DbUtils.insert(dataStore, event, masterEvent,
+                MedicineTakingEventMapper::mapToEntity, MedicineTakingEventMapper::mapToPlainObject);
+    }
+
     private DiaperEvent updateDiaperEvent(@NonNull DiaperEvent event) {
         return DbUtils.update(dataStore, event,
                 DiaperEventMapper::mapToEntity, DiaperEventMapper::mapToPlainObject);
@@ -360,5 +445,15 @@ public class CalendarDbService {
     private SleepEvent updateSleepEvent(@NonNull SleepEvent event) {
         return DbUtils.update(dataStore, event,
                 SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject);
+    }
+
+    private DoctorVisitEvent updateDoctorVisitEvent(@NonNull DoctorVisitEvent event) {
+        return DbUtils.update(dataStore, event,
+                DoctorVisitEventMapper::mapToEntity, DoctorVisitEventMapper::mapToPlainObject);
+    }
+
+    private MedicineTakingEvent updateMedicineTakingEvent(@NonNull MedicineTakingEvent event) {
+        return DbUtils.update(dataStore, event,
+                MedicineTakingEventMapper::mapToEntity, MedicineTakingEventMapper::mapToPlainObject);
     }
 }

@@ -31,13 +31,12 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.calendar.FabController;
+import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.calendar.adapters.calendar.CalendarViewAdapter;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
-import ru.android.childdiary.presentation.events.FeedFieldActivity;
 import ru.android.childdiary.presentation.events.FeedFieldActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;

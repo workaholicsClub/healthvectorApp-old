@@ -39,9 +39,9 @@ public interface FeedEventData {
 
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
-    FoodMeasureData getFoodMeasureData();
+    FoodMeasureData getFoodMeasure();
 
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
-    FoodData getFoodData();
+    FoodData getFood();
 }

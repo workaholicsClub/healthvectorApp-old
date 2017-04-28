@@ -8,7 +8,6 @@ import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.ColorUtils;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,13 +22,14 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.presentation.core.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-class EventViewHolder extends RecyclerView.ViewHolder {
+class EventViewHolder extends SwipeViewHolder {
     private static final double ALPHA_INCREASING_COEF = 1.5;
     private static final int FADE_DURATION_MS = 500;
 
@@ -137,6 +137,11 @@ class EventViewHolder extends RecyclerView.ViewHolder {
         shape.setCornerRadii(new float[]{corner, corner, corner, corner, corner, corner, corner, corner});
         shape.setColor(color);
         return shape;
+    }
+
+    @Override
+    public SwipeLayout getSwipeLayout() {
+        return swipeLayout;
     }
 
     @OnClick(R.id.eventRowActionDone)

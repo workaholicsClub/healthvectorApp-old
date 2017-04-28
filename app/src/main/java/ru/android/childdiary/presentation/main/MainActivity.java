@@ -41,7 +41,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
-import ru.android.childdiary.presentation.calendar.FabController;
+import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;

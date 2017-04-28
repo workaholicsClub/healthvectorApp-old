@@ -1,5 +1,7 @@
 package ru.android.childdiary.data.entities.medical;
 
+import org.joda.time.DateTime;
+
 import io.requery.Entity;
 import io.requery.ForeignKey;
 import io.requery.Generated;
@@ -18,5 +20,13 @@ public interface MedicineTakingData {
 
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
-    MedicineData getMedicineData();
+    MedicineData getMedicine();
+
+    DateTime getDateTime();
+
+    Integer getNotifyTimeInMinutes();
+
+    String getNote();
+
+    String getImageFileName();
 }

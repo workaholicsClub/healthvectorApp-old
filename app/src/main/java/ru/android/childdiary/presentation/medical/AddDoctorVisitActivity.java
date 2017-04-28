@@ -3,16 +3,20 @@ package ru.android.childdiary.presentation.medical;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
@@ -51,8 +55,18 @@ public class AddDoctorVisitActivity extends BaseMvpActivity implements AddDoctor
         // TODO checkbox color
     }
 
+    @OnClick(R.id.buttonAdd)
+    void onButtonAddClick() {
+        presenter.addDoctorVisit(DoctorVisit.builder().build());
+    }
+
     @Override
     public void showDoctors(List<Doctor> doctors) {
         doctorView.updateAdapter(doctors);
+    }
+
+    @Override
+    public void doctorVisitAdded(@NonNull DoctorVisit doctorVisit) {
+        Toast.makeText(this, "added: " + doctorVisit, Toast.LENGTH_SHORT).show();
     }
 }

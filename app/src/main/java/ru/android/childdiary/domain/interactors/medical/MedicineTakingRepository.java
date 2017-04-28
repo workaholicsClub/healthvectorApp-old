@@ -15,5 +15,5 @@ public interface MedicineTakingRepository extends Repository {
 
     Observable<List<MedicineTaking>> getMedicineTakingList();
 
-    Observable<Medicine> addMedicineTaking(@NonNull MedicineTaking medicineTaking);
+    Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking);
 }

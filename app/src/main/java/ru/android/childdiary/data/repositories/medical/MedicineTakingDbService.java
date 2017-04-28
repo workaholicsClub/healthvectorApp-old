@@ -11,8 +11,10 @@ import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMapper;
+import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 
@@ -34,14 +36,18 @@ public class MedicineTakingDbService {
     }
 
     public Observable<Medicine> addMedicine(@NonNull Medicine medicine) {
-        return null;
+        return DbUtils.insertObservable(dataStore, medicine, MedicineMapper::mapToEntity, MedicineMapper::mapToPlainObject);
     }
 
     public Observable<List<MedicineTaking>> getMedicineTakingList() {
-        return null;
+        return dataStore.select(MedicineTakingEntity.class)
+                .orderBy(MedicineTakingEntity.ID)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MedicineTakingMapper::mapToPlainObject));
     }
 
-    public Observable<Medicine> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return null;
+    public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        return DbUtils.insertObservable(dataStore, medicineTaking, MedicineTakingMapper::mapToEntity, MedicineTakingMapper::mapToPlainObject);
     }
 }

@@ -10,9 +10,11 @@ import java.util.List;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.core.Repository;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
@@ -63,6 +65,10 @@ public interface CalendarRepository extends Repository {
 
     Observable<SleepEvent> getSleepEventDetail(@NonNull MasterEvent event);
 
+    Observable<DoctorVisitEvent> getDoctorVisitEventDetail(@NonNull MasterEvent event);
+
+    Observable<MedicineTakingEvent> getMedicineTakingEventDetail(@NonNull MasterEvent event);
+
     Observable<DiaperEvent> add(@NonNull DiaperEvent event);
 
     Observable<FeedEvent> add(@NonNull FeedEvent event);
@@ -73,6 +79,10 @@ public interface CalendarRepository extends Repository {
 
     Observable<SleepEvent> add(@NonNull SleepEvent event);
 
+    Observable<DoctorVisitEvent> add(@NonNull DoctorVisitEvent event);
+
+    Observable<MedicineTakingEvent> add(@NonNull MedicineTakingEvent event);
+
     Observable<DiaperEvent> update(@NonNull DiaperEvent event);
 
     Observable<FeedEvent> update(@NonNull FeedEvent event);
@@ -82,6 +92,10 @@ public interface CalendarRepository extends Repository {
     Observable<PumpEvent> update(@NonNull PumpEvent event);
 
     Observable<SleepEvent> update(@NonNull SleepEvent event);
+
+    Observable<DoctorVisitEvent> update(@NonNull DoctorVisitEvent event);
+
+    Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event);
 
     Observable<MasterEvent> delete(@NonNull MasterEvent event);
 
