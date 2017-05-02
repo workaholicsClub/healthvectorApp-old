@@ -31,11 +31,11 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.calendar.adapters.calendar.CalendarViewAdapter;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedFieldActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
@@ -144,7 +144,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
 
     @Override
     public void onTimerTick(@NonNull SleepEvent event) {
-        eventAdapter.updateEvent(event);
+        eventAdapter.updatePartially(event);
     }
 
     @Override
@@ -217,7 +217,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     public void showEvents(@NonNull LocalDate date, @NonNull List<MasterEvent> events) {
         logger.debug("showEvents: " + StringUtils.eventsList(events));
         updateEventsTitle(date);
-        eventAdapter.setEvents(events);
+        eventAdapter.setItems(events);
     }
 
     @Override
@@ -261,12 +261,8 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
-    public void done(MasterEvent event) {
-        presenter.done(event);
-    }
-
-    @Override
-    public void move(MasterEvent event) {
+    public void delete(MasterEvent event) {
+        presenter.delete(event);
     }
 
     @Override
@@ -275,7 +271,11 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
-    public void delete(MasterEvent event) {
-        presenter.delete(event);
+    public void move(MasterEvent event) {
+    }
+
+    @Override
+    public void done(MasterEvent event) {
+        presenter.done(event);
     }
 }

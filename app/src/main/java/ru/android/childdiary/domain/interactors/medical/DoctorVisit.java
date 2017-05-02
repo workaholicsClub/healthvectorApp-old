@@ -2,13 +2,15 @@ package ru.android.childdiary.domain.interactors.medical;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
+
 import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
 @Value
 @Builder(toBuilder = true)
-public class DoctorVisit {
+public class DoctorVisit implements Serializable {
     Long id;
 
     Doctor doctor;

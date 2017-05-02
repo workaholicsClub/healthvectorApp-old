@@ -1,13 +1,10 @@
 package ru.android.childdiary.presentation.calendar.adapters.events;
 
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.presentation.core.swipe.ItemActionListener;
 
-public interface EventActionListener {
-    void done(MasterEvent event);
-
+public interface EventActionListener extends ItemActionListener<MasterEvent> {
     void move(MasterEvent event);
 
-    void edit(MasterEvent event);
-
-    void delete(MasterEvent event);
+    void done(MasterEvent event);
 }

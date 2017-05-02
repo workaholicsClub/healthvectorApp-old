@@ -9,7 +9,7 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.requery.Converter;
@@ -47,7 +47,7 @@ public class LinearGroupsConverter implements Converter<LinearGroups, String> {
 
     @Override
     public LinearGroups convertToMapped(Class<? extends LinearGroups> type, String value) {
-        return value == null ? LinearGroups.builder().times(Collections.emptyList()).build() : map(value);
+        return value == null ? LinearGroups.builder().times(new ArrayList<>()).build() : map(value);
     }
 
     private static String map(@NonNull LinearGroups linearGroups) {
@@ -61,6 +61,6 @@ public class LinearGroupsConverter implements Converter<LinearGroups, String> {
         List<LocalTime> times = Stream.of(parts)
                 .map(TIME_FORMATTER::parseLocalTime)
                 .collect(Collectors.toList());
-        return LinearGroups.builder().times(times).build();
+        return LinearGroups.builder().times(new ArrayList<>(times)).build();
     }
 }

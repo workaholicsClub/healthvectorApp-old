@@ -8,7 +8,7 @@ import com.daimajia.swipe.SwipeLayout;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SwipeManager {
+public final class SwipeManager {
     private static final int INVALID_POSITION = -1;
     private final Set<SwipeLayout> shownLayouts = new HashSet<>();
     private final Set<Integer> openedOrOpeningPositions = new HashSet<>();

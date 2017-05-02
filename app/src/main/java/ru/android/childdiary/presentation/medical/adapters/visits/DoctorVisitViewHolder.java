@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.calendar.adapters.events;
+package ru.android.childdiary.presentation.medical.adapters.visits;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,17 +17,15 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.presentation.core.swipe.ItemActionListener;
+import ru.android.childdiary.presentation.core.swipe.SwipeActionListener;
 import ru.android.childdiary.presentation.core.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.DateUtils;
-import ru.android.childdiary.utils.EventHelper;
-import ru.android.childdiary.utils.StringUtils;
-import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListener, EventActionListener> {
+class DoctorVisitViewHolder extends SwipeViewHolder<DoctorVisit, SwipeActionListener<DoctorVisitViewHolder>, ItemActionListener<DoctorVisit>> {
     private static final double ALPHA_INCREASING_COEF = 1.5;
     private static final int FADE_DURATION_MS = 500;
 
@@ -61,50 +59,24 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
 
-    public EventViewHolder(View itemView, @NonNull EventActionListener itemActionListener, @NonNull EventSwipeActionListener swipeActionListener) {
+    public DoctorVisitViewHolder(View itemView, @NonNull ItemActionListener<DoctorVisit> itemActionListener, @NonNull SwipeActionListener<DoctorVisitViewHolder> swipeActionListener) {
         super(itemView, itemActionListener, swipeActionListener);
     }
 
     @Override
-    public void bind(Context context, Sex sex, MasterEvent event) {
-        super.bind(context, sex, event);
+    public void bind(Context context, Sex sex, DoctorVisit item) {
+        super.bind(context, sex, item);
 
-        //noinspection deprecation
-        eventView.setBackgroundDrawable(
-                getEventViewBackgroundDrawable(ResourcesUtils.getEventColor(context, sex, event)));
         //noinspection deprecation
         actionsView.setBackgroundDrawable(
                 getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
 
-        textViewTime.setText(DateUtils.time(context, event.getDateTime().toLocalTime()));
-        EventType eventType = event.getEventType();
-        if (eventType == EventType.OTHER) {
-            textViewTitle.setText(EventHelper.getDescription(context, event));
-            textViewDescription.setText(null);
-        } else {
-            textViewTitle.setText(StringUtils.eventType(context, eventType));
-            textViewDescription.setText(EventHelper.getDescription(context, event));
-        }
+        textViewTime.setText(DateUtils.time(context, item.getDateTime().toLocalTime()));
+        textViewTitle.setText(item.toString());
+        textViewDescription.setText(null);
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
-
-        boolean showActionDone = EventHelper.canBeDone(event);
-        actionDoneView.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
-        delimiter1.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
-
-        boolean isDone = EventHelper.isDone(event);
-        boolean isExpired = EventHelper.isExpired(event);
-        int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
-        textViewTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
-    }
-
-    @Override
-    public void updatePartially(Context context, MasterEvent event) {
-        EventType eventType = event.getEventType();
-        if (eventType != EventType.OTHER) {
-            textViewDescription.setText(EventHelper.getDescription(context, event));
-        }
     }
 
     private Drawable getEventViewBackgroundDrawable(@ColorInt int color) {
@@ -144,15 +116,5 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     @OnClick(R.id.eventRowActionDelete)
     void onDeleteClick() {
         swipeActionListener.delete(this);
-    }
-
-    @OnClick(R.id.eventRowActionMove)
-    void onMoveClick() {
-        swipeActionListener.move(this);
-    }
-
-    @OnClick(R.id.eventRowActionDone)
-    void onDoneClick() {
-        swipeActionListener.done(this);
     }
 }

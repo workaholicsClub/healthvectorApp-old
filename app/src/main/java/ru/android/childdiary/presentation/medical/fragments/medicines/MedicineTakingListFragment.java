@@ -11,15 +11,20 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.swipe.FabController;
+import ru.android.childdiary.presentation.core.swipe.ItemActionListener;
+import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingAdapter;
 
-public class MedicineTakingListFragment extends AppPartitionFragment implements MedicineTakingListView {
+public class MedicineTakingListFragment extends AppPartitionFragment
+        implements MedicineTakingListView, ItemActionListener<MedicineTaking> {
     @InjectPresenter
     MedicineTakingListPresenter presenter;
 
     @BindView(R.id.recyclerViewMedicineTakingList)
-    RecyclerView recyclerViewMedicineTakingList;
+    RecyclerView recyclerView;
 
-    //private MedicineTakingAdapter medicineTakingAdapter;
+    private MedicineTakingAdapter adapter;
+    private FabController fabController;
 
     @Override
     protected int getLayoutResourceId() {
@@ -28,13 +33,26 @@ public class MedicineTakingListFragment extends AppPartitionFragment implements 
 
     @Override
     protected void setupUi() {
+        adapter = new MedicineTakingAdapter(getContext(), this, fabController);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void showMedicineTakingList(@NonNull MedicineTakingListFilter filter, @NonNull List<MedicineTaking> medicineTakingList) {
+        adapter.setItems(medicineTakingList);
     }
 
     @Override
     public void navigateToMedicineTaking() {
+    }
+
+    @Override
+    public void delete(MedicineTaking item) {
+
+    }
+
+    @Override
+    public void edit(MedicineTaking item) {
+
     }
 }
