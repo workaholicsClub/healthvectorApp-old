@@ -46,7 +46,7 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     @BindView(R.id.textViewTime)
     TextView textViewTime;
 
-    @BindView(R.id.textViewEventTitle)
+    @BindView(R.id.textViewTitle)
     TextView textViewTitle;
 
     @BindView(R.id.textViewDescription)

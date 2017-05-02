@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.medical.fragments.visits;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.swipe.FabController;
@@ -20,7 +22,7 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     @InjectPresenter
     DoctorVisitsPresenter presenter;
 
-    @BindView(R.id.recyclerViewVisits)
+    @BindView(R.id.recyclerViewDoctorVisits)
     RecyclerView recyclerView;
 
     private DoctorVisitAdapter adapter;
@@ -35,6 +37,32 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     protected void setupUi() {
         adapter = new DoctorVisitAdapter(getContext(), this, fabController);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        adapter.setSex(getSex());
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FabController) {
+            fabController = (FabController) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fabController = null;
+    }
+
+    @Override
+    public void showChild(@NonNull Child child) {
+        super.showChild(child);
+        adapter.getSwipeManager().setFabController(child.getId() == null ? null : fabController);
     }
 
     @Override

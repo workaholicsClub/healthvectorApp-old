@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -35,7 +35,7 @@ public abstract class SwipeListAdapter<
         this.inflater = LayoutInflater.from(context);
         this.itemActionListener = itemActionListener;
         this.swipeManager = new SwipeManager(fabController);
-        this.items = Collections.emptyList();
+        this.items = new ArrayList<>();
     }
 
     public final void setSex(@Nullable Sex sex) {
@@ -49,7 +49,7 @@ public abstract class SwipeListAdapter<
         swipeManager.closeAllItems();
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListDiff<>(this.items, items, this), false);
         diffResult.dispatchUpdatesTo(this);
-        this.items = Collections.unmodifiableList(items);
+        this.items = new ArrayList<>(items);
     }
 
     public final void updatePartially(@NonNull T item) {
@@ -63,7 +63,7 @@ public abstract class SwipeListAdapter<
 
     @Override
     public final VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        VH viewHolder = createViewHolder(parent, itemActionListener);
+        VH viewHolder = createViewHolder(parent);
         return viewHolder;
     }
 
@@ -93,7 +93,7 @@ public abstract class SwipeListAdapter<
         swipeManager.closeAllItems();
     }
 
-    protected abstract VH createViewHolder(ViewGroup parent, IL itemActionListener);
+    protected abstract VH createViewHolder(ViewGroup parent);
 
     @Override
     public boolean areContentsTheSame(T oldItem, T newItem) {
