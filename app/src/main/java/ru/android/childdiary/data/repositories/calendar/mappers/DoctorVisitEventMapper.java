@@ -8,6 +8,7 @@ import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventData;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.medical.DoctorVisitData;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
@@ -15,6 +16,7 @@ import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 
@@ -23,6 +25,8 @@ public class DoctorVisitEventMapper {
         MasterEventData masterEventData = eventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
+        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
         DoctorVisitData doctorVisitData = eventData.getDoctorVisit();
         DoctorVisit doctorVisit = doctorVisitData == null ? null : DoctorVisitMapper.mapToPlainObject(doctorVisitData);
         return DoctorVisitEvent.builder()
@@ -33,8 +37,9 @@ public class DoctorVisitEventMapper {
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
-                .isDeleted(masterEventData.isDeleted())
                 .child(child)
+                .repeatParameters(repeatParameters)
+                .linearGroup(masterEventData.getLinearGroup())
                 .doctorVisit(doctorVisit)
                 .build();
     }

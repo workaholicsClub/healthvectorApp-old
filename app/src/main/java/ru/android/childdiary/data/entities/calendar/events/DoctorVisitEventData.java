@@ -25,6 +25,4 @@ public interface DoctorVisitEventData {
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
     DoctorVisitData getDoctorVisit();
-
-    // TODO: периодичность
 }

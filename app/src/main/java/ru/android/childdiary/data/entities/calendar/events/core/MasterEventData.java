@@ -33,9 +33,9 @@ public interface MasterEventData {
 
     Boolean isDone();
 
-    Boolean isDeleted();
-
     @ForeignKey
     @OneToOne
     RepeatParametersData getRepeatParameters();
+
+    Integer getLinearGroup();
 }

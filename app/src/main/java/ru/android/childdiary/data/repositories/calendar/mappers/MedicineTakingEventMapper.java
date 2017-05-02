@@ -8,6 +8,7 @@ import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventDa
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.medical.MedicineTakingData;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
@@ -15,6 +16,7 @@ import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 
@@ -23,6 +25,8 @@ public class MedicineTakingEventMapper {
         MasterEventData masterEventData = eventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
+        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
         MedicineTakingData medicineTakingData = eventData.getMedicineTaking();
         MedicineTaking medicineTaking = medicineTakingData == null ? null : MedicineTakingMapper.mapToPlainObject(medicineTakingData);
         return MedicineTakingEvent.builder()
@@ -33,8 +37,9 @@ public class MedicineTakingEventMapper {
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
-                .isDeleted(masterEventData.isDeleted())
                 .child(child)
+                .repeatParameters(repeatParameters)
+                .linearGroup(masterEventData.getLinearGroup())
                 .medicineTaking(medicineTaking)
                 .build();
     }

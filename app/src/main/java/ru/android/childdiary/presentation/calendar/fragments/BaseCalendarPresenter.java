@@ -58,14 +58,8 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
         requestData();
     }
 
-    private void unsubscribe() {
-        if (subscription != null && !subscription.isDisposed()) {
-            subscription.dispose();
-        }
-    }
-
     private void requestData() {
-        unsubscribe();
+        unsubscribe(subscription);
         subscription = unsubscribeOnDestroy(calendarInteractor.getAll(requestBuilder.build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

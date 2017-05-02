@@ -6,11 +6,13 @@ import android.support.annotation.Nullable;
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
@@ -19,6 +21,8 @@ public class OtherEventMapper {
         MasterEventData masterEventData = eventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
+        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
         return OtherEvent.builder()
                 .id(eventData.getId())
                 .masterEventId(masterEventData.getId())
@@ -27,8 +31,9 @@ public class OtherEventMapper {
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
-                .isDeleted(masterEventData.isDeleted())
                 .child(child)
+                .repeatParameters(repeatParameters)
+                .linearGroup(masterEventData.getLinearGroup())
                 .name(eventData.getName())
                 .finishDateTime(eventData.getFinishDateTime())
                 .build();

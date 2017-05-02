@@ -9,6 +9,7 @@ import lombok.Value;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
@@ -30,13 +31,14 @@ public class PumpEvent extends MasterEvent {
                       Integer notifyTimeInMinutes,
                       String note,
                       Boolean isDone,
-                      Boolean isDeleted,
                       Child child,
+                      RepeatParameters repeatParameters,
+                      Integer linearGroup,
                       Long id,
                       Breast breast,
                       Double leftAmountMl,
                       Double rightAmountMl) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, repeatParameters, linearGroup);
         this.id = id;
         this.breast = breast;
         this.leftAmountMl = leftAmountMl;

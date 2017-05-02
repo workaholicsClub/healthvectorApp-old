@@ -48,7 +48,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> implemen
 
     public void setEvents(@NonNull List<MasterEvent> events) {
         swipeManager.closeAllItems();
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new EventListDiff(this.events, events), false);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new EventsDiff(this.events, events), false);
         diffResult.dispatchUpdatesTo(this);
         this.events = new ArrayList<>(events);
     }

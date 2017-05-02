@@ -20,6 +20,7 @@ import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEn
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.DiaperEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
@@ -103,7 +104,6 @@ public class CalendarDbService {
                 .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
                 .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
                 .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
-                .and(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
                 .and(MasterEventEntity.EVENT_TYPE.notNull())
                 .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
                 .get()
@@ -120,7 +120,13 @@ public class CalendarDbService {
                 MasterEventEntity.NOTIFY_TIME_IN_MINUTES,
                 MasterEventEntity.NOTE,
                 MasterEventEntity.DONE,
-                MasterEventEntity.DELETED,
+                MasterEventEntity.LINEAR_GROUP,
+                // repeat parameters
+                RepeatParametersEntity.ID.as("repeat_parameters_id"),
+                RepeatParametersEntity.DATE_TIME_FROM.as("repeat_parameters_date_time_from"),
+                RepeatParametersEntity.PERIODICITY_IN_MINUTES,
+                RepeatParametersEntity.LENGTH_IN_MINUTES,
+                RepeatParametersEntity.LINEAR_GROUPS,
                 // child
                 ChildEntity.ID.as("child_id"),
                 ChildEntity.NAME.as("child_name"),
@@ -164,6 +170,12 @@ public class CalendarDbService {
                 DoctorVisitEventEntity.ID.as("doctor_visit_event_id"),
                 // doctor visit
                 DoctorVisitEntity.ID.as("doctor_visit_id"),
+                DoctorVisitEntity.NAME.as("doctor_visit_name"),
+                DoctorVisitEntity.DURATION_IN_MINUTES.as("doctor_visit_duration_in_minutes"),
+                DoctorVisitEntity.DATE_TIME.as("doctor_visit_date_time"),
+                DoctorVisitEntity.NOTIFY_TIME_IN_MINUTES.as("doctor_visit_notify_time_in_minutes"),
+                DoctorVisitEntity.NOTE.as("doctor_visit_note"),
+                DoctorVisitEntity.IMAGE_FILE_NAME.as("doctor_visit_image_file_name"),
                 // doctor
                 DoctorEntity.ID.as("doctor_id"),
                 DoctorEntity.NAME.as("doctor_name"),
@@ -171,12 +183,17 @@ public class CalendarDbService {
                 MedicineTakingEventEntity.ID.as("medicine_taking_event_id"),
                 // medicine taking
                 MedicineTakingEntity.ID.as("medicine_taking_id"),
+                MedicineTakingEntity.DATE_TIME.as("medicine_taking_date_time"),
+                MedicineTakingEntity.NOTIFY_TIME_IN_MINUTES.as("medicine_taking_notify_time_in_minutes"),
+                MedicineTakingEntity.NOTE.as("medicine_taking_note"),
+                MedicineTakingEntity.IMAGE_FILE_NAME.as("medicine_taking_image_file_name"),
                 // medicine
                 MedicineEntity.ID.as("medicine_id"),
                 MedicineEntity.NAME.as("medicine_name")
         )
                 .from(MasterEventEntity.class)
                 .join(ChildEntity.class).on(ChildEntity.ID.eq(MasterEventEntity.CHILD_ID))
+                .leftJoin(RepeatParametersEntity.class).on(RepeatParametersEntity.ID.eq(MasterEventEntity.REPEAT_PARAMETERS_ID))
                 .leftJoin(DiaperEventEntity.class).on(DiaperEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .leftJoin(FeedEventEntity.class).on(FeedEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .leftJoin(FoodMeasureEntity.class).on(FoodMeasureEntity.ID.eq(FeedEventEntity.FOOD_MEASURE_ID))
@@ -193,7 +210,6 @@ public class CalendarDbService {
                 .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
                 .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
                 .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
-                .and(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
                 .and(MasterEventEntity.EVENT_TYPE.notNull())
                 .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
                 .get()
@@ -204,7 +220,6 @@ public class CalendarDbService {
     public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
         return dataStore.select(SleepEventEntity.class)
                 .join(MasterEventEntity.class).on(SleepEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .where(MasterEventEntity.DELETED.isNull().or(MasterEventEntity.DELETED.eq(false)))
                 .and(MasterEventEntity.EVENT_TYPE.eq(EventType.SLEEP))
                 .and(SleepEventEntity.TIMER_STARTED.eq(true))
                 .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.ID)
@@ -368,8 +383,7 @@ public class CalendarDbService {
     }
 
     public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
-        MasterEvent masterEvent = event.toMasterBuilder().isDeleted(true).build();
-        return Observable.fromCallable(() -> updateMasterEvent(masterEvent));
+        return DbUtils.deleteObservable(dataStore, MasterEventEntity.class, event, event.getMasterEventId());
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {

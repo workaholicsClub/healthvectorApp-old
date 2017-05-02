@@ -9,8 +9,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
-import ru.android.childdiary.presentation.medical.adapters.DoctorVisitAdapter;
 
 public class DoctorVisitsFragment extends AppPartitionFragment implements DoctorVisitsView {
     @InjectPresenter
@@ -19,7 +19,7 @@ public class DoctorVisitsFragment extends AppPartitionFragment implements Doctor
     @BindView(R.id.recyclerViewVisits)
     RecyclerView recyclerViewVisits;
 
-    private DoctorVisitAdapter doctorVisitAdapter;
+    //private DoctorVisitAdapter doctorVisitAdapter;
 
     @Override
     protected int getLayoutResourceId() {
@@ -31,7 +31,7 @@ public class DoctorVisitsFragment extends AppPartitionFragment implements Doctor
     }
 
     @Override
-    public void showDoctorVisits(@NonNull DoctorVisitsFilter filter, @NonNull List doctorVisits) {
+    public void showDoctorVisits(@NonNull DoctorVisitsFilter filter, @NonNull List<DoctorVisit> doctorVisits) {
     }
 
     @Override

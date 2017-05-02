@@ -7,11 +7,11 @@ import java.util.List;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.utils.EventHelper;
 
-public class EventListDiff extends DiffUtil.Callback {
+class EventsDiff extends DiffUtil.Callback {
     private final List<MasterEvent> oldEvents;
     private final List<MasterEvent> newEvents;
 
-    public EventListDiff(List<MasterEvent> oldEvents, List<MasterEvent> newEvents) {
+    public EventsDiff(List<MasterEvent> oldEvents, List<MasterEvent> newEvents) {
         this.oldEvents = oldEvents;
         this.newEvents = newEvents;
     }

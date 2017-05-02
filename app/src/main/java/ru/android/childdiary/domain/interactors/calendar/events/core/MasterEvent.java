@@ -33,9 +33,11 @@ public class MasterEvent implements Serializable {
 
     Boolean isDone;
 
-    Boolean isDeleted;
-
     Child child;
+
+    RepeatParameters repeatParameters;
+
+    Integer linearGroup;
 
     public MasterEvent getMasterEvent() {
         return this;
@@ -49,7 +51,8 @@ public class MasterEvent implements Serializable {
                 .notifyTimeInMinutes(notifyTimeInMinutes)
                 .note(note)
                 .isDone(isDone)
-                .isDeleted(isDeleted)
+                .repeatParameters(repeatParameters)
+                .linearGroup(linearGroup)
                 .child(child);
     }
 }
