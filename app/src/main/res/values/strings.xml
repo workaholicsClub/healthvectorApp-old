@@ -267,6 +267,17 @@
         <item>Эспумизан</item>
         <item>Линекс</item>
     </string-array>
+    <string-array name="medicine_measure">
+        <item>мг</item>
+        <item>мл</item>
+        <item>шт.</item>
+        <item>ед.</item>
+        <item>мерн. лож.</item>
+        <item>ч. лож.</item>
+        <item>ст. лож.</item>
+        <item>куб. см</item>
+        <item>впрыск</item>
+    </string-array>
     <plurals name="numberOfYears">
         <item quantity="one">%d год</item>
         <item quantity="few">%d года</item>

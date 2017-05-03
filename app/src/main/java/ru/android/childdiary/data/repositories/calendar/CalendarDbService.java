@@ -31,6 +31,7 @@ import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
+import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.AllEventsMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.DiaperEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.DoctorVisitEventMapper;
@@ -187,9 +188,13 @@ public class CalendarDbService {
                 MedicineTakingEntity.NOTIFY_TIME_IN_MINUTES.as("medicine_taking_notify_time_in_minutes"),
                 MedicineTakingEntity.NOTE.as("medicine_taking_note"),
                 MedicineTakingEntity.IMAGE_FILE_NAME.as("medicine_taking_image_file_name"),
+                MedicineTakingEntity.AMOUNT.as("medicine_taking_amount"),
                 // medicine
                 MedicineEntity.ID.as("medicine_id"),
-                MedicineEntity.NAME.as("medicine_name")
+                MedicineEntity.NAME.as("medicine_name"),
+                // medicine measure
+                MedicineMeasureEntity.ID.as("medicine_measure_id"),
+                MedicineMeasureEntity.NAME.as("medicine_measure_name")
         )
                 .from(MasterEventEntity.class)
                 .join(ChildEntity.class).on(ChildEntity.ID.eq(MasterEventEntity.CHILD_ID))
@@ -207,6 +212,7 @@ public class CalendarDbService {
                 .leftJoin(MedicineTakingEventEntity.class).on(MedicineTakingEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .leftJoin(MedicineTakingEntity.class).on(MedicineTakingEntity.ID.eq(MedicineTakingEventEntity.MEDICINE_TAKING_ID))
                 .leftJoin(MedicineEntity.class).on(MedicineEntity.ID.eq(MedicineTakingEntity.MEDICINE_ID))
+                .leftJoin(MedicineMeasureEntity.class).on(MedicineMeasureEntity.ID.eq(MedicineTakingEntity.MEDICINE_MEASURE_ID))
                 .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
                 .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
                 .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))

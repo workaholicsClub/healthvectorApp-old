@@ -7,16 +7,23 @@ import ru.android.childdiary.data.entities.medical.MedicineTakingData;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineData;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
+import ru.android.childdiary.data.entities.medical.core.MedicineMeasureData;
+import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 
 public class MedicineTakingMapper {
     public static MedicineTaking mapToPlainObject(@NonNull MedicineTakingData medicineTakingData) {
         MedicineData medicineData = medicineTakingData.getMedicine();
         Medicine medicine = medicineData == null ? null : MedicineMapper.mapToPlainObject(medicineData);
+        MedicineMeasureData medicineMeasureData = medicineTakingData.getMedicineMeasure();
+        MedicineMeasure medicineMeasure = medicineMeasureData == null ? null : MedicineMeasureMapper.mapToPlainObject(medicineMeasureData);
         return MedicineTaking.builder()
                 .id(medicineTakingData.getId())
                 .medicine(medicine)
+                .amount(medicineTakingData.getAmount())
+                .medicineMeasure(medicineMeasure)
                 .dateTime(medicineTakingData.getDateTime())
                 .notifyTimeInMinutes(medicineTakingData.getNotifyTimeInMinutes())
                 .note(medicineTakingData.getNote())
@@ -38,10 +45,16 @@ public class MedicineTakingMapper {
             MedicineEntity medicineEntity = (MedicineEntity) blockingEntityStore.findByKey(MedicineEntity.class, medicine.getId());
             medicineTakingEntity.setMedicine(medicineEntity);
         }
+        MedicineMeasure medicineMeasure = medicineTaking.getMedicineMeasure();
+        if (medicineMeasure != null) {
+            MedicineMeasureEntity medicineMeasureEntity = (MedicineMeasureEntity) blockingEntityStore.findByKey(MedicineMeasureEntity.class, medicineMeasure.getId());
+            medicineTakingEntity.setMedicineMeasure(medicineMeasureEntity);
+        }
         return medicineTakingEntity;
     }
 
     private static void fillNonReferencedFields(@NonNull MedicineTakingEntity to, @NonNull MedicineTaking from) {
+        to.setAmount(from.getAmount());
         to.setDateTime(from.getDateTime());
         to.setNotifyTimeInMinutes(from.getNotifyTimeInMinutes());
         to.setNote(from.getNote());

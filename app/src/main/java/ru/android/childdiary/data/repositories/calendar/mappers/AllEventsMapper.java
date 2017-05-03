@@ -17,6 +17,8 @@ import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
+import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
+import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
@@ -34,6 +36,7 @@ import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 
 public class AllEventsMapper {
     public static MasterEvent mapToPlainObject(@NonNull Tuple data) {
@@ -234,6 +237,8 @@ public class AllEventsMapper {
         return MedicineTaking.builder()
                 .id(data.get(MedicineTakingEntity.ID.as("medicine_taking_id")))
                 .medicine(mapToMedicine(data))
+                .amount(data.get(MedicineTakingEntity.AMOUNT.as("medicine_taking_amount")))
+                .medicineMeasure(mapToMedicineMeasure(data))
                 .dateTime(data.get(MedicineTakingEntity.DATE_TIME.as("medicine_taking_date_time")))
                 .notifyTimeInMinutes(data.get(MedicineTakingEntity.NOTIFY_TIME_IN_MINUTES.as("medicine_taking_notify_time_in_minutes")))
                 .note(data.get(MedicineTakingEntity.NOTE.as("medicine_taking_note")))
@@ -243,8 +248,15 @@ public class AllEventsMapper {
 
     public static Medicine mapToMedicine(@NonNull Tuple data) {
         return Medicine.builder()
-                .id(data.get(DoctorEntity.ID.as("medicine_id")))
-                .name(data.get(DoctorEntity.NAME.as("medicine_name")))
+                .id(data.get(MedicineEntity.ID.as("medicine_id")))
+                .name(data.get(MedicineEntity.NAME.as("medicine_name")))
+                .build();
+    }
+
+    public static MedicineMeasure mapToMedicineMeasure(@NonNull Tuple data) {
+        return MedicineMeasure.builder()
+                .id(data.get(MedicineMeasureEntity.ID.as("medicine_measure_id")))
+                .name(data.get(MedicineMeasureEntity.NAME.as("medicine_measure_name")))
                 .build();
     }
 

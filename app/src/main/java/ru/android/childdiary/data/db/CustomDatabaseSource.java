@@ -44,6 +44,7 @@ public class CustomDatabaseSource extends DatabaseSource {
         fillTableWithValues(db, R.array.food_measure, "food_measure", "name");
         fillTableWithValues(db, R.array.doctor, "doctor", "name");
         fillTableWithValues(db, R.array.medicine, "medicine", "name");
+        fillTableWithValues(db, R.array.medicine_measure, "medicine_measure", "name");
     }
 
     private void fillTableWithValues(SQLiteDatabase db, @ArrayRes int arrayResId, String table, String column) {

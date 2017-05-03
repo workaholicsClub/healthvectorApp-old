@@ -10,6 +10,7 @@ import io.requery.ManyToOne;
 import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.medical.core.MedicineData;
+import ru.android.childdiary.data.entities.medical.core.MedicineMeasureData;
 
 @Table(name = "medicine_taking")
 @Entity(name = "MedicineTakingEntity")
@@ -21,6 +22,12 @@ public interface MedicineTakingData {
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
     MedicineData getMedicine();
+
+    Double getAmount();
+
+    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ManyToOne
+    MedicineMeasureData getMedicineMeasure();
 
     DateTime getDateTime();
 
