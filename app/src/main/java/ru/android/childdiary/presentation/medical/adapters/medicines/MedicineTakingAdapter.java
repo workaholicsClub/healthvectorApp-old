@@ -9,23 +9,21 @@ import android.view.ViewGroup;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.presentation.core.swipe.FabController;
-import ru.android.childdiary.presentation.core.swipe.ItemActionListener;
-import ru.android.childdiary.presentation.core.swipe.SwipeActionListener;
 import ru.android.childdiary.presentation.core.swipe.SwipeListAdapter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public class MedicineTakingAdapter extends SwipeListAdapter<
         MedicineTakingViewHolder,
         MedicineTaking,
-        SwipeActionListener<MedicineTakingViewHolder>,
-        ItemActionListener<MedicineTaking>> {
-    public MedicineTakingAdapter(Context context, @NonNull ItemActionListener<MedicineTaking> itemActionListener, @Nullable FabController fabController) {
+        MedicineTakingSwipeActionListener,
+        MedicineTakingActionListener> implements MedicineTakingSwipeActionListener {
+    public MedicineTakingAdapter(Context context, @NonNull MedicineTakingActionListener itemActionListener, @Nullable FabController fabController) {
         super(context, itemActionListener, fabController);
     }
 
     @Override
     protected MedicineTakingViewHolder createViewHolder(ViewGroup parent) {
-        View v = inflater.inflate(R.layout.medicine_taking_item, parent, false);
+        View v = inflater.inflate(R.layout.medical_list_item, parent, false);
         return new MedicineTakingViewHolder(v, itemActionListener, this);
     }
 

@@ -2,6 +2,8 @@ package ru.android.childdiary.presentation.medical.fragments.visits;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -14,15 +16,15 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.swipe.FabController;
-import ru.android.childdiary.presentation.core.swipe.ItemActionListener;
+import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitActionListener;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitAdapter;
 
 public class DoctorVisitsFragment extends AppPartitionFragment
-        implements DoctorVisitsView, ItemActionListener<DoctorVisit> {
+        implements DoctorVisitsView, DoctorVisitActionListener {
     @InjectPresenter
     DoctorVisitsPresenter presenter;
 
-    @BindView(R.id.recyclerViewDoctorVisits)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     private DoctorVisitAdapter adapter;
@@ -30,13 +32,17 @@ public class DoctorVisitsFragment extends AppPartitionFragment
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.fragment_doctor_visits;
+        return R.layout.fragment_medical_list;
     }
 
     @Override
     protected void setupUi() {
-        adapter = new DoctorVisitAdapter(getContext(), this, fabController);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new DoctorVisitAdapter(getActivity(), this, fabController);
         recyclerView.setAdapter(adapter);
+
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
 
     @Override

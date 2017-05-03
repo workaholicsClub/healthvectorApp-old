@@ -12,12 +12,9 @@ import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.presentation.core.swipe.ItemActionListener;
-import ru.android.childdiary.presentation.core.swipe.SwipeActionListener;
 import ru.android.childdiary.presentation.core.swipe.SwipeViewHolder;
-import ru.android.childdiary.utils.DateUtils;
 
-class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, SwipeActionListener<MedicineTakingViewHolder>, ItemActionListener<MedicineTaking>> {
+class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, MedicineTakingSwipeActionListener, MedicineTakingActionListener> {
     @BindView(R.id.swipeLayout)
     SwipeLayout swipeLayout;
 
@@ -40,8 +37,8 @@ class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, SwipeActi
     TextView textViewDescription;
 
     public MedicineTakingViewHolder(View itemView,
-                                    @NonNull ItemActionListener<MedicineTaking> itemActionListener,
-                                    @NonNull SwipeActionListener<MedicineTakingViewHolder> swipeActionListener) {
+                                    @NonNull MedicineTakingActionListener itemActionListener,
+                                    @NonNull MedicineTakingSwipeActionListener swipeActionListener) {
         super(itemView, itemActionListener, swipeActionListener);
     }
 
@@ -49,7 +46,6 @@ class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, SwipeActi
     public void bind(Context context, Sex sex, MedicineTaking item) {
         super.bind(context, sex, item);
 
-        textViewTime.setText(DateUtils.time(context, item.getDateTime().toLocalTime()));
         textViewTitle.setText(item.toString());
         textViewDescription.setText(null);
 

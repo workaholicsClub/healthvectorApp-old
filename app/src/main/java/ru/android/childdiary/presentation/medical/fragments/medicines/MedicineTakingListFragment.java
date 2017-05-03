@@ -2,6 +2,8 @@ package ru.android.childdiary.presentation.medical.fragments.medicines;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -14,15 +16,15 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.swipe.FabController;
-import ru.android.childdiary.presentation.core.swipe.ItemActionListener;
+import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingActionListener;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingAdapter;
 
 public class MedicineTakingListFragment extends AppPartitionFragment
-        implements MedicineTakingListView, ItemActionListener<MedicineTaking> {
+        implements MedicineTakingListView, MedicineTakingActionListener {
     @InjectPresenter
     MedicineTakingListPresenter presenter;
 
-    @BindView(R.id.recyclerViewMedicineTakingList)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     private MedicineTakingAdapter adapter;
@@ -30,13 +32,17 @@ public class MedicineTakingListFragment extends AppPartitionFragment
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.fragment_medicine_taking_list;
+        return R.layout.fragment_medical_list;
     }
 
     @Override
     protected void setupUi() {
-        adapter = new MedicineTakingAdapter(getContext(), this, fabController);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new MedicineTakingAdapter(getActivity(), this, fabController);
         recyclerView.setAdapter(adapter);
+
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
 
     @Override

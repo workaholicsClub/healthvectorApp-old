@@ -23,12 +23,14 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
+import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.medical.fragments.medicines.MedicineTakingListFragment;
 import ru.android.childdiary.presentation.medical.fragments.visits.DoctorVisitsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class MedicalDataFragment extends AppPartitionFragment implements MedicalDataView {
+public class MedicalDataFragment extends AppPartitionFragment implements MedicalDataView,
+        FabController {
     private static final String KEY_SELECTED_PAGE = "medical_data.selected_page";
 
     @Inject
@@ -62,7 +64,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     @Override
     protected void setupUi() {
         setupViewPager();
-        hideFab();
+        hideFabBar();
     }
 
     private void setupViewPager() {
@@ -110,9 +112,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     public void showChild(@NonNull Child child) {
         super.showChild(child);
         if (child.getId() == null) {
-            hideFab();
-        } else {
-            showFab();
+            hideFabBar();
         }
     }
 
@@ -138,11 +138,23 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         }
     }
 
-    private void showFab() {
+
+    @Override
+    public void showFab() {
         fab.show();
     }
 
-    private void hideFab() {
+    @Override
+    public boolean hideBar() {
+        return false;
+    }
+
+    @Override
+    public void hideBarWithoutAnimation() {
+    }
+
+    @Override
+    public void hideFabBar() {
         fab.hide();
     }
 }
