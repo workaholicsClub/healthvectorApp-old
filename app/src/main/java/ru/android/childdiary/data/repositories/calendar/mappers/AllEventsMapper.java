@@ -59,6 +59,7 @@ public class AllEventsMapper {
                 return mapToDoctorVisitEvent(data);
             case MEDICINE_TAKING:
                 return mapToMedicineTakingEvent(data);
+            // TODO EXERCISE
         }
         throw new IllegalStateException("Unknown event type");
     }

@@ -17,7 +17,9 @@ public class MedicineTakingAdapter extends SwipeListAdapter<
         MedicineTaking,
         MedicineTakingSwipeActionListener,
         MedicineTakingActionListener> implements MedicineTakingSwipeActionListener {
-    public MedicineTakingAdapter(Context context, @NonNull MedicineTakingActionListener itemActionListener, @Nullable FabController fabController) {
+    public MedicineTakingAdapter(Context context,
+                                 @NonNull MedicineTakingActionListener itemActionListener,
+                                 @Nullable FabController fabController) {
         super(context, itemActionListener, fabController);
     }
 

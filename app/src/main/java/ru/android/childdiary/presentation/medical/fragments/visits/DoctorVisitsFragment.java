@@ -11,6 +11,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.List;
 
 import butterknife.BindView;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
@@ -27,6 +28,7 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @Getter
     private DoctorVisitAdapter adapter;
     private FabController fabController;
 

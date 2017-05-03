@@ -18,6 +18,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
@@ -30,7 +31,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -182,8 +183,8 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
-    public Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate) {
-        return dbService.getAll(child, selectedDate);
+    public Observable<List<MasterEvent>> getAll(@NonNull EventsRequest request) {
+        return dbService.getAll(request);
     }
 
     @Override
@@ -304,6 +305,28 @@ public class CalendarDataRepository implements CalendarRepository {
     @Override
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         return dbService.done(event);
+    }
+
+    @Override
+    public Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
+        switch (eventType) {
+            case DIAPER:
+                return Observable.just(0);
+            case FEED:
+                return Observable.just(30);
+            case OTHER:
+                return Observable.just(10);
+            case PUMP:
+                return Observable.just(10);
+            case SLEEP:
+                return Observable.just(60);
+            case DOCTOR_VISIT:
+                return Observable.just(24 * 60);
+            case MEDICINE_TAKING:
+                return Observable.just(10);
+            // TODO EXERCISE
+        }
+        throw new IllegalStateException("Unknown event type");
     }
 
     private interface OnSelectedDateChangedListener {

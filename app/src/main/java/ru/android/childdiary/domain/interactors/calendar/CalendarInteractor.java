@@ -90,22 +90,6 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.addFood(food);
     }
 
-    public Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
-        switch (eventType) {
-            case DIAPER:
-                return Observable.just(0);
-            case FEED:
-                return Observable.just(30);
-            case OTHER:
-                return Observable.just(10);
-            case PUMP:
-                return Observable.just(10);
-            case SLEEP:
-                return Observable.just(60);
-        }
-        throw new IllegalStateException("Unknown event type");
-    }
-
     @SuppressWarnings("unchecked")
     public <T extends MasterEvent> Observable<T> getDefaultEventDetail(@NonNull EventType eventType) {
         switch (eventType) {
@@ -128,7 +112,7 @@ public class CalendarInteractor implements Interactor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                getDefaultNotifyTimeInMinutes(EventType.DIAPER),
+                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.DIAPER),
                 (child, date, time, minutes) -> DiaperEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -142,7 +126,7 @@ public class CalendarInteractor implements Interactor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                getDefaultNotifyTimeInMinutes(EventType.FEED),
+                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.FEED),
                 calendarRepository.getLastFeedType(),
                 calendarRepository.getLastFoodMeasure(),
                 calendarRepository.getLastFood(),
@@ -162,7 +146,7 @@ public class CalendarInteractor implements Interactor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                getDefaultNotifyTimeInMinutes(EventType.OTHER),
+                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.OTHER),
                 (child, date, time, minutes) -> OtherEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -175,7 +159,7 @@ public class CalendarInteractor implements Interactor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                getDefaultNotifyTimeInMinutes(EventType.PUMP),
+                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.PUMP),
                 (child, date, time, minutes) -> PumpEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -189,7 +173,7 @@ public class CalendarInteractor implements Interactor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                getDefaultNotifyTimeInMinutes(EventType.SLEEP),
+                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.SLEEP),
                 (child, date, time, minutes) -> SleepEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -198,7 +182,7 @@ public class CalendarInteractor implements Interactor {
     }
 
     public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {
-        return calendarRepository.getAll(request.getChild(), request.getDate())
+        return calendarRepository.getAll(request)
                 .map(events -> EventsResponse.builder().request(request).events(events).build());
     }
 

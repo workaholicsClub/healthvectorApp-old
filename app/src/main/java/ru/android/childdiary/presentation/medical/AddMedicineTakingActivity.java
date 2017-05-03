@@ -18,6 +18,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 
@@ -63,6 +64,11 @@ public class AddMedicineTakingActivity extends BaseMvpActivity implements AddMed
     @Override
     public void showMedicines(List<Medicine> medicines) {
         medicineView.updateAdapter(medicines);
+    }
+
+    @Override
+    public void showMedicineMeasureList(List<MedicineMeasure> medicineMeasureList) {
+        // TODO
     }
 
     @Override

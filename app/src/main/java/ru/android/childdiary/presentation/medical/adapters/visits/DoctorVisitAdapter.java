@@ -17,7 +17,9 @@ public class DoctorVisitAdapter extends SwipeListAdapter<
         DoctorVisit,
         DoctorVisitSwipeActionListener,
         DoctorVisitActionListener> implements DoctorVisitSwipeActionListener {
-    public DoctorVisitAdapter(Context context, @NonNull DoctorVisitActionListener itemActionListener, @Nullable FabController fabController) {
+    public DoctorVisitAdapter(Context context,
+                              @NonNull DoctorVisitActionListener itemActionListener,
+                              @Nullable FabController fabController) {
         super(context, itemActionListener, fabController);
     }
 

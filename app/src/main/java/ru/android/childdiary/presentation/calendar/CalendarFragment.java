@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -30,8 +31,9 @@ import ru.android.childdiary.presentation.calendar.fragments.MonthFragment;
 import ru.android.childdiary.presentation.calendar.fragments.WeekFragment;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
+import ru.android.childdiary.presentation.core.swipe.FabController;
+import ru.android.childdiary.presentation.core.swipe.SwipeListAdapter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedFieldActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
@@ -99,10 +101,9 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
             @Override
             public void onPageSelected(int position) {
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
-                BaseCalendarFragment fragment = (BaseCalendarFragment) viewPagerAdapter.getItem(position);
-                EventAdapter eventAdapter = fragment.getEventAdapter();
-                if (eventAdapter != null) {
-                    eventAdapter.getSwipeManager().update();
+                SwipeListAdapter adapter = getSwipeListAdapter(position);
+                if (adapter != null) {
+                    adapter.getSwipeManager().update();
                 } else {
                     logger.error("selected page: " + position + "; event adapter is null");
                 }
@@ -217,5 +218,12 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     @Override
     public void hideFabBar() {
         fabToolbar.hideFabBar();
+    }
+
+    @Nullable
+    private SwipeListAdapter getSwipeListAdapter(int position) {
+        BaseCalendarFragment fragment = (BaseCalendarFragment) viewPagerAdapter.getItem(position);
+        EventAdapter eventAdapter = fragment.getEventAdapter();
+        return eventAdapter;
     }
 }

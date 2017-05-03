@@ -15,8 +15,10 @@ import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
 
 @Singleton
 public class DoctorVisitDbService {
@@ -39,8 +41,10 @@ public class DoctorVisitDbService {
         return DbUtils.insertObservable(dataStore, doctor, DoctorMapper::mapToEntity, DoctorMapper::mapToPlainObject);
     }
 
-    public Observable<List<DoctorVisit>> getDoctorVisits() {
+    public Observable<List<DoctorVisit>> getDoctorVisits(@NonNull DoctorVisitsRequest request) {
+        Child child = request.getChild();
         return dataStore.select(DoctorVisitEntity.class)
+                .where(DoctorVisitEntity.CHILD_ID.eq(child.getId()))
                 .orderBy(DoctorVisitEntity.ID)
                 .get()
                 .observableResult()

@@ -109,7 +109,7 @@ public class ResourcesUtils {
                 return sex == null || sex == Sex.MALE
                         ? R.color.event_medicine_taking_row_background_boy
                         : R.color.event_medicine_taking_row_background_girl;
-            // TODO exercise color
+            // TODO EXERCISE
             default:
                 return R.color.white;
         }

@@ -54,6 +54,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.EventHelper;
 
@@ -112,7 +113,9 @@ public class CalendarDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MasterEventMapper::mapToPlainObject));
     }
 
-    public Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate) {
+    public Observable<List<MasterEvent>> getAll(@NonNull EventsRequest request) {
+        Child child = request.getChild();
+        LocalDate selectedDate = request.getDate();
         return dataStore.select(
                 // master event
                 MasterEventEntity.ID,

@@ -9,12 +9,16 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
 public class AddDoctorVisitPresenter extends BasePresenter<AddDoctorVisitView> {
+    @Inject
+    ChildInteractor childInteractor;
+
     @Inject
     DoctorVisitInteractor doctorVisitInteractor;
 
@@ -35,10 +39,12 @@ public class AddDoctorVisitPresenter extends BasePresenter<AddDoctorVisitView> {
     }
 
     public void addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        unsubscribeOnDestroy(doctorVisitInteractor.addDoctorVisit(doctorVisit)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(addedDoctorVisit -> logger.debug("doctor visit added: " + addedDoctorVisit))
-                .subscribe(getViewState()::doctorVisitAdded, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .flatMap(child -> doctorVisitInteractor.addDoctorVisit(doctorVisit.toBuilder().child(child).build()))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(added -> logger.debug("added: " + added))
+                        .subscribe(getViewState()::doctorVisitAdded, this::onUnexpectedError));
     }
 }

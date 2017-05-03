@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 import java.util.List;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.core.Repository;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
@@ -20,7 +21,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
 
 public interface CalendarRepository extends Repository {
     Observable<LocalDate> getSelectedDate();
@@ -51,7 +52,7 @@ public interface CalendarRepository extends Repository {
 
     Food setLastFood(@Nullable Food food);
 
-    Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate);
+    Observable<List<MasterEvent>> getAll(@NonNull EventsRequest request);
 
     Observable<List<SleepEvent>> getSleepEventsWithTimer();
 
@@ -100,4 +101,6 @@ public interface CalendarRepository extends Repository {
     Observable<MasterEvent> delete(@NonNull MasterEvent event);
 
     Observable<MasterEvent> done(@NonNull MasterEvent event);
+
+    Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType);
 }

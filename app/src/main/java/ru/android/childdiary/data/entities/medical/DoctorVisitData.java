@@ -9,6 +9,7 @@ import io.requery.Key;
 import io.requery.ManyToOne;
 import io.requery.ReferentialAction;
 import io.requery.Table;
+import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.medical.core.DoctorData;
 
 @Table(name = "doctor_visit")
@@ -17,6 +18,10 @@ public interface DoctorVisitData {
     @Key
     @Generated
     Long getId();
+
+    @ForeignKey
+    @ManyToOne
+    ChildData getChild();
 
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne

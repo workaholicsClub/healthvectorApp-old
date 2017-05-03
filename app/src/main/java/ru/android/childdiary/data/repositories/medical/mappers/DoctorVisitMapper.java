@@ -3,19 +3,26 @@ package ru.android.childdiary.data.repositories.medical.mappers;
 import android.support.annotation.NonNull;
 
 import io.requery.BlockingEntityStore;
+import ru.android.childdiary.data.entities.child.ChildData;
+import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitData;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorData;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
+import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
 public class DoctorVisitMapper {
     public static DoctorVisit mapToPlainObject(@NonNull DoctorVisitData doctorVisitData) {
+        ChildData childData = doctorVisitData.getChild();
+        Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
         DoctorData doctorData = doctorVisitData.getDoctor();
         Doctor doctor = doctorData == null ? null : DoctorMapper.mapToPlainObject(doctorData);
         return DoctorVisit.builder()
                 .id(doctorVisitData.getId())
+                .child(child)
                 .doctor(doctor)
                 .name(doctorVisitData.getName())
                 .durationInMinutes(doctorVisitData.getDurationInMinutes())
@@ -35,6 +42,11 @@ public class DoctorVisitMapper {
             doctorVisitEntity = (DoctorVisitEntity) blockingEntityStore.findByKey(DoctorVisitEntity.class, doctorVisit.getId());
         }
         fillNonReferencedFields(doctorVisitEntity, doctorVisit);
+        Child child = doctorVisit.getChild();
+        if (child != null) {
+            ChildEntity childEntity = (ChildEntity) blockingEntityStore.findByKey(ChildEntity.class, child.getId());
+            doctorVisitEntity.setChild(childEntity);
+        }
         Doctor doctor = doctorVisit.getDoctor();
         if (doctor != null) {
             DoctorEntity doctorEntity = (DoctorEntity) blockingEntityStore.findByKey(DoctorEntity.class, doctor.getId());

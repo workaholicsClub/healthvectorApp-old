@@ -11,6 +11,8 @@ import io.reactivex.Observable;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
 
 @Singleton
 public class MedicineTakingDataRepository implements MedicineTakingRepository {
@@ -32,8 +34,13 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     }
 
     @Override
-    public Observable<List<MedicineTaking>> getMedicineTakingList() {
-        return dbService.getMedicineTakingList();
+    public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
+        return dbService.getMedicineMeasureList();
+    }
+
+    @Override
+    public Observable<List<MedicineTaking>> getMedicineTakingList(@NonNull MedicineTakingListRequest request) {
+        return dbService.getMedicineTakingList(request);
     }
 
     @Override

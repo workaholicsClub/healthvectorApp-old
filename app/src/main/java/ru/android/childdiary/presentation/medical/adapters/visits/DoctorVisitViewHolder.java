@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.medical.adapters.visits;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -13,6 +14,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.presentation.core.swipe.SwipeViewHolder;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 class DoctorVisitViewHolder extends SwipeViewHolder<DoctorVisit, DoctorVisitSwipeActionListener, DoctorVisitActionListener> {
     @BindView(R.id.swipeLayout)
@@ -24,8 +26,14 @@ class DoctorVisitViewHolder extends SwipeViewHolder<DoctorVisit, DoctorVisitSwip
     @BindView(R.id.actionsView)
     View actionsView;
 
+    @BindView(R.id.eventRowActionDelete)
+    ImageView imageViewDelete;
+
     @BindView(R.id.eventView)
     View eventView;
+
+    @BindView(R.id.textViewDate)
+    TextView textViewDate;
 
     @BindView(R.id.textViewTime)
     TextView textViewTime;
@@ -46,8 +54,11 @@ class DoctorVisitViewHolder extends SwipeViewHolder<DoctorVisit, DoctorVisitSwip
     public void bind(Context context, Sex sex, DoctorVisit item) {
         super.bind(context, sex, item);
 
+        textViewDate.setText("date");
+        textViewTime.setText("time");
         textViewTitle.setText(item.toString());
-        textViewDescription.setText(null);
+        textViewDescription.setText("description");
+        imageViewDelete.setBackgroundColor(ThemeUtils.getColorAccent(context, sex));
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);

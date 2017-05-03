@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.core.swipe.FabController;
+import ru.android.childdiary.presentation.core.swipe.SwipeListAdapter;
 import ru.android.childdiary.presentation.medical.fragments.medicines.MedicineTakingListFragment;
 import ru.android.childdiary.presentation.medical.fragments.visits.DoctorVisitsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -86,6 +88,12 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
             @Override
             public void onPageSelected(int position) {
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
+                SwipeListAdapter adapter = getSwipeListAdapter(position);
+                if (adapter != null) {
+                    adapter.getSwipeManager().update();
+                } else {
+                    logger.error("selected page: " + position + "; event adapter is null");
+                }
             }
 
             @Override
@@ -156,5 +164,17 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     @Override
     public void hideFabBar() {
         fab.hide();
+    }
+
+    @Nullable
+    private SwipeListAdapter getSwipeListAdapter(int position) {
+        Fragment fragment = viewPagerAdapter.getItem(position);
+        SwipeListAdapter adapter = null;
+        if (fragment instanceof DoctorVisitsFragment) {
+            adapter = ((DoctorVisitsFragment) fragment).getAdapter();
+        } else if (fragment instanceof MedicineTakingListFragment) {
+            adapter = ((MedicineTakingListFragment) fragment).getAdapter();
+        }
+        return adapter;
     }
 }

@@ -13,10 +13,15 @@ import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
+import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMapper;
+import ru.android.childdiary.data.repositories.medical.mappers.MedicineMeasureMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
 
 @Singleton
 public class MedicineTakingDbService {
@@ -39,8 +44,18 @@ public class MedicineTakingDbService {
         return DbUtils.insertObservable(dataStore, medicine, MedicineMapper::mapToEntity, MedicineMapper::mapToPlainObject);
     }
 
-    public Observable<List<MedicineTaking>> getMedicineTakingList() {
+    public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
+        return dataStore.select(MedicineMeasureEntity.class)
+                .orderBy(MedicineMeasureEntity.NAME, MedicineMeasureEntity.ID)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MedicineMeasureMapper::mapToPlainObject));
+    }
+
+    public Observable<List<MedicineTaking>> getMedicineTakingList(@NonNull MedicineTakingListRequest request) {
+        Child child = request.getChild();
         return dataStore.select(MedicineTakingEntity.class)
+                .where(MedicineTakingEntity.CHILD_ID.eq(child.getId()))
                 .orderBy(MedicineTakingEntity.ID)
                 .get()
                 .observableResult()
