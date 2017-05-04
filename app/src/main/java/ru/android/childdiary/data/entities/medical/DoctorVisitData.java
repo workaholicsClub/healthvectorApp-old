@@ -29,7 +29,7 @@ public interface DoctorVisitData {
     @ManyToOne
     DoctorData getDoctor();
 
-    @ForeignKey
+    @ForeignKey(delete = ReferentialAction.SET_NULL)
     @OneToOne
     RepeatParametersData getRepeatParameters();
 

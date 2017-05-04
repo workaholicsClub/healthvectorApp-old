@@ -8,6 +8,7 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.ManyToOne;
 import io.requery.OneToOne;
+import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.types.EventType;
@@ -33,7 +34,7 @@ public interface MasterEventData {
 
     Boolean isDone();
 
-    @ForeignKey
+    @ForeignKey(delete = ReferentialAction.SET_NULL)
     @OneToOne
     RepeatParametersData getRepeatParameters();
 

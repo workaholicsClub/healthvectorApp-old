@@ -36,7 +36,7 @@ public interface MedicineTakingData {
     @ManyToOne
     MedicineMeasureData getMedicineMeasure();
 
-    @ForeignKey
+    @ForeignKey(delete = ReferentialAction.SET_NULL)
     @OneToOne
     RepeatParametersData getRepeatParameters();
 
