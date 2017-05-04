@@ -46,7 +46,8 @@ public class FieldRepeatParametersView extends LinearLayout implements View.OnCl
         textView = ButterKnife.findById(child, R.id.textView);
         textView.setOnClickListener(this);
 
-        // TODO Время выполнения
+        child = inflate(getContext(), R.layout.field_times, null);
+        addView(child);
     }
 
     @Override

@@ -42,16 +42,16 @@ public class DoctorVisitInteractor implements Interactor {
         return doctorVisitRepository.addDoctor(doctor);
     }
 
-    public Observable<DoctorVisit> getDefaultOtherEvent() {
+    public Observable<DoctorVisit> getDefaultDoctorVisit() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 Observable.just(DateTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.MEDICINE_TAKING),
+                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.DOCTOR_VISIT),
                 (child, dateTime, minutes) -> DoctorVisit.builder()
                         .child(child)
                         .doctor(null)
                         .name(null)
-                        .durationInMinutes(null)
+                        .durationInMinutes(15)
                         .dateTime(dateTime)
                         .notifyTimeInMinutes(minutes)
                         .note(null)

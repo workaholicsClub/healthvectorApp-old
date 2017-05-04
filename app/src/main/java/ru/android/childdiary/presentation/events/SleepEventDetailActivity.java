@@ -39,6 +39,7 @@ import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class SleepEventDetailActivity extends EventDetailActivity<EventDetailView<SleepEvent>, SleepEvent> implements EventDetailView<SleepEvent>,
         TimerServiceListener {
@@ -224,8 +225,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @Override
     public void setupEventDetail(@NonNull SleepEvent event) {
-        setDateTime(event.getDateTime(), startDateView, startTimeView);
-        setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
+        WidgetsUtils.setDateTime(event.getDateTime(), startDateView, startTimeView);
+        WidgetsUtils.setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? visibility : View.GONE);
@@ -240,8 +241,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                 ? SleepEvent.builder()
                 : event.toBuilder();
 
-        DateTime startDateTime = getDateTime(startDateView, startTimeView);
-        DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
+        DateTime startDateTime = WidgetsUtils.getDateTime(startDateView, startTimeView);
+        DateTime finishDateTime = WidgetsUtils.getDateTime(finishDateView, finishTimeView);
         if (finishDateTime == null) {
             LocalDate finishDate = finishDateView.getValue();
             LocalTime finishTime = finishTimeView.getValue();
@@ -297,9 +298,9 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     public void onSetTime(String tag, int minutes) {
         switch (tag) {
             case TAG_DURATION_DIALOG:
-                DateTime start = getDateTime(startDateView, startTimeView);
+                DateTime start = WidgetsUtils.getDateTime(startDateView, startTimeView);
                 DateTime finish = start.plusMinutes(minutes);
-                setDateTime(finish, finishDateView, finishTimeView);
+                WidgetsUtils.setDateTime(finish, finishDateView, finishTimeView);
                 durationView.setValue(minutes);
                 break;
             case TAG_NOTIFY_TIME_DIALOG:
@@ -309,8 +310,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     private void updateDuration() {
-        DateTime start = getDateTime(startDateView, startTimeView);
-        DateTime finish = getDateTime(finishDateView, finishTimeView);
+        DateTime start = WidgetsUtils.getDateTime(startDateView, startTimeView);
+        DateTime finish = WidgetsUtils.getDateTime(finishDateView, finishTimeView);
         Integer minutes = TimeUtils.durationInMinutes(start, finish);
         durationView.setValue(minutes);
         int visibility = isTimerStarted() ? View.GONE : View.VISIBLE;

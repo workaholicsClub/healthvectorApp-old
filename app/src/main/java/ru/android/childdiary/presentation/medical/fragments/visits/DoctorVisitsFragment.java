@@ -41,7 +41,7 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     protected void setupUi() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new DoctorVisitAdapter(getActivity(), this, fabController);
+        adapter = new DoctorVisitAdapter(getContext(), this, fabController);
         recyclerView.setAdapter(adapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);

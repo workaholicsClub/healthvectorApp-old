@@ -114,6 +114,7 @@
     <string name="minutes_short">%d мин.</string>
     <string name="duration_format">00:00:00</string>
     <string name="other_event_title_hint">Введите название события</string>
+    <string name="doctor_visit_title_hint">Введите название визита</string>
     <string name="menu_title_done">Выполнено</string>
     <string name="menu_title_move">Перенести</string>
     <string name="menu_title_delete">Удалить</string>
@@ -135,6 +136,12 @@
     <string name="medicine">Лекарство</string>
     <string name="doctor">Специализация</string>
     <string name="export_to_calendar">Добавить в календарь</string>
+    <string name="frequency">Как часто</string>
+    <string name="periodicity">Периодичность</string>
+    <string name="length">Длительность</string>
+    <string name="times">Время выполнения</string>
+    <string name="note_with_photo">Введите описание</string>
+    <string name="medicine_measure">Дозировка</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

@@ -31,6 +31,7 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailView<DiaperEvent>, DiaperEvent> implements EventDetailView<DiaperEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
@@ -113,7 +114,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
 
     @Override
     public void setupEventDetail(@NonNull DiaperEvent event) {
-        setDateTime(event.getDateTime(), dateView, timeView);
+        WidgetsUtils.setDateTime(event.getDateTime(), dateView, timeView);
         diaperStateView.setSelected(event.getDiaperState());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
@@ -126,7 +127,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
                 ? DiaperEvent.builder()
                 : event.toBuilder();
 
-        DateTime dateTime = getDateTime(dateView, timeView);
+        DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
 
         builder.dateTime(dateTime)
                 .diaperState(diaperStateView.getSelected())

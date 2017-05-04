@@ -43,7 +43,7 @@ public class MedicineTakingInteractor implements Interactor {
         return medicineTakingRepository.addMedicine(medicine);
     }
 
-    public Observable<MedicineTaking> getDefaultOtherEvent() {
+    public Observable<MedicineTaking> getDefaultMedicineTaking() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 Observable.just(DateTime.now()),

@@ -10,7 +10,7 @@
         android:layout_width="@dimen/field_icon_size"
         android:layout_height="@dimen/field_icon_size"
         android:scaleType="center"
-        android:src="@drawable/ic_duration" />
+        android:src="@drawable/ic_length" />
 
     <TextView
         android:layout_width="0dp"
@@ -19,7 +19,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="@string/duration"
+        android:text="@string/length"
         android:textAppearance="@style/SecondaryTextAppearance"
         tools:ignore="Deprecated" />
 

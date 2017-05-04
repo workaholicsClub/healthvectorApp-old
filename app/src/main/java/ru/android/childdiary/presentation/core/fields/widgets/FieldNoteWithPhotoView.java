@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.support.design.widget.TextInputLayout;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
 
@@ -18,9 +17,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
 public class FieldNoteWithPhotoView extends FieldEditTextView {
-    @BindView(R.id.editTextWrapper)
-    TextInputLayout editTextWrapper;
-
     @BindView(R.id.editText)
     CustomEditText editText;
 

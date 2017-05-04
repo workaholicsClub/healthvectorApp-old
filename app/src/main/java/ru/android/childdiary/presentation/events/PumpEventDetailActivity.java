@@ -32,6 +32,7 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView<PumpEvent>, PumpEvent> implements EventDetailView<PumpEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
@@ -118,7 +119,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
 
     @Override
     public void setupEventDetail(@NonNull PumpEvent event) {
-        setDateTime(event.getDateTime(), dateView, timeView);
+        WidgetsUtils.setDateTime(event.getDateTime(), dateView, timeView);
         breastView.setSelected(event.getBreast());
         amountMlPumpView.setAmountMlLeft(event.getLeftAmountMl());
         amountMlPumpView.setAmountMlRight(event.getRightAmountMl());
@@ -133,7 +134,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                 ? PumpEvent.builder()
                 : event.toBuilder();
 
-        DateTime dateTime = getDateTime(dateView, timeView);
+        DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
 
         builder.dateTime(dateTime)
                 .breast(breastView.getSelected())

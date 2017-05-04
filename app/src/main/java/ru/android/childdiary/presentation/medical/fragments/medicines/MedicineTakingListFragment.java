@@ -41,7 +41,7 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     protected void setupUi() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MedicineTakingAdapter(getActivity(), this, fabController);
+        adapter = new MedicineTakingAdapter(getContext(), this, fabController);
         recyclerView.setAdapter(adapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);

@@ -20,7 +20,6 @@ import android.widget.Button;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -38,10 +37,8 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.utils.EventHelper;
@@ -264,21 +261,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected void setTime(String tag, LocalTime time) {
-    }
-
-    @Nullable
-    protected DateTime getDateTime(FieldDateView dateView, FieldTimeView timeView) {
-        LocalDate date = dateView.getValue();
-        LocalTime time = timeView.getValue(); // подставлять секунды, если время совпадает с текущим?
-        return date == null || time == null
-                ? null
-                : new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
-                time.getHourOfDay(), time.getMinuteOfHour());
-    }
-
-    protected void setDateTime(@Nullable DateTime dateTime, FieldDateView dateView, FieldTimeView timeView) {
-        dateView.setValue(dateTime == null ? null : dateTime.toLocalDate());
-        timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
     }
 
     @Override

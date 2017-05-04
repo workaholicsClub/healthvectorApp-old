@@ -9,16 +9,12 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
-import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
 
 @InjectViewState
-public class AddMedicineTakingPresenter extends BasePresenter<AddMedicineTakingView> {
-    @Inject
-    ChildInteractor childInteractor;
-
+public class AddMedicineTakingPresenter extends BaseAddItemPresenter<AddMedicineTakingView, MedicineTaking> {
     @Inject
     MedicineTakingInteractor medicineTakingInteractor;
 
@@ -31,12 +27,6 @@ public class AddMedicineTakingPresenter extends BasePresenter<AddMedicineTakingV
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(medicineTakingInteractor.getMedicines()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(medicines -> logger.debug("showMedicines: " + medicines))
-                .subscribe(getViewState()::showMedicines, this::onUnexpectedError));
-
         unsubscribeOnDestroy(medicineTakingInteractor.getMedicineMeasureList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -44,13 +34,13 @@ public class AddMedicineTakingPresenter extends BasePresenter<AddMedicineTakingV
                 .subscribe(getViewState()::showMedicineMeasureList, this::onUnexpectedError));
     }
 
-    public void addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+    @Override
+    public void add(@NonNull MedicineTaking medicineTaking) {
         unsubscribeOnDestroy(
-                childInteractor.getActiveChildOnce()
-                        .flatMap(child -> medicineTakingInteractor.addMedicineTaking(medicineTaking.toBuilder().child(child).build()))
+                medicineTakingInteractor.addMedicineTaking(medicineTaking)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(added -> logger.debug("added: " + added))
-                        .subscribe(getViewState()::medicineTakingAdded, this::onUnexpectedError));
+                        .subscribe(getViewState()::added, this::onUnexpectedError));
     }
 }

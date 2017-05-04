@@ -2,6 +2,7 @@ package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
@@ -196,6 +197,27 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
+    public static int getDoctorVisitLogoRes(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.drawable.toolbar_logo_doctor_visit_boy
+                : R.drawable.toolbar_logo_doctor_visit_girl;
+    }
+
+    @DrawableRes
+    public static int getMedicineTakingLogoRes(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.drawable.toolbar_logo_medicine_taking_boy
+                : R.drawable.toolbar_logo_medicine_taking_girl;
+    }
+
+    @DrawableRes
+    public static int getExerciseLogoRes(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.drawable.toolbar_logo_exercise_boy
+                : R.drawable.toolbar_logo_exercise_girl;
+    }
+
+    @DrawableRes
     public static int getRadioRes(@Nullable Sex sex, boolean on) {
         return on ? (sex == null || sex == Sex.MALE ? R.drawable.radio_on_boy : R.drawable.radio_on_girl)
                 : R.drawable.radio_off;
@@ -242,5 +264,13 @@ public class ResourcesUtils {
         } else {
             return R.drawable.ic_notification_sleep;
         }
+    }
+
+    public static GradientDrawable getShape(@ColorInt int color, float corner) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setCornerRadii(new float[]{corner, corner, corner, corner, corner, corner, corner, corner});
+        shape.setColor(color);
+        return shape;
     }
 }

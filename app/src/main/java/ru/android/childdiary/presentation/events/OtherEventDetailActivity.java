@@ -32,6 +32,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDetailView, OtherEvent> implements OtherEventDetailView {
     private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
@@ -144,8 +145,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     @Override
     public void setupEventDetail(@NonNull OtherEvent event) {
         otherEventNameView.setText(event.getName());
-        setDateTime(event.getDateTime(), startDateView, startTimeView);
-        setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
+        WidgetsUtils.setDateTime(event.getDateTime(), startDateView, startTimeView);
+        WidgetsUtils.setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
@@ -157,8 +158,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                 ? OtherEvent.builder()
                 : event.toBuilder();
 
-        DateTime startDateTime = getDateTime(startDateView, startTimeView);
-        DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
+        DateTime startDateTime = WidgetsUtils.getDateTime(startDateView, startTimeView);
+        DateTime finishDateTime = WidgetsUtils.getDateTime(finishDateView, finishTimeView);
         if (finishDateTime == null) {
             LocalDate finishDate = finishDateView.getValue();
             LocalTime finishTime = finishTimeView.getValue();

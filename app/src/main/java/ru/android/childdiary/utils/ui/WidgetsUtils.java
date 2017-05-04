@@ -12,8 +12,14 @@ import android.widget.TextView;
 
 import com.yalantis.ucrop.UCrop;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 
 public class WidgetsUtils {
     public static void setupTextView(TextView textView, boolean enabled) {
@@ -39,5 +45,20 @@ public class WidgetsUtils {
                 }
             }
         }
+    }
+
+    @Nullable
+    public static DateTime getDateTime(FieldDateView dateView, FieldTimeView timeView) {
+        LocalDate date = dateView.getValue();
+        LocalTime time = timeView.getValue(); // подставлять секунды, если время совпадает с текущим?
+        return date == null || time == null
+                ? null
+                : new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
+                time.getHourOfDay(), time.getMinuteOfHour());
+    }
+
+    public static void setDateTime(@Nullable DateTime dateTime, FieldDateView dateView, FieldTimeView timeView) {
+        dateView.setValue(dateTime == null ? null : dateTime.toLocalDate());
+        timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
     }
 }

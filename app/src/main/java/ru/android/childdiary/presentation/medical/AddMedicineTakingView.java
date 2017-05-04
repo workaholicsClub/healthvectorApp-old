@@ -1,25 +1,15 @@
 package ru.android.childdiary.presentation.medical;
 
-import android.support.annotation.NonNull;
-
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
-import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.List;
 
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
-import ru.android.childdiary.presentation.core.BaseView;
+import ru.android.childdiary.presentation.core.events.BaseAddItemView;
 
-public interface AddMedicineTakingView extends BaseView {
-    @StateStrategyType(AddToEndSingleStrategy.class)
-    void showMedicines(List<Medicine> medicines);
-
+public interface AddMedicineTakingView extends BaseAddItemView<MedicineTaking> {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showMedicineMeasureList(List<MedicineMeasure> medicineMeasureList);
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void medicineTakingAdded(@NonNull MedicineTaking medicineTaking);
 }

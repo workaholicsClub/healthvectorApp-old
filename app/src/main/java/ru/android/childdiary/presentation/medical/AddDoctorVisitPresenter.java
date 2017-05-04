@@ -9,16 +9,12 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
-import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
 
 @InjectViewState
-public class AddDoctorVisitPresenter extends BasePresenter<AddDoctorVisitView> {
-    @Inject
-    ChildInteractor childInteractor;
-
+public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisitView, DoctorVisit> {
     @Inject
     DoctorVisitInteractor doctorVisitInteractor;
 
@@ -28,23 +24,12 @@ public class AddDoctorVisitPresenter extends BasePresenter<AddDoctorVisitView> {
     }
 
     @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
-
-        unsubscribeOnDestroy(doctorVisitInteractor.getDoctors()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(doctors -> logger.debug("showDoctors: " + doctors))
-                .subscribe(getViewState()::showDoctors, this::onUnexpectedError));
-    }
-
-    public void addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+    public void add(@NonNull DoctorVisit doctorVisit) {
         unsubscribeOnDestroy(
-                childInteractor.getActiveChildOnce()
-                        .flatMap(child -> doctorVisitInteractor.addDoctorVisit(doctorVisit.toBuilder().child(child).build()))
+                doctorVisitInteractor.addDoctorVisit(doctorVisit)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(added -> logger.debug("added: " + added))
-                        .subscribe(getViewState()::doctorVisitAdded, this::onUnexpectedError));
+                        .subscribe(getViewState()::added, this::onUnexpectedError));
     }
 }

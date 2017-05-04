@@ -8,12 +8,15 @@ import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.presentation.core.swipe.SwipeViewHolder;
+import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, MedicineTakingSwipeActionListener, MedicineTakingActionListener> {
@@ -22,9 +25,6 @@ class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, MedicineT
 
     @BindView(R.id.bottomView)
     View bottomView;
-
-    @BindView(R.id.actionsView)
-    View actionsView;
 
     @BindView(R.id.eventRowActionDelete)
     ImageView imageViewDelete;
@@ -44,6 +44,9 @@ class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, MedicineT
     @BindView(R.id.textViewDescription)
     TextView textViewDescription;
 
+    @BindDimen(R.dimen.event_row_corner_radius)
+    float corner;
+
     public MedicineTakingViewHolder(View itemView,
                                     @NonNull MedicineTakingActionListener itemActionListener,
                                     @NonNull MedicineTakingSwipeActionListener swipeActionListener) {
@@ -54,11 +57,12 @@ class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, MedicineT
     public void bind(Context context, Sex sex, MedicineTaking item) {
         super.bind(context, sex, item);
 
-        textViewDate.setText("date");
-        textViewTime.setText("time");
+        textViewDate.setText(DateUtils.date(context, item.getDateTime()));
+        textViewTime.setText(DateUtils.time(context, item.getDateTime()));
         textViewTitle.setText(item.toString());
         textViewDescription.setText("description");
-        imageViewDelete.setBackgroundColor(ThemeUtils.getColorAccent(context, sex));
+        //noinspection deprecation
+        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);

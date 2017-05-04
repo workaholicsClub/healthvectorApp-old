@@ -3,7 +3,6 @@ package ru.android.childdiary.presentation.calendar.adapters.events;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -76,7 +75,7 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
         actionsView.setBackgroundDrawable(
                 getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
 
-        textViewTime.setText(DateUtils.time(context, event.getDateTime().toLocalTime()));
+        textViewTime.setText(DateUtils.time(context, event.getDateTime()));
         EventType eventType = event.getEventType();
         if (eventType == EventType.OTHER) {
             textViewTitle.setText(EventHelper.getDescription(context, event));
@@ -114,21 +113,13 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
         StateListDrawable background = new StateListDrawable();
         background.setEnterFadeDuration(FADE_DURATION_MS);
         background.setExitFadeDuration(FADE_DURATION_MS);
-        background.addState(new int[]{android.R.attr.state_pressed}, getShape(colorPressed));
-        background.addState(new int[]{}, getShape(color));
+        background.addState(new int[]{android.R.attr.state_pressed}, ResourcesUtils.getShape(colorPressed, corner));
+        background.addState(new int[]{}, ResourcesUtils.getShape(color, corner));
         return background;
     }
 
     private Drawable getActionsViewBackgroundDrawable(@ColorInt int color) {
-        return getShape(color);
-    }
-
-    private GradientDrawable getShape(@ColorInt int color) {
-        GradientDrawable shape = new GradientDrawable();
-        shape.setShape(GradientDrawable.RECTANGLE);
-        shape.setCornerRadii(new float[]{corner, corner, corner, corner, corner, corner, corner, corner});
-        shape.setColor(color);
-        return shape;
+        return ResourcesUtils.getShape(color, corner);
     }
 
     @Override

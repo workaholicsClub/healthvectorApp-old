@@ -45,6 +45,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class FeedFieldActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
         FieldSpinnerView.FieldSpinnerListener, FoodMeasureDialog.Listener, FoodDialog.Listener {
@@ -178,7 +179,7 @@ public class FeedFieldActivity extends EventDetailActivity<FeedEventDetailView, 
 
     @Override
     public void setupEventDetail(@NonNull FeedEvent event) {
-        setDateTime(event.getDateTime(), dateView, timeView);
+        WidgetsUtils.setDateTime(event.getDateTime(), dateView, timeView);
         feedTypeView.setValue(event.getFeedType());
         setupFeedType();
         foodMeasureView.setValue(event.getFoodMeasure());
@@ -209,7 +210,7 @@ public class FeedFieldActivity extends EventDetailActivity<FeedEventDetailView, 
                 ? FeedEvent.builder()
                 : event.toBuilder();
 
-        DateTime dateTime = getDateTime(dateView, timeView);
+        DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
 
         builder.dateTime(dateTime)
                 .feedType(feedTypeView.getValue())

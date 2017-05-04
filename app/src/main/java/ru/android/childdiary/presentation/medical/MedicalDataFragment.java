@@ -21,6 +21,8 @@ import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
@@ -125,14 +127,14 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     }
 
     @Override
-    public void navigateToMedicineTakingAdd() {
-        Intent intent = AddMedicineTakingActivity.getIntent(getContext());
+    public void navigateToMedicineTakingAdd(@NonNull MedicineTaking defaultMedicineTaking) {
+        Intent intent = AddMedicineTakingActivity.getIntent(getContext(), defaultMedicineTaking);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToDoctorVisitAdd() {
-        Intent intent = AddDoctorVisitActivity.getIntent(getContext());
+    public void navigateToDoctorVisitAdd(@NonNull DoctorVisit defaultDoctorVisit) {
+        Intent intent = AddDoctorVisitActivity.getIntent(getContext(), defaultDoctorVisit);
         startActivity(intent);
     }
 

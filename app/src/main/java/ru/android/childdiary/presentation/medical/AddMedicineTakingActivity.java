@@ -5,37 +5,42 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import org.joda.time.DateTime;
+
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
-import ru.android.childdiary.presentation.core.BaseMvpActivity;
+import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
+import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class AddMedicineTakingActivity extends BaseMvpActivity implements AddMedicineTakingView {
+public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTakingView, MedicineTaking>
+        implements AddMedicineTakingView {
     @InjectPresenter
     AddMedicineTakingPresenter presenter;
-
-    @BindView(R.id.dummy)
-    View dummy;
 
     @BindView(R.id.medicineView)
     FieldMedicineView medicineView;
@@ -61,8 +66,10 @@ public class AddMedicineTakingActivity extends BaseMvpActivity implements AddMed
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context) {
-        return new Intent(context, AddMedicineTakingActivity.class);
+    public static Intent getIntent(Context context, @NonNull MedicineTaking medicineTaking) {
+        Intent intent = new Intent(context, AddMedicineTakingActivity.class);
+        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, medicineTaking);
+        return intent;
     }
 
     @Override
@@ -73,40 +80,100 @@ public class AddMedicineTakingActivity extends BaseMvpActivity implements AddMed
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_medicine_taking);
 
-        checkBoxView.setText(R.string.export_to_calendar);
-    }
-
-    @Override
-    protected void setupToolbar(Toolbar toolbar) {
-        super.setupToolbar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
-    }
-
-    @Override
-    protected void themeChanged() {
-        super.themeChanged();
-        checkBoxView.setSex(getSex());
-    }
-
-    @OnClick(R.id.buttonAdd)
-    void onButtonAddClick() {
-        presenter.addMedicineTaking(MedicineTaking.builder().build());
-    }
-
-    @Override
-    public void showMedicines(List<Medicine> medicines) {
-        medicineView.updateAdapter(medicines);
+        changeThemeIfNeeded(defaultItem.getChild());
     }
 
     @Override
     public void showMedicineMeasureList(List<MedicineMeasure> medicineMeasureList) {
-        // TODO
+        medicineMeasureView.updateAdapter(medicineMeasureList);
     }
 
     @Override
-    public void medicineTakingAdded(@NonNull MedicineTaking medicineTaking) {
-        Toast.makeText(this, "added: " + medicineTaking, Toast.LENGTH_SHORT).show();
+    protected BaseAddItemPresenter<AddMedicineTakingView, MedicineTaking> getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    protected int getContentLayoutResourceId() {
+        return R.layout.activity_add_item_medicine_taking;
+    }
+
+    @Override
+    protected void setup(MedicineTaking item) {
+        medicineView.setValue(item.getMedicine());
+        // TODO amount
+        medicineMeasureView.setValue(item.getMedicineMeasure());
+        // TODO repeatParameters
+        WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
+        notifyTimeView.setValue(item.getNotifyTimeInMinutes());
+        boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
+        notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
+        noteWithPhotoView.setText(item.getNote());
+        // TODO image file name
+    }
+
+    @Override
+    protected MedicineTaking build() {
+        Medicine medicine = medicineView.getValue();
+        Double amount = null;
+        MedicineMeasure medicineMeasure = medicineMeasureView.getValue();
+        RepeatParameters repeatParameters = null;
+        DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
+        Integer minutes = notifyTimeView.getValue();
+        String note = noteWithPhotoView.getText();
+        String imageFileName = null;
+
+        return defaultItem.toBuilder()
+                .medicine(medicine)
+                .amount(amount)
+                .medicineMeasure(medicineMeasure)
+                .repeatParameters(repeatParameters)
+                .dateTime(dateTime)
+                .notifyTimeInMinutes(minutes)
+                .note(note)
+                .imageFileName(imageFileName)
+                .build();
+    }
+
+    @Override
+    protected boolean contentEquals(MedicineTaking item1, MedicineTaking item2) {
+        return false;
+    }
+
+    @Override
+    protected FieldDateView getDateView() {
+        return dateView;
+    }
+
+    @Override
+    protected FieldTimeView getTimeView() {
+        return timeView;
+    }
+
+    @Override
+    protected FieldNotifyTimeView getNotifyTimeView() {
+        return notifyTimeView;
+    }
+
+    @Nullable
+    @Override
+    protected FieldDurationView getDurationView() {
+        return null;
+    }
+
+    @Override
+    protected FieldCheckBoxView getCheckBoxView() {
+        return checkBoxView;
+    }
+
+    @Override
+    protected FieldRepeatParametersView getRepeatParametersView() {
+        return repeatParametersView;
+    }
+
+    @Override
+    protected List<FieldEditTextView> getEditTextViews() {
+        return Arrays.asList(noteWithPhotoView);
     }
 }

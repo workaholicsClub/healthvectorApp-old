@@ -20,7 +20,7 @@
         android:layout_marginRight="@dimen/base_margin_horizontal"
         android:layout_weight="1"
         android:background="@drawable/edit_text_background"
-        android:hint="@string/other_event_title_hint"
+        android:hint="@string/doctor_visit_title_hint"
         android:imeOptions="actionDone"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLength="@integer/max_length_other_event_name"

@@ -6,16 +6,15 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ListAdapter;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
-import ru.android.childdiary.presentation.core.fields.adapters.FoodMeasureAdapter;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.presentation.core.fields.adapters.MedicineMeasureAdapter;
 
-public class FieldMedicineMeasureView extends FieldSpinnerView<FoodMeasure> {
-    private final FoodMeasureAdapter adapter = new FoodMeasureAdapter(getContext(), Collections.singletonList(FoodMeasure.NULL));
+public class FieldMedicineMeasureView extends FieldSpinnerView<MedicineMeasure> {
+    private final MedicineMeasureAdapter adapter = new MedicineMeasureAdapter(getContext(), Collections.emptyList());
 
     public FieldMedicineMeasureView(Context context) {
         super(context);
@@ -36,7 +35,7 @@ public class FieldMedicineMeasureView extends FieldSpinnerView<FoodMeasure> {
     }
 
     @Override
-    protected String getTextForValue(@Nullable FoodMeasure value) {
+    protected String getTextForValue(@Nullable MedicineMeasure value) {
         return value == null ? null : value.getName();
     }
 
@@ -45,9 +44,7 @@ public class FieldMedicineMeasureView extends FieldSpinnerView<FoodMeasure> {
         return adapter;
     }
 
-    public void updateAdapter(List<FoodMeasure> items) {
-        items = new ArrayList<>(items);
-        items.add(FoodMeasure.NULL);
+    public void updateAdapter(List<MedicineMeasure> items) {
         adapter.setItems(items);
     }
 }
