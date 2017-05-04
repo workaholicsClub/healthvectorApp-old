@@ -6,6 +6,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView
+        android:id="@+id/medicineMeasureView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
         android:id="@+id/dateView"
         android:layout_width="match_parent"
@@ -16,11 +21,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <!-- TODO medicine measure -->
-    <!-- TODO repeat parameters -->
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView
+        android:id="@+id/repeatParametersView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView
-        android:id="@+id/noteView"
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView
+        android:id="@+id/noteWithPhotoView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

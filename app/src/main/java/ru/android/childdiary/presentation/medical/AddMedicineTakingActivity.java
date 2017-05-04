@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -20,14 +21,41 @@ import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 
 public class AddMedicineTakingActivity extends BaseMvpActivity implements AddMedicineTakingView {
     @InjectPresenter
     AddMedicineTakingPresenter presenter;
 
+    @BindView(R.id.dummy)
+    View dummy;
+
     @BindView(R.id.medicineView)
     FieldMedicineView medicineView;
+
+    @BindView(R.id.medicineMeasureView)
+    FieldMedicineMeasureView medicineMeasureView;
+
+    @BindView(R.id.dateView)
+    FieldDateView dateView;
+
+    @BindView(R.id.timeView)
+    FieldTimeView timeView;
+
+    @BindView(R.id.repeatParametersView)
+    FieldRepeatParametersView repeatParametersView;
+
+    @BindView(R.id.noteWithPhotoView)
+    FieldNoteWithPhotoView noteWithPhotoView;
+
+    @BindView(R.id.notifyTimeView)
+    FieldNotifyTimeView notifyTimeView;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, AddMedicineTakingActivity.class);

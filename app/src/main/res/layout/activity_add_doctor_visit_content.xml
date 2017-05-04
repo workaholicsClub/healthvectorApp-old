@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldOtherEventNameView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView
         android:id="@+id/doctorVisitNameView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -22,14 +22,17 @@
         android:layout_height="wrap_content" />
 
     <ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView
-        android:id="@+id/diaperStateView"
+        android:id="@+id/durationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <!-- TODO repeat parameters -->
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView
+        android:id="@+id/repeatParametersView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView
-        android:id="@+id/noteView"
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView
+        android:id="@+id/noteWithPhotoView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
