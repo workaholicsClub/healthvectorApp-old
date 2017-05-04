@@ -21,6 +21,7 @@ import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
@@ -48,6 +49,9 @@ public class AddMedicineTakingActivity extends BaseMvpActivity implements AddMed
     @BindView(R.id.timeView)
     FieldTimeView timeView;
 
+    @BindView(R.id.checkBoxView)
+    FieldCheckBoxView checkBoxView;
+
     @BindView(R.id.repeatParametersView)
     FieldRepeatParametersView repeatParametersView;
 
@@ -70,6 +74,8 @@ public class AddMedicineTakingActivity extends BaseMvpActivity implements AddMed
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_medicine_taking);
+
+        checkBoxView.setText(R.string.export_to_calendar);
     }
 
     @Override
@@ -81,7 +87,7 @@ public class AddMedicineTakingActivity extends BaseMvpActivity implements AddMed
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        // TODO checkbox color
+        checkBoxView.setSex(getSex());
     }
 
     @OnClick(R.id.buttonAdd)

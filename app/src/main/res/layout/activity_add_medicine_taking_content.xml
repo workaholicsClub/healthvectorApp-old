@@ -21,6 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
+        android:id="@+id/checkBoxView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView
         android:id="@+id/repeatParametersView"
         android:layout_width="match_parent"

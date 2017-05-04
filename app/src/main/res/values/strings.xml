@@ -134,6 +134,7 @@
     <string name="medical_tab_title_medicine_taking_list">Лекарства</string>
     <string name="medicine">Лекарство</string>
     <string name="doctor">Специализация</string>
+    <string name="export_to_calendar">Добавить в календарь</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
