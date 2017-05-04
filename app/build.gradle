@@ -25,6 +25,7 @@ android {
         resValue "string", "font_path_regular", "fonts/Roboto-Regular.ttf"
         resValue "string", "font_path_bold", "fonts/Roboto-Bold.ttf"
         resValue "string", "font_path_medium", "fonts/Roboto-Medium.ttf"
+        multiDexEnabled true
     }
     buildTypes {
         debug {
@@ -50,6 +51,8 @@ def renameArtifact(variant, defaultConfig) {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile "com.android.support:multidex:1.0.1"
 
     compile "org.slf4j:slf4j-api:1.7.22"
 
