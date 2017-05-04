@@ -84,4 +84,7 @@
     <dimen name="time_dialog_header_width">50dp</dimen>
     <dimen name="time_dialog_column_space">6dp</dimen>
     <dimen name="alert_dialog_padding_top">16dp</dimen>
+    <!-- medical item -->
+    <dimen name="medical_item_action_delete_height">64dp</dimen>
+    <dimen name="medical_item_margin_vertical">8dp</dimen>
 </resources>

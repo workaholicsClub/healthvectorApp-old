@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -35,7 +36,7 @@ import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.core.swipe.SwipeListAdapter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
-import ru.android.childdiary.presentation.events.FeedFieldActivity;
+import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
@@ -71,6 +72,7 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     }
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.fragment_calendar;
     }
@@ -170,7 +172,7 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
 
     @Override
     public void navigateToFeedEventAdd(@NonNull FeedEvent defaultEvent) {
-        Intent intent = FeedFieldActivity.getIntent(getContext(), null, defaultEvent);
+        Intent intent = FeedEventDetailActivity.getIntent(getContext(), null, defaultEvent);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
     }
 

@@ -103,4 +103,10 @@ public interface CalendarRepository extends Repository {
     Observable<MasterEvent> done(@NonNull MasterEvent event);
 
     Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType);
+
+    Observable<List<Integer>> getFrequencyList();
+
+    Observable<List<Integer>> getPeriodicityList();
+
+    Observable<List<Integer>> getLengthList();
 }

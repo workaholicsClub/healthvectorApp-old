@@ -1,29 +1,17 @@
 package ru.android.childdiary.presentation.core.fields.adapters;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindDimen;
-import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
-import ru.android.childdiary.presentation.core.adapters.BaseArrayAdapter;
-import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
 
-public class FoodMeasureAdapter extends BaseArrayAdapter<FoodMeasure, FoodMeasureAdapter.ViewHolder> {
+public class FoodMeasureAdapter extends SpinnerItemAdapter<FoodMeasure, FoodMeasureAdapter.ViewHolder> {
     public FoodMeasureAdapter(Context context, List<FoodMeasure> foodMeasureList) {
         super(context, foodMeasureList);
-    }
-
-    @Override
-    @LayoutRes
-    protected int getLayoutResourceId() {
-        return R.layout.spinner_item;
     }
 
     @Override
@@ -31,28 +19,16 @@ public class FoodMeasureAdapter extends BaseArrayAdapter<FoodMeasure, FoodMeasur
         return new FoodMeasureAdapter.ViewHolder(view);
     }
 
-    static class ViewHolder extends BaseViewHolder<FoodMeasure> {
-        @BindView(android.R.id.text1)
-        TextView textView;
-        @BindView(R.id.imageViewDropdown)
-        View imageViewDropdown;
-        @BindDimen(R.dimen.base_margin_horizontal)
-        int baseMarginHorizontal;
-
+    static class ViewHolder extends SpinnerItemViewHolder<FoodMeasure> {
         public ViewHolder(View view) {
             super(view);
         }
 
         @Override
-        public void bind(Context context, int position, FoodMeasure foodMeasure) {
-            String text = foodMeasure == FoodMeasure.NULL
+        protected String getTextForValue(Context context, @NonNull FoodMeasure item) {
+            return item == FoodMeasure.NULL
                     ? context.getString(R.string.food_measure_other)
-                    : foodMeasure.getName();
-            textView.setText(text);
-            imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textView.getLayoutParams();
-            params.rightMargin = position == 0 ? 0 : baseMarginHorizontal;
-            textView.setLayoutParams(params);
+                    : item.getName();
         }
     }
 }

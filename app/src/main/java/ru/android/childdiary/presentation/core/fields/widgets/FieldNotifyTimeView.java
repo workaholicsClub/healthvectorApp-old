@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
@@ -25,6 +26,7 @@ public class FieldNotifyTimeView extends FieldDialogView<Integer> {
     }
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.field_notify_time;
     }

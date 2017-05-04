@@ -2,14 +2,26 @@ package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 
-public class FieldRepeatParametersView extends LinearLayout implements View.OnClickListener {
+public class FieldRepeatParametersView extends LinearLayout implements FieldSpinnerView.FieldSpinnerListener {
+    @BindView(R.id.frequencyView)
+    FieldFrequencyView frequencyView;
+
+    @BindView(R.id.periodicityView)
+    FieldPeriodicityView periodicityView;
+
+    @BindView(R.id.lengthView)
+    FieldLengthView lengthView;
+
+    // TODO times
+
     public FieldRepeatParametersView(Context context) {
         super(context);
         init();
@@ -26,31 +38,42 @@ public class FieldRepeatParametersView extends LinearLayout implements View.OnCl
     }
 
     private void init() {
-        setOrientation(LinearLayout.VERTICAL);
-
-        View child;
-        TextView textView;
-
-        child = inflate(getContext(), R.layout.field_frequency, null);
-        addView(child);
-        textView = ButterKnife.findById(child, R.id.textView);
-        textView.setOnClickListener(this);
-
-        child = inflate(getContext(), R.layout.field_periodicity, null);
-        addView(child);
-        textView = ButterKnife.findById(child, R.id.textView);
-        textView.setOnClickListener(this);
-
-        child = inflate(getContext(), R.layout.field_length, null);
-        addView(child);
-        textView = ButterKnife.findById(child, R.id.textView);
-        textView.setOnClickListener(this);
-
-        child = inflate(getContext(), R.layout.field_times, null);
-        addView(child);
+        setOrientation(VERTICAL);
+        inflate(getContext(), R.layout.field_repeat_parameters, this);
     }
 
     @Override
-    public void onClick(View v) {
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        ButterKnife.bind(this);
+        frequencyView.setFieldSpinnerListener(this);
+        periodicityView.setFieldSpinnerListener(this);
+        lengthView.setFieldSpinnerListener(this);
+    }
+
+    public void updateFrequency(List<Integer> items) {
+        frequencyView.updateAdapter(items);
+    }
+
+    public void updatePeriodicity(List<Integer> items) {
+        periodicityView.updateAdapter(items);
+    }
+
+    public void updateLength(List<Integer> items) {
+        lengthView.updateAdapter(items);
+    }
+
+    @Override
+    public void onSpinnerItemClick(FieldSpinnerView view, Object item) {
+        if (view == frequencyView) {
+            frequencyView.setValue((Integer) item);
+        } else if (view == periodicityView) {
+            periodicityView.setValue((Integer) item);
+        } else if (view == lengthView) {
+            lengthView.setValue((Integer) item);
+        }
+    }
+
+    public interface FieldRepeatParametersListener {
     }
 }

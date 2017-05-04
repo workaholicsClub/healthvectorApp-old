@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical;
+package ru.android.childdiary.presentation.medical.edit.visits;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,24 +11,25 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import org.joda.time.DateTime;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
+import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
-import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
+import ru.android.childdiary.presentation.core.events.BaseEditItemActivity;
+import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
@@ -36,25 +37,22 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitView, DoctorVisit>
-        implements AddDoctorVisitView {
+public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicineTakingView, MedicineTaking>
+        implements EditMedicineTakingView {
     @InjectPresenter
-    AddDoctorVisitPresenter presenter;
+    EditMedicineTakingPresenter presenter;
 
-    @BindView(R.id.doctorVisitNameView)
-    FieldDoctorVisitNameView doctorVisitNameView;
+    @BindView(R.id.medicineView)
+    FieldMedicineView medicineView;
 
-    @BindView(R.id.doctorView)
-    FieldDoctorView doctorView;
+    @BindView(R.id.medicineMeasureView)
+    FieldMedicineMeasureView medicineMeasureView;
 
     @BindView(R.id.dateView)
     FieldDateView dateView;
 
     @BindView(R.id.timeView)
     FieldTimeView timeView;
-
-    @BindView(R.id.durationView)
-    FieldDurationView durationView;
 
     @BindView(R.id.checkBoxView)
     FieldCheckBoxView checkBoxView;
@@ -68,9 +66,9 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @NonNull DoctorVisit defaultDoctorVisit) {
-        Intent intent = new Intent(context, AddDoctorVisitActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultDoctorVisit);
+    public static Intent getIntent(Context context, @NonNull MedicineTaking medicineTaking) {
+        Intent intent = new Intent(context, EditMedicineTakingActivity.class);
+        intent.putExtra(ExtraConstants.EXTRA_ITEM, medicineTaking);
         return intent;
     }
 
@@ -83,25 +81,30 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        changeThemeIfNeeded(defaultItem.getChild());
+        changeThemeIfNeeded(item.getChild());
     }
 
     @Override
-    protected BaseAddItemPresenter<AddDoctorVisitView, DoctorVisit> getPresenter() {
+    public void showMedicineMeasureList(List<MedicineMeasure> medicineMeasureList) {
+        medicineMeasureView.updateAdapter(medicineMeasureList);
+    }
+
+    @Override
+    protected BaseEditItemPresenter<EditMedicineTakingView, MedicineTaking> getPresenter() {
         return presenter;
     }
 
     @Override
     protected int getContentLayoutResourceId() {
-        return R.layout.activity_add_item_doctor_visit;
+        return R.layout.activity_item_content_medicine_taking;
     }
 
     @Override
-    protected void setup(DoctorVisit item) {
-        doctorView.setValue(item.getDoctor());
-        // TODO repeat parameters
-        doctorVisitNameView.setText(item.getName());
-        durationView.setValue(item.getDurationInMinutes());
+    protected void setup(MedicineTaking item) {
+        medicineView.setValue(item.getMedicine());
+        // TODO amount
+        medicineMeasureView.setValue(item.getMedicineMeasure());
+        // TODO repeatParameters
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
@@ -111,21 +114,21 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     }
 
     @Override
-    protected DoctorVisit build() {
-        Doctor doctor = doctorView.getValue();
+    protected MedicineTaking build() {
+        Medicine medicine = medicineView.getValue();
+        Double amount = null;
+        MedicineMeasure medicineMeasure = medicineMeasureView.getValue();
         RepeatParameters repeatParameters = null;
-        String doctorVisitName = doctorVisitNameView.getText();
-        Integer duration = durationView.getValue();
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
         String imageFileName = null;
 
-        return defaultItem.toBuilder()
-                .doctor(doctor)
+        return item.toBuilder()
+                .medicine(medicine)
+                .amount(amount)
+                .medicineMeasure(medicineMeasure)
                 .repeatParameters(repeatParameters)
-                .name(doctorVisitName)
-                .durationInMinutes(duration)
                 .dateTime(dateTime)
                 .notifyTimeInMinutes(minutes)
                 .note(note)
@@ -134,7 +137,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     }
 
     @Override
-    protected boolean contentEquals(DoctorVisit item1, DoctorVisit item2) {
+    protected boolean contentEquals(MedicineTaking item1, MedicineTaking item2) {
         return false;
     }
 
@@ -156,7 +159,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     @Nullable
     @Override
     protected FieldDurationView getDurationView() {
-        return durationView;
+        return null;
     }
 
     @Override
@@ -171,6 +174,6 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
 
     @Override
     protected List<FieldEditTextView> getEditTextViews() {
-        return Arrays.asList(doctorVisitNameView, noteWithPhotoView);
+        return Collections.singletonList(noteWithPhotoView);
     }
 }

@@ -47,7 +47,7 @@ import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class FeedFieldActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
+public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
         FieldSpinnerView.FieldSpinnerListener, FoodMeasureDialog.Listener, FoodDialog.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
@@ -92,7 +92,7 @@ public class FeedFieldActivity extends EventDetailActivity<FeedEventDetailView, 
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull FeedEvent defaultEvent) {
-        Intent intent = new Intent(context, FeedFieldActivity.class);
+        Intent intent = new Intent(context, FeedEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
         intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
         return intent;

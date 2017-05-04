@@ -12,6 +12,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsResponse;
@@ -32,8 +33,8 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
         applicationComponent.inject(this);
     }
 
-    public void requestDoctorVisitDetail() {
-        getViewState().navigateToDoctorVisit();
+    public void requestDoctorVisitDetail(@NonNull DoctorVisit doctorVisit) {
+        getViewState().navigateToDoctorVisit(doctorVisit);
     }
 
     @Override
@@ -60,5 +61,9 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
     private void onGetData(@NonNull DoctorVisitsResponse response) {
         logger.debug("onGetData: " + response);
         getViewState().showDoctorVisits(DoctorVisitsFilter.builder().build(), response.getDoctorVisits());
+    }
+
+    public void editDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        getViewState().navigateToDoctorVisit(doctorVisit);
     }
 }

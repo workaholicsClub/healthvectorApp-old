@@ -28,6 +28,8 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.core.swipe.SwipeListAdapter;
+import ru.android.childdiary.presentation.medical.add.medicines.AddDoctorVisitActivity;
+import ru.android.childdiary.presentation.medical.add.visits.AddMedicineTakingActivity;
 import ru.android.childdiary.presentation.medical.fragments.medicines.MedicineTakingListFragment;
 import ru.android.childdiary.presentation.medical.fragments.visits.DoctorVisitsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;

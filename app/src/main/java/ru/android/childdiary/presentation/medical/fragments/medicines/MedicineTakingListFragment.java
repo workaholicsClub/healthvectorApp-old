@@ -1,6 +1,8 @@
 package ru.android.childdiary.presentation.medical.fragments.medicines;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +21,7 @@ import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingActionListener;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingAdapter;
+import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingActivity;
 
 public class MedicineTakingListFragment extends AppPartitionFragment
         implements MedicineTakingListView, MedicineTakingActionListener {
@@ -33,6 +36,7 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     private FabController fabController;
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.fragment_medical_list;
     }
@@ -79,16 +83,18 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     }
 
     @Override
-    public void navigateToMedicineTaking() {
+    public void navigateToMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        Intent intent = EditMedicineTakingActivity.getIntent(getContext(), medicineTaking);
+        startActivity(intent);
     }
 
     @Override
     public void delete(MedicineTaking item) {
-
+        // TODO confirm delete all connected events or no events
     }
 
     @Override
     public void edit(MedicineTaking item) {
-
+        presenter.editMedicineTaking(item);
     }
 }

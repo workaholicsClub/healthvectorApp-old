@@ -37,7 +37,7 @@ import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.swipe.FabController;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
-import ru.android.childdiary.presentation.events.FeedFieldActivity;
+import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
@@ -228,7 +228,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
 
     @Override
     public void navigateToFeedEvent(@NonNull MasterEvent event, @NonNull FeedEvent defaultEvent) {
-        Intent intent = FeedFieldActivity.getIntent(getContext(), event, defaultEvent);
+        Intent intent = FeedEventDetailActivity.getIntent(getContext(), event, defaultEvent);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 

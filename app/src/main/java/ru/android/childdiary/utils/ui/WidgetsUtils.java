@@ -6,6 +6,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,6 +27,10 @@ public class WidgetsUtils {
         @ColorRes int colorRes = enabled ? R.color.primary_text : R.color.placeholder_text;
         @ColorInt int color = ContextCompat.getColor(textView.getContext(), colorRes);
         textView.setTextColor(color);
+    }
+
+    public static void hideIfEmpty(TextView textView) {
+        textView.setVisibility(TextUtils.isEmpty(textView.getText()) ? View.GONE : View.VISIBLE);
     }
 
     public static void setupCropActivityToolbar(Context context, UCrop.Options options, @Nullable Sex sex) {

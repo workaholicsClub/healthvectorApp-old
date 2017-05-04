@@ -12,6 +12,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListResponse;
@@ -32,8 +33,8 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
         applicationComponent.inject(this);
     }
 
-    public void requestMedicineDetail() {
-        getViewState().navigateToMedicineTaking();
+    public void requestMedicineDetail(@NonNull MedicineTaking medicineTaking) {
+        getViewState().navigateToMedicineTaking(medicineTaking);
     }
 
     @Override
@@ -60,5 +61,9 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
     private void onGetData(@NonNull MedicineTakingListResponse response) {
         logger.debug("onGetData: " + response);
         getViewState().showMedicineTakingList(MedicineTakingListFilter.builder().build(), response.getMedicineTakingList());
+    }
+
+    public void editMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        getViewState().navigateToMedicineTaking(medicineTaking);
     }
 }

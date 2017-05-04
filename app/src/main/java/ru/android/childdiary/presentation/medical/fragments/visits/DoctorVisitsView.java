@@ -16,5 +16,5 @@ public interface DoctorVisitsView extends AppPartitionView {
     void showDoctorVisits(@NonNull DoctorVisitsFilter filter, @NonNull List<DoctorVisit> doctorVisits);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToDoctorVisit();
+    void navigateToDoctorVisit(@NonNull DoctorVisit doctorVisit);
 }

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical;
+package ru.android.childdiary.presentation.medical.edit.medicines;
 
 import android.support.annotation.NonNull;
 
@@ -11,10 +11,10 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
-import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
+import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
 
 @InjectViewState
-public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisitView, DoctorVisit> {
+public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVisitView, DoctorVisit> {
     @Inject
     DoctorVisitInteractor doctorVisitInteractor;
 
@@ -24,12 +24,13 @@ public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisit
     }
 
     @Override
-    public void add(@NonNull DoctorVisit doctorVisit) {
+    public void update(@NonNull DoctorVisit doctorVisit) {
+        // TODO update
         unsubscribeOnDestroy(
                 doctorVisitInteractor.addDoctorVisit(doctorVisit)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext(added -> logger.debug("added: " + added))
-                        .subscribe(getViewState()::added, this::onUnexpectedError));
+                        .doOnNext(updated -> logger.debug("updated: " + updated))
+                        .subscribe(getViewState()::updated, this::onUnexpectedError));
     }
 }

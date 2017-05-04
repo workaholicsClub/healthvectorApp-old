@@ -44,6 +44,6 @@ public class FieldTitleView extends LinearLayout {
     }
 
     public void setTitle(@StringRes int res) {
-        textView.setText(getContext().getString(res));
+        textView.setText(res);
     }
 }

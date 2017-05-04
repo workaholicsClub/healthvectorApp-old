@@ -16,5 +16,5 @@ public interface MedicineTakingListView extends AppPartitionView {
     void showMedicineTakingList(@NonNull MedicineTakingListFilter filter, @NonNull List<MedicineTaking> medicineTakingList);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToMedicineTaking();
+    void navigateToMedicineTaking(@NonNull MedicineTaking medicineTaking);
 }

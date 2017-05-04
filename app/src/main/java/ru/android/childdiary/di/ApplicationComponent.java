@@ -12,7 +12,7 @@ import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
 import ru.android.childdiary.presentation.events.FeedEventDetailPresenter;
-import ru.android.childdiary.presentation.events.FeedFieldActivity;
+import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailPresenter;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
@@ -23,12 +23,16 @@ import ru.android.childdiary.presentation.exercises.ExercisesPresenter;
 import ru.android.childdiary.presentation.help.HelpPresenter;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.main.MainPresenter;
-import ru.android.childdiary.presentation.medical.AddDoctorVisitActivity;
-import ru.android.childdiary.presentation.medical.AddDoctorVisitPresenter;
-import ru.android.childdiary.presentation.medical.AddMedicineTakingActivity;
-import ru.android.childdiary.presentation.medical.AddMedicineTakingPresenter;
 import ru.android.childdiary.presentation.medical.MedicalDataFragment;
 import ru.android.childdiary.presentation.medical.MedicalDataPresenter;
+import ru.android.childdiary.presentation.medical.add.medicines.AddDoctorVisitActivity;
+import ru.android.childdiary.presentation.medical.add.medicines.AddDoctorVisitPresenter;
+import ru.android.childdiary.presentation.medical.add.visits.AddMedicineTakingActivity;
+import ru.android.childdiary.presentation.medical.add.visits.AddMedicineTakingPresenter;
+import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitActivity;
+import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitPresenter;
+import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingActivity;
+import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingPresenter;
 import ru.android.childdiary.presentation.medical.fragments.medicines.MedicineTakingListPresenter;
 import ru.android.childdiary.presentation.medical.fragments.visits.DoctorVisitsPresenter;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
@@ -81,6 +85,10 @@ public interface ApplicationComponent {
 
     void inject(AddMedicineTakingPresenter presenter);
 
+    void inject(EditDoctorVisitPresenter presenter);
+
+    void inject(EditMedicineTakingPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -92,7 +100,7 @@ public interface ApplicationComponent {
 
     void inject(DiaperEventDetailActivity activity);
 
-    void inject(FeedFieldActivity activity);
+    void inject(FeedEventDetailActivity activity);
 
     void inject(OtherEventDetailActivity activity);
 
@@ -103,6 +111,10 @@ public interface ApplicationComponent {
     void inject(AddDoctorVisitActivity activity);
 
     void inject(AddMedicineTakingActivity activity);
+
+    void inject(EditDoctorVisitActivity activity);
+
+    void inject(EditMedicineTakingActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

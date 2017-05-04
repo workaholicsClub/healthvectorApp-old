@@ -2,51 +2,19 @@ package ru.android.childdiary.presentation.medical.adapters.medicines;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.daimajia.swipe.SwipeLayout;
-
-import butterknife.BindDimen;
-import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.presentation.core.swipe.SwipeViewHolder;
+import ru.android.childdiary.presentation.medical.adapters.core.BaseMedicalItemViewHolder;
 import ru.android.childdiary.utils.DateUtils;
-import ru.android.childdiary.utils.ui.ResourcesUtils;
-import ru.android.childdiary.utils.ui.ThemeUtils;
+import ru.android.childdiary.utils.DoubleUtils;
+import ru.android.childdiary.utils.ObjectUtils;
 
-class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, MedicineTakingSwipeActionListener, MedicineTakingActionListener> {
-    @BindView(R.id.swipeLayout)
-    SwipeLayout swipeLayout;
-
-    @BindView(R.id.bottomView)
-    View bottomView;
-
-    @BindView(R.id.eventRowActionDelete)
-    ImageView imageViewDelete;
-
-    @BindView(R.id.eventView)
-    View eventView;
-
-    @BindView(R.id.textViewDate)
-    TextView textViewDate;
-
-    @BindView(R.id.textViewTime)
-    TextView textViewTime;
-
-    @BindView(R.id.textViewTitle)
-    TextView textViewTitle;
-
-    @BindView(R.id.textViewDescription)
-    TextView textViewDescription;
-
-    @BindDimen(R.dimen.event_row_corner_radius)
-    float corner;
-
+class MedicineTakingViewHolder extends BaseMedicalItemViewHolder<MedicineTaking, MedicineTakingSwipeActionListener, MedicineTakingActionListener> {
     public MedicineTakingViewHolder(View itemView,
                                     @NonNull MedicineTakingActionListener itemActionListener,
                                     @NonNull MedicineTakingSwipeActionListener swipeActionListener) {
@@ -54,31 +22,38 @@ class MedicineTakingViewHolder extends SwipeViewHolder<MedicineTaking, MedicineT
     }
 
     @Override
-    public void bind(Context context, Sex sex, MedicineTaking item) {
-        super.bind(context, sex, item);
-
-        textViewDate.setText(DateUtils.date(context, item.getDateTime()));
-        textViewTime.setText(DateUtils.time(context, item.getDateTime()));
-        textViewTitle.setText(item.toString());
-        textViewDescription.setText("description");
-        //noinspection deprecation
-        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
-
-        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
+    @Nullable
+    protected String getDateText(Context context, MedicineTaking item) {
+        return DateUtils.date(context, item.getDateTime());
     }
 
     @Override
-    public SwipeLayout getSwipeLayout() {
-        return swipeLayout;
+    @Nullable
+    protected String getTimeText(Context context, MedicineTaking item) {
+        return DateUtils.time(context, item.getDateTime());
     }
 
-    @OnClick(R.id.eventView)
-    void onEventViewClick() {
-        itemActionListener.edit(item);
+    @Override
+    @Nullable
+    protected String getTitleText(Context context, MedicineTaking item) {
+        return item.getMedicine() == null ? null : item.getMedicine().getName();
     }
 
-    @OnClick(R.id.eventRowActionDelete)
+    @Override
+    @Nullable
+    protected String getDescriptionText(Context context, MedicineTaking item) {
+        if (ObjectUtils.isPositive(item.getAmount())
+                && item.getMedicineMeasure() != null
+                && !TextUtils.isEmpty(item.getMedicineMeasure().getName())) {
+            String amount = DoubleUtils.multipleUnitFormat(item.getAmount());
+            String medicineMeasure = item.getMedicineMeasure().getName();
+            return context.getString(R.string.medicine_measure_format, amount, medicineMeasure);
+        } else {
+            return null;
+        }
+    }
+
+    @OnClick(R.id.actionDelete)
     void onDeleteClick() {
         swipeActionListener.delete(this);
     }

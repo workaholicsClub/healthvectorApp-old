@@ -6,40 +6,48 @@
 
     <LinearLayout
         android:id="@+id/bottomView"
-        android:layout_width="80dp"
-        android:layout_height="75dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/eventRowActionDelete"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:id="@+id/actionDelete"
+            android:layout_width="@dimen/medical_item_action_delete_height"
+            android:layout_height="@dimen/medical_item_action_delete_height"
+            android:layout_marginEnd="@dimen/base_margin_horizontal"
+            android:layout_marginRight="@dimen/base_margin_horizontal"
             android:background="@color/accent_boy"
             android:scaleType="center"
             android:src="@drawable/event_row_action_delete" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/eventView"
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medical_item_margin_vertical"
+            android:layout_marginEnd="@dimen/base_margin_horizontal"
+            android:layout_marginLeft="@dimen/base_margin_horizontal"
+            android:layout_marginRight="@dimen/base_margin_horizontal"
+            android:layout_marginStart="@dimen/base_margin_horizontal"
+            android:layout_marginTop="@dimen/medical_item_margin_vertical"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textViewDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/medical_item_margin_vertical"
                 android:gravity="center_vertical"
-                android:paddingLeft="@dimen/event_row_padding_horizontal"
-                android:paddingRight="@dimen/event_row_padding_horizontal"
                 android:textAppearance="@style/ItemDateTextAppearance" />
 
             <TextView
@@ -49,8 +57,6 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingLeft="@dimen/event_row_padding_horizontal"
-                android:paddingRight="@dimen/event_row_padding_horizontal"
                 android:singleLine="true"
                 android:textAppearance="@style/ItemTitleTextAppearance"
                 tools:ignore="Deprecated" />
@@ -62,8 +68,6 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingLeft="@dimen/event_row_padding_horizontal"
-                android:paddingRight="@dimen/event_row_padding_horizontal"
                 android:singleLine="true"
                 android:textAppearance="@style/ItemDescriptionTextAppearance"
                 tools:ignore="Deprecated" />
@@ -73,11 +77,11 @@
             android:id="@+id/textViewTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/base_margin_horizontal"
+            android:layout_marginRight="@dimen/base_margin_horizontal"
             android:ellipsize="end"
             android:gravity="center_vertical|end"
             android:maxLines="1"
-            android:paddingLeft="@dimen/event_row_padding_horizontal"
-            android:paddingRight="@dimen/event_row_padding_horizontal"
             android:singleLine="true"
             android:textAppearance="@style/ItemTimeTextAppearance"
             tools:ignore="Deprecated" />

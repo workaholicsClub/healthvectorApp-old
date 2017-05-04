@@ -1,29 +1,17 @@
 package ru.android.childdiary.presentation.core.fields.adapters;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindDimen;
-import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
-import ru.android.childdiary.presentation.core.adapters.BaseArrayAdapter;
-import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
 
-public class FoodAdapter extends BaseArrayAdapter<Food, FoodAdapter.ViewHolder> {
+public class FoodAdapter extends SpinnerItemAdapter<Food, FoodAdapter.ViewHolder> {
     public FoodAdapter(Context context, List<Food> foodList) {
         super(context, foodList);
-    }
-
-    @Override
-    @LayoutRes
-    protected int getLayoutResourceId() {
-        return R.layout.spinner_item;
     }
 
     @Override
@@ -31,28 +19,16 @@ public class FoodAdapter extends BaseArrayAdapter<Food, FoodAdapter.ViewHolder> 
         return new FoodAdapter.ViewHolder(view);
     }
 
-    static class ViewHolder extends BaseViewHolder<Food> {
-        @BindView(android.R.id.text1)
-        TextView textView;
-        @BindView(R.id.imageViewDropdown)
-        View imageViewDropdown;
-        @BindDimen(R.dimen.base_margin_horizontal)
-        int baseMarginHorizontal;
-
+    static class ViewHolder extends SpinnerItemViewHolder<Food> {
         public ViewHolder(View view) {
             super(view);
         }
 
         @Override
-        public void bind(Context context, int position, Food food) {
-            String text = food == Food.NULL
+        protected String getTextForValue(Context context, @NonNull Food item) {
+            return item == Food.NULL
                     ? context.getString(R.string.food_other)
-                    : food.getName();
-            textView.setText(text);
-            imageViewDropdown.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textView.getLayoutParams();
-            params.rightMargin = position == 0 ? 0 : baseMarginHorizontal;
-            textView.setLayoutParams(params);
+                    : item.getName();
         }
     }
 }

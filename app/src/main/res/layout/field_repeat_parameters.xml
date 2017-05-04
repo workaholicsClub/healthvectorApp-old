@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldFrequencyView
+        android:id="@+id/frequencyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldPeriodicityView
+        android:id="@+id/periodicityView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldLengthView
+        android:id="@+id/lengthView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/field_times" />
+</merge>

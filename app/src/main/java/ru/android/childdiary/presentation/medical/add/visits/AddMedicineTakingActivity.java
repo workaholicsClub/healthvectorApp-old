@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical;
+package ru.android.childdiary.presentation.medical.add.visits;
 
 import android.content.Context;
 import android.content.Intent;
@@ -96,7 +96,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
 
     @Override
     protected int getContentLayoutResourceId() {
-        return R.layout.activity_add_item_medicine_taking;
+        return R.layout.activity_item_content_medicine_taking;
     }
 
     @Override

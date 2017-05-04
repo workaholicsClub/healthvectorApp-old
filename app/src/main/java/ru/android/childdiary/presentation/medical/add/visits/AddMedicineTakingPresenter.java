@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical;
+package ru.android.childdiary.presentation.medical.add.visits;
 
 import android.support.annotation.NonNull;
 

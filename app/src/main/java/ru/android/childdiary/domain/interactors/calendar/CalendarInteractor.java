@@ -430,4 +430,16 @@ public class CalendarInteractor implements Interactor {
             throw new IllegalStateException("Unknown event type");
         });
     }
+
+    public Observable<List<Integer>> getFrequencyList() {
+        return calendarRepository.getFrequencyList();
+    }
+
+    public Observable<List<Integer>> getPeriodicityList() {
+        return calendarRepository.getPeriodicityList();
+    }
+
+    public Observable<List<Integer>> getLengthList() {
+        return calendarRepository.getLengthList();
+    }
 }

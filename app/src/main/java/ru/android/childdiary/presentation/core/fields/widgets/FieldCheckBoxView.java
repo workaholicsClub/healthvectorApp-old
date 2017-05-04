@@ -74,7 +74,7 @@ public class FieldCheckBoxView extends LinearLayout implements View.OnClickListe
     }
 
     public void setText(@StringRes int res) {
-        textView.setText(getContext().getString(res));
+        textView.setText(res);
     }
 
     public void setSex(Sex sex) {
