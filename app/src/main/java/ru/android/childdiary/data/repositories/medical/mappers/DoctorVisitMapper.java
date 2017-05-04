@@ -3,13 +3,17 @@ package ru.android.childdiary.data.repositories.medical.mappers;
 import android.support.annotation.NonNull;
 
 import io.requery.BlockingEntityStore;
+import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersData;
+import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitData;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorData;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
+import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -20,10 +24,13 @@ public class DoctorVisitMapper {
         Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
         DoctorData doctorData = doctorVisitData.getDoctor();
         Doctor doctor = doctorData == null ? null : DoctorMapper.mapToPlainObject(doctorData);
+        RepeatParametersData repeatParametersData = doctorVisitData.getRepeatParameters();
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
         return DoctorVisit.builder()
                 .id(doctorVisitData.getId())
                 .child(child)
                 .doctor(doctor)
+                .repeatParameters(repeatParameters)
                 .name(doctorVisitData.getName())
                 .durationInMinutes(doctorVisitData.getDurationInMinutes())
                 .dateTime(doctorVisitData.getDateTime())
@@ -51,6 +58,11 @@ public class DoctorVisitMapper {
         if (doctor != null) {
             DoctorEntity doctorEntity = (DoctorEntity) blockingEntityStore.findByKey(DoctorEntity.class, doctor.getId());
             doctorVisitEntity.setDoctor(doctorEntity);
+        }
+        RepeatParameters repeatParameters = doctorVisit.getRepeatParameters();
+        if (repeatParameters != null) {
+            RepeatParametersEntity repeatParametersEntity = (RepeatParametersEntity) blockingEntityStore.findByKey(RepeatParametersEntity.class, repeatParameters.getId());
+            doctorVisitEntity.setRepeatParameters(repeatParametersEntity);
         }
         return doctorVisitEntity;
     }

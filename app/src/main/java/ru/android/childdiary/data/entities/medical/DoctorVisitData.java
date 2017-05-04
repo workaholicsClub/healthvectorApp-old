@@ -7,8 +7,10 @@ import io.requery.ForeignKey;
 import io.requery.Generated;
 import io.requery.Key;
 import io.requery.ManyToOne;
+import io.requery.OneToOne;
 import io.requery.ReferentialAction;
 import io.requery.Table;
+import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.medical.core.DoctorData;
 
@@ -26,6 +28,10 @@ public interface DoctorVisitData {
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
     DoctorData getDoctor();
+
+    @ForeignKey
+    @OneToOne
+    RepeatParametersData getRepeatParameters();
 
     String getName();
 

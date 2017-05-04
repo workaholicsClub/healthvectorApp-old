@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import lombok.Builder;
 import lombok.Value;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -22,6 +23,8 @@ public class MedicineTaking implements Serializable {
     Double amount;
 
     MedicineMeasure medicineMeasure;
+
+    RepeatParameters repeatParameters;
 
     DateTime dateTime;
 

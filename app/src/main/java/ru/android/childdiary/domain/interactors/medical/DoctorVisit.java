@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import lombok.Builder;
 import lombok.Value;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
@@ -17,6 +18,8 @@ public class DoctorVisit implements Serializable {
     Child child;
 
     Doctor doctor;
+
+    RepeatParameters repeatParameters;
 
     String name;
 

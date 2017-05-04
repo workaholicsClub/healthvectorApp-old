@@ -3,6 +3,8 @@ package ru.android.childdiary.data.repositories.medical.mappers;
 import android.support.annotation.NonNull;
 
 import io.requery.BlockingEntityStore;
+import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersData;
+import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingData;
@@ -11,7 +13,9 @@ import ru.android.childdiary.data.entities.medical.core.MedicineData;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureData;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
+import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
@@ -25,12 +29,15 @@ public class MedicineTakingMapper {
         Medicine medicine = medicineData == null ? null : MedicineMapper.mapToPlainObject(medicineData);
         MedicineMeasureData medicineMeasureData = medicineTakingData.getMedicineMeasure();
         MedicineMeasure medicineMeasure = medicineMeasureData == null ? null : MedicineMeasureMapper.mapToPlainObject(medicineMeasureData);
+        RepeatParametersData repeatParametersData = medicineTakingData.getRepeatParameters();
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
         return MedicineTaking.builder()
                 .id(medicineTakingData.getId())
                 .child(child)
                 .medicine(medicine)
                 .amount(medicineTakingData.getAmount())
                 .medicineMeasure(medicineMeasure)
+                .repeatParameters(repeatParameters)
                 .dateTime(medicineTakingData.getDateTime())
                 .notifyTimeInMinutes(medicineTakingData.getNotifyTimeInMinutes())
                 .note(medicineTakingData.getNote())
@@ -61,6 +68,11 @@ public class MedicineTakingMapper {
         if (medicineMeasure != null) {
             MedicineMeasureEntity medicineMeasureEntity = (MedicineMeasureEntity) blockingEntityStore.findByKey(MedicineMeasureEntity.class, medicineMeasure.getId());
             medicineTakingEntity.setMedicineMeasure(medicineMeasureEntity);
+        }
+        RepeatParameters repeatParameters = medicineTaking.getRepeatParameters();
+        if (repeatParameters != null) {
+            RepeatParametersEntity repeatParametersEntity = (RepeatParametersEntity) blockingEntityStore.findByKey(RepeatParametersEntity.class, repeatParameters.getId());
+            medicineTakingEntity.setRepeatParameters(repeatParametersEntity);
         }
         return medicineTakingEntity;
     }
