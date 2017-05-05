@@ -9,7 +9,7 @@ import lombok.Value;
 import ru.android.childdiary.data.entities.calendar.events.core.LinearGroups;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class RepeatParameters implements Serializable {
     Long id;
 

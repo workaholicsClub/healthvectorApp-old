@@ -25,9 +25,8 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
 
     @Override
     public void update(@NonNull DoctorVisit doctorVisit) {
-        // TODO update
         unsubscribeOnDestroy(
-                doctorVisitInteractor.addDoctorVisit(doctorVisit)
+                doctorVisitInteractor.updateDoctorVisit(doctorVisit)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(updated -> logger.debug("updated: " + updated))

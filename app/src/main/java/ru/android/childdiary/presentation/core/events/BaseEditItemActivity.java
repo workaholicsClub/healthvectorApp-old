@@ -49,7 +49,7 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
 
     @Override
     public void updated(@NonNull T item) {
-        Toast.makeText(this, "added: " + item, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "updated: " + item, Toast.LENGTH_SHORT).show();
         finish();
     }
 

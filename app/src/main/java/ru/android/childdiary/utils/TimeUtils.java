@@ -221,6 +221,14 @@ public class TimeUtils {
         return sameDate && isStartTimeAfterFinishTime;
     }
 
+    @Nullable
+    public static String numberOfTimes(Context context, @Nullable Integer number) {
+        if (number == null) {
+            return null;
+        }
+        return context.getResources().getQuantityString(R.plurals.numberOfTimesInADay, number, number);
+    }
+
     @Value
     @Builder
     public static class Time {

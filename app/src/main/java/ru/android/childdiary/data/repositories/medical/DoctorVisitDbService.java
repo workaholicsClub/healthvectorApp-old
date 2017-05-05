@@ -13,8 +13,10 @@ import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
+import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -51,7 +53,47 @@ public class DoctorVisitDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, DoctorVisitMapper::mapToPlainObject));
     }
 
-    public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return DbUtils.insertObservable(dataStore, doctorVisit, DoctorVisitMapper::mapToEntity, DoctorVisitMapper::mapToPlainObject);
+    private RepeatParameters insertRepeatParameters(@NonNull RepeatParameters repeatParameters) {
+        return DbUtils.insert(dataStore, repeatParameters,
+                RepeatParametersMapper::mapToEntity, RepeatParametersMapper::mapToPlainObject);
+    }
+
+    private DoctorVisit insertDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        return DbUtils.insert(dataStore, doctorVisit,
+                DoctorVisitMapper::mapToEntity, DoctorVisitMapper::mapToPlainObject);
+    }
+
+    public Observable<DoctorVisit> add(@NonNull DoctorVisit doctorVisit) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            DoctorVisit object = doctorVisit;
+            RepeatParameters repeatParameters = object.getRepeatParameters();
+            if (repeatParameters != null) {
+                repeatParameters = insertRepeatParameters(repeatParameters);
+                object = object.toBuilder().repeatParameters(repeatParameters).build();
+            }
+            return insertDoctorVisit(object);
+        }));
+    }
+
+    private RepeatParameters updateRepeatParameters(@NonNull RepeatParameters repeatParameters) {
+        return DbUtils.update(dataStore, repeatParameters,
+                RepeatParametersMapper::mapToEntity, RepeatParametersMapper::mapToPlainObject);
+    }
+
+    private DoctorVisit updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        return DbUtils.update(dataStore, doctorVisit,
+                DoctorVisitMapper::mapToEntity, DoctorVisitMapper::mapToPlainObject);
+    }
+
+    public Observable<DoctorVisit> update(@NonNull DoctorVisit doctorVisit) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            DoctorVisit object = doctorVisit;
+            RepeatParameters repeatParameters = object.getRepeatParameters();
+            if (repeatParameters != null) {
+                repeatParameters = updateRepeatParameters(repeatParameters);
+                object = object.toBuilder().repeatParameters(repeatParameters).build();
+            }
+            return updateDoctorVisit(object);
+        }));
     }
 }

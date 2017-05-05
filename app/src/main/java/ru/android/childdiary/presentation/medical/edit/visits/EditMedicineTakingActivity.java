@@ -104,7 +104,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         medicineView.setValue(item.getMedicine());
         // TODO amount
         medicineMeasureView.setValue(item.getMedicineMeasure());
-        // TODO repeatParameters
+        repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
@@ -118,7 +118,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         Medicine medicine = medicineView.getValue();
         Double amount = null;
         MedicineMeasure medicineMeasure = medicineMeasureView.getValue();
-        RepeatParameters repeatParameters = null;
+        RepeatParameters repeatParameters = repeatParametersView.getRepeatParameters();
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();

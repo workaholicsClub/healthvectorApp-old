@@ -35,4 +35,11 @@
         <item quantity="many">%d минут</item>
         <item quantity="zero">%d минут</item>
     </plurals>
+    <plurals name="numberOfTimesInADay">
+        <item quantity="one">%d раз в день</item>
+        <item quantity="few">%d раза в день</item>
+        <item quantity="other">%d раз в день</item>
+        <item quantity="many">%d раз в день</item>
+        <item quantity="zero">%d раз в день</item>
+    </plurals>
 </resources>

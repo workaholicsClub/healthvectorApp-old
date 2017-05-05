@@ -72,4 +72,8 @@ public class MedicineTakingInteractor implements Interactor {
     public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
         return medicineTakingRepository.addMedicineTaking(medicineTaking);
     }
+
+    public Observable<MedicineTaking> updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        return medicineTakingRepository.updateMedicineTaking(medicineTaking);
+    }
 }

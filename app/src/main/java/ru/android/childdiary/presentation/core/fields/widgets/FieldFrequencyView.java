@@ -36,7 +36,7 @@ public class FieldFrequencyView extends FieldSpinnerView<Integer> {
 
     @Override
     protected String getTextForValue(@Nullable Integer value) {
-        return TimeUtils.durationLong(getContext(), value);
+        return TimeUtils.numberOfTimes(getContext(), value);
     }
 
     @Override

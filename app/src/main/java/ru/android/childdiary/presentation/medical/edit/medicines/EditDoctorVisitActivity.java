@@ -99,7 +99,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     @Override
     protected void setup(DoctorVisit item) {
         doctorView.setValue(item.getDoctor());
-        // TODO repeat parameters
+        repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         doctorVisitNameView.setText(item.getName());
         durationView.setValue(item.getDurationInMinutes());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
@@ -113,7 +113,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     @Override
     protected DoctorVisit build() {
         Doctor doctor = doctorView.getValue();
-        RepeatParameters repeatParameters = null;
+        RepeatParameters repeatParameters = repeatParametersView.getRepeatParameters();
         String doctorVisitName = doctorVisitNameView.getText();
         Integer duration = durationView.getValue();
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);

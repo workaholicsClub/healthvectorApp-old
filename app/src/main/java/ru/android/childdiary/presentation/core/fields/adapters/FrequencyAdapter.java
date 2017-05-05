@@ -25,7 +25,7 @@ public class FrequencyAdapter extends SpinnerItemAdapter<Integer, FrequencyAdapt
 
         @Override
         protected String getTextForValue(Context context, @NonNull Integer item) {
-            return TimeUtils.durationLong(context, item);
+            return TimeUtils.numberOfTimes(context, item);
         }
     }
 }

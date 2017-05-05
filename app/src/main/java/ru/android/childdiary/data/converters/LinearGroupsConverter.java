@@ -47,7 +47,7 @@ public class LinearGroupsConverter implements Converter<LinearGroups, String> {
 
     @Override
     public LinearGroups convertToMapped(Class<? extends LinearGroups> type, String value) {
-        return value == null ? LinearGroups.builder().times(new ArrayList<>()).build() : map(value);
+        return value == null ? null : map(value);
     }
 
     private static String map(@NonNull LinearGroups linearGroups) {

@@ -1,14 +1,19 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
+
+import org.joda.time.LocalTime;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.entities.calendar.events.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 
 public class FieldRepeatParametersView extends LinearLayout implements FieldSpinnerView.FieldSpinnerListener {
     @BindView(R.id.frequencyView)
@@ -20,7 +25,11 @@ public class FieldRepeatParametersView extends LinearLayout implements FieldSpin
     @BindView(R.id.lengthView)
     FieldLengthView lengthView;
 
-    // TODO times
+    @BindView(R.id.timesView)
+    FieldTimesView timesView;
+
+    @Nullable
+    private RepeatParameters repeatParameters;
 
     public FieldRepeatParametersView(Context context) {
         super(context);
@@ -66,7 +75,9 @@ public class FieldRepeatParametersView extends LinearLayout implements FieldSpin
     @Override
     public void onSpinnerItemClick(FieldSpinnerView view, Object item) {
         if (view == frequencyView) {
-            frequencyView.setValue((Integer) item);
+            Integer number = (Integer) item;
+            frequencyView.setValue(number);
+            timesView.setNumber(number);
         } else if (view == periodicityView) {
             periodicityView.setValue((Integer) item);
         } else if (view == lengthView) {
@@ -74,6 +85,35 @@ public class FieldRepeatParametersView extends LinearLayout implements FieldSpin
         }
     }
 
-    public interface FieldRepeatParametersListener {
+    public void setRepeatParameters(@Nullable RepeatParameters repeatParameters) {
+        this.repeatParameters = repeatParameters;
+        LinearGroups linearGroups = repeatParameters == null ? null : repeatParameters.getLinearGroups();
+        Integer periodicity = repeatParameters == null ? null : repeatParameters.getPeriodicityInMinutes();
+        Integer length = repeatParameters == null ? null : repeatParameters.getLengthInMinutes();
+        frequencyView.setValue(linearGroups == null ? null : linearGroups.getTimes().size());
+        timesView.setLinearGroups(linearGroups);
+        periodicityView.setValue(periodicity);
+        lengthView.setValue(length);
+    }
+
+    public RepeatParameters getRepeatParameters() {
+        LinearGroups linearGroups = timesView.getLinearGroups();
+        Integer periodicity = periodicityView.getValue();
+        Integer length = lengthView.getValue();
+        RepeatParameters.RepeatParametersBuilder builder = repeatParameters == null
+                ? RepeatParameters.builder() : repeatParameters.toBuilder();
+        return builder
+                .periodicityInMinutes(periodicity)
+                .lengthInMinutes(length)
+                .linearGroups(linearGroups)
+                .build();
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        timesView.setStartTime(startTime);
+    }
+
+    public void setFinishTime(LocalTime finishTime) {
+        timesView.setFinishTime(finishTime);
     }
 }

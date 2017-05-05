@@ -14,9 +14,11 @@ import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
+import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMeasureMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
@@ -62,7 +64,47 @@ public class MedicineTakingDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MedicineTakingMapper::mapToPlainObject));
     }
 
-    public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return DbUtils.insertObservable(dataStore, medicineTaking, MedicineTakingMapper::mapToEntity, MedicineTakingMapper::mapToPlainObject);
+    private RepeatParameters insertRepeatParameters(@NonNull RepeatParameters repeatParameters) {
+        return DbUtils.insert(dataStore, repeatParameters,
+                RepeatParametersMapper::mapToEntity, RepeatParametersMapper::mapToPlainObject);
+    }
+
+    private MedicineTaking insertMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        return DbUtils.insert(dataStore, medicineTaking,
+                MedicineTakingMapper::mapToEntity, MedicineTakingMapper::mapToPlainObject);
+    }
+
+    public Observable<MedicineTaking> add(@NonNull MedicineTaking medicineTaking) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            MedicineTaking object = medicineTaking;
+            RepeatParameters repeatParameters = object.getRepeatParameters();
+            if (repeatParameters != null) {
+                repeatParameters = insertRepeatParameters(repeatParameters);
+                object = object.toBuilder().repeatParameters(repeatParameters).build();
+            }
+            return insertMedicineTaking(object);
+        }));
+    }
+
+    private RepeatParameters updateRepeatParameters(@NonNull RepeatParameters repeatParameters) {
+        return DbUtils.update(dataStore, repeatParameters,
+                RepeatParametersMapper::mapToEntity, RepeatParametersMapper::mapToPlainObject);
+    }
+
+    private MedicineTaking updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        return DbUtils.update(dataStore, medicineTaking,
+                MedicineTakingMapper::mapToEntity, MedicineTakingMapper::mapToPlainObject);
+    }
+
+    public Observable<MedicineTaking> update(@NonNull MedicineTaking medicineTaking) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            MedicineTaking object = medicineTaking;
+            RepeatParameters repeatParameters = object.getRepeatParameters();
+            if (repeatParameters != null) {
+                repeatParameters = updateRepeatParameters(repeatParameters);
+                object = object.toBuilder().repeatParameters(repeatParameters).build();
+            }
+            return updateMedicineTaking(object);
+        }));
     }
 }

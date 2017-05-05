@@ -39,6 +39,11 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
 
     @Override
     public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return dbService.addDoctorVisit(doctorVisit);
+        return dbService.add(doctorVisit);
+    }
+
+    @Override
+    public Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        return dbService.update(doctorVisit);
     }
 }

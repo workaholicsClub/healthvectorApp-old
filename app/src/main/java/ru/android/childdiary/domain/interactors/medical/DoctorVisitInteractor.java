@@ -67,4 +67,8 @@ public class DoctorVisitInteractor implements Interactor {
     public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
         return doctorVisitRepository.addDoctorVisit(doctorVisit);
     }
+
+    public Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        return doctorVisitRepository.updateDoctorVisit(doctorVisit);
+    }
 }
