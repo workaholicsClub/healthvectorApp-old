@@ -83,8 +83,9 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     }
 
     @Override
-    public void navigateToDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        Intent intent = EditDoctorVisitActivity.getIntent(getContext(), doctorVisit);
+    public void navigateToDoctorVisit(@NonNull DoctorVisit doctorVisit,
+                                      @NonNull DoctorVisit defaultDoctorVisit) {
+        Intent intent = EditDoctorVisitActivity.getIntent(getContext(), doctorVisit, defaultDoctorVisit);
         startActivity(intent);
     }
 

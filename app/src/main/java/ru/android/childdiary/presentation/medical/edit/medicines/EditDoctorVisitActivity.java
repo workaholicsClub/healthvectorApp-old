@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -68,9 +69,11 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @NonNull DoctorVisit defaultDoctorVisit) {
+    public static Intent getIntent(Context context, @NonNull DoctorVisit doctorVisit,
+                                   @NonNull DoctorVisit defaultDoctorVisit) {
         Intent intent = new Intent(context, EditDoctorVisitActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_ITEM, defaultDoctorVisit);
+        intent.putExtra(ExtraConstants.EXTRA_ITEM, doctorVisit);
+        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultDoctorVisit);
         return intent;
     }
 
@@ -84,6 +87,12 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         super.onCreate(savedInstanceState);
 
         changeThemeIfNeeded(item.getChild());
+    }
+
+    @Override
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
+        setupToolbarTitle(R.string.edit_doctor_visit_title);
     }
 
     @Override

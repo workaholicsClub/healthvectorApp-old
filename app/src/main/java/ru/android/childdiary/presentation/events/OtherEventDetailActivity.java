@@ -109,7 +109,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                         .title(getString(R.string.notify_time_dialog_title))
                         .build()));
 
-        unsubscribeOnDestroy(presenter.listenForDoneButtonUpdate(otherEventNameView.otherEventNameObservable()));
+        unsubscribeOnDestroy(presenter.listenForDoneButtonUpdate(otherEventNameView.textObservable()));
     }
 
     @Override
@@ -192,7 +192,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     public void validationFailed() {
         if (!isValidationStarted) {
             isValidationStarted = true;
-            unsubscribeOnDestroy(presenter.listenForFieldsUpdate(otherEventNameView.otherEventNameObservable()));
+            unsubscribeOnDestroy(presenter.listenForFieldsUpdate(otherEventNameView.textObservable()));
         }
     }
 

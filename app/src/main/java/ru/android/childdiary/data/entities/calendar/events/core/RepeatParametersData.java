@@ -1,7 +1,5 @@
 package ru.android.childdiary.data.entities.calendar.events.core;
 
-import org.joda.time.DateTime;
-
 import io.requery.Entity;
 import io.requery.Generated;
 import io.requery.Key;
@@ -13,8 +11,6 @@ public interface RepeatParametersData {
     @Key
     @Generated
     Long getId();
-
-    DateTime getDateTimeFrom();
 
     Integer getPeriodicityInMinutes();
 

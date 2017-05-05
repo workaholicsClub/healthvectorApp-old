@@ -144,6 +144,10 @@
     <string name="medicine_measure">Дозировка</string>
     <string name="medicine_measure_format">%1$s %2$s</string>
     <string name="finish">Завершить</string>
+    <string name="add_medicine_taking_title">Добавить рецепт</string>
+    <string name="add_doctor_visit_title">Добавить визит к врачу</string>
+    <string name="edit_medicine_taking_title">Рецепт</string>
+    <string name="edit_doctor_visit_title">Визит к врачу</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

@@ -266,10 +266,9 @@ public class AllEventsMapper {
     public static RepeatParameters mapToRepeatParameters(@NonNull Tuple data) {
         return RepeatParameters.builder()
                 .id(data.get(RepeatParametersEntity.ID.as("repeat_parameters_id")))
-                .dateTimeFrom(data.get(RepeatParametersEntity.DATE_TIME_FROM.as("repeat_parameters_date_time_from")))
+                .linearGroups(data.get(RepeatParametersEntity.LINEAR_GROUPS))
                 .periodicityInMinutes(data.get(RepeatParametersEntity.PERIODICITY_IN_MINUTES))
                 .lengthInMinutes(data.get(RepeatParametersEntity.LENGTH_IN_MINUTES))
-                .linearGroups(data.get(RepeatParametersEntity.LINEAR_GROUPS))
                 .build();
     }
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.entities.calendar.events.core.LinearGroups;
 import ru.android.childdiary.utils.DateUtils;
@@ -24,6 +25,7 @@ public class FieldTimesView extends LinearLayout {
     LinearLayout timesView;
 
     @Nullable
+    @Getter
     private LinearGroups linearGroups;
 
     public FieldTimesView(Context context) {
@@ -61,7 +63,7 @@ public class FieldTimesView extends LinearLayout {
         if (ObjectUtils.isPositive(number)) {
             ArrayList<LocalTime> times = new ArrayList<>();
             for (int i = 0; i < number; ++i) {
-                times.add(LocalTime.MIDNIGHT);
+                times.add(LocalTime.MIDNIGHT.plusHours(i));
             }
             linearGroups = LinearGroups.builder().times(times).build();
         } else {
@@ -73,11 +75,6 @@ public class FieldTimesView extends LinearLayout {
     public void setLinearGroups(@Nullable LinearGroups linearGroups) {
         this.linearGroups = linearGroups;
         update();
-    }
-
-    @Nullable
-    public LinearGroups getLinearGroups() {
-        return linearGroups;
     }
 
     private void update() {

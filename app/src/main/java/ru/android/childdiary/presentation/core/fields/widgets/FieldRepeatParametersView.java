@@ -103,9 +103,9 @@ public class FieldRepeatParametersView extends LinearLayout implements FieldSpin
         RepeatParameters.RepeatParametersBuilder builder = repeatParameters == null
                 ? RepeatParameters.builder() : repeatParameters.toBuilder();
         return builder
+                .linearGroups(linearGroups)
                 .periodicityInMinutes(periodicity)
                 .lengthInMinutes(length)
-                .linearGroups(linearGroups)
                 .build();
     }
 
@@ -115,5 +115,11 @@ public class FieldRepeatParametersView extends LinearLayout implements FieldSpin
 
     public void setFinishTime(LocalTime finishTime) {
         timesView.setFinishTime(finishTime);
+    }
+
+    public boolean dismissPopupWindow() {
+        return frequencyView.dismissPopupWindow()
+                || periodicityView.dismissPopupWindow()
+                || lengthView.dismissPopupWindow();
     }
 }

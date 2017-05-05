@@ -53,6 +53,7 @@ public class MedicineTakingInteractor implements Interactor {
                         .medicine(null)
                         .amount(null)
                         .medicineMeasure(null)
+                        .repeatParameters(null)
                         .dateTime(dateTime)
                         .notifyTimeInMinutes(minutes)
                         .note(null)

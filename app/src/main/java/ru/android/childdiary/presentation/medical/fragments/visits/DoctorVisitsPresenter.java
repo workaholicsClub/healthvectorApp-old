@@ -33,10 +33,6 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
         applicationComponent.inject(this);
     }
 
-    public void requestDoctorVisitDetail(@NonNull DoctorVisit doctorVisit) {
-        getViewState().navigateToDoctorVisit(doctorVisit);
-    }
-
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
@@ -64,6 +60,10 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
     }
 
     public void editDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        getViewState().navigateToDoctorVisit(doctorVisit);
+        unsubscribeOnDestroy(doctorVisitInteractor.getDefaultDoctorVisit()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(defaultDoctorVisit -> getViewState().navigateToDoctorVisit(doctorVisit, defaultDoctorVisit),
+                        this::onUnexpectedError));
     }
 }

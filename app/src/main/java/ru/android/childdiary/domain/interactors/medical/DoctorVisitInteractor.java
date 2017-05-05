@@ -50,6 +50,7 @@ public class DoctorVisitInteractor implements Interactor {
                 (child, dateTime, minutes) -> DoctorVisit.builder()
                         .child(child)
                         .doctor(null)
+                        .repeatParameters(null)
                         .name(null)
                         .durationInMinutes(15)
                         .dateTime(dateTime)

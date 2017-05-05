@@ -1,7 +1,5 @@
 package ru.android.childdiary.domain.interactors.calendar.events.core;
 
-import org.joda.time.DateTime;
-
 import java.io.Serializable;
 
 import lombok.Builder;
@@ -13,11 +11,9 @@ import ru.android.childdiary.data.entities.calendar.events.core.LinearGroups;
 public class RepeatParameters implements Serializable {
     Long id;
 
-    DateTime dateTimeFrom;
+    LinearGroups linearGroups;
 
     Integer periodicityInMinutes;
 
     Integer lengthInMinutes;
-
-    LinearGroups linearGroups;
 }

@@ -33,10 +33,6 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
         applicationComponent.inject(this);
     }
 
-    public void requestMedicineDetail(@NonNull MedicineTaking medicineTaking) {
-        getViewState().navigateToMedicineTaking(medicineTaking);
-    }
-
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
@@ -64,6 +60,10 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
     }
 
     public void editMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        getViewState().navigateToMedicineTaking(medicineTaking);
+        unsubscribeOnDestroy(medicineTakingInteractor.getDefaultMedicineTaking()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(defaultMedicineTaking -> getViewState().navigateToMedicineTaking(medicineTaking, defaultMedicineTaking),
+                        this::onUnexpectedError));
     }
 }

@@ -127,10 +127,9 @@ public class CalendarDbService {
                 MasterEventEntity.LINEAR_GROUP,
                 // repeat parameters
                 RepeatParametersEntity.ID.as("repeat_parameters_id"),
-                RepeatParametersEntity.DATE_TIME_FROM.as("repeat_parameters_date_time_from"),
+                RepeatParametersEntity.LINEAR_GROUPS,
                 RepeatParametersEntity.PERIODICITY_IN_MINUTES,
                 RepeatParametersEntity.LENGTH_IN_MINUTES,
-                RepeatParametersEntity.LINEAR_GROUPS,
                 // child
                 ChildEntity.ID.as("child_id"),
                 ChildEntity.NAME.as("child_name"),

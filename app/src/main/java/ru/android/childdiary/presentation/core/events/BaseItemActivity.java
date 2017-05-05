@@ -230,6 +230,11 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @Override
     public void onBackPressed() {
+        boolean processed = getRepeatParametersView().dismissPopupWindow();
+        if (processed) {
+            return;
+        }
+
         saveChangesOrExit();
     }
 

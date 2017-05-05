@@ -47,7 +47,7 @@ public class DoctorVisitDbService {
         Child child = request.getChild();
         return dataStore.select(DoctorVisitEntity.class)
                 .where(DoctorVisitEntity.CHILD_ID.eq(child.getId()))
-                .orderBy(DoctorVisitEntity.ID)
+                .orderBy(DoctorVisitEntity.DATE_TIME, DoctorVisitEntity.DOCTOR_ID, DoctorVisitEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, DoctorVisitMapper::mapToPlainObject));
@@ -90,7 +90,11 @@ public class DoctorVisitDbService {
             DoctorVisit object = doctorVisit;
             RepeatParameters repeatParameters = object.getRepeatParameters();
             if (repeatParameters != null) {
-                repeatParameters = updateRepeatParameters(repeatParameters);
+                if (repeatParameters.getId() == null) {
+                    repeatParameters = insertRepeatParameters(repeatParameters);
+                } else {
+                    repeatParameters = updateRepeatParameters(repeatParameters);
+                }
                 object = object.toBuilder().repeatParameters(repeatParameters).build();
             }
             return updateDoctorVisit(object);

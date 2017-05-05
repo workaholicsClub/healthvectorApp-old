@@ -11,10 +11,9 @@ public class RepeatParametersMapper {
     public static RepeatParameters mapToPlainObject(@NonNull RepeatParametersData repeatParametersData) {
         return RepeatParameters.builder()
                 .id(repeatParametersData.getId())
-                .dateTimeFrom(repeatParametersData.getDateTimeFrom())
+                .linearGroups(repeatParametersData.getLinearGroups())
                 .periodicityInMinutes(repeatParametersData.getPeriodicityInMinutes())
                 .lengthInMinutes(repeatParametersData.getLengthInMinutes())
-                .linearGroups(repeatParametersData.getLinearGroups())
                 .build();
     }
 
@@ -30,9 +29,8 @@ public class RepeatParametersMapper {
     }
 
     private static void fillNonReferencedFields(@NonNull RepeatParametersEntity to, @NonNull RepeatParameters from) {
-        to.setDateTimeFrom(from.getDateTimeFrom());
+        to.setLinearGroups(from.getLinearGroups());
         to.setPeriodicityInMinutes(from.getPeriodicityInMinutes());
         to.setLengthInMinutes(from.getLengthInMinutes());
-        to.setLinearGroups(from.getLinearGroups());
     }
 }

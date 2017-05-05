@@ -83,8 +83,9 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     }
 
     @Override
-    public void navigateToMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        Intent intent = EditMedicineTakingActivity.getIntent(getContext(), medicineTaking);
+    public void navigateToMedicineTaking(@NonNull MedicineTaking medicineTaking,
+                                         @NonNull MedicineTaking defaultMedicineTaking) {
+        Intent intent = EditMedicineTakingActivity.getIntent(getContext(), medicineTaking, defaultMedicineTaking);
         startActivity(intent);
     }
 
