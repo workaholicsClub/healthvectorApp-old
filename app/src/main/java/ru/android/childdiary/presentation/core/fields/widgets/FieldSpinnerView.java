@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ListPopupWindow;
@@ -18,14 +19,15 @@ import android.widget.TextView;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.utils.ui.FontUtils;
 
-public abstract class FieldSpinnerView<T> extends LinearLayout implements
-        AdapterView.OnItemClickListener,
-        PopupWindow.OnDismissListener {
+public abstract class FieldSpinnerView<T> extends LinearLayout implements View.OnClickListener,
+        AdapterView.OnItemClickListener, PopupWindow.OnDismissListener, FieldReadOnly {
+    private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
+
     @BindView(R.id.textViewWrapper)
     View textViewWrapper;
 
@@ -68,6 +70,7 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        setReadOnly(false);
     }
 
     public void setValue(T value) {
@@ -90,22 +93,24 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements
         return false;
     }
 
-    @OnClick(R.id.textViewWrapper)
-    void onClick(View view) {
-        dismissPopupWindow();
-        View anchor = view;
-        int width = spinnerItemWidth;
-        int gravity = Gravity.END;
+    @Override
+    public void onClick(View v) {
+        if (v == textViewWrapper) {
+            dismissPopupWindow();
+            View anchor = v;
+            int width = spinnerItemWidth;
+            int gravity = Gravity.END;
 
-        popupWindow = new android.support.v7.widget.ListPopupWindow(getContext(), null, R.attr.actionOverflowMenuStyle, R.style.OverflowMenu);
-        popupWindow.setWidth(width);
-        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setAdapter(getAdapter());
-        popupWindow.setAnchorView(anchor);
-        popupWindow.setDropDownGravity(gravity);
-        popupWindow.setOnItemClickListener(this);
-        popupWindow.setOnDismissListener(this);
-        popupWindow.show();
+            popupWindow = new android.support.v7.widget.ListPopupWindow(getContext(), null, R.attr.actionOverflowMenuStyle, R.style.OverflowMenu);
+            popupWindow.setWidth(width);
+            popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+            popupWindow.setAdapter(getAdapter());
+            popupWindow.setAnchorView(anchor);
+            popupWindow.setDropDownGravity(gravity);
+            popupWindow.setOnItemClickListener(this);
+            popupWindow.setOnDismissListener(this);
+            popupWindow.show();
+        }
     }
 
     @Override
@@ -121,6 +126,16 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements
     @Override
     public void onDismiss() {
         dismissPopupWindow();
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        //noinspection deprecation
+        textView.setTextAppearance(getContext(), readOnly ? R.style.SecondaryTextAppearance : R.style.PrimaryTextAppearance);
+        textView.setTypeface(typeface);
+        imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
+        textViewWrapper.setOnClickListener(readOnly ? null : this);
+        textViewWrapper.setClickable(!readOnly);
     }
 
     @LayoutRes

@@ -176,6 +176,8 @@ public class CalendarDbService {
                 DoctorVisitEntity.NAME.as("doctor_visit_name"),
                 DoctorVisitEntity.DURATION_IN_MINUTES.as("doctor_visit_duration_in_minutes"),
                 DoctorVisitEntity.DATE_TIME.as("doctor_visit_date_time"),
+                DoctorVisitEntity.FINISH_DATE_TIME.as("doctor_visit_finish_date_time"),
+                DoctorVisitEntity.EXPORTED.as("doctor_visit_exported"),
                 DoctorVisitEntity.NOTIFY_TIME_IN_MINUTES.as("doctor_visit_notify_time_in_minutes"),
                 DoctorVisitEntity.NOTE.as("doctor_visit_note"),
                 DoctorVisitEntity.IMAGE_FILE_NAME.as("doctor_visit_image_file_name"),
@@ -187,6 +189,8 @@ public class CalendarDbService {
                 // medicine taking
                 MedicineTakingEntity.ID.as("medicine_taking_id"),
                 MedicineTakingEntity.DATE_TIME.as("medicine_taking_date_time"),
+                MedicineTakingEntity.FINISH_DATE_TIME.as("medicine_taking_finish_date_time"),
+                MedicineTakingEntity.EXPORTED.as("medicine_taking_exported"),
                 MedicineTakingEntity.NOTIFY_TIME_IN_MINUTES.as("medicine_taking_notify_time_in_minutes"),
                 MedicineTakingEntity.NOTE.as("medicine_taking_note"),
                 MedicineTakingEntity.IMAGE_FILE_NAME.as("medicine_taking_image_file_name"),

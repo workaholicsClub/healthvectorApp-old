@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.presentation.core.swipe.FabController;
-import ru.android.childdiary.presentation.core.swipe.SwipeListAdapter;
+import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
+import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.utils.ObjectUtils;
 
-public class DoctorVisitAdapter extends SwipeListAdapter<
-        DoctorVisitViewHolder,
+public class DoctorVisitAdapter extends SwipeViewAdapter<
         DoctorVisit,
+        DoctorVisitViewHolder,
         DoctorVisitSwipeActionListener,
         DoctorVisitActionListener> implements DoctorVisitSwipeActionListener {
     public DoctorVisitAdapter(Context context,

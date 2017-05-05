@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.events;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -26,18 +27,24 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
+import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerActivity;
+import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerActivity;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.TimeUtils;
 
@@ -49,6 +56,8 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
+    private static final int REQUEST_DOCTOR = 1;
+    private static final int REQUEST_MEDICINE = 2;
 
     @BindView(R.id.rootView)
     View rootView;
@@ -89,6 +98,28 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                             .showMinutes(true)
                             .title(getString(R.string.duration))
                             .build()));
+        }
+        if (getDoctorView() != null) {
+            getDoctorView().setFieldDialogListener(view ->
+                    startActivityForResult(new Intent(this, DoctorPickerActivity.class)
+                            .putExtra(ExtraConstants.EXTRA_SEX, getSex()), REQUEST_DOCTOR));
+        }
+        if (getMedicineView() != null) {
+            getMedicineView().setFieldDialogListener(view ->
+                    startActivityForResult(new Intent(this, MedicinePickerActivity.class)
+                            .putExtra(ExtraConstants.EXTRA_SEX, getSex()), REQUEST_DOCTOR));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_DOCTOR && getDoctorView() != null && data != null) {
+            Doctor doctor = (Doctor) data.getSerializableExtra(ExtraConstants.EXTRA_DOCTOR);
+            getDoctorView().setValue(doctor);
+        } else if (requestCode == REQUEST_MEDICINE && getMedicineView() != null && data != null) {
+            Medicine medicine = (Medicine) data.getSerializableExtra(ExtraConstants.EXTRA_MEDICINE);
+            getMedicineView().setValue(medicine);
         }
     }
 
@@ -277,4 +308,10 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     protected abstract FieldRepeatParametersView getRepeatParametersView();
 
     protected abstract List<FieldEditTextView> getEditTextViews();
+
+    @Nullable
+    protected abstract FieldDoctorView getDoctorView();
+
+    @Nullable
+    protected abstract FieldMedicineView getMedicineView();
 }

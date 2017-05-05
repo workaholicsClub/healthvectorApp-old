@@ -27,6 +27,7 @@ import ru.android.childdiary.presentation.core.events.BaseEditItemActivity;
 import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
@@ -115,8 +116,18 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         medicineMeasureView.setValue(item.getMedicineMeasure());
         repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
+
+        boolean exported = ObjectUtils.isTrue(item.getExported());
+        checkBoxView.setChecked(exported);
+        if (exported) {
+            checkBoxView.setVisibility(View.GONE);
+            dateView.setReadOnly(true);
+            timeView.setReadOnly(true);
+            repeatParametersView.setReadOnly(true);
+        }
+
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
-        boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
+        boolean notifyTimeViewVisible = ObjectUtils.isPositive(defaultItem.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(item.getNote());
         // TODO image file name
@@ -129,6 +140,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         MedicineMeasure medicineMeasure = medicineMeasureView.getValue();
         RepeatParameters repeatParameters = repeatParametersView.getRepeatParameters();
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
+        boolean exported = checkBoxView.isChecked();
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
         String imageFileName = null;
@@ -139,6 +151,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
                 .medicineMeasure(medicineMeasure)
                 .repeatParameters(repeatParameters)
                 .dateTime(dateTime)
+                .exported(exported)
                 .notifyTimeInMinutes(minutes)
                 .note(note)
                 .imageFileName(imageFileName)
@@ -147,7 +160,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
 
     @Override
     protected boolean contentEquals(MedicineTaking item1, MedicineTaking item2) {
-        return false;
+        return ObjectUtils.contentEquals(item1, item2);
     }
 
     @Override
@@ -184,5 +197,17 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
     @Override
     protected List<FieldEditTextView> getEditTextViews() {
         return Collections.singletonList(noteWithPhotoView);
+    }
+
+    @Nullable
+    @Override
+    public FieldDoctorView getDoctorView() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    protected FieldMedicineView getMedicineView() {
+        return medicineView;
     }
 }

@@ -34,6 +34,8 @@ public class DoctorVisitMapper {
                 .name(doctorVisitData.getName())
                 .durationInMinutes(doctorVisitData.getDurationInMinutes())
                 .dateTime(doctorVisitData.getDateTime())
+                .finishDateTime(doctorVisitData.getFinishDateTime())
+                .exported(doctorVisitData.getExported())
                 .notifyTimeInMinutes(doctorVisitData.getNotifyTimeInMinutes())
                 .note(doctorVisitData.getNote())
                 .imageFileName(doctorVisitData.getImageFileName())
@@ -71,6 +73,8 @@ public class DoctorVisitMapper {
         to.setName(from.getName());
         to.setDurationInMinutes(from.getDurationInMinutes());
         to.setDateTime(from.getDateTime());
+        to.setFinishDateTime(from.getFinishDateTime());
+        to.setExported(from.getExported());
         to.setNotifyTimeInMinutes(from.getNotifyTimeInMinutes());
         to.setNote(from.getNote());
         to.setImageFileName(from.getImageFileName());

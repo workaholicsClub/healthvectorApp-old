@@ -26,8 +26,8 @@ import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
-import ru.android.childdiary.presentation.core.swipe.FabController;
-import ru.android.childdiary.presentation.core.swipe.SwipeListAdapter;
+import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
+import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.medical.add.medicines.AddDoctorVisitActivity;
 import ru.android.childdiary.presentation.medical.add.visits.AddMedicineTakingActivity;
 import ru.android.childdiary.presentation.medical.fragments.medicines.MedicineTakingListFragment;
@@ -92,7 +92,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
             @Override
             public void onPageSelected(int position) {
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
-                SwipeListAdapter adapter = getSwipeListAdapter(position);
+                SwipeViewAdapter adapter = getSwipeListAdapter(position);
                 if (adapter != null) {
                     adapter.getSwipeManager().update();
                 } else {
@@ -171,9 +171,9 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     }
 
     @Nullable
-    private SwipeListAdapter getSwipeListAdapter(int position) {
+    private SwipeViewAdapter getSwipeListAdapter(int position) {
         Fragment fragment = viewPagerAdapter.getItem(position);
-        SwipeListAdapter adapter = null;
+        SwipeViewAdapter adapter = null;
         if (fragment instanceof DoctorVisitsFragment) {
             adapter = ((DoctorVisitsFragment) fragment).getAdapter();
         } else if (fragment instanceof MedicineTakingListFragment) {

@@ -27,6 +27,10 @@ public class DoctorVisit implements Serializable {
 
     DateTime dateTime;
 
+    DateTime finishDateTime;
+
+    Boolean exported;
+
     Integer notifyTimeInMinutes;
 
     String note;

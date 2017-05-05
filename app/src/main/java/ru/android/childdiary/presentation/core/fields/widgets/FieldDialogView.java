@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -11,12 +12,14 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.utils.ui.FontUtils;
 
-public abstract class FieldDialogView<T> extends LinearLayout {
+public abstract class FieldDialogView<T> extends LinearLayout implements View.OnClickListener, FieldReadOnly {
+    private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
+
     @BindView(R.id.textViewWrapper)
     View textViewWrapper;
 
@@ -56,6 +59,7 @@ public abstract class FieldDialogView<T> extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        setReadOnly(false);
     }
 
     public void setValue(@Nullable T value) {
@@ -63,11 +67,23 @@ public abstract class FieldDialogView<T> extends LinearLayout {
         textView.setText(getTextForValue(value));
     }
 
-    @OnClick(R.id.textViewWrapper)
-    void onClick() {
-        if (fieldDialogListener != null) {
-            fieldDialogListener.requestValueChange(this);
+    @Override
+    public void onClick(View v) {
+        if (v == textViewWrapper) {
+            if (fieldDialogListener != null) {
+                fieldDialogListener.requestValueChange(this);
+            }
         }
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        //noinspection deprecation
+        textView.setTextAppearance(getContext(), readOnly ? R.style.SecondaryTextAppearance : R.style.PrimaryTextAppearance);
+        textView.setTypeface(typeface);
+        imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
+        textViewWrapper.setOnClickListener(readOnly ? null : this);
+        textViewWrapper.setClickable(!readOnly);
     }
 
     @LayoutRes

@@ -148,6 +148,10 @@
     <string name="add_doctor_visit_title">Добавить визит к врачу</string>
     <string name="edit_medicine_taking_title">Рецепт</string>
     <string name="edit_doctor_visit_title">Визит к врачу</string>
+    <string name="add_medicine_title">Добавить лекарство</string>
+    <string name="medicines_title">Список лекарств</string>
+    <string name="add_doctor_title">Добавить специализацию</string>
+    <string name="doctors_title">Список специализаций</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
@@ -251,7 +255,6 @@
         <item>Перинатолог</item>
         <item>Сурдопедагог</item>
         <item>Фтизиопедиатр</item>
-        <item>Хирург</item>
     </string-array>
     <string-array name="medicine">
         <item>Активированный уголь</item>

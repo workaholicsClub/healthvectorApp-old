@@ -18,7 +18,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
-import ru.android.childdiary.presentation.core.swipe.FabController;
+import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitActionListener;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitAdapter;
 import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitActivity;

@@ -81,6 +81,13 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ConfigUtils.setupOrientation(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
+        if (savedInstanceState == null) {
+            sex = (Sex) getIntent().getSerializableExtra(ExtraConstants.EXTRA_SEX);
+            if (sex == null) {
+                Child child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
+                sex = child == null ? null : child.getSex();
+            }
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

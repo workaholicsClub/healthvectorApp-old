@@ -8,7 +8,6 @@
     <include layout="@layout/request_focus_view_white" />
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

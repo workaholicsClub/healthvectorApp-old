@@ -39,6 +39,8 @@ public class MedicineTakingMapper {
                 .medicineMeasure(medicineMeasure)
                 .repeatParameters(repeatParameters)
                 .dateTime(medicineTakingData.getDateTime())
+                .finishDateTime(medicineTakingData.getFinishDateTime())
+                .exported(medicineTakingData.getExported())
                 .notifyTimeInMinutes(medicineTakingData.getNotifyTimeInMinutes())
                 .note(medicineTakingData.getNote())
                 .imageFileName(medicineTakingData.getImageFileName())
@@ -80,6 +82,8 @@ public class MedicineTakingMapper {
     private static void fillNonReferencedFields(@NonNull MedicineTakingEntity to, @NonNull MedicineTaking from) {
         to.setAmount(from.getAmount());
         to.setDateTime(from.getDateTime());
+        to.setFinishDateTime(from.getFinishDateTime());
+        to.setExported(from.getExported());
         to.setNotifyTimeInMinutes(from.getNotifyTimeInMinutes());
         to.setNote(from.getNote());
         to.setImageFileName(from.getImageFileName());

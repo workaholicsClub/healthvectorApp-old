@@ -11,8 +11,8 @@ import ru.android.childdiary.presentation.calendar.fragments.BaseCalendarPresent
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
-import ru.android.childdiary.presentation.events.FeedEventDetailPresenter;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.FeedEventDetailPresenter;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailPresenter;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
@@ -35,6 +35,14 @@ import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTaking
 import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingPresenter;
 import ru.android.childdiary.presentation.medical.fragments.medicines.MedicineTakingListPresenter;
 import ru.android.childdiary.presentation.medical.fragments.visits.DoctorVisitsPresenter;
+import ru.android.childdiary.presentation.medical.pickers.medicines.MedicineAddActivity;
+import ru.android.childdiary.presentation.medical.pickers.medicines.MedicineAddPresenter;
+import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerActivity;
+import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerPresenter;
+import ru.android.childdiary.presentation.medical.pickers.visits.DoctorAddActivity;
+import ru.android.childdiary.presentation.medical.pickers.visits.DoctorAddPresenter;
+import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerActivity;
+import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerPresenter;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditPresenter;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
@@ -89,6 +97,14 @@ public interface ApplicationComponent {
 
     void inject(EditMedicineTakingPresenter presenter);
 
+    void inject(DoctorPickerPresenter presenter);
+
+    void inject(DoctorAddPresenter presenter);
+
+    void inject(MedicinePickerPresenter presenter);
+
+    void inject(MedicineAddPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -115,6 +131,14 @@ public interface ApplicationComponent {
     void inject(EditDoctorVisitActivity activity);
 
     void inject(EditMedicineTakingActivity activity);
+
+    void inject(DoctorPickerActivity activity);
+
+    void inject(DoctorAddActivity activity);
+
+    void inject(MedicinePickerActivity activity);
+
+    void inject(MedicineAddActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

@@ -1,9 +1,11 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -21,6 +23,9 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
 public abstract class FieldNameView extends FieldEditTextView {
+    @BindView(R.id.imageView)
+    ImageView imageView;
+
     @BindView(R.id.editText)
     CustomEditText editText;
 
@@ -43,13 +48,15 @@ public abstract class FieldNameView extends FieldEditTextView {
     }
 
     private void init() {
-        inflate(getContext(), getLayoutResourceId(), this);
+        inflate(getContext(), R.layout.field_name, this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        imageView.setImageResource(getIconResId());
+        editText.setHint(getHintResId());
     }
 
     public String getText() {
@@ -90,6 +97,9 @@ public abstract class FieldNameView extends FieldEditTextView {
         editText.setPadding(0, 0, 0, editTextBottomPadding);
     }
 
-    @LayoutRes
-    protected abstract int getLayoutResourceId();
+    @DrawableRes
+    protected abstract int getIconResId();
+
+    @StringRes
+    protected abstract int getHintResId();
 }

@@ -35,7 +35,7 @@ import ru.android.childdiary.presentation.calendar.adapters.calendar.CalendarVie
 import ru.android.childdiary.presentation.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
-import ru.android.childdiary.presentation.core.swipe.FabController;
+import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;

@@ -30,6 +30,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
@@ -110,6 +111,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         doctorVisitNameView.setText(item.getName());
         durationView.setValue(item.getDurationInMinutes());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
+        checkBoxView.setChecked(ObjectUtils.isTrue(item.getExported()));
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
@@ -124,6 +126,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         String doctorVisitName = doctorVisitNameView.getText();
         Integer duration = durationView.getValue();
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
+        boolean exported = checkBoxView.isChecked();
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
         String imageFileName = null;
@@ -134,6 +137,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
                 .name(doctorVisitName)
                 .durationInMinutes(duration)
                 .dateTime(dateTime)
+                .exported(exported)
                 .notifyTimeInMinutes(minutes)
                 .note(note)
                 .imageFileName(imageFileName)
@@ -142,7 +146,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
 
     @Override
     protected boolean contentEquals(DoctorVisit item1, DoctorVisit item2) {
-        return false;
+        return ObjectUtils.contentEquals(item1, item2);
     }
 
     @Override
@@ -179,5 +183,17 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     @Override
     protected List<FieldEditTextView> getEditTextViews() {
         return Arrays.asList(doctorVisitNameView, noteWithPhotoView);
+    }
+
+    @Nullable
+    @Override
+    public FieldDoctorView getDoctorView() {
+        return doctorView;
+    }
+
+    @Nullable
+    @Override
+    protected FieldMedicineView getMedicineView() {
+        return null;
     }
 }

@@ -5,13 +5,17 @@ import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
+import ru.android.childdiary.data.entities.calendar.events.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 
 public class ObjectUtils {
     public static boolean equals(@Nullable Object o1, @Nullable Object o2) {
@@ -26,12 +30,16 @@ public class ObjectUtils {
         return isEmpty(s1) ? isEmpty(s2) : s1.equals(s2);
     }
 
-    public static boolean isPositive(Integer number) {
+    public static boolean isPositive(@Nullable Integer number) {
         return number != null && number > 0;
     }
 
-    public static boolean isPositive(Double number) {
+    public static boolean isPositive(@Nullable Double number) {
         return number != null && number > 0;
+    }
+
+    public static boolean isTrue(@Nullable Boolean value) {
+        return value != null && value;
     }
 
     public static boolean isEmpty(@NonNull Child child) {
@@ -48,7 +56,7 @@ public class ObjectUtils {
                 && equals(child1.getBirthWeight(), child2.getBirthWeight());
     }
 
-    private static boolean equals(@Nullable DateTime dateTime1, @Nullable DateTime dateTime2) {
+    private static boolean equalsToMinutes(@Nullable DateTime dateTime1, @Nullable DateTime dateTime2) {
         if (dateTime1 == null) {
             return dateTime2 == null;
         }
@@ -61,7 +69,7 @@ public class ObjectUtils {
     }
 
     public static boolean contentEquals(@NonNull MasterEvent event1, @NonNull MasterEvent event2) {
-        return equals(event1.getDateTime(), event2.getDateTime())
+        return equalsToMinutes(event1.getDateTime(), event2.getDateTime())
                 && equals(event1.getNotifyTimeInMinutes(), event2.getNotifyTimeInMinutes())
                 && contentEquals(event1.getNote(), event2.getNote());
     }
@@ -98,7 +106,7 @@ public class ObjectUtils {
     public static boolean contentEquals(@NonNull OtherEvent event1, @NonNull OtherEvent event2) {
         return contentEquals(event1.getMasterEvent(), event2.getMasterEvent())
                 && contentEquals(event1.getName(), event2.getName())
-                && equals(event1.getFinishDateTime(), event2.getFinishDateTime());
+                && equalsToMinutes(event1.getFinishDateTime(), event2.getFinishDateTime());
     }
 
     public static boolean contentEquals(@NonNull PumpEvent event1, @NonNull PumpEvent event2) {
@@ -110,6 +118,54 @@ public class ObjectUtils {
 
     public static boolean contentEquals(@NonNull SleepEvent event1, @NonNull SleepEvent event2) {
         return contentEquals(event1.getMasterEvent(), event2.getMasterEvent())
-                && equals(event1.getFinishDateTime(), event2.getFinishDateTime());
+                && equalsToMinutes(event1.getFinishDateTime(), event2.getFinishDateTime());
+    }
+
+    public static boolean contentEquals(@NonNull DoctorVisit doctorVisit1, @NonNull DoctorVisit doctorVisit2) {
+        return equals(doctorVisit1.getDoctor(), doctorVisit2.getDoctor())
+                && contentEquals(doctorVisit1.getRepeatParameters(), doctorVisit2.getRepeatParameters())
+                && contentEquals(doctorVisit1.getName(), doctorVisit2.getName())
+                && equals(doctorVisit1.getDurationInMinutes(), doctorVisit2.getDurationInMinutes())
+                && equalsToMinutes(doctorVisit1.getDateTime(), doctorVisit2.getDateTime())
+                && equalsToMinutes(doctorVisit1.getFinishDateTime(), doctorVisit2.getFinishDateTime())
+                && isTrue(doctorVisit1.getExported()) == isTrue(doctorVisit2.getExported())
+                && equals(doctorVisit1.getNotifyTimeInMinutes(), doctorVisit2.getNotifyTimeInMinutes())
+                && contentEquals(doctorVisit1.getNote(), doctorVisit2.getNote())
+                && contentEquals(doctorVisit1.getImageFileName(), doctorVisit2.getImageFileName());
+    }
+
+    public static boolean contentEquals(@NonNull MedicineTaking medicineTaking1, @NonNull MedicineTaking medicineTaking2) {
+        return equals(medicineTaking1.getMedicine(), medicineTaking2.getMedicine())
+                && equals(medicineTaking1.getAmount(), medicineTaking2.getAmount())
+                && equals(medicineTaking1.getMedicineMeasure(), medicineTaking2.getMedicineMeasure())
+                && contentEquals(medicineTaking1.getRepeatParameters(), medicineTaking2.getRepeatParameters())
+                && equalsToMinutes(medicineTaking1.getDateTime(), medicineTaking2.getDateTime())
+                && equalsToMinutes(medicineTaking1.getFinishDateTime(), medicineTaking2.getFinishDateTime())
+                && isTrue(medicineTaking1.getExported()) == isTrue(medicineTaking2.getExported())
+                && equals(medicineTaking1.getNotifyTimeInMinutes(), medicineTaking2.getNotifyTimeInMinutes())
+                && contentEquals(medicineTaking1.getNote(), medicineTaking2.getNote())
+                && contentEquals(medicineTaking1.getImageFileName(), medicineTaking2.getImageFileName());
+    }
+
+    public static boolean contentEquals(@Nullable RepeatParameters repeatParameters1, @Nullable RepeatParameters repeatParameters2) {
+        if (repeatParameters1 == null) {
+            return repeatParameters2 == null || repeatParameters2.isContentEmpty();
+        }
+        if (repeatParameters2 == null) {
+            return repeatParameters1.isContentEmpty();
+        }
+        return contentEquals(repeatParameters1.getLinearGroups(), repeatParameters2.getLinearGroups())
+                && ObjectUtils.equals(repeatParameters1.getPeriodicityInMinutes(), repeatParameters2.getPeriodicityInMinutes())
+                && ObjectUtils.equals(repeatParameters1.getLengthInMinutes(), repeatParameters2.getLengthInMinutes());
+    }
+
+    public static boolean contentEquals(@Nullable LinearGroups linearGroups1, @Nullable LinearGroups linearGroups2) {
+        if (linearGroups1 == null) {
+            return linearGroups2 == null || linearGroups2.getTimes().isEmpty();
+        }
+        if (linearGroups2 == null) {
+            return linearGroups1.getTimes().isEmpty();
+        }
+        return linearGroups1.getTimes().equals(linearGroups2.getTimes());
     }
 }

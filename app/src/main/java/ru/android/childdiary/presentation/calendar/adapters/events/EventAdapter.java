@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.presentation.core.swipe.FabController;
-import ru.android.childdiary.presentation.core.swipe.SwipeListAdapter;
+import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
+import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.utils.EventHelper;
 
-public class EventAdapter extends SwipeListAdapter<
-        EventViewHolder,
+public class EventAdapter extends SwipeViewAdapter<
         MasterEvent,
+        EventViewHolder,
         EventSwipeActionListener,
         EventActionListener>
         implements EventSwipeActionListener {

@@ -31,7 +31,7 @@ public class EventHelper {
     }
 
     public static boolean isDone(@NonNull MasterEvent event) {
-        return event.getIsDone() != null && event.getIsDone();
+        return ObjectUtils.isTrue(event.getIsDone());
     }
 
     public static boolean isExpired(@NonNull MasterEvent event) {
@@ -40,7 +40,7 @@ public class EventHelper {
     }
 
     public static boolean isTimerStarted(@Nullable SleepEvent event) {
-        return event != null && event.getIsTimerStarted() != null && event.getIsTimerStarted();
+        return event != null && ObjectUtils.isTrue(event.getIsTimerStarted());
     }
 
     public static String getDescription(Context context, @NonNull MasterEvent event) {

@@ -20,7 +20,7 @@ import ru.android.childdiary.data.entities.calendar.events.core.LinearGroups;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 
-public class FieldTimesView extends LinearLayout {
+public class FieldTimesView extends LinearLayout implements FieldReadOnly {
     @BindView(R.id.timesView)
     LinearLayout timesView;
 
@@ -90,5 +90,10 @@ public class FieldTimesView extends LinearLayout {
             textView.setLayoutParams(layoutParams);
             timesView.addView(textView);
         }
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        // TODO not clickable, font, etc.
     }
 }

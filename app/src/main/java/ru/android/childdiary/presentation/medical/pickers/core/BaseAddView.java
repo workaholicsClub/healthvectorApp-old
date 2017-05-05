@@ -1,4 +1,6 @@
 package ru.android.childdiary.presentation.medical.pickers.core;
 
-public class BaseAddView {
+import ru.android.childdiary.presentation.core.BaseView;
+
+public interface BaseAddView<T> extends BaseView {
 }

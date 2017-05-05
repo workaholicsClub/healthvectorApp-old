@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
@@ -20,8 +19,12 @@ public class FieldDoctorVisitNameView extends FieldNameView {
     }
 
     @Override
-    @LayoutRes
-    protected int getLayoutResourceId() {
-        return R.layout.field_doctor_visit_name;
+    protected int getIconResId() {
+        return R.drawable.ic_other_event_name;
+    }
+
+    @Override
+    protected int getHintResId() {
+        return R.string.doctor_visit_title_hint;
     }
 }

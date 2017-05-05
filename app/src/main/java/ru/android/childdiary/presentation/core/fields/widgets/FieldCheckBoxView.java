@@ -20,7 +20,7 @@ import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FieldCheckBoxView extends LinearLayout implements View.OnClickListener {
-    private Typeface typeface = FontUtils.getTypefaceRegular(getContext());
+    private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
     private Sex sex;
     @Getter
     private boolean checked;

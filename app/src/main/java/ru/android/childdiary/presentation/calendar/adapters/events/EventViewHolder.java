@@ -19,7 +19,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.presentation.core.swipe.SwipeViewHolder;
+import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.StringUtils;

@@ -15,7 +15,8 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.entities.calendar.events.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 
-public class FieldRepeatParametersView extends LinearLayout implements FieldSpinnerView.FieldSpinnerListener {
+public class FieldRepeatParametersView extends LinearLayout
+        implements FieldSpinnerView.FieldSpinnerListener, FieldReadOnly {
     @BindView(R.id.frequencyView)
     FieldFrequencyView frequencyView;
 
@@ -121,5 +122,13 @@ public class FieldRepeatParametersView extends LinearLayout implements FieldSpin
         return frequencyView.dismissPopupWindow()
                 || periodicityView.dismissPopupWindow()
                 || lengthView.dismissPopupWindow();
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        frequencyView.setReadOnly(readOnly);
+        timesView.setReadOnly(readOnly);
+        periodicityView.setReadOnly(readOnly);
+        lengthView.setReadOnly(readOnly);
     }
 }

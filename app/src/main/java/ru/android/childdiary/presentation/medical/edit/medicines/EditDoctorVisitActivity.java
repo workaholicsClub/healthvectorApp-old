@@ -30,6 +30,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
@@ -112,8 +113,18 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         doctorVisitNameView.setText(item.getName());
         durationView.setValue(item.getDurationInMinutes());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
+
+        boolean exported = ObjectUtils.isTrue(item.getExported());
+        checkBoxView.setChecked(exported);
+        if (exported) {
+            checkBoxView.setVisibility(View.GONE);
+            dateView.setReadOnly(true);
+            timeView.setReadOnly(true);
+            repeatParametersView.setReadOnly(true);
+        }
+
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
-        boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
+        boolean notifyTimeViewVisible = ObjectUtils.isPositive(defaultItem.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(item.getNote());
         // TODO image file name
@@ -126,6 +137,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         String doctorVisitName = doctorVisitNameView.getText();
         Integer duration = durationView.getValue();
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
+        boolean exported = checkBoxView.isChecked();
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
         String imageFileName = null;
@@ -136,6 +148,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
                 .name(doctorVisitName)
                 .durationInMinutes(duration)
                 .dateTime(dateTime)
+                .exported(exported)
                 .notifyTimeInMinutes(minutes)
                 .note(note)
                 .imageFileName(imageFileName)
@@ -144,7 +157,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
 
     @Override
     protected boolean contentEquals(DoctorVisit item1, DoctorVisit item2) {
-        return false;
+        return ObjectUtils.contentEquals(item1, item2);
     }
 
     @Override
@@ -181,5 +194,17 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     @Override
     protected List<FieldEditTextView> getEditTextViews() {
         return Arrays.asList(doctorVisitNameView, noteWithPhotoView);
+    }
+
+    @Nullable
+    @Override
+    public FieldDoctorView getDoctorView() {
+        return doctorView;
+    }
+
+    @Nullable
+    @Override
+    protected FieldMedicineView getMedicineView() {
+        return null;
     }
 }

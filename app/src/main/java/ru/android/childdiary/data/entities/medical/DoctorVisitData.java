@@ -39,6 +39,10 @@ public interface DoctorVisitData {
 
     DateTime getDateTime();
 
+    DateTime getFinishDateTime();
+
+    Boolean getExported();
+
     Integer getNotifyTimeInMinutes();
 
     String getNote();
