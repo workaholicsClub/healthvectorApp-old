@@ -13,6 +13,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
 import android.widget.Toast;
 
 import org.slf4j.Logger;
@@ -21,18 +22,24 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
 import icepick.Icepick;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseDialogFragment extends DialogFragment {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private final Map<Integer, RequestPermissionInfo> permissionInfoMap = new HashMap<>();
+
+    @Nullable
+    @BindView(R.id.dummy)
+    View dummy;
 
     @NonNull
     @Getter(AccessLevel.PROTECTED)
@@ -106,5 +113,13 @@ public abstract class BaseDialogFragment extends DialogFragment {
     }
 
     protected void permissionGranted(RequestPermissionInfo permissionInfo) {
+    }
+
+    public void hideKeyboardAndClearFocus(View view) {
+        KeyboardUtils.hideKeyboard(getContext(), view);
+        view.clearFocus();
+        if (dummy != null) {
+            dummy.requestFocus();
+        }
     }
 }

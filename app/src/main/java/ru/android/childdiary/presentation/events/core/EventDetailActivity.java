@@ -42,7 +42,6 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.utils.EventHelper;
-import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -60,9 +59,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @BindView(R.id.rootView)
     View rootView;
-
-    @BindView(R.id.dummy)
-    View dummy;
 
     private ViewGroup eventDetailsView;
 
@@ -103,7 +99,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         //noinspection unchecked
         T event = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_EVENT);
         setupEventDetail(event); // в таймере сна дергается время
-        dummy.requestFocus();
         logger.debug("restore event: " + event);
     }
 
@@ -121,12 +116,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         View contentView = inflater.inflate(getContentLayoutResourceId(), null);
         eventDetailsView = ButterKnife.findById(this, R.id.eventDetailsView);
         eventDetailsView.addView(contentView);
-    }
-
-    public void hideKeyboardAndClearFocus(View view) {
-        KeyboardUtils.hideKeyboard(this, view);
-        view.clearFocus();
-        dummy.requestFocus();
     }
 
     protected void setupEditTextView(FieldEditTextView view) {

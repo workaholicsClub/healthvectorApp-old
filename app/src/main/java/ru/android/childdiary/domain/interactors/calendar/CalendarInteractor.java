@@ -2,6 +2,8 @@ package ru.android.childdiary.domain.interactors.calendar;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextUtils;
 
 import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
@@ -263,14 +265,15 @@ public class CalendarInteractor implements Interactor {
     public Observable<Boolean> controlOtherEventDoneButton(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
         return otherEventNameObservable
                 .map(otherEventNameAfterTextChangeEvent -> otherEventNameAfterTextChangeEvent.editable() != null
-                        && !otherEventNameAfterTextChangeEvent.editable().toString().isEmpty())
+                        && !TextUtils.isEmpty(otherEventNameAfterTextChangeEvent.editable()))
                 .distinctUntilChanged();
     }
 
     public Observable<List<CalendarValidationResult>> controlOtherEventFields(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
         return otherEventNameObservable
                 .filter(otherEventNameAfterTextChangeEvent -> otherEventNameAfterTextChangeEvent.editable() != null)
-                .map(otherEventNameAfterTextChangeEvent -> otherEventNameAfterTextChangeEvent.editable().toString())
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
                 .map(otherEventName -> Collections.singletonList(new OtherEventValidator(context).validateOtherEventName(otherEventName)));
     }
 

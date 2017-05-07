@@ -30,6 +30,11 @@ public class MedicinePickerActivity extends BasePickerActivity<Medicine, Medicin
     }
 
     @Override
+    public MedicinePickerPresenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
     protected Class<? extends BaseAddActivity<Medicine, ? extends BaseAddView<Medicine>>> getAddActivityClass() {
         return MedicineAddActivity.class;
     }

@@ -42,6 +42,7 @@ import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -61,6 +62,10 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
     @BindView(R.id.toolbar)
     @Getter(AccessLevel.PROTECTED)
     Toolbar toolbar;
+
+    @Nullable
+    @BindView(R.id.dummy)
+    View dummy;
 
     private ImageView toolbarLogo;
 
@@ -178,6 +183,14 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
             this.sex = sex;
             setupToolbarColor();
             themeChanged();
+        }
+    }
+
+    public void hideKeyboardAndClearFocus(View view) {
+        KeyboardUtils.hideKeyboard(this, view);
+        view.clearFocus();
+        if (dummy != null) {
+            dummy.requestFocus();
         }
     }
 

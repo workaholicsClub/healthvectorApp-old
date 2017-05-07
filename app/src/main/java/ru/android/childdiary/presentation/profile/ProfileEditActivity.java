@@ -59,7 +59,6 @@ import ru.android.childdiary.presentation.profile.adapters.SexAdapter;
 import ru.android.childdiary.presentation.profile.image.ImagePickerDialogFragment;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
-import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -113,9 +112,6 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
 
     @BindView(R.id.editTextBirthWeight)
     CustomEditText editTextBirthWeight;
-
-    @BindView(R.id.dummy)
-    View dummy;
 
     @BindDimen(R.dimen.name_edit_text_padding_bottom)
     int editTextBottomPadding;
@@ -248,12 +244,6 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         editTextName.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
         editTextBirthHeight.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
         editTextBirthWeight.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
-    }
-
-    private void hideKeyboardAndClearFocus(View view) {
-        KeyboardUtils.hideKeyboard(this, view);
-        view.clearFocus();
-        dummy.requestFocus();
     }
 
     private void setupSex() {

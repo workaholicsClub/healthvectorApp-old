@@ -3,12 +3,15 @@ package ru.android.childdiary.utils.ui;
 import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yalantis.ucrop.UCrop;
@@ -65,5 +68,30 @@ public class WidgetsUtils {
     public static void setDateTime(@Nullable DateTime dateTime, FieldDateView dateView, FieldTimeView timeView) {
         dateView.setValue(dateTime == null ? null : dateTime.toLocalDate());
         timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
+    }
+
+    public static void setupSearchView(SearchView searchView) {
+        @IdRes int resId;
+        ImageView imageView;
+        Context context = searchView.getContext();
+
+        resId = android.support.v7.appcompat.R.id.search_button;
+        imageView = (ImageView) searchView.findViewById(resId);
+        if (imageView != null) {
+            imageView.setImageResource(R.drawable.toolbar_action_search);
+        }
+
+        resId = android.support.v7.appcompat.R.id.search_close_btn;
+        imageView = (ImageView) searchView.findViewById(resId);
+        if (imageView != null) {
+            imageView.setImageResource(R.drawable.toolbar_action_close);
+        }
+
+        resId = android.support.v7.appcompat.R.id.search_src_text;
+        TextView textView = (TextView) searchView.findViewById(resId);
+        //noinspection deprecation
+        textView.setTextAppearance(context, R.style.SearchTextAppearance);
+        textView.setTypeface(FontUtils.getTypefaceRegular(context));
+        textView.setHintTextColor(ContextCompat.getColor(context, R.color.white_transparent));
     }
 }

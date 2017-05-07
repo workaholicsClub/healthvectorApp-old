@@ -21,8 +21,8 @@ class ChildObservable extends Observable<Child> {
     }
 
     private static class Listener extends MainThreadDisposable implements OnUpdateChildListener {
-        private final Observer<? super Child> observer;
         private final ProfileEditActivity activity;
+        private final Observer<? super Child> observer;
 
         public Listener(ProfileEditActivity activity, Observer<? super Child> observer) {
             this.activity = activity;

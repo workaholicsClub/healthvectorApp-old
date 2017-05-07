@@ -9,7 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import java.util.List;
 
@@ -20,9 +22,12 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewAdapter;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewHolder;
+import ru.android.childdiary.presentation.core.bindings.RxSearchView;
+import ru.android.childdiary.presentation.core.bindings.SearchViewQueryTextEvent;
 import ru.android.childdiary.utils.ui.ThemeUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public abstract class BasePickerActivity<T, V> extends BaseMvpActivity implements BasePickerView<T> {
+public abstract class BasePickerActivity<T, V extends BasePickerView<T>> extends BaseMvpActivity implements BasePickerView<T> {
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -64,9 +69,27 @@ public abstract class BasePickerActivity<T, V> extends BaseMvpActivity implement
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        WidgetsUtils.setupSearchView(searchView);
+        unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(RxSearchView.queryTextChangeEvents(searchView)));
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void processSearchEvent(@NonNull SearchViewQueryTextEvent event) {
+        if (event.isSubmitted()) {
+            hideKeyboardAndClearFocus(event.getView());
+        }
+    }
+
+    @Override
     public void showList(@NonNull List<T> list) {
         adapter.setItems(list);
     }
+
+    protected abstract BasePickerPresenter<T, V> getPresenter();
 
     protected abstract Class<? extends BaseAddActivity<T, ? extends BaseAddView<T>>> getAddActivityClass();
 

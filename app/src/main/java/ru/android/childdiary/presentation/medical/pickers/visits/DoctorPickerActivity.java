@@ -30,6 +30,11 @@ public class DoctorPickerActivity extends BasePickerActivity<Doctor, DoctorPicke
     }
 
     @Override
+    public DoctorPickerPresenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
     protected Class<? extends BaseAddActivity<Doctor, ? extends BaseAddView<Doctor>>> getAddActivityClass() {
         return DoctorAddActivity.class;
     }

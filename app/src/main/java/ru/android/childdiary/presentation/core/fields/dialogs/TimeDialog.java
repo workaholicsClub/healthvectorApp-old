@@ -23,7 +23,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseDialogFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -56,9 +55,6 @@ public class TimeDialog extends BaseDialogFragment {
 
     @BindView(R.id.minutesHeader)
     TextView minutesHeader;
-
-    @BindView(R.id.dummy)
-    View dummy;
 
     private Listener listener;
 
@@ -129,12 +125,6 @@ public class TimeDialog extends BaseDialogFragment {
         hoursHeader.setVisibility(parameters.isShowHours() ? View.VISIBLE : View.GONE);
         durationSeparatorHeader.setVisibility(parameters.isShowHours() && parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
         minutesHeader.setVisibility(parameters.isShowMinutes() ? View.VISIBLE : View.GONE);
-    }
-
-    public void hideKeyboardAndClearFocus(View view) {
-        KeyboardUtils.hideKeyboard(getContext(), view);
-        view.clearFocus();
-        dummy.requestFocus();
     }
 
     @Override

@@ -45,7 +45,6 @@ import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerActivity;
 import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerActivity;
-import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.TimeUtils;
 
 public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Serializable>
@@ -61,9 +60,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @BindView(R.id.rootView)
     View rootView;
-
-    @BindView(R.id.dummy)
-    View dummy;
 
     private ViewGroup detailsView;
 
@@ -129,7 +125,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         //noinspection unchecked
         T item = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_ITEM);
         setup(item);
-        dummy.requestFocus();
         logger.debug("restore: " + item);
     }
 
@@ -146,12 +141,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         LayoutInflater inflater = LayoutInflater.from(this);
         detailsView = ButterKnife.findById(this, R.id.detailsView);
         View contentView = inflater.inflate(getContentLayoutResourceId(), detailsView);
-    }
-
-    public void hideKeyboardAndClearFocus(View view) {
-        KeyboardUtils.hideKeyboard(this, view);
-        view.clearFocus();
-        dummy.requestFocus();
     }
 
     protected void setupEditTextView(FieldEditTextView view) {
