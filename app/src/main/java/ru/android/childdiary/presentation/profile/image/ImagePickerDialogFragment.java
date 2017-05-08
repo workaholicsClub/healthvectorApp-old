@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
@@ -33,7 +33,8 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ImagePickerDialogFragment extends BaseDialogFragment implements AdapterView.OnItemClickListener {
+public class ImagePickerDialogFragment extends BaseDialogFragment<ImagePickerDialogArguments>
+        implements AdapterView.OnItemClickListener {
     private static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
 
     private static final int REQUEST_PICK_IMAGE = 1;
@@ -46,11 +47,19 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
     private Listener listener;
 
     @Override
-    @NonNull
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        init(savedInstanceState);
+    @LayoutRes
+    protected int getLayoutResourceId() {
+        return 0;
+    }
 
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
+    @Override
+    protected void setupUi() {
+    }
+
+    @NonNull
+    @Override
+    protected Dialog createDialog(View view) {
+        Dialog dialog = new Dialog(getContext(), getTheme());
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         List<ImagePickerAction> actions = new ArrayList<>();
@@ -64,7 +73,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
                 .titleResourceId(R.string.action_pick_image)
                 .iconResourceId(R.drawable.image_picker_action_pick_image)
                 .build());
-        if (getChild().getImageFileName() != null) {
+        if (dialogArguments.isShowDeleteItem()) {
             actions.add(ImagePickerAction.builder()
                     .type(ImagePickerActionType.DELETE)
                     .titleResourceId(R.string.action_delete_image)
@@ -202,7 +211,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment implements Ada
         options.setCropGridRowCount(0);
         options.setShowCropFrame(false);
 
-        WidgetsUtils.setupCropActivityToolbar(getContext(), options, getSex());
+        WidgetsUtils.setupCropActivityToolbar(getContext(), options, dialogArguments.getSex());
 
         uCrop.withOptions(options);
 

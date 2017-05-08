@@ -186,7 +186,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         }
     }
 
-    public void hideKeyboardAndClearFocus(View view) {
+    public final void hideKeyboardAndClearFocus(View view) {
         KeyboardUtils.hideKeyboard(this, view);
         view.clearFocus();
         if (dummy != null) {
@@ -256,7 +256,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         }
     }
 
-    protected void showToast(String text) {
+    protected final void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 

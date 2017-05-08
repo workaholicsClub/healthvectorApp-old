@@ -26,11 +26,13 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.fields.dialogs.FoodDialog;
-import ru.android.childdiary.presentation.core.fields.dialogs.FoodMeasureDialog;
-import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.dialogs.FoodDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.FoodDialogFragment;
+import ru.android.childdiary.presentation.core.fields.dialogs.FoodMeasureDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.FoodMeasureDialogFragment;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldAmountMlView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldAmountView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldBreastFeedDurationView;
@@ -48,7 +50,7 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
-        FieldSpinnerView.FieldSpinnerListener, FoodMeasureDialog.Listener, FoodDialog.Listener {
+        FieldSpinnerView.FieldSpinnerListener, FoodMeasureDialogFragment.Listener, FoodDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_FOOD_MEASURE_DIALOG = "FOOD_MEASURE_DIALOG";
@@ -117,8 +119,10 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         durationView.setFieldDurationListener(new FieldBreastFeedDurationView.FieldDurationListener() {
             @Override
             public void requestLeftValueChange(FieldBreastFeedDurationView view) {
-                presenter.requestTimeDialog(TAG_LEFT_DURATION_DIALOG,
-                        TimeDialog.Parameters.builder()
+                TimeDialogFragment dialogFragment = new TimeDialogFragment();
+                dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_LEFT_DURATION_DIALOG,
+                        TimeDialogArguments.builder()
+                                .sex(getSex())
                                 .minutes(durationView.getDurationLeftInt())
                                 .showDays(false)
                                 .showHours(false)
@@ -129,8 +133,10 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
             @Override
             public void requestRightValueChange(FieldBreastFeedDurationView view) {
-                presenter.requestTimeDialog(TAG_RIGHT_DURATION_DIALOG,
-                        TimeDialog.Parameters.builder()
+                TimeDialogFragment dialogFragment = new TimeDialogFragment();
+                dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_RIGHT_DURATION_DIALOG,
+                        TimeDialogArguments.builder()
+                                .sex(getSex())
                                 .minutes(durationView.getDurationRightInt())
                                 .showDays(false)
                                 .showHours(false)
@@ -139,14 +145,18 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                                 .build());
             }
         });
-        notifyTimeView.setFieldDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
-                TimeDialog.Parameters.builder()
-                        .minutes(notifyTimeView.getValueInt())
-                        .showDays(true)
-                        .showHours(true)
-                        .showMinutes(true)
-                        .title(getString(R.string.notify_time_dialog_title))
-                        .build()));
+        notifyTimeView.setFieldDialogListener(v -> {
+            TimeDialogFragment dialogFragment = new TimeDialogFragment();
+            dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG,
+                    TimeDialogArguments.builder()
+                            .sex(getSex())
+                            .minutes(notifyTimeView.getValueInt())
+                            .showDays(true)
+                            .showHours(true)
+                            .showMinutes(true)
+                            .title(getString(R.string.notify_time_dialog_title))
+                            .build());
+        });
     }
 
     @Override
@@ -228,18 +238,6 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     }
 
     @Override
-    public void showFoodMeasureDialog(String tag, @NonNull Child child) {
-        FoodMeasureDialog dialog = new FoodMeasureDialog();
-        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child);
-    }
-
-    @Override
-    public void showFoodDialog(String tag, @NonNull Child child) {
-        FoodDialog dialog = new FoodDialog();
-        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child);
-    }
-
-    @Override
     protected void setDate(String tag, LocalDate date) {
         dateView.setValue(date);
     }
@@ -273,14 +271,22 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         } else if (view == foodMeasureView) {
             FoodMeasure foodMeasure = (FoodMeasure) item;
             if (foodMeasure == FoodMeasure.NULL) {
-                presenter.requestFoodMeasureDialog(TAG_FOOD_MEASURE_DIALOG);
+                FoodMeasureDialogFragment dialogFragment = new FoodMeasureDialogFragment();
+                dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_FOOD_MEASURE_DIALOG,
+                        FoodMeasureDialogArguments.builder()
+                                .sex(getSex())
+                                .build());
             } else {
                 foodMeasureView.setValue(foodMeasure);
             }
         } else if (view == foodView) {
             Food food = (Food) item;
             if (food == Food.NULL) {
-                presenter.requestFoodDialog(TAG_FOOD_DIALOG);
+                FoodDialogFragment dialogFragment = new FoodDialogFragment();
+                dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_FOOD_DIALOG,
+                        FoodDialogArguments.builder()
+                                .sex(getSex())
+                                .build());
             } else {
                 foodView.setValue(food);
             }

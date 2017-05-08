@@ -1,22 +1,22 @@
 package ru.android.childdiary.presentation.core.events;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.presentation.core.BaseView;
-import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
 
 public interface BaseItemView<T extends Serializable> extends BaseView {
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters);
-
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showFrequencyList(List<Integer> frequencyList);
 
@@ -25,4 +25,13 @@ public interface BaseItemView<T extends Serializable> extends BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showLengthList(List<Integer> lengthList);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void setDoctor(@Nullable Doctor doctor);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void setMedicine(@Nullable Medicine medicine);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showMedicineMeasureValueDialog(@NonNull ArrayList<MedicineMeasure> medicineMeasureList);
 }

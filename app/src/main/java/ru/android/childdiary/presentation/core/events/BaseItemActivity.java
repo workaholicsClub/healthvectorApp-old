@@ -19,6 +19,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -26,17 +27,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureValueDialogFragment;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
@@ -50,11 +55,12 @@ import ru.android.childdiary.utils.TimeUtils;
 public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Serializable>
         extends BaseMvpActivity implements BaseItemView<T>,
         FieldCheckBoxView.FieldCheckBoxListener,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
+        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
+    private static final String TAG_MEDICINE_MEASURE_DIALOG = "TAG_MEDICINE_MEASURE_DIALOG";
     private static final int REQUEST_DOCTOR = 1;
     private static final int REQUEST_MEDICINE = 2;
 
@@ -77,45 +83,64 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
         getDateView().setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER, getDateView().getValue(), null, null));
         getTimeView().setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER, getTimeView().getValue()));
-        getNotifyTimeView().setFieldDialogListener(v -> getPresenter().requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
-                TimeDialog.Parameters.builder()
-                        .minutes(getNotifyTimeView().getValueInt())
-                        .showDays(true)
-                        .showHours(true)
-                        .showMinutes(true)
-                        .title(getString(R.string.notify_time_dialog_title))
-                        .build()));
-        if (getDurationView() != null) {
-            getDurationView().setFieldDialogListener(v -> getPresenter().requestTimeDialog(TAG_DURATION_DIALOG,
-                    TimeDialog.Parameters.builder()
-                            .minutes(getDurationView().getValueInt())
-                            .showDays(getDurationView().getValueInt() >= TimeUtils.MINUTES_IN_DAY)
+        getNotifyTimeView().setFieldDialogListener(v -> {
+            TimeDialogFragment dialogFragment = new TimeDialogFragment();
+            dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG,
+                    TimeDialogArguments.builder()
+                            .sex(getSex())
+                            .minutes(getNotifyTimeView().getValueInt())
+                            .showDays(true)
                             .showHours(true)
                             .showMinutes(true)
-                            .title(getString(R.string.duration))
-                            .build()));
+                            .title(getString(R.string.notify_time_dialog_title))
+                            .build());
+        });
+        if (getDurationView() != null) {
+            getDurationView().setFieldDialogListener(v -> {
+                TimeDialogFragment dialogFragment = new TimeDialogFragment();
+                dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DURATION_DIALOG,
+                        TimeDialogArguments.builder()
+                                .sex(getSex())
+                                .minutes(getDurationView().getValueInt())
+                                .showDays(getDurationView().getValueInt() >= TimeUtils.MINUTES_IN_DAY)
+                                .showHours(true)
+                                .showMinutes(true)
+                                .title(getString(R.string.duration))
+                                .build());
+            });
         }
         if (getDoctorView() != null) {
             getDoctorView().setFieldDialogListener(view ->
-                    startActivityForResult(new Intent(this, DoctorPickerActivity.class)
-                            .putExtra(ExtraConstants.EXTRA_SEX, getSex()), REQUEST_DOCTOR));
+                    startActivityForResult(DoctorPickerActivity.getIntent(this, getSex()),
+                            REQUEST_DOCTOR));
         }
         if (getMedicineView() != null) {
             getMedicineView().setFieldDialogListener(view ->
-                    startActivityForResult(new Intent(this, MedicinePickerActivity.class)
-                            .putExtra(ExtraConstants.EXTRA_SEX, getSex()), REQUEST_DOCTOR));
+                    startActivityForResult(MedicinePickerActivity.getIntent(this, getSex()),
+                            REQUEST_MEDICINE));
+        }
+        if (getMedicineMeasureView() != null) {
+            getMedicineMeasureView().setFieldDialogListener(view -> getPresenter().requestMedicineMeasureValueDialog());
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_DOCTOR && getDoctorView() != null && data != null) {
-            Doctor doctor = (Doctor) data.getSerializableExtra(ExtraConstants.EXTRA_ITEM);
-            getDoctorView().setValue(doctor);
-        } else if (requestCode == REQUEST_MEDICINE && getMedicineView() != null && data != null) {
-            Medicine medicine = (Medicine) data.getSerializableExtra(ExtraConstants.EXTRA_ITEM);
-            getMedicineView().setValue(medicine);
+        if (requestCode == REQUEST_DOCTOR && getDoctorView() != null) {
+            if (resultCode == RESULT_OK) {
+                Doctor doctor = (Doctor) data.getSerializableExtra(ExtraConstants.EXTRA_ITEM);
+                getDoctorView().setValue(doctor);
+            } else {
+                getPresenter().checkValue(getDoctorView().getValue());
+            }
+        } else if (requestCode == REQUEST_MEDICINE && getMedicineView() != null) {
+            if (resultCode == RESULT_OK) {
+                Medicine medicine = (Medicine) data.getSerializableExtra(ExtraConstants.EXTRA_ITEM);
+                getMedicineView().setValue(medicine);
+            } else {
+                getPresenter().checkValue(getMedicineView().getValue());
+            }
         }
     }
 
@@ -168,12 +193,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     @Override
-    public void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters) {
-        TimeDialog dialog = new TimeDialog();
-        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child, parameters);
-    }
-
-    @Override
     public void showFrequencyList(List<Integer> frequencyList) {
         getRepeatParametersView().updateFrequency(frequencyList);
     }
@@ -186,6 +205,34 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @Override
     public void showLengthList(List<Integer> lengthList) {
         getRepeatParametersView().updateLength(lengthList);
+    }
+
+    @Override
+    public void setDoctor(@Nullable Doctor doctor) {
+        if (getDoctorView() != null) {
+            getDoctorView().setValue(doctor);
+        }
+    }
+
+    @Override
+    public void setMedicine(@Nullable Medicine medicine) {
+        if (getMedicineView() != null) {
+            getMedicineView().setValue(medicine);
+        }
+    }
+
+    @Override
+    public void showMedicineMeasureValueDialog(@NonNull ArrayList<MedicineMeasure> medicineMeasureList) {
+        if (getMedicineMeasureView() == null) {
+            return;
+        }
+        MedicineMeasureValueDialogFragment dialogFragment = new MedicineMeasureValueDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_MEDICINE_MEASURE_DIALOG,
+                MedicineMeasureDialogArguments.builder()
+                        .sex(getSex())
+                        .medicineMeasureList(medicineMeasureList)
+                        .medicineMeasureValue(getMedicineMeasureView().getValue())
+                        .build());
     }
 
     @Override
@@ -303,4 +350,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @Nullable
     protected abstract FieldMedicineView getMedicineView();
+
+    @Nullable
+    protected abstract FieldMedicineMeasureView getMedicineMeasureView();
 }

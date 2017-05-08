@@ -30,6 +30,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
@@ -205,6 +206,12 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     @Nullable
     @Override
     protected FieldMedicineView getMedicineView() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    protected FieldMedicineMeasureView getMedicineMeasureView() {
         return null;
     }
 }

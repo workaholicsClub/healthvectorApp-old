@@ -90,7 +90,7 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
         }
     }
 
-    protected void showToast(String text) {
+    protected final void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 

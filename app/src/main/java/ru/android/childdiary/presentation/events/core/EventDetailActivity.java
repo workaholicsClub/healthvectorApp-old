@@ -33,10 +33,9 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
@@ -50,7 +49,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
-        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
+        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener {
     @BindView(R.id.noteView)
     protected FieldNoteView noteView;
 
@@ -191,12 +190,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public void eventDone(@NonNull MasterEvent event) {
         showToast(getString(EventHelper.isDone(event) ? R.string.event_is_done : R.string.event_is_not_done));
-    }
-
-    @Override
-    public void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters) {
-        TimeDialog dialog = new TimeDialog();
-        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child, parameters);
     }
 
     @Override

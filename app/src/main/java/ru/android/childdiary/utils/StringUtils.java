@@ -2,6 +2,7 @@ package ru.android.childdiary.utils;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,7 @@ import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 
 public class StringUtils {
     @Nullable
@@ -119,6 +121,21 @@ public class StringUtils {
                 return context.getString(R.string.feed_type_food);
             default:
                 return null;
+        }
+    }
+
+    @Nullable
+    public static String medicineMeasureValue(Context context,
+                                              @Nullable Double amount,
+                                              @Nullable MedicineMeasure medicineMeasure) {
+        if (ObjectUtils.isPositive(amount)
+                && medicineMeasure != null
+                && !TextUtils.isEmpty(medicineMeasure.getName())) {
+            String amountStr = DoubleUtils.multipleUnitFormat(amount);
+            String medicineMeasureStr = medicineMeasure.getName();
+            return context.getString(R.string.medicine_measure_format, amountStr, medicineMeasureStr);
+        } else {
+            return null;
         }
     }
 }

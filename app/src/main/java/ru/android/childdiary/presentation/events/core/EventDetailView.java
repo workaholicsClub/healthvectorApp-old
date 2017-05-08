@@ -7,9 +7,7 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseView;
-import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialog;
 
 public interface EventDetailView<T extends MasterEvent> extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
@@ -26,9 +24,6 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void eventDone(@NonNull MasterEvent event);
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void validationFailed();

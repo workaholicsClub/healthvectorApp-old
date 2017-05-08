@@ -153,6 +153,7 @@
     <string name="add_doctor_title">Добавить специализацию</string>
     <string name="doctors_title">Список специализаций</string>
     <string name="search">Поиск</string>
+    <string name="medicine_measure_dialog_title">Дозировка</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

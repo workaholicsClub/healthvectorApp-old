@@ -12,7 +12,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import org.joda.time.DateTime;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,6 +22,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParam
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
 import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
@@ -93,11 +94,6 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     }
 
     @Override
-    public void showMedicineMeasureList(List<MedicineMeasure> medicineMeasureList) {
-        medicineMeasureView.updateAdapter(medicineMeasureList);
-    }
-
-    @Override
     protected BaseAddItemPresenter<AddMedicineTakingView, MedicineTaking> getPresenter() {
         return presenter;
     }
@@ -110,8 +106,12 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     @Override
     protected void setup(MedicineTaking item) {
         medicineView.setValue(item.getMedicine());
-        // TODO amount
-        medicineMeasureView.setValue(item.getMedicineMeasure());
+        MedicineMeasureValue medicineMeasureValue = MedicineMeasureValue
+                .builder()
+                .amount(item.getAmount())
+                .medicineMeasure(item.getMedicineMeasure())
+                .build();
+        medicineMeasureView.setValue(medicineMeasureValue);
         repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
         checkBoxView.setChecked(ObjectUtils.isTrue(item.getExported()));
@@ -125,8 +125,9 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     @Override
     protected MedicineTaking build() {
         Medicine medicine = medicineView.getValue();
-        Double amount = null;
-        MedicineMeasure medicineMeasure = medicineMeasureView.getValue();
+        MedicineMeasureValue medicineMeasureValue = medicineMeasureView.getValue();
+        Double amount = medicineMeasureValue == null ? null : medicineMeasureValue.getAmount();
+        MedicineMeasure medicineMeasure = medicineMeasureValue == null ? null : medicineMeasureValue.getMedicineMeasure();
         RepeatParameters repeatParameters = repeatParametersView.getRepeatParameters();
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
         boolean exported = checkBoxView.isChecked();
@@ -185,7 +186,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
 
     @Override
     protected List<FieldEditTextView> getEditTextViews() {
-        return Arrays.asList(noteWithPhotoView);
+        return Collections.singletonList(noteWithPhotoView);
     }
 
     @Nullable
@@ -198,5 +199,9 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     @Override
     protected FieldMedicineView getMedicineView() {
         return medicineView;
+    }
+
+    public FieldMedicineMeasureView getMedicineMeasureView() {
+        return medicineMeasureView;
     }
 }

@@ -1,24 +1,21 @@
 package ru.android.childdiary.presentation.core.fields.dialogs;
 
 import android.app.Dialog;
-import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public abstract class AddValueDialog extends BaseDialogFragment {
+public abstract class AddValueDialogFragment<T extends AddValueDialogArguments> extends BaseDialogFragment<T> {
     @BindView(R.id.rootView)
     View rootView;
 
@@ -26,37 +23,13 @@ public abstract class AddValueDialog extends BaseDialogFragment {
     CustomEditText editText;
 
     @Override
-    @NonNull
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        init(savedInstanceState);
-
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.dialog_add_value, null);
-
-        ButterKnife.bind(this, view);
-
-        setupUi();
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setView(view)
-                .setTitle(getTitle())
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    hideKeyboardAndClearFocus(rootView.findFocus());
-                    String text = editText.getText().toString().trim();
-                    if (TextUtils.isEmpty(text)) {
-                        return;
-                    }
-                    addValue(text);
-                })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
-
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        return dialog;
+    @LayoutRes
+    protected int getLayoutResourceId() {
+        return R.layout.dialog_add_value;
     }
 
-    private void setupUi() {
+    @Override
+    protected void setupUi() {
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(getMaxLength())});
 
         editText.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
@@ -74,6 +47,28 @@ public abstract class AddValueDialog extends BaseDialogFragment {
             }
             return false;
         });
+    }
+
+    @NonNull
+    @Override
+    protected Dialog createDialog(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
+                .setView(view)
+                .setTitle(getTitle())
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    hideKeyboardAndClearFocus(rootView.findFocus());
+                    String text = editText.getText().toString().trim();
+                    if (TextUtils.isEmpty(text)) {
+                        return;
+                    }
+                    addValue(text);
+                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
+
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
     }
 
     protected abstract int getMaxLength();

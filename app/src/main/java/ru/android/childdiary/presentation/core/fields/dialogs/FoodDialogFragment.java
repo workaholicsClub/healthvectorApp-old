@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 
-public class FoodDialog extends AddValueDialog {
+public class FoodDialogFragment extends AddValueDialogFragment<FoodDialogArguments> {
     private Listener listener;
 
     @Override
@@ -43,4 +43,5 @@ public class FoodDialog extends AddValueDialog {
     public interface Listener {
         void onSetFood(String tag, @NonNull Food food);
     }
+
 }

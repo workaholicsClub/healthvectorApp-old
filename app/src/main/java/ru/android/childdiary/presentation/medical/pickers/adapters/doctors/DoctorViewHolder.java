@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.medical.pickers.adapters.core.BaseItemViewHolder;
@@ -27,5 +28,10 @@ public class DoctorViewHolder extends BaseItemViewHolder<Doctor,
     @Override
     protected String getTextForValue(Context context, Doctor item) {
         return item.getName();
+    }
+
+    @OnClick(R.id.actionDelete)
+    void onDeleteClick() {
+        swipeActionListener.delete(this);
     }
 }

@@ -36,20 +36,6 @@ public class FeedEventDetailPresenter extends EventDetailPresenter<FeedEventDeta
                 .subscribe(getViewState()::showFoodList, this::onUnexpectedError));
     }
 
-    public void requestFoodMeasureDialog(String tag) {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(child -> getViewState().showFoodMeasureDialog(tag, child), this::onUnexpectedError));
-    }
-
-    public void requestFoodDialog(String tag) {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(child -> getViewState().showFoodDialog(tag, child), this::onUnexpectedError));
-    }
-
     public void addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
         unsubscribeOnDestroy(calendarInteractor.addFoodMeasure(foodMeasure)
                 .subscribeOn(Schedulers.io())

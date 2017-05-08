@@ -56,6 +56,7 @@ import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.presentation.profile.adapters.SexAdapter;
+import ru.android.childdiary.presentation.profile.image.ImagePickerDialogArguments;
 import ru.android.childdiary.presentation.profile.image.ImagePickerDialogFragment;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
@@ -322,8 +323,13 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
 
     @OnClick(R.id.imageViewPhoto)
     void onPhotoClick() {
-        ImagePickerDialogFragment imagePicker = new ImagePickerDialogFragment();
-        imagePicker.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER, editedChild);
+        ImagePickerDialogFragment dialogFragment = new ImagePickerDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER,
+                ImagePickerDialogArguments
+                        .builder()
+                        .sex(getSex())
+                        .showDeleteItem(editedChild.getImageFileName() != null)
+                        .build());
     }
 
     @OnClick(R.id.textViewDateWrapper)

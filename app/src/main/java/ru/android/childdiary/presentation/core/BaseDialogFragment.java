@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +13,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,36 +24,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import icepick.Icepick;
-import lombok.AccessLevel;
-import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public abstract class BaseDialogFragment extends DialogFragment {
+public abstract class BaseDialogFragment<T extends BaseDialogArguments> extends DialogFragment {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private final Map<Integer, RequestPermissionInfo> permissionInfoMap = new HashMap<>();
+
+    protected T dialogArguments;
 
     @Nullable
     @BindView(R.id.dummy)
     View dummy;
 
-    @NonNull
-    @Getter(AccessLevel.PROTECTED)
-    private Child child;
-
-    @Nullable
-    @Getter(AccessLevel.PROTECTED)
-    private Sex sex;
-
-    public void showAllowingStateLoss(FragmentManager manager, String tag, @NonNull Child child) {
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, child);
-        setArguments(arguments);
+    public void showAllowingStateLoss(FragmentManager manager, String tag, T dialogArguments) {
+        Bundle data = new Bundle();
+        data.putSerializable(ExtraConstants.EXTRA_DIALOG_ARGUMENTS, dialogArguments);
+        setArguments(data);
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);
         ft.commitAllowingStateLoss();
@@ -61,15 +53,21 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @Override
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        init(savedInstanceState);
-        return super.onCreateDialog(savedInstanceState);
-    }
-
-    @CallSuper
-    protected void init(Bundle savedInstanceState) {
-        child = (Child) getArguments().getSerializable(ExtraConstants.EXTRA_CHILD);
-        sex = child.getSex();
+        //noinspection unchecked
+        dialogArguments = (T) getArguments().getSerializable(ExtraConstants.EXTRA_DIALOG_ARGUMENTS);
         Icepick.restoreInstanceState(this, savedInstanceState);
+
+        View view = null;
+        if (getLayoutResourceId() != 0) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            view = inflater.inflate(getLayoutResourceId(), null);
+
+            ButterKnife.bind(this, view);
+
+            setupUi();
+        }
+
+        return createDialog(view);
     }
 
     @Override
@@ -78,7 +76,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
         Icepick.saveInstanceState(this, outState);
     }
 
-    protected void showToast(String text) {
+    protected final void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
@@ -89,7 +87,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 != PackageManager.PERMISSION_GRANTED) {
             permissionInfoMap.put(permissionInfo.getRequestCode(), permissionInfo);
             if (shouldShowRequestPermissionRationale(permission)) {
-                new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(sex))
+                new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                         .setTitle(permissionInfo.getTitleResourceId())
                         .setMessage(permissionInfo.getTextResourceId())
                         .setPositiveButton(R.string.ok,
@@ -115,11 +113,19 @@ public abstract class BaseDialogFragment extends DialogFragment {
     protected void permissionGranted(RequestPermissionInfo permissionInfo) {
     }
 
-    public void hideKeyboardAndClearFocus(View view) {
+    public final void hideKeyboardAndClearFocus(View view) {
         KeyboardUtils.hideKeyboard(getContext(), view);
         view.clearFocus();
         if (dummy != null) {
             dummy.requestFocus();
         }
     }
+
+    @LayoutRes
+    protected abstract int getLayoutResourceId();
+
+    protected abstract void setupUi();
+
+    @NonNull
+    protected abstract Dialog createDialog(View view);
 }
