@@ -27,7 +27,7 @@ public class MedicinePickerPresenter extends BasePickerPresenter<Medicine, Medic
     }
 
     @Override
-    protected Observable<List<Medicine>> createLoader() {
+    protected Observable<List<Medicine>> getAllItemsLoader() {
         return medicineTakingInteractor.getMedicines();
     }
 
@@ -36,5 +36,10 @@ public class MedicinePickerPresenter extends BasePickerPresenter<Medicine, Medic
         return item.getName() != null
                 && (TextUtils.isEmpty(filter)
                 || item.getName().toLowerCase().contains(filter.toLowerCase()));
+    }
+
+    @Override
+    protected Observable<Medicine> deleteItemLoader(@NonNull Medicine item) {
+        return medicineTakingInteractor.deleteMedicine(item);
     }
 }

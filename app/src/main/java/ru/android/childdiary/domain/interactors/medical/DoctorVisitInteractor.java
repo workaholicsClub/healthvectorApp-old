@@ -42,6 +42,10 @@ public class DoctorVisitInteractor implements Interactor {
         return doctorVisitRepository.addDoctor(doctor);
     }
 
+    public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
+        return doctorVisitRepository.deleteDoctor(doctor);
+    }
+
     public Observable<DoctorVisit> getDefaultDoctorVisit() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),

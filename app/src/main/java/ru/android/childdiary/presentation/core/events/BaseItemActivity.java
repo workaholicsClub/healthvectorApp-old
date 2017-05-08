@@ -111,10 +111,10 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_DOCTOR && getDoctorView() != null && data != null) {
-            Doctor doctor = (Doctor) data.getSerializableExtra(ExtraConstants.EXTRA_DOCTOR);
+            Doctor doctor = (Doctor) data.getSerializableExtra(ExtraConstants.EXTRA_ITEM);
             getDoctorView().setValue(doctor);
         } else if (requestCode == REQUEST_MEDICINE && getMedicineView() != null && data != null) {
-            Medicine medicine = (Medicine) data.getSerializableExtra(ExtraConstants.EXTRA_MEDICINE);
+            Medicine medicine = (Medicine) data.getSerializableExtra(ExtraConstants.EXTRA_ITEM);
             getMedicineView().setValue(medicine);
         }
     }

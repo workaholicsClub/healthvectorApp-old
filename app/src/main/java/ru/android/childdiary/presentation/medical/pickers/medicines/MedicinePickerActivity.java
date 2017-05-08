@@ -9,12 +9,14 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewAdapter;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewHolder;
+import ru.android.childdiary.presentation.medical.pickers.adapters.medicines.MedicineActionListener;
 import ru.android.childdiary.presentation.medical.pickers.adapters.medicines.MedicineAdapter;
 import ru.android.childdiary.presentation.medical.pickers.core.BaseAddActivity;
 import ru.android.childdiary.presentation.medical.pickers.core.BaseAddView;
 import ru.android.childdiary.presentation.medical.pickers.core.BasePickerActivity;
 
-public class MedicinePickerActivity extends BasePickerActivity<Medicine, MedicinePickerView> implements MedicinePickerView {
+public class MedicinePickerActivity extends BasePickerActivity<Medicine, MedicinePickerView>
+        implements MedicinePickerView, MedicineActionListener {
     @InjectPresenter
     MedicinePickerPresenter presenter;
 
@@ -41,6 +43,6 @@ public class MedicinePickerActivity extends BasePickerActivity<Medicine, Medicin
 
     @Override
     protected BaseRecyclerViewAdapter<Medicine, ? extends BaseRecyclerViewHolder<Medicine>> createAdapter() {
-        return new MedicineAdapter(this);
+        return new MedicineAdapter(this, this, this);
     }
 }

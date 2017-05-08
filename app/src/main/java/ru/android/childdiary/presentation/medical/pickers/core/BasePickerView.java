@@ -17,4 +17,7 @@ public interface BasePickerView<T> extends BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showList(@NonNull List<T> list);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void itemDeleted(@NonNull T item);
 }

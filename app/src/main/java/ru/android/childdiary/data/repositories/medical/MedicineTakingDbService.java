@@ -46,6 +46,10 @@ public class MedicineTakingDbService {
         return DbUtils.insertObservable(dataStore, medicine, MedicineMapper::mapToEntity, MedicineMapper::mapToPlainObject);
     }
 
+    public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
+        return DbUtils.deleteObservable(dataStore, MedicineEntity.class, medicine, medicine.getId());
+    }
+
     public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
         return dataStore.select(MedicineMeasureEntity.class)
                 .orderBy(MedicineMeasureEntity.NAME, MedicineMeasureEntity.ID)

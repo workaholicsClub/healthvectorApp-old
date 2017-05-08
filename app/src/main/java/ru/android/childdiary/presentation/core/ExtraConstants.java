@@ -9,6 +9,4 @@ public class ExtraConstants {
     public static final String EXTRA_DEFAULT_EVENT = PACKAGE_NAME + ".default_event";
     public static final String EXTRA_ITEM = PACKAGE_NAME + ".item";
     public static final String EXTRA_DEFAULT_ITEM = PACKAGE_NAME + ".default_item";
-    public static final String EXTRA_DOCTOR = PACKAGE_NAME + ".doctor";
-    public static final String EXTRA_MEDICINE = PACKAGE_NAME + ".medicine";
 }

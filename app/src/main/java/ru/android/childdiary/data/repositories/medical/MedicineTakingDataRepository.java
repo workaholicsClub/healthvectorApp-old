@@ -34,6 +34,11 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     }
 
     @Override
+    public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
+        return dbService.deleteMedicine(medicine);
+    }
+
+    @Override
     public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
         return dbService.getMedicineMeasureList();
     }

@@ -13,6 +13,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,12 +23,15 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewAdapter;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewHolder;
+import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
+import ru.android.childdiary.presentation.core.adapters.swipe.ItemActionListener;
 import ru.android.childdiary.presentation.core.bindings.RxSearchView;
 import ru.android.childdiary.presentation.core.bindings.SearchViewQueryTextEvent;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public abstract class BasePickerActivity<T, V extends BasePickerView<T>> extends BaseMvpActivity implements BasePickerView<T> {
+public abstract class BasePickerActivity<T extends Serializable, V extends BasePickerView<T>> extends BaseMvpActivity
+        implements BasePickerView<T>, ItemActionListener<T>, FabController {
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -44,6 +48,7 @@ public abstract class BasePickerActivity<T, V extends BasePickerView<T>> extends
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = createAdapter();
+        adapter.setSex(getSex());
         recyclerView.setAdapter(adapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
@@ -58,6 +63,9 @@ public abstract class BasePickerActivity<T, V extends BasePickerView<T>> extends
     @Override
     protected void themeChanged() {
         super.themeChanged();
+        if (adapter != null) {
+            adapter.setSex(getSex());
+        }
         fab.setBackgroundTintList(ColorStateList.valueOf(ThemeUtils.getColorAccent(this, getSex())));
     }
 
@@ -87,6 +95,41 @@ public abstract class BasePickerActivity<T, V extends BasePickerView<T>> extends
     @Override
     public void showList(@NonNull List<T> list) {
         adapter.setItems(list);
+    }
+
+    @Override
+    public void itemDeleted(@NonNull T item) {
+    }
+
+    @Override
+    public void delete(T item) {
+        getPresenter().deleteItem(item);
+    }
+
+    @Override
+    public void edit(T item) {
+        Intent data = new Intent().putExtra(ExtraConstants.EXTRA_ITEM, item);
+        setResult(RESULT_OK, data);
+        finish();
+    }
+
+    @Override
+    public void showFab() {
+        fab.show();
+    }
+
+    @Override
+    public boolean hideBar() {
+        return false;
+    }
+
+    @Override
+    public void hideBarWithoutAnimation() {
+    }
+
+    @Override
+    public void hideFabBar() {
+        fab.hide();
     }
 
     protected abstract BasePickerPresenter<T, V> getPresenter();

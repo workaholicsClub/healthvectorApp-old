@@ -23,7 +23,7 @@ public abstract class BasePickerPresenter<T, V extends BasePickerView<T>> extend
     }
 
     private void requestList() {
-        unsubscribeOnDestroy(createLoader(null)
+        unsubscribeOnDestroy(getAllItemsLoader(null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showList, this::onUnexpectedError));
@@ -39,14 +39,14 @@ public abstract class BasePickerPresenter<T, V extends BasePickerView<T>> extend
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .map(CharSequence::toString)
                 .map(String::trim)
-                .flatMap(this::createLoader)
+                .flatMap(this::getAllItemsLoader)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showList, this::onUnexpectedError);
     }
 
-    private Observable<List<T>> createLoader(@Nullable String filter) {
-        return createLoader()
+    private Observable<List<T>> getAllItemsLoader(@Nullable String filter) {
+        return getAllItemsLoader()
                 .map(list -> filter(list, filter));
     }
 
@@ -54,7 +54,16 @@ public abstract class BasePickerPresenter<T, V extends BasePickerView<T>> extend
         return Observable.fromIterable(list).filter(t -> filter(t, filter)).toList().blockingGet();
     }
 
-    protected abstract Observable<List<T>> createLoader();
+    protected abstract Observable<List<T>> getAllItemsLoader();
 
     protected abstract boolean filter(@NonNull T item, @Nullable String filter);
+
+    public void deleteItem(@NonNull T item) {
+        unsubscribeOnDestroy(deleteItemLoader(item)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::itemDeleted, this::onUnexpectedError));
+    }
+
+    protected abstract Observable<T> deleteItemLoader(@NonNull T item);
 }

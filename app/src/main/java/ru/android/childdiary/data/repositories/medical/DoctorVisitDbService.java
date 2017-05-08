@@ -43,6 +43,10 @@ public class DoctorVisitDbService {
         return DbUtils.insertObservable(dataStore, doctor, DoctorMapper::mapToEntity, DoctorMapper::mapToPlainObject);
     }
 
+    public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
+        return DbUtils.deleteObservable(dataStore, DoctorEntity.class, doctor, doctor.getId());
+    }
+
     public Observable<List<DoctorVisit>> getDoctorVisits(@NonNull DoctorVisitsRequest request) {
         Child child = request.getChild();
         return dataStore.select(DoctorVisitEntity.class)

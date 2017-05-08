@@ -43,6 +43,10 @@ public class MedicineTakingInteractor implements Interactor {
         return medicineTakingRepository.addMedicine(medicine);
     }
 
+    public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
+        return medicineTakingRepository.deleteMedicine(medicine);
+    }
+
     public Observable<MedicineTaking> getDefaultMedicineTaking() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),

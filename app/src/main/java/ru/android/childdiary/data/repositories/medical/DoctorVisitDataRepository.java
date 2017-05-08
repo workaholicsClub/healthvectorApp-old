@@ -33,6 +33,11 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
     }
 
     @Override
+    public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
+        return dbService.deleteDoctor(doctor);
+    }
+
+    @Override
     public Observable<List<DoctorVisit>> getDoctorVisits(@NonNull DoctorVisitsRequest request) {
         return dbService.getDoctorVisits(request);
     }

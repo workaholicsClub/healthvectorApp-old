@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical.adapters.core;
+package ru.android.childdiary.presentation.medical.pickers.adapters.core;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -19,9 +19,8 @@ import ru.android.childdiary.presentation.core.adapters.swipe.SwipeActionListene
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
-import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public abstract class BaseMedicalItemViewHolder<T,
+public abstract class BaseItemViewHolder<T,
         SL extends SwipeActionListener<? extends SwipeViewHolder<T, SL, IL>>,
         IL extends ItemActionListener<T>>
         extends SwipeViewHolder<T, SL, IL> {
@@ -34,24 +33,15 @@ public abstract class BaseMedicalItemViewHolder<T,
     @BindView(R.id.actionDelete)
     ImageView imageViewDelete;
 
-    @BindView(R.id.textViewDate)
-    TextView textViewDate;
-
-    @BindView(R.id.textViewTime)
-    TextView textViewTime;
-
-    @BindView(R.id.textViewTitle)
-    TextView textViewTitle;
-
-    @BindView(R.id.textViewDescription)
-    TextView textViewDescription;
+    @BindView(R.id.textView)
+    TextView textView;
 
     @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
 
-    public BaseMedicalItemViewHolder(View itemView,
-                                     @NonNull IL itemActionListener,
-                                     @NonNull SL swipeActionListener) {
+    public BaseItemViewHolder(View itemView,
+                              @NonNull IL itemActionListener,
+                              @NonNull SL swipeActionListener) {
         super(itemView, itemActionListener, swipeActionListener);
     }
 
@@ -59,11 +49,7 @@ public abstract class BaseMedicalItemViewHolder<T,
     public void bind(Context context, Sex sex, T item) {
         super.bind(context, sex, item);
 
-        textViewDate.setText(getDateText(context, item));
-        textViewTime.setText(getTimeText(context, item));
-        WidgetsUtils.hideIfEmpty(textViewTime);
-        textViewTitle.setText(getTitleText(context, item));
-        textViewDescription.setText(getDescriptionText(context, item));
+        textView.setText(getTextForValue(context, item));
         //noinspection deprecation
         imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
 
@@ -72,16 +58,7 @@ public abstract class BaseMedicalItemViewHolder<T,
     }
 
     @Nullable
-    protected abstract String getDateText(Context context, T item);
-
-    @Nullable
-    protected abstract String getTimeText(Context context, T item);
-
-    @Nullable
-    protected abstract String getTitleText(Context context, T item);
-
-    @Nullable
-    protected abstract String getDescriptionText(Context context, T item);
+    protected abstract String getTextForValue(Context context, T item);
 
     @Override
     public SwipeLayout getSwipeLayout() {
