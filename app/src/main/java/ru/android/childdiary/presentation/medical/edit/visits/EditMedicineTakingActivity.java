@@ -31,7 +31,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
@@ -48,8 +48,8 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
     @BindView(R.id.medicineView)
     FieldMedicineView medicineView;
 
-    @BindView(R.id.medicineMeasureView)
-    FieldMedicineMeasureView medicineMeasureView;
+    @BindView(R.id.medicineMeasureValueView)
+    FieldMedicineMeasureValueView medicineMeasureView;
 
     @BindView(R.id.dateView)
     FieldDateView dateView;
@@ -214,7 +214,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
 
     @Nullable
     @Override
-    public FieldMedicineMeasureView getMedicineMeasureView() {
+    public FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return medicineMeasureView;
     }
 }

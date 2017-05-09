@@ -52,7 +52,7 @@ public class MedicineTakingDbService {
 
     public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
         return dataStore.select(MedicineMeasureEntity.class)
-                .orderBy(MedicineMeasureEntity.NAME, MedicineMeasureEntity.ID)
+                .orderBy(MedicineMeasureEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MedicineMeasureMapper::mapToPlainObject));

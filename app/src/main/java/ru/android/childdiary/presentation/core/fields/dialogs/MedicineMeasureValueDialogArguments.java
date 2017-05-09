@@ -20,16 +20,16 @@ import ru.android.childdiary.presentation.core.BaseDialogArguments;
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
-public class MedicineMeasureDialogArguments extends BaseDialogArguments {
+public class MedicineMeasureValueDialogArguments extends BaseDialogArguments {
     @NonNull
     ArrayList<MedicineMeasure> medicineMeasureList;
     @Nullable
     MedicineMeasureValue medicineMeasureValue;
 
     @Builder
-    public MedicineMeasureDialogArguments(@Nullable Sex sex,
-                                          @NonNull ArrayList<MedicineMeasure> medicineMeasureList,
-                                          @Nullable MedicineMeasureValue medicineMeasureValue) {
+    public MedicineMeasureValueDialogArguments(@Nullable Sex sex,
+                                               @NonNull ArrayList<MedicineMeasure> medicineMeasureList,
+                                               @Nullable MedicineMeasureValue medicineMeasureValue) {
         super(sex);
         this.medicineMeasureList = medicineMeasureList;
         this.medicineMeasureValue = medicineMeasureValue;

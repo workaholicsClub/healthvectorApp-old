@@ -5,4 +5,5 @@
     <integer name="max_length_field_food">10</integer>
     <integer name="max_length_child_name">100</integer>
     <integer name="max_length_other_event_name">100</integer>
+    <integer name="max_length_medicine_measure_value_amount">8</integer>
 </resources>

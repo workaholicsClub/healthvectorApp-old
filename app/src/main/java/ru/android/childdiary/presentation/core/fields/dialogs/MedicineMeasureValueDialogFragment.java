@@ -6,6 +6,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.NumberPicker;
 
 import butterknife.BindView;
@@ -17,7 +18,7 @@ import ru.android.childdiary.presentation.core.BaseDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<MedicineMeasureDialogArguments> {
+public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<MedicineMeasureValueDialogArguments> {
     private static final String KEY_PARAMETERS = "parameters";
 
     @BindView(R.id.rootView)
@@ -34,12 +35,28 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.dialog_medicine_measure;
+        return R.layout.dialog_medicine_measure_value;
     }
 
     @Override
     protected void setupUi() {
         // TODO setup numberpicker, edittext selected value
+        editText.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+
+        editText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                editText.setSelection(editText.getText().length());
+            }
+        });
+
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboardAndClearFocus(editText);
+                return true;
+            }
+            return false;
+        });
+
         String[] names = Observable.fromIterable(dialogArguments.getMedicineMeasureList())
                 .map(MedicineMeasure::getName)
                 .toList()

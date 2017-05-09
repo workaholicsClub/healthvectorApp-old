@@ -31,7 +31,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
@@ -48,8 +48,8 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     @BindView(R.id.medicineView)
     FieldMedicineView medicineView;
 
-    @BindView(R.id.medicineMeasureView)
-    FieldMedicineMeasureView medicineMeasureView;
+    @BindView(R.id.medicineMeasureValueView)
+    FieldMedicineMeasureValueView medicineMeasureValueView;
 
     @BindView(R.id.dateView)
     FieldDateView dateView;
@@ -111,7 +111,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
                 .amount(item.getAmount())
                 .medicineMeasure(item.getMedicineMeasure())
                 .build();
-        medicineMeasureView.setValue(medicineMeasureValue);
+        medicineMeasureValueView.setValue(medicineMeasureValue);
         repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
         checkBoxView.setChecked(ObjectUtils.isTrue(item.getExported()));
@@ -125,7 +125,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     @Override
     protected MedicineTaking build() {
         Medicine medicine = medicineView.getValue();
-        MedicineMeasureValue medicineMeasureValue = medicineMeasureView.getValue();
+        MedicineMeasureValue medicineMeasureValue = medicineMeasureValueView.getValue();
         Double amount = medicineMeasureValue == null ? null : medicineMeasureValue.getAmount();
         MedicineMeasure medicineMeasure = medicineMeasureValue == null ? null : medicineMeasureValue.getMedicineMeasure();
         RepeatParameters repeatParameters = repeatParametersView.getRepeatParameters();
@@ -201,7 +201,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
         return medicineView;
     }
 
-    public FieldMedicineMeasureView getMedicineMeasureView() {
-        return medicineMeasureView;
+    public FieldMedicineMeasureValueView getMedicineMeasureValueView() {
+        return medicineMeasureValueView;
     }
 }

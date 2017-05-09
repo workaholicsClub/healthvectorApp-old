@@ -10,15 +10,15 @@
 
     <ru.android.childdiary.presentation.core.widgets.CustomEditText
         android:id="@+id/editText"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/medicine_measure_value_amount_width"
         android:layout_height="@dimen/profile_field_height"
-        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/base_margin_horizontal"
+        android:layout_marginRight="@dimen/base_margin_horizontal"
         android:background="@drawable/edit_text_background"
-        android:drawableEnd="@drawable/arrow_down_gray"
-        android:drawableRight="@drawable/arrow_down_gray"
-        android:hint="@string/enter_weight"
+        android:gravity="center"
         android:imeOptions="actionDone"
         android:inputType="numberDecimal"
+        android:maxLength="@integer/max_length_medicine_measure_value_amount"
         android:textAppearance="@style/PrimaryTextAppearance"
         android:textColorHint="@color/placeholder_text"
         android:textCursorDrawable="@drawable/edit_text_cursor" />
@@ -27,6 +27,8 @@
         android:id="@+id/numberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/base_margin_horizontal"
+        android:layout_marginRight="@dimen/base_margin_horizontal"
         android:descendantFocusability="blocksDescendants"
         android:textAppearance="@style/PrimaryTextAppearance" />
 </LinearLayout>

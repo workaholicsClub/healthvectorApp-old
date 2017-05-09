@@ -32,7 +32,7 @@ import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureValueDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureValueDialogFragment;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
@@ -41,7 +41,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
@@ -119,8 +119,8 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                     startActivityForResult(MedicinePickerActivity.getIntent(this, getSex()),
                             REQUEST_MEDICINE));
         }
-        if (getMedicineMeasureView() != null) {
-            getMedicineMeasureView().setFieldDialogListener(view -> getPresenter().requestMedicineMeasureValueDialog());
+        if (getMedicineMeasureValueView() != null) {
+            getMedicineMeasureValueView().setFieldDialogListener(view -> getPresenter().requestMedicineMeasureValueDialog());
         }
     }
 
@@ -223,15 +223,15 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @Override
     public void showMedicineMeasureValueDialog(@NonNull ArrayList<MedicineMeasure> medicineMeasureList) {
-        if (getMedicineMeasureView() == null) {
+        if (getMedicineMeasureValueView() == null) {
             return;
         }
         MedicineMeasureValueDialogFragment dialogFragment = new MedicineMeasureValueDialogFragment();
         dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_MEDICINE_MEASURE_DIALOG,
-                MedicineMeasureDialogArguments.builder()
+                MedicineMeasureValueDialogArguments.builder()
                         .sex(getSex())
                         .medicineMeasureList(medicineMeasureList)
-                        .medicineMeasureValue(getMedicineMeasureView().getValue())
+                        .medicineMeasureValue(getMedicineMeasureValueView().getValue())
                         .build());
     }
 
@@ -352,5 +352,5 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     protected abstract FieldMedicineView getMedicineView();
 
     @Nullable
-    protected abstract FieldMedicineMeasureView getMedicineMeasureView();
+    protected abstract FieldMedicineMeasureValueView getMedicineMeasureValueView();
 }

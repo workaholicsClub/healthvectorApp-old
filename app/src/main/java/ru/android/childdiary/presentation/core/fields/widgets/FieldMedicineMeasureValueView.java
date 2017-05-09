@@ -12,18 +12,18 @@ import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValu
 import ru.android.childdiary.presentation.core.fields.adapters.MedicineMeasureAdapter;
 import ru.android.childdiary.utils.StringUtils;
 
-public class FieldMedicineMeasureView extends FieldDialogView<MedicineMeasureValue> {
+public class FieldMedicineMeasureValueView extends FieldDialogView<MedicineMeasureValue> {
     private final MedicineMeasureAdapter adapter = new MedicineMeasureAdapter(getContext(), Collections.emptyList());
 
-    public FieldMedicineMeasureView(Context context) {
+    public FieldMedicineMeasureValueView(Context context) {
         super(context);
     }
 
-    public FieldMedicineMeasureView(Context context, AttributeSet attrs) {
+    public FieldMedicineMeasureValueView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FieldMedicineMeasureView(Context context, AttributeSet attrs, int defStyle) {
+    public FieldMedicineMeasureValueView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

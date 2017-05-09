@@ -6,8 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureView
-        android:id="@+id/medicineMeasureView"
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView
+        android:id="@+id/medicineMeasureValueView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
