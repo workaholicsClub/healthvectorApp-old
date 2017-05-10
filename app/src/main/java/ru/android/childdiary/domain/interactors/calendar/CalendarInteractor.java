@@ -43,6 +43,7 @@ import ru.android.childdiary.domain.interactors.calendar.validation.OtherEventVa
 import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 
 public class CalendarInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -438,11 +439,7 @@ public class CalendarInteractor implements Interactor {
         return calendarRepository.getFrequencyList();
     }
 
-    public Observable<List<Integer>> getPeriodicityList() {
+    public Observable<List<PeriodicityType>> getPeriodicityList() {
         return calendarRepository.getPeriodicityList();
-    }
-
-    public Observable<List<Integer>> getLengthList() {
-        return calendarRepository.getLengthList();
     }
 }

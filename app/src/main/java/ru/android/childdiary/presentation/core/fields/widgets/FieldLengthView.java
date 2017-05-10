@@ -4,18 +4,12 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.ListAdapter;
-
-import java.util.Collections;
-import java.util.List;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.presentation.core.fields.adapters.LengthAdapter;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.domain.interactors.core.LengthValue;
+import ru.android.childdiary.utils.StringUtils;
 
-public class FieldLengthView extends FieldSpinnerView<Integer> {
-    private final LengthAdapter adapter = new LengthAdapter(getContext(), Collections.emptyList());
-
+public class FieldLengthView extends FieldDialogView<LengthValue> {
     public FieldLengthView(Context context) {
         super(context);
     }
@@ -35,16 +29,9 @@ public class FieldLengthView extends FieldSpinnerView<Integer> {
     }
 
     @Override
-    protected String getTextForValue(@Nullable Integer value) {
-        return TimeUtils.durationLong(getContext(), value);
-    }
-
-    @Override
-    protected ListAdapter getAdapter() {
-        return adapter;
-    }
-
-    public void updateAdapter(List<Integer> items) {
-        adapter.setItems(items);
+    protected String getTextForValue(@Nullable LengthValue value) {
+        return value == null
+                ? null
+                : StringUtils.lengthValue(getContext(), value.getLength(), value.getTimeUnit());
     }
 }

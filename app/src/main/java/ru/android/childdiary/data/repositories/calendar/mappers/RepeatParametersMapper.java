@@ -3,17 +3,17 @@ package ru.android.childdiary.data.repositories.calendar.mappers;
 import android.support.annotation.NonNull;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersData;
-import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersEntity;
-import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
+import ru.android.childdiary.data.entities.core.RepeatParametersData;
+import ru.android.childdiary.data.entities.core.RepeatParametersEntity;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
 public class RepeatParametersMapper {
     public static RepeatParameters mapToPlainObject(@NonNull RepeatParametersData repeatParametersData) {
         return RepeatParameters.builder()
                 .id(repeatParametersData.getId())
-                .linearGroups(repeatParametersData.getLinearGroups())
-                .periodicityInMinutes(repeatParametersData.getPeriodicityInMinutes())
-                .lengthInMinutes(repeatParametersData.getLengthInMinutes())
+                .frequency(repeatParametersData.getFrequency())
+                .periodicity(repeatParametersData.getPeriodicity())
+                .length(repeatParametersData.getLength())
                 .build();
     }
 
@@ -29,8 +29,8 @@ public class RepeatParametersMapper {
     }
 
     private static void fillNonReferencedFields(@NonNull RepeatParametersEntity to, @NonNull RepeatParameters from) {
-        to.setLinearGroups(from.getLinearGroups());
-        to.setPeriodicityInMinutes(from.getPeriodicityInMinutes());
-        to.setLengthInMinutes(from.getLengthInMinutes());
+        to.setFrequency(from.getFrequency());
+        to.setPeriodicity(from.getPeriodicity());
+        to.setLength(from.getLength());
     }
 }

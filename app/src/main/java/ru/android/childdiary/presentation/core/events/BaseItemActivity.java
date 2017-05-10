@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -190,8 +191,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     @Override
-    public void onChecked(boolean value) {
-        // TODO
+    public void onChecked() {
     }
 
     @Override
@@ -200,13 +200,8 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     @Override
-    public void showPeriodicityList(List<Integer> periodicityList) {
+    public void showPeriodicityList(List<PeriodicityType> periodicityList) {
         getRepeatParametersView().updatePeriodicity(periodicityList);
-    }
-
-    @Override
-    public void showLengthList(List<Integer> lengthList) {
-        getRepeatParametersView().updateLength(lengthList);
     }
 
     @Override

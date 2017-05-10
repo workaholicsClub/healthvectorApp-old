@@ -1,9 +1,9 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,18 +12,12 @@ import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import lombok.Getter;
-import ru.android.childdiary.R;
-import ru.android.childdiary.data.entities.calendar.events.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.utils.DateUtils;
-import ru.android.childdiary.utils.ObjectUtils;
 
 public class FieldTimesView extends LinearLayout implements FieldReadOnly {
-    @BindView(R.id.timesView)
-    LinearLayout timesView;
-
     @Nullable
     @Getter
     private LinearGroups linearGroups;
@@ -44,7 +38,8 @@ public class FieldTimesView extends LinearLayout implements FieldReadOnly {
     }
 
     private void init() {
-        inflate(getContext(), R.layout.field_times, this);
+        setOrientation(HORIZONTAL);
+        setGravity(Gravity.CENTER);
     }
 
     @Override
@@ -59,16 +54,16 @@ public class FieldTimesView extends LinearLayout implements FieldReadOnly {
     public void setFinishTime(LocalTime finishTime) {
     }
 
-    public void setNumber(@NonNull Integer number) {
-        if (ObjectUtils.isPositive(number)) {
-            ArrayList<LocalTime> times = new ArrayList<>();
-            for (int i = 0; i < number; ++i) {
-                times.add(LocalTime.MIDNIGHT.plusHours(i));
-            }
-            linearGroups = LinearGroups.builder().times(times).build();
-        } else {
+    public void setNumber(@Nullable Integer number) {
+        if (number == null || number < 0) {
             linearGroups = null;
+            return;
         }
+        ArrayList<LocalTime> times = new ArrayList<>();
+        for (int i = 0; i < number; ++i) {
+            times.add(LocalTime.MIDNIGHT.plusHours(i));
+        }
+        linearGroups = LinearGroups.builder().times(times).build();
         update();
     }
 
@@ -78,7 +73,7 @@ public class FieldTimesView extends LinearLayout implements FieldReadOnly {
     }
 
     private void update() {
-        timesView.removeAllViews();
+        removeAllViews();
         if (linearGroups == null) {
             return;
         }
@@ -88,7 +83,7 @@ public class FieldTimesView extends LinearLayout implements FieldReadOnly {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(10, 10, 10, 10);
             textView.setLayoutParams(layoutParams);
-            timesView.addView(textView);
+            addView(textView);
         }
     }
 

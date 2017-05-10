@@ -12,6 +12,7 @@ import lombok.Value;
 public class MedicineMeasureValue implements Serializable {
     @Nullable
     Double amount;
+
     @Nullable
     MedicineMeasure medicineMeasure;
 }

@@ -18,7 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -112,7 +112,10 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         doctorVisitNameView.setText(item.getName());
         durationView.setValue(item.getDurationInMinutes());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
-        checkBoxView.setChecked(ObjectUtils.isTrue(item.getExported()));
+
+        boolean exported = ObjectUtils.isTrue(item.getExported());
+        checkBoxView.setChecked(exported);
+
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
@@ -143,6 +146,12 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
                 .note(note)
                 .imageFileName(imageFileName)
                 .build();
+    }
+
+    @Override
+    public void onChecked() {
+        boolean readOnly = !getCheckBoxView().isChecked();
+        repeatParametersView.setReadOnly(readOnly);
     }
 
     @Override

@@ -22,6 +22,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 
 public interface CalendarRepository extends Repository {
     Observable<LocalDate> getSelectedDate();
@@ -106,7 +107,5 @@ public interface CalendarRepository extends Repository {
 
     Observable<List<Integer>> getFrequencyList();
 
-    Observable<List<Integer>> getPeriodicityList();
-
-    Observable<List<Integer>> getLengthList();
+    Observable<List<PeriodicityType>> getPeriodicityList();
 }

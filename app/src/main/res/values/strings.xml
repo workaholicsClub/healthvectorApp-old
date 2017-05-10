@@ -154,6 +154,10 @@
     <string name="doctors_title">Список специализаций</string>
     <string name="search">Поиск</string>
     <string name="medicine_measure_dialog_title">Дозировка</string>
+    <string name="frequency_once">Однократно</string>
+    <string name="periodicity_daily">Ежедневно</string>
+    <string name="periodicity_weekly">Еженедельно</string>
+    <string name="periodicity_monthly">Ежемесячно</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
@@ -309,6 +313,13 @@
         <item quantity="other">%d месяцев</item>
         <item quantity="many">%d месяцев</item>
         <item quantity="zero">%d месяцев</item>
+    </plurals>
+    <plurals name="numberOfWeeks">
+        <item quantity="one">%d неделя</item>
+        <item quantity="few">%d недели</item>
+        <item quantity="other">%d недель</item>
+        <item quantity="many">%d недель</item>
+        <item quantity="zero">%d недель</item>
     </plurals>
     <plurals name="numberOfDays">
         <item quantity="one">%d день</item>

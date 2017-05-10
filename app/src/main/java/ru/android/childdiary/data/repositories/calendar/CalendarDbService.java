@@ -20,13 +20,13 @@ import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEn
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
-import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.DiaperEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.data.entities.core.RepeatParametersEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
@@ -127,9 +127,9 @@ public class CalendarDbService {
                 MasterEventEntity.LINEAR_GROUP,
                 // repeat parameters
                 RepeatParametersEntity.ID.as("repeat_parameters_id"),
-                RepeatParametersEntity.LINEAR_GROUPS,
-                RepeatParametersEntity.PERIODICITY_IN_MINUTES,
-                RepeatParametersEntity.LENGTH_IN_MINUTES,
+                RepeatParametersEntity.FREQUENCY,
+                RepeatParametersEntity.PERIODICITY,
+                RepeatParametersEntity.LENGTH,
                 // child
                 ChildEntity.ID.as("child_id"),
                 ChildEntity.NAME.as("child_name"),

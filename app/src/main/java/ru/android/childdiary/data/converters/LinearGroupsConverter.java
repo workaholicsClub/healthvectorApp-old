@@ -12,11 +12,11 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.requery.Converter;
-import ru.android.childdiary.data.entities.calendar.events.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.core.LinearGroups;
 
-public class LinearGroupsConverter implements Converter<LinearGroups, String> {
+public class LinearGroupsConverter extends SimpleConverter<LinearGroups> {
     private static final String DELIMITER = ",";
+
     /**
      * DateTimeFormat is thread-safe and immutable, and the formatters it returns are as well.
      * <p>
@@ -31,32 +31,14 @@ public class LinearGroupsConverter implements Converter<LinearGroups, String> {
     }
 
     @Override
-    public Class<String> getPersistedType() {
-        return String.class;
-    }
-
-    @Override
-    public Integer getPersistedSize() {
-        return null;
-    }
-
-    @Override
-    public String convertToPersisted(LinearGroups value) {
-        return value == null ? null : map(value);
-    }
-
-    @Override
-    public LinearGroups convertToMapped(Class<? extends LinearGroups> type, String value) {
-        return value == null ? null : map(value);
-    }
-
-    private static String map(@NonNull LinearGroups linearGroups) {
+    protected String map(@NonNull LinearGroups linearGroups) {
         return Stream.of(linearGroups.getTimes())
                 .map(TIME_FORMATTER::print)
                 .collect(Collectors.joining(DELIMITER));
     }
 
-    private static LinearGroups map(@NonNull String value) {
+    @Override
+    protected LinearGroups map(@NonNull String value) {
         String[] parts = value.split(DELIMITER);
         List<LocalTime> times = Stream.of(parts)
                 .map(TIME_FORMATTER::parseLocalTime)

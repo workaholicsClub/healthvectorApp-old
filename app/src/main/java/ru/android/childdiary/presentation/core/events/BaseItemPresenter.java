@@ -42,10 +42,6 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showPeriodicityList));
-        unsubscribeOnDestroy(calendarInteractor.getLengthList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::showLengthList));
     }
 
     public void checkValue(@Nullable Doctor doctor) {

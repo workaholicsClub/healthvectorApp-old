@@ -14,6 +14,13 @@
         <item quantity="many">%d месяцев</item>
         <item quantity="zero">%d месяцев</item>
     </plurals>
+    <plurals name="numberOfWeeks">
+        <item quantity="one">%d неделя</item>
+        <item quantity="few">%d недели</item>
+        <item quantity="other">%d недель</item>
+        <item quantity="many">%d недель</item>
+        <item quantity="zero">%d недель</item>
+    </plurals>
     <plurals name="numberOfDays">
         <item quantity="one">%d день</item>
         <item quantity="few">%d дня</item>

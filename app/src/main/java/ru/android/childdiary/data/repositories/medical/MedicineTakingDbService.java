@@ -18,7 +18,7 @@ import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParameters
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMeasureMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
-import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;

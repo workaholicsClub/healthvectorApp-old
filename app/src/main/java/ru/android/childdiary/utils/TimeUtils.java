@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 
 public class TimeUtils {
     public static final int MINUTES_IN_HOUR = 60;
@@ -222,11 +223,38 @@ public class TimeUtils {
     }
 
     @Nullable
+    public static String frequency(Context context, @Nullable Integer number) {
+        if (number == null) {
+            return null;
+        }
+        if (number == 0) {
+            return context.getString(R.string.frequency_once);
+        }
+        return numberOfTimes(context, number);
+    }
+
+    @Nullable
     public static String numberOfTimes(Context context, @Nullable Integer number) {
         if (number == null) {
             return null;
         }
         return context.getResources().getQuantityString(R.plurals.numberOfTimesInADay, number, number);
+    }
+
+    @Nullable
+    public static String periodicity(Context context, @Nullable PeriodicityType type) {
+        if (type == null) {
+            return null;
+        }
+        switch (type) {
+            case DAILY:
+                return context.getString(R.string.periodicity_daily);
+            case WEEKLY:
+                return context.getString(R.string.periodicity_weekly);
+            case MONTHLY:
+                return context.getString(R.string.periodicity_monthly);
+        }
+        return null;
     }
 
     @Value

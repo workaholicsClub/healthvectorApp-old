@@ -6,10 +6,11 @@ import android.view.View;
 
 import java.util.List;
 
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.utils.TimeUtils;
 
-public class PeriodicityAdapter extends SpinnerItemAdapter<Integer, PeriodicityAdapter.ViewHolder> {
-    public PeriodicityAdapter(Context context, List<Integer> periodicityList) {
+public class PeriodicityAdapter extends SpinnerItemAdapter<PeriodicityType, PeriodicityAdapter.ViewHolder> {
+    public PeriodicityAdapter(Context context, List<PeriodicityType> periodicityList) {
         super(context, periodicityList);
     }
 
@@ -18,14 +19,14 @@ public class PeriodicityAdapter extends SpinnerItemAdapter<Integer, PeriodicityA
         return new PeriodicityAdapter.ViewHolder(view);
     }
 
-    static class ViewHolder extends SpinnerItemViewHolder<Integer> {
+    static class ViewHolder extends SpinnerItemViewHolder<PeriodicityType> {
         public ViewHolder(View view) {
             super(view);
         }
 
         @Override
-        protected String getTextForValue(Context context, @NonNull Integer item) {
-            return TimeUtils.durationLong(context, item);
+        protected String getTextForValue(Context context, @NonNull PeriodicityType item) {
+            return TimeUtils.periodicity(context, item);
         }
     }
 }

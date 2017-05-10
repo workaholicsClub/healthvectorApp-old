@@ -65,7 +65,7 @@ public class FieldCheckBoxView extends LinearLayout implements View.OnClickListe
         checked = value;
         update();
         if (fieldCheckBoxListener != null) {
-            fieldCheckBoxListener.onChecked(checked);
+            fieldCheckBoxListener.onChecked();
         }
     }
 
@@ -97,6 +97,6 @@ public class FieldCheckBoxView extends LinearLayout implements View.OnClickListe
     }
 
     public interface FieldCheckBoxListener {
-        void onChecked(boolean value);
+        void onChecked();
     }
 }

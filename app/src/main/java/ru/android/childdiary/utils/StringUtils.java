@@ -15,6 +15,7 @@ import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 
 public class StringUtils {
@@ -134,8 +135,25 @@ public class StringUtils {
             String amountStr = DoubleUtils.multipleUnitFormat(amount);
             String medicineMeasureStr = medicineMeasure.getName();
             return context.getString(R.string.medicine_measure_format, amountStr, medicineMeasureStr);
-        } else {
+        }
+        return null;
+    }
+
+    @Nullable
+    public static String lengthValue(Context context,
+                                     @Nullable Integer length,
+                                     @Nullable TimeUnit timeUnit) {
+        if (length == null || timeUnit == null) {
             return null;
         }
+        switch (timeUnit) {
+            case DAY:
+                return context.getResources().getQuantityString(R.plurals.numberOfDays, length);
+            case WEEK:
+                return context.getResources().getQuantityString(R.plurals.numberOfWeeks, length);
+            case MONTH:
+                return context.getResources().getQuantityString(R.plurals.numberOfMonths, length);
+        }
+        return null;
     }
 }

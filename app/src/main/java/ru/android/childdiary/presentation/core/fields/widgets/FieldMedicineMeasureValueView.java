@@ -5,16 +5,11 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-import java.util.Collections;
-
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
-import ru.android.childdiary.presentation.core.fields.adapters.MedicineMeasureAdapter;
 import ru.android.childdiary.utils.StringUtils;
 
 public class FieldMedicineMeasureValueView extends FieldDialogView<MedicineMeasureValue> {
-    private final MedicineMeasureAdapter adapter = new MedicineMeasureAdapter(getContext(), Collections.emptyList());
-
     public FieldMedicineMeasureValueView(Context context) {
         super(context);
     }

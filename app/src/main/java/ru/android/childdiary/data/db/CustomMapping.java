@@ -9,8 +9,11 @@ import ru.android.childdiary.data.converters.FeedTypeEnumConverter;
 import ru.android.childdiary.data.converters.JodaDateTimeConverter;
 import ru.android.childdiary.data.converters.JodaLocalDateConverter;
 import ru.android.childdiary.data.converters.JodaLocalTimeConverter;
+import ru.android.childdiary.data.converters.LengthValueConverter;
 import ru.android.childdiary.data.converters.LinearGroupsConverter;
+import ru.android.childdiary.data.converters.PeriodicityTypeEnumConverter;
 import ru.android.childdiary.data.converters.SexEnumConverter;
+import ru.android.childdiary.data.converters.TimeUnitEnumConverter;
 
 public class CustomMapping extends DefaultMapping {
     public CustomMapping(Platform platform) {
@@ -22,7 +25,10 @@ public class CustomMapping extends DefaultMapping {
         addConverter(new JodaDateTimeConverter());
         addConverter(new JodaLocalDateConverter());
         addConverter(new JodaLocalTimeConverter());
+        addConverter(new LengthValueConverter());
         addConverter(new LinearGroupsConverter());
+        addConverter(new PeriodicityTypeEnumConverter());
         addConverter(new SexEnumConverter());
+        addConverter(new TimeUnitEnumConverter());
     }
 }

@@ -33,6 +33,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 
@@ -323,7 +324,7 @@ public class CalendarDataRepository implements CalendarRepository {
             case SLEEP:
                 return Observable.just(60);
             case DOCTOR_VISIT:
-                return Observable.just(24 * 60);
+                return Observable.just(TimeUtils.MINUTES_IN_DAY);
             case MEDICINE_TAKING:
                 return Observable.just(10);
             // TODO EXERCISE
@@ -333,24 +334,12 @@ public class CalendarDataRepository implements CalendarRepository {
 
     @Override
     public Observable<List<Integer>> getFrequencyList() {
-        return Observable.just(Arrays.asList(1, 2, 3, 4, 5));
+        return Observable.just(Arrays.asList(0, 1, 2, 3, 4, 5));
     }
 
     @Override
-    public Observable<List<Integer>> getPeriodicityList() {
-        return Observable.just(Arrays.asList(
-                TimeUtils.MINUTES_IN_DAY,
-                2 * TimeUtils.MINUTES_IN_DAY,
-                7 * TimeUtils.MINUTES_IN_DAY,
-                30 * TimeUtils.MINUTES_IN_DAY));
-    }
-
-    @Override
-    public Observable<List<Integer>> getLengthList() {
-        return Observable.just(Arrays.asList(
-                7 * TimeUtils.MINUTES_IN_DAY,
-                10 * TimeUtils.MINUTES_IN_DAY,
-                30 * TimeUtils.MINUTES_IN_DAY));
+    public Observable<List<PeriodicityType>> getPeriodicityList() {
+        return Observable.just(Arrays.asList(PeriodicityType.DAILY, PeriodicityType.WEEKLY, PeriodicityType.MONTHLY));
     }
 
     private interface OnSelectedDateChangedListener {

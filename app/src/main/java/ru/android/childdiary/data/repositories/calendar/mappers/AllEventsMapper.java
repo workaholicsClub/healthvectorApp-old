@@ -7,13 +7,13 @@ import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntit
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
-import ru.android.childdiary.data.entities.calendar.events.core.RepeatParametersEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.DiaperEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.data.entities.core.RepeatParametersEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
@@ -25,13 +25,13 @@ import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEv
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -270,9 +270,9 @@ public class AllEventsMapper {
     public static RepeatParameters mapToRepeatParameters(@NonNull Tuple data) {
         return RepeatParameters.builder()
                 .id(data.get(RepeatParametersEntity.ID.as("repeat_parameters_id")))
-                .linearGroups(data.get(RepeatParametersEntity.LINEAR_GROUPS))
-                .periodicityInMinutes(data.get(RepeatParametersEntity.PERIODICITY_IN_MINUTES))
-                .lengthInMinutes(data.get(RepeatParametersEntity.LENGTH_IN_MINUTES))
+                .frequency(data.get(RepeatParametersEntity.FREQUENCY))
+                .periodicity(data.get(RepeatParametersEntity.PERIODICITY))
+                .length(data.get(RepeatParametersEntity.LENGTH))
                 .build();
     }
 }

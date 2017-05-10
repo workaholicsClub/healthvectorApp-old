@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -21,10 +22,7 @@ public interface BaseItemView<T extends Serializable> extends BaseView {
     void showFrequencyList(List<Integer> frequencyList);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showPeriodicityList(List<Integer> periodicityList);
-
-    @StateStrategyType(AddToEndSingleStrategy.class)
-    void showLengthList(List<Integer> lengthList);
+    void showPeriodicityList(List<PeriodicityType> periodicityList);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void setDoctor(@Nullable Doctor doctor);
