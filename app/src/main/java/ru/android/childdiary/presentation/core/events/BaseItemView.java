@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -32,4 +33,7 @@ public interface BaseItemView<T extends Serializable> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showMedicineMeasureValueDialog(@NonNull ArrayList<MedicineMeasure> medicineMeasureList);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showLengthValueDialog(@NonNull ArrayList<TimeUnit> timeUnits);
 }

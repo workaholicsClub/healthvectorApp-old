@@ -98,7 +98,7 @@
     <string name="other_event_finish">Конец</string>
     <string name="notify_time_dialog_title">Оповещение за</string>
     <string name="notify_time_text">За %s</string>
-    <string name="no_notification">Нет</string>
+    <string name="no_value">Нет</string>
     <string name="time_dialog_days">Дней</string>
     <string name="time_dialog_hours">Часов</string>
     <string name="time_dialog_minutes">Минут</string>
@@ -327,6 +327,27 @@
         <item quantity="other">%d дней</item>
         <item quantity="many">%d дней</item>
         <item quantity="zero">%d дней</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfMonths">
+        <item quantity="one">месяц</item>
+        <item quantity="few">месяца</item>
+        <item quantity="other">месяцев</item>
+        <item quantity="many">месяцев</item>
+        <item quantity="zero">месяцев</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfWeeks">
+        <item quantity="one">неделя</item>
+        <item quantity="few">недели</item>
+        <item quantity="other">недель</item>
+        <item quantity="many">недель</item>
+        <item quantity="zero">недель</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfDays">
+        <item quantity="one">день</item>
+        <item quantity="few">дня</item>
+        <item quantity="other">дней</item>
+        <item quantity="many">дней</item>
+        <item quantity="zero">дней</item>
     </plurals>
     <plurals name="numberOfHours">
         <item quantity="one">%d час</item>

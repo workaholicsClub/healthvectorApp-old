@@ -28,10 +28,9 @@ public class FieldLengthView extends FieldDialogView<LengthValue> {
         return R.layout.field_length;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable LengthValue value) {
-        return value == null
-                ? null
-                : StringUtils.lengthValue(getContext(), value.getLength(), value.getTimeUnit());
+        return StringUtils.lengthValue(getContext(), value);
     }
 }

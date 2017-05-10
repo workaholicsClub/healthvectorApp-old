@@ -27,13 +27,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.fields.dialogs.LengthValueDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.LengthValueDialogFragment;
 import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureValueDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureValueDialogFragment;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
@@ -58,14 +62,18 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         extends BaseMvpActivity implements BaseItemView<T>,
         FieldCheckBoxView.FieldCheckBoxListener,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener,
-        MedicineMeasureValueDialogFragment.Listener {
+        MedicineMeasureValueDialogFragment.Listener, LengthValueDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
     private static final String TAG_MEDICINE_MEASURE_DIALOG = "TAG_MEDICINE_MEASURE_DIALOG";
+    private static final String TAG_LENGTH_VALUE_DIALOG = "TAG_LENGTH_VALUE_DIALOG";
+
     private static final int REQUEST_DOCTOR = 1;
     private static final int REQUEST_MEDICINE = 2;
+
+    protected T defaultItem;
 
     @BindView(R.id.rootView)
     View rootView;
@@ -76,6 +84,9 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResourceId());
+
+        //noinspection unchecked
+        defaultItem = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_ITEM);
 
         getCheckBoxView().setText(R.string.export_to_calendar);
         getCheckBoxView().setFieldCheckBoxListener(this);
@@ -125,6 +136,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         if (getMedicineMeasureValueView() != null) {
             getMedicineMeasureValueView().setFieldDialogListener(view -> getPresenter().requestMedicineMeasureValueDialog());
         }
+        getRepeatParametersView().setListener(() -> getPresenter().requestLengthValueDialog());
     }
 
     @Override
@@ -233,6 +245,18 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     @Override
+    public void showLengthValueDialog(@NonNull ArrayList<TimeUnit> timeUnits) {
+        LengthValue lengthValue = getRepeatParametersView().getLengthValue();
+        LengthValueDialogFragment dialogFragment = new LengthValueDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_LENGTH_VALUE_DIALOG,
+                LengthValueDialogArguments.builder()
+                        .sex(getSex())
+                        .timeUnits(timeUnits)
+                        .lengthValue(lengthValue)
+                        .build());
+    }
+
+    @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         if (fragment instanceof TimePickerDialog) {
@@ -297,6 +321,11 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         if (getMedicineMeasureValueView() != null) {
             getMedicineMeasureValueView().setValue(medicineMeasureValue);
         }
+    }
+
+    @Override
+    public void onSetLengthValue(String tag, @NonNull LengthValue lengthValue) {
+        getRepeatParametersView().setLengthValue(lengthValue);
     }
 
     @Override

@@ -35,6 +35,7 @@ public class FieldFoodMeasureView extends FieldSpinnerView<FoodMeasure> {
         return R.layout.field_food_measure;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable FoodMeasure value) {
         return value == null ? null : value.getName();

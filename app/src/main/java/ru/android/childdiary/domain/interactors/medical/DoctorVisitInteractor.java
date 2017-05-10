@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,6 +18,8 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
+import ru.android.childdiary.domain.interactors.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsResponse;
@@ -49,12 +53,13 @@ public class DoctorVisitInteractor implements Interactor {
     public Observable<DoctorVisit> getDefaultDoctorVisit() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
+                getDefaultRepeatParameters(),
                 Observable.just(DateTime.now()),
                 calendarRepository.getDefaultNotifyTimeInMinutes(EventType.DOCTOR_VISIT),
-                (child, dateTime, minutes) -> DoctorVisit.builder()
+                (child, repeatParameters, dateTime, minutes) -> DoctorVisit.builder()
                         .child(child)
                         .doctor(null)
-                        .repeatParameters(null)
+                        .repeatParameters(repeatParameters)
                         .name(null)
                         .durationInMinutes(15)
                         .dateTime(dateTime)
@@ -63,6 +68,17 @@ public class DoctorVisitInteractor implements Interactor {
                         .notifyTimeInMinutes(minutes)
                         .note(null)
                         .imageFileName(null)
+                        .build());
+    }
+
+    private Observable<RepeatParameters> getDefaultRepeatParameters() {
+        return Observable.just(
+                RepeatParameters.builder()
+                        .frequency(LinearGroups.builder()
+                                .times(new ArrayList<>(Collections.emptyList()))
+                                .build())
+                        .periodicity(null)
+                        .length(null)
                         .build());
     }
 

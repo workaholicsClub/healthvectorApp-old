@@ -28,10 +28,9 @@ public class FieldMedicineMeasureValueView extends FieldDialogView<MedicineMeasu
         return R.layout.field_medicine_measure;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable MedicineMeasureValue value) {
-        return value == null
-                ? null
-                : StringUtils.medicineMeasureValue(getContext(), value.getAmount(), value.getMedicineMeasure());
+        return StringUtils.medicineMeasureValue(getContext(), value);
     }
 }

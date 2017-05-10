@@ -106,8 +106,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     @Override
     protected void setup(MedicineTaking item) {
         medicineView.setValue(item.getMedicine());
-        MedicineMeasureValue medicineMeasureValue = MedicineMeasureValue
-                .builder()
+        MedicineMeasureValue medicineMeasureValue = MedicineMeasureValue.builder()
                 .amount(item.getAmount())
                 .medicineMeasure(item.getMedicineMeasure())
                 .build();

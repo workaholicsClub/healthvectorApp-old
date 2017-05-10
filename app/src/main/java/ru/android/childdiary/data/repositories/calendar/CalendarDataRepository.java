@@ -34,6 +34,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 
@@ -340,6 +341,11 @@ public class CalendarDataRepository implements CalendarRepository {
     @Override
     public Observable<List<PeriodicityType>> getPeriodicityList() {
         return Observable.just(Arrays.asList(PeriodicityType.DAILY, PeriodicityType.WEEKLY, PeriodicityType.MONTHLY));
+    }
+
+    @Override
+    public Observable<List<TimeUnit>> getTimeUnits() {
+        return Observable.just(Arrays.asList(TimeUnit.DAY, TimeUnit.WEEK, TimeUnit.MONTH));
     }
 
     private interface OnSelectedDateChangedListener {

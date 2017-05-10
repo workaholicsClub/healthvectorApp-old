@@ -20,8 +20,6 @@ import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<MedicineMeasureValueDialogArguments> {
-    private static final String KEY_PARAMETERS = "parameters";
-
     @BindView(R.id.rootView)
     View rootView;
 
@@ -47,7 +45,7 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
             if (hasFocus) {
                 editText.setSelection(editText.getText().length());
             } else {
-                Double amount = readDouble();
+                Double amount = readAmount();
                 editText.setText(DoubleUtils.multipleUnitFormat(amount));
             }
         });
@@ -86,12 +84,10 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
                 .setTitle(R.string.medicine_measure_dialog_title)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     hideKeyboardAndClearFocus(rootView.findFocus());
-                    Double amount = readDouble();
-                    int i = numberPicker.getValue();
-                    MedicineMeasure medicineMeasure = dialogArguments.getMedicineMeasureList().get(i);
+                    Double amount = readAmount();
+                    MedicineMeasure medicineMeasure = readMedicineMeasure();
                     if (listener != null) {
-                        MedicineMeasureValue medicineMeasureValue = MedicineMeasureValue
-                                .builder()
+                        MedicineMeasureValue medicineMeasureValue = MedicineMeasureValue.builder()
                                 .amount(amount)
                                 .medicineMeasure(medicineMeasure)
                                 .build();
@@ -106,12 +102,17 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
         return dialog;
     }
 
-    private Double readDouble() {
+    private Double readAmount() {
         try {
             return Double.parseDouble(editText.getText().toString());
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    private MedicineMeasure readMedicineMeasure() {
+        int index = numberPicker.getValue();
+        return dialogArguments.getMedicineMeasureList().get(index);
     }
 
     @Override

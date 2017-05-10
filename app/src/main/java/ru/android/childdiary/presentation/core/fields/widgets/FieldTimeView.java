@@ -29,6 +29,7 @@ public class FieldTimeView extends FieldDialogView<LocalTime> {
         return R.layout.field_time;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable LocalTime value) {
         return DateUtils.time(getContext(), value);

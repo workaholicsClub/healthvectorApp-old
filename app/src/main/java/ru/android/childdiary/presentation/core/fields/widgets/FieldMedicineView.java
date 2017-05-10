@@ -27,6 +27,7 @@ public class FieldMedicineView extends FieldDialogView<Medicine> {
         return R.layout.field_medicine;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable Medicine value) {
         return value == null ? null : value.getName();

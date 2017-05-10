@@ -20,11 +20,10 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T extends Serializable>
         extends BaseItemActivity<V, T> implements BaseEditItemView<T> {
+    protected T item;
+
     @BindView(R.id.buttonFinish)
     Button buttonFinish;
-
-    protected T item;
-    protected T defaultItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,8 +31,6 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
 
         //noinspection unchecked
         item = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_ITEM);
-        //noinspection unchecked
-        defaultItem = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_ITEM);
 
         setup(item);
     }

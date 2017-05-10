@@ -14,7 +14,6 @@ import java.io.Serializable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
-import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -23,14 +22,9 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     @BindView(R.id.buttonAdd)
     Button buttonAdd;
 
-    protected T defaultItem;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //noinspection unchecked
-        defaultItem = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_ITEM);
 
         setup(defaultItem);
     }

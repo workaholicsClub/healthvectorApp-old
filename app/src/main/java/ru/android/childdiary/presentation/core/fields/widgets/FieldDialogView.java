@@ -32,6 +32,7 @@ public abstract class FieldDialogView<T> extends LinearLayout implements View.On
     @Nullable
     @Setter
     private FieldDialogListener fieldDialogListener;
+
     @Nullable
     @Getter
     private T value;
@@ -89,6 +90,7 @@ public abstract class FieldDialogView<T> extends LinearLayout implements View.On
     @LayoutRes
     protected abstract int getLayoutResourceId();
 
+    @Nullable
     protected abstract String getTextForValue(@Nullable T value);
 
     public interface FieldDialogListener {

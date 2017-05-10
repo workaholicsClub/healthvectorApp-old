@@ -71,6 +71,7 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements View.O
         super.onFinishInflate();
         ButterKnife.bind(this);
         setReadOnly(false);
+        textView.setText(getTextForValue(value));
     }
 
     public void setValue(T value) {
@@ -141,6 +142,7 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements View.O
     @LayoutRes
     protected abstract int getLayoutResourceId();
 
+    @Nullable
     protected abstract String getTextForValue(@Nullable T value);
 
     protected abstract ListAdapter getAdapter();

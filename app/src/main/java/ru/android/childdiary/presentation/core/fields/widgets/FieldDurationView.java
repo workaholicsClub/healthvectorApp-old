@@ -31,6 +31,7 @@ public class FieldDurationView extends FieldDialogView<Integer> {
         return R.layout.field_duration;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable Integer value) {
         return TimeUtils.durationShort(getContext(), value);

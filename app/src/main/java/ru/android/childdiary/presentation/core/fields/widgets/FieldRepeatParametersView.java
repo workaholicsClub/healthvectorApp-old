@@ -12,6 +12,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
@@ -19,7 +20,7 @@ import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
 public class FieldRepeatParametersView extends LinearLayout
-        implements FieldSpinnerView.FieldSpinnerListener, FieldReadOnly {
+        implements FieldSpinnerView.FieldSpinnerListener, FieldDialogView.FieldDialogListener, FieldReadOnly {
     @BindView(R.id.frequencyView)
     FieldFrequencyView frequencyView;
 
@@ -34,6 +35,10 @@ public class FieldRepeatParametersView extends LinearLayout
 
     @BindView(R.id.timesView)
     FieldTimesView timesView;
+
+    @Nullable
+    @Setter
+    private Listener listener;
 
     @Nullable
     private RepeatParameters repeatParameters;
@@ -64,7 +69,7 @@ public class FieldRepeatParametersView extends LinearLayout
         ButterKnife.bind(this);
         frequencyView.setFieldSpinnerListener(this);
         periodicityView.setFieldSpinnerListener(this);
-        // TODO dialog listener lengthView.setFieldSpinnerListener(this);
+        lengthView.setFieldDialogListener(this);
     }
 
     public void updateFrequency(List<Integer> items) {
@@ -80,22 +85,20 @@ public class FieldRepeatParametersView extends LinearLayout
         if (view == frequencyView) {
             Integer number = (Integer) item;
             frequencyView.setValue(number);
+            timesTitle.setVisibility(number != null && number > 0 ? VISIBLE : GONE);
             timesView.setNumber(number);
-            timesTitle.setVisibility(number > 0 ? VISIBLE : GONE);
         } else if (view == periodicityView) {
             periodicityView.setValue((PeriodicityType) item);
         }
     }
 
-    public void setRepeatParameters(@Nullable RepeatParameters repeatParameters) {
-        this.repeatParameters = repeatParameters;
-        LinearGroups linearGroups = repeatParameters == null ? null : repeatParameters.getFrequency();
-        PeriodicityType periodicity = repeatParameters == null ? null : repeatParameters.getPeriodicity();
-        LengthValue length = repeatParameters == null ? null : repeatParameters.getLength();
-        frequencyView.setValue(linearGroups == null ? null : linearGroups.getTimes().size());
-        timesView.setLinearGroups(linearGroups);
-        periodicityView.setValue(periodicity);
-        lengthView.setValue(length);
+    @Override
+    public void requestValueChange(FieldDialogView view) {
+        if (view == lengthView) {
+            if (listener != null) {
+                listener.showLengthValueDialog();
+            }
+        }
     }
 
     public RepeatParameters getRepeatParameters() {
@@ -109,6 +112,31 @@ public class FieldRepeatParametersView extends LinearLayout
                 .periodicity(periodicity)
                 .length(length)
                 .build();
+    }
+
+    public void setRepeatParameters(@Nullable RepeatParameters repeatParameters) {
+        this.repeatParameters = repeatParameters;
+        LinearGroups linearGroups = repeatParameters == null ? null : repeatParameters.getFrequency();
+        PeriodicityType periodicity = repeatParameters == null ? null : repeatParameters.getPeriodicity();
+        LengthValue length = repeatParameters == null ? null : repeatParameters.getLength();
+
+        Integer number = linearGroups == null ? null : linearGroups.getTimes().size();
+        frequencyView.setValue(number);
+        timesTitle.setVisibility(number != null && number > 0 ? VISIBLE : GONE);
+        timesView.setNumber(number);
+
+        timesView.setLinearGroups(linearGroups);
+        periodicityView.setValue(periodicity);
+        lengthView.setValue(length);
+    }
+
+    @Nullable
+    public LengthValue getLengthValue() {
+        return lengthView.getValue();
+    }
+
+    public void setLengthValue(@Nullable LengthValue lengthValue) {
+        lengthView.setValue(lengthValue);
     }
 
     public void setStartTime(LocalTime startTime) {
@@ -130,5 +158,9 @@ public class FieldRepeatParametersView extends LinearLayout
         timesView.setReadOnly(readOnly);
         periodicityView.setReadOnly(readOnly);
         lengthView.setReadOnly(readOnly);
+    }
+
+    public interface Listener {
+        void showLengthValueDialog();
     }
 }

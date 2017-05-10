@@ -12,7 +12,7 @@ import java.util.List;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.presentation.core.fields.adapters.PeriodicityAdapter;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.StringUtils;
 
 public class FieldPeriodicityView extends FieldSpinnerView<PeriodicityType> {
     private final PeriodicityAdapter adapter = new PeriodicityAdapter(getContext(), Collections.emptyList());
@@ -35,9 +35,10 @@ public class FieldPeriodicityView extends FieldSpinnerView<PeriodicityType> {
         return R.layout.field_periodicity;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable PeriodicityType value) {
-        return TimeUtils.periodicity(getContext(), value);
+        return StringUtils.periodicity(getContext(), value);
     }
 
     @Override

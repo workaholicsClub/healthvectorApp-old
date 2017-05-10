@@ -66,6 +66,7 @@ public abstract class FieldRadioView<T extends Enum<T>> extends LinearLayout imp
     @LayoutRes
     protected abstract int getTitleLayoutResourceId();
 
+    @Nullable
     protected abstract String getTextForValue(@Nullable T value);
 
     @Override

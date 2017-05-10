@@ -3,7 +3,10 @@ package ru.android.childdiary.domain.interactors.medical;
 import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,6 +19,11 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
+import ru.android.childdiary.domain.interactors.core.LengthValue;
+import ru.android.childdiary.domain.interactors.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
@@ -50,20 +58,35 @@ public class MedicineTakingInteractor implements Interactor {
     public Observable<MedicineTaking> getDefaultMedicineTaking() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
+                getDefaultRepeatParameters(),
                 Observable.just(DateTime.now()),
                 calendarRepository.getDefaultNotifyTimeInMinutes(EventType.MEDICINE_TAKING),
-                (child, dateTime, minutes) -> MedicineTaking.builder()
+                (child, repeatParameters, dateTime, minutes) -> MedicineTaking.builder()
                         .child(child)
                         .medicine(null)
                         .amount(null)
                         .medicineMeasure(null)
-                        .repeatParameters(null)
+                        .repeatParameters(repeatParameters)
                         .dateTime(dateTime)
                         .finishDateTime(null)
                         .exported(null)
                         .notifyTimeInMinutes(minutes)
                         .note(null)
                         .imageFileName(null)
+                        .build());
+    }
+
+    private Observable<RepeatParameters> getDefaultRepeatParameters() {
+        return Observable.just(
+                RepeatParameters.builder()
+                        .frequency(LinearGroups.builder()
+                                .times(new ArrayList<>(Collections.singletonList(LocalTime.MIDNIGHT)))
+                                .build())
+                        .periodicity(PeriodicityType.DAILY)
+                        .length(LengthValue.builder()
+                                .length(1)
+                                .timeUnit(TimeUnit.WEEK)
+                                .build())
                         .build());
     }
 

@@ -43,6 +43,7 @@ public class FieldFeedTypeView extends FieldSpinnerView<FeedType> {
         return R.layout.field_feed_type;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable FeedType value) {
         return StringUtils.feedType(getContext(), value);

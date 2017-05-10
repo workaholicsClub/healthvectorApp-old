@@ -29,6 +29,7 @@ public class FieldDateView extends FieldDialogView<LocalDate> {
         return R.layout.field_date;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable LocalDate value) {
         return DateUtils.date(getContext(), value);

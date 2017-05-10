@@ -33,6 +33,7 @@ public class FieldBreastView extends FieldRadioView<Breast> {
         return R.layout.field_breast;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable Breast value) {
         return StringUtils.breast(getContext(), value);

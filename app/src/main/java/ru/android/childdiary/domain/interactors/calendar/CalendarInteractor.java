@@ -44,6 +44,7 @@ import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventVal
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.core.TimeUnit;
 
 public class CalendarInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -441,5 +442,9 @@ public class CalendarInteractor implements Interactor {
 
     public Observable<List<PeriodicityType>> getPeriodicityList() {
         return calendarRepository.getPeriodicityList();
+    }
+
+    public Observable<List<TimeUnit>> getTimeUnits() {
+        return calendarRepository.getTimeUnits();
     }
 }

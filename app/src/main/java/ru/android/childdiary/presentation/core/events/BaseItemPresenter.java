@@ -89,4 +89,12 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showMedicineMeasureValueDialog, this::onUnexpectedError));
     }
+
+    public void requestLengthValueDialog() {
+        unsubscribeOnDestroy(calendarInteractor.getTimeUnits()
+                .map(ArrayList::new)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showLengthValueDialog, this::onUnexpectedError));
+    }
 }

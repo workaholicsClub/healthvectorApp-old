@@ -11,7 +11,7 @@ import java.util.List;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.fields.adapters.FrequencyAdapter;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.StringUtils;
 
 public class FieldFrequencyView extends FieldSpinnerView<Integer> {
     private final FrequencyAdapter adapter = new FrequencyAdapter(getContext(), Collections.emptyList());
@@ -34,9 +34,10 @@ public class FieldFrequencyView extends FieldSpinnerView<Integer> {
         return R.layout.field_frequency;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable Integer value) {
-        return TimeUtils.frequency(getContext(), value);
+        return StringUtils.frequency(getContext(), value);
     }
 
     @Override

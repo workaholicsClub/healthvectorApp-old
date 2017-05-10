@@ -33,6 +33,7 @@ public class FieldDiaperStateView extends FieldRadioView<DiaperState> {
         return R.layout.field_diaper_state;
     }
 
+    @Nullable
     @Override
     protected String getTextForValue(@Nullable DiaperState value) {
         return StringUtils.diaperState(getContext(), value);
