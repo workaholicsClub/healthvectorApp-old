@@ -27,7 +27,10 @@ public class EventHelper {
     }
 
     public static boolean canBeDone(@Nullable EventType eventType) {
-        return eventType == EventType.OTHER;
+        return eventType == EventType.OTHER
+                || eventType == EventType.DOCTOR_VISIT
+                || eventType == EventType.MEDICINE_TAKING;
+        // TODO EXERCISE
     }
 
     public static boolean isDone(@NonNull MasterEvent event) {

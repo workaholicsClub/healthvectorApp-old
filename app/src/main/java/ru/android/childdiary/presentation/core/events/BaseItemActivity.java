@@ -30,6 +30,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureValueDialogArguments;
@@ -55,7 +56,8 @@ import ru.android.childdiary.utils.TimeUtils;
 public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Serializable>
         extends BaseMvpActivity implements BaseItemView<T>,
         FieldCheckBoxView.FieldCheckBoxListener,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener {
+        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener,
+        MedicineMeasureValueDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
@@ -292,6 +294,13 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
             case TAG_NOTIFY_TIME_DIALOG:
                 getNotifyTimeView().setValue(minutes);
                 break;
+        }
+    }
+
+    @Override
+    public void onSetMedicineMeasureValue(String tag, @NonNull MedicineMeasureValue medicineMeasureValue) {
+        if (getMedicineMeasureValueView() != null) {
+            getMedicineMeasureValueView().setValue(medicineMeasureValue);
         }
     }
 

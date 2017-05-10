@@ -16,6 +16,7 @@ import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.BaseDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<MedicineMeasureValueDialogArguments> {
@@ -40,12 +41,14 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
 
     @Override
     protected void setupUi() {
-        // TODO setup numberpicker, edittext selected value
         editText.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
 
         editText.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 editText.setSelection(editText.getText().length());
+            } else {
+                Double amount = readDouble();
+                editText.setText(DoubleUtils.multipleUnitFormat(amount));
             }
         });
 
@@ -65,6 +68,14 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(names.length - 1);
         numberPicker.setDisplayedValues(names);
+
+        MedicineMeasureValue medicineMeasureValue = dialogArguments.getMedicineMeasureValue();
+        Double amount = medicineMeasureValue == null ? null : medicineMeasureValue.getAmount();
+        MedicineMeasure medicineMeasure = medicineMeasureValue == null ? null : medicineMeasureValue.getMedicineMeasure();
+        editText.setText(DoubleUtils.multipleUnitFormat(amount));
+        int index = dialogArguments.getMedicineMeasureList().indexOf(medicineMeasure);
+        index = index < 0 ? 0 : index;
+        numberPicker.setValue(index);
     }
 
     @NonNull
@@ -75,9 +86,16 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
                 .setTitle(R.string.medicine_measure_dialog_title)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     hideKeyboardAndClearFocus(rootView.findFocus());
-                    // TODO read values
+                    Double amount = readDouble();
+                    int i = numberPicker.getValue();
+                    MedicineMeasure medicineMeasure = dialogArguments.getMedicineMeasureList().get(i);
                     if (listener != null) {
-                        listener.onSetMedicineMeasure(getTag(), MedicineMeasureValue.builder().build());
+                        MedicineMeasureValue medicineMeasureValue = MedicineMeasureValue
+                                .builder()
+                                .amount(amount)
+                                .medicineMeasure(medicineMeasure)
+                                .build();
+                        listener.onSetMedicineMeasureValue(getTag(), medicineMeasureValue);
                     }
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
@@ -86,6 +104,14 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
+    }
+
+    private Double readDouble() {
+        try {
+            return Double.parseDouble(editText.getText().toString());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     @Override
@@ -103,6 +129,6 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
     }
 
     public interface Listener {
-        void onSetMedicineMeasure(String tag, @NonNull MedicineMeasureValue medicineMeasureValue);
+        void onSetMedicineMeasureValue(String tag, @NonNull MedicineMeasureValue medicineMeasureValue);
     }
 }
