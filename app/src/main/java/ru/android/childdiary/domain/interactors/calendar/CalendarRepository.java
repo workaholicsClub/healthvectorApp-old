@@ -82,10 +82,6 @@ public interface CalendarRepository extends Repository {
 
     Observable<SleepEvent> add(@NonNull SleepEvent event);
 
-    Observable<DoctorVisitEvent> add(@NonNull DoctorVisitEvent event);
-
-    Observable<MedicineTakingEvent> add(@NonNull MedicineTakingEvent event);
-
     Observable<DiaperEvent> update(@NonNull DiaperEvent event);
 
     Observable<FeedEvent> update(@NonNull FeedEvent event);

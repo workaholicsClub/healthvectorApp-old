@@ -41,6 +41,8 @@
     <string name="event_feed">Кормление</string>
     <string name="event_pump">Сцеживание</string>
     <string name="event_other">Другое</string>
+    <string name="event_doctor_visit">Визит к врачу</string>
+    <string name="event_medicine_taking">Прием лекарств</string>
     <string name="validate_child_name_empty">Введите имя ребенка</string>
     <string name="validate_child_sex_empty">Выберите пол ребенка</string>
     <string name="validate_child_birth_date_empty">Введите дату рождения ребенка</string>

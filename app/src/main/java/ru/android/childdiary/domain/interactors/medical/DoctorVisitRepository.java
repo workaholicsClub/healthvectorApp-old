@@ -21,4 +21,6 @@ public interface DoctorVisitRepository extends Repository {
     Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit);
 
     Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit);
+
+    Observable<DoctorVisit> deleteDoctorVisit(@NonNull DoctorVisit doctorVisit);
 }

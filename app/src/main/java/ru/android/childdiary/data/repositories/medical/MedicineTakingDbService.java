@@ -15,11 +15,12 @@ import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
+import ru.android.childdiary.data.repositories.core.MedicineTakingEventsGenerator;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMeasureMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -28,10 +29,13 @@ import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingL
 @Singleton
 public class MedicineTakingDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
+    private final MedicineTakingEventsGenerator eventsGenerator;
 
     @Inject
-    public MedicineTakingDbService(ReactiveEntityStore<Persistable> dataStore) {
+    public MedicineTakingDbService(ReactiveEntityStore<Persistable> dataStore,
+                                   MedicineTakingEventsGenerator eventsGenerator) {
         this.dataStore = dataStore;
+        this.eventsGenerator = eventsGenerator;
     }
 
     public Observable<List<Medicine>> getMedicines() {
@@ -86,7 +90,9 @@ public class MedicineTakingDbService {
                 repeatParameters = insertRepeatParameters(repeatParameters);
                 object = object.toBuilder().repeatParameters(repeatParameters).build();
             }
-            return insertMedicineTaking(object);
+            MedicineTaking result = insertMedicineTaking(object);
+            eventsGenerator.generateEvents(medicineTaking);
+            return result;
         }));
     }
 
@@ -114,5 +120,9 @@ public class MedicineTakingDbService {
             }
             return updateMedicineTaking(object);
         }));
+    }
+
+    public Observable<MedicineTaking> delete(@NonNull MedicineTaking medicineTaking) {
+        return DbUtils.deleteObservable(dataStore, MedicineTakingEntity.class, medicineTaking, medicineTaking.getId());
     }
 }

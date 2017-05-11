@@ -104,6 +104,10 @@ public class StringUtils {
                 return context.getString(R.string.event_pump);
             case OTHER:
                 return context.getString(R.string.event_other);
+            case DOCTOR_VISIT:
+                return context.getString(R.string.event_doctor_visit);
+            case MEDICINE_TAKING:
+                return context.getString(R.string.event_medicine_taking);
             default:
                 return null;
         }
@@ -138,8 +142,8 @@ public class StringUtils {
 
     @Nullable
     public static String medicineMeasureValue(Context context,
-                                               @Nullable Double amount,
-                                               @Nullable MedicineMeasure medicineMeasure) {
+                                              @Nullable Double amount,
+                                              @Nullable MedicineMeasure medicineMeasure) {
         if (ObjectUtils.isPositive(amount)
                 && medicineMeasure != null
                 && !TextUtils.isEmpty(medicineMeasure.getName())) {

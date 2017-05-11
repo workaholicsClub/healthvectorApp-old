@@ -51,4 +51,9 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
     public Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
         return dbService.update(doctorVisit);
     }
+
+    @Override
+    public Observable<DoctorVisit> deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        return dbService.delete(doctorVisit);
+    }
 }

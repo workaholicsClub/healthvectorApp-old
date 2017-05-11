@@ -66,4 +66,11 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
                 .subscribe(defaultDoctorVisit -> getViewState().navigateToDoctorVisit(doctorVisit, defaultDoctorVisit),
                         this::onUnexpectedError));
     }
+
+    public void deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        unsubscribeOnDestroy(doctorVisitInteractor.deleteDoctorVisit(doctorVisit)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::doctorVisitDeleted, this::onUnexpectedError));
+    }
 }

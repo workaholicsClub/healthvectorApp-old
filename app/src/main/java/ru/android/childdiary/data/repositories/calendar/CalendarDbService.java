@@ -331,20 +331,6 @@ public class CalendarDbService {
         }));
     }
 
-    public Observable<DoctorVisitEvent> add(@NonNull DoctorVisitEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            MasterEvent masterEvent = insertMasterEvent(event);
-            return insertDoctorVisitEvent(event, masterEvent);
-        }));
-    }
-
-    public Observable<MedicineTakingEvent> add(@NonNull MedicineTakingEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            MasterEvent masterEvent = insertMasterEvent(event);
-            return insertMedicineTakingEvent(event, masterEvent);
-        }));
-    }
-
     public Observable<DiaperEvent> update(@NonNull DiaperEvent event) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             updateMasterEvent(event);
@@ -436,11 +422,6 @@ public class CalendarDbService {
     private SleepEvent insertSleepEvent(@NonNull SleepEvent event, @NonNull MasterEvent masterEvent) {
         return DbUtils.insert(dataStore, event, masterEvent,
                 SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject);
-    }
-
-    private DoctorVisitEvent insertDoctorVisitEvent(@NonNull DoctorVisitEvent event, @NonNull MasterEvent masterEvent) {
-        return DbUtils.insert(dataStore, event, masterEvent,
-                DoctorVisitEventMapper::mapToEntity, DoctorVisitEventMapper::mapToPlainObject);
     }
 
     private MedicineTakingEvent insertMedicineTakingEvent(@NonNull MedicineTakingEvent event, @NonNull MasterEvent masterEvent) {

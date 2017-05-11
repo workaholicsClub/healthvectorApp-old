@@ -90,8 +90,13 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     }
 
     @Override
+    public void doctorVisitDeleted(@NonNull DoctorVisit doctorVisit) {
+    }
+
+    @Override
     public void delete(DoctorVisit item) {
         // TODO confirm delete all connected events or no events
+        presenter.deleteDoctorVisit(item);
     }
 
     @Override

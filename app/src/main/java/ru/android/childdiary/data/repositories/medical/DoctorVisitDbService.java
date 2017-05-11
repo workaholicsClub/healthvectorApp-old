@@ -14,10 +14,11 @@ import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
+import ru.android.childdiary.data.repositories.core.DoctorVisitEventsGenerator;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
@@ -25,10 +26,13 @@ import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsReq
 @Singleton
 public class DoctorVisitDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
+    private final DoctorVisitEventsGenerator eventsGenerator;
 
     @Inject
-    public DoctorVisitDbService(ReactiveEntityStore<Persistable> dataStore) {
+    public DoctorVisitDbService(ReactiveEntityStore<Persistable> dataStore,
+                                DoctorVisitEventsGenerator eventsGenerator) {
         this.dataStore = dataStore;
+        this.eventsGenerator = eventsGenerator;
     }
 
     public Observable<List<Doctor>> getDoctors() {
@@ -75,7 +79,9 @@ public class DoctorVisitDbService {
                 repeatParameters = insertRepeatParameters(repeatParameters);
                 object = object.toBuilder().repeatParameters(repeatParameters).build();
             }
-            return insertDoctorVisit(object);
+            DoctorVisit result = insertDoctorVisit(object);
+            eventsGenerator.generateEvents(result);
+            return result;
         }));
     }
 
@@ -103,5 +109,9 @@ public class DoctorVisitDbService {
             }
             return updateDoctorVisit(object);
         }));
+    }
+
+    public Observable<DoctorVisit> delete(@NonNull DoctorVisit doctorVisit) {
+        return DbUtils.deleteObservable(dataStore, DoctorVisitEntity.class, doctorVisit, doctorVisit.getId());
     }
 }

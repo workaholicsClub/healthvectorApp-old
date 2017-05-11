@@ -66,4 +66,11 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
                 .subscribe(defaultMedicineTaking -> getViewState().navigateToMedicineTaking(medicineTaking, defaultMedicineTaking),
                         this::onUnexpectedError));
     }
+
+    public void deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        unsubscribeOnDestroy(medicineTakingInteractor.deleteMedicineTaking(medicineTaking)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::medicineTakingDeleted, this::onUnexpectedError));
+    }
 }

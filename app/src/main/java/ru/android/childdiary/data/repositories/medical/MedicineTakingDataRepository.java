@@ -57,4 +57,9 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     public Observable<MedicineTaking> updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
         return dbService.update(medicineTaking);
     }
+
+    @Override
+    public Observable<MedicineTaking> deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        return dbService.delete(medicineTaking);
+    }
 }

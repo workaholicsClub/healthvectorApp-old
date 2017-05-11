@@ -9,6 +9,8 @@ import org.joda.time.DateTime;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -17,6 +19,8 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 
 import static ru.android.childdiary.data.types.FeedType.BREAST_MILK;
 import static ru.android.childdiary.data.types.FeedType.FOOD;
@@ -46,6 +50,7 @@ public class EventHelper {
         return event != null && ObjectUtils.isTrue(event.getIsTimerStarted());
     }
 
+    @Nullable
     public static String getDescription(Context context, @NonNull MasterEvent event) {
         if (event instanceof DiaperEvent) {
             DiaperEvent diaperEvent = (DiaperEvent) event;
@@ -75,7 +80,16 @@ public class EventHelper {
             } else {
                 return TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime());
             }
+        } else if (event instanceof DoctorVisitEvent) {
+            DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
+            Doctor doctor = doctorVisitEvent.getDoctorVisit().getDoctor();
+            return doctor == null ? null : doctor.getName();
+        } else if (event instanceof MedicineTakingEvent) {
+            MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) event;
+            Medicine medicine = medicineTakingEvent.getMedicineTaking().getMedicine();
+            return medicine == null ? null : medicine.getName();
         }
+        // TODO EXERCISE
         throw new IllegalStateException("Unknown event type");
     }
 

@@ -257,16 +257,6 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
-    public Observable<DoctorVisitEvent> add(@NonNull DoctorVisitEvent event) {
-        return dbService.add(event);
-    }
-
-    @Override
-    public Observable<MedicineTakingEvent> add(@NonNull MedicineTakingEvent event) {
-        return dbService.add(event);
-    }
-
-    @Override
     public Observable<DiaperEvent> update(@NonNull DiaperEvent event) {
         return dbService.update(event);
     }

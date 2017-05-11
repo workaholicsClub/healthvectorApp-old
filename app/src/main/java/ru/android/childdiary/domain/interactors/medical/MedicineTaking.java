@@ -6,14 +6,15 @@ import java.io.Serializable;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.data.repositories.core.RepeatParametersContainer;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 
 @Value
 @Builder(toBuilder = true)
-public class MedicineTaking implements Serializable {
+public class MedicineTaking implements Serializable, RepeatParametersContainer {
     Long id;
 
     Child child;
