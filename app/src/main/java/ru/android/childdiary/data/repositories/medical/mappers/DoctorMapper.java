@@ -2,21 +2,30 @@ package ru.android.childdiary.data.repositories.medical.mappers;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.medical.core.DoctorData;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
-public class DoctorMapper {
-    public static Doctor mapToPlainObject(@NonNull DoctorData doctorData) {
+public class DoctorMapper implements EntityMapper<DoctorData, DoctorEntity, Doctor> {
+    @Inject
+    public DoctorMapper() {
+    }
+
+    @Override
+    public Doctor mapToPlainObject(@NonNull DoctorData data) {
         return Doctor.builder()
-                .id(doctorData.getId())
-                .name(doctorData.getName())
+                .id(data.getId())
+                .name(data.getName())
                 .build();
     }
 
-    public static DoctorEntity mapToEntity(BlockingEntityStore blockingEntityStore,
-                                           @NonNull Doctor doctor) {
+    @Override
+    public DoctorEntity mapToEntity(BlockingEntityStore blockingEntityStore,
+                                    @NonNull Doctor doctor) {
         DoctorEntity doctorEntity;
         if (doctor.getId() == null) {
             doctorEntity = new DoctorEntity();
@@ -27,7 +36,8 @@ public class DoctorMapper {
         return doctorEntity;
     }
 
-    private static void fillNonReferencedFields(@NonNull DoctorEntity to, @NonNull Doctor from) {
+    @Override
+    public void fillNonReferencedFields(@NonNull DoctorEntity to, @NonNull Doctor from) {
         to.setName(from.getName());
     }
 }

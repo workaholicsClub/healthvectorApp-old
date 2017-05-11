@@ -27,12 +27,21 @@ import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsReq
 public class DoctorVisitDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
     private final DoctorVisitEventsGenerator eventsGenerator;
+    private final DoctorMapper doctorMapper;
+    private final DoctorVisitMapper doctorVisitMapper;
+    private final RepeatParametersMapper repeatParametersMapper;
 
     @Inject
     public DoctorVisitDbService(ReactiveEntityStore<Persistable> dataStore,
-                                DoctorVisitEventsGenerator eventsGenerator) {
+                                DoctorVisitEventsGenerator eventsGenerator,
+                                DoctorMapper doctorMapper,
+                                DoctorVisitMapper doctorVisitMapper,
+                                RepeatParametersMapper repeatParametersMapper) {
         this.dataStore = dataStore;
         this.eventsGenerator = eventsGenerator;
+        this.doctorMapper = doctorMapper;
+        this.doctorVisitMapper = doctorVisitMapper;
+        this.repeatParametersMapper = repeatParametersMapper;
     }
 
     public Observable<List<Doctor>> getDoctors() {
@@ -40,11 +49,11 @@ public class DoctorVisitDbService {
                 .orderBy(DoctorEntity.NAME, DoctorEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, DoctorMapper::mapToPlainObject));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, doctorMapper));
     }
 
     public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {
-        return DbUtils.insertObservable(dataStore, doctor, DoctorMapper::mapToEntity, DoctorMapper::mapToPlainObject);
+        return DbUtils.insertObservable(dataStore, doctor, doctorMapper);
     }
 
     public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
@@ -58,17 +67,15 @@ public class DoctorVisitDbService {
                 .orderBy(DoctorVisitEntity.DATE_TIME, DoctorVisitEntity.DOCTOR_ID, DoctorVisitEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, DoctorVisitMapper::mapToPlainObject));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, doctorVisitMapper));
     }
 
     private RepeatParameters insertRepeatParameters(@NonNull RepeatParameters repeatParameters) {
-        return DbUtils.insert(dataStore, repeatParameters,
-                RepeatParametersMapper::mapToEntity, RepeatParametersMapper::mapToPlainObject);
+        return DbUtils.insert(dataStore, repeatParameters, repeatParametersMapper);
     }
 
     private DoctorVisit insertDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return DbUtils.insert(dataStore, doctorVisit,
-                DoctorVisitMapper::mapToEntity, DoctorVisitMapper::mapToPlainObject);
+        return DbUtils.insert(dataStore, doctorVisit, doctorVisitMapper);
     }
 
     public Observable<DoctorVisit> add(@NonNull DoctorVisit doctorVisit) {
@@ -86,13 +93,11 @@ public class DoctorVisitDbService {
     }
 
     private RepeatParameters updateRepeatParameters(@NonNull RepeatParameters repeatParameters) {
-        return DbUtils.update(dataStore, repeatParameters,
-                RepeatParametersMapper::mapToEntity, RepeatParametersMapper::mapToPlainObject);
+        return DbUtils.update(dataStore, repeatParameters, repeatParametersMapper);
     }
 
     private DoctorVisit updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return DbUtils.update(dataStore, doctorVisit,
-                DoctorVisitMapper::mapToEntity, DoctorVisitMapper::mapToPlainObject);
+        return DbUtils.update(dataStore, doctorVisit, doctorVisitMapper);
     }
 
     public Observable<DoctorVisit> update(@NonNull DoctorVisit doctorVisit) {
@@ -105,9 +110,9 @@ public class DoctorVisitDbService {
                 } else {
                     repeatParameters = updateRepeatParameters(repeatParameters);
                 }
-                object = object.toBuilder().repeatParameters(repeatParameters).build();
+                object = updateDoctorVisit(object);
             }
-            return updateDoctorVisit(object);
+            return DbUtils.update(dataStore, object, doctorVisitMapper);
         }));
     }
 

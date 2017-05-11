@@ -30,12 +30,24 @@ import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingL
 public class MedicineTakingDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
     private final MedicineTakingEventsGenerator eventsGenerator;
+    private final MedicineMapper medicineMapper;
+    private final MedicineMeasureMapper medicineMeasureMapper;
+    private final MedicineTakingMapper medicineTakingMapper;
+    private final RepeatParametersMapper repeatParametersMapper;
 
     @Inject
     public MedicineTakingDbService(ReactiveEntityStore<Persistable> dataStore,
-                                   MedicineTakingEventsGenerator eventsGenerator) {
+                                   MedicineTakingEventsGenerator eventsGenerator,
+                                   MedicineMapper medicineMapper,
+                                   MedicineMeasureMapper medicineMeasureMapper,
+                                   MedicineTakingMapper medicineTakingMapper,
+                                   RepeatParametersMapper repeatParametersMapper) {
         this.dataStore = dataStore;
         this.eventsGenerator = eventsGenerator;
+        this.medicineMapper = medicineMapper;
+        this.medicineMeasureMapper = medicineMeasureMapper;
+        this.medicineTakingMapper = medicineTakingMapper;
+        this.repeatParametersMapper = repeatParametersMapper;
     }
 
     public Observable<List<Medicine>> getMedicines() {
@@ -43,11 +55,11 @@ public class MedicineTakingDbService {
                 .orderBy(MedicineEntity.NAME, MedicineEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MedicineMapper::mapToPlainObject));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineMapper));
     }
 
     public Observable<Medicine> addMedicine(@NonNull Medicine medicine) {
-        return DbUtils.insertObservable(dataStore, medicine, MedicineMapper::mapToEntity, MedicineMapper::mapToPlainObject);
+        return DbUtils.insertObservable(dataStore, medicine, medicineMapper);
     }
 
     public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
@@ -59,7 +71,7 @@ public class MedicineTakingDbService {
                 .orderBy(MedicineMeasureEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MedicineMeasureMapper::mapToPlainObject));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineMeasureMapper));
     }
 
     public Observable<List<MedicineTaking>> getMedicineTakingList(@NonNull MedicineTakingListRequest request) {
@@ -69,17 +81,15 @@ public class MedicineTakingDbService {
                 .orderBy(MedicineTakingEntity.DATE_TIME, MedicineTakingEntity.MEDICINE_ID, MedicineTakingEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, MedicineTakingMapper::mapToPlainObject));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineTakingMapper));
     }
 
     private RepeatParameters insertRepeatParameters(@NonNull RepeatParameters repeatParameters) {
-        return DbUtils.insert(dataStore, repeatParameters,
-                RepeatParametersMapper::mapToEntity, RepeatParametersMapper::mapToPlainObject);
+        return DbUtils.insert(dataStore, repeatParameters, repeatParametersMapper);
     }
 
     private MedicineTaking insertMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return DbUtils.insert(dataStore, medicineTaking,
-                MedicineTakingMapper::mapToEntity, MedicineTakingMapper::mapToPlainObject);
+        return DbUtils.insert(dataStore, medicineTaking, medicineTakingMapper);
     }
 
     public Observable<MedicineTaking> add(@NonNull MedicineTaking medicineTaking) {
@@ -97,13 +107,11 @@ public class MedicineTakingDbService {
     }
 
     private RepeatParameters updateRepeatParameters(@NonNull RepeatParameters repeatParameters) {
-        return DbUtils.update(dataStore, repeatParameters,
-                RepeatParametersMapper::mapToEntity, RepeatParametersMapper::mapToPlainObject);
+        return DbUtils.update(dataStore, repeatParameters, repeatParametersMapper);
     }
 
     private MedicineTaking updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return DbUtils.update(dataStore, medicineTaking,
-                MedicineTakingMapper::mapToEntity, MedicineTakingMapper::mapToPlainObject);
+        return DbUtils.update(dataStore, medicineTaking, medicineTakingMapper);
     }
 
     public Observable<MedicineTaking> update(@NonNull MedicineTaking medicineTaking) {

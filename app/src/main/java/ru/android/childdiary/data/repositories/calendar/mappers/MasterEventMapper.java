@@ -2,6 +2,8 @@ package ru.android.childdiary.data.repositories.calendar.mappers;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
@@ -10,31 +12,44 @@ import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.core.RepeatParametersEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
-public class MasterEventMapper {
-    public static MasterEvent mapToPlainObject(@NonNull MasterEventData masterEventData) {
-        ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
-        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
+public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEventEntity, MasterEvent> {
+    private final ChildMapper childMapper;
+    private final RepeatParametersMapper repeatParametersMapper;
+
+    @Inject
+    public MasterEventMapper(ChildMapper childMapper,
+                             RepeatParametersMapper repeatParametersMapper) {
+        this.childMapper = childMapper;
+        this.repeatParametersMapper = repeatParametersMapper;
+    }
+
+    @Override
+    public MasterEvent mapToPlainObject(@NonNull MasterEventData data) {
+        ChildData childData = data.getChild();
+        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        RepeatParametersData repeatParametersData = data.getRepeatParameters();
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return MasterEvent.masterBuilder()
-                .masterEventId(masterEventData.getId())
-                .eventType(masterEventData.getEventType())
-                .dateTime(masterEventData.getDateTime())
-                .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
-                .note(masterEventData.getNote())
-                .isDone(masterEventData.isDone())
+                .masterEventId(data.getId())
+                .eventType(data.getEventType())
+                .dateTime(data.getDateTime())
+                .notifyTimeInMinutes(data.getNotifyTimeInMinutes())
+                .note(data.getNote())
+                .isDone(data.isDone())
                 .repeatParameters(repeatParameters)
-                .linearGroup(masterEventData.getLinearGroup())
+                .linearGroup(data.getLinearGroup())
                 .child(child)
                 .build();
     }
 
-    public static MasterEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
-                                                @NonNull MasterEvent masterEvent) {
+    @Override
+    public MasterEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
+                                         @NonNull MasterEvent masterEvent) {
         MasterEventEntity masterEventEntity;
         if (masterEvent.getMasterEventId() == null) {
             masterEventEntity = new MasterEventEntity();
@@ -55,7 +70,8 @@ public class MasterEventMapper {
         return masterEventEntity;
     }
 
-    private static void fillNonReferencedFields(@NonNull MasterEventEntity to, @NonNull MasterEvent from) {
+    @Override
+    public void fillNonReferencedFields(@NonNull MasterEventEntity to, @NonNull MasterEvent from) {
         to.setEventType(from.getEventType());
         to.setDateTime(from.getDateTime());
         to.setNotifyTimeInMinutes(from.getNotifyTimeInMinutes());

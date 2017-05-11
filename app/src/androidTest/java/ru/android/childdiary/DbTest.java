@@ -28,6 +28,8 @@ import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.repositories.child.AntropometryDbService;
 import ru.android.childdiary.data.repositories.child.ChildDbService;
+import ru.android.childdiary.data.repositories.child.mappers.AntropometryMapper;
+import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -70,8 +72,10 @@ public class DbTest {
 
         dataStore = DbUtils.getDataStore(context, DB_NAME, DB_VERSION);
 
-        childDbService = new ChildDbService(dataStore);
-        antropometryDbService = new AntropometryDbService(dataStore);
+        ChildMapper childMapper = new ChildMapper();
+        AntropometryMapper antropometryMapper = new AntropometryMapper(childMapper);
+        childDbService = new ChildDbService(dataStore, childMapper);
+        antropometryDbService = new AntropometryDbService(dataStore, antropometryMapper);
     }
 
     @AfterClass

@@ -19,10 +19,13 @@ import ru.android.childdiary.domain.interactors.child.Child;
 @Singleton
 public class AntropometryDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
+    private final AntropometryMapper antropometryMapper;
 
     @Inject
-    public AntropometryDbService(ReactiveEntityStore<Persistable> dataStore) {
+    public AntropometryDbService(ReactiveEntityStore<Persistable> dataStore,
+                                 AntropometryMapper antropometryMapper) {
         this.dataStore = dataStore;
+        this.antropometryMapper = antropometryMapper;
     }
 
     public Observable<List<Antropometry>> getAll(@NonNull Child child) {
@@ -31,17 +34,15 @@ public class AntropometryDbService {
                 .orderBy(AntropometryEntity.DATE, AntropometryEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, AntropometryMapper::mapToPlainObject));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, antropometryMapper));
     }
 
     public Observable<Antropometry> add(@NonNull Antropometry antropometry) {
-        return DbUtils.insertObservable(dataStore, antropometry,
-                AntropometryMapper::mapToEntity, AntropometryMapper::mapToPlainObject);
+        return DbUtils.insertObservable(dataStore, antropometry, antropometryMapper);
     }
 
     public Observable<Antropometry> update(@NonNull Antropometry antropometry) {
-        return DbUtils.updateObservable(dataStore, antropometry,
-                AntropometryMapper::mapToEntity, AntropometryMapper::mapToPlainObject);
+        return DbUtils.updateObservable(dataStore, antropometry, antropometryMapper);
     }
 
     public Observable<Antropometry> delete(@NonNull Antropometry antropometry) {

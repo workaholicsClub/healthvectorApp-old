@@ -2,6 +2,9 @@ package ru.android.childdiary.data.repositories.calendar.mappers;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
+import io.requery.BlockingEntityStore;
 import io.requery.query.Tuple;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
@@ -19,6 +22,7 @@ import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
@@ -38,8 +42,14 @@ import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 
-public class AllEventsMapper {
-    public static MasterEvent mapToPlainObject(@NonNull Tuple data) {
+// TODO Обобщить поля select-запроса и их mapping
+public class AllEventsMapper implements EntityMapper<Tuple, Tuple, MasterEvent> {
+    @Inject
+    public AllEventsMapper() {
+    }
+
+    @Override
+    public MasterEvent mapToPlainObject(@NonNull Tuple data) {
         EventType eventType = data.get(MasterEventEntity.EVENT_TYPE);
         if (eventType == null) {
             throw new IllegalStateException("Unknown event type");
@@ -62,6 +72,16 @@ public class AllEventsMapper {
             // TODO EXERCISE
         }
         throw new IllegalStateException("Unknown event type");
+    }
+
+    @Override
+    public Tuple mapToEntity(BlockingEntityStore blockingEntityStore, @NonNull MasterEvent masterEvent) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public void fillNonReferencedFields(@NonNull Tuple to, @NonNull MasterEvent from) {
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     private static DiaperEvent mapToDiaperEvent(@NonNull Tuple data) {

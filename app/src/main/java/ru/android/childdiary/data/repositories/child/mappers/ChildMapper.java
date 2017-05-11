@@ -2,26 +2,35 @@ package ru.android.childdiary.data.repositories.child.mappers;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.child.Child;
 
-public class ChildMapper {
-    public static Child mapToPlainObject(@NonNull ChildData childData) {
+public class ChildMapper implements EntityMapper<ChildData, ChildEntity, Child> {
+    @Inject
+    public ChildMapper() {
+    }
+
+    @Override
+    public Child mapToPlainObject(@NonNull ChildData data) {
         return Child.builder()
-                .id(childData.getId())
-                .name(childData.getName())
-                .birthDate(childData.getBirthDate())
-                .birthTime(childData.getBirthTime())
-                .sex(childData.getSex())
-                .imageFileName(childData.getImageFileName())
-                .birthHeight(childData.getBirthHeight())
-                .birthWeight(childData.getBirthWeight())
+                .id(data.getId())
+                .name(data.getName())
+                .birthDate(data.getBirthDate())
+                .birthTime(data.getBirthTime())
+                .sex(data.getSex())
+                .imageFileName(data.getImageFileName())
+                .birthHeight(data.getBirthHeight())
+                .birthWeight(data.getBirthWeight())
                 .build();
     }
 
-    public static ChildEntity mapToEntity(BlockingEntityStore blockingEntityStore, @NonNull Child child) {
+    @Override
+    public ChildEntity mapToEntity(BlockingEntityStore blockingEntityStore, @NonNull Child child) {
         ChildEntity childEntity;
         if (child.getId() == null) {
             childEntity = new ChildEntity();
@@ -32,7 +41,8 @@ public class ChildMapper {
         return childEntity;
     }
 
-    private static void fillNonReferencedFields(@NonNull ChildEntity to, @NonNull Child from) {
+    @Override
+    public void fillNonReferencedFields(@NonNull ChildEntity to, @NonNull Child from) {
         to.setName(from.getName());
         to.setBirthDate(from.getBirthDate());
         to.setBirthTime(from.getBirthTime());

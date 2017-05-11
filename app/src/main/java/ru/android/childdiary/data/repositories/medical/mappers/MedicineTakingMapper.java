@@ -2,6 +2,8 @@ package ru.android.childdiary.data.repositories.medical.mappers;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
@@ -15,22 +17,40 @@ import ru.android.childdiary.data.entities.medical.core.MedicineMeasureData;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 
-public class MedicineTakingMapper {
-    public static MedicineTaking mapToPlainObject(@NonNull MedicineTakingData medicineTakingData) {
+public class MedicineTakingMapper implements EntityMapper<MedicineTakingData, MedicineTakingEntity, MedicineTaking> {
+    private final ChildMapper childMapper;
+    private final MedicineMapper medicineMapper;
+    private final MedicineMeasureMapper medicineMeasureMapper;
+    private final RepeatParametersMapper repeatParametersMapper;
+
+    @Inject
+    public MedicineTakingMapper(ChildMapper childMapper,
+                                MedicineMapper medicineMapper,
+                                MedicineMeasureMapper medicineMeasureMapper,
+                                RepeatParametersMapper repeatParametersMapper) {
+        this.childMapper = childMapper;
+        this.medicineMapper = medicineMapper;
+        this.medicineMeasureMapper = medicineMeasureMapper;
+        this.repeatParametersMapper = repeatParametersMapper;
+    }
+
+    @Override
+    public MedicineTaking mapToPlainObject(@NonNull MedicineTakingData medicineTakingData) {
         ChildData childData = medicineTakingData.getChild();
-        Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
+        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         MedicineData medicineData = medicineTakingData.getMedicine();
-        Medicine medicine = medicineData == null ? null : MedicineMapper.mapToPlainObject(medicineData);
+        Medicine medicine = medicineData == null ? null : medicineMapper.mapToPlainObject(medicineData);
         MedicineMeasureData medicineMeasureData = medicineTakingData.getMedicineMeasure();
-        MedicineMeasure medicineMeasure = medicineMeasureData == null ? null : MedicineMeasureMapper.mapToPlainObject(medicineMeasureData);
+        MedicineMeasure medicineMeasure = medicineMeasureData == null ? null : medicineMeasureMapper.mapToPlainObject(medicineMeasureData);
         RepeatParametersData repeatParametersData = medicineTakingData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return MedicineTaking.builder()
                 .id(medicineTakingData.getId())
                 .child(child)
@@ -47,8 +67,9 @@ public class MedicineTakingMapper {
                 .build();
     }
 
-    public static MedicineTakingEntity mapToEntity(BlockingEntityStore blockingEntityStore,
-                                                   @NonNull MedicineTaking medicineTaking) {
+    @Override
+    public MedicineTakingEntity mapToEntity(BlockingEntityStore blockingEntityStore,
+                                            @NonNull MedicineTaking medicineTaking) {
         MedicineTakingEntity medicineTakingEntity;
         if (medicineTaking.getId() == null) {
             medicineTakingEntity = new MedicineTakingEntity();
@@ -79,7 +100,8 @@ public class MedicineTakingMapper {
         return medicineTakingEntity;
     }
 
-    private static void fillNonReferencedFields(@NonNull MedicineTakingEntity to, @NonNull MedicineTaking from) {
+    @Override
+    public void fillNonReferencedFields(@NonNull MedicineTakingEntity to, @NonNull MedicineTaking from) {
         to.setAmount(from.getAmount());
         to.setDateTime(from.getDateTime());
         to.setFinishDateTime(from.getFinishDateTime());

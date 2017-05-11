@@ -6,8 +6,6 @@ import org.joda.time.DateTime;
 
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
-import ru.android.childdiary.data.db.DbUtils;
-import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
@@ -28,15 +26,5 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
 
     protected abstract To createEvent(From from, DateTime dateTime, int linearGroup);
 
-    private To add(@NonNull To event) {
-        MasterEvent masterEvent = insert(event);
-        return insert(event, masterEvent);
-    }
-
-    private MasterEvent insert(@NonNull MasterEvent event) {
-        return DbUtils.insert(dataStore, event,
-                MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
-    }
-
-    protected abstract To insert(@NonNull To event, @NonNull MasterEvent masterEvent);
+    protected abstract To add(@NonNull To event);
 }

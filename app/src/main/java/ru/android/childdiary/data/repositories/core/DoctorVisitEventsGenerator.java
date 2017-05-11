@@ -10,15 +10,23 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.repositories.calendar.mappers.DoctorVisitEventMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 
 public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit, DoctorVisitEvent> {
+    private final MasterEventMapper masterEventMapper;
+    private final DoctorVisitEventMapper doctorVisitEventMapper;
+
     @Inject
-    public DoctorVisitEventsGenerator(ReactiveEntityStore<Persistable> dataStore) {
+    public DoctorVisitEventsGenerator(ReactiveEntityStore<Persistable> dataStore,
+                                      MasterEventMapper masterEventMapper,
+                                      DoctorVisitEventMapper doctorVisitEventMapper) {
         super(dataStore);
+        this.masterEventMapper = masterEventMapper;
+        this.doctorVisitEventMapper = doctorVisitEventMapper;
     }
 
     @Override
@@ -38,11 +46,10 @@ public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit, Doc
                 .build();
     }
 
-    // TODO: mapper, datastore private
     @Override
-    protected DoctorVisitEvent insert(@NonNull DoctorVisitEvent event, @NonNull MasterEvent masterEvent) {
+    protected DoctorVisitEvent add(@NonNull DoctorVisitEvent event) {
+        MasterEvent masterEvent = DbUtils.insert(dataStore, event, masterEventMapper);
         DoctorVisitEvent doctorVisitEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
-        return DbUtils.insert(dataStore, event,
-                DoctorVisitEventMapper::mapToEntity, DoctorVisitEventMapper::mapToPlainObject);
+        return DbUtils.insert(dataStore, doctorVisitEvent, doctorVisitEventMapper);
     }
 }

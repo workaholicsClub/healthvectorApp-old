@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.MedicineTakingEventMapper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
@@ -16,9 +17,16 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 
 public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTaking, MedicineTakingEvent> {
+    private final MasterEventMapper masterEventMapper;
+    private final MedicineTakingEventMapper medicineTakingEventMapper;
+
     @Inject
-    public MedicineTakingEventsGenerator(ReactiveEntityStore<Persistable> dataStore) {
+    public MedicineTakingEventsGenerator(ReactiveEntityStore<Persistable> dataStore,
+                                         MasterEventMapper masterEventMapper,
+                                         MedicineTakingEventMapper medicineTakingEventMapper) {
         super(dataStore);
+        this.masterEventMapper = masterEventMapper;
+        this.medicineTakingEventMapper = medicineTakingEventMapper;
     }
 
     @Override
@@ -38,11 +46,10 @@ public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTakin
                 .build();
     }
 
-    // TODO: mapper, datastore private
     @Override
-    protected MedicineTakingEvent insert(@NonNull MedicineTakingEvent event, @NonNull MasterEvent masterEvent) {
+    protected MedicineTakingEvent add(@NonNull MedicineTakingEvent event) {
+        MasterEvent masterEvent = DbUtils.insert(dataStore, event, masterEventMapper);
         MedicineTakingEvent medicineTakingEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
-        return DbUtils.insert(dataStore, event,
-                MedicineTakingEventMapper::mapToEntity, MedicineTakingEventMapper::mapToPlainObject);
+        return DbUtils.insert(dataStore, medicineTakingEvent, medicineTakingEventMapper);
     }
 }

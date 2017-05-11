@@ -2,21 +2,30 @@ package ru.android.childdiary.data.repositories.medical.mappers;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureData;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 
-public class MedicineMeasureMapper {
-    public static MedicineMeasure mapToPlainObject(@NonNull MedicineMeasureData medicineMeasureData) {
+public class MedicineMeasureMapper implements EntityMapper<MedicineMeasureData, MedicineMeasureEntity, MedicineMeasure> {
+    @Inject
+    public MedicineMeasureMapper() {
+    }
+
+    @Override
+    public MedicineMeasure mapToPlainObject(@NonNull MedicineMeasureData data) {
         return MedicineMeasure.builder()
-                .id(medicineMeasureData.getId())
-                .name(medicineMeasureData.getName())
+                .id(data.getId())
+                .name(data.getName())
                 .build();
     }
 
-    public static MedicineMeasureEntity mapToEntity(BlockingEntityStore blockingEntityStore,
-                                                    @NonNull MedicineMeasure medicineMeasure) {
+    @Override
+    public MedicineMeasureEntity mapToEntity(BlockingEntityStore blockingEntityStore,
+                                             @NonNull MedicineMeasure medicineMeasure) {
         MedicineMeasureEntity medicineMeasureEntity;
         if (medicineMeasure.getId() == null) {
             medicineMeasureEntity = new MedicineMeasureEntity();
@@ -27,7 +36,8 @@ public class MedicineMeasureMapper {
         return medicineMeasureEntity;
     }
 
-    private static void fillNonReferencedFields(@NonNull MedicineMeasureEntity to, @NonNull MedicineMeasure from) {
+    @Override
+    public void fillNonReferencedFields(@NonNull MedicineMeasureEntity to, @NonNull MedicineMeasure from) {
         to.setName(from.getName());
     }
 }

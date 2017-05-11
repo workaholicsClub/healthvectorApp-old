@@ -2,6 +2,8 @@ package ru.android.childdiary.data.repositories.calendar.mappers;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
@@ -10,19 +12,31 @@ import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEn
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
-public class SleepEventMapper {
-    public static SleepEvent mapToPlainObject(@NonNull SleepEventData eventData) {
-        MasterEventData masterEventData = eventData.getMasterEvent();
+public class SleepEventMapper implements EntityMapper<SleepEventData, SleepEventEntity, SleepEvent> {
+    private final ChildMapper childMapper;
+    private final RepeatParametersMapper repeatParametersMapper;
+
+    @Inject
+    public SleepEventMapper(ChildMapper childMapper,
+                            RepeatParametersMapper repeatParametersMapper) {
+        this.childMapper = childMapper;
+        this.repeatParametersMapper = repeatParametersMapper;
+    }
+
+    @Override
+    public SleepEvent mapToPlainObject(@NonNull SleepEventData data) {
+        MasterEventData masterEventData = data.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
+        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return SleepEvent.builder()
-                .id(eventData.getId())
+                .id(data.getId())
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
@@ -32,13 +46,14 @@ public class SleepEventMapper {
                 .child(child)
                 .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
-                .finishDateTime(eventData.getFinishDateTime())
-                .isTimerStarted(eventData.isTimerStarted())
+                .finishDateTime(data.getFinishDateTime())
+                .isTimerStarted(data.isTimerStarted())
                 .build();
     }
 
-    public static SleepEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
-                                               @NonNull SleepEvent sleepEvent) {
+    @Override
+    public SleepEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
+                                        @NonNull SleepEvent sleepEvent) {
         SleepEventEntity sleepEventEntity;
         if (sleepEvent.getId() == null) {
             sleepEventEntity = new SleepEventEntity();
@@ -53,7 +68,8 @@ public class SleepEventMapper {
         return sleepEventEntity;
     }
 
-    private static void fillNonReferencedFields(@NonNull SleepEventEntity to, @NonNull SleepEvent from) {
+    @Override
+    public void fillNonReferencedFields(@NonNull SleepEventEntity to, @NonNull SleepEvent from) {
         to.setFinishDateTime(from.getFinishDateTime());
         to.setTimerStarted(from.getIsTimerStarted());
     }

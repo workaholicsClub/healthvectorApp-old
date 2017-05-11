@@ -18,10 +18,13 @@ import ru.android.childdiary.domain.interactors.child.Child;
 @Singleton
 public class ChildDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
+    private final ChildMapper childMapper;
 
     @Inject
-    public ChildDbService(ReactiveEntityStore<Persistable> dataStore) {
+    public ChildDbService(ReactiveEntityStore<Persistable> dataStore,
+                          ChildMapper childMapper) {
         this.dataStore = dataStore;
+        this.childMapper = childMapper;
     }
 
     public Observable<List<Child>> getAll() {
@@ -29,17 +32,15 @@ public class ChildDbService {
                 .orderBy(ChildEntity.NAME, ChildEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, ChildMapper::mapToPlainObject));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, childMapper));
     }
 
     public Observable<Child> add(@NonNull Child child) {
-        return DbUtils.insertObservable(dataStore, child,
-                ChildMapper::mapToEntity, ChildMapper::mapToPlainObject);
+        return DbUtils.insertObservable(dataStore, child, childMapper);
     }
 
     public Observable<Child> update(@NonNull Child child) {
-        return DbUtils.updateObservable(dataStore, child,
-                ChildMapper::mapToEntity, ChildMapper::mapToPlainObject);
+        return DbUtils.updateObservable(dataStore, child, childMapper);
     }
 
     public Observable<Child> delete(@NonNull Child child) {

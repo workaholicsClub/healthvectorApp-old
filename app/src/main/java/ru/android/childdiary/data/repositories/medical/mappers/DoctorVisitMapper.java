@@ -2,6 +2,8 @@ package ru.android.childdiary.data.repositories.medical.mappers;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
@@ -13,37 +15,53 @@ import ru.android.childdiary.data.entities.medical.core.DoctorData;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
-public class DoctorVisitMapper {
-    public static DoctorVisit mapToPlainObject(@NonNull DoctorVisitData doctorVisitData) {
-        ChildData childData = doctorVisitData.getChild();
-        Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
-        DoctorData doctorData = doctorVisitData.getDoctor();
-        Doctor doctor = doctorData == null ? null : DoctorMapper.mapToPlainObject(doctorData);
-        RepeatParametersData repeatParametersData = doctorVisitData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
+public class DoctorVisitMapper implements EntityMapper<DoctorVisitData, DoctorVisitEntity, DoctorVisit> {
+    private final ChildMapper childMapper;
+    private final DoctorMapper doctorMapper;
+    private final RepeatParametersMapper repeatParametersMapper;
+
+    @Inject
+    public DoctorVisitMapper(ChildMapper childMapper,
+                             DoctorMapper doctorMapper,
+                             RepeatParametersMapper repeatParametersMapper) {
+        this.childMapper = childMapper;
+        this.doctorMapper = doctorMapper;
+        this.repeatParametersMapper = repeatParametersMapper;
+    }
+
+    @Override
+    public DoctorVisit mapToPlainObject(@NonNull DoctorVisitData data) {
+        ChildData childData = data.getChild();
+        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        DoctorData doctorData = data.getDoctor();
+        Doctor doctor = doctorData == null ? null : doctorMapper.mapToPlainObject(doctorData);
+        RepeatParametersData repeatParametersData = data.getRepeatParameters();
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return DoctorVisit.builder()
-                .id(doctorVisitData.getId())
+                .id(data.getId())
                 .child(child)
                 .doctor(doctor)
                 .repeatParameters(repeatParameters)
-                .name(doctorVisitData.getName())
-                .durationInMinutes(doctorVisitData.getDurationInMinutes())
-                .dateTime(doctorVisitData.getDateTime())
-                .finishDateTime(doctorVisitData.getFinishDateTime())
-                .exported(doctorVisitData.getExported())
-                .notifyTimeInMinutes(doctorVisitData.getNotifyTimeInMinutes())
-                .note(doctorVisitData.getNote())
-                .imageFileName(doctorVisitData.getImageFileName())
+                .name(data.getName())
+                .durationInMinutes(data.getDurationInMinutes())
+                .dateTime(data.getDateTime())
+                .finishDateTime(data.getFinishDateTime())
+                .exported(data.getExported())
+                .notifyTimeInMinutes(data.getNotifyTimeInMinutes())
+                .note(data.getNote())
+                .imageFileName(data.getImageFileName())
                 .build();
     }
 
-    public static DoctorVisitEntity mapToEntity(BlockingEntityStore blockingEntityStore,
-                                                @NonNull DoctorVisit doctorVisit) {
+    @Override
+    public DoctorVisitEntity mapToEntity(BlockingEntityStore blockingEntityStore,
+                                         @NonNull DoctorVisit doctorVisit) {
         DoctorVisitEntity doctorVisitEntity;
         if (doctorVisit.getId() == null) {
             doctorVisitEntity = new DoctorVisitEntity();
@@ -69,7 +87,8 @@ public class DoctorVisitMapper {
         return doctorVisitEntity;
     }
 
-    private static void fillNonReferencedFields(@NonNull DoctorVisitEntity to, @NonNull DoctorVisit from) {
+    @Override
+    public void fillNonReferencedFields(@NonNull DoctorVisitEntity to, @NonNull DoctorVisit from) {
         to.setName(from.getName());
         to.setDurationInMinutes(from.getDurationInMinutes());
         to.setDateTime(from.getDateTime());

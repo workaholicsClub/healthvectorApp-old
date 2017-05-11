@@ -2,6 +2,8 @@ package ru.android.childdiary.data.repositories.calendar.mappers;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodData;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
@@ -14,25 +16,43 @@ import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEnt
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
-public class FeedEventMapper {
-    public static FeedEvent mapToPlainObject(@NonNull FeedEventData eventData) {
-        MasterEventData masterEventData = eventData.getMasterEvent();
+public class FeedEventMapper implements EntityMapper<FeedEventData, FeedEventEntity, FeedEvent> {
+    private final ChildMapper childMapper;
+    private final RepeatParametersMapper repeatParametersMapper;
+    private final FoodMeasureMapper foodMeasureMapper;
+    private final FoodMapper foodMapper;
+
+    @Inject
+    public FeedEventMapper(ChildMapper childMapper,
+                           RepeatParametersMapper repeatParametersMapper,
+                           FoodMeasureMapper foodMeasureMapper,
+                           FoodMapper foodMapper) {
+        this.childMapper = childMapper;
+        this.repeatParametersMapper = repeatParametersMapper;
+        this.foodMeasureMapper = foodMeasureMapper;
+        this.foodMapper = foodMapper;
+    }
+
+    @Override
+    public FeedEvent mapToPlainObject(@NonNull FeedEventData data) {
+        MasterEventData masterEventData = data.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : ChildMapper.mapToPlainObject(childData);
+        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : RepeatParametersMapper.mapToPlainObject(repeatParametersData);
-        FoodMeasureData foodMeasureData = eventData.getFoodMeasure();
-        FoodMeasure foodMeasure = foodMeasureData == null ? null : FoodMeasureMapper.mapToPlainObject(foodMeasureData);
-        FoodData foodData = eventData.getFood();
-        Food food = foodData == null ? null : FoodMapper.mapToPlainObject(foodData);
+        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
+        FoodMeasureData foodMeasureData = data.getFoodMeasure();
+        FoodMeasure foodMeasure = foodMeasureData == null ? null : foodMeasureMapper.mapToPlainObject(foodMeasureData);
+        FoodData foodData = data.getFood();
+        Food food = foodData == null ? null : foodMapper.mapToPlainObject(foodData);
         return FeedEvent.builder()
-                .id(eventData.getId())
+                .id(data.getId())
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
@@ -42,19 +62,20 @@ public class FeedEventMapper {
                 .child(child)
                 .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
-                .feedType(eventData.getFeedType())
-                .breast(eventData.getBreast())
-                .leftDurationInMinutes(eventData.getLeftDurationInMinutes())
-                .rightDurationInMinutes(eventData.getRightDurationInMinutes())
-                .amount(eventData.getAmount())
-                .amountMl(eventData.getAmountMl())
+                .feedType(data.getFeedType())
+                .breast(data.getBreast())
+                .leftDurationInMinutes(data.getLeftDurationInMinutes())
+                .rightDurationInMinutes(data.getRightDurationInMinutes())
+                .amount(data.getAmount())
+                .amountMl(data.getAmountMl())
                 .foodMeasure(foodMeasure)
                 .food(food)
                 .build();
     }
 
-    public static FeedEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
-                                              @NonNull FeedEvent feedEvent) {
+    @Override
+    public FeedEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
+                                       @NonNull FeedEvent feedEvent) {
         FeedEventEntity feedEventEntity;
         if (feedEvent.getId() == null) {
             feedEventEntity = new FeedEventEntity();
@@ -79,7 +100,8 @@ public class FeedEventMapper {
         return feedEventEntity;
     }
 
-    private static void fillNonReferencedFields(@NonNull FeedEventEntity to, @NonNull FeedEvent from) {
+    @Override
+    public void fillNonReferencedFields(@NonNull FeedEventEntity to, @NonNull FeedEvent from) {
         to.setFeedType(from.getFeedType());
         to.setBreast(from.getBreast());
         to.setLeftDurationInMinutes(from.getLeftDurationInMinutes());
