@@ -301,6 +301,8 @@ public class DbTest {
         update(updatedChild);
         checkInSelection(1, updatedChild);
 
+        antropometry = antropometry.toBuilder().child(updatedChild).build();
+
         Antropometry updatedAntropometry = antropometry.toBuilder().height(updatedHeight).build();
         update(updatedAntropometry);
         checkInSelection(updatedChild, 1, updatedAntropometry);
