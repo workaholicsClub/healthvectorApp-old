@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import org.joda.time.DateTime;
 
 import ru.android.childdiary.domain.core.ContentObject;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -115,6 +117,24 @@ public class ObjectUtils {
         return contentEquals(event1.getMasterEvent(), event2.getMasterEvent())
                 && equalsToMinutes(event1.getFinishDateTime(), event2.getFinishDateTime());
     }
+
+    public static boolean contentEquals(@NonNull DoctorVisitEvent event1, @NonNull DoctorVisitEvent event2) {
+        return contentEquals(event1.getMasterEvent(), event2.getMasterEvent())
+                && equals(event1.getDoctor(), event2.getDoctor())
+                && contentEquals(event1.getName(), event2.getName())
+                && equals(event1.getDurationInMinutes(), event2.getDurationInMinutes())
+                && contentEquals(event1.getImageFileName(), event2.getImageFileName());
+    }
+
+    public static boolean contentEquals(@NonNull MedicineTakingEvent event1, @NonNull MedicineTakingEvent event2) {
+        return contentEquals(event1.getMasterEvent(), event2.getMasterEvent())
+                && equals(event1.getMedicine(), event2.getMedicine())
+                && equals(event1.getAmount(), event2.getAmount())
+                && equals(event1.getMedicineMeasure(), event2.getMedicineMeasure())
+                && contentEquals(event1.getImageFileName(), event2.getImageFileName());
+    }
+
+    // TODO EXERCISE
 
     public static boolean contentEquals(@NonNull DoctorVisit doctorVisit1, @NonNull DoctorVisit doctorVisit2) {
         return equals(doctorVisit1.getDoctor(), doctorVisit2.getDoctor())

@@ -24,6 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -37,7 +39,9 @@ import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
+import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
+import ru.android.childdiary.presentation.events.MedicineTakingEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
@@ -247,6 +251,18 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     @Override
     public void navigateToSleepEvent(@NonNull MasterEvent event, @NonNull SleepEvent defaultEvent) {
         Intent intent = SleepEventDetailActivity.getIntent(getContext(), event, defaultEvent);
+        startActivityForResult(intent, REQUEST_UPDATE_EVENT);
+    }
+
+    @Override
+    public void navigateToDoctorVisitEvent(@NonNull MasterEvent event, @NonNull DoctorVisitEvent defaultEvent) {
+        Intent intent = DoctorVisitEventDetailActivity.getIntent(getContext(), event, defaultEvent);
+        startActivityForResult(intent, REQUEST_UPDATE_EVENT);
+    }
+
+    @Override
+    public void navigateToMedicineTakingEvent(@NonNull MasterEvent event, @NonNull MedicineTakingEvent defaultEvent) {
+        Intent intent = MedicineTakingEventDetailActivity.getIntent(getContext(), event, defaultEvent);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 

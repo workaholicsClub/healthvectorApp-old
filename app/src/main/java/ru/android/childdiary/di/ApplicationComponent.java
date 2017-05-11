@@ -11,8 +11,12 @@ import ru.android.childdiary.presentation.calendar.fragments.BaseCalendarPresent
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
+import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
+import ru.android.childdiary.presentation.events.DoctorVisitEventDetailPresenter;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailPresenter;
+import ru.android.childdiary.presentation.events.MedicineTakingEventDetailActivity;
+import ru.android.childdiary.presentation.events.MedicineTakingEventDetailPresenter;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailPresenter;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
@@ -105,6 +109,12 @@ public interface ApplicationComponent {
 
     void inject(MedicineAddPresenter presenter);
 
+    void inject(DoctorVisitEventDetailPresenter presenter);
+
+    void inject(MedicineTakingEventDetailPresenter presenter);
+
+    // TODO EXERCISE
+
     // activities
     void inject(SplashActivity activity);
 
@@ -139,6 +149,12 @@ public interface ApplicationComponent {
     void inject(MedicinePickerActivity activity);
 
     void inject(MedicineAddActivity activity);
+
+    void inject(DoctorVisitEventDetailActivity activity);
+
+    void inject(MedicineTakingEventDetailActivity activity);
+
+    // TODO EXERCISE
 
     // fragments
     void inject(CalendarFragment fragment);

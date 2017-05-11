@@ -329,7 +329,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             case HELP:
                 return new HelpFragment();
         }
-        throw new IllegalStateException("Unknown app partition");
+        throw new IllegalStateException("Unsupported app partition");
     }
 
     @Override

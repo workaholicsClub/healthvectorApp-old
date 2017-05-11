@@ -52,7 +52,7 @@ public class AllEventsMapper implements EntityMapper<Tuple, Tuple, MasterEvent> 
     public MasterEvent mapToPlainObject(@NonNull Tuple data) {
         EventType eventType = data.get(MasterEventEntity.EVENT_TYPE);
         if (eventType == null) {
-            throw new IllegalStateException("Unknown event type");
+            throw new IllegalStateException("Unsupported event type");
         }
         switch (eventType) {
             case DIAPER:
@@ -71,7 +71,7 @@ public class AllEventsMapper implements EntityMapper<Tuple, Tuple, MasterEvent> 
                 return mapToMedicineTakingEvent(data);
             // TODO EXERCISE
         }
-        throw new IllegalStateException("Unknown event type");
+        throw new IllegalStateException("Unsupported event type");
     }
 
     @Override

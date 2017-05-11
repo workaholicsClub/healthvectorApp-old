@@ -320,7 +320,7 @@ public class CalendarDataRepository implements CalendarRepository {
                 return Observable.just(10);
             // TODO EXERCISE
         }
-        throw new IllegalStateException("Unknown event type");
+        throw new IllegalStateException("Unsupported event type");
     }
 
     @Override

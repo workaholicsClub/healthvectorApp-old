@@ -25,6 +25,8 @@ import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.core.Validator;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
@@ -38,7 +40,9 @@ import ru.android.childdiary.domain.interactors.calendar.requests.EventsResponse
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.validation.DiaperEventValidator;
+import ru.android.childdiary.domain.interactors.calendar.validation.DoctorVisitEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.FeedEventValidator;
+import ru.android.childdiary.domain.interactors.calendar.validation.MedicineTakingEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.OtherEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
@@ -92,23 +96,6 @@ public class CalendarInteractor implements Interactor {
 
     public Observable<Food> addFood(@NonNull Food food) {
         return calendarRepository.addFood(food);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends MasterEvent> Observable<T> getDefaultEventDetail(@NonNull EventType eventType) {
-        switch (eventType) {
-            case DIAPER:
-                return (Observable<T>) getDefaultDiaperEvent();
-            case FEED:
-                return (Observable<T>) getDefaultFeedEvent();
-            case OTHER:
-                return (Observable<T>) getDefaultOtherEvent();
-            case PUMP:
-                return (Observable<T>) getDefaultPumpEvent();
-            case SLEEP:
-                return (Observable<T>) getDefaultSleepEvent();
-        }
-        throw new IllegalStateException("Unknown event type");
     }
 
     public Observable<DiaperEvent> getDefaultDiaperEvent() {
@@ -185,6 +172,14 @@ public class CalendarInteractor implements Interactor {
                         .build());
     }
 
+    public Observable<DoctorVisitEvent> getDefaultDoctorVisitEvent() {
+        return Observable.just(DoctorVisitEvent.builder().build());
+    }
+
+    public Observable<MedicineTakingEvent> getDefaultMedicineTakingEvent() {
+        return Observable.just(MedicineTakingEvent.builder().build());
+    }
+
     public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {
         return calendarRepository.getAll(request)
                 .map(events -> EventsResponse.builder().request(request).events(events).build());
@@ -206,15 +201,20 @@ public class CalendarInteractor implements Interactor {
             return (Observable<T>) calendarRepository.getPumpEventDetail(event);
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.getSleepEventDetail(event);
+        } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
+            return (Observable<T>) calendarRepository.getDoctorVisitEventDetail(event);
+        } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
+            return (Observable<T>) calendarRepository.getMedicineTakingEventDetail(event);
         }
-        throw new IllegalStateException("Unknown event type");
+        // TODO EXERCISE
+        throw new IllegalStateException("Unsupported event type");
     }
 
     public <T extends MasterEvent> Observable<T> add(@NonNull T event) {
         return preprocessOnInsert(event)
                 .flatMap(this::validate)
                 .flatMap(this::addInternal)
-                .flatMap(this::postprocess);
+                .flatMap(this::postprocessOnInsert);
     }
 
     @SuppressWarnings("unchecked")
@@ -230,14 +230,14 @@ public class CalendarInteractor implements Interactor {
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.add((SleepEvent) event);
         }
-        throw new IllegalStateException("Unknown event type");
+        throw new IllegalStateException("Unsupported event type");
     }
 
     public <T extends MasterEvent> Observable<T> update(@NonNull T event) {
         return preprocessOnUpdate(event)
                 .flatMap(this::validate)
                 .flatMap(this::updateInternal)
-                .flatMap(this::postprocess);
+                .flatMap(this::postprocessOnUpdate);
     }
 
     @SuppressWarnings("unchecked")
@@ -252,8 +252,13 @@ public class CalendarInteractor implements Interactor {
             return (Observable<T>) calendarRepository.update((PumpEvent) event);
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.update((SleepEvent) event);
+        } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
+            return (Observable<T>) calendarRepository.update((DoctorVisitEvent) event);
+        } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
+            return (Observable<T>) calendarRepository.update((MedicineTakingEvent) event);
         }
-        throw new IllegalStateException("Unknown event type");
+        // TODO EXERCISE
+        throw new IllegalStateException("Unsupported event type");
     }
 
     public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
@@ -303,8 +308,13 @@ public class CalendarInteractor implements Interactor {
             return (Validator<T, CalendarValidationResult>) new PumpEventValidator(context);
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Validator<T, CalendarValidationResult>) new SleepEventValidator(context, this);
+        } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
+            return (Validator<T, CalendarValidationResult>) new DoctorVisitEventValidator(context);
+        } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
+            return (Validator<T, CalendarValidationResult>) new MedicineTakingEventValidator(context);
         }
-        throw new IllegalStateException("Unknown event type");
+        // TODO EXERCISE
+        throw new IllegalStateException("Unsupported event type");
     }
 
     @SuppressWarnings("unchecked")
@@ -321,7 +331,7 @@ public class CalendarInteractor implements Interactor {
             } else if (event instanceof SleepEvent) {
                 return (T) preprocessSleepEventOnInsert((SleepEvent) event);
             }
-            throw new IllegalStateException("Unknown event type");
+            throw new IllegalStateException("Unsupported event type");
         });
     }
 
@@ -329,17 +339,22 @@ public class CalendarInteractor implements Interactor {
     private <T extends MasterEvent> Observable<T> preprocessOnUpdate(@NonNull T event) {
         return Observable.fromCallable(() -> {
             if (event instanceof DiaperEvent) {
-                return (T) preprocessDiaperEventOnUpdate((DiaperEvent) event);
+                return event;
             } else if (event instanceof FeedEvent) {
-                return (T) preprocessFeedEventOnUpdate((FeedEvent) event);
+                return event;
             } else if (event instanceof OtherEvent) {
-                return (T) preprocessOtherEventOnUpdate((OtherEvent) event);
+                return event;
             } else if (event instanceof PumpEvent) {
-                return (T) preprocessPumpEventOnUpdate((PumpEvent) event);
+                return event;
             } else if (event instanceof SleepEvent) {
-                return (T) preprocessSleepEventOnUpdate((SleepEvent) event);
+                return event;
+            } else if (event instanceof DoctorVisitEvent) {
+                return event;
+            } else if (event instanceof MedicineTakingEvent) {
+                return event;
             }
-            throw new IllegalStateException("Unknown event type");
+            // TODO EXERCISE
+            throw new IllegalStateException("Unsupported event type");
         });
     }
 
@@ -383,48 +398,14 @@ public class CalendarInteractor implements Interactor {
                 .build();
     }
 
-    private DiaperEvent preprocessDiaperEventOnUpdate(DiaperEvent diaperEvent) {
-        return diaperEvent.toBuilder()
-                .eventType(EventType.DIAPER)
-                .build();
-    }
-
-    private FeedEvent preprocessFeedEventOnUpdate(FeedEvent feedEvent) {
-        return feedEvent.toBuilder()
-                .eventType(EventType.FEED)
-                .build();
-    }
-
-    private OtherEvent preprocessOtherEventOnUpdate(OtherEvent otherEvent) {
-        return otherEvent.toBuilder()
-                .eventType(EventType.OTHER)
-                .build();
-    }
-
-    private PumpEvent preprocessPumpEventOnUpdate(PumpEvent pumpEvent) {
-        return pumpEvent.toBuilder()
-                .eventType(EventType.PUMP)
-                .build();
-    }
-
-    private SleepEvent preprocessSleepEventOnUpdate(SleepEvent sleepEvent) {
-        return sleepEvent.toBuilder()
-                .eventType(EventType.SLEEP)
-                .build();
-    }
-
     @SuppressWarnings("unchecked")
-    private <T extends MasterEvent> Observable<T> postprocess(@NonNull T event) {
+    private <T extends MasterEvent> Observable<T> postprocessOnInsert(@NonNull T event) {
         return Observable.fromCallable(() -> {
             calendarRepository.setSelectedDate(event.getDateTime().toLocalDate());
             if (event.getEventType() == EventType.DIAPER) {
                 return event;
             } else if (event.getEventType() == EventType.FEED) {
-                FeedEvent feedEvent = (FeedEvent) event;
-                calendarRepository.setLastFeedType(feedEvent.getFeedType());
-                calendarRepository.setLastFoodMeasure(feedEvent.getFoodMeasure());
-                calendarRepository.setLastFood(feedEvent.getFood());
-                return event;
+                return (T) postprocessFeedEvent((FeedEvent) event);
             } else if (event.getEventType() == EventType.OTHER) {
                 return event;
             } else if (event.getEventType() == EventType.PUMP) {
@@ -432,8 +413,39 @@ public class CalendarInteractor implements Interactor {
             } else if (event.getEventType() == EventType.SLEEP) {
                 return event;
             }
-            throw new IllegalStateException("Unknown event type");
+            throw new IllegalStateException("Unsupported event type");
         });
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> Observable<T> postprocessOnUpdate(@NonNull T event) {
+        return Observable.fromCallable(() -> {
+            calendarRepository.setSelectedDate(event.getDateTime().toLocalDate());
+            if (event.getEventType() == EventType.DIAPER) {
+                return event;
+            } else if (event.getEventType() == EventType.FEED) {
+                return (T) postprocessFeedEvent((FeedEvent) event);
+            } else if (event.getEventType() == EventType.OTHER) {
+                return event;
+            } else if (event.getEventType() == EventType.PUMP) {
+                return event;
+            } else if (event.getEventType() == EventType.SLEEP) {
+                return event;
+            } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
+                return event;
+            } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
+                return event;
+            }
+            // TODO EXERCISE
+            throw new IllegalStateException("Unsupported event type");
+        });
+    }
+
+    private FeedEvent postprocessFeedEvent(FeedEvent feedEvent) {
+        calendarRepository.setLastFeedType(feedEvent.getFeedType());
+        calendarRepository.setLastFoodMeasure(feedEvent.getFoodMeasure());
+        calendarRepository.setLastFood(feedEvent.getFood());
+        return feedEvent;
     }
 
     public Observable<List<Integer>> getFrequencyList() {

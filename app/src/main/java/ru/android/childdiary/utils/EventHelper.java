@@ -90,7 +90,7 @@ public class EventHelper {
             return medicine == null ? null : medicine.getName();
         }
         // TODO EXERCISE
-        throw new IllegalStateException("Unknown event type");
+        throw new IllegalStateException("Unsupported event type");
     }
 
     public static boolean sameEvent(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {

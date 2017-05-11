@@ -128,6 +128,16 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                         .subscribe(defaultEvent -> getViewState().navigateToSleepEvent(event, defaultEvent),
                                 this::onUnexpectedError));
                 break;
+            case DOCTOR_VISIT:
+                unsubscribeOnDestroy(calendarInteractor.getDefaultDoctorVisitEvent()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(defaultEvent -> getViewState().navigateToDoctorVisitEvent(event, defaultEvent),
+                                this::onUnexpectedError));
+                break;
+            case MEDICINE_TAKING:
+                break;
+            // TODO EXERCISE
         }
     }
 

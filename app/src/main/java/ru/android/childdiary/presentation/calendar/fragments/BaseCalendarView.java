@@ -10,6 +10,8 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -39,4 +41,12 @@ public interface BaseCalendarView extends AppPartitionView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToSleepEvent(@NonNull MasterEvent event, @NonNull SleepEvent defaultEvent);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToDoctorVisitEvent(@NonNull MasterEvent event, @NonNull DoctorVisitEvent defaultEvent);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToMedicineTakingEvent(@NonNull MasterEvent event, @NonNull MedicineTakingEvent defaultEvent);
+
+    // TODO EXERCISE
 }
