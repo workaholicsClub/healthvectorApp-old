@@ -330,12 +330,12 @@ public class CalendarDataRepository implements CalendarRepository {
 
     @Override
     public Observable<List<PeriodicityType>> getPeriodicityList() {
-        return Observable.just(Arrays.asList(PeriodicityType.DAILY, PeriodicityType.WEEKLY, PeriodicityType.MONTHLY));
+        return Observable.just(Arrays.asList(PeriodicityType.values()));
     }
 
     @Override
     public Observable<List<TimeUnit>> getTimeUnits() {
-        return Observable.just(Arrays.asList(TimeUnit.DAY, TimeUnit.WEEK, TimeUnit.MONTH));
+        return Observable.just(Arrays.asList(TimeUnit.values()));
     }
 
     private interface OnSelectedDateChangedListener {

@@ -2,12 +2,11 @@ package ru.android.childdiary.presentation.events.core;
 
 import android.support.annotation.NonNull;
 
-import com.annimon.stream.Stream;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -99,10 +98,10 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
             }
 
             getViewState().validationFailed();
-            String msg = Stream.of(results)
+            String msg = Observable.fromIterable(results)
                     .filter(CalendarValidationResult::notValid)
                     .map(CalendarValidationResult::toString)
-                    .findFirst().orElse(null);
+                    .blockingFirst();
             getViewState().showValidationErrorMessage(msg);
             handleValidationResult(results);
         } else {

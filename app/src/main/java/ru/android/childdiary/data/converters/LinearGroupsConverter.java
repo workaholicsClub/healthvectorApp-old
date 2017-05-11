@@ -1,9 +1,7 @@
 package ru.android.childdiary.data.converters;
 
 import android.support.annotation.NonNull;
-
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
+import android.text.TextUtils;
 
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -12,6 +10,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 
 public class LinearGroupsConverter extends SimpleConverter<LinearGroups> {
@@ -32,17 +31,20 @@ public class LinearGroupsConverter extends SimpleConverter<LinearGroups> {
 
     @Override
     protected String map(@NonNull LinearGroups linearGroups) {
-        return Stream.of(linearGroups.getTimes())
+        List<String> strings = Observable.fromIterable(linearGroups.getTimes())
                 .map(TIME_FORMATTER::print)
-                .collect(Collectors.joining(DELIMITER));
+                .toList()
+                .blockingGet();
+        return TextUtils.join(DELIMITER, strings);
     }
 
     @Override
     protected LinearGroups map(@NonNull String value) {
         String[] parts = value.split(DELIMITER);
-        List<LocalTime> times = Stream.of(parts)
+        List<LocalTime> times = Observable.fromArray(parts)
                 .map(TIME_FORMATTER::parseLocalTime)
-                .collect(Collectors.toList());
+                .toList()
+                .blockingGet();
         return LinearGroups.builder().times(new ArrayList<>(times)).build();
     }
 }

@@ -5,9 +5,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
-
 import org.joda.time.LocalDate;
 
 import java.text.DateFormatSymbols;
@@ -17,6 +14,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Observable;
 import lombok.Getter;
 import lombok.NonNull;
 import ru.android.childdiary.R;
@@ -30,7 +28,7 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
 
     static {
         String[] dayOfWeekArray = new DateFormatSymbols().getShortWeekdays();
-        List<String> dayOfWeekList = Stream.of(dayOfWeekArray).map(String::toUpperCase).collect(Collectors.toList());
+        List<String> dayOfWeekList = Observable.fromArray(dayOfWeekArray).map(String::toUpperCase).toList().blockingGet();
         DAY_OF_WEEK_LIST = Collections.unmodifiableList(dayOfWeekList);
         DAY_OF_WEEK_INDEXES = Collections.unmodifiableList(Calendar.getInstance().getFirstDayOfWeek() == Calendar.SUNDAY
                 ? Arrays.asList(Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY)

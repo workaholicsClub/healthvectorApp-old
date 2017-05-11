@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.annimon.stream.Stream;
-
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.joda.time.LocalDateTime;
@@ -23,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
@@ -145,9 +144,9 @@ public class DbTest {
     private final <T> void selectedContainInserted(IdsComparator<T> idsEqual, List<T> selected, int count, T... items) {
         for (T insertedItem : items) {
             long found;
-            found = Stream.of(selected).filter(item -> item.equals(insertedItem)).count();
+            found = Observable.fromIterable(selected).filter(item -> item.equals(insertedItem)).count().blockingGet();
             assertEquals("item value found in selection", count, found);
-            found = Stream.of(selected).filter(item -> idsEqual.idsEqual(item, insertedItem)).count();
+            found = Observable.fromIterable(selected).filter(item -> idsEqual.idsEqual(item, insertedItem)).count().blockingGet();
             assertEquals("item id found in selection", count, found);
         }
     }
