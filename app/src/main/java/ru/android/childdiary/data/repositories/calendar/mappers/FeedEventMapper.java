@@ -41,18 +41,18 @@ public class FeedEventMapper implements EntityMapper<FeedEventData, FeedEventEnt
     }
 
     @Override
-    public FeedEvent mapToPlainObject(@NonNull FeedEventData data) {
-        MasterEventData masterEventData = data.getMasterEvent();
+    public FeedEvent mapToPlainObject(@NonNull FeedEventData feedEventData) {
+        MasterEventData masterEventData = feedEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
         RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
-        FoodMeasureData foodMeasureData = data.getFoodMeasure();
+        FoodMeasureData foodMeasureData = feedEventData.getFoodMeasure();
         FoodMeasure foodMeasure = foodMeasureData == null ? null : foodMeasureMapper.mapToPlainObject(foodMeasureData);
-        FoodData foodData = data.getFood();
+        FoodData foodData = feedEventData.getFood();
         Food food = foodData == null ? null : foodMapper.mapToPlainObject(foodData);
         return FeedEvent.builder()
-                .id(data.getId())
+                .id(feedEventData.getId())
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
@@ -62,12 +62,12 @@ public class FeedEventMapper implements EntityMapper<FeedEventData, FeedEventEnt
                 .child(child)
                 .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
-                .feedType(data.getFeedType())
-                .breast(data.getBreast())
-                .leftDurationInMinutes(data.getLeftDurationInMinutes())
-                .rightDurationInMinutes(data.getRightDurationInMinutes())
-                .amount(data.getAmount())
-                .amountMl(data.getAmountMl())
+                .feedType(feedEventData.getFeedType())
+                .breast(feedEventData.getBreast())
+                .leftDurationInMinutes(feedEventData.getLeftDurationInMinutes())
+                .rightDurationInMinutes(feedEventData.getRightDurationInMinutes())
+                .amount(feedEventData.getAmount())
+                .amountMl(feedEventData.getAmountMl())
                 .foodMeasure(foodMeasure)
                 .food(food)
                 .build();

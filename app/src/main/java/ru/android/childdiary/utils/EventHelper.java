@@ -82,11 +82,11 @@ public class EventHelper {
             }
         } else if (event instanceof DoctorVisitEvent) {
             DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
-            Doctor doctor = doctorVisitEvent.getDoctorVisit().getDoctor();
+            Doctor doctor = doctorVisitEvent.getDoctor();
             return doctor == null ? null : doctor.getName();
         } else if (event instanceof MedicineTakingEvent) {
             MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) event;
-            Medicine medicine = medicineTakingEvent.getMedicineTaking().getMedicine();
+            Medicine medicine = medicineTakingEvent.getMedicine();
             return medicine == null ? null : medicine.getName();
         }
         // TODO EXERCISE

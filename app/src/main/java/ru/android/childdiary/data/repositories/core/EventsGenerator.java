@@ -17,11 +17,14 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
     }
 
     public void generateEvents(@NonNull From from) {
-        DateTime dateTime = from.getDateTime();
+        DateTime fromDateTime = from.getDateTime();
         RepeatParameters repeatParameters = from.getRepeatParameters();
         int linearGroup = 0;
-        To event = createEvent(from, dateTime, linearGroup);
-        add(event);
+        for (int i = 0; i < 1000; ++i) {
+            DateTime dateTime = fromDateTime.plusDays(i);
+            To event = createEvent(from, dateTime, linearGroup);
+            add(event);
+        }
     }
 
     protected abstract To createEvent(From from, DateTime dateTime, int linearGroup);

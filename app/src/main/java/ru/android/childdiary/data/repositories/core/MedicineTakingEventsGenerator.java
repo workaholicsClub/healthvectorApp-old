@@ -43,6 +43,10 @@ public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTakin
                 .repeatParameters(medicineTaking.getRepeatParameters())
                 .linearGroup(linearGroup)
                 .medicineTaking(medicineTaking)
+                .medicine(medicineTaking.getMedicine())
+                .amount(medicineTaking.getAmount())
+                .medicineMeasure(medicineTaking.getMedicineMeasure())
+                .imageFileName(medicineTaking.getImageFileName())
                 .build();
     }
 

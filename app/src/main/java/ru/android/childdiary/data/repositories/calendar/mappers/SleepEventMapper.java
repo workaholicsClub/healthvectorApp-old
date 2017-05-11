@@ -29,14 +29,14 @@ public class SleepEventMapper implements EntityMapper<SleepEventData, SleepEvent
     }
 
     @Override
-    public SleepEvent mapToPlainObject(@NonNull SleepEventData data) {
-        MasterEventData masterEventData = data.getMasterEvent();
+    public SleepEvent mapToPlainObject(@NonNull SleepEventData sleepEventData) {
+        MasterEventData masterEventData = sleepEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
         RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return SleepEvent.builder()
-                .id(data.getId())
+                .id(sleepEventData.getId())
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
@@ -46,8 +46,8 @@ public class SleepEventMapper implements EntityMapper<SleepEventData, SleepEvent
                 .child(child)
                 .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
-                .finishDateTime(data.getFinishDateTime())
-                .isTimerStarted(data.isTimerStarted())
+                .finishDateTime(sleepEventData.getFinishDateTime())
+                .isTimerStarted(sleepEventData.isTimerStarted())
                 .build();
     }
 

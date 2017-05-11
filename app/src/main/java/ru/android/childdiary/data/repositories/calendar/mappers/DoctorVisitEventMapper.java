@@ -13,39 +13,48 @@ import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.medical.DoctorVisitData;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
+import ru.android.childdiary.data.entities.medical.core.DoctorData;
+import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
+import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
 public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData, DoctorVisitEventEntity, DoctorVisitEvent> {
     private final ChildMapper childMapper;
     private final RepeatParametersMapper repeatParametersMapper;
     private final DoctorVisitMapper doctorVisitMapper;
+    private final DoctorMapper doctorMapper;
 
     @Inject
     public DoctorVisitEventMapper(ChildMapper childMapper,
                                   RepeatParametersMapper repeatParametersMapper,
-                                  DoctorVisitMapper doctorVisitMapper) {
+                                  DoctorVisitMapper doctorVisitMapper,
+                                  DoctorMapper doctorMapper) {
         this.childMapper = childMapper;
         this.repeatParametersMapper = repeatParametersMapper;
         this.doctorVisitMapper = doctorVisitMapper;
+        this.doctorMapper = doctorMapper;
     }
 
     @Override
-    public DoctorVisitEvent mapToPlainObject(@NonNull DoctorVisitEventData data) {
-        MasterEventData masterEventData = data.getMasterEvent();
+    public DoctorVisitEvent mapToPlainObject(@NonNull DoctorVisitEventData doctorVisitEventData) {
+        MasterEventData masterEventData = doctorVisitEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
         RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
-        DoctorVisitData doctorVisitData = data.getDoctorVisit();
+        DoctorVisitData doctorVisitData = doctorVisitEventData.getDoctorVisit();
         DoctorVisit doctorVisit = doctorVisitData == null ? null : doctorVisitMapper.mapToPlainObject(doctorVisitData);
+        DoctorData doctorData = doctorVisitEventData.getDoctor();
+        Doctor doctor = doctorData == null ? null : doctorMapper.mapToPlainObject(doctorData);
         return DoctorVisitEvent.builder()
-                .id(data.getId())
+                .id(doctorVisitEventData.getId())
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
@@ -56,6 +65,10 @@ public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData
                 .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
                 .doctorVisit(doctorVisit)
+                .doctor(doctor)
+                .name(doctorVisitEventData.getName())
+                .durationInMinutes(doctorVisitEventData.getDurationInMinutes())
+                .imageFileName(doctorVisitEventData.getImageFileName())
                 .build();
     }
 
@@ -78,10 +91,18 @@ public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData
             DoctorVisitEntity doctorVisitEntity = (DoctorVisitEntity) blockingEntityStore.findByKey(DoctorVisitEntity.class, doctorVisit.getId());
             doctorVisitEventEntity.setDoctorVisit(doctorVisitEntity);
         }
+        Doctor doctor = doctorVisitEvent.getDoctor();
+        if (doctor != null) {
+            DoctorEntity doctorEntity = (DoctorEntity) blockingEntityStore.findByKey(DoctorEntity.class, doctor.getId());
+            doctorVisitEventEntity.setDoctor(doctorEntity);
+        }
         return doctorVisitEventEntity;
     }
 
     @Override
     public void fillNonReferencedFields(@NonNull DoctorVisitEventEntity to, @NonNull DoctorVisitEvent from) {
+        to.setName(from.getName());
+        to.setDurationInMinutes(from.getDurationInMinutes());
+        to.setImageFileName(from.getImageFileName());
     }
 }

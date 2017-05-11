@@ -29,14 +29,14 @@ public class DiaperEventMapper implements EntityMapper<DiaperEventData, DiaperEv
     }
 
     @Override
-    public DiaperEvent mapToPlainObject(@NonNull DiaperEventData data) {
-        MasterEventData masterEventData = data.getMasterEvent();
+    public DiaperEvent mapToPlainObject(@NonNull DiaperEventData diaperEventData) {
+        MasterEventData masterEventData = diaperEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
         RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return DiaperEvent.builder()
-                .id(data.getId())
+                .id(diaperEventData.getId())
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
@@ -46,7 +46,7 @@ public class DiaperEventMapper implements EntityMapper<DiaperEventData, DiaperEv
                 .child(child)
                 .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
-                .diaperState(data.getDiaperState())
+                .diaperState(diaperEventData.getDiaperState())
                 .build();
     }
 

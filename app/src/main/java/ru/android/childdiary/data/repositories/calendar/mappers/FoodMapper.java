@@ -16,10 +16,10 @@ public class FoodMapper implements EntityMapper<FoodData, FoodEntity, Food> {
     }
 
     @Override
-    public Food mapToPlainObject(@NonNull FoodData data) {
+    public Food mapToPlainObject(@NonNull FoodData foodData) {
         return Food.builder()
-                .id(data.getId())
-                .name(data.getName())
+                .id(foodData.getId())
+                .name(foodData.getName())
                 .build();
     }
 

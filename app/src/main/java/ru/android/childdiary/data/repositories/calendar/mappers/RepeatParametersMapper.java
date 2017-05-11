@@ -16,12 +16,12 @@ public class RepeatParametersMapper implements EntityMapper<RepeatParametersData
     }
 
     @Override
-    public RepeatParameters mapToPlainObject(@NonNull RepeatParametersData data) {
+    public RepeatParameters mapToPlainObject(@NonNull RepeatParametersData repeatParametersData) {
         return RepeatParameters.builder()
-                .id(data.getId())
-                .frequency(data.getFrequency())
-                .periodicity(data.getPeriodicity())
-                .length(data.getLength())
+                .id(repeatParametersData.getId())
+                .frequency(repeatParametersData.getFrequency())
+                .periodicity(repeatParametersData.getPeriodicity())
+                .length(repeatParametersData.getLength())
                 .build();
     }
 

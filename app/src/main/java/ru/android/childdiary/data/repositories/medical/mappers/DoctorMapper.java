@@ -16,10 +16,10 @@ public class DoctorMapper implements EntityMapper<DoctorData, DoctorEntity, Doct
     }
 
     @Override
-    public Doctor mapToPlainObject(@NonNull DoctorData data) {
+    public Doctor mapToPlainObject(@NonNull DoctorData doctorData) {
         return Doctor.builder()
-                .id(data.getId())
-                .name(data.getName())
+                .id(doctorData.getId())
+                .name(doctorData.getName())
                 .build();
     }
 

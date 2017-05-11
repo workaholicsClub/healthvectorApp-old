@@ -10,6 +10,7 @@ import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.medical.DoctorVisitData;
+import ru.android.childdiary.data.entities.medical.core.DoctorData;
 
 @Table(name = "doctor_visit_event")
 @Entity(name = "DoctorVisitEventEntity")
@@ -25,4 +26,14 @@ public interface DoctorVisitEventData {
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
     DoctorVisitData getDoctorVisit();
+
+    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ManyToOne
+    DoctorData getDoctor();
+
+    String getName();
+
+    Integer getDurationInMinutes();
+
+    String getImageFileName();
 }

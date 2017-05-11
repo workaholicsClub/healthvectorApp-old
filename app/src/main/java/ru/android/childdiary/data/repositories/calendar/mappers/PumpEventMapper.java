@@ -29,14 +29,14 @@ public class PumpEventMapper implements EntityMapper<PumpEventData, PumpEventEnt
     }
 
     @Override
-    public PumpEvent mapToPlainObject(@NonNull PumpEventData data) {
-        MasterEventData masterEventData = data.getMasterEvent();
+    public PumpEvent mapToPlainObject(@NonNull PumpEventData pumpEventData) {
+        MasterEventData masterEventData = pumpEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
         RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return PumpEvent.builder()
-                .id(data.getId())
+                .id(pumpEventData.getId())
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
@@ -46,9 +46,9 @@ public class PumpEventMapper implements EntityMapper<PumpEventData, PumpEventEnt
                 .child(child)
                 .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
-                .breast(data.getBreast())
-                .leftAmountMl(data.getLeftAmountMl())
-                .rightAmountMl(data.getRightAmountMl())
+                .breast(pumpEventData.getBreast())
+                .leftAmountMl(pumpEventData.getLeftAmountMl())
+                .rightAmountMl(pumpEventData.getRightAmountMl())
                 .build();
     }
 

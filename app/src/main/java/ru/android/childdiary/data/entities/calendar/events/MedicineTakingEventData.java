@@ -10,6 +10,8 @@ import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.medical.MedicineTakingData;
+import ru.android.childdiary.data.entities.medical.core.MedicineData;
+import ru.android.childdiary.data.entities.medical.core.MedicineMeasureData;
 
 @Table(name = "medicine_taking_event")
 @Entity(name = "MedicineTakingEventEntity")
@@ -25,4 +27,16 @@ public interface MedicineTakingEventData {
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
     MedicineTakingData getMedicineTaking();
+
+    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ManyToOne
+    MedicineData getMedicine();
+
+    Double getAmount();
+
+    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ManyToOne
+    MedicineMeasureData getMedicineMeasure();
+
+    String getImageFileName();
 }

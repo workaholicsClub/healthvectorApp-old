@@ -16,10 +16,10 @@ public class MedicineMeasureMapper implements EntityMapper<MedicineMeasureData, 
     }
 
     @Override
-    public MedicineMeasure mapToPlainObject(@NonNull MedicineMeasureData data) {
+    public MedicineMeasure mapToPlainObject(@NonNull MedicineMeasureData medicineMeasureData) {
         return MedicineMeasure.builder()
-                .id(data.getId())
-                .name(data.getName())
+                .id(medicineMeasureData.getId())
+                .name(medicineMeasureData.getName())
                 .build();
     }
 

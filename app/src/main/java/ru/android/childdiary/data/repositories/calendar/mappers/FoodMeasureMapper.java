@@ -16,10 +16,10 @@ public class FoodMeasureMapper implements EntityMapper<FoodMeasureData, FoodMeas
     }
 
     @Override
-    public FoodMeasure mapToPlainObject(@NonNull FoodMeasureData data) {
+    public FoodMeasure mapToPlainObject(@NonNull FoodMeasureData foodMeasureData) {
         return FoodMeasure.builder()
-                .id(data.getId())
-                .name(data.getName())
+                .id(foodMeasureData.getId())
+                .name(foodMeasureData.getName())
                 .build();
     }
 

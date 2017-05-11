@@ -29,20 +29,20 @@ public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEv
     }
 
     @Override
-    public MasterEvent mapToPlainObject(@NonNull MasterEventData data) {
-        ChildData childData = data.getChild();
+    public MasterEvent mapToPlainObject(@NonNull MasterEventData masterEventData) {
+        ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
-        RepeatParametersData repeatParametersData = data.getRepeatParameters();
+        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
         RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return MasterEvent.masterBuilder()
-                .masterEventId(data.getId())
-                .eventType(data.getEventType())
-                .dateTime(data.getDateTime())
-                .notifyTimeInMinutes(data.getNotifyTimeInMinutes())
-                .note(data.getNote())
-                .isDone(data.isDone())
+                .masterEventId(masterEventData.getId())
+                .eventType(masterEventData.getEventType())
+                .dateTime(masterEventData.getDateTime())
+                .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
+                .note(masterEventData.getNote())
+                .isDone(masterEventData.isDone())
                 .repeatParameters(repeatParameters)
-                .linearGroup(data.getLinearGroup())
+                .linearGroup(masterEventData.getLinearGroup())
                 .child(child)
                 .build();
     }

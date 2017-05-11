@@ -22,15 +22,15 @@ public class AntropometryMapper implements EntityMapper<AntropometryData, Antrop
     }
 
     @Override
-    public Antropometry mapToPlainObject(@NonNull AntropometryData data) {
-        ChildData childData = data.getChild();
+    public Antropometry mapToPlainObject(@NonNull AntropometryData antropometryData) {
+        ChildData childData = antropometryData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         return Antropometry.builder()
-                .id(data.getId())
+                .id(antropometryData.getId())
                 .child(child)
-                .height(data.getHeight())
-                .weight(data.getWeight())
-                .date(data.getDate())
+                .height(antropometryData.getHeight())
+                .weight(antropometryData.getWeight())
+                .date(antropometryData.getDate())
                 .build();
     }
 

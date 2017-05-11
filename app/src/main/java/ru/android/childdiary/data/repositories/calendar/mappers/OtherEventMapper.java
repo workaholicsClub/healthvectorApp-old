@@ -29,14 +29,14 @@ public class OtherEventMapper implements EntityMapper<OtherEventData, OtherEvent
     }
 
     @Override
-    public OtherEvent mapToPlainObject(@NonNull OtherEventData data) {
-        MasterEventData masterEventData = data.getMasterEvent();
+    public OtherEvent mapToPlainObject(@NonNull OtherEventData otherEventData) {
+        MasterEventData masterEventData = otherEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
         RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
         RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return OtherEvent.builder()
-                .id(data.getId())
+                .id(otherEventData.getId())
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
@@ -46,8 +46,8 @@ public class OtherEventMapper implements EntityMapper<OtherEventData, OtherEvent
                 .child(child)
                 .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
-                .name(data.getName())
-                .finishDateTime(data.getFinishDateTime())
+                .name(otherEventData.getName())
+                .finishDateTime(otherEventData.getFinishDateTime())
                 .build();
     }
 

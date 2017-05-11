@@ -43,6 +43,10 @@ public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit, Doc
                 .repeatParameters(doctorVisit.getRepeatParameters())
                 .linearGroup(linearGroup)
                 .doctorVisit(doctorVisit)
+                .doctor(doctorVisit.getDoctor())
+                .name(doctorVisit.getName())
+                .durationInMinutes(doctorVisit.getDurationInMinutes())
+                .imageFileName(doctorVisit.getImageFileName())
                 .build();
     }
 

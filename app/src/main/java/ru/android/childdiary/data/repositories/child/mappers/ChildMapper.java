@@ -16,16 +16,16 @@ public class ChildMapper implements EntityMapper<ChildData, ChildEntity, Child> 
     }
 
     @Override
-    public Child mapToPlainObject(@NonNull ChildData data) {
+    public Child mapToPlainObject(@NonNull ChildData childData) {
         return Child.builder()
-                .id(data.getId())
-                .name(data.getName())
-                .birthDate(data.getBirthDate())
-                .birthTime(data.getBirthTime())
-                .sex(data.getSex())
-                .imageFileName(data.getImageFileName())
-                .birthHeight(data.getBirthHeight())
-                .birthWeight(data.getBirthWeight())
+                .id(childData.getId())
+                .name(childData.getName())
+                .birthDate(childData.getBirthDate())
+                .birthTime(childData.getBirthTime())
+                .sex(childData.getSex())
+                .imageFileName(childData.getImageFileName())
+                .birthHeight(childData.getBirthHeight())
+                .birthWeight(childData.getBirthWeight())
                 .build();
     }
 

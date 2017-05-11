@@ -36,26 +36,26 @@ public class DoctorVisitMapper implements EntityMapper<DoctorVisitData, DoctorVi
     }
 
     @Override
-    public DoctorVisit mapToPlainObject(@NonNull DoctorVisitData data) {
-        ChildData childData = data.getChild();
+    public DoctorVisit mapToPlainObject(@NonNull DoctorVisitData doctorVisitData) {
+        ChildData childData = doctorVisitData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
-        DoctorData doctorData = data.getDoctor();
+        DoctorData doctorData = doctorVisitData.getDoctor();
         Doctor doctor = doctorData == null ? null : doctorMapper.mapToPlainObject(doctorData);
-        RepeatParametersData repeatParametersData = data.getRepeatParameters();
+        RepeatParametersData repeatParametersData = doctorVisitData.getRepeatParameters();
         RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return DoctorVisit.builder()
-                .id(data.getId())
+                .id(doctorVisitData.getId())
                 .child(child)
                 .doctor(doctor)
                 .repeatParameters(repeatParameters)
-                .name(data.getName())
-                .durationInMinutes(data.getDurationInMinutes())
-                .dateTime(data.getDateTime())
-                .finishDateTime(data.getFinishDateTime())
-                .exported(data.getExported())
-                .notifyTimeInMinutes(data.getNotifyTimeInMinutes())
-                .note(data.getNote())
-                .imageFileName(data.getImageFileName())
+                .name(doctorVisitData.getName())
+                .durationInMinutes(doctorVisitData.getDurationInMinutes())
+                .dateTime(doctorVisitData.getDateTime())
+                .finishDateTime(doctorVisitData.getFinishDateTime())
+                .exported(doctorVisitData.getExported())
+                .notifyTimeInMinutes(doctorVisitData.getNotifyTimeInMinutes())
+                .note(doctorVisitData.getNote())
+                .imageFileName(doctorVisitData.getImageFileName())
                 .build();
     }
 
