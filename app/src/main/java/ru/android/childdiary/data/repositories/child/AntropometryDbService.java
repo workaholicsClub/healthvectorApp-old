@@ -34,8 +34,8 @@ public class AntropometryDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, AntropometryMapper::mapToPlainObject));
     }
 
-    public Observable<Antropometry> add(@NonNull Child child, @NonNull Antropometry antropometry) {
-        return DbUtils.insertObservable(dataStore, antropometry, child,
+    public Observable<Antropometry> add(@NonNull Antropometry antropometry) {
+        return DbUtils.insertObservable(dataStore, antropometry,
                 AntropometryMapper::mapToEntity, AntropometryMapper::mapToPlainObject);
     }
 

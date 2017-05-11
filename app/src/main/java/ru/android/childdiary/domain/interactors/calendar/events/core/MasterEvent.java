@@ -52,8 +52,8 @@ public class MasterEvent implements Serializable {
                 .notifyTimeInMinutes(notifyTimeInMinutes)
                 .note(note)
                 .isDone(isDone)
+                .child(child)
                 .repeatParameters(repeatParameters)
-                .linearGroup(linearGroup)
-                .child(child);
+                .linearGroup(linearGroup);
     }
 }

@@ -1,23 +1,21 @@
 package ru.android.childdiary.data.repositories.calendar.mappers;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventData;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
-import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.child.ChildData;
+import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.medical.MedicineTakingData;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 
 public class MedicineTakingEventMapper {
@@ -46,12 +44,6 @@ public class MedicineTakingEventMapper {
 
     public static MedicineTakingEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
                                                         @NonNull MedicineTakingEvent medicineTakingEvent) {
-        return mapToEntity(blockingEntityStore, medicineTakingEvent, null);
-    }
-
-    public static MedicineTakingEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
-                                                        @NonNull MedicineTakingEvent medicineTakingEvent,
-                                                        @Nullable MasterEvent masterEvent) {
         MedicineTakingEventEntity medicineTakingEventEntity;
         if (medicineTakingEvent.getId() == null) {
             medicineTakingEventEntity = new MedicineTakingEventEntity();
@@ -59,10 +51,10 @@ public class MedicineTakingEventMapper {
             medicineTakingEventEntity = (MedicineTakingEventEntity) blockingEntityStore.findByKey(MedicineTakingEvent.class, medicineTakingEvent.getId());
         }
         fillNonReferencedFields(medicineTakingEventEntity, medicineTakingEvent);
-        if (masterEvent != null) {
-            MasterEventEntity masterEventEntity = (MasterEventEntity) blockingEntityStore.findByKey(MasterEventEntity.class, masterEvent.getMasterEventId());
-            medicineTakingEventEntity.setMasterEvent(masterEventEntity);
-        }
+
+        MasterEventEntity masterEventEntity = (MasterEventEntity) blockingEntityStore.findByKey(MasterEventEntity.class, medicineTakingEvent.getMasterEventId());
+        medicineTakingEventEntity.setMasterEvent(masterEventEntity);
+
         MedicineTaking medicineTaking = medicineTakingEvent.getMedicineTaking();
         if (medicineTaking != null) {
             MedicineTakingEntity medicineTakingEntity = (MedicineTakingEntity) blockingEntityStore.findByKey(MedicineTakingEntity.class, medicineTaking.getId());

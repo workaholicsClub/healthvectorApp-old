@@ -9,7 +9,6 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Function3;
 import io.requery.BlockingEntityStore;
 import io.requery.EntityStore;
 import io.requery.Persistable;
@@ -74,28 +73,6 @@ public class DbUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T, E, PT> Observable<T> insertObservable(EntityStore dataStore, T object, PT parentObject,
-                                                            @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
-                                                            @NonNull Function<E, T> mapToPlainObject) {
-        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
-                insert(dataStore, object, parentObject, mapToEntity, mapToPlainObject)));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T, E, PT> T insert(EntityStore dataStore, T object, PT parentObject,
-                                      @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
-                                      @NonNull Function<E, T> mapToPlainObject) {
-        try {
-            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-            E entity = mapToEntity.apply(blockingEntityStore, object, parentObject);
-            entity = (E) blockingEntityStore.insert(entity);
-            return mapToPlainObject.apply(entity);
-        } catch (Exception e) {
-            throw new RuntimeException("error on inserting\n" + object + "\n" + parentObject, e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     public static <T, E> Observable<T> updateObservable(EntityStore dataStore, T object,
                                                         @NonNull BiFunction<BlockingEntityStore, T, E> mapToEntity,
                                                         @NonNull Function<E, T> mapToPlainObject) {
@@ -114,28 +91,6 @@ public class DbUtils {
             return mapToPlainObject.apply(entity);
         } catch (Exception e) {
             throw new RuntimeException("error on updating\n" + object, e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T, E, PT> Observable<T> updateObservable(EntityStore dataStore, T object, PT parentObject,
-                                                            @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
-                                                            @NonNull Function<E, T> mapToPlainObject) {
-        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
-                update(dataStore, object, parentObject, mapToEntity, mapToPlainObject)));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T, E, PT> T update(EntityStore dataStore, T object, PT parentObject,
-                                      @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
-                                      @NonNull Function<E, T> mapToPlainObject) {
-        try {
-            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-            E entity = mapToEntity.apply(blockingEntityStore, object, parentObject);
-            entity = (E) blockingEntityStore.update(entity);
-            return mapToPlainObject.apply(entity);
-        } catch (Exception e) {
-            throw new RuntimeException("error on updating\n" + object + "\n" + parentObject, e);
         }
     }
 

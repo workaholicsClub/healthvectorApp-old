@@ -23,7 +23,8 @@ public class AntropometryInteractor implements Interactor {
     }
 
     public Observable<Antropometry> add(@NonNull Child child, @NonNull Antropometry item) {
-        return antropometryRepository.add(child, item);
+        item = item.toBuilder().child(child).build();
+        return antropometryRepository.add(item);
     }
 
     public Observable<Antropometry> update(@NonNull Antropometry item) {

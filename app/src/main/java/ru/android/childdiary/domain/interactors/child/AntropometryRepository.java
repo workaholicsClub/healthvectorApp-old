@@ -10,7 +10,7 @@ import ru.android.childdiary.domain.core.Repository;
 public interface AntropometryRepository extends Repository {
     Observable<List<Antropometry>> getAll(@NonNull Child child);
 
-    Observable<Antropometry> add(@NonNull Child child, @NonNull Antropometry antropometry);
+    Observable<Antropometry> add(@NonNull Antropometry antropometry);
 
     Observable<Antropometry> update(@NonNull Antropometry antropometry);
 

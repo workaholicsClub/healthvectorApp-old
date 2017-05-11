@@ -41,7 +41,8 @@ public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit, Doc
     // TODO: mapper, datastore private
     @Override
     protected DoctorVisitEvent insert(@NonNull DoctorVisitEvent event, @NonNull MasterEvent masterEvent) {
-        return DbUtils.insert(dataStore, event, masterEvent,
+        DoctorVisitEvent doctorVisitEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
+        return DbUtils.insert(dataStore, event,
                 DoctorVisitEventMapper::mapToEntity, DoctorVisitEventMapper::mapToPlainObject);
     }
 }

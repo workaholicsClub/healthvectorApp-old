@@ -299,35 +299,40 @@ public class CalendarDbService {
     public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
-            return insertDiaperEvent(event, masterEvent);
+            DiaperEvent diaperEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
+            return insertDiaperEvent(diaperEvent);
         }));
     }
 
     public Observable<FeedEvent> add(@NonNull FeedEvent event) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
-            return insertFeedEvent(event, masterEvent);
+            FeedEvent feedEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
+            return insertFeedEvent(feedEvent);
         }));
     }
 
     public Observable<OtherEvent> add(@NonNull OtherEvent event) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
-            return insertOtherEvent(event, masterEvent);
+            OtherEvent otherEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
+            return insertOtherEvent(otherEvent);
         }));
     }
 
     public Observable<PumpEvent> add(@NonNull PumpEvent event) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
-            return insertPumpEvent(event, masterEvent);
+            PumpEvent pumpEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
+            return insertPumpEvent(pumpEvent);
         }));
     }
 
     public Observable<SleepEvent> add(@NonNull SleepEvent event) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
-            return insertSleepEvent(event, masterEvent);
+            SleepEvent sleepEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
+            return insertSleepEvent(sleepEvent);
         }));
     }
 
@@ -399,33 +404,33 @@ public class CalendarDbService {
                 MasterEventMapper::mapToEntity, MasterEventMapper::mapToPlainObject);
     }
 
-    private DiaperEvent insertDiaperEvent(@NonNull DiaperEvent event, @NonNull MasterEvent masterEvent) {
-        return DbUtils.insert(dataStore, event, masterEvent,
+    private DiaperEvent insertDiaperEvent(@NonNull DiaperEvent event) {
+        return DbUtils.insert(dataStore, event,
                 DiaperEventMapper::mapToEntity, DiaperEventMapper::mapToPlainObject);
     }
 
-    private FeedEvent insertFeedEvent(@NonNull FeedEvent event, @NonNull MasterEvent masterEvent) {
-        return DbUtils.insert(dataStore, event, masterEvent,
+    private FeedEvent insertFeedEvent(@NonNull FeedEvent event) {
+        return DbUtils.insert(dataStore, event,
                 FeedEventMapper::mapToEntity, FeedEventMapper::mapToPlainObject);
     }
 
-    private OtherEvent insertOtherEvent(@NonNull OtherEvent event, @NonNull MasterEvent masterEvent) {
-        return DbUtils.insert(dataStore, event, masterEvent,
+    private OtherEvent insertOtherEvent(@NonNull OtherEvent event) {
+        return DbUtils.insert(dataStore, event,
                 OtherEventMapper::mapToEntity, OtherEventMapper::mapToPlainObject);
     }
 
-    private PumpEvent insertPumpEvent(@NonNull PumpEvent event, @NonNull MasterEvent masterEvent) {
-        return DbUtils.insert(dataStore, event, masterEvent,
+    private PumpEvent insertPumpEvent(@NonNull PumpEvent event) {
+        return DbUtils.insert(dataStore, event,
                 PumpEventMapper::mapToEntity, PumpEventMapper::mapToPlainObject);
     }
 
-    private SleepEvent insertSleepEvent(@NonNull SleepEvent event, @NonNull MasterEvent masterEvent) {
-        return DbUtils.insert(dataStore, event, masterEvent,
+    private SleepEvent insertSleepEvent(@NonNull SleepEvent event) {
+        return DbUtils.insert(dataStore, event,
                 SleepEventMapper::mapToEntity, SleepEventMapper::mapToPlainObject);
     }
 
-    private MedicineTakingEvent insertMedicineTakingEvent(@NonNull MedicineTakingEvent event, @NonNull MasterEvent masterEvent) {
-        return DbUtils.insert(dataStore, event, masterEvent,
+    private MedicineTakingEvent insertMedicineTakingEvent(@NonNull MedicineTakingEvent event) {
+        return DbUtils.insert(dataStore, event,
                 MedicineTakingEventMapper::mapToEntity, MedicineTakingEventMapper::mapToPlainObject);
     }
 

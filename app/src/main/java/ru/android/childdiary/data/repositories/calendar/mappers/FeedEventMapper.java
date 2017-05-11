@@ -1,7 +1,6 @@
 package ru.android.childdiary.data.repositories.calendar.mappers;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodData;
@@ -10,17 +9,16 @@ import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureData;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
-import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
+import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
 public class FeedEventMapper {
     public static FeedEvent mapToPlainObject(@NonNull FeedEventData eventData) {
@@ -57,12 +55,6 @@ public class FeedEventMapper {
 
     public static FeedEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
                                               @NonNull FeedEvent feedEvent) {
-        return mapToEntity(blockingEntityStore, feedEvent, null);
-    }
-
-    public static FeedEventEntity mapToEntity(BlockingEntityStore blockingEntityStore,
-                                              @NonNull FeedEvent feedEvent,
-                                              @Nullable MasterEvent masterEvent) {
         FeedEventEntity feedEventEntity;
         if (feedEvent.getId() == null) {
             feedEventEntity = new FeedEventEntity();
@@ -70,10 +62,10 @@ public class FeedEventMapper {
             feedEventEntity = (FeedEventEntity) blockingEntityStore.findByKey(FeedEventEntity.class, feedEvent.getId());
         }
         fillNonReferencedFields(feedEventEntity, feedEvent);
-        if (masterEvent != null) {
-            MasterEventEntity masterEventEntity = (MasterEventEntity) blockingEntityStore.findByKey(MasterEventEntity.class, masterEvent.getMasterEventId());
-            feedEventEntity.setMasterEvent(masterEventEntity);
-        }
+
+        MasterEventEntity masterEventEntity = (MasterEventEntity) blockingEntityStore.findByKey(MasterEventEntity.class, feedEvent.getMasterEventId());
+        feedEventEntity.setMasterEvent(masterEventEntity);
+
         FoodMeasure foodMeasure = feedEvent.getFoodMeasure();
         if (foodMeasure != null) {
             FoodMeasureEntity foodMeasureEntity = (FoodMeasureEntity) blockingEntityStore.findByKey(FoodMeasureEntity.class, foodMeasure.getId());

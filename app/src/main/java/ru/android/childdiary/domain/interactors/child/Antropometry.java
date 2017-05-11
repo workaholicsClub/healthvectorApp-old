@@ -14,6 +14,8 @@ public class Antropometry implements Serializable {
 
     Long id;
 
+    Child child;
+
     Double height;
 
     Double weight;

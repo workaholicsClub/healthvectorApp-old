@@ -161,7 +161,8 @@ public class DbTest {
 
     private Antropometry add(Child child, Antropometry item) {
         List<Antropometry> inserted = new ArrayList<>();
-        antropometryDbService.add(child, item)
+        item = item.toBuilder().child(child).build();
+        antropometryDbService.add(item)
                 .doOnNext(this::logOnNextInsert)
                 .doOnNext(inserted::add)
                 .doOnError(this::logOnErrorInsert)
