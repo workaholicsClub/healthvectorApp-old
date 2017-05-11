@@ -26,6 +26,7 @@ import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArgument
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDiaperStateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
@@ -53,6 +54,9 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
 
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
+
+    @BindView(R.id.noteView)
+    FieldNoteView noteView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull DiaperEvent defaultEvent) {
@@ -85,6 +89,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
         });
+        setupEditTextView(noteView);
     }
 
     @Override

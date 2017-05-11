@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import lombok.Setter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
@@ -37,11 +38,11 @@ public class FieldRepeatParametersView extends LinearLayout
     FieldTimesView timesView;
 
     @Nullable
-    @Setter
-    private Listener listener;
+    private RepeatParameters repeatParameters;
 
     @Nullable
-    private RepeatParameters repeatParameters;
+    @Setter
+    private Listener listener;
 
     public FieldRepeatParametersView(Context context) {
         super(context);
@@ -70,6 +71,10 @@ public class FieldRepeatParametersView extends LinearLayout
         frequencyView.setFieldSpinnerListener(this);
         periodicityView.setFieldSpinnerListener(this);
         lengthView.setFieldDialogListener(this);
+    }
+
+    public void setSex(@Nullable Sex sex) {
+        timesView.setSex(sex);
     }
 
     public void updateFrequency(List<Integer> items) {
@@ -158,6 +163,14 @@ public class FieldRepeatParametersView extends LinearLayout
         timesView.setReadOnly(readOnly);
         periodicityView.setReadOnly(readOnly);
         lengthView.setReadOnly(readOnly);
+    }
+
+    public void setFieldTimesListener(FieldTimesView.FieldTimesListener fieldTimesListener) {
+        timesView.setFieldTimesListener(fieldTimesListener);
+    }
+
+    public void setTime(int i, LocalTime time) {
+        timesView.setTime(i, time);
     }
 
     public interface Listener {

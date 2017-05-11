@@ -136,6 +136,11 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                                 this::onUnexpectedError));
                 break;
             case MEDICINE_TAKING:
+                unsubscribeOnDestroy(calendarInteractor.getDefaultMedicineTakingEvent()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(defaultEvent -> getViewState().navigateToMedicineTakingEvent(event, defaultEvent),
+                                this::onUnexpectedError));
                 break;
             // TODO EXERCISE
         }

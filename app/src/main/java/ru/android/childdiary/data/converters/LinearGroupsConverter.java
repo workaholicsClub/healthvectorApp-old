@@ -1,6 +1,7 @@
 package ru.android.childdiary.data.converters;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.joda.time.LocalTime;
@@ -30,6 +31,7 @@ public class LinearGroupsConverter extends SimpleConverter<LinearGroups> {
     }
 
     @Override
+    @Nullable
     protected String map(@NonNull LinearGroups linearGroups) {
         List<String> strings = Observable.fromIterable(linearGroups.getTimes())
                 .map(TIME_FORMATTER::print)
@@ -39,6 +41,7 @@ public class LinearGroupsConverter extends SimpleConverter<LinearGroups> {
     }
 
     @Override
+    @Nullable
     protected LinearGroups map(@NonNull String value) {
         String[] parts = value.split(DELIMITER);
         List<LocalTime> times = Observable.fromArray(parts)

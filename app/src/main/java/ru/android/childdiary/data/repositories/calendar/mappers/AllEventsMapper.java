@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import io.requery.BlockingEntityStore;
 import io.requery.query.Tuple;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
@@ -46,42 +47,6 @@ import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 public class AllEventsMapper implements EntityMapper<Tuple, Tuple, MasterEvent> {
     @Inject
     public AllEventsMapper() {
-    }
-
-    @Override
-    public MasterEvent mapToPlainObject(@NonNull Tuple data) {
-        EventType eventType = data.get(MasterEventEntity.EVENT_TYPE);
-        if (eventType == null) {
-            throw new IllegalStateException("Unsupported event type");
-        }
-        switch (eventType) {
-            case DIAPER:
-                return mapToDiaperEvent(data);
-            case FEED:
-                return mapToFeedEvent(data);
-            case OTHER:
-                return mapToOtherEvent(data);
-            case PUMP:
-                return mapToPumpEvent(data);
-            case SLEEP:
-                return mapToSleepEvent(data);
-            case DOCTOR_VISIT:
-                return mapToDoctorVisitEvent(data);
-            case MEDICINE_TAKING:
-                return mapToMedicineTakingEvent(data);
-            // TODO EXERCISE
-        }
-        throw new IllegalStateException("Unsupported event type");
-    }
-
-    @Override
-    public Tuple mapToEntity(BlockingEntityStore blockingEntityStore, @NonNull MasterEvent masterEvent) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public void fillNonReferencedFields(@NonNull Tuple to, @NonNull MasterEvent from) {
-        throw new UnsupportedOperationException("Not implemented");
     }
 
     private static DiaperEvent mapToDiaperEvent(@NonNull Tuple data) {
@@ -215,6 +180,10 @@ public class AllEventsMapper implements EntityMapper<Tuple, Tuple, MasterEvent> 
                 .repeatParameters(mapToRepeatParameters(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP))
                 .doctorVisit(mapToDoctorVisit(data))
+                // TODO doctor
+                .name(data.get(DoctorVisitEventEntity.NAME.as("doctor_visit_event_name")))
+                .durationInMinutes(data.get(DoctorVisitEventEntity.DURATION_IN_MINUTES.as("doctor_visit_event_duration")))
+                .imageFileName(data.get(DoctorVisitEventEntity.IMAGE_FILE_NAME.as("doctor_visit_event_image_file_name")))
                 .build();
     }
 
@@ -243,7 +212,7 @@ public class AllEventsMapper implements EntityMapper<Tuple, Tuple, MasterEvent> 
 
     public static MedicineTakingEvent mapToMedicineTakingEvent(@NonNull Tuple data) {
         return MedicineTakingEvent.builder()
-                .id(data.get(DoctorVisitEventEntity.ID.as("medicine_taking_event_id")))
+                .id(data.get(MedicineTakingEventEntity.ID.as("medicine_taking_event_id")))
                 .masterEventId(data.get(MasterEventEntity.ID))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME))
@@ -254,6 +223,9 @@ public class AllEventsMapper implements EntityMapper<Tuple, Tuple, MasterEvent> 
                 .repeatParameters(mapToRepeatParameters(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP))
                 .medicineTaking(mapToMedicineTaking(data))
+                // TODO medicine medicineMeasure
+                .amount(data.get((MedicineTakingEventEntity.AMOUNT.as("medicine_taking_event_amount"))))
+                .imageFileName(data.get(MedicineTakingEventEntity.IMAGE_FILE_NAME.as("medicine_taking_event_image_file_name")))
                 .build();
     }
 
@@ -294,5 +266,41 @@ public class AllEventsMapper implements EntityMapper<Tuple, Tuple, MasterEvent> 
                 .periodicity(data.get(RepeatParametersEntity.PERIODICITY))
                 .length(data.get(RepeatParametersEntity.LENGTH))
                 .build();
+    }
+
+    @Override
+    public MasterEvent mapToPlainObject(@NonNull Tuple data) {
+        EventType eventType = data.get(MasterEventEntity.EVENT_TYPE);
+        if (eventType == null) {
+            throw new IllegalStateException("Unsupported event type");
+        }
+        switch (eventType) {
+            case DIAPER:
+                return mapToDiaperEvent(data);
+            case FEED:
+                return mapToFeedEvent(data);
+            case OTHER:
+                return mapToOtherEvent(data);
+            case PUMP:
+                return mapToPumpEvent(data);
+            case SLEEP:
+                return mapToSleepEvent(data);
+            case DOCTOR_VISIT:
+                return mapToDoctorVisitEvent(data);
+            case MEDICINE_TAKING:
+                return mapToMedicineTakingEvent(data);
+            // TODO EXERCISE
+        }
+        throw new IllegalStateException("Unsupported event type");
+    }
+
+    @Override
+    public Tuple mapToEntity(BlockingEntityStore blockingEntityStore, @NonNull MasterEvent masterEvent) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public void fillNonReferencedFields(@NonNull Tuple to, @NonNull MasterEvent from) {
+        throw new UnsupportedOperationException("Not implemented");
     }
 }

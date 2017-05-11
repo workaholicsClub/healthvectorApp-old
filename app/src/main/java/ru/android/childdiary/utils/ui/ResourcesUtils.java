@@ -256,6 +256,13 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
+    public static int getTimeItemBackgroundRes(@Nullable Sex sex, boolean enabled) {
+        return sex == null || sex == Sex.MALE
+                ? (enabled ? R.drawable.background_times_on_boy : R.drawable.background_times_off)
+                : (enabled ? R.drawable.background_times_on_girl : R.drawable.background_times_off);
+    }
+
+    @DrawableRes
     public static int getNotificationSleepRes(@Nullable Sex sex) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return sex == null || sex == Sex.MALE

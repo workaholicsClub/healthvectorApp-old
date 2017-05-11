@@ -1,6 +1,7 @@
 package ru.android.childdiary.data.repositories.core;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
@@ -30,7 +31,9 @@ public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit, Doc
     }
 
     @Override
-    protected DoctorVisitEvent createEvent(DoctorVisit doctorVisit, DateTime dateTime, int linearGroup) {
+    protected DoctorVisitEvent createEvent(@NonNull DoctorVisit doctorVisit,
+                                           @NonNull DateTime dateTime,
+                                           @Nullable Integer linearGroup) {
         return DoctorVisitEvent.builder()
                 .id(null)
                 .masterEventId(null)

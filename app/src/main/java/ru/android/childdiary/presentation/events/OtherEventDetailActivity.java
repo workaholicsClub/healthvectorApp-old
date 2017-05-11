@@ -26,6 +26,7 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldOtherEventNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
@@ -68,6 +69,9 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
 
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
+
+    @BindView(R.id.noteView)
+    FieldNoteView noteView;
 
     @State
     boolean isButtonDoneEnabled;
@@ -113,6 +117,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
         });
+        setupEditTextView(noteView);
 
         unsubscribeOnDestroy(presenter.listenForDoneButtonUpdate(otherEventNameView.textObservable()));
     }

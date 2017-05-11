@@ -88,7 +88,7 @@ public class MedicineTakingEventMapper implements EntityMapper<MedicineTakingEve
         if (medicineTakingEvent.getId() == null) {
             medicineTakingEventEntity = new MedicineTakingEventEntity();
         } else {
-            medicineTakingEventEntity = (MedicineTakingEventEntity) blockingEntityStore.findByKey(MedicineTakingEvent.class, medicineTakingEvent.getId());
+            medicineTakingEventEntity = (MedicineTakingEventEntity) blockingEntityStore.findByKey(MedicineTakingEventEntity.class, medicineTakingEvent.getId());
         }
         fillNonReferencedFields(medicineTakingEventEntity, medicineTakingEvent);
 

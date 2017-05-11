@@ -27,6 +27,7 @@ import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment
 import ru.android.childdiary.presentation.core.fields.widgets.FieldAmountMlPumpView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldBreastView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
@@ -57,6 +58,9 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
 
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
+
+    @BindView(R.id.noteView)
+    FieldNoteView noteView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull PumpEvent defaultEvent) {
@@ -90,6 +94,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
         });
+        setupEditTextView(noteView);
     }
 
     @Override

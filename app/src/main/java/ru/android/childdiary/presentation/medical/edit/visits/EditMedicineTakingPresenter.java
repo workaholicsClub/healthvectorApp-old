@@ -26,4 +26,14 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
                         .doOnNext(updated -> logger.debug("updated: " + updated))
                         .subscribe(getViewState()::updated, this::onUnexpectedError));
     }
+
+    @Override
+    public void delete(@NonNull MedicineTaking medicineTaking) {
+        unsubscribeOnDestroy(
+                medicineTakingInteractor.deleteMedicineTaking(medicineTaking)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(deleted -> logger.debug("deleted: " + deleted))
+                        .subscribe(getViewState()::deleted, this::onUnexpectedError));
+    }
 }

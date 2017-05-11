@@ -10,4 +10,7 @@ import java.io.Serializable;
 public interface BaseEditItemView<T extends Serializable> extends BaseItemView<T> {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void updated(@NonNull T item);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void deleted(@NonNull T item);
 }

@@ -155,7 +155,7 @@
     <string name="add_doctor_title">Добавить специализацию</string>
     <string name="doctors_title">Список специализаций</string>
     <string name="search">Поиск</string>
-    <string name="medicine_measure_dialog_title">Дозировка</string>
+    <string name="medicine_measure_value_dialog_title">Дозировка</string>
     <string name="frequency_once">Однократно</string>
     <string name="periodicity_daily">Ежедневно</string>
     <string name="periodicity_weekly">Еженедельно</string>

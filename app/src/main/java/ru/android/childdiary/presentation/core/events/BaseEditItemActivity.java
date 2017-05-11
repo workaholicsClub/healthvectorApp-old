@@ -2,16 +2,18 @@ package ru.android.childdiary.presentation.core.events;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.widget.Button;
-import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 
 import java.io.Serializable;
 
-import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -22,9 +24,6 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
         extends BaseItemActivity<V, T> implements BaseEditItemView<T> {
     protected T item;
 
-    @BindView(R.id.buttonFinish)
-    Button buttonFinish;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,16 +31,23 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
         //noinspection unchecked
         item = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_ITEM);
 
+        buttonAdd.setVisibility(View.GONE);
         setup(item);
+    }
+
+    @Override
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
+        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        buttonFinish.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
-    @OnClick(R.id.buttonFinish)
+    @OnClick(R.id.buttonAdd)
     void onButtonFinishClick() {
         // TODO
         getPresenter().update(build());
@@ -49,7 +55,11 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
 
     @Override
     public void updated(@NonNull T item) {
-        Toast.makeText(this, "updated: " + item, Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void deleted(@NonNull T item) {
         finish();
     }
 
@@ -68,11 +78,23 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
                 .show();
     }
 
+    protected abstract BaseEditItemPresenter<V, T> getPresenter();
+
     @Override
-    @LayoutRes
-    protected int getLayoutResourceId() {
-        return R.layout.activity_item_edit;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.delete, menu);
+        return true;
     }
 
-    protected abstract BaseEditItemPresenter<V, T> getPresenter();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                getPresenter().delete(this.item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

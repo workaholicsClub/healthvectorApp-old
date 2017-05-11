@@ -10,9 +10,31 @@ import io.requery.Converter;
 import io.requery.Nullable;
 
 public abstract class SimpleConverter<T> implements Converter<T, String> {
+    private static final String NULL = "null";
+
     private final Logger logger = LoggerFactory.getLogger(toString());
 
-    private static final String NULL = "null";
+    protected static <E> String toString(@android.support.annotation.Nullable E value) {
+        return value == null ? NULL : value.toString();
+    }
+
+    @android.support.annotation.Nullable
+    protected static Integer toInteger(@NonNull String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    @android.support.annotation.Nullable
+    public static <T extends Enum<T>> T toEnum(Class<T> enumType, @NonNull String name) {
+        try {
+            return T.valueOf(enumType, name);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 
     @Override
     public Class<String> getPersistedType() {
@@ -41,28 +63,9 @@ public abstract class SimpleConverter<T> implements Converter<T, String> {
         }
     }
 
+    @android.support.annotation.Nullable
     protected abstract String map(@NonNull T value);
 
-    protected abstract T map(@NonNull String value);
-
-    protected static <E> String toString(@android.support.annotation.Nullable E value) {
-        return value == null ? NULL : value.toString();
-    }
-
     @android.support.annotation.Nullable
-    protected static Integer toInteger(@NonNull String value) {
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    public static <T extends Enum<T>> T toEnum(Class<T> enumType, @NonNull String name) {
-        try {
-            return T.valueOf(enumType, name);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
+    protected abstract T map(@NonNull String value);
 }

@@ -203,6 +203,9 @@ public class CalendarDbService {
                 SleepEventEntity.TIMER_STARTED,
                 // doctor visit event
                 DoctorVisitEventEntity.ID.as("doctor_visit_event_id"),
+                DoctorVisitEventEntity.NAME.as("doctor_visit_event_name"),
+                DoctorVisitEventEntity.DURATION_IN_MINUTES.as("doctor_visit_event_duration"),
+                DoctorVisitEventEntity.IMAGE_FILE_NAME.as("doctor_visit_event_image_file_name"),
                 // doctor visit
                 DoctorVisitEntity.ID.as("doctor_visit_id"),
                 DoctorVisitEntity.NAME.as("doctor_visit_name"),
@@ -218,6 +221,8 @@ public class CalendarDbService {
                 DoctorEntity.NAME.as("doctor_name"),
                 // medicine taking event
                 MedicineTakingEventEntity.ID.as("medicine_taking_event_id"),
+                MedicineTakingEventEntity.AMOUNT.as("medicine_taking_event_amount"),
+                MedicineTakingEventEntity.IMAGE_FILE_NAME.as("medicine_taking_event_image_file_name"),
                 // medicine taking
                 MedicineTakingEntity.ID.as("medicine_taking_id"),
                 MedicineTakingEntity.DATE_TIME.as("medicine_taking_date_time"),

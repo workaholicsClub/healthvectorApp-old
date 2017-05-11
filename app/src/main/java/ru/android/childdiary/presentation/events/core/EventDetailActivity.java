@@ -37,7 +37,6 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.utils.EventHelper;
@@ -50,16 +49,13 @@ import static android.view.View.VISIBLE;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
         EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener {
-    @BindView(R.id.noteView)
-    protected FieldNoteView noteView;
-
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
 
     @BindView(R.id.rootView)
     View rootView;
 
-    private ViewGroup eventDetailsView;
+    private ViewGroup detailsView;
 
     private T defaultEvent;
     @Nullable
@@ -68,7 +64,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_detail);
+        setContentView(R.layout.activity_details);
 
         MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
         //noinspection unchecked
@@ -78,6 +74,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             buttonAdd.setVisibility(VISIBLE);
             buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
         } else {
+            buttonAdd.setVisibility(GONE);
             if (savedInstanceState == null) {
                 getPresenter().requestEventDetails(masterEvent);
             }
@@ -88,8 +85,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
         logger.debug("master event: " + masterEvent);
         logger.debug("default event: " + defaultEvent);
-
-        setupEditTextView(noteView);
     }
 
     @Override
@@ -112,9 +107,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View contentView = inflater.inflate(getContentLayoutResourceId(), null);
-        eventDetailsView = ButterKnife.findById(this, R.id.eventDetailsView);
-        eventDetailsView.addView(contentView);
+        detailsView = ButterKnife.findById(this, R.id.detailsView);
+        View contentView = inflater.inflate(getContentLayoutResourceId(), detailsView);
     }
 
     protected void setupEditTextView(FieldEditTextView view) {

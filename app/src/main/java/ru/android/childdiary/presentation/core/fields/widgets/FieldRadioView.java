@@ -24,7 +24,10 @@ public abstract class FieldRadioView<T extends Enum<T>> extends LinearLayout imp
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
     private final List<TextView> texts = new ArrayList<>();
     private final List<ImageView> radios = new ArrayList<>();
+
+    @Nullable
     private Sex sex;
+
     @Getter
     private T selected;
 
@@ -75,7 +78,7 @@ public abstract class FieldRadioView<T extends Enum<T>> extends LinearLayout imp
         setSelected((T) v.getTag());
     }
 
-    public void setSex(Sex sex) {
+    public void setSex(@Nullable Sex sex) {
         if (this.sex != sex) {
             this.sex = sex;
             updateItems();

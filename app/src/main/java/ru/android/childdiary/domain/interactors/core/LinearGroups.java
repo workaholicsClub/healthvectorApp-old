@@ -11,18 +11,18 @@ import lombok.Value;
 import ru.android.childdiary.domain.core.ContentObject;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class LinearGroups implements Serializable, ContentObject<LinearGroups> {
     @NonNull
     ArrayList<LocalTime> times;
 
     @Override
     public boolean isContentEmpty() {
-        return times.size() == 0;
+        return false;
     }
 
     @Override
-    public boolean isContentEqual(@android.support.annotation.NonNull LinearGroups other) {
+    public boolean isContentEqual(@NonNull LinearGroups other) {
         return times.equals(other.times);
     }
 }

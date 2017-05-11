@@ -81,7 +81,7 @@ public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<Medic
     protected Dialog createDialog(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
-                .setTitle(R.string.medicine_measure_dialog_title)
+                .setTitle(R.string.medicine_measure_value_dialog_title)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     hideKeyboardAndClearFocus(rootView.findFocus());
                     Double amount = readAmount();

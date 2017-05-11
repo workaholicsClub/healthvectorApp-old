@@ -173,11 +173,29 @@ public class CalendarInteractor implements Interactor {
     }
 
     public Observable<DoctorVisitEvent> getDefaultDoctorVisitEvent() {
-        return Observable.just(DoctorVisitEvent.builder().build());
+        return Observable.combineLatest(
+                childRepository.getActiveChildOnce(),
+                getSelectedDateOnce(),
+                Observable.just(LocalTime.now()),
+                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.DOCTOR_VISIT),
+                (child, date, time, minutes) -> DoctorVisitEvent.builder()
+                        .child(child)
+                        .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
+                        .notifyTimeInMinutes(minutes)
+                        .build());
     }
 
     public Observable<MedicineTakingEvent> getDefaultMedicineTakingEvent() {
-        return Observable.just(MedicineTakingEvent.builder().build());
+        return Observable.combineLatest(
+                childRepository.getActiveChildOnce(),
+                getSelectedDateOnce(),
+                Observable.just(LocalTime.now()),
+                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.MEDICINE_TAKING),
+                (child, date, time, minutes) -> MedicineTakingEvent.builder()
+                        .child(child)
+                        .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
+                        .notifyTimeInMinutes(minutes)
+                        .build());
     }
 
     public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {

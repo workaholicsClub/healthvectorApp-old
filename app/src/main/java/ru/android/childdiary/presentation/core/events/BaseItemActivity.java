@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -67,13 +68,16 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
-    private static final String TAG_MEDICINE_MEASURE_DIALOG = "TAG_MEDICINE_MEASURE_DIALOG";
+    private static final String TAG_MEDICINE_MEASURE_VALUE_DIALOG = "TAG_MEDICINE_MEASURE_VALUE_DIALOG";
     private static final String TAG_LENGTH_VALUE_DIALOG = "TAG_LENGTH_VALUE_DIALOG";
 
     private static final int REQUEST_DOCTOR = 1;
     private static final int REQUEST_MEDICINE = 2;
 
     protected T defaultItem;
+
+    @BindView(R.id.buttonAdd)
+    protected Button buttonAdd;
 
     @BindView(R.id.rootView)
     View rootView;
@@ -83,7 +87,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutResourceId());
+        setContentView(R.layout.activity_details);
 
         //noinspection unchecked
         defaultItem = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_ITEM);
@@ -137,6 +141,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
             getMedicineMeasureValueView().setFieldDialogListener(view -> getPresenter().requestMedicineMeasureValueDialog());
         }
         getRepeatParametersView().setListener(() -> getPresenter().requestLengthValueDialog());
+        getRepeatParametersView().setFieldTimesListener((i, time) -> showTimePicker(String.valueOf(i), time));
     }
 
     @Override
@@ -200,6 +205,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     protected void themeChanged() {
         super.themeChanged();
         getCheckBoxView().setSex(getSex());
+        getRepeatParametersView().setSex(getSex());
     }
 
     @Override
@@ -236,7 +242,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
             return;
         }
         MedicineMeasureValueDialogFragment dialogFragment = new MedicineMeasureValueDialogFragment();
-        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_MEDICINE_MEASURE_DIALOG,
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_MEDICINE_MEASURE_VALUE_DIALOG,
                 MedicineMeasureValueDialogArguments.builder()
                         .sex(getSex())
                         .medicineMeasureList(medicineMeasureList)
@@ -282,8 +288,12 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         setDate(view.getTag(), date);
     }
 
-    protected void setDate(String tag, LocalDate date) {
-        getDateView().setValue(date);
+    private void setDate(String tag, LocalDate date) {
+        switch (tag) {
+            case TAG_DATE_PICKER:
+                getDateView().setValue(date);
+                break;
+        }
     }
 
     protected void showTimePicker(String tag, @Nullable LocalTime time) {
@@ -298,8 +308,17 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         setTime(view.getTag(), time);
     }
 
-    protected void setTime(String tag, LocalTime time) {
-        getTimeView().setValue(time);
+    private void setTime(String tag, LocalTime time) {
+        try {
+            int i = Integer.parseInt(tag);
+            getRepeatParametersView().setTime(i, time);
+        } catch (NumberFormatException e) {
+            switch (tag) {
+                case TAG_TIME_PICKER:
+                    getTimeView().setValue(time);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -350,9 +369,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     protected abstract void saveChangesOrExit();
 
     protected abstract BaseItemPresenter<V, T> getPresenter();
-
-    @LayoutRes
-    protected abstract int getLayoutResourceId();
 
     @LayoutRes
     protected abstract int getContentLayoutResourceId();

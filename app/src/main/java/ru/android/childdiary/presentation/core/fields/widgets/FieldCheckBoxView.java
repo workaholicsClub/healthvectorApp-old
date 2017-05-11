@@ -21,15 +21,18 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FieldCheckBoxView extends LinearLayout implements View.OnClickListener {
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
-    private Sex sex;
-    @Getter
-    private boolean checked;
 
     @BindView(R.id.imageView)
     ImageView imageView;
 
     @BindView(R.id.textView)
     TextView textView;
+
+    @Nullable
+    private Sex sex;
+
+    @Getter
+    private boolean checked;
 
     @Nullable
     @Setter
@@ -59,6 +62,7 @@ public class FieldCheckBoxView extends LinearLayout implements View.OnClickListe
         super.onFinishInflate();
         ButterKnife.bind(this);
         setOnClickListener(this);
+        update();
     }
 
     public void setChecked(boolean value) {
@@ -77,7 +81,7 @@ public class FieldCheckBoxView extends LinearLayout implements View.OnClickListe
         textView.setText(res);
     }
 
-    public void setSex(Sex sex) {
+    public void setSex(@Nullable Sex sex) {
         if (this.sex != sex) {
             this.sex = sex;
             update();

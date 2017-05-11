@@ -7,13 +7,13 @@
     android:paddingBottom="@dimen/field_margin_base"
     android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView
-        android:id="@+id/doctorVisitNameView"
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView
+        android:id="@+id/medicineView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView
-        android:id="@+id/doctorView"
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView
+        android:id="@+id/medicineMeasureValueView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -24,21 +24,6 @@
 
     <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
         android:id="@+id/timeView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView
-        android:id="@+id/durationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
-        android:id="@+id/checkBoxView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView
-        android:id="@+id/repeatParametersView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

@@ -73,6 +73,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     public void deleteEvent(@NonNull T event) {
+        unsubscribe();
         unsubscribeOnDestroy(calendarInteractor.delete(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

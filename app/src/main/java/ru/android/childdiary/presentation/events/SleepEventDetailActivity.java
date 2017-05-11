@@ -28,6 +28,7 @@ import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArgument
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView;
@@ -77,6 +78,9 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
+
+    @BindView(R.id.noteView)
+    FieldNoteView noteView;
 
     @BindView(R.id.timerView)
     TimerView timerView;
@@ -136,6 +140,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
         });
+        setupEditTextView(noteView);
     }
 
     @Override

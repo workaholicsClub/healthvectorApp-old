@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/field_margin_base"
+    android:paddingTop="@dimen/field_margin_base">
 
     <ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView
         android:id="@+id/medicineView"
@@ -40,4 +46,4 @@
         android:id="@+id/notifyTimeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-</merge>
+</LinearLayout>

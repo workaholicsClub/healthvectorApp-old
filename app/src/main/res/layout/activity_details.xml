@@ -3,6 +3,7 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_background"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
@@ -16,10 +17,7 @@
             android:id="@+id/detailsView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/field_margin_base"
-            android:paddingTop="@dimen/field_margin_base">
+            android:orientation="vertical">
 
             <include layout="@layout/request_focus_view_dummy" />
         </LinearLayout>

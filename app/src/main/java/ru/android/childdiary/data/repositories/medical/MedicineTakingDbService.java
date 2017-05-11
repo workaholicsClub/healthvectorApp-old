@@ -101,7 +101,7 @@ public class MedicineTakingDbService {
                 object = object.toBuilder().repeatParameters(repeatParameters).build();
             }
             MedicineTaking result = insertMedicineTaking(object);
-            eventsGenerator.generateEvents(medicineTaking);
+            eventsGenerator.generateEvents(result);
             return result;
         }));
     }

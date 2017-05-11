@@ -41,6 +41,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldFeedTypeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldFoodMeasureView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldFoodView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldSpinnerView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
@@ -91,6 +92,9 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
+
+    @BindView(R.id.noteView)
+    FieldNoteView noteView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull FeedEvent defaultEvent) {
@@ -157,6 +161,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
         });
+        setupEditTextView(noteView);
     }
 
     @Override

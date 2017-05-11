@@ -79,7 +79,7 @@ public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData
         if (doctorVisitEvent.getId() == null) {
             doctorVisitEventEntity = new DoctorVisitEventEntity();
         } else {
-            doctorVisitEventEntity = (DoctorVisitEventEntity) blockingEntityStore.findByKey(DoctorVisitEvent.class, doctorVisitEvent.getId());
+            doctorVisitEventEntity = (DoctorVisitEventEntity) blockingEntityStore.findByKey(DoctorVisitEventEntity.class, doctorVisitEvent.getId());
         }
         fillNonReferencedFields(doctorVisitEventEntity, doctorVisitEvent);
 
