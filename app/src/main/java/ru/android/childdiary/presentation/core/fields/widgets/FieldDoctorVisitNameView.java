@@ -1,11 +1,12 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
 
-public class FieldDoctorVisitNameView extends FieldNameView {
+public class FieldDoctorVisitNameView extends FieldNameView implements FieldReadOnly {
     public FieldDoctorVisitNameView(Context context) {
         super(context);
     }
@@ -26,5 +27,15 @@ public class FieldDoctorVisitNameView extends FieldNameView {
     @Override
     protected int getHintResId() {
         return R.string.doctor_visit_title_hint;
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        if (TextUtils.isEmpty(getText())) {
+            setVisibility(GONE);
+        } else {
+            setVisibility(VISIBLE);
+            // TODO
+        }
     }
 }

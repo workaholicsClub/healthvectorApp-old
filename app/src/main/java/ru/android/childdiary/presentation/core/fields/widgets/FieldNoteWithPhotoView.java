@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
 
@@ -16,7 +17,7 @@ import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
-public class FieldNoteWithPhotoView extends FieldEditTextView {
+public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldReadOnly {
     @BindView(R.id.editText)
     CustomEditText editText;
 
@@ -72,5 +73,15 @@ public class FieldNoteWithPhotoView extends FieldEditTextView {
         }));
 
         return disposables;
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        if (TextUtils.isEmpty(getText())) {
+            setVisibility(GONE);
+        } else {
+            setVisibility(VISIBLE);
+            // TODO
+        }
     }
 }

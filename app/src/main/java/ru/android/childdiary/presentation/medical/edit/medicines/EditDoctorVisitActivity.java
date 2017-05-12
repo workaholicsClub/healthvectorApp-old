@@ -118,10 +118,15 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         boolean exported = ObjectUtils.isTrue(item.getExported());
         checkBoxView.setChecked(exported);
         if (exported) {
+            doctorVisitNameView.setEnabled(false);
+            doctorView.setReadOnly(true);
+            durationView.setReadOnly(true);
             checkBoxView.setVisibility(View.GONE);
             dateView.setReadOnly(true);
             timeView.setReadOnly(true);
             repeatParametersView.setReadOnly(true);
+            noteWithPhotoView.setEnabled(false);
+            notifyTimeView.setReadOnly(true);
         }
 
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());

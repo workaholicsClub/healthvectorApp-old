@@ -45,7 +45,7 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class MedicineTakingEventDetailActivity
         extends EventDetailActivity<MedicineTakingEventDetailView, MedicineTakingEvent>
-        implements MedicineTakingEventDetailView {
+        implements MedicineTakingEventDetailView, MedicineMeasureValueDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
@@ -209,6 +209,11 @@ public class MedicineTakingEventDetailActivity
     @Override
     public void onSetTime(String tag, int minutes) {
         notifyTimeView.setValue(minutes);
+    }
+
+    @Override
+    public void onSetMedicineMeasureValue(String tag, @NonNull MedicineMeasureValue medicineMeasureValue) {
+        medicineMeasureValueView.setValue(medicineMeasureValue);
     }
 
     @Override
