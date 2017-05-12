@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.core.events;
+package ru.android.childdiary.presentation.medical.core;
 
 import android.content.DialogInterface;
 import android.os.Bundle;

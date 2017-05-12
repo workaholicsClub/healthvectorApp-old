@@ -8,7 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
+import ru.android.childdiary.presentation.medical.core.BaseAddItemPresenter;
 
 @InjectViewState
 public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisitView, DoctorVisit> {
