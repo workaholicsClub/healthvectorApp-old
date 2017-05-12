@@ -56,14 +56,35 @@ public class CalendarInteractor implements Interactor {
     private final Context context;
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
+    private final DiaperEventValidator diaperEventValidator;
+    private final FeedEventValidator feedEventValidator;
+    private final OtherEventValidator otherEventValidator;
+    private final PumpEventValidator pumpEventValidator;
+    private final SleepEventValidator sleepEventValidator;
+    private final DoctorVisitEventValidator doctorVisitEventValidator;
+    private final MedicineTakingEventValidator medicineTakingEventValidator;
 
     @Inject
     public CalendarInteractor(Context context,
                               ChildDataRepository childRepository,
-                              CalendarDataRepository calendarRepository) {
+                              CalendarDataRepository calendarRepository,
+                              DiaperEventValidator diaperEventValidator,
+                              FeedEventValidator feedEventValidator,
+                              OtherEventValidator otherEventValidator,
+                              PumpEventValidator pumpEventValidator,
+                              SleepEventValidator sleepEventValidator,
+                              DoctorVisitEventValidator doctorVisitEventValidator,
+                              MedicineTakingEventValidator medicineTakingEventValidator) {
         this.context = context;
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
+        this.diaperEventValidator = diaperEventValidator;
+        this.feedEventValidator = feedEventValidator;
+        this.otherEventValidator = otherEventValidator;
+        this.pumpEventValidator = pumpEventValidator;
+        this.sleepEventValidator = sleepEventValidator;
+        this.doctorVisitEventValidator = doctorVisitEventValidator;
+        this.medicineTakingEventValidator = medicineTakingEventValidator;
     }
 
     public Observable<LocalDate> getSelectedDate() {
@@ -299,7 +320,7 @@ public class CalendarInteractor implements Interactor {
                 .filter(otherEventNameAfterTextChangeEvent -> otherEventNameAfterTextChangeEvent.editable() != null)
                 .map(TextViewAfterTextChangeEvent::editable)
                 .map(Editable::toString)
-                .map(otherEventName -> Collections.singletonList(new OtherEventValidator(context).validateOtherEventName(otherEventName)));
+                .map(otherEventName -> Collections.singletonList(otherEventValidator.validateOtherEventName(otherEventName)));
     }
 
     private <T extends MasterEvent> Observable<T> validate(@NonNull T item) {
@@ -317,19 +338,19 @@ public class CalendarInteractor implements Interactor {
     @SuppressWarnings("unchecked")
     private <T extends MasterEvent> Validator<T, CalendarValidationResult> getValidator(@NonNull T event) {
         if (event.getEventType() == EventType.DIAPER) {
-            return (Validator<T, CalendarValidationResult>) new DiaperEventValidator(context);
+            return (Validator<T, CalendarValidationResult>) diaperEventValidator;
         } else if (event.getEventType() == EventType.FEED) {
-            return (Validator<T, CalendarValidationResult>) new FeedEventValidator(context);
+            return (Validator<T, CalendarValidationResult>) feedEventValidator;
         } else if (event.getEventType() == EventType.OTHER) {
-            return (Validator<T, CalendarValidationResult>) new OtherEventValidator(context);
+            return (Validator<T, CalendarValidationResult>) otherEventValidator;
         } else if (event.getEventType() == EventType.PUMP) {
-            return (Validator<T, CalendarValidationResult>) new PumpEventValidator(context);
+            return (Validator<T, CalendarValidationResult>) pumpEventValidator;
         } else if (event.getEventType() == EventType.SLEEP) {
-            return (Validator<T, CalendarValidationResult>) new SleepEventValidator(context, this);
+            return (Validator<T, CalendarValidationResult>) sleepEventValidator;
         } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
-            return (Validator<T, CalendarValidationResult>) new DoctorVisitEventValidator(context);
+            return (Validator<T, CalendarValidationResult>) doctorVisitEventValidator;
         } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
-            return (Validator<T, CalendarValidationResult>) new MedicineTakingEventValidator(context);
+            return (Validator<T, CalendarValidationResult>) medicineTakingEventValidator;
         }
         // TODO EXERCISE
         throw new IllegalStateException("Unsupported event type");

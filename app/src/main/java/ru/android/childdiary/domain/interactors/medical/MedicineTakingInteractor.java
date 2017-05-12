@@ -69,7 +69,7 @@ public class MedicineTakingInteractor implements Interactor {
                         .repeatParameters(repeatParameters)
                         .dateTime(dateTime)
                         .finishDateTime(null)
-                        .exported(null)
+                        .exported(true)
                         .notifyTimeInMinutes(minutes)
                         .note(null)
                         .imageFileName(null)
