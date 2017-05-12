@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import icepick.Icepick;
+import icepick.State;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -36,6 +39,14 @@ public class FieldRepeatParametersView extends LinearLayout
 
     @BindView(R.id.timesView)
     FieldTimesView timesView;
+
+    @Nullable
+    @State
+    PeriodicityType lastSelectedPeriodicityType;
+
+    @Nullable
+    @State
+    LengthValue lastSelectedLengthValue;
 
     @Nullable
     private RepeatParameters repeatParameters;
@@ -73,6 +84,16 @@ public class FieldRepeatParametersView extends LinearLayout
         lengthView.setFieldDialogListener(this);
     }
 
+    @Override
+    public Parcelable onSaveInstanceState() {
+        return Icepick.saveInstanceState(this, super.onSaveInstanceState());
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        super.onRestoreInstanceState(Icepick.restoreInstanceState(this, state));
+    }
+
     public void setSex(@Nullable Sex sex) {
         timesView.setSex(sex);
     }
@@ -92,8 +113,23 @@ public class FieldRepeatParametersView extends LinearLayout
             frequencyView.setValue(number);
             timesTitle.setVisibility(number != null && number > 0 ? VISIBLE : GONE);
             timesView.setNumber(number);
+            if (number != null && number == 0) {
+                // Однократно
+                lastSelectedPeriodicityType = periodicityView.getValue();
+                lastSelectedLengthValue = lengthView.getValue();
+                periodicityView.setValue(null);
+                lengthView.setValue(null);
+                periodicityView.setReadOnly(true);
+                lengthView.setReadOnly(true);
+            } else {
+                periodicityView.setValue(lastSelectedPeriodicityType);
+                lengthView.setValue(lastSelectedLengthValue);
+                periodicityView.setReadOnly(false);
+                lengthView.setReadOnly(false);
+            }
         } else if (view == periodicityView) {
-            periodicityView.setValue((PeriodicityType) item);
+            PeriodicityType periodicityType = (PeriodicityType) item;
+            periodicityView.setValue(periodicityType);
         }
     }
 
