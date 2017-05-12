@@ -46,13 +46,17 @@ public class CalendarDataRepository implements CalendarRepository {
 
     private final RxSharedPreferences preferences;
     private final CalendarDbService dbService;
+    private final AllEventsDbService allEventsDbService;
     private final List<OnSelectedDateChangedListener> selectedDateChangedListeners = new ArrayList<>();
     private LocalDate selectedDate = LocalDate.now();
 
     @Inject
-    public CalendarDataRepository(RxSharedPreferences preferences, CalendarDbService dbService) {
+    public CalendarDataRepository(RxSharedPreferences preferences,
+                                  CalendarDbService dbService,
+                                  AllEventsDbService allEventsDbService) {
         this.preferences = preferences;
         this.dbService = dbService;
+        this.allEventsDbService = allEventsDbService;
     }
 
     void addOnActiveChildChangedListener(OnSelectedDateChangedListener listener) {
@@ -188,7 +192,7 @@ public class CalendarDataRepository implements CalendarRepository {
 
     @Override
     public Observable<List<MasterEvent>> getAll(@NonNull EventsRequest request) {
-        return dbService.getAll(request);
+        return allEventsDbService.getAllEvents(request);
     }
 
     @Override

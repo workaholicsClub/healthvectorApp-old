@@ -2,10 +2,6 @@ package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,14 +21,6 @@ import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEnt
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
-import ru.android.childdiary.data.entities.child.ChildEntity;
-import ru.android.childdiary.data.entities.core.RepeatParametersEntity;
-import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
-import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
-import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
-import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
-import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
-import ru.android.childdiary.data.repositories.calendar.mappers.AllEventsMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.DiaperEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.DoctorVisitEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.FeedEventMapper;
@@ -54,14 +42,11 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.EventHelper;
 
 @Singleton
 public class CalendarDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
-    private final AllEventsMapper allEventsMapper;
     private final DiaperEventMapper diaperEventMapper;
     private final DoctorVisitEventMapper doctorVisitEventMapper;
     private final FeedEventMapper feedEventMapper;
@@ -75,7 +60,6 @@ public class CalendarDbService {
 
     @Inject
     public CalendarDbService(ReactiveEntityStore<Persistable> dataStore,
-                             AllEventsMapper allEventsMapper,
                              DiaperEventMapper diaperEventMapper,
                              DoctorVisitEventMapper doctorVisitEventMapper,
                              FeedEventMapper feedEventMapper,
@@ -87,7 +71,6 @@ public class CalendarDbService {
                              PumpEventMapper pumpEventMapper,
                              SleepEventMapper sleepEventMapper) {
         this.dataStore = dataStore;
-        this.allEventsMapper = allEventsMapper;
         this.diaperEventMapper = diaperEventMapper;
         this.doctorVisitEventMapper = doctorVisitEventMapper;
         this.feedEventMapper = feedEventMapper;
@@ -98,14 +81,6 @@ public class CalendarDbService {
         this.otherEventMapper = otherEventMapper;
         this.pumpEventMapper = pumpEventMapper;
         this.sleepEventMapper = sleepEventMapper;
-    }
-
-    private static DateTime midnight(LocalDate date) {
-        return date.toDateTime(LocalTime.MIDNIGHT);
-    }
-
-    private static DateTime nextDayMidnight(LocalDate date) {
-        return date.plusDays(1).toDateTime(LocalTime.MIDNIGHT);
     }
 
     public Observable<List<FoodMeasure>> getFoodMeasureList() {
@@ -130,140 +105,6 @@ public class CalendarDbService {
 
     public Observable<Food> addFood(@NonNull Food food) {
         return DbUtils.insertObservable(dataStore, food, foodMapper);
-    }
-
-    public Observable<List<MasterEvent>> getAllWithoutDetails(@NonNull Child child, @NonNull LocalDate selectedDate) {
-        return dataStore.select(MasterEventEntity.class)
-                .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
-                .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
-                .and(MasterEventEntity.EVENT_TYPE.notNull())
-                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
-                .get()
-                .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, masterEventMapper));
-    }
-
-    public Observable<List<MasterEvent>> getAll(@NonNull EventsRequest request) {
-        Child child = request.getChild();
-        LocalDate selectedDate = request.getDate();
-        // TODO Обобщить поля select-запроса и их mapping
-        return dataStore.select(
-                // master event
-                MasterEventEntity.ID,
-                MasterEventEntity.EVENT_TYPE,
-                MasterEventEntity.DATE_TIME,
-                MasterEventEntity.NOTIFY_TIME_IN_MINUTES,
-                MasterEventEntity.NOTE,
-                MasterEventEntity.DONE,
-                MasterEventEntity.LINEAR_GROUP,
-                // repeat parameters
-                RepeatParametersEntity.ID.as("repeat_parameters_id"),
-                RepeatParametersEntity.FREQUENCY,
-                RepeatParametersEntity.PERIODICITY,
-                RepeatParametersEntity.LENGTH,
-                // child
-                ChildEntity.ID.as("child_id"),
-                ChildEntity.NAME.as("child_name"),
-                ChildEntity.BIRTH_DATE,
-                ChildEntity.BIRTH_TIME,
-                ChildEntity.SEX,
-                ChildEntity.IMAGE_FILE_NAME,
-                ChildEntity.BIRTH_HEIGHT,
-                ChildEntity.BIRTH_WEIGHT,
-                // diaper event
-                DiaperEventEntity.ID.as("diaper_event_id"),
-                DiaperEventEntity.DIAPER_STATE,
-                // feed event
-                FeedEventEntity.ID.as("feed_event_id"),
-                FeedEventEntity.FEED_TYPE,
-                FeedEventEntity.BREAST.as("feed_event_breast"),
-                FeedEventEntity.LEFT_DURATION_IN_MINUTES,
-                FeedEventEntity.RIGHT_DURATION_IN_MINUTES,
-                FeedEventEntity.AMOUNT,
-                FeedEventEntity.AMOUNT_ML,
-                // food measure
-                FoodMeasureEntity.ID.as("food_measure_id"),
-                FoodMeasureEntity.NAME.as("food_measure_name"),
-                // food
-                FoodEntity.ID.as("food_id"),
-                FoodEntity.NAME.as("food_name"),
-                // other event
-                OtherEventEntity.ID.as("other_event_id"),
-                OtherEventEntity.NAME.as("other_event_name"),
-                OtherEventEntity.FINISH_DATE_TIME.as("other_event_finish_date_time"),
-                // pump event
-                PumpEventEntity.ID.as("pump_event_id"),
-                PumpEventEntity.BREAST.as("pump_event_breast"),
-                PumpEventEntity.LEFT_AMOUNT_ML,
-                PumpEventEntity.RIGHT_AMOUNT_ML,
-                // sleep event
-                SleepEventEntity.ID.as("sleep_event_id"),
-                SleepEventEntity.FINISH_DATE_TIME.as("sleep_event_finish_date_time"),
-                SleepEventEntity.TIMER_STARTED,
-                // doctor visit event
-                DoctorVisitEventEntity.ID.as("doctor_visit_event_id"),
-                DoctorVisitEventEntity.NAME.as("doctor_visit_event_name"),
-                DoctorVisitEventEntity.DURATION_IN_MINUTES.as("doctor_visit_event_duration"),
-                DoctorVisitEventEntity.IMAGE_FILE_NAME.as("doctor_visit_event_image_file_name"),
-                // doctor visit
-                DoctorVisitEntity.ID.as("doctor_visit_id"),
-                DoctorVisitEntity.NAME.as("doctor_visit_name"),
-                DoctorVisitEntity.DURATION_IN_MINUTES.as("doctor_visit_duration_in_minutes"),
-                DoctorVisitEntity.DATE_TIME.as("doctor_visit_date_time"),
-                DoctorVisitEntity.FINISH_DATE_TIME.as("doctor_visit_finish_date_time"),
-                DoctorVisitEntity.EXPORTED.as("doctor_visit_exported"),
-                DoctorVisitEntity.NOTIFY_TIME_IN_MINUTES.as("doctor_visit_notify_time_in_minutes"),
-                DoctorVisitEntity.NOTE.as("doctor_visit_note"),
-                DoctorVisitEntity.IMAGE_FILE_NAME.as("doctor_visit_image_file_name"),
-                // doctor
-                DoctorEntity.ID.as("doctor_id"),
-                DoctorEntity.NAME.as("doctor_name"),
-                // medicine taking event
-                MedicineTakingEventEntity.ID.as("medicine_taking_event_id"),
-                MedicineTakingEventEntity.AMOUNT.as("medicine_taking_event_amount"),
-                MedicineTakingEventEntity.IMAGE_FILE_NAME.as("medicine_taking_event_image_file_name"),
-                // medicine taking
-                MedicineTakingEntity.ID.as("medicine_taking_id"),
-                MedicineTakingEntity.DATE_TIME.as("medicine_taking_date_time"),
-                MedicineTakingEntity.FINISH_DATE_TIME.as("medicine_taking_finish_date_time"),
-                MedicineTakingEntity.EXPORTED.as("medicine_taking_exported"),
-                MedicineTakingEntity.NOTIFY_TIME_IN_MINUTES.as("medicine_taking_notify_time_in_minutes"),
-                MedicineTakingEntity.NOTE.as("medicine_taking_note"),
-                MedicineTakingEntity.IMAGE_FILE_NAME.as("medicine_taking_image_file_name"),
-                MedicineTakingEntity.AMOUNT.as("medicine_taking_amount"),
-                // medicine
-                MedicineEntity.ID.as("medicine_id"),
-                MedicineEntity.NAME.as("medicine_name"),
-                // medicine measure
-                MedicineMeasureEntity.ID.as("medicine_measure_id"),
-                MedicineMeasureEntity.NAME.as("medicine_measure_name")
-        )
-                .from(MasterEventEntity.class)
-                .join(ChildEntity.class).on(ChildEntity.ID.eq(MasterEventEntity.CHILD_ID))
-                .leftJoin(RepeatParametersEntity.class).on(RepeatParametersEntity.ID.eq(MasterEventEntity.REPEAT_PARAMETERS_ID))
-                .leftJoin(DiaperEventEntity.class).on(DiaperEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .leftJoin(FeedEventEntity.class).on(FeedEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .leftJoin(FoodMeasureEntity.class).on(FoodMeasureEntity.ID.eq(FeedEventEntity.FOOD_MEASURE_ID))
-                .leftJoin(FoodEntity.class).on(FoodEntity.ID.eq(FeedEventEntity.FOOD_ID))
-                .leftJoin(OtherEventEntity.class).on(OtherEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .leftJoin(PumpEventEntity.class).on(PumpEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .leftJoin(SleepEventEntity.class).on(SleepEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .leftJoin(DoctorVisitEventEntity.class).on(DoctorVisitEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .leftJoin(DoctorVisitEntity.class).on(DoctorVisitEntity.ID.eq(DoctorVisitEventEntity.DOCTOR_VISIT_ID))
-                .leftJoin(DoctorEntity.class).on(DoctorEntity.ID.eq(DoctorVisitEntity.DOCTOR_ID))
-                .leftJoin(MedicineTakingEventEntity.class).on(MedicineTakingEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .leftJoin(MedicineTakingEntity.class).on(MedicineTakingEntity.ID.eq(MedicineTakingEventEntity.MEDICINE_TAKING_ID))
-                .leftJoin(MedicineEntity.class).on(MedicineEntity.ID.eq(MedicineTakingEntity.MEDICINE_ID))
-                .leftJoin(MedicineMeasureEntity.class).on(MedicineMeasureEntity.ID.eq(MedicineTakingEntity.MEDICINE_MEASURE_ID))
-                .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
-                .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
-                .and(MasterEventEntity.EVENT_TYPE.notNull())
-                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
-                .get()
-                .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, allEventsMapper));
     }
 
     public Observable<List<SleepEvent>> getSleepEventsWithTimer() {

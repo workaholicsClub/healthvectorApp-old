@@ -58,7 +58,6 @@ public abstract class SimpleConverter<T> implements Converter<T, String> {
         try {
             return value == null ? null : map(value);
         } catch (Exception e) {
-            logger.error("parse error", e);
             return null;
         }
     }
