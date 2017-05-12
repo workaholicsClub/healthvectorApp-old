@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
@@ -135,17 +134,12 @@ public class MedicineTakingEventDetailActivity
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(getSex()));
+        setupToolbarLogo(ResourcesUtils.getMedicineTakingLogoRes(getSex()));
     }
 
     @Override
     public MedicineTakingEventDetailPresenter getPresenter() {
         return presenter;
-    }
-
-    @Override
-    protected EventType getEventType() {
-        return EventType.MEDICINE_TAKING;
     }
 
     @Override

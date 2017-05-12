@@ -30,7 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
@@ -150,8 +149,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
 
-    protected abstract EventType getEventType();
-
     @LayoutRes
     protected abstract int getContentLayoutResourceId();
 
@@ -269,7 +266,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             return super.onPrepareOptionsMenu(menu);
         }
         MenuItem item = menu.findItem(R.id.menu_done);
-        item.setVisible(EventHelper.canBeDone(getEventType()));
+        item.setVisible(EventHelper.canBeDone(getPresenter().getEventType()));
         item.setChecked(EventHelper.isDone(event));
         return true;
     }

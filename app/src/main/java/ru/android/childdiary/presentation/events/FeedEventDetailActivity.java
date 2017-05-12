@@ -19,7 +19,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
@@ -179,11 +178,6 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @Override
     public FeedEventDetailPresenter getPresenter() {
         return presenter;
-    }
-
-    @Override
-    protected EventType getEventType() {
-        return EventType.FEED;
     }
 
     @Override

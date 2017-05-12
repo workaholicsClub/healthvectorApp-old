@@ -17,7 +17,6 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
@@ -146,17 +145,12 @@ public class DoctorVisitEventDetailActivity
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getPumpEventLogoRes(getSex()));
+        setupToolbarLogo(ResourcesUtils.getDoctorVisitLogoRes(getSex()));
     }
 
     @Override
     public DoctorVisitEventDetailPresenter getPresenter() {
         return presenter;
-    }
-
-    @Override
-    protected EventType getEventType() {
-        return EventType.DOCTOR_VISIT;
     }
 
     @Override

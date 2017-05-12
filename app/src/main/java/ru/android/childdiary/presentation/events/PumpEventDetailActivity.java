@@ -17,7 +17,6 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
@@ -114,11 +113,6 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @Override
     public PumpEventDetailPresenter getPresenter() {
         return presenter;
-    }
-
-    @Override
-    protected EventType getEventType() {
-        return EventType.PUMP;
     }
 
     @Override
