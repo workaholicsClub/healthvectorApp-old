@@ -1,6 +1,7 @@
 package ru.android.childdiary.data.repositories.medical;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class DoctorVisitDbService {
@@ -78,20 +80,6 @@ public class DoctorVisitDbService {
         return DbUtils.insert(dataStore, doctorVisit, doctorVisitMapper);
     }
 
-    public Observable<DoctorVisit> add(@NonNull DoctorVisit doctorVisit) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            DoctorVisit object = doctorVisit;
-            RepeatParameters repeatParameters = object.getRepeatParameters();
-            if (repeatParameters != null) {
-                repeatParameters = insertRepeatParameters(repeatParameters);
-                object = object.toBuilder().repeatParameters(repeatParameters).build();
-            }
-            DoctorVisit result = insertDoctorVisit(object);
-            eventsGenerator.generateEvents(result);
-            return result;
-        }));
-    }
-
     private RepeatParameters updateRepeatParameters(@NonNull RepeatParameters repeatParameters) {
         return DbUtils.update(dataStore, repeatParameters, repeatParametersMapper);
     }
@@ -100,19 +88,50 @@ public class DoctorVisitDbService {
         return DbUtils.update(dataStore, doctorVisit, doctorVisitMapper);
     }
 
+    @Nullable
+    private RepeatParameters upsertRepeatParameters(@Nullable RepeatParameters repeatParameters) {
+        if (repeatParameters != null) {
+            if (repeatParameters.getId() == null) {
+                return insertRepeatParameters(repeatParameters);
+            } else {
+                return updateRepeatParameters(repeatParameters);
+            }
+        }
+        return null;
+    }
+
+    public Observable<DoctorVisit> add(@NonNull DoctorVisit doctorVisit) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            RepeatParameters repeatParameters = upsertRepeatParameters(doctorVisit.getRepeatParameters());
+            DoctorVisit result = doctorVisit.toBuilder().repeatParameters(repeatParameters).build();
+            result = insertDoctorVisit(result);
+
+            eventsGenerator.generateEvents(result);
+
+            return result;
+        }));
+    }
+
     public Observable<DoctorVisit> update(@NonNull DoctorVisit doctorVisit) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            DoctorVisit object = doctorVisit;
-            RepeatParameters repeatParameters = object.getRepeatParameters();
-            if (repeatParameters != null) {
-                if (repeatParameters.getId() == null) {
-                    repeatParameters = insertRepeatParameters(repeatParameters);
-                } else {
-                    repeatParameters = updateRepeatParameters(repeatParameters);
-                }
-                object = updateDoctorVisit(object);
+            DoctorVisitEntity oldDoctorVisitEntity = dataStore.toBlocking()
+                    .select(DoctorVisitEntity.class)
+                    .where(DoctorVisitEntity.ID.eq(doctorVisit.getId()))
+                    .get()
+                    .first();
+
+            boolean needToAddEvents = ObjectUtils.isFalse(oldDoctorVisitEntity.getExported())
+                    && ObjectUtils.isTrue(doctorVisit.getExported());
+
+            RepeatParameters repeatParameters = upsertRepeatParameters(doctorVisit.getRepeatParameters());
+            DoctorVisit result = doctorVisit.toBuilder().repeatParameters(repeatParameters).build();
+            result = updateDoctorVisit(result);
+
+            if (needToAddEvents) {
+                eventsGenerator.generateEvents(result);
             }
-            return DbUtils.update(dataStore, object, doctorVisitMapper);
+
+            return result;
         }));
     }
 

@@ -39,6 +39,10 @@ public class ObjectUtils {
         return value != null && value;
     }
 
+    public static boolean isFalse(@Nullable Boolean value) {
+        return value == null || !value;
+    }
+
     public static boolean isEmpty(@Nullable ContentObject object) {
         return object == null || object.isContentEmpty();
     }

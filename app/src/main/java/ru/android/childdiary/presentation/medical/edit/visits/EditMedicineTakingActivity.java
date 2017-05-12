@@ -127,6 +127,10 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
             repeatParametersView.setReadOnly(true);
             noteWithPhotoView.setEnabled(false);
             notifyTimeView.setReadOnly(true);
+            if (item.getFinishDateTime() == null) {
+                buttonAdd.setText(R.string.finish);
+                buttonAdd.setVisibility(View.VISIBLE);
+            }
         }
 
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());

@@ -1,6 +1,7 @@
 package ru.android.childdiary.data.repositories.medical;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class MedicineTakingDbService {
@@ -92,20 +94,6 @@ public class MedicineTakingDbService {
         return DbUtils.insert(dataStore, medicineTaking, medicineTakingMapper);
     }
 
-    public Observable<MedicineTaking> add(@NonNull MedicineTaking medicineTaking) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            MedicineTaking object = medicineTaking;
-            RepeatParameters repeatParameters = object.getRepeatParameters();
-            if (repeatParameters != null) {
-                repeatParameters = insertRepeatParameters(repeatParameters);
-                object = object.toBuilder().repeatParameters(repeatParameters).build();
-            }
-            MedicineTaking result = insertMedicineTaking(object);
-            eventsGenerator.generateEvents(result);
-            return result;
-        }));
-    }
-
     private RepeatParameters updateRepeatParameters(@NonNull RepeatParameters repeatParameters) {
         return DbUtils.update(dataStore, repeatParameters, repeatParametersMapper);
     }
@@ -114,19 +102,50 @@ public class MedicineTakingDbService {
         return DbUtils.update(dataStore, medicineTaking, medicineTakingMapper);
     }
 
+    @Nullable
+    private RepeatParameters upsertRepeatParameters(@Nullable RepeatParameters repeatParameters) {
+        if (repeatParameters != null) {
+            if (repeatParameters.getId() == null) {
+                return insertRepeatParameters(repeatParameters);
+            } else {
+                return updateRepeatParameters(repeatParameters);
+            }
+        }
+        return null;
+    }
+
+    public Observable<MedicineTaking> add(@NonNull MedicineTaking medicineTaking) {
+        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+            RepeatParameters repeatParameters = upsertRepeatParameters(medicineTaking.getRepeatParameters());
+            MedicineTaking result = medicineTaking.toBuilder().repeatParameters(repeatParameters).build();
+            result = insertMedicineTaking(result);
+
+            eventsGenerator.generateEvents(result);
+
+            return result;
+        }));
+    }
+
     public Observable<MedicineTaking> update(@NonNull MedicineTaking medicineTaking) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            MedicineTaking object = medicineTaking;
-            RepeatParameters repeatParameters = object.getRepeatParameters();
-            if (repeatParameters != null) {
-                if (repeatParameters.getId() == null) {
-                    repeatParameters = insertRepeatParameters(repeatParameters);
-                } else {
-                    repeatParameters = updateRepeatParameters(repeatParameters);
-                }
-                object = object.toBuilder().repeatParameters(repeatParameters).build();
+            MedicineTakingEntity oldMedicineTakingEntity = dataStore.toBlocking()
+                    .select(MedicineTakingEntity.class)
+                    .where(MedicineTakingEntity.ID.eq(medicineTaking.getId()))
+                    .get()
+                    .first();
+
+            boolean needToAddEvents = ObjectUtils.isFalse(oldMedicineTakingEntity.getExported())
+                    && ObjectUtils.isTrue(medicineTaking.getExported());
+
+            RepeatParameters repeatParameters = upsertRepeatParameters(medicineTaking.getRepeatParameters());
+            MedicineTaking result = medicineTaking.toBuilder().repeatParameters(repeatParameters).build();
+            result = updateMedicineTaking(result);
+
+            if (needToAddEvents) {
+                eventsGenerator.generateEvents(result);
             }
-            return updateMedicineTaking(object);
+
+            return result;
         }));
     }
 
