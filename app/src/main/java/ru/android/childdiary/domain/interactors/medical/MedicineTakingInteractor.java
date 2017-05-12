@@ -28,19 +28,25 @@ import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListResponse;
+import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
+import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
+import ru.android.childdiary.domain.interactors.medical.validation.MedicineTakingValidator;
 
 public class MedicineTakingInteractor implements Interactor {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
     private final MedicineTakingRepository medicineTakingRepository;
+    private final MedicineTakingValidator medicineTakingValidator;
 
     @Inject
     public MedicineTakingInteractor(ChildDataRepository childRepository,
                                     CalendarDataRepository calendarRepository,
-                                    MedicineTakingDataRepository medicineTakingRepository) {
+                                    MedicineTakingDataRepository medicineTakingRepository,
+                                    MedicineTakingValidator medicineTakingValidator) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.medicineTakingRepository = medicineTakingRepository;
+        this.medicineTakingValidator = medicineTakingValidator;
     }
 
     public Observable<List<Medicine>> getMedicines() {
@@ -99,12 +105,23 @@ public class MedicineTakingInteractor implements Interactor {
                 .map(medicineTakingList -> MedicineTakingListResponse.builder().request(request).medicineTakingList(medicineTakingList).build());
     }
 
+    private Observable<MedicineTaking> validate(@NonNull MedicineTaking medicineTaking) {
+        return Observable.just(medicineTaking)
+                .flatMap(item -> {
+                    List<MedicalValidationResult> results = medicineTakingValidator.validate(item);
+                    if (!medicineTakingValidator.isValid(results)) {
+                        return Observable.error(new MedicalValidationException(results));
+                    }
+                    return Observable.just(item);
+                });
+    }
+
     public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return medicineTakingRepository.addMedicineTaking(medicineTaking);
+        return validate(medicineTaking).flatMap(medicineTakingRepository::addMedicineTaking);
     }
 
     public Observable<MedicineTaking> updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return medicineTakingRepository.updateMedicineTaking(medicineTaking);
+        return validate(medicineTaking).flatMap(medicineTakingRepository::updateMedicineTaking);
     }
 
     public Observable<MedicineTaking> deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {

@@ -8,21 +8,27 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ru.android.childdiary.domain.core.Validator;
-import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
+import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 
-public class MedicineTakingValidator extends Validator<MedicineTaking, CalendarValidationResult> {
-    private final Context context;
-
+public class MedicineTakingValidator extends MedicalValidator<MedicineTaking> {
     @Inject
     public MedicineTakingValidator(Context context) {
-        this.context = context;
+        super(context);
     }
 
     @Override
-    public List<CalendarValidationResult> validate(@NonNull MedicineTaking medicineTaking) {
-        List<CalendarValidationResult> results = new ArrayList<>();
+    public List<MedicalValidationResult> validate(@NonNull MedicineTaking medicineTaking) {
+        List<MedicalValidationResult> results = new ArrayList<>();
+
+        validate(results, medicineTaking.getRepeatParameters());
+
+        if (medicineTaking.getMedicine() == null) {
+            MedicalValidationResult result = new MedicalValidationResult();
+            result.addMessage(context.getString(R.string.validate_medicine_taking_medicine_empty));
+            results.add(result);
+        }
+
         return results;
     }
 }

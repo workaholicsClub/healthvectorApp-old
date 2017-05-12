@@ -17,25 +17,32 @@ import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
+import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsResponse;
+import ru.android.childdiary.domain.interactors.medical.validation.DoctorVisitValidator;
+import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
+import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 
 public class DoctorVisitInteractor implements Interactor {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
     private final DoctorVisitRepository doctorVisitRepository;
+    private final DoctorVisitValidator doctorVisitValidator;
 
     @Inject
     public DoctorVisitInteractor(ChildDataRepository childRepository,
                                  CalendarDataRepository calendarRepository,
-                                 DoctorVisitDataRepository doctorVisitRepository) {
+                                 DoctorVisitDataRepository doctorVisitRepository,
+                                 DoctorVisitValidator doctorVisitValidator) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.doctorVisitRepository = doctorVisitRepository;
+        this.doctorVisitValidator = doctorVisitValidator;
     }
 
     public Observable<List<Doctor>> getDoctors() {
@@ -87,12 +94,23 @@ public class DoctorVisitInteractor implements Interactor {
                 .map(doctorVisits -> DoctorVisitsResponse.builder().request(request).doctorVisits(doctorVisits).build());
     }
 
+    private Observable<DoctorVisit> validate(@NonNull DoctorVisit doctorVisit) {
+        return Observable.just(doctorVisit)
+                .flatMap(item -> {
+                    List<MedicalValidationResult> results = doctorVisitValidator.validate(item);
+                    if (!doctorVisitValidator.isValid(results)) {
+                        return Observable.error(new MedicalValidationException(results));
+                    }
+                    return Observable.just(item);
+                });
+    }
+
     public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return doctorVisitRepository.addDoctorVisit(doctorVisit);
+        return validate(doctorVisit).flatMap(doctorVisitRepository::addDoctorVisit);
     }
 
     public Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return doctorVisitRepository.updateDoctorVisit(doctorVisit);
+        return validate(doctorVisit).flatMap(doctorVisitRepository::updateDoctorVisit);
     }
 
     public Observable<DoctorVisit> deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {

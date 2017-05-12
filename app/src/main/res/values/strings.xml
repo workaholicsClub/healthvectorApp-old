@@ -55,6 +55,11 @@
     <string name="validate_event_sleep_timer_already_started">Таймер сна уже запущен</string>
     <string name="validate_event_other_title_empty">Введите название события</string>
     <string name="validate_start_finish_time">Время окончания не может быть меньше, чем время начала события</string>
+    <string name="validate_doctor_visit_name_empty">Введите название визита</string>
+    <string name="validate_doctor_visit_doctor_empty">Выберите специализацию врача</string>
+    <string name="validate_medicine_taking_medicine_empty">Выберите лекарство</string>
+    <string name="validate_repeat_parameters_periodicity_empty">Выберите периодичность</string>
+    <string name="validate_repeat_parameters_length_empty">Введите длительность</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
     <string name="amount_review">%s мл</string>

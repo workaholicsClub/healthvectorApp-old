@@ -402,4 +402,17 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @Nullable
     protected abstract FieldMedicineMeasureValueView getMedicineMeasureValueView();
+
+    @Override
+    public void validationFailed() {
+    }
+
+    @Override
+    public void showValidationErrorMessage(String msg) {
+        showToast(msg);
+    }
+
+    @Override
+    public void doctorVisitNameValidated(boolean valid) {
+    }
 }

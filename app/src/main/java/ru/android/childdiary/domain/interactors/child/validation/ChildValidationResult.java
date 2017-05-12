@@ -10,7 +10,7 @@ public class ChildValidationResult extends ValidationResult {
     @Getter
     private final ChildFieldType fieldType;
 
-    public ChildValidationResult(ChildFieldType fieldType) {
+    public ChildValidationResult(@Nullable ChildFieldType fieldType) {
         this.fieldType = fieldType;
     }
 }
