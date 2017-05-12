@@ -196,6 +196,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
+    public void setButtonAddEnabled(boolean enabled) {
+        buttonAdd.setEnabled(enabled);
+    }
+
+    @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         if (fragment instanceof TimePickerDialog) {

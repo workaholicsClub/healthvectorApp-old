@@ -19,11 +19,14 @@ public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisit
 
     @Override
     public void add(@NonNull DoctorVisit doctorVisit) {
+        getViewState().setButtonAddEnabled(false);
         unsubscribeOnDestroy(
                 doctorVisitInteractor.addDoctorVisit(doctorVisit)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(added -> logger.debug("added: " + added))
+                        .doOnNext(added -> getViewState().setButtonAddEnabled(true))
+                        .doOnError(throwable -> getViewState().setButtonAddEnabled(true))
                         .subscribe(getViewState()::added, this::onUnexpectedError));
     }
 }

@@ -30,4 +30,7 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showValidationErrorMessage(String msg);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void setButtonAddEnabled(boolean enabled);
 }

@@ -41,6 +41,11 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     }
 
     @Override
+    public void setButtonAddEnabled(boolean enabled) {
+        buttonAdd.setEnabled(enabled);
+    }
+
+    @Override
     protected void saveChangesOrExit() {
         T item = build();
         if (contentEquals(item, defaultItem)) {

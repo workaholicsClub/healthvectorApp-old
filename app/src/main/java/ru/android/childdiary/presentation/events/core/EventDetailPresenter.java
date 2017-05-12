@@ -49,11 +49,14 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     public void addEvent(@NonNull T event, boolean afterButtonPressed) {
+        getViewState().setButtonAddEnabled(false);
         unsubscribeOnDestroy(calendarInteractor.add(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(addedEvent -> logger.debug("event added: " + addedEvent))
                 .doOnNext(this::requestEventDetails)
+                .doOnNext(addedEvent -> getViewState().setButtonAddEnabled(true))
+                .doOnError(throwable -> getViewState().setButtonAddEnabled(true))
                 .subscribe(addedEvent -> getViewState().eventAdded(addedEvent, afterButtonPressed), this::onUnexpectedError));
     }
 
