@@ -8,6 +8,7 @@ import java.util.List;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.Validator;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
+import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -20,10 +21,13 @@ abstract class MedicalValidator<T> extends Validator<T, MedicalValidationResult>
     }
 
     protected void validate(List<MedicalValidationResult> results, @Nullable RepeatParameters repeatParameters) {
+        LinearGroups linearGroups = repeatParameters == null ? null : repeatParameters.getFrequency();
         PeriodicityType periodicityType = repeatParameters == null ? null : repeatParameters.getPeriodicity();
         LengthValue lengthValue = repeatParameters == null ? null : repeatParameters.getLength();
-        validate(results, periodicityType);
-        validate(results, lengthValue);
+        if (linearGroups == null || linearGroups.getTimes().size() > 0) {
+            validate(results, periodicityType);
+            validate(results, lengthValue);
+        }
     }
 
     private void validate(List<MedicalValidationResult> results, @Nullable PeriodicityType periodicityType) {
