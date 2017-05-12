@@ -36,13 +36,4 @@ public interface BaseItemView<T extends Serializable> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showLengthValueDialog(@NonNull ArrayList<TimeUnit> timeUnits);
-
-    @StateStrategyType(AddToEndSingleStrategy.class)
-    void validationFailed();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void showValidationErrorMessage(String msg);
-
-    @StateStrategyType(AddToEndSingleStrategy.class)
-    void doctorVisitNameValidated(boolean valid);
 }

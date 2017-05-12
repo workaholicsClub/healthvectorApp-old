@@ -2,7 +2,7 @@ package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.LayoutRes;
+import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ListPopupWindow;
 import android.util.AttributeSet;
@@ -11,21 +11,18 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.ui.FontUtils;
 
-public abstract class FieldSpinnerView<T> extends LinearLayout implements View.OnClickListener,
-        AdapterView.OnItemClickListener, PopupWindow.OnDismissListener, FieldReadOnly {
+public abstract class FieldSpinnerView<T> extends FieldValueView<T> implements View.OnClickListener,
+        AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
 
     @BindView(R.id.textViewWrapper)
@@ -40,49 +37,28 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements View.O
     @BindDimen(R.dimen.spinner_item_width)
     int spinnerItemWidth;
 
+    private ListPopupWindow popupWindow;
+
+    @Nullable
     @Setter
     private FieldSpinnerListener<T> fieldSpinnerListener;
-    @Getter
-    private T value;
-
-    private ListPopupWindow popupWindow;
 
     public FieldSpinnerView(Context context) {
         super(context);
-        init();
     }
 
     public FieldSpinnerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public FieldSpinnerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
     }
 
-    private void init() {
-        inflate(getContext(), getLayoutResourceId(), this);
-    }
-
+    @CallSuper
     @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        ButterKnife.bind(this);
-        setReadOnly(false);
-        textView.setText(getTextForValue(value));
-    }
-
-    public void setValue(T value) {
-        if (this.value != value) {
-            this.value = value;
-            textView.setText(getTextForValue(value));
-            valueChanged();
-        }
-    }
-
     protected void valueChanged() {
+        textView.setText(getTextForValue(getValue()));
     }
 
     public boolean dismissPopupWindow() {
@@ -138,9 +114,6 @@ public abstract class FieldSpinnerView<T> extends LinearLayout implements View.O
         textViewWrapper.setOnClickListener(readOnly ? null : this);
         textViewWrapper.setClickable(!readOnly);
     }
-
-    @LayoutRes
-    protected abstract int getLayoutResourceId();
 
     @Nullable
     protected abstract String getTextForValue(@Nullable T value);

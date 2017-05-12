@@ -112,6 +112,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                             .showMinutes(true)
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
+            hideKeyboardAndClearFocus(rootView.findFocus());
         });
         if (getDurationView() != null) {
             getDurationView().setFieldDialogListener(v -> {
@@ -125,17 +126,22 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                                 .showMinutes(true)
                                 .title(getString(R.string.duration))
                                 .build());
+                hideKeyboardAndClearFocus(rootView.findFocus());
             });
         }
         if (getDoctorView() != null) {
-            getDoctorView().setFieldDialogListener(view ->
-                    startActivityForResult(DoctorPickerActivity.getIntent(this, getSex()),
-                            REQUEST_DOCTOR));
+            getDoctorView().setFieldDialogListener(view -> {
+                startActivityForResult(DoctorPickerActivity.getIntent(this, getSex()),
+                        REQUEST_DOCTOR);
+                hideKeyboardAndClearFocus(rootView.findFocus());
+            });
         }
         if (getMedicineView() != null) {
-            getMedicineView().setFieldDialogListener(view ->
-                    startActivityForResult(MedicinePickerActivity.getIntent(this, getSex()),
-                            REQUEST_MEDICINE));
+            getMedicineView().setFieldDialogListener(view -> {
+                startActivityForResult(MedicinePickerActivity.getIntent(this, getSex()),
+                        REQUEST_MEDICINE);
+                hideKeyboardAndClearFocus(rootView.findFocus());
+            });
         }
         if (getMedicineMeasureValueView() != null) {
             getMedicineMeasureValueView().setFieldDialogListener(view -> getPresenter().requestMedicineMeasureValueDialog());
@@ -248,6 +254,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                         .medicineMeasureList(medicineMeasureList)
                         .medicineMeasureValue(getMedicineMeasureValueView().getValue())
                         .build());
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
@@ -260,6 +267,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                         .timeUnits(timeUnits)
                         .lengthValue(lengthValue)
                         .build());
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
@@ -402,17 +410,4 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @Nullable
     protected abstract FieldMedicineMeasureValueView getMedicineMeasureValueView();
-
-    @Override
-    public void validationFailed() {
-    }
-
-    @Override
-    public void showValidationErrorMessage(String msg) {
-        showToast(msg);
-    }
-
-    @Override
-    public void doctorVisitNameValidated(boolean valid) {
-    }
 }

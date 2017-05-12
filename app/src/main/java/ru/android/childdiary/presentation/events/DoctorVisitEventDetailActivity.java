@@ -103,6 +103,7 @@ public class DoctorVisitEventDetailActivity
                             .showMinutes(true)
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
+            hideKeyboardAndClearFocus(rootView.findFocus());
         });
         durationView.setFieldDialogListener(v -> {
             TimeDialogFragment dialogFragment = new TimeDialogFragment();
@@ -115,10 +116,13 @@ public class DoctorVisitEventDetailActivity
                             .showMinutes(true)
                             .title(getString(R.string.duration))
                             .build());
+            hideKeyboardAndClearFocus(rootView.findFocus());
         });
-        doctorView.setFieldDialogListener(view ->
-                startActivityForResult(DoctorPickerActivity.getIntent(this, getSex()),
-                        REQUEST_DOCTOR));
+        doctorView.setFieldDialogListener(view -> {
+            startActivityForResult(DoctorPickerActivity.getIntent(this, getSex()),
+                    REQUEST_DOCTOR);
+            hideKeyboardAndClearFocus(rootView.findFocus());
+        });
         setupEditTextView(noteWithPhotoView);
     }
 

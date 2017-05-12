@@ -103,10 +103,13 @@ public class MedicineTakingEventDetailActivity
                             .showMinutes(true)
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
+            hideKeyboardAndClearFocus(rootView.findFocus());
         });
-        medicineView.setFieldDialogListener(view ->
-                startActivityForResult(MedicinePickerActivity.getIntent(this, getSex()),
-                        REQUEST_MEDICINE));
+        medicineView.setFieldDialogListener(view -> {
+            startActivityForResult(MedicinePickerActivity.getIntent(this, getSex()),
+                    REQUEST_MEDICINE);
+            hideKeyboardAndClearFocus(rootView.findFocus());
+        });
         medicineMeasureValueView.setFieldDialogListener(view -> getPresenter().requestMedicineMeasureValueDialog());
         setupEditTextView(noteWithPhotoView);
     }
@@ -224,6 +227,7 @@ public class MedicineTakingEventDetailActivity
                         .medicineMeasureList(medicineMeasureList)
                         .medicineMeasureValue(medicineMeasureValueView.getValue())
                         .build());
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override

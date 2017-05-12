@@ -12,7 +12,6 @@ import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -310,17 +309,18 @@ public class CalendarInteractor implements Interactor {
 
     public Observable<Boolean> controlOtherEventDoneButton(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
         return otherEventNameObservable
-                .map(otherEventNameAfterTextChangeEvent -> otherEventNameAfterTextChangeEvent.editable() != null
-                        && !TextUtils.isEmpty(otherEventNameAfterTextChangeEvent.editable()))
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(otherEventName -> !TextUtils.isEmpty(otherEventName))
                 .distinctUntilChanged();
     }
 
     public Observable<List<CalendarValidationResult>> controlOtherEventFields(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
         return otherEventNameObservable
-                .filter(otherEventNameAfterTextChangeEvent -> otherEventNameAfterTextChangeEvent.editable() != null)
                 .map(TextViewAfterTextChangeEvent::editable)
                 .map(Editable::toString)
-                .map(otherEventName -> Collections.singletonList(otherEventValidator.validateOtherEventName(otherEventName)));
+                .map(otherEventName -> OtherEvent.builder().name(otherEventName).build())
+                .map(otherEventValidator::validate);
     }
 
     private <T extends MasterEvent> Observable<T> validate(@NonNull T item) {

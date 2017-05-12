@@ -1,6 +1,9 @@
 package ru.android.childdiary.domain.interactors.medical;
 
 import android.support.annotation.NonNull;
+import android.text.Editable;
+
+import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
 import org.joda.time.DateTime;
 
@@ -17,9 +20,10 @@ import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
-import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
+import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
@@ -27,6 +31,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRes
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorVisitValidator;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
+import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
 public class DoctorVisitInteractor implements Interactor {
     private final ChildRepository childRepository;
@@ -115,5 +120,59 @@ public class DoctorVisitInteractor implements Interactor {
 
     public Observable<DoctorVisit> deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
         return doctorVisitRepository.deleteDoctorVisit(doctorVisit);
+    }
+
+    public Observable<Boolean> controlDoneButton(
+            @NonNull Observable<TextViewAfterTextChangeEvent> doctorVisitNameObservable,
+            @NonNull FieldValueChangeEventsObservable<Doctor> doctorObservable,
+            @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
+            @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
+            @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
+        return Observable.combineLatest(
+                doctorVisitNameObservable
+                        .map(TextViewAfterTextChangeEvent::editable)
+                        .map(Editable::toString),
+                doctorObservable,
+                linearGroupsObservable,
+                periodicityTypeObservable,
+                lengthValueObservable,
+                (doctorVisitName, doctorEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> DoctorVisit.builder()
+                        .name(doctorVisitName)
+                        .doctor(doctorEvent.getValue())
+                        .repeatParameters(RepeatParameters.builder()
+                                .frequency(linearGroupsEvent.getValue())
+                                .periodicity(periodicityTypeEvent.getValue())
+                                .length(lengthValueEvent.getValue())
+                                .build())
+                        .build())
+                .map(doctorVisitValidator::validate)
+                .map(doctorVisitValidator::isValid)
+                .distinctUntilChanged();
+    }
+
+    public Observable<List<MedicalValidationResult>> controlFields(
+            @NonNull Observable<TextViewAfterTextChangeEvent> doctorVisitNameObservable,
+            @NonNull FieldValueChangeEventsObservable<Doctor> doctorObservable,
+            @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
+            @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
+            @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
+        return Observable.combineLatest(
+                doctorVisitNameObservable
+                        .map(TextViewAfterTextChangeEvent::editable)
+                        .map(Editable::toString),
+                doctorObservable,
+                linearGroupsObservable,
+                periodicityTypeObservable,
+                lengthValueObservable,
+                (doctorVisitName, doctorEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> DoctorVisit.builder()
+                        .name(doctorVisitName)
+                        .doctor(doctorEvent.getValue())
+                        .repeatParameters(RepeatParameters.builder()
+                                .frequency(linearGroupsEvent.getValue())
+                                .periodicity(periodicityTypeEvent.getValue())
+                                .length(lengthValueEvent.getValue())
+                                .build())
+                        .build()
+        ).map(doctorVisitValidator::validate);
     }
 }

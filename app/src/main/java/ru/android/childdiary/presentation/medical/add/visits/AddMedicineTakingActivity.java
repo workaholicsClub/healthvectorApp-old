@@ -24,8 +24,7 @@ import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.medical.core.BaseAddItemActivity;
-import ru.android.childdiary.presentation.medical.core.BaseAddItemPresenter;
+import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
@@ -37,6 +36,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhoto
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.medical.core.BaseAddItemActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -85,6 +85,13 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
         super.onCreate(savedInstanceState);
 
         changeThemeIfNeeded(defaultItem.getChild());
+
+        unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(
+                RxFieldValueView.valueChangeEvents(medicineView),
+                repeatParametersView.linearGroupsObservable(),
+                repeatParametersView.periodicityTypeObservable(),
+                repeatParametersView.lengthValueObservable()
+        ));
     }
 
     @Override
@@ -94,7 +101,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     }
 
     @Override
-    protected BaseAddItemPresenter<AddMedicineTakingView, MedicineTaking> getPresenter() {
+    protected AddMedicineTakingPresenter getPresenter() {
         return presenter;
     }
 
@@ -209,7 +216,18 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
         return medicineView;
     }
 
+    @Override
     public FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return medicineMeasureValueView;
+    }
+
+    @Override
+    protected void validationStarted() {
+        unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(
+                RxFieldValueView.valueChangeEvents(medicineView),
+                repeatParametersView.linearGroupsObservable(),
+                repeatParametersView.periodicityTypeObservable(),
+                repeatParametersView.lengthValueObservable()
+        ));
     }
 }

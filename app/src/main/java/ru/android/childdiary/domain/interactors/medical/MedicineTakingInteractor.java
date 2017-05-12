@@ -31,6 +31,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingL
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicineTakingValidator;
+import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
 public class MedicineTakingInteractor implements Interactor {
     private final ChildRepository childRepository;
@@ -126,5 +127,49 @@ public class MedicineTakingInteractor implements Interactor {
 
     public Observable<MedicineTaking> deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
         return medicineTakingRepository.deleteMedicineTaking(medicineTaking);
+    }
+
+    public Observable<Boolean> controlDoneButton(
+            @NonNull FieldValueChangeEventsObservable<Medicine> medicineObservable,
+            @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
+            @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
+            @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
+        return Observable.combineLatest(
+                medicineObservable,
+                linearGroupsObservable,
+                periodicityTypeObservable,
+                lengthValueObservable,
+                (medicineEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> MedicineTaking.builder()
+                        .medicine(medicineEvent.getValue())
+                        .repeatParameters(RepeatParameters.builder()
+                                .frequency(linearGroupsEvent.getValue())
+                                .periodicity(periodicityTypeEvent.getValue())
+                                .length(lengthValueEvent.getValue())
+                                .build())
+                        .build())
+                .map(medicineTakingValidator::validate)
+                .map(medicineTakingValidator::isValid)
+                .distinctUntilChanged();
+    }
+
+    public Observable<List<MedicalValidationResult>> controlFields(
+            @NonNull FieldValueChangeEventsObservable<Medicine> medicineObservable,
+            @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
+            @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
+            @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
+        return Observable.combineLatest(
+                medicineObservable,
+                linearGroupsObservable,
+                periodicityTypeObservable,
+                lengthValueObservable,
+                (medicineEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> MedicineTaking.builder()
+                        .medicine(medicineEvent.getValue())
+                        .repeatParameters(RepeatParameters.builder()
+                                .frequency(linearGroupsEvent.getValue())
+                                .periodicity(periodicityTypeEvent.getValue())
+                                .length(lengthValueEvent.getValue())
+                                .build())
+                        .build()
+        ).map(medicineTakingValidator::validate);
     }
 }

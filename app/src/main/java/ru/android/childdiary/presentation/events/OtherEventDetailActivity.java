@@ -115,6 +115,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                             .showMinutes(true)
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
+            hideKeyboardAndClearFocus(rootView.findFocus());
         });
         setupEditTextView(noteView);
 

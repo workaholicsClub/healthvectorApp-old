@@ -22,19 +22,21 @@ public class DoctorVisitValidator extends MedicalValidator<DoctorVisit> {
     public List<MedicalValidationResult> validate(@NonNull DoctorVisit doctorVisit) {
         List<MedicalValidationResult> results = new ArrayList<>();
 
-        validate(results, doctorVisit.getRepeatParameters());
+        MedicalValidationResult result;
 
+        result = new MedicalValidationResult(MedicalFieldType.DOCTOR_VISIT_NAME);
         if (TextUtils.isEmpty(doctorVisit.getName())) {
-            MedicalValidationResult result = new MedicalValidationResult(MedicalFieldType.DOCTOR_VISIT_NAME);
             result.addMessage(context.getString(R.string.validate_doctor_visit_name_empty));
-            results.add(result);
         }
+        results.add(result);
 
         if (doctorVisit.getDoctor() == null) {
-            MedicalValidationResult result = new MedicalValidationResult();
+            result = new MedicalValidationResult();
             result.addMessage(context.getString(R.string.validate_doctor_visit_doctor_empty));
             results.add(result);
         }
+
+        validate(results, doctorVisit.getRepeatParameters());
 
         return results;
     }

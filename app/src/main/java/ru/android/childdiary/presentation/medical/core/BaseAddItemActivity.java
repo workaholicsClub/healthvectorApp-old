@@ -10,12 +10,18 @@ import android.view.View;
 import java.io.Serializable;
 
 import butterknife.OnClick;
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extends Serializable>
         extends BaseItemActivity<V, T> implements BaseAddItemView<T> {
+    @State
+    boolean isButtonDoneEnabled;
+
+    private boolean isValidationStarted;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +33,7 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @OnClick(R.id.buttonAdd)
@@ -41,8 +47,27 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     }
 
     @Override
-    public void setButtonAddEnabled(boolean enabled) {
+    public void setLoading(boolean enabled) {
         buttonAdd.setEnabled(enabled);
+    }
+
+    @Override
+    public void setButtonDoneEnabled(boolean enabled) {
+        isButtonDoneEnabled = enabled;
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
+    }
+
+    @Override
+    public final void validationFailed() {
+        if (!isValidationStarted) {
+            isValidationStarted = true;
+            validationStarted();
+        }
+    }
+
+    @Override
+    public void showValidationErrorMessage(String msg) {
+        showToast(msg);
     }
 
     @Override
@@ -61,4 +86,6 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     }
 
     protected abstract BaseAddItemPresenter<V, T> getPresenter();
+
+    protected abstract void validationStarted();
 }

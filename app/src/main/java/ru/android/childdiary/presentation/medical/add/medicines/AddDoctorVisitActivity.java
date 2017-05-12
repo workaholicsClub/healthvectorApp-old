@@ -22,8 +22,7 @@ import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.medical.core.BaseAddItemActivity;
-import ru.android.childdiary.presentation.medical.core.BaseAddItemPresenter;
+import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
@@ -36,6 +35,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhoto
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.medical.core.BaseAddItemActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -87,6 +87,14 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         super.onCreate(savedInstanceState);
 
         changeThemeIfNeeded(defaultItem.getChild());
+
+        unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(
+                doctorVisitNameView.textObservable(),
+                RxFieldValueView.valueChangeEvents(doctorView),
+                repeatParametersView.linearGroupsObservable(),
+                repeatParametersView.periodicityTypeObservable(),
+                repeatParametersView.lengthValueObservable()
+        ));
     }
 
     @Override
@@ -96,7 +104,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     }
 
     @Override
-    protected BaseAddItemPresenter<AddDoctorVisitView, DoctorVisit> getPresenter() {
+    protected AddDoctorVisitPresenter getPresenter() {
         return presenter;
     }
 
@@ -211,5 +219,21 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     @Override
     protected FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return null;
+    }
+
+    @Override
+    public void doctorVisitNameValidated(boolean valid) {
+        doctorVisitNameView.validated(valid);
+    }
+
+    @Override
+    protected void validationStarted() {
+        unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(
+                doctorVisitNameView.textObservable(),
+                RxFieldValueView.valueChangeEvents(doctorView),
+                repeatParametersView.linearGroupsObservable(),
+                repeatParametersView.periodicityTypeObservable(),
+                repeatParametersView.lengthValueObservable()
+        ));
     }
 }

@@ -34,6 +34,7 @@ public class FieldFeedTypeView extends FieldSpinnerView<FeedType> {
 
     @Override
     protected void valueChanged() {
+        super.valueChanged();
         imageView.setImageResource(ResourcesUtils.getFeedTypeIcon(getValue()));
     }
 

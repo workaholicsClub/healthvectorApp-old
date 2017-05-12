@@ -52,7 +52,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected Button buttonAdd;
 
     @BindView(R.id.rootView)
-    View rootView;
+    protected View rootView;
 
     private ViewGroup detailsView;
 

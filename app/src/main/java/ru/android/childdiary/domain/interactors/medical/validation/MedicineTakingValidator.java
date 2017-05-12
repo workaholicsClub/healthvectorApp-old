@@ -21,13 +21,13 @@ public class MedicineTakingValidator extends MedicalValidator<MedicineTaking> {
     public List<MedicalValidationResult> validate(@NonNull MedicineTaking medicineTaking) {
         List<MedicalValidationResult> results = new ArrayList<>();
 
-        validate(results, medicineTaking.getRepeatParameters());
-
         if (medicineTaking.getMedicine() == null) {
             MedicalValidationResult result = new MedicalValidationResult();
             result.addMessage(context.getString(R.string.validate_medicine_taking_medicine_empty));
             results.add(result);
         }
+
+        validate(results, medicineTaking.getRepeatParameters());
 
         return results;
     }

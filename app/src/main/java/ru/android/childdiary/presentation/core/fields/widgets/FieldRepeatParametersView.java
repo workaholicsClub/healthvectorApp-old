@@ -22,6 +22,8 @@ import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
+import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 
 public class FieldRepeatParametersView extends LinearLayout
         implements FieldSpinnerView.FieldSpinnerListener, FieldDialogView.FieldDialogListener, FieldReadOnly {
@@ -50,6 +52,7 @@ public class FieldRepeatParametersView extends LinearLayout
 
     @Nullable
     private RepeatParameters repeatParameters;
+    private boolean readOnly;
 
     @Nullable
     @Setter
@@ -113,19 +116,20 @@ public class FieldRepeatParametersView extends LinearLayout
             frequencyView.setValue(number);
             timesTitle.setVisibility(number != null && number > 0 ? VISIBLE : GONE);
             timesView.setNumber(number);
-            if (number != null && number == 0) {
+
+            boolean once = number != null && number == 0;
+            periodicityView.setReadOnly(once || readOnly);
+            lengthView.setReadOnly(once || readOnly);
+
+            if (once) {
                 // Однократно
                 lastSelectedPeriodicityType = periodicityView.getValue();
                 lastSelectedLengthValue = lengthView.getValue();
                 periodicityView.setValue(null);
                 lengthView.setValue(null);
-                periodicityView.setReadOnly(true);
-                lengthView.setReadOnly(true);
             } else {
                 periodicityView.setValue(lastSelectedPeriodicityType);
                 lengthView.setValue(lastSelectedLengthValue);
-                periodicityView.setReadOnly(false);
-                lengthView.setReadOnly(false);
             }
         } else if (view == periodicityView) {
             PeriodicityType periodicityType = (PeriodicityType) item;
@@ -143,7 +147,7 @@ public class FieldRepeatParametersView extends LinearLayout
     }
 
     public RepeatParameters getRepeatParameters() {
-        LinearGroups linearGroups = timesView.getLinearGroups();
+        LinearGroups linearGroups = timesView.getValue();
         PeriodicityType periodicity = periodicityView.getValue();
         LengthValue length = lengthView.getValue();
         RepeatParameters.RepeatParametersBuilder builder = repeatParameters == null
@@ -166,9 +170,13 @@ public class FieldRepeatParametersView extends LinearLayout
         timesTitle.setVisibility(number != null && number > 0 ? VISIBLE : GONE);
         timesView.setNumber(number);
 
-        timesView.setLinearGroups(linearGroups);
+        timesView.setValue(linearGroups);
         periodicityView.setValue(periodicity);
         lengthView.setValue(length);
+
+        boolean once = number != null && number == 0;
+        periodicityView.setReadOnly(once || readOnly);
+        lengthView.setReadOnly(once || readOnly);
     }
 
     @Nullable
@@ -195,10 +203,16 @@ public class FieldRepeatParametersView extends LinearLayout
 
     @Override
     public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+
         frequencyView.setReadOnly(readOnly);
         timesView.setReadOnly(readOnly);
-        periodicityView.setReadOnly(readOnly);
-        lengthView.setReadOnly(readOnly);
+
+        Integer number = frequencyView.getValue();
+
+        boolean once = number != null && number == 0;
+        periodicityView.setReadOnly(once || readOnly);
+        lengthView.setReadOnly(once || readOnly);
     }
 
     public void setFieldTimesListener(FieldTimesView.FieldTimesListener fieldTimesListener) {
@@ -207,6 +221,18 @@ public class FieldRepeatParametersView extends LinearLayout
 
     public void setTime(int i, LocalTime time) {
         timesView.setTime(i, time);
+    }
+
+    public FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable() {
+        return RxFieldValueView.valueChangeEvents(timesView);
+    }
+
+    public FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable() {
+        return RxFieldValueView.valueChangeEvents(periodicityView);
+    }
+
+    public FieldValueChangeEventsObservable<LengthValue> lengthValueObservable() {
+        return RxFieldValueView.valueChangeEvents(lengthView);
     }
 
     public interface Listener {

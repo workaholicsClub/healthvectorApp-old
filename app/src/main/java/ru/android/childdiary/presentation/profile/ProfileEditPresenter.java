@@ -64,7 +64,7 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
         for (ChildValidationResult result : results) {
             boolean valid = result.isValid();
             if (result.getFieldType() == null) {
-                return;
+                continue;
             }
             switch (result.getFieldType()) {
                 case IMAGE:
