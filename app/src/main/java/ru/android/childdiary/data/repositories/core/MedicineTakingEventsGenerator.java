@@ -40,7 +40,7 @@ public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTakin
                 .eventType(EventType.MEDICINE_TAKING)
                 .dateTime(dateTime)
                 .notifyTimeInMinutes(medicineTaking.getNotifyTimeInMinutes())
-                .note(medicineTaking.getNote())
+                .note(null)
                 .isDone(null)
                 .child(medicineTaking.getChild())
                 .repeatParameters(medicineTaking.getRepeatParameters())
@@ -49,7 +49,7 @@ public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTakin
                 .medicine(medicineTaking.getMedicine())
                 .amount(medicineTaking.getAmount())
                 .medicineMeasure(medicineTaking.getMedicineMeasure())
-                .imageFileName(medicineTaking.getImageFileName())
+                .imageFileName(null)
                 .build();
     }
 

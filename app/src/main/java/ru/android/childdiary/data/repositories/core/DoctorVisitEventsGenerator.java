@@ -40,7 +40,7 @@ public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit, Doc
                 .eventType(EventType.DOCTOR_VISIT)
                 .dateTime(dateTime)
                 .notifyTimeInMinutes(doctorVisit.getNotifyTimeInMinutes())
-                .note(doctorVisit.getNote())
+                .note(null)
                 .isDone(null)
                 .child(doctorVisit.getChild())
                 .repeatParameters(doctorVisit.getRepeatParameters())
@@ -49,7 +49,7 @@ public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit, Doc
                 .doctor(doctorVisit.getDoctor())
                 .name(doctorVisit.getName())
                 .durationInMinutes(doctorVisit.getDurationInMinutes())
-                .imageFileName(doctorVisit.getImageFileName())
+                .imageFileName(null)
                 .build();
     }
 
