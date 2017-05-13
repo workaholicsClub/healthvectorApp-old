@@ -17,5 +17,7 @@ public abstract class BaseEditItemPresenter<V extends BaseEditItemView<T>, T ext
 
     public abstract void complete(@NonNull T item);
 
-    public abstract void completeFromDate(@NonNull T item, @NonNull DateTime dateTime);
+    public abstract void completeWithoutDeletion(@NonNull T item, @NonNull DateTime dateTime);
+
+    public abstract void completeAndDeleteFromDate(@NonNull T item, @NonNull DateTime dateTime);
 }

@@ -16,6 +16,7 @@ public class DeleteEventsRequest {
     DoctorVisit doctorVisit;
     MedicineTaking medicineTaking;
     DateTime dateTime;
+    boolean delete;
 
     public enum DeleteType {
         DELETE_ONE, DELETE_LINEAR_GROUP,

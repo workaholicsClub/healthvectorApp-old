@@ -75,11 +75,25 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
     }
 
     @Override
-    public void completeFromDate(@NonNull DoctorVisit doctorVisit, @NonNull DateTime dateTime) {
+    public void completeWithoutDeletion(@NonNull DoctorVisit doctorVisit, @NonNull DateTime dateTime) {
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
                 .deleteType(DeleteEventsRequest.DeleteType.COMPLETE_DOCTOR_VISIT)
                 .doctorVisit(doctorVisit)
                 .dateTime(dateTime)
+                .delete(false)
+                .build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(count -> getViewState().completed(doctorVisit), this::onUnexpectedError));
+    }
+
+    @Override
+    public void completeAndDeleteFromDate(@NonNull DoctorVisit doctorVisit, @NonNull DateTime dateTime) {
+        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
+                .deleteType(DeleteEventsRequest.DeleteType.COMPLETE_DOCTOR_VISIT)
+                .doctorVisit(doctorVisit)
+                .dateTime(dateTime)
+                .delete(true)
                 .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

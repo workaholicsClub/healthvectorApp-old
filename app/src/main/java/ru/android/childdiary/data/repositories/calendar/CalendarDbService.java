@@ -321,43 +321,51 @@ public class CalendarDbService {
     }
 
     public Observable<Integer> completeDoctorVisit(@NonNull Long doctorVisitId,
-                                                   @NonNull DateTime dateTime) {
+                                                   @NonNull DateTime dateTime,
+                                                   boolean delete) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             BlockingEntityStore<Persistable> blockingEntityStore = dataStore.toBlocking();
             DoctorVisitEntity doctorVisitEntity = blockingEntityStore
                     .findByKey(DoctorVisitEntity.class, doctorVisitId);
             doctorVisitEntity.setFinishDateTime(dateTime);
             blockingEntityStore.update(doctorVisitEntity);
-            List<MasterEventEntity> events = blockingEntityStore
-                    .select(MasterEventEntity.class)
-                    .join(DoctorVisitEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
-                    .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisitId))
-                    .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(dateTime.toDateTime()))
-                    .get()
-                    .toList();
-            int count = events.size();
-            blockingEntityStore.delete(events);
+            int count = 0;
+            if (delete) {
+                List<MasterEventEntity> events = blockingEntityStore
+                        .select(MasterEventEntity.class)
+                        .join(DoctorVisitEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
+                        .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisitId))
+                        .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(dateTime.toDateTime()))
+                        .get()
+                        .toList();
+                count = events.size();
+                blockingEntityStore.delete(events);
+            }
             return count;
         }));
     }
 
     public Observable<Integer> completeMedicineTaking(@NonNull Long medicineTakingId,
-                                                      @NonNull DateTime dateTime) {
+                                                      @NonNull DateTime dateTime,
+                                                      boolean delete) {
         return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
             BlockingEntityStore<Persistable> blockingEntityStore = dataStore.toBlocking();
             MedicineTakingEntity medicineTakingEntity = blockingEntityStore
                     .findByKey(MedicineTakingEntity.class, medicineTakingId);
             medicineTakingEntity.setFinishDateTime(dateTime);
             blockingEntityStore.update(medicineTakingEntity);
-            List<MasterEventEntity> events = blockingEntityStore
-                    .select(MasterEventEntity.class)
-                    .join(MedicineTakingEventEntity.class).on(MasterEventEntity.ID.eq(MedicineTakingEventEntity.MASTER_EVENT_ID))
-                    .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTakingId))
-                    .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(dateTime.toDateTime()))
-                    .get()
-                    .toList();
-            int count = events.size();
-            blockingEntityStore.delete(events);
+            int count = 0;
+            if (delete) {
+                List<MasterEventEntity> events = blockingEntityStore
+                        .select(MasterEventEntity.class)
+                        .join(MedicineTakingEventEntity.class).on(MasterEventEntity.ID.eq(MedicineTakingEventEntity.MASTER_EVENT_ID))
+                        .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTakingId))
+                        .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(dateTime.toDateTime()))
+                        .get()
+                        .toList();
+                count = events.size();
+                blockingEntityStore.delete(events);
+            }
             return count;
         }));
     }

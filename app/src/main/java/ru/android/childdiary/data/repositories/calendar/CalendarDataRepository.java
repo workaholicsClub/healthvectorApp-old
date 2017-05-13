@@ -437,14 +437,16 @@ public class CalendarDataRepository implements CalendarRepository {
     private Observable<DeleteEventsResponse> completeDoctorVisit(@NonNull DeleteEventsRequest request) {
         Long doctorVisitId = extractDoctorVisitId(request.getDoctorVisit());
         DateTime dateTime = extractDateTime(request);
-        return dbService.completeDoctorVisit(doctorVisitId, dateTime)
+        boolean delete = request.isDelete();
+        return dbService.completeDoctorVisit(doctorVisitId, dateTime, delete)
                 .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
     }
 
     private Observable<DeleteEventsResponse> completeMedicineTaking(@NonNull DeleteEventsRequest request) {
         Long medicineTakingId = extractMedicineTakingId(request.getMedicineTaking());
         DateTime dateTime = extractDateTime(request);
-        return dbService.completeMedicineTaking(medicineTakingId, dateTime)
+        boolean delete = request.isDelete();
+        return dbService.completeMedicineTaking(medicineTakingId, dateTime, delete)
                 .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
     }
 

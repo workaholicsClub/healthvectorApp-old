@@ -38,6 +38,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParamet
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.medical.core.BaseEditItemActivity;
 import ru.android.childdiary.presentation.medical.core.BaseEditItemPresenter;
+import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -239,7 +240,15 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     }
 
     @Override
-    public void askCompleteFromDate(@NonNull DoctorVisit item, @NonNull DateTime dateTime) {
-        // TODO
+    public void askCompleteFromDate(@NonNull DoctorVisit doctorVisit, @NonNull DateTime dateTime) {
+        String dateStr = DateUtils.date(this, dateTime);
+        String timeStr = DateUtils.time(this, dateTime);
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(getString(R.string.ask_complete_doctor_visit, timeStr, dateStr))
+                .setPositiveButton(R.string.complete_without_deletion,
+                        (DialogInterface dialog, int which) -> getPresenter().completeWithoutDeletion(doctorVisit, dateTime))
+                .setNegativeButton(R.string.complete_and_delete_events,
+                        (DialogInterface dialog, int which) -> getPresenter().completeAndDeleteFromDate(doctorVisit, dateTime))
+                .show();
     }
 }

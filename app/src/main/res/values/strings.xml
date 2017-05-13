@@ -11,6 +11,7 @@
     <string name="add_profile">Добавить профиль</string>
     <string name="edit">Редактировать</string>
     <string name="remove_child">Удалить профиль</string>
+    <!-- %s - параметр "Имя ребенка" -->
     <string name="remove_child_confirmation_dialog_title">Удалить профиль %s?</string>
     <string name="remove_child_confirmation_dialog_text">Все данные профиля будут удалены без возможности восстановления.</string>
     <string name="remove_child_confirmation_dialog_positive_button_text">Удалить</string>
@@ -64,6 +65,7 @@
     <string name="weight_review">%s кг</string>
     <string name="amount_review">%s мл</string>
     <string name="newborn">новорождённый</string>
+    <!-- %1$s - параметр "Количество лет", %2$s - параметр "Количество месяцев" -->
     <string name="years_and_months">%1$s %2$s</string>
     <string name="select_sex">Выберите пол</string>
     <string name="male">Мужской</string>
@@ -75,9 +77,13 @@
     <string name="day">День</string>
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
+    <!-- %1$s - параметр "Месяц", %2$d - параметр "Год" -->
     <string name="calendar_month_title">%1$s %2$d</string>
+    <!-- %1$d - параметр "Число, с", \u2014 - длинное тире, %2$d - параметр "Число, по", %3$s - параметр "Месяц" -->
     <string name="calendar_week_title_one_month">%1$d \u2014 %2$d %3$s</string>
+    <!-- %1$d - параметр "Число, с", %2$s - параметр "Месяц, с", \u2014 - длинное тире, %3$d - параметр "Число, по", %4$s - параметр "Месяц, по" -->
     <string name="calendar_week_title_two_month">%1$d %2$s \u2014 %3$d %4$s</string>
+    <!-- %1$d - параметр "Число", %2$d - параметр "Месяц" -->
     <string name="calendar_selected_date_format">%1$d %2$s</string>
     <string name="breast_left">Левая</string>
     <string name="breast_right">Правая</string>
@@ -104,6 +110,7 @@
     <string name="other_event_start">Начало</string>
     <string name="other_event_finish">Конец</string>
     <string name="notify_time_dialog_title">Оповещение за</string>
+    <!-- %s - например, "За 4 дня 2 часа 1 минуту" -->
     <string name="notify_time_text">За %s</string>
     <string name="no_value">Нет</string>
     <string name="time_dialog_days">Дней</string>
@@ -112,8 +119,10 @@
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
     <string name="food_dialog_title">Введите наименование прикорма</string>
     <string name="duration_separator">:</string>
+    <!-- %s - параметр "Имя ребенка" -->
     <string name="child_sleep">%s спит</string>
     <string name="sleep_timer">Таймер сна</string>
+    <!-- %s - например, "запустится через 00:52" -->
     <string name="will_start">запустится через %s</string>
     <string name="stop_sleep_timer">Остановить таймер сна</string>
     <string name="days_short">%d д.</string>
@@ -149,6 +158,7 @@
     <string name="times">Время выполнения</string>
     <string name="note_with_photo">Введите описание</string>
     <string name="medicine_measure">Дозировка</string>
+    <!-- %1$s - параметр "Число (дозировка)", %2$s - параметр "Единица измерения" -->
     <string name="medicine_measure_format">%1$s %2$s</string>
     <string name="finish">Завершить</string>
     <string name="add_medicine_taking_title">Добавить рецепт</string>
@@ -174,6 +184,12 @@
     <string name="ask_delete_medicine_taking_connected_events_or_not">Удалить все события, привязанные к рецепту?</string>
     <string name="delete_only_medicine_taking">Удалить только рецепт</string>
     <string name="delete_medicine_taking_and_events">Удалить рецепт и события</string>
+    <!-- %1$s - параметр "Время", %2$s - параметр "Дата" -->
+    <string name="ask_complete_medicine_taking">Завершить выполнение и удалить все события, привязанные к рецепту, начиная с %1$s %2$s?</string>
+    <!-- %1$s - параметр "Время", %2$s - параметр "Дата" -->
+    <string name="ask_complete_doctor_visit">Завершить выполнение и удалить все события, привязанные к визиту, начиная с %1$s %2$s?</string>
+    <string name="complete_without_deletion">Завершить без удаления</string>
+    <string name="complete_and_delete_events">Удалить события</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
