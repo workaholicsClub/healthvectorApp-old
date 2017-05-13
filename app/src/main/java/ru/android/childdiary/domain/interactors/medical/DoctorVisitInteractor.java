@@ -6,6 +6,7 @@ import android.text.Editable;
 import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
+import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.Interactor;
@@ -25,6 +27,7 @@ import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsResponse;
@@ -36,16 +39,19 @@ import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsOb
 public class DoctorVisitInteractor implements Interactor {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
+    private final SettingsRepository settingsRepository;
     private final DoctorVisitRepository doctorVisitRepository;
     private final DoctorVisitValidator doctorVisitValidator;
 
     @Inject
     public DoctorVisitInteractor(ChildDataRepository childRepository,
                                  CalendarDataRepository calendarRepository,
+                                 SettingsDataRepository settingsRepository,
                                  DoctorVisitDataRepository doctorVisitRepository,
                                  DoctorVisitValidator doctorVisitValidator) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
+        this.settingsRepository = settingsRepository;
         this.doctorVisitRepository = doctorVisitRepository;
         this.doctorVisitValidator = doctorVisitValidator;
     }
@@ -92,6 +98,14 @@ public class DoctorVisitInteractor implements Interactor {
                         .periodicity(null)
                         .length(null)
                         .build());
+    }
+
+    public Observable<LocalTime> getStartTimeOnce() {
+        return settingsRepository.getStartTimeOnce();
+    }
+
+    public Observable<LocalTime> getFinishTimeOnce() {
+        return settingsRepository.getFinishTimeOnce();
     }
 
     public Observable<DoctorVisitsResponse> getDoctorVisits(@NonNull DoctorVisitsRequest request) {

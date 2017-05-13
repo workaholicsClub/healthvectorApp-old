@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
+import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.Interactor;
@@ -24,6 +25,7 @@ import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
@@ -36,16 +38,19 @@ import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsOb
 public class MedicineTakingInteractor implements Interactor {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
+    private final SettingsRepository settingsRepository;
     private final MedicineTakingRepository medicineTakingRepository;
     private final MedicineTakingValidator medicineTakingValidator;
 
     @Inject
     public MedicineTakingInteractor(ChildDataRepository childRepository,
                                     CalendarDataRepository calendarRepository,
+                                    SettingsDataRepository settingsRepository,
                                     MedicineTakingDataRepository medicineTakingRepository,
                                     MedicineTakingValidator medicineTakingValidator) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
+        this.settingsRepository = settingsRepository;
         this.medicineTakingRepository = medicineTakingRepository;
         this.medicineTakingValidator = medicineTakingValidator;
     }
@@ -65,7 +70,9 @@ public class MedicineTakingInteractor implements Interactor {
     public Observable<MedicineTaking> getDefaultMedicineTaking() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
-                getDefaultRepeatParameters(),
+                settingsRepository.getStartTimeOnce()
+                        .map(Collections::singletonList)
+                        .map(this::getDefaultRepeatParameters),
                 Observable.just(DateTime.now()),
                 calendarRepository.getDefaultNotifyTimeInMinutes(EventType.MEDICINE_TAKING),
                 (child, repeatParameters, dateTime, minutes) -> MedicineTaking.builder()
@@ -83,18 +90,25 @@ public class MedicineTakingInteractor implements Interactor {
                         .build());
     }
 
-    private Observable<RepeatParameters> getDefaultRepeatParameters() {
-        return Observable.just(
-                RepeatParameters.builder()
-                        .frequency(LinearGroups.builder()
-                                .times(new ArrayList<>(Collections.singletonList(LocalTime.MIDNIGHT)))
-                                .build())
-                        .periodicity(PeriodicityType.DAILY)
-                        .length(LengthValue.builder()
-                                .length(1)
-                                .timeUnit(TimeUnit.WEEK)
-                                .build())
-                        .build());
+    private RepeatParameters getDefaultRepeatParameters(@NonNull List<LocalTime> times) {
+        return RepeatParameters.builder()
+                .frequency(LinearGroups.builder()
+                        .times(new ArrayList<>(times))
+                        .build())
+                .periodicity(PeriodicityType.DAILY)
+                .length(LengthValue.builder()
+                        .length(1)
+                        .timeUnit(TimeUnit.WEEK)
+                        .build())
+                .build();
+    }
+
+    public Observable<LocalTime> getStartTimeOnce() {
+        return settingsRepository.getStartTimeOnce();
+    }
+
+    public Observable<LocalTime> getFinishTimeOnce() {
+        return settingsRepository.getFinishTimeOnce();
     }
 
     public Observable<List<MedicineMeasure>> getMedicineMeasureList() {

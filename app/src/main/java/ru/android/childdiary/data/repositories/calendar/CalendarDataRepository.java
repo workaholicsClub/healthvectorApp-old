@@ -136,7 +136,9 @@ public class CalendarDataRepository implements CalendarRepository {
                         .toObservable(),
                 preferences
                         .getLong(KEY_LAST_FOOD_MEASURE_ID)
-                        .asObservable(),
+                        .asObservable()
+                        .first(0L)
+                        .toObservable(),
                 this::getLastFoodMeasure)
                 .first(FoodMeasure.NULL)
                 .toObservable();
@@ -158,7 +160,9 @@ public class CalendarDataRepository implements CalendarRepository {
                         .toObservable(),
                 preferences
                         .getLong(KEY_LAST_FOOD_ID)
-                        .asObservable(),
+                        .asObservable()
+                        .first(0L)
+                        .toObservable(),
                 this::getLastFood)
                 .first(Food.NULL)
                 .toObservable();

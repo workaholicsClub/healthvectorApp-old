@@ -11,6 +11,7 @@ import android.view.View;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 import java.util.Arrays;
 import java.util.List;
@@ -71,9 +72,12 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @NonNull DoctorVisit defaultDoctorVisit) {
+    public static Intent getIntent(Context context, @NonNull DoctorVisit defaultDoctorVisit,
+                                   @Nullable LocalTime startTime, @Nullable LocalTime finishTime) {
         Intent intent = new Intent(context, AddDoctorVisitActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultDoctorVisit);
+        intent.putExtra(ExtraConstants.EXTRA_START_TIME, startTime);
+        intent.putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
         return intent;
     }
 

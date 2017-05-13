@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -188,11 +189,8 @@ public class FieldRepeatParametersView extends LinearLayout
         lengthView.setValue(lengthValue);
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setTimeLimits(@NonNull LocalTime startTime, @NonNull LocalTime finishTime) {
         timesView.setStartTime(startTime);
-    }
-
-    public void setFinishTime(LocalTime finishTime) {
         timesView.setFinishTime(finishTime);
     }
 

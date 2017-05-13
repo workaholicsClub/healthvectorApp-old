@@ -37,6 +37,11 @@ public class FieldTimesView extends FieldValueView<LinearGroups> implements View
     private Sex sex;
     private boolean readOnly;
 
+    @Setter
+    private LocalTime startTime = LocalTime.MIDNIGHT;
+    @Setter
+    private LocalTime finishTime = LocalTime.MIDNIGHT;
+
     @Nullable
     @Setter
     private FieldTimesListener fieldTimesListener;
@@ -69,12 +74,6 @@ public class FieldTimesView extends FieldValueView<LinearGroups> implements View
         update();
     }
 
-    public void setStartTime(LocalTime startTime) {
-    }
-
-    public void setFinishTime(LocalTime finishTime) {
-    }
-
     public void setNumber(@Nullable Integer number) {
         LinearGroups linearGroups;
         if (number == null || number < 0) {
@@ -82,7 +81,7 @@ public class FieldTimesView extends FieldValueView<LinearGroups> implements View
         } else {
             ArrayList<LocalTime> times = new ArrayList<>();
             for (int i = 0; i < number; ++i) {
-                times.add(LocalTime.MIDNIGHT.plusHours(i));
+                times.add(startTime.plusHours(i));
             }
             linearGroups = LinearGroups.builder().times(times).build();
         }

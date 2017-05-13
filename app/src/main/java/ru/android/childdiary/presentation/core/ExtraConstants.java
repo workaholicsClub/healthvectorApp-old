@@ -10,4 +10,6 @@ public class ExtraConstants {
     public static final String EXTRA_ITEM = PACKAGE_NAME + ".item";
     public static final String EXTRA_DEFAULT_ITEM = PACKAGE_NAME + ".default_item";
     public static final String EXTRA_DIALOG_ARGUMENTS = PACKAGE_NAME + ".dialog_arguments";
+    public static final String EXTRA_START_TIME = PACKAGE_NAME + ".start_time";
+    public static final String EXTRA_FINISH_TIME = PACKAGE_NAME + ".finish_time";
 }

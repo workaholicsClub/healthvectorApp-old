@@ -14,6 +14,8 @@ import android.support.v4.view.ViewPager;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
+import org.joda.time.LocalTime;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -129,14 +131,20 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     }
 
     @Override
-    public void navigateToMedicineTakingAdd(@NonNull MedicineTaking defaultMedicineTaking) {
-        Intent intent = AddMedicineTakingActivity.getIntent(getContext(), defaultMedicineTaking);
+    public void navigateToMedicineTakingAdd(@NonNull MedicineTaking defaultMedicineTaking,
+                                            @Nullable LocalTime startTime,
+                                            @Nullable LocalTime finishTime) {
+        Intent intent = AddMedicineTakingActivity.getIntent(getContext(), defaultMedicineTaking,
+                startTime, finishTime);
         startActivity(intent);
     }
 
     @Override
-    public void navigateToDoctorVisitAdd(@NonNull DoctorVisit defaultDoctorVisit) {
-        Intent intent = AddDoctorVisitActivity.getIntent(getContext(), defaultDoctorVisit);
+    public void navigateToDoctorVisitAdd(@NonNull DoctorVisit defaultDoctorVisit,
+                                         @Nullable LocalTime startTime,
+                                         @Nullable LocalTime finishTime) {
+        Intent intent = AddDoctorVisitActivity.getIntent(getContext(), defaultDoctorVisit,
+                startTime, finishTime);
         startActivity(intent);
     }
 
@@ -149,7 +157,6 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
             presenter.addMedicineTaking();
         }
     }
-
 
     @Override
     public void showFab() {
