@@ -186,9 +186,11 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         }
     }
 
-    public final void hideKeyboardAndClearFocus(View view) {
+    public final void hideKeyboardAndClearFocus(@Nullable View view) {
         KeyboardUtils.hideKeyboard(this, view);
-        view.clearFocus();
+        if (view != null) {
+            view.clearFocus();
+        }
         if (dummy != null) {
             dummy.requestFocus();
         }

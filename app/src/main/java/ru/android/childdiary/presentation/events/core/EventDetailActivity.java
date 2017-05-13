@@ -129,6 +129,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideKeyboardAndClearFocus(rootView.findFocus());
+    }
+
     protected final T buildEvent() {
         return buildEvent(event == null ? defaultEvent : event);
     }
@@ -212,7 +218,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, date, getSex(),
                 minDate, maxDate);
         dpd.show(getFragmentManager(), tag);
-        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
@@ -229,7 +234,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void showTimePicker(String tag, @Nullable LocalTime time) {
         TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, time, getSex());
         tpd.show(getFragmentManager(), tag);
-        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override

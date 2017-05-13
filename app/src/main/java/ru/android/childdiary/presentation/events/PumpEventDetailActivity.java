@@ -92,7 +92,6 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                             .showMinutes(true)
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
-            hideKeyboardAndClearFocus(rootView.findFocus());
         });
         setupEditTextView(noteView);
     }

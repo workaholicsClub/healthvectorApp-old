@@ -112,7 +112,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                             .showMinutes(true)
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
-            hideKeyboardAndClearFocus(rootView.findFocus());
         });
         if (getDurationView() != null) {
             getDurationView().setFieldDialogListener(v -> {
@@ -126,7 +125,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                                 .showMinutes(true)
                                 .title(getString(R.string.duration))
                                 .build());
-                hideKeyboardAndClearFocus(rootView.findFocus());
             });
         }
         if (getDoctorView() != null) {
@@ -215,6 +213,12 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        hideKeyboardAndClearFocus(rootView.findFocus());
+    }
+
+    @Override
     public void onChecked() {
     }
 
@@ -254,7 +258,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                         .medicineMeasureList(medicineMeasureList)
                         .medicineMeasureValue(getMedicineMeasureValueView().getValue())
                         .build());
-        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
@@ -267,7 +270,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                         .timeUnits(timeUnits)
                         .lengthValue(lengthValue)
                         .build());
-        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
@@ -285,7 +287,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, date, getSex(),
                 minDate, maxDate);
         dpd.show(getFragmentManager(), tag);
-        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
@@ -307,7 +308,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     protected void showTimePicker(String tag, @Nullable LocalTime time) {
         TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, time, getSex());
         tpd.show(getFragmentManager(), tag);
-        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override

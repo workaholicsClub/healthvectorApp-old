@@ -113,9 +113,11 @@ public abstract class BaseDialogFragment<T extends BaseDialogArguments> extends 
     protected void permissionGranted(RequestPermissionInfo permissionInfo) {
     }
 
-    public final void hideKeyboardAndClearFocus(View view) {
+    public final void hideKeyboardAndClearFocus(@Nullable View view) {
         KeyboardUtils.hideKeyboard(getContext(), view);
-        view.clearFocus();
+        if (view != null) {
+            view.clearFocus();
+        }
         if (dummy != null) {
             dummy.requestFocus();
         }

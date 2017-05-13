@@ -132,7 +132,6 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                                 .showMinutes(true)
                                 .title(getString(R.string.breast_left))
                                 .build());
-                hideKeyboardAndClearFocus(rootView.findFocus());
             }
 
             @Override
@@ -147,7 +146,6 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                                 .showMinutes(true)
                                 .title(getString(R.string.breast_right))
                                 .build());
-                hideKeyboardAndClearFocus(rootView.findFocus());
             }
         });
         notifyTimeView.setFieldDialogListener(v -> {
@@ -161,7 +159,6 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                             .showMinutes(true)
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
-            hideKeyboardAndClearFocus(rootView.findFocus());
         });
         setupEditTextView(noteView);
     }

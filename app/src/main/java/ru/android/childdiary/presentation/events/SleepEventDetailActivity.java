@@ -126,7 +126,6 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                             .showMinutes(true)
                             .title(getString(R.string.duration))
                             .build());
-            hideKeyboardAndClearFocus(rootView.findFocus());
         });
         notifyTimeView.setFieldDialogListener(v -> {
             TimeDialogFragment dialogFragment = new TimeDialogFragment();
@@ -139,7 +138,6 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                             .showMinutes(true)
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
-            hideKeyboardAndClearFocus(rootView.findFocus());
         });
         setupEditTextView(noteView);
     }
