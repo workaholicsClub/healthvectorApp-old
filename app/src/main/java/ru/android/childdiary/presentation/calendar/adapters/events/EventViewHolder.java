@@ -22,7 +22,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.EventHelper;
-import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -76,14 +75,8 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
                 getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
 
         textViewTime.setText(DateUtils.time(context, event.getDateTime()));
-        EventType eventType = event.getEventType();
-        if (eventType == EventType.OTHER) {
-            textViewTitle.setText(EventHelper.getDescription(context, event));
-            textViewDescription.setText(null);
-        } else {
-            textViewTitle.setText(StringUtils.eventType(context, eventType));
-            textViewDescription.setText(EventHelper.getDescription(context, event));
-        }
+        textViewTitle.setText(EventHelper.getTitle(context, event));
+        textViewDescription.setText(EventHelper.getDescription(context, event));
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);

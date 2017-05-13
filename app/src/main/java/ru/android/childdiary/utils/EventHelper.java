@@ -3,6 +3,7 @@ package ru.android.childdiary.utils;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import org.joda.time.DateTime;
 
@@ -51,6 +52,22 @@ public class EventHelper {
     }
 
     @Nullable
+    public static String getTitle(Context context, @NonNull MasterEvent event) {
+        EventType eventType = event.getEventType();
+        String eventTypeStr = StringUtils.eventType(context, eventType);
+        if (event instanceof OtherEvent) {
+            OtherEvent otherEvent = (OtherEvent) event;
+            return otherEvent.getName();
+        } else if (event instanceof DoctorVisitEvent) {
+            DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
+            String name = doctorVisitEvent.getName();
+            return TextUtils.isEmpty(name) ? eventTypeStr : name;
+        }
+        // TODO EXERCISE
+        return eventTypeStr;
+    }
+
+    @Nullable
     public static String getDescription(Context context, @NonNull MasterEvent event) {
         if (event instanceof DiaperEvent) {
             DiaperEvent diaperEvent = (DiaperEvent) event;
@@ -68,8 +85,7 @@ public class EventHelper {
                 return StringUtils.feedType(context, feedType);
             }
         } else if (event instanceof OtherEvent) {
-            OtherEvent otherEvent = (OtherEvent) event;
-            return otherEvent.getName();
+            return null;
         } else if (event instanceof PumpEvent) {
             PumpEvent pumpEvent = (PumpEvent) event;
             return StringUtils.breast(context, pumpEvent.getBreast());
@@ -90,7 +106,7 @@ public class EventHelper {
             return medicine == null ? null : medicine.getName();
         }
         // TODO EXERCISE
-        throw new IllegalStateException("Unsupported event type");
+        return null;
     }
 
     public static boolean sameEvent(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {
