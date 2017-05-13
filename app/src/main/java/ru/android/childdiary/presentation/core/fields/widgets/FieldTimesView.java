@@ -14,6 +14,7 @@ import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindDimen;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.TimesMatcher;
 import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
@@ -79,11 +81,8 @@ public class FieldTimesView extends FieldValueView<LinearGroups> implements View
         if (number == null || number < 0) {
             linearGroups = null;
         } else {
-            ArrayList<LocalTime> times = new ArrayList<>();
-            for (int i = 0; i < number; ++i) {
-                times.add(startTime.plusHours(i));
-            }
-            linearGroups = LinearGroups.builder().times(times).build();
+            List<LocalTime> times = TimesMatcher.match(startTime, finishTime, number);
+            linearGroups = LinearGroups.builder().times(new ArrayList<>(times)).build();
         }
         setValue(linearGroups);
     }

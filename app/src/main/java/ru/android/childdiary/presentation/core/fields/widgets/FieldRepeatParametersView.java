@@ -124,8 +124,6 @@ public class FieldRepeatParametersView extends LinearLayout
 
             if (once) {
                 // Однократно
-                lastSelectedPeriodicityType = periodicityView.getValue();
-                lastSelectedLengthValue = lengthView.getValue();
                 periodicityView.setValue(null);
                 lengthView.setValue(null);
             } else {
@@ -135,6 +133,8 @@ public class FieldRepeatParametersView extends LinearLayout
         } else if (view == periodicityView) {
             PeriodicityType periodicityType = (PeriodicityType) item;
             periodicityView.setValue(periodicityType);
+
+            lastSelectedPeriodicityType = periodicityView.getValue();
         }
     }
 
@@ -178,6 +178,9 @@ public class FieldRepeatParametersView extends LinearLayout
         boolean once = number != null && number == 0;
         periodicityView.setReadOnly(once || readOnly);
         lengthView.setReadOnly(once || readOnly);
+
+        lastSelectedPeriodicityType = periodicityView.getValue();
+        lastSelectedLengthValue = lengthView.getValue();
     }
 
     @Nullable
@@ -187,6 +190,8 @@ public class FieldRepeatParametersView extends LinearLayout
 
     public void setLengthValue(@Nullable LengthValue lengthValue) {
         lengthView.setValue(lengthValue);
+
+        lastSelectedLengthValue = lengthView.getValue();
     }
 
     public void setTimeLimits(@NonNull LocalTime startTime, @NonNull LocalTime finishTime) {
