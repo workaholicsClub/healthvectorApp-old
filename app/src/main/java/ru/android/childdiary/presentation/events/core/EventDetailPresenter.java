@@ -13,6 +13,8 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
@@ -75,16 +77,41 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribe(updatedEvent -> logger.debug("event updated silently: " + updatedEvent), this::onUnexpectedError));
     }
 
-    public void deleteEvent(@NonNull T event) {
+    public void delete(@NonNull MasterEvent event) {
+        if (event.getLinearGroup() == null) {
+            deleteOneEvent(event);
+        } else {
+            getViewState().askDeleteOneEventOrLinerGroup(event);
+        }
+    }
+
+    public void deleteOneEvent(@NonNull MasterEvent event) {
         unsubscribe();
-        unsubscribeOnDestroy(calendarInteractor.delete(event)
+        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
+                .deleteType(DeleteEventsRequest.DeleteType.DELETE_ONE)
+                .event(event)
+                .build())
+                .map(response -> response.getRequest().getEvent())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(deletedEvent -> logger.debug("event deleted: " + deletedEvent))
-                .subscribe(deletedEvent -> getViewState().eventDeleted(deletedEvent), this::onUnexpectedError));
+                .subscribe(getViewState()::eventDeleted, this::onUnexpectedError));
     }
 
-    public void doneEvent(@NonNull T event) {
+    public void deleteLinearGroup(@NonNull MasterEvent event) {
+        unsubscribe();
+        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
+                .deleteType(DeleteEventsRequest.DeleteType.DELETE_LINEAR_GROUP)
+                .event(event)
+                .build())
+                .map(DeleteEventsResponse::getCount)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(count -> logger.debug("deleted " + count + " events"))
+                .subscribe(count -> getViewState().eventDeleted(event), this::onUnexpectedError));
+    }
+
+    public void done(@NonNull T event) {
         unsubscribeOnDestroy(calendarInteractor.done(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

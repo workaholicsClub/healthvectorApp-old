@@ -1,10 +1,12 @@
 package ru.android.childdiary.presentation.medical.edit.medicines;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -37,6 +39,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.medical.core.BaseEditItemActivity;
 import ru.android.childdiary.presentation.medical.core.BaseEditItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisitView, DoctorVisit>
@@ -222,5 +225,16 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     @Override
     protected FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return null;
+    }
+
+    @Override
+    public void askDeleteConnectedEventsOrNot(@NonNull DoctorVisit doctorVisit) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.ask_delete_doctor_visit_connected_events_or_not)
+                .setPositiveButton(R.string.delete_only_doctor_visit,
+                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisit(doctorVisit))
+                .setNegativeButton(R.string.delete_doctor_visit_and_events,
+                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisitAndConnectedEvents(doctorVisit))
+                .show();
     }
 }

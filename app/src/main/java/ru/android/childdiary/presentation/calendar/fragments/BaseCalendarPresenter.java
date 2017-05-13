@@ -15,14 +15,16 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
-import ru.android.childdiary.domain.interactors.calendar.requests.EventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
 public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
-    private final EventsRequest.EventsRequestBuilder requestBuilder = EventsRequest.builder();
+    private final GetEventsRequest.GetEventsRequestBuilder requestBuilder = GetEventsRequest.builder();
 
     @Inject
     ChildInteractor childInteractor;
@@ -44,13 +46,13 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
         unsubscribeOnDestroy(Observable.combineLatest(
                 calendarInteractor.getSelectedDate(),
                 childInteractor.getActiveChild(),
-                (date, child) -> EventsRequest.builder().date(date).child(child).build())
+                (date, child) -> GetEventsRequest.builder().date(date).child(child).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetRequest, this::onUnexpectedError));
     }
 
-    private void onGetRequest(@NonNull EventsRequest request) {
+    private void onGetRequest(@NonNull GetEventsRequest request) {
         logger.debug("onGetRequest: " + request);
         getViewState().showChild(request.getChild());
         getViewState().setSelectedDate(request.getDate());
@@ -66,7 +68,7 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                 .subscribe(this::onGetData, this::onUnexpectedError));
     }
 
-    private void onGetData(@NonNull EventsResponse response) {
+    private void onGetData(@NonNull GetEventsResponse response) {
         logger.debug("onGetData: " + response);
         getViewState().showEvents(response.getRequest().getDate(), response.getEvents());
     }
@@ -82,10 +84,33 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     }
 
     public void delete(@NonNull MasterEvent event) {
-        unsubscribeOnDestroy(calendarInteractor.delete(event)
+        if (event.getLinearGroup() == null) {
+            deleteOneEvent(event);
+        } else {
+            getViewState().askDeleteOneEventOrLinerGroup(event);
+        }
+    }
+
+    public void deleteOneEvent(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
+                .deleteType(DeleteEventsRequest.DeleteType.DELETE_ONE)
+                .event(event)
+                .build())
+                .map(response -> response.getRequest().getEvent())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(deletedEvent -> logger.debug("event deleted: " + deletedEvent), this::onUnexpectedError));
+    }
+
+    public void deleteLinearGroup(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
+                .deleteType(DeleteEventsRequest.DeleteType.DELETE_LINEAR_GROUP)
+                .event(event)
+                .build())
+                .map(DeleteEventsResponse::getCount)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(count -> logger.debug("deleted " + count + " events"), this::onUnexpectedError));
     }
 
     public void move(@NonNull MasterEvent event) {

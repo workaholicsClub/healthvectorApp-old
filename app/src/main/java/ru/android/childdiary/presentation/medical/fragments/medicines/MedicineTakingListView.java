@@ -20,4 +20,7 @@ public interface MedicineTakingListView extends AppPartitionView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void medicineTakingDeleted(@NonNull MedicineTaking medicineTaking);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void askDeleteConnectedEventsOrNot(@NonNull MedicineTaking medicineTaking);
 }

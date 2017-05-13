@@ -1,10 +1,12 @@
 package ru.android.childdiary.presentation.medical.fragments.medicines;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -22,6 +24,7 @@ import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingActionListener;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingAdapter;
 import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingActivity;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MedicineTakingListFragment extends AppPartitionFragment
         implements MedicineTakingListView, MedicineTakingActionListener {
@@ -94,9 +97,19 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     }
 
     @Override
+    public void askDeleteConnectedEventsOrNot(@NonNull MedicineTaking medicineTaking) {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.ask_delete_medicine_taking_connected_events_or_not)
+                .setPositiveButton(R.string.delete_only_medicine_taking,
+                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTaking(medicineTaking))
+                .setNegativeButton(R.string.delete_medicine_taking_and_events,
+                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTakingAndConnectedEvents(medicineTaking))
+                .show();
+    }
+
+    @Override
     public void delete(MedicineTaking item) {
-        // TODO confirm delete all connected events or no events
-        presenter.deleteMedicineTaking(item);
+        presenter.delete(item);
     }
 
     @Override

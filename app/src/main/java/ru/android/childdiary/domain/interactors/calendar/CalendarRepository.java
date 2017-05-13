@@ -21,7 +21,10 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 
@@ -54,7 +57,7 @@ public interface CalendarRepository extends Repository {
 
     Food setLastFood(@Nullable Food food);
 
-    Observable<List<MasterEvent>> getAll(@NonNull EventsRequest request);
+    Observable<GetEventsResponse> getAll(@NonNull GetEventsRequest request);
 
     Observable<List<SleepEvent>> getSleepEventsWithTimer();
 
@@ -96,7 +99,7 @@ public interface CalendarRepository extends Repository {
 
     Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event);
 
-    Observable<MasterEvent> delete(@NonNull MasterEvent event);
+    Observable<DeleteEventsResponse> delete(@NonNull DeleteEventsRequest request);
 
     Observable<MasterEvent> done(@NonNull MasterEvent event);
 

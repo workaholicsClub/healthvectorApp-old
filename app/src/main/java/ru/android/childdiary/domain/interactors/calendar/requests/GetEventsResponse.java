@@ -8,7 +8,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 
 @Value
 @Builder
-public class EventsResponse {
-    EventsRequest request;
+public class GetEventsResponse {
+    GetEventsRequest request;
     List<MasterEvent> events;
 }

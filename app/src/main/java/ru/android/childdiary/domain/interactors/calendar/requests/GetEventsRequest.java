@@ -8,7 +8,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
 @Builder
-public class EventsRequest {
+public class GetEventsRequest {
     Child child;
     LocalDate date;
 }

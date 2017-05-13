@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -32,9 +33,14 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 
@@ -195,7 +201,7 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
-    public Observable<List<MasterEvent>> getAll(@NonNull EventsRequest request) {
+    public Observable<GetEventsResponse> getAll(@NonNull GetEventsRequest request) {
         return allEventsDbService.getAllEvents(request);
     }
 
@@ -300,9 +306,149 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
-    public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
-        return dbService.delete(event);
+    public Observable<DeleteEventsResponse> delete(@NonNull DeleteEventsRequest request) {
+        if (request.getDeleteType() == null) {
+            throw new IllegalArgumentException("Specify delete type");
+        }
+        switch (request.getDeleteType()) {
+            case DELETE_ONE:
+                return deleteOne(request);
+            case DELETE_LINEAR_GROUP:
+                return deleteLinearGroup(request);
+            case DELETE_ALL_DOCTOR_VISIT_EVENTS:
+                return deleteAllDoctorVisitEvents(request);
+            case DELETE_ALL_MEDICINE_TAKING_EVENTS:
+                return deleteAllMedicineTakingEvents(request);
+            // TODO EXERCISE
+            case COMPLETE_DOCTOR_VISIT:
+                return completeDoctorVisit(request);
+            case COMPLETE_MEDICINE_TAKING:
+                return completeMedicineTaking(request);
+            // TODO EXERCISE
+        }
+        throw new IllegalArgumentException("Unsupported delete type: " + request.getDeleteType());
     }
+
+    private DateTime extractDateTime(@NonNull DeleteEventsRequest request) {
+        DateTime dateTime = request.getDateTime();
+        if (dateTime == null) {
+            throw new IllegalArgumentException("Date time not specified");
+        }
+        return dateTime;
+    }
+
+    private MasterEvent extractEvent(@NonNull DeleteEventsRequest request, String msg) {
+        MasterEvent event = request.getEvent();
+        if (event == null) {
+            throw new IllegalArgumentException(msg);
+        }
+        return event;
+    }
+
+    private Integer extractLinearGroup(@NonNull MasterEvent event) {
+        Integer linearGroup = event.getLinearGroup();
+        if (linearGroup == null) {
+            throw new IllegalArgumentException("Linear group not specified: " + event);
+        }
+        return linearGroup;
+    }
+
+    private Long extractDoctorVisitId(@NonNull DoctorVisitEvent event) {
+        Long doctorVisitId = event.getDoctorVisit() == null
+                ? null : event.getDoctorVisit().getId();
+        if (doctorVisitId == null) {
+            throw new IllegalArgumentException("Doctor visit id not specified: " + event);
+        }
+        return doctorVisitId;
+    }
+
+    private Long extractMedicineTakingId(@NonNull MedicineTakingEvent event) {
+        Long medicineTakingId = event.getMedicineTaking() == null
+                ? null : event.getMedicineTaking().getId();
+        if (medicineTakingId == null) {
+            throw new IllegalArgumentException("Medicine taking id not specified: " + event);
+        }
+        return medicineTakingId;
+    }
+
+    // TODO EXERCISE
+
+    private Long extractDoctorVisitId(@Nullable DoctorVisit doctorVisit) {
+        Long doctorVisitId = doctorVisit == null ? null : doctorVisit.getId();
+        if (doctorVisitId == null) {
+            throw new IllegalArgumentException("Doctor visit id not specified: " + doctorVisit);
+        }
+        return doctorVisitId;
+    }
+
+    private Long extractMedicineTakingId(@Nullable MedicineTaking medicineTaking) {
+        Long medicineTakingId = medicineTaking == null ? null : medicineTaking.getId();
+        if (medicineTakingId == null) {
+            throw new IllegalArgumentException("Medicine taking id not specified: " + medicineTaking);
+        }
+        return medicineTakingId;
+    }
+
+    // TODO EXERCISE
+
+    private Observable<DeleteEventsResponse> deleteOne(@NonNull DeleteEventsRequest request) {
+        MasterEvent event = extractEvent(request, "Specify event to delete");
+        return dbService.deleteOne(event)
+                .map(deletedEvent -> DeleteEventsResponse.builder()
+                        .count(1)
+                        .request(request)
+                        .build());
+    }
+
+    private Observable<DeleteEventsResponse> deleteLinearGroup(@NonNull DeleteEventsRequest request) {
+        MasterEvent event = extractEvent(request, "Specify event to delete linear group");
+        if (event instanceof DoctorVisitEvent) {
+            DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
+            Long doctorVisitId = extractDoctorVisitId(doctorVisitEvent);
+            Integer linearGroup = extractLinearGroup(event);
+            return dbService.deleteDoctorVisitEvents(doctorVisitId, linearGroup)
+                    .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
+        } else if (event instanceof MedicineTakingEvent) {
+            MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) event;
+            Long medicineTakingId = extractMedicineTakingId(medicineTakingEvent);
+            Integer linearGroup = extractLinearGroup(event);
+            return dbService.deleteMedicineTakingEvents(medicineTakingId, linearGroup)
+                    .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
+        } else {
+            throw new IllegalArgumentException("This event type not support linear group deletion: " + event);
+        }
+        // TODO EXERCISE
+    }
+
+    private Observable<DeleteEventsResponse> deleteAllDoctorVisitEvents(@NonNull DeleteEventsRequest request) {
+        Long doctorVisitId = extractDoctorVisitId(request.getDoctorVisit());
+        return dbService.deleteDoctorVisitEvents(doctorVisitId, null)
+                .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
+    }
+
+    private Observable<DeleteEventsResponse> deleteAllMedicineTakingEvents(@NonNull DeleteEventsRequest request) {
+        Long medicineTakingId = extractMedicineTakingId(request.getMedicineTaking());
+        return dbService.deleteMedicineTakingEvents(medicineTakingId, null)
+                .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
+    }
+
+    // TODO EXERCISE
+
+    private Observable<DeleteEventsResponse> completeDoctorVisit(@NonNull DeleteEventsRequest request) {
+        Long doctorVisitId = extractDoctorVisitId(request.getDoctorVisit());
+        DateTime dateTime = extractDateTime(request);
+        return dbService.completeDoctorVisit(doctorVisitId, dateTime)
+                .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
+    }
+
+    private Observable<DeleteEventsResponse> completeMedicineTaking(@NonNull DeleteEventsRequest request) {
+        Long medicineTakingId = extractMedicineTakingId(request.getMedicineTaking());
+        DateTime dateTime = extractDateTime(request);
+        return dbService.completeMedicineTaking(medicineTakingId, dateTime)
+                .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
+    }
+
+    // TODO EXERCISE
 
     @Override
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {

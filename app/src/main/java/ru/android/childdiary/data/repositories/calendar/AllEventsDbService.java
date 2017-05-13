@@ -6,8 +6,6 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -43,7 +41,8 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
@@ -228,7 +227,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .build();
     }
 
-    public Observable<List<MasterEvent>> getAllEvents(@NonNull EventsRequest request) {
+    public Observable<GetEventsResponse> getAllEvents(@NonNull GetEventsRequest request) {
         Child child = request.getChild();
         LocalDate selectedDate = request.getDate();
         return dataStore.select(EXPRESSIONS)
@@ -253,7 +252,8 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, this));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, this))
+                .map(events -> GetEventsResponse.builder().events(events).request(request).build());
     }
 
     @Override

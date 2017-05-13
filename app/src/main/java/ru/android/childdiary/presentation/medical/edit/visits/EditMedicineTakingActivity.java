@@ -1,10 +1,12 @@
 package ru.android.childdiary.presentation.medical.edit.visits;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -38,6 +40,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.medical.core.BaseEditItemActivity;
 import ru.android.childdiary.presentation.medical.core.BaseEditItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicineTakingView, MedicineTaking>
@@ -223,5 +226,16 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
     @Override
     public FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return medicineMeasureView;
+    }
+
+    @Override
+    public void askDeleteConnectedEventsOrNot(@NonNull MedicineTaking medicineTaking) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.ask_delete_medicine_taking_connected_events_or_not)
+                .setPositiveButton(R.string.delete_only_medicine_taking,
+                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTaking(medicineTaking))
+                .setNegativeButton(R.string.delete_medicine_taking_and_events,
+                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTakingAndConnectedEvents(medicineTaking))
+                .show();
     }
 }

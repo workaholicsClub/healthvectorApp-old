@@ -2,10 +2,12 @@ package ru.android.childdiary.presentation.calendar.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -49,6 +51,7 @@ import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> extends AppPartitionFragment implements BaseCalendarView,
         AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener {
@@ -116,6 +119,16 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
         recyclerViewEvents.setAdapter(eventAdapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewEvents, false);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_UPDATE_EVENT && resultCode == Activity.RESULT_OK) {
+            if (fabController != null) {
+                fabController.hideBarWithoutAnimation();
+            }
+        }
     }
 
     @Override
@@ -267,13 +280,14 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_UPDATE_EVENT && resultCode == Activity.RESULT_OK) {
-            if (fabController != null) {
-                fabController.hideBarWithoutAnimation();
-            }
-        }
+    public void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event) {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.ask_delete_one_event_or_linear_group)
+                .setPositiveButton(R.string.delete_one_event,
+                        (DialogInterface dialog, int which) -> presenter.deleteOneEvent(event))
+                .setNegativeButton(R.string.delete_linear_group,
+                        (DialogInterface dialog, int which) -> presenter.deleteLinearGroup(event))
+                .show();
     }
 
     @Override

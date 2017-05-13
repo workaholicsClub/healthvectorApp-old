@@ -165,6 +165,15 @@
     <string name="periodicity_daily">Ежедневно</string>
     <string name="periodicity_weekly">Еженедельно</string>
     <string name="periodicity_monthly">Ежемесячно</string>
+    <string name="ask_delete_one_event_or_linear_group">Удалить только одно событие или всю линейную группу событий?</string>
+    <string name="delete_one_event">Удалить одно событие</string>
+    <string name="delete_linear_group">Удалить линейную группу</string>
+    <string name="ask_delete_doctor_visit_connected_events_or_not">Удалить все события, привязанные к визиту?</string>
+    <string name="delete_only_doctor_visit">Удалить только визит</string>
+    <string name="delete_doctor_visit_and_events">Удалить визит и события</string>
+    <string name="ask_delete_medicine_taking_connected_events_or_not">Удалить все события, привязанные к рецепту?</string>
+    <string name="delete_only_medicine_taking">Удалить только рецепт</string>
+    <string name="delete_medicine_taking_and_events">Удалить рецепт и события</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

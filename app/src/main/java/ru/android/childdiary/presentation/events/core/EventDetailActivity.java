@@ -204,6 +204,17 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
+    public void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.ask_delete_one_event_or_linear_group)
+                .setPositiveButton(R.string.delete_one_event,
+                        (DialogInterface dialog, int which) -> getPresenter().deleteOneEvent(event))
+                .setNegativeButton(R.string.delete_linear_group,
+                        (DialogInterface dialog, int which) -> getPresenter().deleteLinearGroup(event))
+                .show();
+    }
+
+    @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         if (fragment instanceof TimePickerDialog) {
@@ -286,12 +297,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
         switch (item.getItemId()) {
             case R.id.menu_done:
-                getPresenter().doneEvent(event);
+                getPresenter().done(event);
                 return true;
             case R.id.menu_move:
                 return true;
             case R.id.menu_delete:
-                getPresenter().deleteEvent(event);
+                getPresenter().delete(event);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

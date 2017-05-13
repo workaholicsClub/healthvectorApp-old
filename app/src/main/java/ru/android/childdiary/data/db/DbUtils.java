@@ -38,7 +38,7 @@ public class DbUtils {
                 delete(dataStore, entityClass, object, objectId)));
     }
 
-    private static <T, E> T delete(EntityStore dataStore,
+    public static <T, E> T delete(EntityStore dataStore,
                                    Class<E> entityClass, T object, long objectId) {
         BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
         Object entity = blockingEntityStore.findByKey(entityClass, objectId);

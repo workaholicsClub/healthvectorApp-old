@@ -1,10 +1,12 @@
 package ru.android.childdiary.presentation.medical.fragments.visits;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -22,6 +24,7 @@ import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitActionListener;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitAdapter;
 import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitActivity;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class DoctorVisitsFragment extends AppPartitionFragment
         implements DoctorVisitsView, DoctorVisitActionListener {
@@ -94,9 +97,19 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     }
 
     @Override
+    public void askDeleteConnectedEventsOrNot(@NonNull DoctorVisit doctorVisit) {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.ask_delete_doctor_visit_connected_events_or_not)
+                .setPositiveButton(R.string.delete_only_doctor_visit,
+                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisit(doctorVisit))
+                .setNegativeButton(R.string.delete_doctor_visit_and_events,
+                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisitAndConnectedEvents(doctorVisit))
+                .show();
+    }
+
+    @Override
     public void delete(DoctorVisit item) {
-        // TODO confirm delete all connected events or no events
-        presenter.deleteDoctorVisit(item);
+        presenter.delete(item);
     }
 
     @Override

@@ -49,4 +49,7 @@ public interface BaseCalendarView extends AppPartitionView {
     void navigateToMedicineTakingEvent(@NonNull MasterEvent event, @NonNull MedicineTakingEvent defaultEvent);
 
     // TODO EXERCISE
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event);
 }

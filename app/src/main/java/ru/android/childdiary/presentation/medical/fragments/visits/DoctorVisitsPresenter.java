@@ -11,17 +11,23 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsResponse;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsView> {
     @Inject
     ChildInteractor childInteractor;
+
+    @Inject
+    CalendarInteractor calendarInteractor;
 
     @Inject
     DoctorVisitInteractor doctorVisitInteractor;
@@ -67,10 +73,28 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
                         this::onUnexpectedError));
     }
 
+    public void delete(@NonNull DoctorVisit doctorVisit) {
+        if (ObjectUtils.isTrue(doctorVisit.getExported())) {
+            getViewState().askDeleteConnectedEventsOrNot(doctorVisit);
+        } else {
+            deleteDoctorVisit(doctorVisit);
+        }
+    }
+
     public void deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
         unsubscribeOnDestroy(doctorVisitInteractor.deleteDoctorVisit(doctorVisit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::doctorVisitDeleted, this::onUnexpectedError));
+    }
+
+    public void deleteDoctorVisitAndConnectedEvents(@NonNull DoctorVisit doctorVisit) {
+        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
+                .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_DOCTOR_VISIT_EVENTS)
+                .doctorVisit(doctorVisit)
+                .build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(count -> getViewState().doctorVisitDeleted(doctorVisit), this::onUnexpectedError));
     }
 }

@@ -34,8 +34,10 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.EventsRequest;
-import ru.android.childdiary.domain.interactors.calendar.requests.EventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.validation.DiaperEventValidator;
@@ -218,9 +220,8 @@ public class CalendarInteractor implements Interactor {
                         .build());
     }
 
-    public Observable<EventsResponse> getAll(@NonNull EventsRequest request) {
-        return calendarRepository.getAll(request)
-                .map(events -> EventsResponse.builder().request(request).events(events).build());
+    public Observable<GetEventsResponse> getAll(@NonNull GetEventsRequest request) {
+        return calendarRepository.getAll(request);
     }
 
     public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
@@ -299,8 +300,8 @@ public class CalendarInteractor implements Interactor {
         throw new IllegalStateException("Unsupported event type");
     }
 
-    public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
-        return calendarRepository.delete(event);
+    public Observable<DeleteEventsResponse> delete(@NonNull DeleteEventsRequest request) {
+        return calendarRepository.delete(request);
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
