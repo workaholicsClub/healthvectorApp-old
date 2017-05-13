@@ -49,8 +49,7 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
 
     @OnClick(R.id.buttonAdd)
     void onButtonFinishClick() {
-        // TODO
-        getPresenter().update(build());
+        getPresenter().complete(item);
     }
 
     @Override
@@ -61,6 +60,11 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
     @Override
     public void deleted(@NonNull T item) {
         finish();
+    }
+
+    @Override
+    public void completed(@NonNull T item) {
+        buttonAdd.setVisibility(View.GONE);
     }
 
     @Override

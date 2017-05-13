@@ -233,9 +233,14 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_medicine_taking_connected_events_or_not)
                 .setPositiveButton(R.string.delete_only_medicine_taking,
-                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTaking(medicineTaking))
+                        (DialogInterface dialog, int which) -> getPresenter().deleteOneItem(medicineTaking))
                 .setNegativeButton(R.string.delete_medicine_taking_and_events,
-                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTakingAndConnectedEvents(medicineTaking))
+                        (DialogInterface dialog, int which) -> getPresenter().deleteWithConnectedEvents(medicineTaking))
                 .show();
+    }
+
+    @Override
+    public void askCompleteFromDate(@NonNull MedicineTaking item, @NonNull DateTime dateTime) {
+        // TODO
     }
 }

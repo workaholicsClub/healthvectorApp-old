@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import org.joda.time.DateTime;
+
 import java.io.Serializable;
 
 public interface BaseEditItemView<T extends Serializable> extends BaseItemView<T> {
@@ -15,5 +17,11 @@ public interface BaseEditItemView<T extends Serializable> extends BaseItemView<T
     void deleted(@NonNull T item);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void completed(@NonNull T item);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteConnectedEventsOrNot(@NonNull T item);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void askCompleteFromDate(@NonNull T item, @NonNull DateTime dateTime);
 }

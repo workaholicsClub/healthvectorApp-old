@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import org.joda.time.DateTime;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,18 +42,20 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
         if (ObjectUtils.isTrue(doctorVisit.getExported())) {
             getViewState().askDeleteConnectedEventsOrNot(doctorVisit);
         } else {
-            deleteDoctorVisit(doctorVisit);
+            deleteOneItem(doctorVisit);
         }
     }
 
-    public void deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+    @Override
+    public void deleteOneItem(@NonNull DoctorVisit doctorVisit) {
         unsubscribeOnDestroy(doctorVisitInteractor.deleteDoctorVisit(doctorVisit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::deleted, this::onUnexpectedError));
     }
 
-    public void deleteDoctorVisitAndConnectedEvents(@NonNull DoctorVisit doctorVisit) {
+    @Override
+    public void deleteWithConnectedEvents(@NonNull DoctorVisit doctorVisit) {
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
                 .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_DOCTOR_VISIT_EVENTS)
                 .doctorVisit(doctorVisit)
@@ -59,5 +63,26 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(count -> getViewState().deleted(doctorVisit), this::onUnexpectedError));
+    }
+
+    @Override
+    public void complete(@NonNull DoctorVisit item) {
+        if (item.getFinishDateTime() == null) {
+            getViewState().askCompleteFromDate(item, DateTime.now());
+        } else {
+            logger.error("already completed: " + item);
+        }
+    }
+
+    @Override
+    public void completeFromDate(@NonNull DoctorVisit doctorVisit, @NonNull DateTime dateTime) {
+        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
+                .deleteType(DeleteEventsRequest.DeleteType.COMPLETE_DOCTOR_VISIT)
+                .doctorVisit(doctorVisit)
+                .dateTime(dateTime)
+                .build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(count -> getViewState().completed(doctorVisit), this::onUnexpectedError));
     }
 }

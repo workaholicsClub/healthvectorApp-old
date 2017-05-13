@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import org.joda.time.DateTime;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,18 +42,20 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
         if (ObjectUtils.isTrue(medicineTaking.getExported())) {
             getViewState().askDeleteConnectedEventsOrNot(medicineTaking);
         } else {
-            deleteMedicineTaking(medicineTaking);
+            deleteOneItem(medicineTaking);
         }
     }
 
-    public void deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+    @Override
+    public void deleteOneItem(@NonNull MedicineTaking medicineTaking) {
         unsubscribeOnDestroy(medicineTakingInteractor.deleteMedicineTaking(medicineTaking)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::deleted, this::onUnexpectedError));
     }
 
-    public void deleteMedicineTakingAndConnectedEvents(@NonNull MedicineTaking medicineTaking) {
+    @Override
+    public void deleteWithConnectedEvents(@NonNull MedicineTaking medicineTaking) {
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
                 .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_MEDICINE_TAKING_EVENTS)
                 .medicineTaking(medicineTaking)
@@ -59,5 +63,26 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(count -> getViewState().deleted(medicineTaking), this::onUnexpectedError));
+    }
+
+    @Override
+    public void complete(@NonNull MedicineTaking item) {
+        if (item.getFinishDateTime() == null) {
+            getViewState().askCompleteFromDate(item, DateTime.now());
+        } else {
+            logger.error("already completed: " + item);
+        }
+    }
+
+    @Override
+    public void completeFromDate(@NonNull MedicineTaking medicineTaking, @NonNull DateTime dateTime) {
+        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
+                .deleteType(DeleteEventsRequest.DeleteType.COMPLETE_DOCTOR_VISIT)
+                .medicineTaking(medicineTaking)
+                .dateTime(dateTime)
+                .build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(count -> getViewState().completed(medicineTaking), this::onUnexpectedError));
     }
 }

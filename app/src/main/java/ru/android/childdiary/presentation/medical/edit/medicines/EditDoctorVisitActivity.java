@@ -232,9 +232,14 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_doctor_visit_connected_events_or_not)
                 .setPositiveButton(R.string.delete_only_doctor_visit,
-                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisit(doctorVisit))
+                        (DialogInterface dialog, int which) -> getPresenter().deleteOneItem(doctorVisit))
                 .setNegativeButton(R.string.delete_doctor_visit_and_events,
-                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisitAndConnectedEvents(doctorVisit))
+                        (DialogInterface dialog, int which) -> getPresenter().deleteWithConnectedEvents(doctorVisit))
                 .show();
+    }
+
+    @Override
+    public void askCompleteFromDate(@NonNull DoctorVisit item, @NonNull DateTime dateTime) {
+        // TODO
     }
 }
