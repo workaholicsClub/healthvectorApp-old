@@ -130,7 +130,11 @@ public class MedicineTakingDbService {
             MedicineTaking result = medicineTaking.toBuilder().repeatParameters(repeatParameters).build();
             result = insertMedicineTaking(result);
 
-            eventsGenerator.generateEvents(result);
+            boolean needToAddEvents = ObjectUtils.isTrue(result.getIsExported());
+
+            if (needToAddEvents) {
+                eventsGenerator.generateEvents(result);
+            }
 
             return result;
         }));

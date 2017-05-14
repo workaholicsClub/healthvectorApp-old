@@ -15,6 +15,7 @@ import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 import ru.android.childdiary.presentation.medical.core.BaseAddItemPresenter;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class AddMedicineTakingPresenter extends BaseAddItemPresenter<AddMedicineTakingView, MedicineTaking> {
@@ -25,15 +26,27 @@ public class AddMedicineTakingPresenter extends BaseAddItemPresenter<AddMedicine
 
     @Override
     public void add(@NonNull MedicineTaking medicineTaking) {
-        getViewState().setLoading(true);
+        showProgressAdd(medicineTaking);
         unsubscribeOnDestroy(
                 medicineTakingInteractor.addMedicineTaking(medicineTaking)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(added -> logger.debug("added: " + added))
-                        .doOnNext(added -> getViewState().setLoading(false))
-                        .doOnError(throwable -> getViewState().setLoading(false))
+                        .doOnNext(added -> hideProgressAdd(medicineTaking))
+                        .doOnError(throwable -> hideProgressAdd(medicineTaking))
                         .subscribe(getViewState()::added, this::onUnexpectedError));
+    }
+
+    private void showProgressAdd(@NonNull MedicineTaking medicineTaking) {
+        if (ObjectUtils.isTrue(medicineTaking.getIsExported())) {
+            getViewState().showGeneratingEvents(true);
+        }
+    }
+
+    private void hideProgressAdd(@NonNull MedicineTaking medicineTaking) {
+        if (ObjectUtils.isTrue(medicineTaking.getIsExported())) {
+            getViewState().showGeneratingEvents(false);
+        }
     }
 
     public Disposable listenForDoneButtonUpdate(

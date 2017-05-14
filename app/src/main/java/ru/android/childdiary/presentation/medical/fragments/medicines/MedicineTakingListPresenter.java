@@ -89,12 +89,15 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
     }
 
     public void deleteMedicineTakingAndConnectedEvents(@NonNull MedicineTaking medicineTaking) {
+        getViewState().showDeletingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
                 .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_MEDICINE_TAKING_EVENTS)
                 .medicineTaking(medicineTaking)
                 .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(count -> getViewState().showDeletingEvents(false))
+                .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> getViewState().medicineTakingDeleted(medicineTaking), this::onUnexpectedError));
     }
 }

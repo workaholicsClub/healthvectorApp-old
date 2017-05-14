@@ -29,12 +29,27 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
 
     @Override
     public void update(@NonNull DoctorVisit doctorVisit) {
+        showProgressUpdate(doctorVisit);
         unsubscribeOnDestroy(
                 doctorVisitInteractor.updateDoctorVisit(doctorVisit)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(updated -> logger.debug("updated: " + updated))
+                        .doOnNext(added -> hideProgressUpdate(doctorVisit))
+                        .doOnError(throwable -> hideProgressUpdate(doctorVisit))
                         .subscribe(getViewState()::updated, this::onUnexpectedError));
+    }
+
+    private void showProgressUpdate(@NonNull DoctorVisit doctorVisit) {
+        if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
+            getViewState().showGeneratingEvents(true);
+        }
+    }
+
+    private void hideProgressUpdate(@NonNull DoctorVisit doctorVisit) {
+        if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
+            getViewState().showGeneratingEvents(false);
+        }
     }
 
     @Override
@@ -56,12 +71,15 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
 
     @Override
     public void deleteWithConnectedEvents(@NonNull DoctorVisit doctorVisit) {
+        getViewState().showDeletingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
                 .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_DOCTOR_VISIT_EVENTS)
                 .doctorVisit(doctorVisit)
                 .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(count -> getViewState().showDeletingEvents(false))
+                .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> getViewState().deleted(doctorVisit), this::onUnexpectedError));
     }
 

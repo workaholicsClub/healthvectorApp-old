@@ -28,6 +28,8 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class DoctorVisitsFragment extends AppPartitionFragment
         implements DoctorVisitsView, DoctorVisitActionListener {
+    private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
+
     @InjectPresenter
     DoctorVisitsPresenter presenter;
 
@@ -115,5 +117,16 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     @Override
     public void edit(DoctorVisit item) {
         presenter.editDoctorVisit(item);
+    }
+
+    @Override
+    public void showDeletingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_deleting));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS);
+        }
     }
 }

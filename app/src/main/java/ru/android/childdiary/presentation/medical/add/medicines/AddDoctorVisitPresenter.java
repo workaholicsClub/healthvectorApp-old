@@ -20,6 +20,7 @@ import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 import ru.android.childdiary.presentation.medical.core.BaseAddItemPresenter;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisitView, DoctorVisit> {
@@ -30,15 +31,27 @@ public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisit
 
     @Override
     public void add(@NonNull DoctorVisit doctorVisit) {
-        getViewState().setLoading(true);
+        showProgressAdd(doctorVisit);
         unsubscribeOnDestroy(
                 doctorVisitInteractor.addDoctorVisit(doctorVisit)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(added -> logger.debug("added: " + added))
-                        .doOnNext(added -> getViewState().setLoading(false))
-                        .doOnError(throwable -> getViewState().setLoading(false))
+                        .doOnNext(added -> hideProgressAdd(doctorVisit))
+                        .doOnError(throwable -> hideProgressAdd(doctorVisit))
                         .subscribe(getViewState()::added, this::onUnexpectedError));
+    }
+
+    private void showProgressAdd(@NonNull DoctorVisit doctorVisit) {
+        if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
+            getViewState().showGeneratingEvents(true);
+        }
+    }
+
+    private void hideProgressAdd(@NonNull DoctorVisit doctorVisit) {
+        if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
+            getViewState().showGeneratingEvents(false);
+        }
     }
 
     @Override

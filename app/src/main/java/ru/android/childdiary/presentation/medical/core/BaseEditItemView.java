@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.medical.core;
 
 import android.support.annotation.NonNull;
 
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
@@ -24,4 +25,7 @@ public interface BaseEditItemView<T extends Serializable> extends BaseItemView<T
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void askCompleteFromDate(@NonNull T item, @NonNull DateTime dateTime);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showDeletingEvents(boolean loading);
 }

@@ -36,4 +36,7 @@ public interface BaseItemView<T extends Serializable> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showLengthValueDialog(@NonNull ArrayList<TimeUnit> timeUnits);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showGeneratingEvents(boolean loading);
 }

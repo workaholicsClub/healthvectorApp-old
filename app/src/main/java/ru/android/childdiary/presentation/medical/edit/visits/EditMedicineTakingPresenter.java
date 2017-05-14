@@ -29,12 +29,27 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
 
     @Override
     public void update(@NonNull MedicineTaking medicineTaking) {
+        showProgressUpdate(medicineTaking);
         unsubscribeOnDestroy(
                 medicineTakingInteractor.updateMedicineTaking(medicineTaking)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(updated -> logger.debug("updated: " + updated))
+                        .doOnNext(added -> hideProgressUpdate(medicineTaking))
+                        .doOnError(throwable -> hideProgressUpdate(medicineTaking))
                         .subscribe(getViewState()::updated, this::onUnexpectedError));
+    }
+
+    private void showProgressUpdate(@NonNull MedicineTaking medicineTaking) {
+        if (ObjectUtils.isTrue(medicineTaking.getIsExported())) {
+            getViewState().showGeneratingEvents(true);
+        }
+    }
+
+    private void hideProgressUpdate(@NonNull MedicineTaking medicineTaking) {
+        if (ObjectUtils.isTrue(medicineTaking.getIsExported())) {
+            getViewState().showGeneratingEvents(false);
+        }
     }
 
     @Override
@@ -56,12 +71,15 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
 
     @Override
     public void deleteWithConnectedEvents(@NonNull MedicineTaking medicineTaking) {
+        getViewState().showDeletingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
                 .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_MEDICINE_TAKING_EVENTS)
                 .medicineTaking(medicineTaking)
                 .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(count -> getViewState().showDeletingEvents(false))
+                .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> getViewState().deleted(medicineTaking), this::onUnexpectedError));
     }
 

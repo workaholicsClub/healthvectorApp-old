@@ -99,4 +99,12 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
 
     protected void injectFragment(ApplicationComponent component) {
     }
+
+    public void showProgress(String tag, String title, String message) {
+        ((BaseMvpActivity) getActivity()).showProgress(tag, title, message);
+    }
+
+    public void hideProgress(String tag) {
+        ((BaseMvpActivity) getActivity()).hideProgress(tag);
+    }
 }

@@ -22,6 +22,8 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T extends Serializable>
         extends BaseItemActivity<V, T> implements BaseEditItemView<T> {
+    private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
+
     protected T item;
 
     @Override
@@ -65,6 +67,17 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
     @Override
     public void completed(@NonNull T item) {
         buttonAdd.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showDeletingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_deleting));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS);
+        }
     }
 
     @Override

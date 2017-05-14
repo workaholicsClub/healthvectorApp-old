@@ -89,12 +89,15 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
     }
 
     public void deleteDoctorVisitAndConnectedEvents(@NonNull DoctorVisit doctorVisit) {
+        getViewState().showDeletingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
                 .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_DOCTOR_VISIT_EVENTS)
                 .doctorVisit(doctorVisit)
                 .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(count -> getViewState().showDeletingEvents(false))
+                .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> getViewState().doctorVisitDeleted(doctorVisit), this::onUnexpectedError));
     }
 }

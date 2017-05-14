@@ -58,11 +58,6 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     }
 
     @Override
-    public void setLoading(boolean enabled) {
-        buttonAdd.setEnabled(enabled);
-    }
-
-    @Override
     public void setButtonDoneEnabled(boolean enabled) {
         isButtonDoneEnabled = enabled;
         buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));

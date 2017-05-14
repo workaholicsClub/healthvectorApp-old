@@ -42,6 +42,8 @@ import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.presentation.core.dialogs.ProgressDialogArguments;
+import ru.android.childdiary.presentation.core.dialogs.ProgressDialogFragment;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -270,5 +272,30 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showProgress(String tag, String title, String message) {
+        ProgressDialogFragment dialogFragment = findProgressDialog(tag);
+        if (dialogFragment == null) {
+            dialogFragment = new ProgressDialogFragment();
+            dialogFragment.showAllowingStateLoss(getSupportFragmentManager(),
+                    tag,
+                    ProgressDialogArguments.builder()
+                            .sex(getSex())
+                            .title(title)
+                            .message(message)
+                            .build());
+        }
+    }
+
+    public void hideProgress(String tag) {
+        ProgressDialogFragment dialogFragment = findProgressDialog(tag);
+        if (dialogFragment != null) {
+            dialogFragment.dismissAllowingStateLoss();
+        }
+    }
+
+    private ProgressDialogFragment findProgressDialog(String tag) {
+        return (ProgressDialogFragment) getSupportFragmentManager().findFragmentByTag(tag);
     }
 }

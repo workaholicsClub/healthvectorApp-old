@@ -116,7 +116,11 @@ public class DoctorVisitDbService {
             DoctorVisit result = doctorVisit.toBuilder().repeatParameters(repeatParameters).build();
             result = insertDoctorVisit(result);
 
-            eventsGenerator.generateEvents(result);
+            boolean needToAddEvents = ObjectUtils.isTrue(result.getIsExported());
+
+            if (needToAddEvents) {
+                eventsGenerator.generateEvents(result);
+            }
 
             return result;
         }));

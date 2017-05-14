@@ -70,6 +70,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
     private static final String TAG_MEDICINE_MEASURE_VALUE_DIALOG = "TAG_MEDICINE_MEASURE_VALUE_DIALOG";
     private static final String TAG_LENGTH_VALUE_DIALOG = "TAG_LENGTH_VALUE_DIALOG";
+    private static final String TAG_PROGRESS_DIALOG_GENERATING_EVENTS = "TAG_PROGRESS_DIALOG_GENERATING_EVENTS";
 
     private static final int REQUEST_DOCTOR = 1;
     private static final int REQUEST_MEDICINE = 2;
@@ -270,6 +271,19 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                         .timeUnits(timeUnits)
                         .lengthValue(lengthValue)
                         .build());
+    }
+
+    @Override
+    public void showGeneratingEvents(boolean loading) {
+        if (loading) {
+            buttonAdd.setEnabled(false);
+            showProgress(TAG_PROGRESS_DIALOG_GENERATING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_generating));
+        } else {
+            buttonAdd.setEnabled(true);
+            hideProgress(TAG_PROGRESS_DIALOG_GENERATING_EVENTS);
+        }
     }
 
     @Override

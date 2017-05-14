@@ -9,6 +9,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
 
 import ru.android.childdiary.R;
@@ -271,6 +272,13 @@ public class ResourcesUtils {
         } else {
             return R.drawable.ic_notification_sleep;
         }
+    }
+
+    @StyleRes
+    public static int getDialogTitleTextAppearance(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.style.DialogTitleTextAppearanceBoy
+                : R.style.DialogTitleTextAppearanceGirl;
     }
 
     public static GradientDrawable getShape(@ColorInt int color, float corner) {
