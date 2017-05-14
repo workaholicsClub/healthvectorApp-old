@@ -107,6 +107,7 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
 
     @Override
     public void completeAndDeleteFromDate(@NonNull MedicineTaking medicineTaking, @NonNull DateTime dateTime) {
+        getViewState().showDeletingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
                 .deleteType(DeleteEventsRequest.DeleteType.COMPLETE_MEDICINE_TAKING)
                 .medicineTaking(medicineTaking)
@@ -115,6 +116,8 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
                 .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(count -> getViewState().showDeletingEvents(false))
+                .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> getViewState().completed(medicineTaking), this::onUnexpectedError));
     }
 }

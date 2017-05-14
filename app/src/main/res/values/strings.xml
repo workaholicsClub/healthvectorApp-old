@@ -189,7 +189,7 @@
     <!-- %1$s - параметр "Время", %2$s - параметр "Дата" -->
     <string name="ask_complete_doctor_visit">Завершить выполнение и удалить все события, привязанные к визиту, начиная с %1$s %2$s?</string>
     <string name="complete_without_deletion">Завершить без удаления</string>
-    <string name="complete_and_delete_events">Удалить события</string>
+    <string name="complete_and_delete_events">Удалить будущие события</string>
     <string name="please_wait">Пожалуйста, подождите&#8230;</string>
     <string name="events_generating">Идет создание событий&#8230;</string>
     <string name="events_deleting">Идет удаление событий&#8230;</string>
