@@ -12,8 +12,8 @@
         android:id="@+id/editText"
         android:layout_width="@dimen/medicine_measure_value_width"
         android:layout_height="@dimen/profile_field_height"
-        android:layout_marginLeft="@dimen/base_margin_horizontal"
-        android:layout_marginRight="@dimen/base_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
         android:background="@drawable/edit_text_background"
         android:gravity="center"
         android:imeOptions="actionDone"
@@ -27,8 +27,8 @@
         android:id="@+id/numberPicker"
         android:layout_width="@dimen/medicine_measure_value_width"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/base_margin_horizontal"
-        android:layout_marginRight="@dimen/base_margin_horizontal"
+        android:layout_marginEnd="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
         android:descendantFocusability="blocksDescendants"
         android:textAppearance="@style/PrimaryTextAppearance" />
 </LinearLayout>

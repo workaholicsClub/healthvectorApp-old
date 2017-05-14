@@ -17,7 +17,7 @@ abstract class SpinnerItemViewHolder<T> extends BaseViewHolder<T> {
     TextView textView;
     @BindView(R.id.imageViewDropdown)
     View imageViewDropdown;
-    @BindDimen(R.dimen.base_margin_horizontal)
+    @BindDimen(R.dimen.base_margin)
     int baseMarginHorizontal;
 
     public SpinnerItemViewHolder(View view) {

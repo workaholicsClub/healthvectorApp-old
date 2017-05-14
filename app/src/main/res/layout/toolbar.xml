@@ -17,8 +17,8 @@
         android:id="@+id/toolbarLogo"
         android:layout_width="@dimen/toolbar_logo_size"
         android:layout_height="@dimen/toolbar_logo_size"
-        android:layout_marginEnd="@dimen/base_margin_horizontal"
-        android:layout_marginRight="@dimen/base_margin_horizontal"
+        android:layout_marginEnd="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
         android:elevation="@dimen/image_elevation"
         android:src="@color/white"
         app:biv_selectorOnPress="@android:color/transparent" />
