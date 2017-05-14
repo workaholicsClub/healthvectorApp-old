@@ -119,7 +119,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         durationView.setValue(item.getDurationInMinutes());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
 
-        boolean exported = ObjectUtils.isTrue(item.getExported());
+        boolean exported = ObjectUtils.isTrue(item.getIsExported());
         checkBoxView.setChecked(exported);
         if (exported) {
             doctorVisitNameView.setEnabled(false);
@@ -162,7 +162,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
                 .name(doctorVisitName)
                 .durationInMinutes(duration)
                 .dateTime(dateTime)
-                .exported(exported)
+                .isExported(exported)
                 .notifyTimeInMinutes(minutes)
                 .note(note)
                 .imageFileName(imageFileName)

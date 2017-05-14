@@ -147,7 +147,7 @@ public class ObjectUtils {
                 && equals(doctorVisit1.getDurationInMinutes(), doctorVisit2.getDurationInMinutes())
                 && equalsToMinutes(doctorVisit1.getDateTime(), doctorVisit2.getDateTime())
                 && equalsToMinutes(doctorVisit1.getFinishDateTime(), doctorVisit2.getFinishDateTime())
-                && isTrue(doctorVisit1.getExported()) == isTrue(doctorVisit2.getExported())
+                && isTrue(doctorVisit1.getIsExported()) == isTrue(doctorVisit2.getIsExported())
                 && equals(doctorVisit1.getNotifyTimeInMinutes(), doctorVisit2.getNotifyTimeInMinutes())
                 && contentEquals(doctorVisit1.getNote(), doctorVisit2.getNote())
                 && contentEquals(doctorVisit1.getImageFileName(), doctorVisit2.getImageFileName());
@@ -160,7 +160,7 @@ public class ObjectUtils {
                 && contentEquals(medicineTaking1.getRepeatParameters(), medicineTaking2.getRepeatParameters())
                 && equalsToMinutes(medicineTaking1.getDateTime(), medicineTaking2.getDateTime())
                 && equalsToMinutes(medicineTaking1.getFinishDateTime(), medicineTaking2.getFinishDateTime())
-                && isTrue(medicineTaking1.getExported()) == isTrue(medicineTaking2.getExported())
+                && isTrue(medicineTaking1.getIsExported()) == isTrue(medicineTaking2.getIsExported())
                 && equals(medicineTaking1.getNotifyTimeInMinutes(), medicineTaking2.getNotifyTimeInMinutes())
                 && contentEquals(medicineTaking1.getNote(), medicineTaking2.getNote())
                 && contentEquals(medicineTaking1.getImageFileName(), medicineTaking2.getImageFileName());

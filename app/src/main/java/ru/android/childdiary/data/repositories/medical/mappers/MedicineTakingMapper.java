@@ -60,10 +60,11 @@ public class MedicineTakingMapper implements EntityMapper<MedicineTakingData, Me
                 .repeatParameters(repeatParameters)
                 .dateTime(medicineTakingData.getDateTime())
                 .finishDateTime(medicineTakingData.getFinishDateTime())
-                .exported(medicineTakingData.getExported())
+                .isExported(medicineTakingData.isExported())
                 .notifyTimeInMinutes(medicineTakingData.getNotifyTimeInMinutes())
                 .note(medicineTakingData.getNote())
                 .imageFileName(medicineTakingData.getImageFileName())
+                .isDeleted(medicineTakingData.isDeleted())
                 .build();
     }
 
@@ -105,9 +106,10 @@ public class MedicineTakingMapper implements EntityMapper<MedicineTakingData, Me
         to.setAmount(from.getAmount());
         to.setDateTime(from.getDateTime());
         to.setFinishDateTime(from.getFinishDateTime());
-        to.setExported(from.getExported());
+        to.setExported(from.getIsExported());
         to.setNotifyTimeInMinutes(from.getNotifyTimeInMinutes());
         to.setNote(from.getNote());
         to.setImageFileName(from.getImageFileName());
+        to.setDeleted(from.getIsDeleted());
     }
 }

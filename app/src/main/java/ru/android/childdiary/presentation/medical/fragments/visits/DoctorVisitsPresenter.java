@@ -74,7 +74,7 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
     }
 
     public void delete(@NonNull DoctorVisit doctorVisit) {
-        if (ObjectUtils.isTrue(doctorVisit.getExported())) {
+        if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
             getViewState().askDeleteConnectedEventsOrNot(doctorVisit);
         } else {
             deleteDoctorVisit(doctorVisit);

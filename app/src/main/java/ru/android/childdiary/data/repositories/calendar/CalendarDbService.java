@@ -1,9 +1,6 @@
 package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -11,10 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
-import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
@@ -26,8 +21,6 @@ import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEnt
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
-import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
-import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.DiaperEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.DoctorVisitEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.FeedEventMapper;
@@ -270,107 +263,9 @@ public class CalendarDbService {
         }));
     }
 
-    public Observable<MasterEvent> deleteOne(@NonNull MasterEvent event) {
+    public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
         return DbUtils.deleteObservable(dataStore, MasterEventEntity.class, event, event.getMasterEventId());
     }
-
-    public Observable<Integer> deleteDoctorVisitEvents(@NonNull Long doctorVisitId,
-                                                       @Nullable Integer linearGroup) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            BlockingEntityStore<Persistable> blockingEntityStore = dataStore.toBlocking();
-            val where = blockingEntityStore
-                    .select(MasterEventEntity.class)
-                    .join(DoctorVisitEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
-                    .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisitId));
-            List<MasterEventEntity> events;
-            if (linearGroup == null) {
-                events = where.get().toList();
-                DoctorVisitEntity doctorVisitEntity = blockingEntityStore
-                        .findByKey(DoctorVisitEntity.class, doctorVisitId);
-                blockingEntityStore.delete(doctorVisitEntity);
-            } else {
-                events = where.and(MasterEventEntity.LINEAR_GROUP.eq(linearGroup)).get().toList();
-            }
-            int count = events.size();
-            blockingEntityStore.delete(events);
-            return count;
-        }));
-    }
-
-    public Observable<Integer> deleteMedicineTakingEvents(@NonNull Long medicineTakingId,
-                                                          @Nullable Integer linearGroup) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            BlockingEntityStore<Persistable> blockingEntityStore = dataStore.toBlocking();
-            val where = blockingEntityStore
-                    .select(MasterEventEntity.class)
-                    .join(MedicineTakingEventEntity.class).on(MasterEventEntity.ID.eq(MedicineTakingEventEntity.MASTER_EVENT_ID))
-                    .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTakingId));
-            List<MasterEventEntity> events;
-            if (linearGroup == null) {
-                events = where.get().toList();
-                MedicineTakingEntity medicineTakingEntity = blockingEntityStore
-                        .findByKey(MedicineTakingEntity.class, medicineTakingId);
-                blockingEntityStore.delete(medicineTakingEntity);
-            } else {
-                events = where.and(MasterEventEntity.LINEAR_GROUP.eq(linearGroup)).get().toList();
-            }
-            int count = events.size();
-            blockingEntityStore.delete(events);
-            return count;
-        }));
-    }
-
-    public Observable<Integer> completeDoctorVisit(@NonNull Long doctorVisitId,
-                                                   @NonNull DateTime dateTime,
-                                                   boolean delete) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            BlockingEntityStore<Persistable> blockingEntityStore = dataStore.toBlocking();
-            DoctorVisitEntity doctorVisitEntity = blockingEntityStore
-                    .findByKey(DoctorVisitEntity.class, doctorVisitId);
-            doctorVisitEntity.setFinishDateTime(dateTime);
-            blockingEntityStore.update(doctorVisitEntity);
-            int count = 0;
-            if (delete) {
-                List<MasterEventEntity> events = blockingEntityStore
-                        .select(MasterEventEntity.class)
-                        .join(DoctorVisitEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
-                        .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisitId))
-                        .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(dateTime.toDateTime()))
-                        .get()
-                        .toList();
-                count = events.size();
-                blockingEntityStore.delete(events);
-            }
-            return count;
-        }));
-    }
-
-    public Observable<Integer> completeMedicineTaking(@NonNull Long medicineTakingId,
-                                                      @NonNull DateTime dateTime,
-                                                      boolean delete) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            BlockingEntityStore<Persistable> blockingEntityStore = dataStore.toBlocking();
-            MedicineTakingEntity medicineTakingEntity = blockingEntityStore
-                    .findByKey(MedicineTakingEntity.class, medicineTakingId);
-            medicineTakingEntity.setFinishDateTime(dateTime);
-            blockingEntityStore.update(medicineTakingEntity);
-            int count = 0;
-            if (delete) {
-                List<MasterEventEntity> events = blockingEntityStore
-                        .select(MasterEventEntity.class)
-                        .join(MedicineTakingEventEntity.class).on(MasterEventEntity.ID.eq(MedicineTakingEventEntity.MASTER_EVENT_ID))
-                        .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTakingId))
-                        .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(dateTime.toDateTime()))
-                        .get()
-                        .toList();
-                count = events.size();
-                blockingEntityStore.delete(events);
-            }
-            return count;
-        }));
-    }
-
-    // TODO EXERCISE
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         MasterEvent masterEvent = event.toMasterBuilder().isDone(!EventHelper.isDone(event)).build();

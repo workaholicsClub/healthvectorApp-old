@@ -125,7 +125,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         durationView.setValue(item.getDurationInMinutes());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
 
-        boolean exported = ObjectUtils.isTrue(item.getExported());
+        boolean exported = ObjectUtils.isTrue(item.getIsExported());
         checkBoxView.setChecked(exported);
 
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
@@ -153,7 +153,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
                 .name(doctorVisitName)
                 .durationInMinutes(duration)
                 .dateTime(dateTime)
-                .exported(exported)
+                .isExported(exported)
                 .notifyTimeInMinutes(minutes)
                 .note(note)
                 .imageFileName(imageFileName)

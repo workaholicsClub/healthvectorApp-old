@@ -52,10 +52,11 @@ public class DoctorVisitMapper implements EntityMapper<DoctorVisitData, DoctorVi
                 .durationInMinutes(doctorVisitData.getDurationInMinutes())
                 .dateTime(doctorVisitData.getDateTime())
                 .finishDateTime(doctorVisitData.getFinishDateTime())
-                .exported(doctorVisitData.getExported())
+                .isExported(doctorVisitData.isExported())
                 .notifyTimeInMinutes(doctorVisitData.getNotifyTimeInMinutes())
                 .note(doctorVisitData.getNote())
                 .imageFileName(doctorVisitData.getImageFileName())
+                .isDeleted(doctorVisitData.isDeleted())
                 .build();
     }
 
@@ -93,9 +94,10 @@ public class DoctorVisitMapper implements EntityMapper<DoctorVisitData, DoctorVi
         to.setDurationInMinutes(from.getDurationInMinutes());
         to.setDateTime(from.getDateTime());
         to.setFinishDateTime(from.getFinishDateTime());
-        to.setExported(from.getExported());
+        to.setExported(from.getIsExported());
         to.setNotifyTimeInMinutes(from.getNotifyTimeInMinutes());
         to.setNote(from.getNote());
         to.setImageFileName(from.getImageFileName());
+        to.setDeleted(from.getIsDeleted());
     }
 }

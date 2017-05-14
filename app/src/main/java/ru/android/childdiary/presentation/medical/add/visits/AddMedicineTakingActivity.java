@@ -125,7 +125,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
         repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
 
-        boolean exported = ObjectUtils.isTrue(item.getExported());
+        boolean exported = ObjectUtils.isTrue(item.getIsExported());
         checkBoxView.setChecked(exported);
 
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
@@ -154,7 +154,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
                 .medicineMeasure(medicineMeasure)
                 .repeatParameters(repeatParameters)
                 .dateTime(dateTime)
-                .exported(exported)
+                .isExported(exported)
                 .notifyTimeInMinutes(minutes)
                 .note(note)
                 .imageFileName(imageFileName)

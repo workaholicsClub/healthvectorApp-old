@@ -10,8 +10,8 @@ import io.requery.ManyToOne;
 import io.requery.OneToOne;
 import io.requery.ReferentialAction;
 import io.requery.Table;
-import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.child.ChildData;
+import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.medical.core.MedicineData;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureData;
 
@@ -44,11 +44,13 @@ public interface MedicineTakingData {
 
     DateTime getFinishDateTime();
 
-    Boolean getExported();
+    Boolean isExported();
 
     Integer getNotifyTimeInMinutes();
 
     String getNote();
 
     String getImageFileName();
+
+    Boolean isDeleted();
 }

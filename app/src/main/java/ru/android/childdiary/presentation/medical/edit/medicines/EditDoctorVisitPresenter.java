@@ -39,7 +39,7 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
 
     @Override
     public void delete(@NonNull DoctorVisit doctorVisit) {
-        if (ObjectUtils.isTrue(doctorVisit.getExported())) {
+        if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
             getViewState().askDeleteConnectedEventsOrNot(doctorVisit);
         } else {
             deleteOneItem(doctorVisit);

@@ -30,11 +30,13 @@ public class DoctorVisit implements Serializable, RepeatParametersContainer {
 
     DateTime finishDateTime;
 
-    Boolean exported;
+    Boolean isExported;
 
     Integer notifyTimeInMinutes;
 
     String note;
 
     String imageFileName;
+
+    Boolean isDeleted;
 }

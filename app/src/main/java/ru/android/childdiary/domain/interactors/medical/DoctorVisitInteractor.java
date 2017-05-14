@@ -82,10 +82,11 @@ public class DoctorVisitInteractor implements Interactor {
                         .durationInMinutes(15)
                         .dateTime(dateTime)
                         .finishDateTime(null)
-                        .exported(true)
+                        .isExported(true)
                         .notifyTimeInMinutes(minutes)
                         .note(null)
                         .imageFileName(null)
+                        .isDeleted(null)
                         .build());
     }
 

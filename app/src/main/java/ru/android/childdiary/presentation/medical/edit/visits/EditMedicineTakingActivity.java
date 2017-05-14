@@ -120,7 +120,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
 
-        boolean exported = ObjectUtils.isTrue(item.getExported());
+        boolean exported = ObjectUtils.isTrue(item.getIsExported());
         checkBoxView.setChecked(exported);
         if (exported) {
             medicineView.setReadOnly(true);
@@ -163,7 +163,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
                 .medicineMeasure(medicineMeasure)
                 .repeatParameters(repeatParameters)
                 .dateTime(dateTime)
-                .exported(exported)
+                .isExported(exported)
                 .notifyTimeInMinutes(minutes)
                 .note(note)
                 .imageFileName(imageFileName)

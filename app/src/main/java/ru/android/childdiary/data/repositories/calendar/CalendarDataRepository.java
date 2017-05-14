@@ -20,6 +20,8 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import ru.android.childdiary.data.repositories.medical.DoctorVisitDbService;
+import ru.android.childdiary.data.repositories.medical.MedicineTakingDbService;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
@@ -51,18 +53,24 @@ public class CalendarDataRepository implements CalendarRepository {
     private static final String KEY_LAST_FOOD_ID = "last_food";
 
     private final RxSharedPreferences preferences;
-    private final CalendarDbService dbService;
+    private final CalendarDbService calendarDbService;
     private final AllEventsDbService allEventsDbService;
+    private final DoctorVisitDbService doctorVisitDbService;
+    private final MedicineTakingDbService medicineTakingDbService;
     private final List<OnSelectedDateChangedListener> selectedDateChangedListeners = new ArrayList<>();
     private LocalDate selectedDate = LocalDate.now();
 
     @Inject
     public CalendarDataRepository(RxSharedPreferences preferences,
-                                  CalendarDbService dbService,
-                                  AllEventsDbService allEventsDbService) {
+                                  CalendarDbService calendarDbService,
+                                  AllEventsDbService allEventsDbService,
+                                  DoctorVisitDbService doctorVisitDbService,
+                                  MedicineTakingDbService medicineTakingDbService) {
         this.preferences = preferences;
-        this.dbService = dbService;
+        this.calendarDbService = calendarDbService;
         this.allEventsDbService = allEventsDbService;
+        this.doctorVisitDbService = doctorVisitDbService;
+        this.medicineTakingDbService = medicineTakingDbService;
     }
 
     void addOnActiveChildChangedListener(OnSelectedDateChangedListener listener) {
@@ -107,22 +115,22 @@ public class CalendarDataRepository implements CalendarRepository {
 
     @Override
     public Observable<List<FoodMeasure>> getFoodMeasureList() {
-        return dbService.getFoodMeasureList();
+        return calendarDbService.getFoodMeasureList();
     }
 
     @Override
     public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
-        return dbService.addFoodMeasure(foodMeasure);
+        return calendarDbService.addFoodMeasure(foodMeasure);
     }
 
     @Override
     public Observable<List<Food>> getFoodList() {
-        return dbService.getFoodList();
+        return calendarDbService.getFoodList();
     }
 
     @Override
     public Observable<Food> addFood(@NonNull Food food) {
-        return dbService.addFood(food);
+        return calendarDbService.addFood(food);
     }
 
     @Override
@@ -207,102 +215,102 @@ public class CalendarDataRepository implements CalendarRepository {
 
     @Override
     public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
-        return dbService.getSleepEventsWithTimer();
+        return calendarDbService.getSleepEventsWithTimer();
     }
 
     @Override
     public Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event) {
-        return dbService.getDiaperEventDetail(event);
+        return calendarDbService.getDiaperEventDetail(event);
     }
 
     @Override
     public Observable<FeedEvent> getFeedEventDetail(@NonNull MasterEvent event) {
-        return dbService.getFeedEventDetail(event);
+        return calendarDbService.getFeedEventDetail(event);
     }
 
     @Override
     public Observable<OtherEvent> getOtherEventDetail(@NonNull MasterEvent event) {
-        return dbService.getOtherEventDetail(event);
+        return calendarDbService.getOtherEventDetail(event);
     }
 
     @Override
     public Observable<PumpEvent> getPumpEventDetail(@NonNull MasterEvent event) {
-        return dbService.getPumpEventDetail(event);
+        return calendarDbService.getPumpEventDetail(event);
     }
 
     @Override
     public Observable<SleepEvent> getSleepEventDetail(@NonNull MasterEvent event) {
-        return dbService.getSleepEventDetail(event);
+        return calendarDbService.getSleepEventDetail(event);
     }
 
     @Override
     public Observable<DoctorVisitEvent> getDoctorVisitEventDetail(@NonNull MasterEvent event) {
-        return dbService.getDoctorVisitEventDetail(event);
+        return calendarDbService.getDoctorVisitEventDetail(event);
     }
 
     @Override
     public Observable<MedicineTakingEvent> getMedicineTakingEventDetail(@NonNull MasterEvent event) {
-        return dbService.getMedicineTakingEventDetail(event);
+        return calendarDbService.getMedicineTakingEventDetail(event);
     }
 
     @Override
     public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
-        return dbService.add(event);
+        return calendarDbService.add(event);
     }
 
     @Override
     public Observable<FeedEvent> add(@NonNull FeedEvent event) {
-        return dbService.add(event);
+        return calendarDbService.add(event);
     }
 
     @Override
     public Observable<OtherEvent> add(@NonNull OtherEvent event) {
-        return dbService.add(event);
+        return calendarDbService.add(event);
     }
 
     @Override
     public Observable<PumpEvent> add(@NonNull PumpEvent event) {
-        return dbService.add(event);
+        return calendarDbService.add(event);
     }
 
     @Override
     public Observable<SleepEvent> add(@NonNull SleepEvent event) {
-        return dbService.add(event);
+        return calendarDbService.add(event);
     }
 
     @Override
     public Observable<DiaperEvent> update(@NonNull DiaperEvent event) {
-        return dbService.update(event);
+        return calendarDbService.update(event);
     }
 
     @Override
     public Observable<FeedEvent> update(@NonNull FeedEvent event) {
-        return dbService.update(event);
+        return calendarDbService.update(event);
     }
 
     @Override
     public Observable<OtherEvent> update(@NonNull OtherEvent event) {
-        return dbService.update(event);
+        return calendarDbService.update(event);
     }
 
     @Override
     public Observable<PumpEvent> update(@NonNull PumpEvent event) {
-        return dbService.update(event);
+        return calendarDbService.update(event);
     }
 
     @Override
     public Observable<SleepEvent> update(@NonNull SleepEvent event) {
-        return dbService.update(event);
+        return calendarDbService.update(event);
     }
 
     @Override
     public Observable<DoctorVisitEvent> update(@NonNull DoctorVisitEvent event) {
-        return dbService.update(event);
+        return calendarDbService.update(event);
     }
 
     @Override
     public Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event) {
-        return dbService.update(event);
+        return calendarDbService.update(event);
     }
 
     @Override
@@ -393,7 +401,7 @@ public class CalendarDataRepository implements CalendarRepository {
 
     private Observable<DeleteEventsResponse> deleteOne(@NonNull DeleteEventsRequest request) {
         MasterEvent event = extractEvent(request, "Specify event to delete");
-        return dbService.deleteOne(event)
+        return calendarDbService.delete(event)
                 .map(deletedEvent -> DeleteEventsResponse.builder()
                         .count(1)
                         .request(request)
@@ -406,13 +414,13 @@ public class CalendarDataRepository implements CalendarRepository {
             DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
             Long doctorVisitId = extractDoctorVisitId(doctorVisitEvent);
             Integer linearGroup = extractLinearGroup(event);
-            return dbService.deleteDoctorVisitEvents(doctorVisitId, linearGroup)
+            return doctorVisitDbService.deleteDoctorVisitEvents(doctorVisitId, linearGroup)
                     .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
         } else if (event instanceof MedicineTakingEvent) {
             MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) event;
             Long medicineTakingId = extractMedicineTakingId(medicineTakingEvent);
             Integer linearGroup = extractLinearGroup(event);
-            return dbService.deleteMedicineTakingEvents(medicineTakingId, linearGroup)
+            return medicineTakingDbService.deleteMedicineTakingEvents(medicineTakingId, linearGroup)
                     .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
         } else {
             throw new IllegalArgumentException("This event type not support linear group deletion: " + event);
@@ -422,13 +430,13 @@ public class CalendarDataRepository implements CalendarRepository {
 
     private Observable<DeleteEventsResponse> deleteAllDoctorVisitEvents(@NonNull DeleteEventsRequest request) {
         Long doctorVisitId = extractDoctorVisitId(request.getDoctorVisit());
-        return dbService.deleteDoctorVisitEvents(doctorVisitId, null)
+        return doctorVisitDbService.deleteDoctorVisitEvents(doctorVisitId, null)
                 .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
     }
 
     private Observable<DeleteEventsResponse> deleteAllMedicineTakingEvents(@NonNull DeleteEventsRequest request) {
         Long medicineTakingId = extractMedicineTakingId(request.getMedicineTaking());
-        return dbService.deleteMedicineTakingEvents(medicineTakingId, null)
+        return medicineTakingDbService.deleteMedicineTakingEvents(medicineTakingId, null)
                 .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
     }
 
@@ -438,7 +446,7 @@ public class CalendarDataRepository implements CalendarRepository {
         Long doctorVisitId = extractDoctorVisitId(request.getDoctorVisit());
         DateTime dateTime = extractDateTime(request);
         boolean delete = request.isDelete();
-        return dbService.completeDoctorVisit(doctorVisitId, dateTime, delete)
+        return doctorVisitDbService.completeDoctorVisit(doctorVisitId, dateTime, delete)
                 .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
     }
 
@@ -446,7 +454,7 @@ public class CalendarDataRepository implements CalendarRepository {
         Long medicineTakingId = extractMedicineTakingId(request.getMedicineTaking());
         DateTime dateTime = extractDateTime(request);
         boolean delete = request.isDelete();
-        return dbService.completeMedicineTaking(medicineTakingId, dateTime, delete)
+        return medicineTakingDbService.completeMedicineTaking(medicineTakingId, dateTime, delete)
                 .map(count -> DeleteEventsResponse.builder().count(count).request(request).build());
     }
 
@@ -454,7 +462,7 @@ public class CalendarDataRepository implements CalendarRepository {
 
     @Override
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        return dbService.done(event);
+        return calendarDbService.done(event);
     }
 
     @Override
