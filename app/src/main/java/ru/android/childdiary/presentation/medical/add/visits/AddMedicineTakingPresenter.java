@@ -25,14 +25,14 @@ public class AddMedicineTakingPresenter extends BaseAddItemPresenter<AddMedicine
 
     @Override
     public void add(@NonNull MedicineTaking medicineTaking) {
-        getViewState().setLoading(false);
+        getViewState().setLoading(true);
         unsubscribeOnDestroy(
                 medicineTakingInteractor.addMedicineTaking(medicineTaking)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(added -> logger.debug("added: " + added))
-                        .doOnNext(added -> getViewState().setLoading(true))
-                        .doOnError(throwable -> getViewState().setLoading(true))
+                        .doOnNext(added -> getViewState().setLoading(false))
+                        .doOnError(throwable -> getViewState().setLoading(false))
                         .subscribe(getViewState()::added, this::onUnexpectedError));
     }
 
