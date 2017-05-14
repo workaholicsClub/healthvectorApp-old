@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical.fragments.medicines;
+package ru.android.childdiary.presentation.medical.partitions.visits;
 
 import android.support.annotation.NonNull;
 
@@ -14,15 +14,15 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
-import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
-import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListResponse;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
+import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsResponse;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
-public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineTakingListView> {
+public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsView> {
     @Inject
     ChildInteractor childInteractor;
 
@@ -30,7 +30,7 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
     CalendarInteractor calendarInteractor;
 
     @Inject
-    MedicineTakingInteractor medicineTakingInteractor;
+    DoctorVisitInteractor doctorVisitInteractor;
 
     private Disposable subscription;
 
@@ -44,7 +44,7 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
         super.onFirstViewAttach();
 
         unsubscribeOnDestroy(Observable.combineLatest(
-                Observable.just(MedicineTakingListRequest.builder().build()),
+                Observable.just(DoctorVisitsRequest.builder().build()),
                 childInteractor.getActiveChild(),
                 (request, child) -> request.toBuilder().child(child).build())
                 .subscribeOn(Schedulers.io())
@@ -52,52 +52,52 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
                 .subscribe(this::requestData, this::onUnexpectedError));
     }
 
-    private void requestData(MedicineTakingListRequest request) {
+    private void requestData(DoctorVisitsRequest request) {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(medicineTakingInteractor.getMedicineTakingList(request)
+        subscription = unsubscribeOnDestroy(doctorVisitInteractor.getDoctorVisits(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetData, this::onUnexpectedError));
     }
 
-    private void onGetData(@NonNull MedicineTakingListResponse response) {
+    private void onGetData(@NonNull DoctorVisitsResponse response) {
         logger.debug("onGetData: " + response);
-        getViewState().showMedicineTakingList(MedicineTakingListFilter.builder().build(), response.getMedicineTakingList());
+        getViewState().showDoctorVisits(DoctorVisitsFilter.builder().build(), response.getDoctorVisits());
     }
 
-    public void editMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        unsubscribeOnDestroy(medicineTakingInteractor.getDefaultMedicineTaking()
+    public void editDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        unsubscribeOnDestroy(doctorVisitInteractor.getDefaultDoctorVisit()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(defaultMedicineTaking -> getViewState().navigateToMedicineTaking(medicineTaking, defaultMedicineTaking),
+                .subscribe(defaultDoctorVisit -> getViewState().navigateToDoctorVisit(doctorVisit, defaultDoctorVisit),
                         this::onUnexpectedError));
     }
 
-    public void delete(@NonNull MedicineTaking medicineTaking) {
-        if (ObjectUtils.isTrue(medicineTaking.getIsExported())) {
-            getViewState().askDeleteConnectedEventsOrNot(medicineTaking);
+    public void delete(@NonNull DoctorVisit doctorVisit) {
+        if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
+            getViewState().askDeleteConnectedEventsOrNot(doctorVisit);
         } else {
-            deleteMedicineTaking(medicineTaking);
+            deleteDoctorVisit(doctorVisit);
         }
     }
 
-    public void deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        unsubscribeOnDestroy(medicineTakingInteractor.deleteMedicineTaking(medicineTaking)
+    public void deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        unsubscribeOnDestroy(doctorVisitInteractor.deleteDoctorVisit(doctorVisit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::medicineTakingDeleted, this::onUnexpectedError));
+                .subscribe(getViewState()::doctorVisitDeleted, this::onUnexpectedError));
     }
 
-    public void deleteMedicineTakingAndConnectedEvents(@NonNull MedicineTaking medicineTaking) {
+    public void deleteDoctorVisitAndConnectedEvents(@NonNull DoctorVisit doctorVisit) {
         getViewState().showDeletingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
-                .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_MEDICINE_TAKING_EVENTS)
-                .medicineTaking(medicineTaking)
+                .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_DOCTOR_VISIT_EVENTS)
+                .doctorVisit(doctorVisit)
                 .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(count -> getViewState().showDeletingEvents(false))
                 .doOnError(throwable -> getViewState().showDeletingEvents(false))
-                .subscribe(count -> getViewState().medicineTakingDeleted(medicineTaking), this::onUnexpectedError));
+                .subscribe(count -> getViewState().doctorVisitDeleted(doctorVisit), this::onUnexpectedError));
     }
 }

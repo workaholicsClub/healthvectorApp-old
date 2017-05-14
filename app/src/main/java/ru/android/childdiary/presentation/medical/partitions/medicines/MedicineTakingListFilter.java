@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical.fragments.medicines;
+package ru.android.childdiary.presentation.medical.partitions.medicines;
 
 import org.joda.time.LocalDate;
 

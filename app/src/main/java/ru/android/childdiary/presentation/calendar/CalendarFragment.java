@@ -26,10 +26,10 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
-import ru.android.childdiary.presentation.calendar.fragments.BaseCalendarFragment;
-import ru.android.childdiary.presentation.calendar.fragments.DayFragment;
-import ru.android.childdiary.presentation.calendar.fragments.MonthFragment;
-import ru.android.childdiary.presentation.calendar.fragments.WeekFragment;
+import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarFragment;
+import ru.android.childdiary.presentation.calendar.partitions.DayFragment;
+import ru.android.childdiary.presentation.calendar.partitions.MonthFragment;
+import ru.android.childdiary.presentation.calendar.partitions.WeekFragment;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;

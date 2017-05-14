@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.calendar.fragments;
+package ru.android.childdiary.presentation.calendar.partitions;
 
 import android.support.annotation.NonNull;
 

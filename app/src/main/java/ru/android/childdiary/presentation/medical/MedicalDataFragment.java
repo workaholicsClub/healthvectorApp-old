@@ -32,8 +32,8 @@ import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.medical.add.medicines.AddDoctorVisitActivity;
 import ru.android.childdiary.presentation.medical.add.visits.AddMedicineTakingActivity;
-import ru.android.childdiary.presentation.medical.fragments.medicines.MedicineTakingListFragment;
-import ru.android.childdiary.presentation.medical.fragments.visits.DoctorVisitsFragment;
+import ru.android.childdiary.presentation.medical.partitions.medicines.MedicineTakingListFragment;
+import ru.android.childdiary.presentation.medical.partitions.visits.DoctorVisitsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 

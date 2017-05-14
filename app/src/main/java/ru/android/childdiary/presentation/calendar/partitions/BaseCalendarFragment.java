@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.calendar.fragments;
+package ru.android.childdiary.presentation.calendar.partitions;
 
 import android.app.Activity;
 import android.content.Context;

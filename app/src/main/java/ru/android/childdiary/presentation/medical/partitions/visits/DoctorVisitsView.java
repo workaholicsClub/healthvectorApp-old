@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical.fragments.medicines;
+package ru.android.childdiary.presentation.medical.partitions.visits;
 
 import android.support.annotation.NonNull;
 
@@ -8,21 +8,21 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.presentation.core.AppPartitionView;
 
-public interface MedicineTakingListView extends AppPartitionView {
+public interface DoctorVisitsView extends AppPartitionView {
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showMedicineTakingList(@NonNull MedicineTakingListFilter filter, @NonNull List<MedicineTaking> medicineTakingList);
+    void showDoctorVisits(@NonNull DoctorVisitsFilter filter, @NonNull List<DoctorVisit> doctorVisits);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToMedicineTaking(@NonNull MedicineTaking medicineTaking, @NonNull MedicineTaking defaultMedicineTaking);
+    void navigateToDoctorVisit(@NonNull DoctorVisit doctorVisit, @NonNull DoctorVisit defaultDoctorVisit);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void medicineTakingDeleted(@NonNull MedicineTaking medicineTaking);
+    void doctorVisitDeleted(@NonNull DoctorVisit doctorVisit);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void askDeleteConnectedEventsOrNot(@NonNull MedicineTaking medicineTaking);
+    void askDeleteConnectedEventsOrNot(@NonNull DoctorVisit doctorVisit);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showDeletingEvents(boolean loading);
