@@ -119,6 +119,11 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         medicineMeasureView.setValue(medicineMeasureValue);
         repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
+        notifyTimeView.setValue(item.getNotifyTimeInMinutes());
+        boolean notifyTimeViewVisible = ObjectUtils.isPositive(defaultItem.getNotifyTimeInMinutes());
+        notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
+        noteWithPhotoView.setText(item.getNote());
+        // TODO image file name
 
         boolean exported = ObjectUtils.isTrue(item.getIsExported());
         checkBoxView.setChecked(exported);
@@ -129,19 +134,13 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
             dateView.setReadOnly(true);
             timeView.setReadOnly(true);
             repeatParametersView.setReadOnly(true);
-            noteWithPhotoView.setEnabled(false);
+            noteWithPhotoView.setReadOnly(true);
             notifyTimeView.setReadOnly(true);
             if (item.getFinishDateTime() == null) {
                 buttonAdd.setText(R.string.finish);
                 buttonAdd.setVisibility(View.VISIBLE);
             }
         }
-
-        notifyTimeView.setValue(item.getNotifyTimeInMinutes());
-        boolean notifyTimeViewVisible = ObjectUtils.isPositive(defaultItem.getNotifyTimeInMinutes());
-        notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
-        noteWithPhotoView.setText(item.getNote());
-        // TODO image file name
     }
 
     @Override

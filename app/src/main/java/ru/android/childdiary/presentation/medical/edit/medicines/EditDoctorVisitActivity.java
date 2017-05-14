@@ -118,30 +118,29 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         doctorVisitNameView.setText(item.getName());
         durationView.setValue(item.getDurationInMinutes());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
+        notifyTimeView.setValue(item.getNotifyTimeInMinutes());
+        boolean notifyTimeViewVisible = ObjectUtils.isPositive(defaultItem.getNotifyTimeInMinutes());
+        notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
+        noteWithPhotoView.setText(item.getNote());
+        // TODO image file name
 
         boolean exported = ObjectUtils.isTrue(item.getIsExported());
         checkBoxView.setChecked(exported);
         if (exported) {
-            doctorVisitNameView.setEnabled(false);
+            doctorVisitNameView.setReadOnly(true);
             doctorView.setReadOnly(true);
             durationView.setReadOnly(true);
             checkBoxView.setVisibility(View.GONE);
             dateView.setReadOnly(true);
             timeView.setReadOnly(true);
             repeatParametersView.setReadOnly(true);
-            noteWithPhotoView.setEnabled(false);
+            noteWithPhotoView.setReadOnly(true);
             notifyTimeView.setReadOnly(true);
             if (item.getFinishDateTime() == null) {
                 buttonAdd.setText(R.string.finish);
                 buttonAdd.setVisibility(View.VISIBLE);
             }
         }
-
-        notifyTimeView.setValue(item.getNotifyTimeInMinutes());
-        boolean notifyTimeViewVisible = ObjectUtils.isPositive(defaultItem.getNotifyTimeInMinutes());
-        notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
-        noteWithPhotoView.setText(item.getNote());
-        // TODO image file name
     }
 
     @Override

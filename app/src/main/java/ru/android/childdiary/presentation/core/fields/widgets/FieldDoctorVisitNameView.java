@@ -31,11 +31,7 @@ public class FieldDoctorVisitNameView extends FieldNameView implements FieldRead
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        if (TextUtils.isEmpty(getText())) {
-            setVisibility(GONE);
-        } else {
-            setVisibility(VISIBLE);
-            // TODO
-        }
+        setVisibility(TextUtils.isEmpty(getText()) ? GONE : VISIBLE);
+        editText.setEnabled(!readOnly);
     }
 }
