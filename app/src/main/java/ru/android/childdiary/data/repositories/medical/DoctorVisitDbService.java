@@ -158,33 +158,17 @@ public class DoctorVisitDbService {
             if (linearGroup == null) {
                 List<MasterEventEntity> events = where.get().toList();
                 int count = events.size();
-                blockingEntityStore.delete(events);
+                deleteManyEvents(blockingEntityStore, events);
                 blockingEntityStore.delete(doctorVisitEntity);
                 return count;
             } else {
                 List<MasterEventEntity> events = where.and(MasterEventEntity.LINEAR_GROUP.eq(linearGroup)).get().toList();
                 int count = events.size();
-                blockingEntityStore.delete(events);
+                deleteManyEvents(blockingEntityStore, events);
                 deleteIfPossible(blockingEntityStore, doctorVisitEntity);
                 return count;
             }
         }));
-    }
-
-    private void deleteIfPossible(BlockingEntityStore<Persistable> blockingEntityStore,
-                                  DoctorVisitEntity doctorVisitEntity) {
-        if (ObjectUtils.isTrue(doctorVisitEntity.isDeleted())) {
-            List<MasterEventEntity> events = blockingEntityStore
-                    .select(MasterEventEntity.class)
-                    .join(DoctorVisitEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
-                    .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisitEntity.getId()))
-                    .get()
-                    .toList();
-            if (events.isEmpty()) {
-                blockingEntityStore.delete(doctorVisitEntity);
-                logger.debug("doctor visit deleted hardly");
-            }
-        }
     }
 
     public Observable<Integer> completeDoctorVisit(@NonNull Long doctorVisitId,
@@ -206,7 +190,7 @@ public class DoctorVisitDbService {
                         .get()
                         .toList();
                 count = events.size();
-                blockingEntityStore.delete(events);
+                deleteManyEvents(blockingEntityStore, events);
             }
             return count;
         }));
@@ -234,5 +218,31 @@ public class DoctorVisitDbService {
             }
             return doctorVisitMapper.mapToPlainObject(doctorVisitEntity);
         }));
+    }
+
+    private void deleteIfPossible(BlockingEntityStore<Persistable> blockingEntityStore,
+                                  DoctorVisitEntity doctorVisitEntity) {
+        if (ObjectUtils.isTrue(doctorVisitEntity.isDeleted())) {
+            List<MasterEventEntity> events = blockingEntityStore
+                    .select(MasterEventEntity.class)
+                    .join(DoctorVisitEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
+                    .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisitEntity.getId()))
+                    .get()
+                    .toList();
+            if (events.isEmpty()) {
+                blockingEntityStore.delete(doctorVisitEntity);
+                logger.debug("doctor visit deleted hardly");
+            }
+        }
+    }
+
+    private void deleteManyEvents(BlockingEntityStore<Persistable> blockingEntityStore,
+                                  List<MasterEventEntity> events) {
+        final int MAX = 10;
+        for (int i = 0; i < events.size(); i += MAX) {
+            int upper = Math.min(i + MAX, events.size());
+            val subList = events.subList(i, upper);
+            blockingEntityStore.delete(subList);
+        }
     }
 }
