@@ -1,6 +1,7 @@
 package ru.android.childdiary.domain.interactors.medical;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -10,6 +11,10 @@ import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
 
 public interface DoctorVisitRepository extends Repository {
+    Observable<Doctor> getLastDoctor();
+
+    Doctor setLastDoctor(@Nullable Doctor doctor);
+
     Observable<List<Doctor>> getDoctors();
 
     Observable<Doctor> addDoctor(@NonNull Doctor doctor);

@@ -71,12 +71,13 @@ public class DoctorVisitInteractor implements Interactor {
     public Observable<DoctorVisit> getDefaultDoctorVisit() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
+                doctorVisitRepository.getLastDoctor(),
                 getDefaultRepeatParameters(),
                 Observable.just(DateTime.now()),
                 calendarRepository.getDefaultNotifyTimeInMinutes(EventType.DOCTOR_VISIT),
-                (child, repeatParameters, dateTime, minutes) -> DoctorVisit.builder()
+                (child, doctor, repeatParameters, dateTime, minutes) -> DoctorVisit.builder()
                         .child(child)
-                        .doctor(null)
+                        .doctor(doctor)
                         .repeatParameters(repeatParameters)
                         .name(null)
                         .durationInMinutes(15)
@@ -126,11 +127,22 @@ public class DoctorVisitInteractor implements Interactor {
     }
 
     public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return validate(doctorVisit).flatMap(doctorVisitRepository::addDoctorVisit);
+        return validate(doctorVisit)
+                .flatMap(doctorVisitRepository::addDoctorVisit)
+                .flatMap(this::postprocess);
     }
 
     public Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return validate(doctorVisit).flatMap(doctorVisitRepository::updateDoctorVisit);
+        return validate(doctorVisit)
+                .flatMap(doctorVisitRepository::updateDoctorVisit)
+                .flatMap(this::postprocess);
+    }
+
+    private Observable<DoctorVisit> postprocess(@NonNull DoctorVisit doctorVisit) {
+        return Observable.fromCallable(() -> {
+            doctorVisitRepository.setLastDoctor(doctorVisit.getDoctor());
+            return doctorVisit;
+        });
     }
 
     public Observable<DoctorVisit> deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {

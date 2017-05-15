@@ -193,6 +193,7 @@
     <string name="please_wait">Пожалуйста, подождите&#8230;</string>
     <string name="events_generating">Идет создание событий&#8230;</string>
     <string name="events_deleting">Идет удаление событий&#8230;</string>
+    <string name="default_doctor_name">Педиатр</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
