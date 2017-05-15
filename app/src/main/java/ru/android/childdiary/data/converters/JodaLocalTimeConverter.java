@@ -5,6 +5,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import io.requery.Converter;
+import io.requery.Nullable;
 
 public class JodaLocalTimeConverter implements Converter<LocalTime, String> {
     /**
@@ -26,6 +27,7 @@ public class JodaLocalTimeConverter implements Converter<LocalTime, String> {
     }
 
     @Override
+    @Nullable
     public Integer getPersistedSize() {
         return null;
     }

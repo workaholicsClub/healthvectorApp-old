@@ -3,6 +3,7 @@ package ru.android.childdiary.data.converters;
 import org.joda.time.DateTime;
 
 import io.requery.Converter;
+import io.requery.Nullable;
 
 public class JodaDateTimeConverter implements Converter<DateTime, Long> {
     @Override
@@ -16,6 +17,7 @@ public class JodaDateTimeConverter implements Converter<DateTime, Long> {
     }
 
     @Override
+    @Nullable
     public Integer getPersistedSize() {
         return null;
     }
