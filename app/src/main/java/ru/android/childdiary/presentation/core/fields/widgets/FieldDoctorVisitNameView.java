@@ -21,7 +21,7 @@ public class FieldDoctorVisitNameView extends FieldNameView implements FieldRead
 
     @Override
     protected int getIconResId() {
-        return R.drawable.ic_other_event_name;
+        return R.drawable.ic_doctor_visit_name;
     }
 
     @Override
