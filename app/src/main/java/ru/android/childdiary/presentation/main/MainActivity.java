@@ -21,8 +21,6 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.Drawer;
@@ -37,13 +35,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
-import ru.android.childdiary.presentation.calendar.FabController;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.exercises.ExercisesFragment;
 import ru.android.childdiary.presentation.help.HelpFragment;
@@ -60,7 +59,6 @@ import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-import static android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
 import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
 public class MainActivity extends BaseMvpActivity implements MainView,
@@ -195,9 +193,10 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                     .withIdentifier(PROFILE_SETTINGS_DELETE));
         }
 
-        profiles.addAll(Stream.of(childList)
+        profiles.addAll(Observable.fromIterable(childList)
                 .map(child -> mapToProfile(this, child))
-                .collect(Collectors.toList()));
+                .toList()
+                .blockingGet());
 
         closeDrawerWithoutAnimation();
         if (accountHeader != null) {
@@ -296,7 +295,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .setTransition(TRANSIT_FRAGMENT_OPEN)
+                .setTransition(TRANSIT_UNSET)
                 .replace(R.id.mainContent, fragment, tag)
                 .addToBackStack(null)
                 .commit();
@@ -330,7 +329,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             case HELP:
                 return new HelpFragment();
         }
-        throw new IllegalStateException("Unknown app partition");
+        throw new IllegalStateException("Unsupported app partition");
     }
 
     @Override
@@ -534,7 +533,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (selectedPartition == AppPartition.CALENDAR) {
+        if (selectedPartition == AppPartition.CALENDAR
+                || selectedPartition == AppPartition.MEDICAL_DATA) {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.main, menu);
             return true;
@@ -544,7 +544,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (selectedPartition == AppPartition.CALENDAR) {
+        if (selectedPartition == AppPartition.CALENDAR
+                || selectedPartition == AppPartition.MEDICAL_DATA) {
             switch (item.getItemId()) {
                 case R.id.menu_filter:
                     return true;
@@ -565,6 +566,14 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     public boolean hideBar() {
         FabController fabController = findFabController();
         return fabController != null && fabController.hideBar();
+    }
+
+    @Override
+    public void hideBarWithoutAnimation() {
+        FabController fabController = findFabController();
+        if (fabController != null) {
+            fabController.hideBarWithoutAnimation();
+        }
     }
 
     @Override

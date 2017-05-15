@@ -81,6 +81,68 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
+        <activity
+            android:name=".presentation.events.DoctorVisitEventDetailActivity"
+            android:exported="true"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.events.MedicineTakingEventDetailActivity"
+            android:exported="true"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.medical.add.medicines.AddDoctorVisitActivity"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.medical.add.visits.AddMedicineTakingActivity"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.medical.edit.medicines.EditDoctorVisitActivity"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.medical.edit.visits.EditMedicineTakingActivity"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.medical.pickers.visits.DoctorAddActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".presentation.medical.pickers.visits.DoctorPickerActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".presentation.medical.pickers.medicines.MedicineAddActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".presentation.medical.pickers.medicines.MedicinePickerActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".presentation.profile.image.CropActivity" />
 
         <provider

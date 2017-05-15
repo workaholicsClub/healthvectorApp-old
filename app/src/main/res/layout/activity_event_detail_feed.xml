@@ -4,53 +4,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailFeedTypeView
-        android:id="@+id/feedTypeView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/field_margin_base"
+        android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDateView
-        android:id="@+id/dateView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldFeedTypeView
+            android:id="@+id/feedTypeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailTimeView
-        android:id="@+id/timeView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+            android:id="@+id/dateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlView
-        android:id="@+id/amountMlView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
+            android:id="@+id/timeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailBreastView
-        android:id="@+id/breastView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldAmountMlView
+            android:id="@+id/amountMlView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailBreastFeedDurationView
-        android:id="@+id/durationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldBreastView
+            android:id="@+id/breastView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailFoodView
-        android:id="@+id/foodView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldBreastFeedDurationView
+            android:id="@+id/durationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailAmountView
-        android:id="@+id/amountView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldFoodView
+            android:id="@+id/foodView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailFoodMeasureView
-        android:id="@+id/foodMeasureView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldAmountView
+            android:id="@+id/amountView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView
-        android:id="@+id/notifyTimeView"
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldFoodMeasureView
+            android:id="@+id/foodMeasureView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
+            android:id="@+id/notifyTimeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView
+        android:id="@+id/noteView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

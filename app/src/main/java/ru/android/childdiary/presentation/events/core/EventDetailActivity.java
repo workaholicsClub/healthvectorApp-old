@@ -20,7 +20,6 @@ import android.widget.Button;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -31,20 +30,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailEditTextView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNoteView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.EventHelper;
-import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -53,37 +47,43 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
-        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialog.Listener {
-    protected T event;
-    protected T defaultEvent;
-
-    @BindView(R.id.noteView)
-    protected EventDetailNoteView noteView;
-
+        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener {
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
 
     @BindView(R.id.rootView)
-    View rootView;
+    protected View rootView;
 
-    @BindView(R.id.dummy)
-    View dummy;
+    private ViewGroup detailsView;
 
-    private ViewGroup eventDetailsView;
+    private T defaultEvent;
+    @Nullable
+    private T event;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_detail);
-        setupEditTextView(noteView);
-        buttonAdd.setVisibility(GONE);
+        setContentView(R.layout.activity_details);
+
         MasterEvent masterEvent = (MasterEvent) getIntent().getSerializableExtra(ExtraConstants.EXTRA_MASTER_EVENT);
-        if (savedInstanceState == null) {
-            getPresenter().requestDefaultEventDetail(getEventType());
-            if (masterEvent != null) {
+        //noinspection unchecked
+        defaultEvent = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_EVENT);
+
+        if (masterEvent == null) {
+            buttonAdd.setVisibility(VISIBLE);
+            buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
+        } else {
+            buttonAdd.setVisibility(GONE);
+            if (savedInstanceState == null) {
                 getPresenter().requestEventDetails(masterEvent);
             }
         }
+
+        changeThemeIfNeeded(defaultEvent.getChild());
+        setupEventDetail(defaultEvent);
+
+        logger.debug("master event: " + masterEvent);
+        logger.debug("default event: " + defaultEvent);
     }
 
     @Override
@@ -91,31 +91,26 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         super.onRestoreInstanceState(savedInstanceState);
         //noinspection unchecked
         T event = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_EVENT);
-        showEventDetail(event);
-        dummy.requestFocus();
+        setupEventDetail(event); // в таймере сна дергается время
+        logger.debug("restore event: " + event);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(ExtraConstants.EXTRA_EVENT, buildEvent());
+        T event = buildEvent();
+        outState.putSerializable(ExtraConstants.EXTRA_EVENT, event);
+        logger.debug("save event: " + event);
     }
 
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View contentView = inflater.inflate(getContentLayoutResourceId(), null);
-        eventDetailsView = ButterKnife.findById(this, R.id.eventDetailsView);
-        eventDetailsView.addView(contentView);
+        detailsView = ButterKnife.findById(this, R.id.detailsView);
+        View contentView = inflater.inflate(getContentLayoutResourceId(), detailsView);
     }
 
-    public void hideKeyboardAndClearFocus(View view) {
-        KeyboardUtils.hideKeyboard(this, view);
-        view.clearFocus();
-        dummy.requestFocus();
-    }
-
-    protected void setupEditTextView(EventDetailEditTextView view) {
+    protected void setupEditTextView(FieldEditTextView view) {
         List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
         for (Disposable disposable : disposables) {
             unsubscribeOnDestroy(disposable);
@@ -134,41 +129,31 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideKeyboardAndClearFocus(rootView.findFocus());
+    }
+
     protected final T buildEvent() {
         return buildEvent(event == null ? defaultEvent : event);
     }
 
     @Override
-    public final void showDefaultEventDetail(@NonNull T event) {
-        defaultEvent = event;
-        if (this.event == null) {
-            setupUi(event);
-        }
-    }
-
-    @Override
     public final void showEventDetail(@NonNull T event) {
+        logger.debug("show event: " + event);
         this.event = event;
-        setupUi(event);
-    }
 
-    private void setupUi(@NonNull T event) {
         changeThemeIfNeeded(event.getChild());
         setupEventDetail(event);
+
         invalidateOptionsMenu();
-        if (this.event == null) {
-            buttonAdd.setVisibility(VISIBLE);
-            buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
-        } else {
-            getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
-            buttonAdd.setVisibility(GONE);
-            buttonAdd.setOnClickListener(null);
-        }
+        getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
+        buttonAdd.setVisibility(GONE);
+        buttonAdd.setOnClickListener(null);
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
-
-    protected abstract EventType getEventType();
 
     @LayoutRes
     protected abstract int getContentLayoutResourceId();
@@ -179,16 +164,16 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public void eventAdded(@NonNull T event, boolean afterButtonPressed) {
+        setResult(RESULT_OK);
         if (afterButtonPressed) {
-            setResult(RESULT_OK);
             finish();
         }
     }
 
     @Override
     public void eventUpdated(@NonNull T event, boolean afterButtonPressed) {
+        setResult(RESULT_OK);
         if (afterButtonPressed) {
-            setResult(RESULT_OK);
             finish();
         }
     }
@@ -205,18 +190,28 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void showTimeDialog(String tag, @NonNull Child child, TimeDialog.Parameters parameters) {
-        TimeDialog dialog = new TimeDialog();
-        dialog.showAllowingStateLoss(getSupportFragmentManager(), tag, child, parameters);
-    }
-
-    @Override
     public void validationFailed() {
     }
 
     @Override
     public void showValidationErrorMessage(String msg) {
         showToast(msg);
+    }
+
+    @Override
+    public void setButtonAddEnabled(boolean enabled) {
+        buttonAdd.setEnabled(enabled);
+    }
+
+    @Override
+    public void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.ask_delete_one_event_or_linear_group)
+                .setPositiveButton(R.string.delete_one_event,
+                        (DialogInterface dialog, int which) -> getPresenter().deleteOneEvent(event))
+                .setNegativeButton(R.string.delete_linear_group,
+                        (DialogInterface dialog, int which) -> getPresenter().deleteLinearGroup(event))
+                .show();
     }
 
     @Override
@@ -234,7 +229,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, date, getSex(),
                 minDate, maxDate);
         dpd.show(getFragmentManager(), tag);
-        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
@@ -251,7 +245,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void showTimePicker(String tag, @Nullable LocalTime time) {
         TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, time, getSex());
         tpd.show(getFragmentManager(), tag);
-        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
@@ -261,21 +254,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected void setTime(String tag, LocalTime time) {
-    }
-
-    @Nullable
-    protected DateTime getDateTime(EventDetailDateView dateView, EventDetailTimeView timeView) {
-        LocalDate date = dateView.getValue();
-        LocalTime time = timeView.getValue();
-        return date == null || time == null
-                ? null
-                : new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
-                time.getHourOfDay(), time.getMinuteOfHour());
-    }
-
-    protected void setDateTime(@Nullable DateTime dateTime, EventDetailDateView dateView, EventDetailTimeView timeView) {
-        dateView.setValue(dateTime == null ? null : dateTime.toLocalDate());
-        timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
     }
 
     @Override
@@ -303,7 +281,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             return super.onPrepareOptionsMenu(menu);
         }
         MenuItem item = menu.findItem(R.id.menu_done);
-        item.setVisible(EventHelper.canBeDone(getEventType()));
+        item.setVisible(EventHelper.canBeDone(getPresenter().getEventType()));
         item.setChecked(EventHelper.isDone(event));
         return true;
     }
@@ -319,12 +297,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
         switch (item.getItemId()) {
             case R.id.menu_done:
-                getPresenter().doneEvent(event);
+                getPresenter().done(event);
                 return true;
             case R.id.menu_move:
                 return true;
             case R.id.menu_delete:
-                getPresenter().deleteEvent(event);
+                getPresenter().delete(event);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -333,7 +311,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     private void saveChangesOrExit() {
         T editedEvent = buildEvent();
-        if (event == null && defaultEvent != null && contentEquals(editedEvent, defaultEvent)) {
+        if (event == null && contentEquals(editedEvent, defaultEvent)) {
             finish();
             return;
         }
@@ -357,7 +335,25 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     protected abstract boolean contentEquals(T event1, T event2);
 
-    protected final boolean notifyTimeViewVisisble() {
+    protected final boolean notifyTimeViewVisible() {
         return defaultEvent != null && ObjectUtils.isPositive(defaultEvent.getNotifyTimeInMinutes());
+    }
+
+    @Nullable
+    protected final String getDefaultNote() {
+        return defaultEvent == null ? null : defaultEvent.getNote();
+    }
+
+    @Nullable
+    protected final Integer getDefaultNotifyTimeInMinutes() {
+        return defaultEvent == null ? null : defaultEvent.getNotifyTimeInMinutes();
+    }
+
+    protected final boolean sameEvent(@NonNull SleepEvent event) {
+        return EventHelper.sameEvent(this.event, event);
+    }
+
+    protected final boolean isTimerStarted() {
+        return event instanceof SleepEvent && EventHelper.isTimerStarted((SleepEvent) event);
     }
 }

@@ -2,18 +2,20 @@ package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class ResourcesUtils {
@@ -101,6 +103,15 @@ public class ResourcesUtils {
                 return sex == null || sex == Sex.MALE
                         ? R.color.event_other_row_background_boy
                         : R.color.event_other_row_background_girl;
+            case DOCTOR_VISIT:
+                return sex == null || sex == Sex.MALE
+                        ? R.color.event_doctor_visit_row_background_boy
+                        : R.color.event_doctor_visit_row_background_girl;
+            case MEDICINE_TAKING:
+                return sex == null || sex == Sex.MALE
+                        ? R.color.event_medicine_taking_row_background_boy
+                        : R.color.event_medicine_taking_row_background_girl;
+            // TODO EXERCISE
             default:
                 return R.color.white;
         }
@@ -187,6 +198,27 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
+    public static int getDoctorVisitLogoRes(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.drawable.toolbar_logo_doctor_visit_boy
+                : R.drawable.toolbar_logo_doctor_visit_girl;
+    }
+
+    @DrawableRes
+    public static int getMedicineTakingLogoRes(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.drawable.toolbar_logo_medicine_taking_boy
+                : R.drawable.toolbar_logo_medicine_taking_girl;
+    }
+
+    @DrawableRes
+    public static int getExerciseLogoRes(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.drawable.toolbar_logo_exercise_boy
+                : R.drawable.toolbar_logo_exercise_girl;
+    }
+
+    @DrawableRes
     public static int getRadioRes(@Nullable Sex sex, boolean on) {
         return on ? (sex == null || sex == Sex.MALE ? R.drawable.radio_on_boy : R.drawable.radio_on_girl)
                 : R.drawable.radio_off;
@@ -225,6 +257,13 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
+    public static int getTimeItemBackgroundRes(@Nullable Sex sex, boolean enabled) {
+        return sex == null || sex == Sex.MALE
+                ? (enabled ? R.drawable.background_times_on_boy : R.drawable.background_times_off)
+                : (enabled ? R.drawable.background_times_on_girl : R.drawable.background_times_off);
+    }
+
+    @DrawableRes
     public static int getNotificationSleepRes(@Nullable Sex sex) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return sex == null || sex == Sex.MALE
@@ -233,5 +272,20 @@ public class ResourcesUtils {
         } else {
             return R.drawable.ic_notification_sleep;
         }
+    }
+
+    @StyleRes
+    public static int getDialogTitleTextAppearance(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.style.DialogTitleTextAppearanceBoy
+                : R.style.DialogTitleTextAppearanceGirl;
+    }
+
+    public static GradientDrawable getShape(@ColorInt int color, float corner) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setCornerRadii(new float[]{corner, corner, corner, corner, corner, corner, corner, corner});
+        shape.setColor(color);
+        return shape;
     }
 }

@@ -1,9 +1,7 @@
 package ru.android.childdiary.domain.core;
 
 import android.support.annotation.NonNull;
-
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,6 @@ public abstract class ValidationResult {
 
     @Override
     public String toString() {
-        return Stream.of(messages).collect(Collectors.joining("\n"));
+        return TextUtils.join("\n", messages);
     }
 }

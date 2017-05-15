@@ -8,9 +8,9 @@ import io.requery.ManyToOne;
 import io.requery.OneToOne;
 import io.requery.ReferentialAction;
 import io.requery.Table;
-import ru.android.childdiary.data.entities.calendar.FoodData;
-import ru.android.childdiary.data.entities.calendar.FoodMeasureData;
-import ru.android.childdiary.data.entities.calendar.events.MasterEventData;
+import ru.android.childdiary.data.entities.calendar.events.core.FoodData;
+import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureData;
+import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.FeedType;
 
@@ -39,9 +39,9 @@ public interface FeedEventData {
 
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
-    FoodMeasureData getFoodMeasureData();
+    FoodMeasureData getFoodMeasure();
 
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
-    FoodData getFoodData();
+    FoodData getFood();
 }

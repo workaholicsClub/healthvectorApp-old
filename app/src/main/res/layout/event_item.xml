@@ -80,7 +80,7 @@
             android:textAppearance="@style/EventRowTextAppearance" />
 
         <TextView
-            android:id="@+id/textViewEventTitle"
+            android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/event_row_padding_horizontal"

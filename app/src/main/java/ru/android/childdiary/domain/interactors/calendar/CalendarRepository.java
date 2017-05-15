@@ -8,15 +8,25 @@ import org.joda.time.LocalDate;
 import java.util.List;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.core.Repository;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
+import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
+import ru.android.childdiary.domain.interactors.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.core.TimeUnit;
 
 public interface CalendarRepository extends Repository {
     Observable<LocalDate> getSelectedDate();
@@ -47,7 +57,7 @@ public interface CalendarRepository extends Repository {
 
     Food setLastFood(@Nullable Food food);
 
-    Observable<List<MasterEvent>> getAll(@NonNull Child child, @NonNull LocalDate selectedDate);
+    Observable<GetEventsResponse> getAll(@NonNull GetEventsRequest request);
 
     Observable<List<SleepEvent>> getSleepEventsWithTimer();
 
@@ -60,6 +70,10 @@ public interface CalendarRepository extends Repository {
     Observable<PumpEvent> getPumpEventDetail(@NonNull MasterEvent event);
 
     Observable<SleepEvent> getSleepEventDetail(@NonNull MasterEvent event);
+
+    Observable<DoctorVisitEvent> getDoctorVisitEventDetail(@NonNull MasterEvent event);
+
+    Observable<MedicineTakingEvent> getMedicineTakingEventDetail(@NonNull MasterEvent event);
 
     Observable<DiaperEvent> add(@NonNull DiaperEvent event);
 
@@ -81,7 +95,19 @@ public interface CalendarRepository extends Repository {
 
     Observable<SleepEvent> update(@NonNull SleepEvent event);
 
-    Observable<MasterEvent> delete(@NonNull MasterEvent event);
+    Observable<DoctorVisitEvent> update(@NonNull DoctorVisitEvent event);
+
+    Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event);
+
+    Observable<DeleteEventsResponse> delete(@NonNull DeleteEventsRequest request);
 
     Observable<MasterEvent> done(@NonNull MasterEvent event);
+
+    Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType);
+
+    Observable<List<Integer>> getFrequencyList();
+
+    Observable<List<PeriodicityType>> getPeriodicityList();
+
+    Observable<List<TimeUnit>> getTimeUnits();
 }

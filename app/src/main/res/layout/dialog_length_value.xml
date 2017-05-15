@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <include layout="@layout/request_focus_view_dummy" />
+
+    <NumberPicker
+        android:id="@+id/numberPickerLength"
+        android:layout_width="@dimen/length_value_width"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
+        android:textAppearance="@style/PrimaryTextAppearance" />
+
+    <NumberPicker
+        android:id="@+id/numberPickerTimeUnit"
+        android:layout_width="@dimen/length_value_width"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
+        android:descendantFocusability="blocksDescendants"
+        android:textAppearance="@style/PrimaryTextAppearance" />
+</LinearLayout>

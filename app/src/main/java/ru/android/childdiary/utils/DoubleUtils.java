@@ -85,4 +85,14 @@ public class DoubleUtils {
     public static String amountMlEdit(Double d) {
         return d == null ? null : SUBMULTIPLE_UNIT_FORMAT.get().format(d);
     }
+
+    @Nullable
+    public static String multipleUnitFormat(Double d) {
+        return d == null ? null : MULTIPLE_UNIT_FORMAT.get().format(d);
+    }
+
+    @Nullable
+    public static String submultipleUnitFormat(Double d) {
+        return d == null ? null : SUBMULTIPLE_UNIT_FORMAT.get().format(d);
+    }
 }

@@ -14,12 +14,40 @@
         <item quantity="many">%d месяцев</item>
         <item quantity="zero">%d месяцев</item>
     </plurals>
+    <plurals name="numberOfWeeks">
+        <item quantity="one">%d неделя</item>
+        <item quantity="few">%d недели</item>
+        <item quantity="other">%d недель</item>
+        <item quantity="many">%d недель</item>
+        <item quantity="zero">%d недель</item>
+    </plurals>
     <plurals name="numberOfDays">
         <item quantity="one">%d день</item>
         <item quantity="few">%d дня</item>
         <item quantity="other">%d дней</item>
         <item quantity="many">%d дней</item>
         <item quantity="zero">%d дней</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfMonths">
+        <item quantity="one">месяц</item>
+        <item quantity="few">месяца</item>
+        <item quantity="other">месяцев</item>
+        <item quantity="many">месяцев</item>
+        <item quantity="zero">месяцев</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfWeeks">
+        <item quantity="one">неделя</item>
+        <item quantity="few">недели</item>
+        <item quantity="other">недель</item>
+        <item quantity="many">недель</item>
+        <item quantity="zero">недель</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfDays">
+        <item quantity="one">день</item>
+        <item quantity="few">дня</item>
+        <item quantity="other">дней</item>
+        <item quantity="many">дней</item>
+        <item quantity="zero">дней</item>
     </plurals>
     <plurals name="numberOfHours">
         <item quantity="one">%d час</item>
@@ -34,5 +62,12 @@
         <item quantity="other">%d минут</item>
         <item quantity="many">%d минут</item>
         <item quantity="zero">%d минут</item>
+    </plurals>
+    <plurals name="numberOfTimesInADay">
+        <item quantity="one">%d раз в день</item>
+        <item quantity="few">%d раза в день</item>
+        <item quantity="other">%d раз в день</item>
+        <item quantity="many">%d раз в день</item>
+        <item quantity="zero">%d раз в день</item>
     </plurals>
 </resources>

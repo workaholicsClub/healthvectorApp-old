@@ -19,26 +19,28 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import icepick.State;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView;
+import ru.android.childdiary.presentation.core.fields.widgets.TimerView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDurationView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTitleView;
-import ru.android.childdiary.presentation.events.widgets.TimerView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class SleepEventDetailActivity extends EventDetailActivity<EventDetailView<SleepEvent>, SleepEvent> implements EventDetailView<SleepEvent>,
         TimerServiceListener {
@@ -53,28 +55,31 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     SleepEventDetailPresenter presenter;
 
     @BindView(R.id.startTitleView)
-    EventDetailTitleView startTitleView;
+    FieldTitleView startTitleView;
 
     @BindView(R.id.startDateView)
-    EventDetailDateView startDateView;
+    FieldDateView startDateView;
 
     @BindView(R.id.startTimeView)
-    EventDetailTimeView startTimeView;
+    FieldTimeView startTimeView;
 
     @BindView(R.id.finishTitleView)
-    EventDetailTitleView finishTitleView;
+    FieldTitleView finishTitleView;
 
     @BindView(R.id.finishDateView)
-    EventDetailDateView finishDateView;
+    FieldDateView finishDateView;
 
     @BindView(R.id.finishTimeView)
-    EventDetailTimeView finishTimeView;
+    FieldTimeView finishTimeView;
 
     @BindView(R.id.durationView)
-    EventDetailDurationView durationView;
+    FieldDurationView durationView;
 
     @BindView(R.id.notifyTimeView)
-    EventDetailNotifyTimeView notifyTimeView;
+    FieldNotifyTimeView notifyTimeView;
+
+    @BindView(R.id.noteView)
+    FieldNoteView noteView;
 
     @BindView(R.id.timerView)
     TimerView timerView;
@@ -84,9 +89,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
+                                   @NonNull SleepEvent defaultEvent) {
         Intent intent = new Intent(context, SleepEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
+        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
         return intent;
     }
 
@@ -102,28 +109,37 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         startTitleView.setTitle(R.string.asleep);
         finishTitleView.setTitle(R.string.awoke);
 
-        startDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue(),
+        startDateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER_START, startDateView.getValue(),
                 null, finishDateView.getValue()));
-        startTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
-        finishDateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue(),
+        startTimeView.setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER_START, startTimeView.getValue()));
+        finishDateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER_FINISH, finishDateView.getValue(),
                 startDateView.getValue(), null));
-        finishTimeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
-        durationView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_DURATION_DIALOG,
-                TimeDialog.Parameters.builder()
-                        .minutes(durationView.getValueInt())
-                        .showDays(durationView.getValueInt() >= TimeUtils.MINUTES_IN_DAY)
-                        .showHours(true)
-                        .showMinutes(true)
-                        .title(getString(R.string.duration))
-                        .build()));
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
-                TimeDialog.Parameters.builder()
-                        .minutes(notifyTimeView.getValueInt())
-                        .showDays(true)
-                        .showHours(true)
-                        .showMinutes(true)
-                        .title(getString(R.string.notify_time_dialog_title))
-                        .build()));
+        finishTimeView.setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER_FINISH, finishTimeView.getValue()));
+        durationView.setFieldDialogListener(v -> {
+            TimeDialogFragment dialogFragment = new TimeDialogFragment();
+            dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DURATION_DIALOG,
+                    TimeDialogArguments.builder()
+                            .sex(getSex())
+                            .minutes(durationView.getValueInt())
+                            .showDays(durationView.getValueInt() >= TimeUtils.MINUTES_IN_DAY)
+                            .showHours(true)
+                            .showMinutes(true)
+                            .title(getString(R.string.duration))
+                            .build());
+        });
+        notifyTimeView.setFieldDialogListener(v -> {
+            TimeDialogFragment dialogFragment = new TimeDialogFragment();
+            dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG,
+                    TimeDialogArguments.builder()
+                            .sex(getSex())
+                            .minutes(notifyTimeView.getValueInt())
+                            .showDays(true)
+                            .showHours(true)
+                            .showMinutes(true)
+                            .title(getString(R.string.notify_time_dialog_title))
+                            .build());
+        });
+        setupEditTextView(noteView);
     }
 
     @Override
@@ -180,8 +196,10 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                 String note = noteView.getText();
                 Integer notifyTime = notifyTimeView.getValue();
                 if (event.getId() != null) {
-                    note = defaultEvent == null ? event.getNote() : defaultEvent.getNote();
-                    notifyTime = defaultEvent == null ? event.getNotifyTimeInMinutes() : defaultEvent.getNotifyTimeInMinutes();
+                    note = getDefaultNote();
+                    notifyTime = getDefaultNotifyTimeInMinutes();
+
+                    presenter.updateEventSilently(event);
                 }
                 event = event.toBuilder()
                         .isTimerStarted(true)
@@ -197,7 +215,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @Override
     public void onTimerTick(@NonNull SleepEvent event) {
-        if (EventHelper.sameEvent(this.event, event)) {
+        if (sameEvent(event)) {
             updateTimer(event);
         }
     }
@@ -208,11 +226,6 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
-    protected EventType getEventType() {
-        return EventType.SLEEP;
-    }
-
-    @Override
     @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_event_detail_sleep;
@@ -220,11 +233,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     @Override
     public void setupEventDetail(@NonNull SleepEvent event) {
-        setDateTime(event.getDateTime(), startDateView, startTimeView);
-        setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
+        WidgetsUtils.setDateTime(event.getDateTime(), startDateView, startTimeView);
+        WidgetsUtils.setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
-        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? visibility : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisible() ? visibility : View.GONE);
         noteView.setText(event.getNote());
         updateDuration();
         updateTimer(event);
@@ -236,8 +249,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                 ? SleepEvent.builder()
                 : event.toBuilder();
 
-        DateTime startDateTime = getDateTime(startDateView, startTimeView);
-        DateTime finishDateTime = getDateTime(finishDateView, finishTimeView);
+        DateTime startDateTime = WidgetsUtils.getDateTime(startDateView, startTimeView);
+        DateTime finishDateTime = WidgetsUtils.getDateTime(finishDateView, finishTimeView);
         if (finishDateTime == null) {
             LocalDate finishDate = finishDateView.getValue();
             LocalTime finishTime = finishTimeView.getValue();
@@ -293,9 +306,9 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     public void onSetTime(String tag, int minutes) {
         switch (tag) {
             case TAG_DURATION_DIALOG:
-                DateTime start = getDateTime(startDateView, startTimeView);
+                DateTime start = WidgetsUtils.getDateTime(startDateView, startTimeView);
                 DateTime finish = start.plusMinutes(minutes);
-                setDateTime(finish, finishDateView, finishTimeView);
+                WidgetsUtils.setDateTime(finish, finishDateView, finishTimeView);
                 durationView.setValue(minutes);
                 break;
             case TAG_NOTIFY_TIME_DIALOG:
@@ -305,16 +318,16 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     private void updateDuration() {
-        DateTime start = getDateTime(startDateView, startTimeView);
-        DateTime finish = getDateTime(finishDateView, finishTimeView);
+        DateTime start = WidgetsUtils.getDateTime(startDateView, startTimeView);
+        DateTime finish = WidgetsUtils.getDateTime(finishDateView, finishTimeView);
         Integer minutes = TimeUtils.durationInMinutes(start, finish);
         durationView.setValue(minutes);
-        int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
+        int visibility = isTimerStarted() ? View.GONE : View.VISIBLE;
         finishTitleView.setVisibility(visibility);
         finishDateView.setVisibility(visibility);
         finishTimeView.setVisibility(visibility);
         durationView.setVisibility(visibility);
-        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? visibility : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisible() ? visibility : View.GONE);
     }
 
     private void updateTimer(@NonNull SleepEvent event) {
@@ -327,7 +340,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     private void updateIfNeeded() {
-        if (EventHelper.isTimerStarted(event)) {
+        if (isTimerStarted()) {
             presenter.updateEvent(buildEvent(), false);
         }
     }

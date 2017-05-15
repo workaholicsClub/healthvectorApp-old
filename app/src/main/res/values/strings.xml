@@ -11,6 +11,7 @@
     <string name="add_profile">Добавить профиль</string>
     <string name="edit">Редактировать</string>
     <string name="remove_child">Удалить профиль</string>
+    <!-- %s - параметр "Имя ребенка" -->
     <string name="remove_child_confirmation_dialog_title">Удалить профиль %s?</string>
     <string name="remove_child_confirmation_dialog_text">Все данные профиля будут удалены без возможности восстановления.</string>
     <string name="remove_child_confirmation_dialog_positive_button_text">Удалить</string>
@@ -41,6 +42,8 @@
     <string name="event_feed">Кормление</string>
     <string name="event_pump">Сцеживание</string>
     <string name="event_other">Другое</string>
+    <string name="event_doctor_visit">Визит к врачу</string>
+    <string name="event_medicine_taking">Прием лекарств</string>
     <string name="validate_child_name_empty">Введите имя ребенка</string>
     <string name="validate_child_sex_empty">Выберите пол ребенка</string>
     <string name="validate_child_birth_date_empty">Введите дату рождения ребенка</string>
@@ -53,10 +56,16 @@
     <string name="validate_event_sleep_timer_already_started">Таймер сна уже запущен</string>
     <string name="validate_event_other_title_empty">Введите название события</string>
     <string name="validate_start_finish_time">Время окончания не может быть меньше, чем время начала события</string>
+    <string name="validate_doctor_visit_name_empty">Введите название визита</string>
+    <string name="validate_doctor_visit_doctor_empty">Выберите специализацию врача</string>
+    <string name="validate_medicine_taking_medicine_empty">Выберите лекарство</string>
+    <string name="validate_repeat_parameters_periodicity_empty">Выберите периодичность</string>
+    <string name="validate_repeat_parameters_length_empty">Введите длительность</string>
     <string name="height_review">%s см</string>
     <string name="weight_review">%s кг</string>
     <string name="amount_review">%s мл</string>
     <string name="newborn">новорождённый</string>
+    <!-- %1$s - параметр "Количество лет", %2$s - параметр "Количество месяцев" -->
     <string name="years_and_months">%1$s %2$s</string>
     <string name="select_sex">Выберите пол</string>
     <string name="male">Мужской</string>
@@ -68,9 +77,13 @@
     <string name="day">День</string>
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
+    <!-- %1$s - параметр "Месяц", %2$d - параметр "Год" -->
     <string name="calendar_month_title">%1$s %2$d</string>
+    <!-- %1$d - параметр "Число, с", \u2014 - длинное тире, %2$d - параметр "Число, по", %3$s - параметр "Месяц" -->
     <string name="calendar_week_title_one_month">%1$d \u2014 %2$d %3$s</string>
+    <!-- %1$d - параметр "Число, с", %2$s - параметр "Месяц, с", \u2014 - длинное тире, %3$d - параметр "Число, по", %4$s - параметр "Месяц, по" -->
     <string name="calendar_week_title_two_month">%1$d %2$s \u2014 %3$d %4$s</string>
+    <!-- %1$d - параметр "Число", %2$d - параметр "Месяц" -->
     <string name="calendar_selected_date_format">%1$d %2$s</string>
     <string name="breast_left">Левая</string>
     <string name="breast_right">Правая</string>
@@ -82,13 +95,7 @@
     <string name="feed_type_pumped_milk">Сцеженное</string>
     <string name="feed_type_milk_formula">Смесь</string>
     <string name="feed_type_food">Прикорм</string>
-    <string name="food_measure_grams">граммы</string>
-    <string name="food_measure_millilitres">миллилитры</string>
     <string name="food_measure_other">Другое</string>
-    <string name="food_porridge">Каша</string>
-    <string name="food_vegetables">Овощное пюре</string>
-    <string name="food_fruits">Фруктовое пюре</string>
-    <string name="food_meat">Мясное пюре</string>
     <string name="food_other">Другое</string>
     <string name="notify_time">Оповещение</string>
     <string name="diaper_state">Состояние подгузника</string>
@@ -103,16 +110,19 @@
     <string name="other_event_start">Начало</string>
     <string name="other_event_finish">Конец</string>
     <string name="notify_time_dialog_title">Оповещение за</string>
+    <!-- %s - например, "За 4 дня 2 часа 1 минуту" -->
     <string name="notify_time_text">За %s</string>
-    <string name="no_notification">Нет</string>
+    <string name="no_value">Нет</string>
     <string name="time_dialog_days">Дней</string>
     <string name="time_dialog_hours">Часов</string>
     <string name="time_dialog_minutes">Минут</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
     <string name="food_dialog_title">Введите наименование прикорма</string>
     <string name="duration_separator">:</string>
+    <!-- %s - параметр "Имя ребенка" -->
     <string name="child_sleep">%s спит</string>
     <string name="sleep_timer">Таймер сна</string>
+    <!-- %s - например, "запустится через 00:52" -->
     <string name="will_start">запустится через %s</string>
     <string name="stop_sleep_timer">Остановить таймер сна</string>
     <string name="days_short">%d д.</string>
@@ -120,6 +130,7 @@
     <string name="minutes_short">%d мин.</string>
     <string name="duration_format">00:00:00</string>
     <string name="other_event_title_hint">Введите название события</string>
+    <string name="doctor_visit_title_hint">Введите название визита</string>
     <string name="menu_title_done">Выполнено</string>
     <string name="menu_title_move">Перенести</string>
     <string name="menu_title_delete">Удалить</string>
@@ -136,6 +147,53 @@
     <!-- TODO: pattern for English: "MMM d, yyyy" -->
     <string name="date_format">d MMM yyyy</string>
     <string name="time_format">HH:mm</string>
+    <string name="medical_tab_title_doctor_visits">Визиты к врачу</string>
+    <string name="medical_tab_title_medicine_taking_list">Лекарства</string>
+    <string name="medicine">Лекарство</string>
+    <string name="doctor">Специализация</string>
+    <string name="export_to_calendar">Добавить в календарь</string>
+    <string name="frequency">Как часто</string>
+    <string name="periodicity">Периодичность</string>
+    <string name="length">Длительность</string>
+    <string name="times">Время выполнения</string>
+    <string name="note_with_photo">Введите описание</string>
+    <string name="medicine_measure">Дозировка</string>
+    <!-- %1$s - параметр "Число (дозировка)", %2$s - параметр "Единица измерения" -->
+    <string name="medicine_measure_format">%1$s %2$s</string>
+    <string name="finish">Завершить</string>
+    <string name="add_medicine_taking_title">Добавить рецепт</string>
+    <string name="add_doctor_visit_title">Добавить визит к врачу</string>
+    <string name="edit_medicine_taking_title">Рецепт</string>
+    <string name="edit_doctor_visit_title">Визит к врачу</string>
+    <string name="add_medicine_title">Добавить лекарство</string>
+    <string name="medicines_title">Список лекарств</string>
+    <string name="add_doctor_title">Добавить специализацию</string>
+    <string name="doctors_title">Список специализаций</string>
+    <string name="search">Поиск</string>
+    <string name="medicine_measure_value_dialog_title">Дозировка</string>
+    <string name="frequency_once">Однократно</string>
+    <string name="periodicity_daily">Ежедневно</string>
+    <string name="periodicity_weekly">Еженедельно</string>
+    <string name="periodicity_monthly">Ежемесячно</string>
+    <string name="ask_delete_one_event_or_linear_group">Удалить только одно событие или всю линейную группу событий?</string>
+    <string name="delete_one_event">Удалить одно событие</string>
+    <string name="delete_linear_group">Удалить линейную группу</string>
+    <string name="ask_delete_doctor_visit_connected_events_or_not">Удалить все события, привязанные к визиту?</string>
+    <string name="delete_only_doctor_visit">Удалить только визит</string>
+    <string name="delete_doctor_visit_and_events">Удалить визит и события</string>
+    <string name="ask_delete_medicine_taking_connected_events_or_not">Удалить все события, привязанные к рецепту?</string>
+    <string name="delete_only_medicine_taking">Удалить только рецепт</string>
+    <string name="delete_medicine_taking_and_events">Удалить рецепт и события</string>
+    <!-- %1$s - параметр "Время", %2$s - параметр "Дата" -->
+    <string name="ask_complete_medicine_taking">Завершить выполнение и удалить все события, привязанные к рецепту, начиная с %1$s %2$s?</string>
+    <!-- %1$s - параметр "Время", %2$s - параметр "Дата" -->
+    <string name="ask_complete_doctor_visit">Завершить выполнение и удалить все события, привязанные к визиту, начиная с %1$s %2$s?</string>
+    <string name="complete_without_deletion">Завершить без удаления</string>
+    <string name="complete_and_delete_events">Удалить будущие события</string>
+    <string name="please_wait">Пожалуйста, подождите&#8230;</string>
+    <string name="events_generating">Идет создание событий&#8230;</string>
+    <string name="events_deleting">Идет удаление событий&#8230;</string>
+    <string name="default_doctor_name">Педиатр</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
@@ -164,6 +222,120 @@
         <item>Ноября</item>
         <item>Декабря</item>
     </string-array>
+    <string-array name="food">
+        <item>Каша</item>
+        <item>Овощное пюре</item>
+        <item>Фруктовое пюре</item>
+        <item>Мясное пюре</item>
+    </string-array>
+    <string-array name="food_measure">
+        <item>граммы</item>
+        <item>миллилитры</item>
+    </string-array>
+    <string-array name="doctor">
+        <item>ЛОР</item>
+        <item>Аллерголог-иммунолог</item>
+        <item>Аллерголог</item>
+        <item>Андролог</item>
+        <item>Аритмолог</item>
+        <item>Вертебролог</item>
+        <item>Вирусолог</item>
+        <item>Гастроэнтеролог</item>
+        <item>Гематолог</item>
+        <item>Гепатолог</item>
+        <item>Гинеколог-эндокринолог</item>
+        <item>Гинеколог</item>
+        <item>Гомеопат</item>
+        <item>Дерматолог</item>
+        <item>Зубной врач</item>
+        <item>Иммунолог</item>
+        <item>Инфекционист</item>
+        <item>Кардиолог</item>
+        <item>Кардиоревматолог</item>
+        <item>Косметолог</item>
+        <item>Логопед</item>
+        <item>Маммолог</item>
+        <item>Массажист</item>
+        <item>Миколог</item>
+        <item>Невролог</item>
+        <item>Невропатолог</item>
+        <item>Нейрохирург</item>
+        <item>Нефролог</item>
+        <item>Окулист</item>
+        <item>Онколог</item>
+        <item>Ортопед-травматолог</item>
+        <item>Ортопед</item>
+        <item>Остеопат</item>
+        <item>Офтальмолог</item>
+        <item>Паразитолог</item>
+        <item>Проктолог</item>
+        <item>Психиатр</item>
+        <item>Психолог</item>
+        <item>Психотерапевт</item>
+        <item>Пульмонолог</item>
+        <item>Ревматолог</item>
+        <item>Рефлексотерапевт</item>
+        <item>Сосудистый хирург</item>
+        <item>Стоматолог-хирург</item>
+        <item>Стоматолог</item>
+        <item>Сурдолог</item>
+        <item>Травматолог</item>
+        <item>Уролог</item>
+        <item>Физиотерапевт</item>
+        <item>Флеболог</item>
+        <item>Фониатр</item>
+        <item>Фтизиатр</item>
+        <item>Хирург-ортопед</item>
+        <item>Хирург-уролог</item>
+        <item>Хирург</item>
+        <item>Эндокринолог</item>
+        <item>Эпилептолог</item>
+        <item>Неонатолог</item>
+        <item>Педиатр-неонатолог</item>
+        <item>Педиатр</item>
+        <item>Перинатолог</item>
+        <item>Сурдопедагог</item>
+        <item>Фтизиопедиатр</item>
+    </string-array>
+    <string-array name="medicine">
+        <item>Активированный уголь</item>
+        <item>Нурофен</item>
+        <item>Ибупрофен</item>
+        <item>Йод</item>
+        <item>Смекта</item>
+        <item>Мирамистин</item>
+        <item>Альбуцид</item>
+        <item>Фурацилин (таблетки)</item>
+        <item>Фурацилиновый спирт</item>
+        <item>Изофра</item>
+        <item>Аквалор</item>
+        <item>Флемоклав</item>
+        <item>Амоксиклав</item>
+        <item>Рибоксин</item>
+        <item>Веторон</item>
+        <item>Алмагель</item>
+        <item>Креон</item>
+        <item>Виброцил</item>
+        <item>Називин</item>
+        <item>Нафтизин</item>
+        <item>Супрастин</item>
+        <item>Фенистил (гель)</item>
+        <item>Виферон (свечи)</item>
+        <item>Парацетамол</item>
+        <item>Эспумизан</item>
+        <item>Линекс</item>
+    </string-array>
+    <string-array name="medicine_measure">
+        <item>мг</item>
+        <item>мл</item>
+        <item>шт.</item>
+        <item>МЕ</item>
+        <item>мерн. лож.</item>
+        <item>ч. лож.</item>
+        <item>ст. лож.</item>
+        <item>куб. см</item>
+        <item>впрыск</item>
+    </string-array>
     <plurals name="numberOfYears">
         <item quantity="one">%d год</item>
         <item quantity="few">%d года</item>
@@ -178,12 +350,40 @@
         <item quantity="many">%d месяцев</item>
         <item quantity="zero">%d месяцев</item>
     </plurals>
+    <plurals name="numberOfWeeks">
+        <item quantity="one">%d неделя</item>
+        <item quantity="few">%d недели</item>
+        <item quantity="other">%d недель</item>
+        <item quantity="many">%d недель</item>
+        <item quantity="zero">%d недель</item>
+    </plurals>
     <plurals name="numberOfDays">
         <item quantity="one">%d день</item>
         <item quantity="few">%d дня</item>
         <item quantity="other">%d дней</item>
         <item quantity="many">%d дней</item>
         <item quantity="zero">%d дней</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfMonths">
+        <item quantity="one">месяц</item>
+        <item quantity="few">месяца</item>
+        <item quantity="other">месяцев</item>
+        <item quantity="many">месяцев</item>
+        <item quantity="zero">месяцев</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfWeeks">
+        <item quantity="one">неделя</item>
+        <item quantity="few">недели</item>
+        <item quantity="other">недель</item>
+        <item quantity="many">недель</item>
+        <item quantity="zero">недель</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfDays">
+        <item quantity="one">день</item>
+        <item quantity="few">дня</item>
+        <item quantity="other">дней</item>
+        <item quantity="many">дней</item>
+        <item quantity="zero">дней</item>
     </plurals>
     <plurals name="numberOfHours">
         <item quantity="one">%d час</item>
@@ -198,5 +398,12 @@
         <item quantity="other">%d минут</item>
         <item quantity="many">%d минут</item>
         <item quantity="zero">%d минут</item>
+    </plurals>
+    <plurals name="numberOfTimesInADay">
+        <item quantity="one">%d раз в день</item>
+        <item quantity="few">%d раза в день</item>
+        <item quantity="other">%d раз в день</item>
+        <item quantity="many">%d раз в день</item>
+        <item quantity="zero">%d раз в день</item>
     </plurals>
 </resources>

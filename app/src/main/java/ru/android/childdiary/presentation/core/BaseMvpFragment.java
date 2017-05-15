@@ -90,7 +90,7 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
         }
     }
 
-    protected void showToast(String text) {
+    protected final void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
@@ -98,5 +98,13 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
     protected abstract Sex getSex();
 
     protected void injectFragment(ApplicationComponent component) {
+    }
+
+    public void showProgress(String tag, String title, String message) {
+        ((BaseMvpActivity) getActivity()).showProgress(tag, title, message);
+    }
+
+    public void hideProgress(String tag) {
+        ((BaseMvpActivity) getActivity()).hideProgress(tag);
     }
 }

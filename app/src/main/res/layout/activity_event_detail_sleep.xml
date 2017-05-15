@@ -4,48 +4,62 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ru.android.childdiary.presentation.events.widgets.TimerView
-        android:id="@+id/timerView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/field_margin_base"
+        android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailTitleView
-        android:id="@+id/startTitleView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.TimerView
+            android:id="@+id/timerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDateView
-        android:id="@+id/startDateView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView
+            android:id="@+id/startTitleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailTimeView
-        android:id="@+id/startTimeView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+            android:id="@+id/startDateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailTitleView
-        android:id="@+id/finishTitleView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
+            android:id="@+id/startTimeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDateView
-        android:id="@+id/finishDateView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView
+            android:id="@+id/finishTitleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailTimeView
-        android:id="@+id/finishTimeView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+            android:id="@+id/finishDateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailDurationView
-        android:id="@+id/durationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
+            android:id="@+id/finishTimeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView
-        android:id="@+id/notifyTimeView"
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView
+            android:id="@+id/durationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
+            android:id="@+id/notifyTimeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView
+        android:id="@+id/noteView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

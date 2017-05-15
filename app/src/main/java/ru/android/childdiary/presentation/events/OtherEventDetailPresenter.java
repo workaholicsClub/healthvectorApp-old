@@ -37,7 +37,7 @@ public class OtherEventDetailPresenter extends EventDetailPresenter<OtherEventDe
         for (CalendarValidationResult result : results) {
             boolean valid = result.isValid();
             if (result.getFieldType() == null) {
-                return;
+                continue;
             }
             switch (result.getFieldType()) {
                 case OTHER_EVENT_NAME:

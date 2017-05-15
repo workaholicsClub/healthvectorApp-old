@@ -54,7 +54,7 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
         TextView textView;
         @BindView(R.id.imageViewDropdown)
         View imageViewDropdown;
-        @BindDimen(R.dimen.base_margin_horizontal)
+        @BindDimen(R.dimen.base_margin)
         int baseMarginHorizontal;
 
         private CloseMenuButtonClickListener listener;

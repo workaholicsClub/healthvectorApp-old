@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/field_margin_base"
+    android:paddingTop="@dimen/field_margin_base">
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView
+        android:id="@+id/medicineView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView
+        android:id="@+id/medicineMeasureValueView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+        android:id="@+id/dateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
+        android:id="@+id/timeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
+        android:id="@+id/checkBoxView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView
+        android:id="@+id/repeatParametersView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView
+        android:id="@+id/noteWithPhotoView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
+        android:id="@+id/notifyTimeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

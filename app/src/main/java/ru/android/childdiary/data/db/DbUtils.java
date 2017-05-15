@@ -1,15 +1,11 @@
 package ru.android.childdiary.data.db;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Function3;
 import io.requery.BlockingEntityStore;
 import io.requery.EntityStore;
 import io.requery.Persistable;
@@ -20,6 +16,7 @@ import io.requery.sql.EntityDataStore;
 import lombok.val;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.data.entities.Models;
+import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 
 public class DbUtils {
     public static ReactiveEntityStore<Persistable> getDataStore(Context appContext) {
@@ -34,13 +31,14 @@ public class DbUtils {
         return dataStore;
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T, E> Observable<T> deleteObservable(EntityStore dataStore, Class<E> entityClass, T object, long objectId) {
+    public static <T, E> Observable<T> deleteObservable(EntityStore dataStore,
+                                                        Class<E> entityClass, T object, long objectId) {
+        //noinspection unchecked
         return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
                 delete(dataStore, entityClass, object, objectId)));
     }
 
-    private static <T, E> T delete(EntityStore dataStore,
+    public static <T, E> T delete(EntityStore dataStore,
                                    Class<E> entityClass, T object, long objectId) {
         BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
         Object entity = blockingEntityStore.findByKey(entityClass, objectId);
@@ -51,106 +49,52 @@ public class DbUtils {
         throw new RuntimeException(object.getClass() + " not found while deleting");
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T, E> Observable<T> insertObservable(EntityStore dataStore, T object,
-                                                        @NonNull BiFunction<BlockingEntityStore, T, E> mapToEntity,
-                                                        @NonNull Function<E, T> mapToPlainObject) {
+    public static <T, E extends D, D> Observable<T> insertObservable(EntityStore dataStore,
+                                                                     T object, EntityMapper<D, E, T> mapper) {
+        //noinspection unchecked
         return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
-                insert(dataStore, object, mapToEntity, mapToPlainObject)));
+                insert(dataStore, object, mapper)));
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T, E> T insert(EntityStore dataStore, T object,
-                                  @NonNull BiFunction<BlockingEntityStore, T, E> mapToEntity,
-                                  @NonNull Function<E, T> mapToPlainObject) {
-        try {
-            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-            E entity = mapToEntity.apply(blockingEntityStore, object);
-            entity = (E) blockingEntityStore.insert(entity);
-            return mapToPlainObject.apply(entity);
-        } catch (Exception e) {
-            throw new RuntimeException("error on inserting\n" + object, e);
-        }
+    public static <T, E extends D, D> T insert(EntityStore dataStore,
+                                               T object, EntityMapper<D, E, T> mapper) {
+        BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+        E entity = mapper.mapToEntity(blockingEntityStore, object);
+        //noinspection unchecked
+        entity = (E) blockingEntityStore.insert(entity);
+        return mapper.mapToPlainObject(entity);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T, E, PT> Observable<T> insertObservable(EntityStore dataStore, T object, PT parentObject,
-                                                            @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
-                                                            @NonNull Function<E, T> mapToPlainObject) {
+    public static <T, E extends D, D> Observable<T> updateObservable(EntityStore dataStore,
+                                                                     T object, EntityMapper<D, E, T> mapper) {
+        //noinspection unchecked
         return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
-                insert(dataStore, object, parentObject, mapToEntity, mapToPlainObject)));
+                update(dataStore, object, mapper)));
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T, E, PT> T insert(EntityStore dataStore, T object, PT parentObject,
-                                      @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
-                                      @NonNull Function<E, T> mapToPlainObject) {
-        try {
-            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-            E entity = mapToEntity.apply(blockingEntityStore, object, parentObject);
-            entity = (E) blockingEntityStore.insert(entity);
-            return mapToPlainObject.apply(entity);
-        } catch (Exception e) {
-            throw new RuntimeException("error on inserting\n" + object + "\n" + parentObject, e);
-        }
+    public static <T, E extends D, D> T update(EntityStore dataStore,
+                                               T object, EntityMapper<D, E, T> mapper) {
+        BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+        E entity = mapper.mapToEntity(blockingEntityStore, object);
+        //noinspection unchecked
+        entity = (E) blockingEntityStore.update(entity);
+        return mapper.mapToPlainObject(entity);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T, E> Observable<T> updateObservable(EntityStore dataStore, T object,
-                                                        @NonNull BiFunction<BlockingEntityStore, T, E> mapToEntity,
-                                                        @NonNull Function<E, T> mapToPlainObject) {
-        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
-                update(dataStore, object, mapToEntity, mapToPlainObject)));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T, E> T update(EntityStore dataStore, T object,
-                                  @NonNull BiFunction<BlockingEntityStore, T, E> mapToEntity,
-                                  @NonNull Function<E, T> mapToPlainObject) {
-        try {
-            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-            E entity = mapToEntity.apply(blockingEntityStore, object);
-            entity = (E) blockingEntityStore.update(entity);
-            return mapToPlainObject.apply(entity);
-        } catch (Exception e) {
-            throw new RuntimeException("error on updating\n" + object, e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T, E, PT> Observable<T> updateObservable(EntityStore dataStore, T object, PT parentObject,
-                                                            @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
-                                                            @NonNull Function<E, T> mapToPlainObject) {
-        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
-                update(dataStore, object, parentObject, mapToEntity, mapToPlainObject)));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T, E, PT> T update(EntityStore dataStore, T object, PT parentObject,
-                                      @NonNull Function3<BlockingEntityStore, T, PT, E> mapToEntity,
-                                      @NonNull Function<E, T> mapToPlainObject) {
-        try {
-            BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-            E entity = mapToEntity.apply(blockingEntityStore, object, parentObject);
-            entity = (E) blockingEntityStore.update(entity);
-            return mapToPlainObject.apply(entity);
-        } catch (Exception e) {
-            throw new RuntimeException("error on updating\n" + object + "\n" + parentObject, e);
-        }
-    }
-
-    public static <T, E> Observable<List<T>> mapReactiveResultToListObservable(ReactiveResult<E> reactiveResult, @NonNull Function<E, T> map) {
+    public static <T, E extends D, D> Observable<List<T>> mapReactiveResultToListObservable(ReactiveResult<E> reactiveResult,
+                                                                                            EntityMapper<D, E, T> mapper) {
         return reactiveResult
                 .observable()
-                .map(map)
+                .map(mapper::mapToPlainObject)
                 .toList()
                 .toObservable();
     }
 
-    public static <T, E> Observable<T> mapReactiveResultToObservable(ReactiveResult<E> reactiveResult, @NonNull Function<E, T> map) {
+    public static <T, E extends D, D> Observable<T> mapReactiveResultToObservable(ReactiveResult<E> reactiveResult,
+                                                                                  EntityMapper<D, E, T> mapper) {
         return reactiveResult
                 .observable()
-                .map(map)
+                .map(mapper::mapToPlainObject)
                 .firstOrError()
                 .toObservable();
     }

@@ -3,20 +3,25 @@ package ru.android.childdiary.utils;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import org.joda.time.DateTime;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
-import ru.android.childdiary.domain.interactors.calendar.Food;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 
 import static ru.android.childdiary.data.types.FeedType.BREAST_MILK;
 import static ru.android.childdiary.data.types.FeedType.FOOD;
@@ -27,11 +32,14 @@ public class EventHelper {
     }
 
     public static boolean canBeDone(@Nullable EventType eventType) {
-        return eventType == EventType.OTHER;
+        return eventType == EventType.OTHER
+                || eventType == EventType.DOCTOR_VISIT
+                || eventType == EventType.MEDICINE_TAKING;
+        // TODO EXERCISE
     }
 
     public static boolean isDone(@NonNull MasterEvent event) {
-        return event.getIsDone() != null && event.getIsDone();
+        return ObjectUtils.isTrue(event.getIsDone());
     }
 
     public static boolean isExpired(@NonNull MasterEvent event) {
@@ -40,9 +48,26 @@ public class EventHelper {
     }
 
     public static boolean isTimerStarted(@Nullable SleepEvent event) {
-        return event != null && event.getIsTimerStarted() != null && event.getIsTimerStarted();
+        return event != null && ObjectUtils.isTrue(event.getIsTimerStarted());
     }
 
+    @Nullable
+    public static String getTitle(Context context, @NonNull MasterEvent event) {
+        EventType eventType = event.getEventType();
+        String eventTypeStr = StringUtils.eventType(context, eventType);
+        if (event instanceof OtherEvent) {
+            OtherEvent otherEvent = (OtherEvent) event;
+            return otherEvent.getName();
+        } else if (event instanceof DoctorVisitEvent) {
+            DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
+            String name = doctorVisitEvent.getName();
+            return TextUtils.isEmpty(name) ? eventTypeStr : name;
+        }
+        // TODO EXERCISE
+        return eventTypeStr;
+    }
+
+    @Nullable
     public static String getDescription(Context context, @NonNull MasterEvent event) {
         if (event instanceof DiaperEvent) {
             DiaperEvent diaperEvent = (DiaperEvent) event;
@@ -60,8 +85,7 @@ public class EventHelper {
                 return StringUtils.feedType(context, feedType);
             }
         } else if (event instanceof OtherEvent) {
-            OtherEvent otherEvent = (OtherEvent) event;
-            return otherEvent.getName();
+            return null;
         } else if (event instanceof PumpEvent) {
             PumpEvent pumpEvent = (PumpEvent) event;
             return StringUtils.breast(context, pumpEvent.getBreast());
@@ -72,8 +96,17 @@ public class EventHelper {
             } else {
                 return TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime());
             }
+        } else if (event instanceof DoctorVisitEvent) {
+            DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
+            Doctor doctor = doctorVisitEvent.getDoctor();
+            return doctor == null ? null : doctor.getName();
+        } else if (event instanceof MedicineTakingEvent) {
+            MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) event;
+            Medicine medicine = medicineTakingEvent.getMedicine();
+            return medicine == null ? null : medicine.getName();
         }
-        throw new IllegalStateException("Unknown event type");
+        // TODO EXERCISE
+        return null;
     }
 
     public static boolean sameEvent(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {

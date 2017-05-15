@@ -22,7 +22,7 @@ import ru.android.childdiary.domain.interactors.child.validation.ChildValidation
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
 import ru.android.childdiary.utils.EventHelper;
 
-public class ChildInteractor implements Interactor, ChildRepository {
+public class ChildInteractor implements Interactor {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final ChildRepository childRepository;
@@ -38,27 +38,22 @@ public class ChildInteractor implements Interactor, ChildRepository {
         this.childValidator = childValidator;
     }
 
-    @Override
     public Observable<Child> getActiveChild() {
         return childRepository.getActiveChild();
     }
 
-    @Override
     public void setActiveChild(@NonNull Child child) {
         childRepository.setActiveChild(child);
     }
 
-    @Override
     public Observable<Child> getActiveChildOnce() {
         return childRepository.getActiveChildOnce();
     }
 
-    @Override
     public Observable<Child> setActiveChildObservable(@NonNull Child child) {
         return childRepository.setActiveChildObservable(child);
     }
 
-    @Override
     public Observable<List<Child>> getAll() {
         return childRepository.getAll();
     }

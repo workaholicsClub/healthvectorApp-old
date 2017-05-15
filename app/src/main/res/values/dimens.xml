@@ -9,6 +9,7 @@
     <dimen name="profile_margin_vertical">26dp</dimen>
     <dimen name="profile_field_height">30dp</dimen>
     <dimen name="name_edit_text_padding_bottom">4dp</dimen>
+    <dimen name="note_with_photo_edit_text_padding_bottom">8dp</dimen>
     <dimen name="name_edit_text_stroke_width">1dp</dimen>
     <dimen name="name_edit_text_stroke_width_negative">-2dp</dimen>
     <dimen name="sex_item_text_padding_horizontal">10dp</dimen>
@@ -55,13 +56,14 @@
     <dimen name="event_row_margin_vertical">2dp</dimen>
     <dimen name="event_row_corner_radius">2dp</dimen>
     <dimen name="event_row_action_delimiter_height">26dp</dimen>
-    <!-- event detail -->
+    <!-- fields -->
     <dimen name="spinner_item_width">200dp</dimen>
-    <dimen name="event_detail_height">54dp</dimen>
-    <dimen name="event_detail_icon_size">54dp</dimen>
-    <dimen name="event_detail_text_view_min_width">100dp</dimen>
-    <dimen name="event_detail_margin_base">8dp</dimen>
-    <dimen name="event_detail_note_corner_radius">4dp</dimen>
+    <dimen name="field_height">54dp</dimen>
+    <dimen name="field_delete_height">44dp</dimen>
+    <dimen name="field_icon_size">54dp</dimen>
+    <dimen name="field_text_view_min_width">100dp</dimen>
+    <dimen name="field_margin_base">8dp</dimen>
+    <dimen name="field_note_corner_radius">4dp</dimen>
     <dimen name="arrow_icon_size">24dp</dimen>
     <!-- timer -->
     <dimen name="timer_stroke_width">2dp</dimen>
@@ -75,12 +77,20 @@
     <!-- text sizes -->
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_base">16sp</dimen>
-    <dimen name="text_size_calendar">14sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
     <!-- base -->
-    <dimen name="base_margin_horizontal">16dp</dimen>
+    <dimen name="base_margin">16dp</dimen>
     <!-- dialogs -->
     <dimen name="time_dialog_header_width">50dp</dimen>
     <dimen name="time_dialog_column_space">6dp</dimen>
     <dimen name="alert_dialog_padding_top">16dp</dimen>
+    <!-- medical item -->
+    <dimen name="medical_item_action_delete_height">64dp</dimen>
+    <dimen name="medical_item_margin_vertical">8dp</dimen>
+    <dimen name="medicine_measure_value_width">100dp</dimen>
+    <dimen name="length_value_width">100dp</dimen>
+    <!-- repeat parameters -->
+    <dimen name="times_margin">4dp</dimen>
+    <dimen name="times_padding">6dp</dimen>
 </resources>

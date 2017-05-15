@@ -17,21 +17,23 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldAmountMlPumpView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldBreastView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
-import ru.android.childdiary.presentation.events.dialogs.TimeDialog;
-import ru.android.childdiary.presentation.events.widgets.EventDetailAmountMlPumpView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailBreastView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailDateView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailNotifyTimeView;
-import ru.android.childdiary.presentation.events.widgets.EventDetailTimeView;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView<PumpEvent>, PumpEvent> implements EventDetailView<PumpEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
@@ -42,23 +44,28 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     PumpEventDetailPresenter presenter;
 
     @BindView(R.id.dateView)
-    EventDetailDateView dateView;
+    FieldDateView dateView;
 
     @BindView(R.id.timeView)
-    EventDetailTimeView timeView;
+    FieldTimeView timeView;
 
     @BindView(R.id.breastView)
-    EventDetailBreastView breastView;
+    FieldBreastView breastView;
 
     @BindView(R.id.amountMlPumpView)
-    EventDetailAmountMlPumpView amountMlPumpView;
+    FieldAmountMlPumpView amountMlPumpView;
 
     @BindView(R.id.notifyTimeView)
-    EventDetailNotifyTimeView notifyTimeView;
+    FieldNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent) {
+    @BindView(R.id.noteView)
+    FieldNoteView noteView;
+
+    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
+                                   @NonNull PumpEvent defaultEvent) {
         Intent intent = new Intent(context, PumpEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
+        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
         return intent;
     }
 
@@ -71,17 +78,22 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dateView.setEventDetailDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(), null, null));
-        timeView.setEventDetailDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
+        dateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(), null, null));
+        timeView.setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
         setupEditTextView(amountMlPumpView);
-        notifyTimeView.setEventDetailDialogListener(v -> presenter.requestTimeDialog(TAG_NOTIFY_TIME_DIALOG,
-                TimeDialog.Parameters.builder()
-                        .minutes(notifyTimeView.getValueInt())
-                        .showDays(true)
-                        .showHours(true)
-                        .showMinutes(true)
-                        .title(getString(R.string.notify_time_dialog_title))
-                        .build()));
+        notifyTimeView.setFieldDialogListener(v -> {
+            TimeDialogFragment dialogFragment = new TimeDialogFragment();
+            dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG,
+                    TimeDialogArguments.builder()
+                            .sex(getSex())
+                            .minutes(notifyTimeView.getValueInt())
+                            .showDays(true)
+                            .showHours(true)
+                            .showMinutes(true)
+                            .title(getString(R.string.notify_time_dialog_title))
+                            .build());
+        });
+        setupEditTextView(noteView);
     }
 
     @Override
@@ -104,11 +116,6 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     }
 
     @Override
-    protected EventType getEventType() {
-        return EventType.PUMP;
-    }
-
-    @Override
     @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_event_detail_pump;
@@ -116,12 +123,12 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
 
     @Override
     public void setupEventDetail(@NonNull PumpEvent event) {
-        setDateTime(event.getDateTime(), dateView, timeView);
+        WidgetsUtils.setDateTime(event.getDateTime(), dateView, timeView);
         breastView.setSelected(event.getBreast());
         amountMlPumpView.setAmountMlLeft(event.getLeftAmountMl());
         amountMlPumpView.setAmountMlRight(event.getRightAmountMl());
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        notifyTimeView.setVisibility(notifyTimeViewVisisble() ? View.VISIBLE : View.GONE);
+        notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
     }
 
@@ -131,7 +138,7 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                 ? PumpEvent.builder()
                 : event.toBuilder();
 
-        DateTime dateTime = getDateTime(dateView, timeView);
+        DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
 
         builder.dateTime(dateTime)
                 .breast(breastView.getSelected())

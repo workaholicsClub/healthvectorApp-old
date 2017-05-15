@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/timer_corner_radius" />
+            <stroke android:width="@dimen/timer_stroke_width" android:color="@color/black_transparent" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</selector>

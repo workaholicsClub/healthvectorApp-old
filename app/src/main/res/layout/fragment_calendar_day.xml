@@ -12,7 +12,6 @@
         layout="@layout/calendar_header" />
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,8 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <include layout="@layout/request_focus_view_white" />
 
             <include layout="@layout/events_view" />
 

@@ -9,9 +9,10 @@ import lombok.Value;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
-import ru.android.childdiary.domain.interactors.calendar.Food;
-import ru.android.childdiary.domain.interactors.calendar.FoodMeasure;
-import ru.android.childdiary.domain.interactors.calendar.events.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
+import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
@@ -43,8 +44,9 @@ public class FeedEvent extends MasterEvent {
                       Integer notifyTimeInMinutes,
                       String note,
                       Boolean isDone,
-                      Boolean isDeleted,
                       Child child,
+                      RepeatParameters repeatParameters,
+                      Integer linearGroup,
                       Long id,
                       FeedType feedType,
                       Breast breast,
@@ -54,7 +56,7 @@ public class FeedEvent extends MasterEvent {
                       Double amountMl,
                       FoodMeasure foodMeasure,
                       Food food) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, isDeleted, child);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, repeatParameters, linearGroup);
         this.id = id;
         this.feedType = feedType;
         this.breast = breast;

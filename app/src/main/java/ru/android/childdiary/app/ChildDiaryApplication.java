@@ -1,7 +1,7 @@
 package ru.android.childdiary.app;
 
-import android.app.Application;
 import android.content.Intent;
+import android.support.multidex.MultiDexApplication;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -18,7 +18,7 @@ import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.FontUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-public class ChildDiaryApplication extends Application {
+public class ChildDiaryApplication extends MultiDexApplication {
     @Getter
     private static ApplicationComponent applicationComponent;
     private Logger logger;

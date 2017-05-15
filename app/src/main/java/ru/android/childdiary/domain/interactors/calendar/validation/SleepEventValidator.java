@@ -10,20 +10,21 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.domain.core.Validator;
-import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.TimeUtils;
 
 public class SleepEventValidator extends Validator<SleepEvent, CalendarValidationResult> {
     private final Context context;
-    private final CalendarInteractor calendarInteractor;
+    private final CalendarRepository calendarRepository;
 
     @Inject
-    public SleepEventValidator(Context context, CalendarInteractor calendarInteractor) {
+    public SleepEventValidator(Context context, CalendarDataRepository calendarRepository) {
         this.context = context;
-        this.calendarInteractor = calendarInteractor;
+        this.calendarRepository = calendarRepository;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class SleepEventValidator extends Validator<SleepEvent, CalendarValidatio
         List<CalendarValidationResult> results = new ArrayList<>();
 
         if (EventHelper.isTimerStarted(event)) {
-            Long count = calendarInteractor.getSleepEventsWithTimer()
+            Long count = calendarRepository.getSleepEventsWithTimer()
                     .firstOrError()
                     .flatMapObservable(Observable::fromIterable)
                     .filter(sleepEvent -> EventHelper.sameChild(sleepEvent, event)

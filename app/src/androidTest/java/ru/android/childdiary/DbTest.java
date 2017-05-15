@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.annimon.stream.Stream;
-
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.joda.time.LocalDateTime;
@@ -23,11 +21,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.repositories.child.AntropometryDbService;
 import ru.android.childdiary.data.repositories.child.ChildDbService;
+import ru.android.childdiary.data.repositories.child.mappers.AntropometryMapper;
+import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -70,8 +71,10 @@ public class DbTest {
 
         dataStore = DbUtils.getDataStore(context, DB_NAME, DB_VERSION);
 
-        childDbService = new ChildDbService(dataStore);
-        antropometryDbService = new AntropometryDbService(dataStore);
+        ChildMapper childMapper = new ChildMapper();
+        AntropometryMapper antropometryMapper = new AntropometryMapper(childMapper);
+        childDbService = new ChildDbService(dataStore, childMapper);
+        antropometryDbService = new AntropometryDbService(dataStore, antropometryMapper);
     }
 
     @AfterClass
@@ -141,9 +144,9 @@ public class DbTest {
     private final <T> void selectedContainInserted(IdsComparator<T> idsEqual, List<T> selected, int count, T... items) {
         for (T insertedItem : items) {
             long found;
-            found = Stream.of(selected).filter(item -> item.equals(insertedItem)).count();
+            found = Observable.fromIterable(selected).filter(item -> item.equals(insertedItem)).count().blockingGet();
             assertEquals("item value found in selection", count, found);
-            found = Stream.of(selected).filter(item -> idsEqual.idsEqual(item, insertedItem)).count();
+            found = Observable.fromIterable(selected).filter(item -> idsEqual.idsEqual(item, insertedItem)).count().blockingGet();
             assertEquals("item id found in selection", count, found);
         }
     }
@@ -161,7 +164,8 @@ public class DbTest {
 
     private Antropometry add(Child child, Antropometry item) {
         List<Antropometry> inserted = new ArrayList<>();
-        antropometryDbService.add(child, item)
+        item = item.toBuilder().child(child).build();
+        antropometryDbService.add(item)
                 .doOnNext(this::logOnNextInsert)
                 .doOnNext(inserted::add)
                 .doOnError(this::logOnErrorInsert)
@@ -296,6 +300,8 @@ public class DbTest {
         Child updatedChild = child.toBuilder().name(updatedName).build();
         update(updatedChild);
         checkInSelection(1, updatedChild);
+
+        antropometry = antropometry.toBuilder().child(updatedChild).build();
 
         Antropometry updatedAntropometry = antropometry.toBuilder().height(updatedHeight).build();
         update(updatedAntropometry);

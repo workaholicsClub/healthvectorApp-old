@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.profile;
 
 import android.support.annotation.NonNull;
 
-import com.annimon.stream.Stream;
 import com.arellomobile.mvp.InjectViewState;
 
 import java.util.List;
@@ -50,10 +49,10 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
             }
 
             getViewState().validationFailed();
-            String msg = Stream.of(results)
+            String msg = Observable.fromIterable(results)
                     .filter(ChildValidationResult::notValid)
                     .map(ChildValidationResult::toString)
-                    .findFirst().orElse(null);
+                    .blockingFirst();
             getViewState().showValidationErrorMessage(msg);
             handleValidationResult(results);
         } else {
@@ -65,7 +64,7 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
         for (ChildValidationResult result : results) {
             boolean valid = result.isValid();
             if (result.getFieldType() == null) {
-                return;
+                continue;
             }
             switch (result.getFieldType()) {
                 case IMAGE:

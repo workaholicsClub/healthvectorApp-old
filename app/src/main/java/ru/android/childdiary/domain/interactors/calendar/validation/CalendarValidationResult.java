@@ -14,7 +14,7 @@ public class CalendarValidationResult extends ValidationResult {
         this(null);
     }
 
-    public CalendarValidationResult(CalendarFieldType fieldType) {
+    public CalendarValidationResult(@Nullable CalendarFieldType fieldType) {
         this.fieldType = fieldType;
     }
 }

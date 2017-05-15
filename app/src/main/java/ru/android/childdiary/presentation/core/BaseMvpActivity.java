@@ -42,6 +42,9 @@ import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.presentation.core.dialogs.ProgressDialogArguments;
+import ru.android.childdiary.presentation.core.dialogs.ProgressDialogFragment;
+import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -62,6 +65,10 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
     @Getter(AccessLevel.PROTECTED)
     Toolbar toolbar;
 
+    @Nullable
+    @BindView(R.id.dummy)
+    View dummy;
+
     private ImageView toolbarLogo;
 
     private TextView toolbarTitle;
@@ -81,6 +88,13 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ConfigUtils.setupOrientation(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
+        if (savedInstanceState == null) {
+            sex = (Sex) getIntent().getSerializableExtra(ExtraConstants.EXTRA_SEX);
+            if (sex == null) {
+                Child child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
+                sex = child == null ? null : child.getSex();
+            }
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -174,6 +188,16 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         }
     }
 
+    public final void hideKeyboardAndClearFocus(@Nullable View view) {
+        KeyboardUtils.hideKeyboard(this, view);
+        if (view != null) {
+            view.clearFocus();
+        }
+        if (dummy != null) {
+            dummy.requestFocus();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -185,6 +209,12 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         super.onStart();
         logger.debug("onStart");
         setupToolbarColor();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        logger.debug("onRestoreInstanceState");
     }
 
     @Override
@@ -230,7 +260,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         }
     }
 
-    protected void showToast(String text) {
+    protected final void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
@@ -242,5 +272,30 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showProgress(String tag, String title, String message) {
+        ProgressDialogFragment dialogFragment = findProgressDialog(tag);
+        if (dialogFragment == null) {
+            dialogFragment = new ProgressDialogFragment();
+            dialogFragment.showAllowingStateLoss(getSupportFragmentManager(),
+                    tag,
+                    ProgressDialogArguments.builder()
+                            .sex(getSex())
+                            .title(title)
+                            .message(message)
+                            .build());
+        }
+    }
+
+    public void hideProgress(String tag) {
+        ProgressDialogFragment dialogFragment = findProgressDialog(tag);
+        if (dialogFragment != null) {
+            dialogFragment.dismissAllowingStateLoss();
+        }
+    }
+
+    private ProgressDialogFragment findProgressDialog(String tag) {
+        return (ProgressDialogFragment) getSupportFragmentManager().findFragmentByTag(tag);
     }
 }

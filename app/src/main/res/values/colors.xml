@@ -22,11 +22,17 @@
     <color name="event_feed_row_background_boy">#80B3673E</color>
     <color name="event_pump_row_background_boy">#80D4B932</color>
     <color name="event_other_row_background_boy">#802364A8</color>
+    <color name="event_doctor_visit_row_background_boy">#80B33E3E</color>
+    <color name="event_medicine_taking_row_background_boy">#804C3EB3</color>
+    <color name="event_exercise_row_background_boy">#80AA3EB3</color>
     <color name="event_diaper_row_background_girl">#80EF89AF</color>
     <color name="event_sleep_row_background_girl">#80E1492D</color>
     <color name="event_feed_row_background_girl">#80A9A124</color>
     <color name="event_pump_row_background_girl">#60D16A0C</color>
     <color name="event_other_row_background_girl">#80C2742C</color>
+    <color name="event_doctor_visit_row_background_girl">#80EBA602</color>
+    <color name="event_medicine_taking_row_background_girl">#80FF3C00</color>
+    <color name="event_exercise_row_background_girl">#80FF7B00</color>
     <color name="timer_on">#FF4335</color>
     <color name="timer_off">#6EC86A</color>
     <color name="current_day_background">#EEF1F3</color>

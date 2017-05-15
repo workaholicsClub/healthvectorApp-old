@@ -27,6 +27,12 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 
     protected abstract void injectPresenter(ApplicationComponent applicationComponent);
 
+    protected final void unsubscribe(Disposable subscription) {
+        if (subscription != null && !subscription.isDisposed()) {
+            subscription.dispose();
+        }
+    }
+
     protected Disposable unsubscribeOnDestroy(@NonNull Disposable disposable) {
         compositeDisposable.add(disposable);
         return disposable;
