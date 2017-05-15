@@ -68,11 +68,13 @@ public class SettingsDataRepository implements SettingsRepository {
 
     @Override
     public Observable<LocalTime> setStartTimeObservable(@NonNull LocalTime startTime) {
+        // TODO Настройки
         return null;
     }
 
     @Override
     public Observable<LocalTime> setFinishTimeObservable(@NonNull LocalTime finishTime) {
+        // TODO Настройки
         return null;
     }
 
