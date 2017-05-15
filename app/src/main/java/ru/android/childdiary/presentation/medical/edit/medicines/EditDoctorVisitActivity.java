@@ -169,6 +169,15 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     }
 
     @Override
+    public void onChecked() {
+        boolean exported = ObjectUtils.isTrue(item.getIsExported());
+        if (!exported) {
+            boolean readOnly = !getCheckBoxView().isChecked();
+            repeatParametersView.setReadOnly(readOnly);
+        }
+    }
+
+    @Override
     protected boolean contentEquals(DoctorVisit item1, DoctorVisit item2) {
         return ObjectUtils.contentEquals(item1, item2);
     }

@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.utils.ObjectUtils;
 
 public class DoctorVisitValidator extends MedicalValidator<DoctorVisit> {
     @Inject
@@ -36,7 +37,9 @@ public class DoctorVisitValidator extends MedicalValidator<DoctorVisit> {
             results.add(result);
         }
 
-        validate(results, doctorVisit.getRepeatParameters());
+        if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
+            validate(results, doctorVisit.getRepeatParameters());
+        }
 
         return results;
     }

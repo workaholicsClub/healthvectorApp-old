@@ -119,9 +119,6 @@ public class FieldRepeatParametersView extends LinearLayout
             timesView.setNumber(number);
 
             boolean once = number != null && number == 0;
-            periodicityView.setReadOnly(once || readOnly);
-            lengthView.setReadOnly(once || readOnly);
-
             if (once) {
                 // Однократно
                 periodicityView.setValue(null);
@@ -130,6 +127,8 @@ public class FieldRepeatParametersView extends LinearLayout
                 periodicityView.setValue(lastSelectedPeriodicityType);
                 lengthView.setValue(lastSelectedLengthValue);
             }
+
+            setupReadOnly();
         } else if (view == periodicityView) {
             PeriodicityType periodicityType = (PeriodicityType) item;
             periodicityView.setValue(periodicityType);
@@ -175,12 +174,10 @@ public class FieldRepeatParametersView extends LinearLayout
         periodicityView.setValue(periodicity);
         lengthView.setValue(length);
 
-        boolean once = number != null && number == 0;
-        periodicityView.setReadOnly(once || readOnly);
-        lengthView.setReadOnly(once || readOnly);
-
         lastSelectedPeriodicityType = periodicityView.getValue();
         lastSelectedLengthValue = lengthView.getValue();
+
+        setupReadOnly();
     }
 
     @Nullable
@@ -207,15 +204,21 @@ public class FieldRepeatParametersView extends LinearLayout
     @Override
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+        setupReadOnly();
+    }
 
+    private void setupReadOnly() {
         frequencyView.setReadOnly(readOnly);
         timesView.setReadOnly(readOnly);
-
-        Integer number = frequencyView.getValue();
-
-        boolean once = number != null && number == 0;
-        periodicityView.setReadOnly(once || readOnly);
-        lengthView.setReadOnly(once || readOnly);
+        if (readOnly) {
+            periodicityView.setReadOnly(true);
+            lengthView.setReadOnly(true);
+        } else {
+            Integer number = frequencyView.getValue();
+            boolean once = number != null && number == 0;
+            periodicityView.setReadOnly(once);
+            lengthView.setReadOnly(once);
+        }
     }
 
     public void setFieldTimesListener(FieldTimesView.FieldTimesListener fieldTimesListener) {
