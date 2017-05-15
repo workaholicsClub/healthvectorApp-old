@@ -85,6 +85,8 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     private ViewGroup detailsView;
 
+    private boolean isValidationStarted;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -287,6 +289,22 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
             buttonAdd.setEnabled(true);
             hideProgress(TAG_PROGRESS_DIALOG_GENERATING_EVENTS);
         }
+    }
+
+    @Override
+    public final void validationFailed() {
+        if (!isValidationStarted) {
+            isValidationStarted = true;
+            validationStarted();
+        }
+    }
+
+    protected void validationStarted() {
+    }
+
+    @Override
+    public void showValidationErrorMessage(String msg) {
+        showToast(msg);
     }
 
     @Override

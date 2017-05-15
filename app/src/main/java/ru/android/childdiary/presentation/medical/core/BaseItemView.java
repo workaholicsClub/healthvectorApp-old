@@ -39,4 +39,10 @@ public interface BaseItemView<T extends Serializable> extends BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showGeneratingEvents(boolean loading);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void validationFailed();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showValidationErrorMessage(String msg);
 }

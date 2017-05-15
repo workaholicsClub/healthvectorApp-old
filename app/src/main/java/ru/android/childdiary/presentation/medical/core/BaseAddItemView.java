@@ -14,10 +14,4 @@ public interface BaseAddItemView<T extends Serializable> extends BaseItemView<T>
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void setButtonDoneEnabled(boolean enabled);
-
-    @StateStrategyType(AddToEndSingleStrategy.class)
-    void validationFailed();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void showValidationErrorMessage(String msg);
 }

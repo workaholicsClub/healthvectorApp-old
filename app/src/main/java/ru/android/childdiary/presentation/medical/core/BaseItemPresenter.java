@@ -17,6 +17,8 @@ import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
+import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -96,5 +98,29 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showLengthValueDialog, this::onUnexpectedError));
+    }
+
+    @Override
+    public void onUnexpectedError(Throwable e) {
+        if (e instanceof MedicalValidationException) {
+            List<MedicalValidationResult> results = ((MedicalValidationException) e).getValidationResults();
+            if (results.isEmpty()) {
+                logger.error("medical validation results empty");
+                return;
+            }
+
+            getViewState().validationFailed();
+            String msg = Observable.fromIterable(results)
+                    .filter(MedicalValidationResult::notValid)
+                    .map(MedicalValidationResult::toString)
+                    .blockingFirst();
+            getViewState().showValidationErrorMessage(msg);
+            handleValidationResult(results);
+        } else {
+            super.onUnexpectedError(e);
+        }
+    }
+
+    public void handleValidationResult(List<MedicalValidationResult> results) {
     }
 }

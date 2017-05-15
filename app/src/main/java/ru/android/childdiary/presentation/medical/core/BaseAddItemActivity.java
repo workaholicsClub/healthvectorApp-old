@@ -20,8 +20,6 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     @State
     boolean isButtonDoneEnabled;
 
-    private boolean isValidationStarted;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,19 +51,6 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     }
 
     @Override
-    public final void validationFailed() {
-        if (!isValidationStarted) {
-            isValidationStarted = true;
-            validationStarted();
-        }
-    }
-
-    @Override
-    public void showValidationErrorMessage(String msg) {
-        showToast(msg);
-    }
-
-    @Override
     protected void saveChangesOrExit() {
         T item = build();
         if (contentEquals(item, defaultItem)) {
@@ -81,6 +66,4 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     }
 
     protected abstract BaseAddItemPresenter<V, T> getPresenter();
-
-    protected abstract void validationStarted();
 }
