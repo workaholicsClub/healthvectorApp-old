@@ -9,6 +9,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -43,11 +44,16 @@ public class LinearGroupsConverter extends SimpleConverter<LinearGroups> {
     @Override
     @Nullable
     protected LinearGroups map(@NonNull String value) {
-        String[] parts = value.split(DELIMITER);
-        List<LocalTime> times = Observable.fromArray(parts)
-                .map(TIME_FORMATTER::parseLocalTime)
-                .toList()
-                .blockingGet();
+        List<LocalTime> times;
+        if (value.isEmpty()) {
+            times = Collections.emptyList();
+        } else {
+            String[] parts = value.split(DELIMITER);
+            times = Observable.fromArray(parts)
+                    .map(TIME_FORMATTER::parseLocalTime)
+                    .toList()
+                    .blockingGet();
+        }
         return LinearGroups.builder().times(new ArrayList<>(times)).build();
     }
 }
