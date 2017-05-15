@@ -13,11 +13,11 @@ import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
-import ru.android.childdiary.presentation.core.BaseDialogFragment;
+import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class LengthValueDialogFragment extends BaseDialogFragment<LengthValueDialogArguments> {
+public class LengthValueDialogFragment extends BaseMvpDialogFragment<LengthValueDialogArguments> {
     @BindView(R.id.rootView)
     View rootView;
 

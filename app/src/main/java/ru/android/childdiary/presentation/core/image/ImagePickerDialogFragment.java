@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.image;
+package ru.android.childdiary.presentation.core.image;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
@@ -27,19 +28,23 @@ import java.util.List;
 
 import icepick.State;
 import ru.android.childdiary.R;
-import ru.android.childdiary.presentation.core.BaseDialogFragment;
+import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
+import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.presentation.core.RequestPermissionInfo;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ImagePickerDialogFragment extends BaseDialogFragment<ImagePickerDialogArguments>
-        implements AdapterView.OnItemClickListener {
+public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePickerDialogArguments>
+        implements AdapterView.OnItemClickListener, ImagePickerView {
     private static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
 
     private static final int REQUEST_PICK_IMAGE = 1;
     private static final int REQUEST_CAPTURE_IMAGE = 2;
     private static final int REQUEST_CROP_IMAGE = 3;
+
+    @InjectPresenter
+    ImagePickerPresenter presenter;
 
     @State
     Uri capturedImageFileUri;
@@ -143,7 +148,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment<ImagePickerDia
     private void captureImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            File capturedImageFile = ImagePickerHelper.createCapturedImageFile(getContext());
+            File capturedImageFile = new ImagesDataRepository().createCapturedImageFile(getContext());
             if (capturedImageFile == null) {
                 showToast(getString(R.string.failed_to_create_file_for_camera));
             } else {
@@ -152,7 +157,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment<ImagePickerDia
                         capturedImageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageFileUri);
 
-                ImagePickerHelper.grantPermissionToApps(getContext(), intent, capturedImageFileUri);
+                grantPermissionToApps(intent, capturedImageFileUri);
 
                 startActivityForResult(intent, REQUEST_CAPTURE_IMAGE);
             }
@@ -174,7 +179,8 @@ public class ImagePickerDialogFragment extends BaseDialogFragment<ImagePickerDia
                 startCropActivity(selectedImageUri);
             }
         } else if (requestCode == REQUEST_CAPTURE_IMAGE) {
-            ImagePickerHelper.revokePermissions(getContext(), capturedImageFileUri);
+            revokePermissions(capturedImageFileUri);
+
             if (resultCode == RESULT_OK) {
                 startCropActivity(capturedImageFileUri);
             }
@@ -188,7 +194,7 @@ public class ImagePickerDialogFragment extends BaseDialogFragment<ImagePickerDia
     }
 
     private void startCropActivity(@NonNull Uri sourceUri) {
-        File destinationFile = ImagePickerHelper.getCroppedImageFile(getContext());
+        File destinationFile = new ImagesDataRepository().getCroppedImageFile(getContext());
 
         if (destinationFile == null) {
             showToast(getString(R.string.failed_to_create_file_for_crop));
@@ -224,12 +230,12 @@ public class ImagePickerDialogFragment extends BaseDialogFragment<ImagePickerDia
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
             dismiss();
-            File resultFile = ImagePickerHelper.createUniqueImageFile(getContext(), resultUri);
-            if (resultFile == null) {
+            String resultFileRelativePath = new ImagesDataRepository().createUniqueImageFile(getContext(), resultUri);
+            if (resultFileRelativePath == null) {
                 showToast(getString(R.string.failed_to_save_result_file));
             } else {
                 if (listener != null) {
-                    listener.onSetImage(resultFile);
+                    listener.onSetImage(resultFileRelativePath);
                 }
             }
         } else {
@@ -264,6 +270,6 @@ public class ImagePickerDialogFragment extends BaseDialogFragment<ImagePickerDia
     }
 
     public interface Listener {
-        void onSetImage(@Nullable File resultFile);
+        void onSetImage(@Nullable String relativeFileName);
     }
 }

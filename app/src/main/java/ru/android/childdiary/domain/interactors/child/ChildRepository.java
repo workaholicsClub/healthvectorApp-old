@@ -5,9 +5,8 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.domain.core.Repository;
 
-public interface ChildRepository extends Repository {
+public interface ChildRepository {
     Observable<Child> getActiveChild();
 
     void setActiveChild(@NonNull Child child);

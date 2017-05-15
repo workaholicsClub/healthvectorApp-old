@@ -3,7 +3,7 @@ package ru.android.childdiary.domain.interactors.medical.validation;
 import java.util.Collections;
 import java.util.List;
 
-import ru.android.childdiary.domain.core.ValidationException;
+import ru.android.childdiary.domain.core.validation.ValidationException;
 
 public class MedicalValidationException extends Exception implements ValidationException<MedicalValidationResult> {
     private final List<MedicalValidationResult> results;

@@ -10,7 +10,6 @@ import java.util.List;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
-import ru.android.childdiary.domain.core.Repository;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
@@ -28,7 +27,7 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRespo
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 
-public interface CalendarRepository extends Repository {
+public interface CalendarRepository {
     Observable<LocalDate> getSelectedDate();
 
     void setSelectedDate(@NonNull LocalDate date);

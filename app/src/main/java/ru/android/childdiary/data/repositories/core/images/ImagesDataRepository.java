@@ -1,9 +1,6 @@
-package ru.android.childdiary.presentation.profile.image;
+package ru.android.childdiary.data.repositories.core.images;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
@@ -11,18 +8,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.List;
 import java.util.UUID;
 
-class ImagePickerHelper {
-    private static final Logger logger = LoggerFactory.getLogger(ImagePickerHelper.class);
+import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+
+public class ImagesDataRepository implements ImagesRepository {
+    private final Logger logger = LoggerFactory.getLogger(toString());
+
     private static final String IMAGE_FILE_SUFFIX = ".jpg";
     private static final String CROPPED_IMAGE_FILE_NAME = "cropped" + IMAGE_FILE_SUFFIX;
     private static final String CAPTURED_IMAGE_FILE_NAME = "captured" + IMAGE_FILE_SUFFIX;
     private static final String PARENT_DIR_NAME = "images";
 
     @Nullable
-    public static File createUniqueImageFile(Context context, Uri resultUri) {
+    @Override
+    public String createUniqueImageFile(Context context, Uri resultUri) {
         try {
             String prefix = UUID.randomUUID().toString();
             File parentDir = new File(context.getFilesDir(), PARENT_DIR_NAME);
@@ -31,7 +31,8 @@ class ImagePickerHelper {
             File fromCropped = new File(resultUri.getPath());
             boolean result = fromCropped.renameTo(resultFile);
             if (result) {
-                return resultFile;
+                int len = context.getFilesDir().getAbsolutePath().length();
+                return resultFile.getAbsolutePath().substring(len);
             } else {
                 logger.error("failed to rename from " + fromCropped + " to " + resultFile);
                 return null;
@@ -43,7 +44,8 @@ class ImagePickerHelper {
     }
 
     @Nullable
-    public static File getCroppedImageFile(Context context) {
+    @Override
+    public File getCroppedImageFile(Context context) {
         try {
             File parentDir = context.getCacheDir();
             File f = new File(parentDir, CROPPED_IMAGE_FILE_NAME);
@@ -55,7 +57,8 @@ class ImagePickerHelper {
     }
 
     @Nullable
-    public static File createCapturedImageFile(Context context) {
+    @Override
+    public File createCapturedImageFile(Context context) {
         try {
             File parentDir = new File(context.getCacheDir(), PARENT_DIR_NAME);
             parentDir.mkdirs();
@@ -66,17 +69,5 @@ class ImagePickerHelper {
             logger.error("failed to create file for camera", e);
             return null;
         }
-    }
-
-    public static void grantPermissionToApps(Context context, Intent intent, Uri uri) {
-        List<ResolveInfo> activities = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        for (ResolveInfo info : activities) {
-            String packageName = info.activityInfo.packageName;
-            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        }
-    }
-
-    public static void revokePermissions(Context context, Uri uri) {
-        context.revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
     }
 }

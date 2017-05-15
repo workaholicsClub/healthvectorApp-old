@@ -11,7 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.core.Validator;
+import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.utils.TimeUtils;
 

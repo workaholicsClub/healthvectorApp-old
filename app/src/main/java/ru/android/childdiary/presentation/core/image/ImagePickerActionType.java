@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.image;
+package ru.android.childdiary.presentation.core.image;
 
 enum ImagePickerActionType {
     CAPTURE, PICK, DELETE

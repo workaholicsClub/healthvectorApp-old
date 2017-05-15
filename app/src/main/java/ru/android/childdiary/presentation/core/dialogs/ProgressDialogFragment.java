@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.presentation.core.BaseDialogFragment;
+import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class ProgressDialogFragment extends BaseDialogFragment<ProgressDialogArguments> {
+public class ProgressDialogFragment extends BaseMvpDialogFragment<ProgressDialogArguments> {
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
 
     @BindView(R.id.title)

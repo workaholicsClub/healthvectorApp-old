@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
 
+import java.io.File;
+
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
@@ -19,16 +21,27 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class ResourcesUtils {
-    public static Drawable getChildIcon(Context context, @NonNull Child child, boolean toolbar) {
+    public static Drawable getChildIconForToolbar(Context context, @NonNull Child child) {
+        return getChildIcon(context, child,
+                ContextCompat.getDrawable(context, R.drawable.ic_placeholder_toolbar));
+    }
+
+    public static Drawable getChildIconForAccountHeader(Context context, @NonNull Child child) {
+        return getChildIcon(context, child,
+                ContextCompat.getDrawable(context, R.drawable.ic_placeholder_account_header));
+    }
+
+    public static Drawable getChildIconForProfile(Context context, @NonNull Child child) {
+        return getChildIcon(context, child,
+                ContextCompat.getDrawable(context, R.color.white));
+    }
+
+    private static Drawable getChildIcon(Context context, @NonNull Child child, Drawable placeholder) {
         if (child.getImageFileName() == null) {
-            return ContextCompat.getDrawable(context,
-                    toolbar ? R.drawable.ic_placeholder_toolbar : R.drawable.ic_placeholder_header);
+            return placeholder;
         }
-        // TODO: использовать относительное имя
-        // т.к. в будущем надо будет добавить
-        // сохранение данных в облако и восстановление данных из облака;
-        // в общем случае полный путь к файлу для разных устройств будет разный
-        return Drawable.createFromPath(child.getImageFileName());
+        File file = new File(context.getFilesDir(), child.getImageFileName());
+        return Drawable.createFromPath(file.getAbsolutePath());
     }
 
     public static int[] getNavigationDrawerItemResources(@Nullable Sex sex) {
