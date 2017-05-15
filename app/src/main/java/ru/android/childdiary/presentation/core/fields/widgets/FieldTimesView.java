@@ -132,10 +132,10 @@ public class FieldTimesView extends FieldValueView<LinearGroups> implements View
         if (getValue() == null) {
             return;
         }
-        LinearGroups linearGroups = getValue().toBuilder().build();
-        linearGroups.getTimes().set(i, time);
-        Collections.sort(linearGroups.getTimes());
-        setValue(linearGroups);
+        ArrayList<LocalTime> times = new ArrayList<>(getValue().getTimes());
+        times.set(i, time);
+        Collections.sort(times);
+        setValue(LinearGroups.builder().times(times).build());
     }
 
     @Override
