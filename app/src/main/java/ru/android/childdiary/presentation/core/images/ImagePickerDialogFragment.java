@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.core.image;
+package ru.android.childdiary.presentation.core.images;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -28,9 +28,13 @@ import java.util.List;
 
 import icepick.State;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.presentation.core.RequestPermissionInfo;
+import ru.android.childdiary.presentation.core.images.adapters.ImagePickerAction;
+import ru.android.childdiary.presentation.core.images.adapters.ImagePickerActionAdapter;
+import ru.android.childdiary.presentation.core.images.adapters.ImagePickerActionType;
+import ru.android.childdiary.presentation.core.images.crop.CropActivity;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 import static android.app.Activity.RESULT_OK;
@@ -102,7 +106,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
         ImagePickerAction action = ((ImagePickerActionAdapter) parent.getAdapter()).getItem(position);
         switch (action.getType()) {
             case CAPTURE:
-                captureImage();
+                presenter.startCamera();
                 break;
             case PICK:
                 requestPermissionAndPickImage();
@@ -145,44 +149,23 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
         startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), REQUEST_PICK_IMAGE);
     }
 
-    private void captureImage() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            File capturedImageFile = new ImagesDataRepository().createCapturedImageFile(getContext());
-            if (capturedImageFile == null) {
-                showToast(getString(R.string.failed_to_create_file_for_camera));
-            } else {
-                capturedImageFileUri = FileProvider.getUriForFile(getContext(),
-                        getString(R.string.file_provider_authorities),
-                        capturedImageFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageFileUri);
-
-                grantPermissionToApps(intent, capturedImageFileUri);
-
-                startActivityForResult(intent, REQUEST_CAPTURE_IMAGE);
-            }
-        } else {
-            showToast(getString(R.string.camera_not_available));
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_PICK_IMAGE) {
             if (resultCode == RESULT_OK) {
-                final Uri selectedImageUri = data.getData();
-                if (selectedImageUri == null) {
+                final Uri selectedImageFileUri = data.getData();
+                if (selectedImageFileUri == null) {
                     showToast(getString(R.string.failed_to_select_image));
                     return;
                 }
 
-                startCropActivity(selectedImageUri);
+                presenter.startCrop(selectedImageFileUri);
             }
         } else if (requestCode == REQUEST_CAPTURE_IMAGE) {
             revokePermissions(capturedImageFileUri);
 
             if (resultCode == RESULT_OK) {
-                startCropActivity(capturedImageFileUri);
+                presenter.startCrop(capturedImageFileUri);
             }
         } else if (requestCode == REQUEST_CROP_IMAGE) {
             if (resultCode == RESULT_OK) {
@@ -193,51 +176,10 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
         }
     }
 
-    private void startCropActivity(@NonNull Uri sourceUri) {
-        File destinationFile = new ImagesDataRepository().getCroppedImageFile(getContext());
-
-        if (destinationFile == null) {
-            showToast(getString(R.string.failed_to_create_file_for_crop));
-            return;
-        }
-
-        UCrop uCrop = UCrop.of(sourceUri, Uri.fromFile(destinationFile));
-
-        uCrop = uCrop.withAspectRatio(1, 1);
-
-        UCrop.Options options = new UCrop.Options();
-
-        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
-        options.setCompressionQuality(90);
-        options.setHideBottomControls(true);
-        options.setFreeStyleCropEnabled(false);
-        options.setAllowedGestures(UCropActivity.ALL, UCropActivity.ALL, UCropActivity.ALL);
-        options.setCircleDimmedLayer(true);
-        options.setCropGridColumnCount(0);
-        options.setCropGridRowCount(0);
-        options.setShowCropFrame(false);
-
-        WidgetsUtils.setupCropActivityToolbar(getContext(), options, dialogArguments.getSex());
-
-        uCrop.withOptions(options);
-
-        Intent intent = uCrop.getIntent(getContext());
-        intent.setClass(getContext(), CropActivity.class);
-        startActivityForResult(intent, REQUEST_CROP_IMAGE);
-    }
-
     private void handleCropResult(@NonNull Intent result) {
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
-            dismiss();
-            String resultFileRelativePath = new ImagesDataRepository().createUniqueImageFile(getContext(), resultUri);
-            if (resultFileRelativePath == null) {
-                showToast(getString(R.string.failed_to_save_result_file));
-            } else {
-                if (listener != null) {
-                    listener.onSetImage(resultFileRelativePath);
-                }
-            }
+            presenter.createUniqueImageFile(dialogArguments.getImageType(), resultUri);
         } else {
             logger.error("handleCropResult: resultUri is null");
             showToast(getString(R.string.failed_to_crop_image));
@@ -253,6 +195,72 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
             logger.error("handleCropError: cropError is null");
             showToast(getString(R.string.failed_to_crop_image));
         }
+    }
+
+    @Override
+    public void setResultImageFile(@NonNull String relativePath) {
+        dismiss();
+        if (listener != null) {
+            listener.onSetImage(relativePath);
+        }
+    }
+
+    @Override
+    public void failedToCreateResultImageFile() {
+        showToast(getString(R.string.failed_to_save_result_file));
+    }
+
+    @Override
+    public void startCrop(@NonNull Uri sourceUri, @NonNull File destinationFile) {
+        UCrop uCrop = UCrop.of(sourceUri, Uri.fromFile(destinationFile));
+
+        uCrop = uCrop.withAspectRatio(1, 1);
+
+        UCrop.Options options = new UCrop.Options();
+
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        options.setCompressionQuality(90);
+        options.setHideBottomControls(true);
+        options.setFreeStyleCropEnabled(false);
+        options.setAllowedGestures(UCropActivity.ALL, UCropActivity.ALL, UCropActivity.ALL);
+        options.setCropGridColumnCount(0);
+        options.setCropGridRowCount(0);
+        options.setShowCropFrame(false);
+
+        options.setCircleDimmedLayer(dialogArguments.getImageType() == ImageType.PROFILE);
+        WidgetsUtils.setupCropActivityToolbar(getContext(), options, dialogArguments.getSex());
+
+        uCrop.withOptions(options);
+
+        Intent intent = uCrop.getIntent(getContext());
+        intent.setClass(getContext(), CropActivity.class);
+        startActivityForResult(intent, REQUEST_CROP_IMAGE);
+    }
+
+    @Override
+    public void failedToCreateCropImageFile() {
+        showToast(getString(R.string.failed_to_create_file_for_crop));
+    }
+
+    @Override
+    public void startCamera(@NonNull File file) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            capturedImageFileUri = FileProvider.getUriForFile(getContext(),
+                    getString(R.string.file_provider_authorities), file);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageFileUri);
+
+            grantPermissionToApps(intent, capturedImageFileUri);
+
+            startActivityForResult(intent, REQUEST_CAPTURE_IMAGE);
+        } else {
+            showToast(getString(R.string.camera_not_available));
+        }
+    }
+
+    @Override
+    public void failedToCreateCameraImageFile() {
+        showToast(getString(R.string.failed_to_create_file_for_camera));
     }
 
     @Override

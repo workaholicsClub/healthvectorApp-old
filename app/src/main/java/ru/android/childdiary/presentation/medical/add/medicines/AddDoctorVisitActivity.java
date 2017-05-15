@@ -132,7 +132,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(item.getNote());
-        // TODO image file name
+        noteWithPhotoView.setImageFileName(item.getImageFileName());
     }
 
     @Override
@@ -145,7 +145,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         boolean exported = checkBoxView.isChecked();
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
-        String imageFileName = null;
+        String imageFileName = noteWithPhotoView.getImageFileName();
 
         return defaultItem.toBuilder()
                 .doctor(doctor)
@@ -223,6 +223,11 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     @Override
     protected FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return null;
+    }
+
+    @Override
+    public FieldNoteWithPhotoView getNoteWithPhotoView() {
+        return noteWithPhotoView;
     }
 
     @Override

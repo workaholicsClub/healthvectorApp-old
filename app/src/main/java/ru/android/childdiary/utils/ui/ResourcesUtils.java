@@ -36,11 +36,26 @@ public class ResourcesUtils {
                 ContextCompat.getDrawable(context, R.color.white));
     }
 
-    private static Drawable getChildIcon(Context context, @NonNull Child child, Drawable placeholder) {
-        if (child.getImageFileName() == null) {
+    private static Drawable getChildIcon(Context context,
+                                         @NonNull Child child,
+                                         @NonNull Drawable placeholder) {
+        return getPhotoDrawable(context, child.getImageFileName(), placeholder);
+    }
+
+    @Nullable
+    public static Drawable getPhotoDrawable(Context context,
+                                            @Nullable String imageFileName) {
+        return getPhotoDrawable(context, imageFileName, null);
+    }
+
+    @Nullable
+    public static Drawable getPhotoDrawable(Context context,
+                                            @Nullable String imageFileName,
+                                            @Nullable Drawable placeholder) {
+        if (imageFileName == null) {
             return placeholder;
         }
-        File file = new File(context.getFilesDir(), child.getImageFileName());
+        File file = new File(context.getFilesDir(), imageFileName);
         return Drawable.createFromPath(file.getAbsolutePath());
     }
 

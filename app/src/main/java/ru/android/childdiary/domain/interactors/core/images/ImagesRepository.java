@@ -1,14 +1,16 @@
 package ru.android.childdiary.domain.interactors.core.images;
 
-import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import java.io.File;
 
+import io.reactivex.Single;
+
 public interface ImagesRepository {
-    String createUniqueImageFile(Context context, Uri resultUri);
+    Single<String> createUniqueImageFile(@NonNull ImageType imageType, @NonNull Uri fromFileUri);
 
-    File getCroppedImageFile(Context context);
+    Single<File> createCroppedImageFile();
 
-    File createCapturedImageFile(Context context);
+    Single<File> createCapturedImageFile();
 }

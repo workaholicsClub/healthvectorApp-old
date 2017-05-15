@@ -46,10 +46,11 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.image.ImagePickerDialogArguments;
-import ru.android.childdiary.presentation.core.image.ImagePickerDialogFragment;
+import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
+import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
@@ -316,6 +317,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
                         .showDeleteItem(editedChild.getImageFileName() != null)
+                        .imageType(ImageType.PROFILE)
                         .build());
     }
 
@@ -472,7 +474,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         }
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
-                .setPositiveButton(R.string.save_changes_dialog_positive_button_text,
+                .setPositiveButton(R.string.save,
                         (DialogInterface dialog, int which) -> {
                             if (child == null) {
                                 presenter.addChild(editedChild);

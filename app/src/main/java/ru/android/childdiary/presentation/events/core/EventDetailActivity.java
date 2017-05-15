@@ -321,7 +321,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
-                .setPositiveButton(R.string.save_changes_dialog_positive_button_text,
+                .setPositiveButton(R.string.save,
                         (DialogInterface dialog, int which) -> {
                             if (event == null) {
                                 getPresenter().addEvent(editedEvent, true);
