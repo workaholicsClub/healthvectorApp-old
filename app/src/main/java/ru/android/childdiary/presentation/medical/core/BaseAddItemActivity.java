@@ -7,14 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
-import org.joda.time.LocalTime;
-
 import java.io.Serializable;
 
 import butterknife.OnClick;
 import icepick.State;
 import ru.android.childdiary.R;
-import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -29,8 +26,6 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupRepeatParameters();
-
         buttonAdd.setVisibility(View.VISIBLE);
         setup(defaultItem);
     }
@@ -39,12 +34,6 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     protected void themeChanged() {
         super.themeChanged();
         buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
-    }
-
-    private void setupRepeatParameters() {
-        LocalTime startTime = (LocalTime) getIntent().getSerializableExtra(ExtraConstants.EXTRA_START_TIME);
-        LocalTime finishTime = (LocalTime) getIntent().getSerializableExtra(ExtraConstants.EXTRA_FINISH_TIME);
-        getRepeatParametersView().setTimeLimits(startTime, finishTime);
     }
 
     @OnClick(R.id.buttonAdd)

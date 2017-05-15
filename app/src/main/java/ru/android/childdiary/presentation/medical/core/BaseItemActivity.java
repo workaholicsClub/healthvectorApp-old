@@ -145,6 +145,9 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         if (getMedicineMeasureValueView() != null) {
             getMedicineMeasureValueView().setFieldDialogListener(view -> getPresenter().requestMedicineMeasureValueDialog());
         }
+        LocalTime startTime = (LocalTime) getIntent().getSerializableExtra(ExtraConstants.EXTRA_START_TIME);
+        LocalTime finishTime = (LocalTime) getIntent().getSerializableExtra(ExtraConstants.EXTRA_FINISH_TIME);
+        getRepeatParametersView().setTimeLimits(startTime, finishTime);
         getRepeatParametersView().setListener(() -> getPresenter().requestLengthValueDialog());
         getRepeatParametersView().setFieldTimesListener((i, time) -> showTimePicker(String.valueOf(i), time));
     }

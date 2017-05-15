@@ -19,6 +19,7 @@ import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsResponse;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
+import ru.android.childdiary.presentation.medical.DoctorVisitParameters;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
@@ -66,11 +67,24 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
     }
 
     public void editDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        unsubscribeOnDestroy(doctorVisitInteractor.getDefaultDoctorVisit()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(defaultDoctorVisit -> getViewState().navigateToDoctorVisit(doctorVisit, defaultDoctorVisit),
-                        this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        doctorVisitInteractor.getDefaultDoctorVisit(),
+                        doctorVisitInteractor.getStartTimeOnce(),
+                        doctorVisitInteractor.getFinishTimeOnce(),
+                        (defaultDoctorVisit, startTime, finishTime) -> DoctorVisitParameters.builder()
+                                .defaultDoctorVisit(defaultDoctorVisit)
+                                .startTime(startTime)
+                                .finishTime(finishTime)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(parameters -> getViewState().navigateToDoctorVisit(
+                                doctorVisit,
+                                parameters.getDefaultDoctorVisit(),
+                                parameters.getStartTime(),
+                                parameters.getFinishTime()),
+                                this::onUnexpectedError));
     }
 
     public void delete(@NonNull DoctorVisit doctorVisit) {

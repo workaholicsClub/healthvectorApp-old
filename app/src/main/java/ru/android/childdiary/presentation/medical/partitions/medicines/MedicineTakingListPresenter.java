@@ -19,6 +19,7 @@ import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListResponse;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
+import ru.android.childdiary.presentation.medical.MedicineTakingParameters;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
@@ -66,11 +67,24 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
     }
 
     public void editMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        unsubscribeOnDestroy(medicineTakingInteractor.getDefaultMedicineTaking()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(defaultMedicineTaking -> getViewState().navigateToMedicineTaking(medicineTaking, defaultMedicineTaking),
-                        this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        medicineTakingInteractor.getDefaultMedicineTaking(),
+                        medicineTakingInteractor.getStartTimeOnce(),
+                        medicineTakingInteractor.getFinishTimeOnce(),
+                        (defaultMedicineTaking, startTime, finishTime) -> MedicineTakingParameters.builder()
+                                .defaultMedicineTaking(defaultMedicineTaking)
+                                .startTime(startTime)
+                                .finishTime(finishTime)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(parameters -> getViewState().navigateToMedicineTaking(
+                                medicineTaking,
+                                parameters.getDefaultMedicineTaking(),
+                                parameters.getStartTime(),
+                                parameters.getFinishTime()),
+                                this::onUnexpectedError));
     }
 
     public void delete(@NonNull MedicineTaking medicineTaking) {

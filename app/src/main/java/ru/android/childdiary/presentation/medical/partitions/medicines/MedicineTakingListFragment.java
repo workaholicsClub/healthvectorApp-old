@@ -5,12 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import org.joda.time.LocalTime;
 
 import java.util.List;
 
@@ -89,8 +92,11 @@ public class MedicineTakingListFragment extends AppPartitionFragment
 
     @Override
     public void navigateToMedicineTaking(@NonNull MedicineTaking medicineTaking,
-                                         @NonNull MedicineTaking defaultMedicineTaking) {
-        Intent intent = EditMedicineTakingActivity.getIntent(getContext(), medicineTaking, defaultMedicineTaking);
+                                         @NonNull MedicineTaking defaultMedicineTaking,
+                                         @Nullable LocalTime startTime,
+                                         @Nullable LocalTime finishTime) {
+        Intent intent = EditMedicineTakingActivity.getIntent(getContext(),
+                medicineTaking, defaultMedicineTaking, startTime, finishTime);
         startActivity(intent);
     }
 

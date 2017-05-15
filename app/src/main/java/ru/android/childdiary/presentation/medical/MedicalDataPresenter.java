@@ -2,19 +2,13 @@ package ru.android.childdiary.presentation.medical;
 
 import com.arellomobile.mvp.InjectViewState;
 
-import org.joda.time.LocalTime;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import lombok.Builder;
-import lombok.Value;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
-import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
@@ -69,21 +63,5 @@ public class MedicalDataPresenter extends AppPartitionPresenter<MedicalDataView>
                                 parameters.getStartTime(),
                                 parameters.getFinishTime()),
                                 this::onUnexpectedError));
-    }
-
-    @Value
-    @Builder
-    private static class DoctorVisitParameters {
-        DoctorVisit defaultDoctorVisit;
-        LocalTime startTime;
-        LocalTime finishTime;
-    }
-
-    @Value
-    @Builder
-    private static class MedicineTakingParameters {
-        MedicineTaking defaultMedicineTaking;
-        LocalTime startTime;
-        LocalTime finishTime;
     }
 }
