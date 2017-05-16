@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
+import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDataRepository;
 import ru.android.childdiary.data.types.EventType;
@@ -24,6 +25,7 @@ import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -40,18 +42,21 @@ public class MedicineTakingInteractor {
     private final SettingsRepository settingsRepository;
     private final MedicineTakingRepository medicineTakingRepository;
     private final MedicineTakingValidator medicineTakingValidator;
+    private final ImagesRepository imagesRepository;
 
     @Inject
     public MedicineTakingInteractor(ChildDataRepository childRepository,
                                     CalendarDataRepository calendarRepository,
                                     SettingsDataRepository settingsRepository,
                                     MedicineTakingDataRepository medicineTakingRepository,
-                                    MedicineTakingValidator medicineTakingValidator) {
+                                    MedicineTakingValidator medicineTakingValidator,
+                                    ImagesDataRepository imagesRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
         this.medicineTakingRepository = medicineTakingRepository;
         this.medicineTakingValidator = medicineTakingValidator;
+        this.imagesRepository = imagesRepository;
     }
 
     public Observable<List<Medicine>> getMedicines() {
@@ -140,7 +145,15 @@ public class MedicineTakingInteractor {
     }
 
     public Observable<MedicineTaking> deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return medicineTakingRepository.deleteMedicineTaking(medicineTaking);
+        return medicineTakingRepository.deleteMedicineTaking(medicineTaking)
+                .flatMap(this::deleteImageFile);
+    }
+
+    private Observable<MedicineTaking> deleteImageFile(@NonNull MedicineTaking medicineTaking) {
+        return Observable.fromCallable(() -> {
+            imagesRepository.deleteImageFile(medicineTaking.getImageFileName());
+            return medicineTaking;
+        });
     }
 
     public Observable<Boolean> controlDoneButton(

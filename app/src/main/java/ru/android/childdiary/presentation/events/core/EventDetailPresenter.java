@@ -88,7 +88,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     public void deleteOneEvent(@NonNull MasterEvent event) {
         unsubscribe();
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
-                .deleteType(DeleteEventsRequest.DeleteType.DELETE_ONE)
+                .deleteType(DeleteEventsRequest.DeleteType.DELETE_ONE_EVENT)
                 .event(event)
                 .build())
                 .map(response -> response.getRequest().getEvent())
@@ -101,7 +101,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     public void deleteLinearGroup(@NonNull MasterEvent event) {
         unsubscribe();
         unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
-                .deleteType(DeleteEventsRequest.DeleteType.DELETE_LINEAR_GROUP)
+                .deleteType(DeleteEventsRequest.DeleteType.DELETE_LINEAR_GROUP_EVENTS)
                 .event(event)
                 .build())
                 .map(DeleteEventsResponse::getCount)

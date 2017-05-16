@@ -319,9 +319,9 @@ public class CalendarDataRepository implements CalendarRepository {
             throw new IllegalArgumentException("Specify delete type");
         }
         switch (request.getDeleteType()) {
-            case DELETE_ONE:
+            case DELETE_ONE_EVENT:
                 return deleteOne(request);
-            case DELETE_LINEAR_GROUP:
+            case DELETE_LINEAR_GROUP_EVENTS:
                 return deleteLinearGroup(request);
             case DELETE_ALL_DOCTOR_VISIT_EVENTS:
                 return deleteAllDoctorVisitEvents(request);

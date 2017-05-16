@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
+import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository;
 import ru.android.childdiary.data.types.EventType;
@@ -26,6 +27,7 @@ import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
@@ -41,18 +43,21 @@ public class DoctorVisitInteractor {
     private final SettingsRepository settingsRepository;
     private final DoctorVisitRepository doctorVisitRepository;
     private final DoctorVisitValidator doctorVisitValidator;
+    private final ImagesRepository imagesRepository;
 
     @Inject
     public DoctorVisitInteractor(ChildDataRepository childRepository,
                                  CalendarDataRepository calendarRepository,
                                  SettingsDataRepository settingsRepository,
                                  DoctorVisitDataRepository doctorVisitRepository,
-                                 DoctorVisitValidator doctorVisitValidator) {
+                                 DoctorVisitValidator doctorVisitValidator,
+                                 ImagesDataRepository imagesRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
         this.doctorVisitRepository = doctorVisitRepository;
         this.doctorVisitValidator = doctorVisitValidator;
+        this.imagesRepository = imagesRepository;
     }
 
     public Observable<List<Doctor>> getDoctors() {
@@ -145,7 +150,15 @@ public class DoctorVisitInteractor {
     }
 
     public Observable<DoctorVisit> deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return doctorVisitRepository.deleteDoctorVisit(doctorVisit);
+        return doctorVisitRepository.deleteDoctorVisit(doctorVisit)
+                .flatMap(this::deleteImageFile);
+    }
+
+    private Observable<DoctorVisit> deleteImageFile(@NonNull DoctorVisit doctorVisit) {
+        return Observable.fromCallable(() -> {
+            imagesRepository.deleteImageFile(doctorVisit.getImageFileName());
+            return doctorVisit;
+        });
     }
 
     public Observable<Boolean> controlDoneButton(
