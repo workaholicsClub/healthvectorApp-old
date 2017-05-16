@@ -171,7 +171,7 @@ public class MedicineTakingEventDetailActivity
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(event.getNote());
-        // TODO image file name
+        noteWithPhotoView.setImageFileName(event.getImageFileName());
     }
 
     @Override
@@ -187,7 +187,7 @@ public class MedicineTakingEventDetailActivity
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
-        String imageFileName = null;
+        String imageFileName = noteWithPhotoView.getImageFileName();
 
         builder.dateTime(dateTime)
                 .medicine(medicine)

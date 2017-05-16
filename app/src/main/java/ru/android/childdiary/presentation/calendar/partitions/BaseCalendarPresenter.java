@@ -6,6 +6,8 @@ import com.arellomobile.mvp.InjectViewState;
 
 import org.joda.time.LocalDate;
 
+import java.util.Arrays;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -14,7 +16,14 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
@@ -119,57 +128,122 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     public void requestEventDetail(@NonNull MasterEvent event) {
         switch (event.getEventType()) {
             case DIAPER:
-                unsubscribeOnDestroy(calendarInteractor.getDefaultDiaperEvent()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(defaultEvent -> getViewState().navigateToDiaperEvent(event, defaultEvent),
-                                this::onUnexpectedError));
+                navigateToDiaperEvent(event);
                 break;
             case FEED:
-                unsubscribeOnDestroy(calendarInteractor.getDefaultFeedEvent()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(defaultEvent -> getViewState().navigateToFeedEvent(event, defaultEvent),
-                                this::onUnexpectedError));
+                navigateToFeedEvent(event);
                 break;
             case OTHER:
-                unsubscribeOnDestroy(calendarInteractor.getDefaultOtherEvent()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(defaultEvent -> getViewState().navigateToOtherEvent(event, defaultEvent),
-                                this::onUnexpectedError));
+                navigateToOtherEvent(event);
                 break;
             case PUMP:
-                unsubscribeOnDestroy(calendarInteractor.getDefaultPumpEvent()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(defaultEvent -> getViewState().navigateToPumpEvent(event, defaultEvent),
-                                this::onUnexpectedError));
+                navigateToPumpEvent(event);
                 break;
             case SLEEP:
-                unsubscribeOnDestroy(calendarInteractor.getDefaultSleepEvent()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(defaultEvent -> getViewState().navigateToSleepEvent(event, defaultEvent),
-                                this::onUnexpectedError));
+                navigateToSleepEvent(event);
                 break;
             case DOCTOR_VISIT:
-                unsubscribeOnDestroy(calendarInteractor.getDefaultDoctorVisitEvent()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(defaultEvent -> getViewState().navigateToDoctorVisitEvent(event, defaultEvent),
-                                this::onUnexpectedError));
+                navigateToDoctorVisitEvent(event);
                 break;
             case MEDICINE_TAKING:
-                unsubscribeOnDestroy(calendarInteractor.getDefaultMedicineTakingEvent()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(defaultEvent -> getViewState().navigateToMedicineTakingEvent(event, defaultEvent),
-                                this::onUnexpectedError));
+                navigateToMedicineTaking(event);
                 break;
             // TODO EXERCISE
         }
     }
+
+    private void navigateToDiaperEvent(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getEventDetailOnce(event),
+                calendarInteractor.getDefaultDiaperEvent(),
+                (eventDetail, defaultEvent) -> Arrays.asList(eventDetail, defaultEvent))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        events -> getViewState().navigateToDiaperEvent(
+                                (MasterEvent) events.get(0), (DiaperEvent) events.get(1)),
+                        this::onUnexpectedError));
+    }
+
+    private void navigateToFeedEvent(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getEventDetailOnce(event),
+                calendarInteractor.getDefaultFeedEvent(),
+                (eventDetail, defaultEvent) -> Arrays.asList(eventDetail, defaultEvent))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        events -> getViewState().navigateToFeedEvent(
+                                (MasterEvent) events.get(0), (FeedEvent) events.get(1)),
+                        this::onUnexpectedError));
+    }
+
+    private void navigateToOtherEvent(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getEventDetailOnce(event),
+                calendarInteractor.getDefaultOtherEvent(),
+                (eventDetail, defaultEvent) -> Arrays.asList(eventDetail, defaultEvent))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        events -> getViewState().navigateToOtherEvent(
+                                (MasterEvent) events.get(0), (OtherEvent) events.get(1)),
+                        this::onUnexpectedError));
+    }
+
+    private void navigateToPumpEvent(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getEventDetailOnce(event),
+                calendarInteractor.getDefaultPumpEvent(),
+                (eventDetail, defaultEvent) -> Arrays.asList(eventDetail, defaultEvent))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        events -> getViewState().navigateToPumpEvent(
+                                (MasterEvent) events.get(0), (PumpEvent) events.get(1)),
+                        this::onUnexpectedError));
+    }
+
+    private void navigateToSleepEvent(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getEventDetailOnce(event),
+                calendarInteractor.getDefaultSleepEvent(),
+                (eventDetail, defaultEvent) -> Arrays.asList(eventDetail, defaultEvent))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        events -> getViewState().navigateToSleepEvent(
+                                (MasterEvent) events.get(0), (SleepEvent) events.get(1)),
+                        this::onUnexpectedError));
+    }
+
+    private void navigateToDoctorVisitEvent(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getEventDetailOnce(event),
+                calendarInteractor.getDefaultDoctorVisitEvent(),
+                (eventDetail, defaultEvent) -> Arrays.asList(eventDetail, defaultEvent))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        events -> getViewState().navigateToDoctorVisitEvent(
+                                (MasterEvent) events.get(0), (DoctorVisitEvent) events.get(1)),
+                        this::onUnexpectedError));
+    }
+
+    private void navigateToMedicineTaking(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getEventDetailOnce(event),
+                calendarInteractor.getDefaultMedicineTakingEvent(),
+                (eventDetail, defaultEvent) -> Arrays.asList(eventDetail, defaultEvent))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        events -> getViewState().navigateToMedicineTakingEvent(
+                                (MasterEvent) events.get(0), (MedicineTakingEvent) events.get(1)),
+                        this::onUnexpectedError));
+    }
+
+    // TODO EXERCISE
 
     public void done(@NonNull MasterEvent event) {
         unsubscribeOnDestroy(calendarInteractor.done(event)
