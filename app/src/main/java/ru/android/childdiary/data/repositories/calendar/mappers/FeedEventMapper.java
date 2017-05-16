@@ -14,28 +14,23 @@ import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntit
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.FeedEventEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
-import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
 public class FeedEventMapper implements EntityMapper<FeedEventData, FeedEventEntity, FeedEvent> {
     private final ChildMapper childMapper;
-    private final RepeatParametersMapper repeatParametersMapper;
     private final FoodMeasureMapper foodMeasureMapper;
     private final FoodMapper foodMapper;
 
     @Inject
     public FeedEventMapper(ChildMapper childMapper,
-                           RepeatParametersMapper repeatParametersMapper,
                            FoodMeasureMapper foodMeasureMapper,
                            FoodMapper foodMapper) {
         this.childMapper = childMapper;
-        this.repeatParametersMapper = repeatParametersMapper;
         this.foodMeasureMapper = foodMeasureMapper;
         this.foodMapper = foodMapper;
     }
@@ -45,8 +40,6 @@ public class FeedEventMapper implements EntityMapper<FeedEventData, FeedEventEnt
         MasterEventData masterEventData = feedEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
-        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         FoodMeasureData foodMeasureData = feedEventData.getFoodMeasure();
         FoodMeasure foodMeasure = foodMeasureData == null ? null : foodMeasureMapper.mapToPlainObject(foodMeasureData);
         FoodData foodData = feedEventData.getFood();
@@ -60,7 +53,6 @@ public class FeedEventMapper implements EntityMapper<FeedEventData, FeedEventEnt
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
                 .child(child)
-                .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
                 .feedType(feedEventData.getFeedType())
                 .breast(feedEventData.getBreast())

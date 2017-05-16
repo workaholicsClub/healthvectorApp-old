@@ -10,4 +10,5 @@ import lombok.Value;
 public class MedicineTakingListFilter {
     LocalDate from;
     LocalDate to;
+    // TODO Medicine
 }

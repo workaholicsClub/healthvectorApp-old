@@ -219,6 +219,14 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
+    public void showNeedToFillNoteOrPhoto() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.need_to_fill_not_or_photo)
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
+    @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         if (fragment instanceof TimePickerDialog) {

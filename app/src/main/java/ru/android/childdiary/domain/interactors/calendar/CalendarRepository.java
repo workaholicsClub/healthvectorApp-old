@@ -20,12 +20,14 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
-import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
 
 public interface CalendarRepository {
     Observable<LocalDate> getSelectedDate();
@@ -98,9 +100,13 @@ public interface CalendarRepository {
 
     Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event);
 
-    Observable<DeleteEventsResponse> delete(@NonNull DeleteEventsRequest request);
+    <T extends MasterEvent> Observable<T> delete(@NonNull T event);
 
     Observable<MasterEvent> done(@NonNull MasterEvent event);
+
+    Observable<DeleteDoctorVisitEventsResponse> deleteLinearGroup(@NonNull DeleteDoctorVisitEventsRequest request);
+
+    Observable<DeleteMedicineTakingEventsResponse> deleteLinearGroup(@NonNull DeleteMedicineTakingEventsRequest request);
 
     Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType);
 

@@ -14,10 +14,18 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.repositories.core.CleanUpDbService;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
-import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -26,15 +34,18 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
 
     private final Context context;
     private final RxSharedPreferences preferences;
-    private final DoctorVisitDbService dbService;
+    private final DoctorVisitDbService doctorVisitDbService;
+    private final CleanUpDbService cleanUpDbService;
 
     @Inject
     public DoctorVisitDataRepository(Context context,
                                      RxSharedPreferences preferences,
-                                     DoctorVisitDbService dbService) {
+                                     DoctorVisitDbService doctorVisitDbService,
+                                     CleanUpDbService cleanUpDbService) {
         this.context = context;
         this.preferences = preferences;
-        this.dbService = dbService;
+        this.doctorVisitDbService = doctorVisitDbService;
+        this.cleanUpDbService = cleanUpDbService;
     }
 
     @Override
@@ -82,36 +93,46 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
 
     @Override
     public Observable<List<Doctor>> getDoctors() {
-        return dbService.getDoctors();
+        return doctorVisitDbService.getDoctors();
     }
 
     @Override
     public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {
-        return dbService.addDoctor(doctor);
+        return doctorVisitDbService.addDoctor(doctor);
     }
 
     @Override
     public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
-        return dbService.deleteDoctor(doctor);
+        return doctorVisitDbService.deleteDoctor(doctor);
     }
 
     @Override
-    public Observable<List<DoctorVisit>> getDoctorVisits(@NonNull DoctorVisitsRequest request) {
-        return dbService.getDoctorVisits(request);
+    public Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request) {
+        return doctorVisitDbService.getDoctorVisits(request);
     }
 
     @Override
     public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return dbService.add(doctorVisit);
+        return doctorVisitDbService.add(doctorVisit);
     }
 
     @Override
     public Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return dbService.update(doctorVisit);
+        return doctorVisitDbService.update(doctorVisit);
     }
 
     @Override
-    public Observable<DoctorVisit> deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return dbService.delete(doctorVisit);
+    public Observable<DeleteDoctorVisitResponse> deleteDoctorVisit(@NonNull DeleteDoctorVisitRequest request) {
+        return cleanUpDbService.deleteDoctorVisit(request);
+    }
+
+    @Override
+    public Observable<DeleteDoctorVisitEventsResponse> deleteDoctorVisitWithEvents(@NonNull DeleteDoctorVisitEventsRequest request) {
+        return cleanUpDbService.deleteDoctorVisitEvents(request);
+    }
+
+    @Override
+    public Observable<CompleteDoctorVisitResponse> completeDoctorVisit(@NonNull CompleteDoctorVisitRequest request) {
+        return cleanUpDbService.completeDoctorVisit(request);
     }
 }

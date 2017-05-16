@@ -43,7 +43,6 @@ public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit, Doc
                 .note(null)
                 .isDone(null)
                 .child(doctorVisit.getChild())
-                .repeatParameters(doctorVisit.getRepeatParameters())
                 .linearGroup(linearGroup)
                 .doctorVisit(doctorVisit)
                 .doctor(doctorVisit.getDoctor())

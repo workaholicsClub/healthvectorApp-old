@@ -8,19 +8,30 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.data.repositories.core.CleanUpDbService;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
-import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
 
 @Singleton
 public class MedicineTakingDataRepository implements MedicineTakingRepository {
     private final MedicineTakingDbService dbService;
+    private final CleanUpDbService cleanUpDbService;
 
     @Inject
-    public MedicineTakingDataRepository(MedicineTakingDbService dbService) {
+    public MedicineTakingDataRepository(MedicineTakingDbService dbService,
+                                        CleanUpDbService cleanUpDbService) {
         this.dbService = dbService;
+        this.cleanUpDbService = cleanUpDbService;
     }
 
     @Override
@@ -44,7 +55,7 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     }
 
     @Override
-    public Observable<List<MedicineTaking>> getMedicineTakingList(@NonNull MedicineTakingListRequest request) {
+    public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {
         return dbService.getMedicineTakingList(request);
     }
 
@@ -59,7 +70,17 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     }
 
     @Override
-    public Observable<MedicineTaking> deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return dbService.delete(medicineTaking);
+    public Observable<DeleteMedicineTakingResponse> deleteMedicineTaking(@NonNull DeleteMedicineTakingRequest request) {
+        return cleanUpDbService.deleteMedicineTaking(request);
+    }
+
+    @Override
+    public Observable<DeleteMedicineTakingEventsResponse> deleteMedicineTakingWithEvents(@NonNull DeleteMedicineTakingEventsRequest request) {
+        return cleanUpDbService.deleteMedicineTakingEvents(request);
+    }
+
+    @Override
+    public Observable<CompleteMedicineTakingResponse> completeMedicineTaking(@NonNull CompleteMedicineTakingRequest request) {
+        return cleanUpDbService.completeMedicineTaking(request);
     }
 }

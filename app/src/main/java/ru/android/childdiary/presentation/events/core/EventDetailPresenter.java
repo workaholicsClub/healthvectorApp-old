@@ -13,12 +13,11 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
-import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.utils.EventHelper;
 
 public abstract class EventDetailPresenter<V extends EventDetailView<T>, T extends MasterEvent> extends BasePresenter<V> {
     @Inject
@@ -87,11 +86,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     public void deleteOneEvent(@NonNull MasterEvent event) {
         unsubscribe();
-        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
-                .deleteType(DeleteEventsRequest.DeleteType.DELETE_ONE_EVENT)
-                .event(event)
-                .build())
-                .map(response -> response.getRequest().getEvent())
+        unsubscribeOnDestroy(calendarInteractor.delete(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(deletedEvent -> logger.debug("event deleted: " + deletedEvent))
@@ -100,11 +95,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     public void deleteLinearGroup(@NonNull MasterEvent event) {
         unsubscribe();
-        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
-                .deleteType(DeleteEventsRequest.DeleteType.DELETE_LINEAR_GROUP_EVENTS)
-                .event(event)
-                .build())
-                .map(DeleteEventsResponse::getCount)
+        unsubscribeOnDestroy(calendarInteractor.deleteLinearGroup(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(count -> logger.debug("deleted " + count + " events"))
@@ -112,11 +103,15 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     public void done(@NonNull T event) {
-        unsubscribeOnDestroy(calendarInteractor.done(event)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(doneEvent -> logger.debug("event done: " + doneEvent))
-                .subscribe(doneEvent -> getViewState().eventDone(doneEvent), this::onUnexpectedError));
+        if (EventHelper.needToFillNoteOrPhoto(event)) {
+            getViewState().showNeedToFillNoteOrPhoto();
+        } else {
+            unsubscribeOnDestroy(calendarInteractor.done(event)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(doneEvent -> logger.debug("event done: " + doneEvent))
+                    .subscribe(doneEvent -> getViewState().eventDone(doneEvent), this::onUnexpectedError));
+        }
     }
 
     @Override

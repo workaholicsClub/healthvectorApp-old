@@ -8,7 +8,6 @@ import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
@@ -29,12 +28,11 @@ public class SleepEvent extends MasterEvent {
                        String note,
                        Boolean isDone,
                        Child child,
-                       RepeatParameters repeatParameters,
                        Integer linearGroup,
                        Long id,
                        DateTime finishDateTime,
                        Boolean isTimerStarted) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, repeatParameters, linearGroup);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
         this.id = id;
         this.finishDateTime = finishDateTime;
         this.isTimerStarted = isTimerStarted;

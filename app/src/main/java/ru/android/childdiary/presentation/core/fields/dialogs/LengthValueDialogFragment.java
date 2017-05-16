@@ -14,6 +14,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -38,7 +39,7 @@ public class LengthValueDialogFragment extends BaseMvpDialogFragment<LengthValue
     @Override
     protected void setupUi() {
         LengthValue lengthValue = dialogArguments.getLengthValue();
-        if (lengthValue == null || lengthValue.isContentEmpty()) {
+        if (ObjectUtils.isEmpty(lengthValue)) {
             lengthValue = LengthValue.builder().length(1).timeUnit(TimeUnit.DAY).build();
         }
 

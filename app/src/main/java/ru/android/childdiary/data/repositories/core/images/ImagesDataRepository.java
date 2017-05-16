@@ -15,11 +15,13 @@ import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Single;
 import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 
+@Singleton
 public class ImagesDataRepository implements ImagesRepository {
     private static final String PARENT_DIR_NAME_IMAGES = "images";
     private static final String PARENT_DIR_NAME_PROFILE = PARENT_DIR_NAME_IMAGES + File.separator + "profile";
@@ -53,9 +55,9 @@ public class ImagesDataRepository implements ImagesRepository {
         return Single.fromCallable(() -> {
             try {
                 // создаем целевой файл
-                File parentDir = new File(getRootDir(), getParentDirName(imageType));
+                File parentDir = new File(context.getFilesDir(), getParentDirName(imageType));
                 boolean result = parentDir.mkdirs();
-                logger.debug(parentDir.getAbsolutePath() + "was" + (result ? "" : "n't") + " created");
+                logger.debug(parentDir.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
                 File resultFile = new File(parentDir, getPrefix() + IMAGE_FILE_SUFFIX);
 
                 // переименовываем
@@ -74,10 +76,6 @@ public class ImagesDataRepository implements ImagesRepository {
                 throw new ImagesException("failed to create unique file", e);
             }
         });
-    }
-
-    private File getRootDir() {
-        return context.getFilesDir();
     }
 
     private String getParentDirName(@NonNull ImageType imageType) {
@@ -116,10 +114,10 @@ public class ImagesDataRepository implements ImagesRepository {
             try {
                 File parentDir = new File(context.getCacheDir(), CACHE_ROOT);
                 boolean result = parentDir.mkdirs();
-                logger.debug(parentDir.getAbsolutePath() + "was" + (result ? "" : "n't") + " created");
+                logger.debug(parentDir.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
                 File file = new File(parentDir, fileName);
                 result = file.createNewFile();
-                logger.debug(file.getAbsolutePath() + "was" + (result ? "" : "n't") + " created");
+                logger.debug(file.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
                 return file;
             } catch (Exception e) {
                 throw new ImagesException("failed to create temp image file: "
@@ -135,8 +133,10 @@ public class ImagesDataRepository implements ImagesRepository {
         }
         File file = new File(context.getFilesDir(), relativePath);
         boolean result = file.delete();
-        if (!result) {
-            logger.error(file.getAbsolutePath() + "wasn't deleted");
+        if (result) {
+            logger.debug(file.getAbsolutePath() + " was deleted");
+        } else {
+            logger.error(file.getAbsolutePath() + " wasn't deleted");
         }
     }
 

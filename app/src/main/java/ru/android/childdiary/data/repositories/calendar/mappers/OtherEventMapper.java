@@ -10,22 +10,17 @@ import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntit
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
-import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
 public class OtherEventMapper implements EntityMapper<OtherEventData, OtherEventEntity, OtherEvent> {
     private final ChildMapper childMapper;
-    private final RepeatParametersMapper repeatParametersMapper;
 
     @Inject
-    public OtherEventMapper(ChildMapper childMapper,
-                            RepeatParametersMapper repeatParametersMapper) {
+    public OtherEventMapper(ChildMapper childMapper) {
         this.childMapper = childMapper;
-        this.repeatParametersMapper = repeatParametersMapper;
     }
 
     @Override
@@ -33,8 +28,6 @@ public class OtherEventMapper implements EntityMapper<OtherEventData, OtherEvent
         MasterEventData masterEventData = otherEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
-        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return OtherEvent.builder()
                 .id(otherEventData.getId())
                 .masterEventId(masterEventData.getId())
@@ -44,7 +37,6 @@ public class OtherEventMapper implements EntityMapper<OtherEventData, OtherEvent
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
                 .child(child)
-                .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
                 .name(otherEventData.getName())
                 .finishDateTime(otherEventData.getFinishDateTime())

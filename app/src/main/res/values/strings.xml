@@ -194,6 +194,7 @@
     <string name="events_deleting">Идет удаление событий&#8230;</string>
     <string name="default_doctor_name">Педиатр</string>
     <string name="delete_photo_confirmation_dialog_title">Удалить фото?</string>
+    <string name="need_to_fill_not_or_photo">Заполните описание события или прикрепите к событию фото</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

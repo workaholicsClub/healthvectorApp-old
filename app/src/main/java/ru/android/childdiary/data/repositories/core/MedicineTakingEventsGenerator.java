@@ -43,7 +43,6 @@ public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTakin
                 .note(null)
                 .isDone(null)
                 .child(medicineTaking.getChild())
-                .repeatParameters(medicineTaking.getRepeatParameters())
                 .linearGroup(linearGroup)
                 .medicineTaking(medicineTaking)
                 .medicine(medicineTaking.getMedicine())

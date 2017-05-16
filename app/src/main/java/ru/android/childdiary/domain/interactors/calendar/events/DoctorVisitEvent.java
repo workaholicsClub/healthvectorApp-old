@@ -9,7 +9,6 @@ import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
@@ -37,7 +36,6 @@ public class DoctorVisitEvent extends MasterEvent {
                              String note,
                              Boolean isDone,
                              Child child,
-                             RepeatParameters repeatParameters,
                              Integer linearGroup,
                              Long id,
                              DoctorVisit doctorVisit,
@@ -45,7 +43,7 @@ public class DoctorVisitEvent extends MasterEvent {
                              String name,
                              Integer durationInMinutes,
                              String imageFileName) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, repeatParameters, linearGroup);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
         this.id = id;
         this.doctorVisit = doctorVisit;
         this.doctor = doctor;
