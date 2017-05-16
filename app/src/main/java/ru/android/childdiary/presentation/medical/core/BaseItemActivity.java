@@ -406,7 +406,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
                         .showDeleteItem(false)
-                        .imageType(ImageType.PROFILE)
+                        .imageType(getImageType())
                         .build());
     }
 
@@ -443,6 +443,8 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         }
         return super.onOptionsItemSelected(item);
     }
+
+    protected abstract ImageType getImageType();
 
     protected abstract void saveChangesOrExit();
 

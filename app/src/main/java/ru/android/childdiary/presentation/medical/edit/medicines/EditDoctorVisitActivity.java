@@ -22,6 +22,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -103,6 +104,11 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.edit_doctor_visit_title);
+    }
+
+    @Override
+    protected ImageType getImageType() {
+        return ImageType.DOCTOR_VISIT;
     }
 
     @Override

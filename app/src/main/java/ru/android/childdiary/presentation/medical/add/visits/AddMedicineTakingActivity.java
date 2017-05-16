@@ -20,6 +20,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -102,6 +103,11 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.add_medicine_taking_title);
+    }
+
+    @Override
+    protected ImageType getImageType() {
+        return ImageType.MEDICINE_TAKING;
     }
 
     @Override
