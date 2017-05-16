@@ -17,7 +17,6 @@ import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDataRepository;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
@@ -35,7 +34,7 @@ import ru.android.childdiary.domain.interactors.medical.validation.MedicalValida
 import ru.android.childdiary.domain.interactors.medical.validation.MedicineTakingValidator;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
-public class MedicineTakingInteractor implements Interactor {
+public class MedicineTakingInteractor {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
     private final SettingsRepository settingsRepository;

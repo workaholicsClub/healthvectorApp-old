@@ -126,7 +126,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .withNameShown(true)
                 .withTag(child)
                 .withIdentifier(mapToProfileId(child))
-                .withIcon(ResourcesUtils.getChildIcon(context, child, false));
+                .withIcon(ResourcesUtils.getChildIconForAccountHeader(context, child));
     }
 
     private static long mapToProfileId(@NonNull Child child) {
@@ -189,7 +189,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .withIdentifier(PROFILE_SETTINGS_ADD));
         if (!childList.isEmpty()) {
             profiles.add(new ProfileSettingDrawerItem()
-                    .withName(getString(R.string.remove_child))
+                    .withName(getString(R.string.delete_child))
                     .withIdentifier(PROFILE_SETTINGS_DELETE));
         }
 
@@ -212,7 +212,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             hideToolbarLogo();
             setupToolbarTitle(R.string.app_name);
         } else {
-            setupToolbarLogo(ResourcesUtils.getChildIcon(this, child, true));
+            setupToolbarLogo(ResourcesUtils.getChildIconForToolbar(this, child));
             setupToolbarTitle(child.getName());
             if (accountHeader != null) {
                 accountHeader.setActiveProfile(mapToProfileId(child));
@@ -239,9 +239,9 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @Override
     public void showDeleteChildConfirmation(@NonNull Child child) {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(getString(R.string.remove_child_confirmation_dialog_title, child.getName()))
-                .setMessage(R.string.remove_child_confirmation_dialog_text)
-                .setPositiveButton(R.string.remove_child_confirmation_dialog_positive_button_text,
+                .setTitle(getString(R.string.delete_child_confirmation_dialog_title, child.getName()))
+                .setMessage(R.string.delete_child_confirmation_dialog_text)
+                .setPositiveButton(R.string.delete,
                         (DialogInterface dialog, int which) -> presenter.deleteChild(child))
                 .setNegativeButton(R.string.cancel, null)
                 .show();

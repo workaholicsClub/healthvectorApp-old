@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -28,4 +29,37 @@
         android:textColor="@drawable/field_editable_text_color"
         android:textColorHint="@color/placeholder_text"
         android:textCursorDrawable="@drawable/edit_text_cursor" />
+
+    <RelativeLayout
+        android:id="@+id/imageViewContainer"
+        android:layout_width="@dimen/field_height"
+        android:layout_height="@dimen/field_height"
+        android:layout_marginEnd="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"
+            app:riv_border_color="@android:color/transparent"
+            app:riv_border_width="0dp"
+            app:riv_corner_radius="2dp"
+            app:riv_mutate_background="true"
+            app:riv_oval="false"
+            app:riv_tile_mode="clamp" />
+
+        <Button
+            android:id="@+id/buttonDeletePhoto"
+            android:layout_width="@dimen/image_delete_button_size"
+            android:layout_height="@dimen/image_delete_button_size"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_delete_photo" />
+    </RelativeLayout>
 </LinearLayout>

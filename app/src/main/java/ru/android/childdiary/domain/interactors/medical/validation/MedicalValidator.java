@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import java.util.List;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.core.Validator;
+import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;

@@ -22,8 +22,7 @@ import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.Interactor;
-import ru.android.childdiary.domain.core.Validator;
+import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
@@ -51,7 +50,7 @@ import ru.android.childdiary.domain.interactors.child.ChildRepository;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 
-public class CalendarInteractor implements Interactor {
+public class CalendarInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final Context context;

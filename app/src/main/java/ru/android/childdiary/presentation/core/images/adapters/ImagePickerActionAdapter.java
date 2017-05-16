@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.image;
+package ru.android.childdiary.presentation.core.images.adapters;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -12,7 +12,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.adapters.BaseArrayAdapter;
 import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
 
-class ImagePickerActionAdapter extends BaseArrayAdapter<ImagePickerAction, ImagePickerActionAdapter.ViewHolder> {
+public class ImagePickerActionAdapter extends BaseArrayAdapter<ImagePickerAction, ImagePickerActionAdapter.ViewHolder> {
     public ImagePickerActionAdapter(Context context, List<ImagePickerAction> actions) {
         super(context, actions);
     }

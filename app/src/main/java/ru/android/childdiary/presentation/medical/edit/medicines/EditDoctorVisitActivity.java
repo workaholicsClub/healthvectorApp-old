@@ -22,6 +22,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -106,6 +107,11 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     }
 
     @Override
+    protected ImageType getImageType() {
+        return ImageType.DOCTOR_VISIT;
+    }
+
+    @Override
     protected BaseEditItemPresenter<EditDoctorVisitView, DoctorVisit> getPresenter() {
         return presenter;
     }
@@ -126,7 +132,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(defaultItem.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(item.getNote());
-        // TODO image file name
+        noteWithPhotoView.setImageFileName(item.getImageFileName());
 
         boolean exported = ObjectUtils.isTrue(item.getIsExported());
         checkBoxView.setChecked(exported);
@@ -157,7 +163,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         boolean exported = checkBoxView.isChecked();
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
-        String imageFileName = null;
+        String imageFileName = noteWithPhotoView.getImageFileName();
 
         return item.toBuilder()
                 .doctor(doctor)
@@ -238,6 +244,11 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     @Override
     protected FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return null;
+    }
+
+    @Override
+    public FieldNoteWithPhotoView getNoteWithPhotoView() {
+        return noteWithPhotoView;
     }
 
     @Override

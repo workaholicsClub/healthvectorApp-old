@@ -5,9 +5,8 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.domain.core.Repository;
 
-public interface AntropometryRepository extends Repository {
+public interface AntropometryRepository {
     Observable<List<Antropometry>> getAll(@NonNull Child child);
 
     Observable<Antropometry> add(@NonNull Antropometry antropometry);

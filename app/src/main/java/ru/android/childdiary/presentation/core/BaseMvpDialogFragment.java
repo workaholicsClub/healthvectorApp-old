@@ -1,15 +1,19 @@
 package ru.android.childdiary.presentation.core;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.compat.BuildConfig;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -17,10 +21,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.arellomobile.mvp.MvpAppCompatDialogFragment;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -30,7 +37,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public abstract class BaseDialogFragment<T extends BaseDialogArguments> extends DialogFragment {
+public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> extends MvpAppCompatDialogFragment implements BaseView {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
     private final Map<Integer, RequestPermissionInfo> permissionInfoMap = new HashMap<>();
@@ -76,6 +83,35 @@ public abstract class BaseDialogFragment<T extends BaseDialogArguments> extends 
         Icepick.saveInstanceState(this, outState);
     }
 
+    @Override
+    public void onUnexpectedError(Throwable e) {
+        logger.error("unexpected error", e);
+        if (BuildConfig.DEBUG) {
+            new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
+                    .setMessage(e.toString())
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+        }
+    }
+
+    public final void hideKeyboardAndClearFocus(@Nullable View view) {
+        KeyboardUtils.hideKeyboard(getContext(), view);
+        if (view != null) {
+            view.clearFocus();
+        }
+        if (dummy != null) {
+            dummy.requestFocus();
+        }
+    }
+
+    @LayoutRes
+    protected abstract int getLayoutResourceId();
+
+    protected abstract void setupUi();
+
+    @NonNull
+    protected abstract Dialog createDialog(View view);
+
     protected final void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
@@ -113,21 +149,17 @@ public abstract class BaseDialogFragment<T extends BaseDialogArguments> extends 
     protected void permissionGranted(RequestPermissionInfo permissionInfo) {
     }
 
-    public final void hideKeyboardAndClearFocus(@Nullable View view) {
-        KeyboardUtils.hideKeyboard(getContext(), view);
-        if (view != null) {
-            view.clearFocus();
-        }
-        if (dummy != null) {
-            dummy.requestFocus();
+    protected void grantPermissionToApps(Intent intent, Uri uri) {
+        Context context = getContext();
+        List<ResolveInfo> activities = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo info : activities) {
+            String packageName = info.activityInfo.packageName;
+            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
     }
 
-    @LayoutRes
-    protected abstract int getLayoutResourceId();
-
-    protected abstract void setupUi();
-
-    @NonNull
-    protected abstract Dialog createDialog(View view);
+    protected void revokePermissions(Uri uri) {
+        Context context = getContext();
+        context.revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    }
 }

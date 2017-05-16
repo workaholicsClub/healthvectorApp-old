@@ -4,12 +4,10 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.InputFilter;
@@ -36,7 +34,6 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -49,15 +46,16 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
+import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.presentation.profile.adapters.SexAdapter;
-import ru.android.childdiary.presentation.profile.image.ImagePickerDialogArguments;
-import ru.android.childdiary.presentation.profile.image.ImagePickerDialogFragment;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -296,17 +294,8 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     }
 
     private void setupImage() {
-        String imageFileName = editedChild.getImageFileName();
-        if (imageFileName == null) {
-            imageViewPhoto.setImageDrawable(ContextCompat.getDrawable(this, R.color.white));
-        } else {
-            // TODO: использовать относительное имя
-            // т.к. в будущем надо будет добавить
-            // сохранение данных в облако и восстановление данных из облака;
-            // в общем случае полный путь к файлу для разных устройств будет разный
-            imageViewPhoto.setImageDrawable(Drawable.createFromPath(imageFileName));
-        }
-        textViewPhoto.setVisibility(imageFileName == null ? VISIBLE : GONE);
+        imageViewPhoto.setImageDrawable(ResourcesUtils.getChildIconForProfile(this, editedChild));
+        textViewPhoto.setVisibility(editedChild.getImageFileName() == null ? VISIBLE : GONE);
     }
 
     private void setupDate() {
@@ -328,6 +317,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
                         .showDeleteItem(editedChild.getImageFileName() != null)
+                        .imageType(ImageType.PROFILE)
                         .build());
     }
 
@@ -359,13 +349,8 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     }
 
     @Override
-    public void onSetImage(@Nullable File resultFile) {
-        // TODO: использовать относительное имя
-        // т.к. в будущем надо будет добавить
-        // сохранение данных в облако и восстановление данных из облака;
-        // в общем случае полный путь к файлу для разных устройств будет разный
-        String imageFileName = resultFile == null ? null : resultFile.getAbsolutePath();
-        updateChild(editedChild.toBuilder().imageFileName(imageFileName).build());
+    public void onSetImage(@Nullable String relativeFileName) {
+        updateChild(editedChild.toBuilder().imageFileName(relativeFileName).build());
         setupImage();
     }
 
@@ -489,7 +474,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         }
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
-                .setPositiveButton(R.string.save_changes_dialog_positive_button_text,
+                .setPositiveButton(R.string.save,
                         (DialogInterface dialog, int which) -> {
                             if (child == null) {
                                 presenter.addChild(editedChild);

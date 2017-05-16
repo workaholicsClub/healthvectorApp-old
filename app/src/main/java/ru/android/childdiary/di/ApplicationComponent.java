@@ -8,6 +8,7 @@ import ru.android.childdiary.di.modules.DataModule;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
+import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
@@ -49,7 +50,6 @@ import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerAct
 import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerPresenter;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditPresenter;
-import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
@@ -113,14 +113,14 @@ public interface ApplicationComponent {
 
     void inject(MedicineTakingEventDetailPresenter presenter);
 
+    void inject(ImagePickerPresenter presenter);
+
     // TODO EXERCISE
 
     // activities
     void inject(SplashActivity activity);
 
     void inject(MainActivity activity);
-
-    void inject(SettingsFragment activity);
 
     void inject(ProfileEditActivity activity);
 

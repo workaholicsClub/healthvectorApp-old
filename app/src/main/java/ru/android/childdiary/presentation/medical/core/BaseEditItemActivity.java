@@ -89,7 +89,7 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
         }
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
-                .setPositiveButton(R.string.save_changes_dialog_positive_button_text,
+                .setPositiveButton(R.string.save,
                         (DialogInterface dialog, int which) -> getPresenter().update(item))
                 .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
                 .show();

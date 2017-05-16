@@ -20,6 +20,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -108,6 +109,11 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     }
 
     @Override
+    protected ImageType getImageType() {
+        return ImageType.DOCTOR_VISIT;
+    }
+
+    @Override
     protected AddDoctorVisitPresenter getPresenter() {
         return presenter;
     }
@@ -132,7 +138,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(item.getNote());
-        // TODO image file name
+        noteWithPhotoView.setImageFileName(item.getImageFileName());
     }
 
     @Override
@@ -145,7 +151,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         boolean exported = checkBoxView.isChecked();
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
-        String imageFileName = null;
+        String imageFileName = noteWithPhotoView.getImageFileName();
 
         return defaultItem.toBuilder()
                 .doctor(doctor)
@@ -223,6 +229,11 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     @Override
     protected FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return null;
+    }
+
+    @Override
+    public FieldNoteWithPhotoView getNoteWithPhotoView() {
+        return noteWithPhotoView;
     }
 
     @Override

@@ -1,11 +1,13 @@
 package ru.android.childdiary.presentation.medical.core;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,6 +33,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -50,20 +53,25 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
+import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerActivity;
 import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerActivity;
 import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Serializable>
         extends BaseMvpActivity implements BaseItemView<T>,
         FieldCheckBoxView.FieldCheckBoxListener,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener,
-        MedicineMeasureValueDialogFragment.Listener, LengthValueDialogFragment.Listener {
+        MedicineMeasureValueDialogFragment.Listener, LengthValueDialogFragment.Listener,
+        FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
@@ -152,6 +160,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         getRepeatParametersView().setTimeLimits(startTime, finishTime);
         getRepeatParametersView().setListener(() -> getPresenter().requestLengthValueDialog());
         getRepeatParametersView().setFieldTimesListener((i, time) -> showTimePicker(String.valueOf(i), time));
+        getNoteWithPhotoView().setPhotoListener(this);
     }
 
     @Override
@@ -391,6 +400,32 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     @Override
+    public void requestPhotoAdd() {
+        ImagePickerDialogFragment dialogFragment = new ImagePickerDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER,
+                ImagePickerDialogArguments.builder()
+                        .sex(getSex())
+                        .showDeleteItem(false)
+                        .imageType(getImageType())
+                        .build());
+    }
+
+    @Override
+    public void requestPhotoDelete() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.delete_photo_confirmation_dialog_title)
+                .setPositiveButton(R.string.delete,
+                        (DialogInterface dialog, int which) -> getNoteWithPhotoView().setImageFileName(null))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
+    public void onSetImage(@Nullable String relativeFileName) {
+        getNoteWithPhotoView().setImageFileName(relativeFileName);
+    }
+
+    @Override
     public void onBackPressed() {
         boolean processed = getRepeatParametersView().dismissPopupWindow();
         if (processed) {
@@ -408,6 +443,8 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         }
         return super.onOptionsItemSelected(item);
     }
+
+    protected abstract ImageType getImageType();
 
     protected abstract void saveChangesOrExit();
 
@@ -445,4 +482,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @Nullable
     protected abstract FieldMedicineMeasureValueView getMedicineMeasureValueView();
+
+    protected abstract FieldNoteWithPhotoView getNoteWithPhotoView();
 }

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.image;
+package ru.android.childdiary.presentation.core.images.crop;
 
 import android.content.Context;
 import android.os.Bundle;

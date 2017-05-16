@@ -93,4 +93,7 @@
     <!-- repeat parameters -->
     <dimen name="times_margin">4dp</dimen>
     <dimen name="times_padding">6dp</dimen>
+    <!-- images -->
+    <dimen name="image_size">48dp</dimen>
+    <dimen name="image_delete_button_size">20dp</dimen>
 </resources>

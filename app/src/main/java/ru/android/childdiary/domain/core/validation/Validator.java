@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.core;
+package ru.android.childdiary.domain.core.validation;
 
 import android.support.annotation.NonNull;
 

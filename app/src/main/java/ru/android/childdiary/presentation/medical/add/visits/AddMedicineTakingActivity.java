@@ -20,6 +20,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -105,6 +106,11 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     }
 
     @Override
+    protected ImageType getImageType() {
+        return ImageType.MEDICINE_TAKING;
+    }
+
+    @Override
     protected AddMedicineTakingPresenter getPresenter() {
         return presenter;
     }
@@ -132,7 +138,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(item.getNote());
-        // TODO image file name
+        noteWithPhotoView.setImageFileName(item.getImageFileName());
     }
 
     @Override
@@ -146,7 +152,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
         boolean exported = checkBoxView.isChecked();
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
-        String imageFileName = null;
+        String imageFileName = noteWithPhotoView.getImageFileName();
 
         return defaultItem.toBuilder()
                 .medicine(medicine)
@@ -223,6 +229,11 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     @Override
     public FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return medicineMeasureValueView;
+    }
+
+    @Override
+    public FieldNoteWithPhotoView getNoteWithPhotoView() {
+        return noteWithPhotoView;
     }
 
     @Override

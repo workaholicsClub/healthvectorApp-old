@@ -11,11 +11,11 @@ import android.view.inputmethod.EditorInfo;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.presentation.core.BaseDialogFragment;
+import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public abstract class AddValueDialogFragment<T extends AddValueDialogArguments> extends BaseDialogFragment<T> {
+public abstract class AddValueDialogFragment<T extends AddValueDialogArguments> extends BaseMvpDialogFragment<T> {
     @BindView(R.id.rootView)
     View rootView;
 

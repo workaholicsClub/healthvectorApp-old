@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.profile.image;
+package ru.android.childdiary.presentation.core.images.adapters;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -9,7 +9,7 @@ import lombok.Value;
 
 @Value
 @Builder
-class ImagePickerAction {
+public class ImagePickerAction {
     @NonNull
     ImagePickerActionType type;
     @StringRes

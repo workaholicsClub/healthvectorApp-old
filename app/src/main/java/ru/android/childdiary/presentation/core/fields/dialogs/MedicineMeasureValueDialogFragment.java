@@ -15,12 +15,12 @@ import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
-import ru.android.childdiary.presentation.core.BaseDialogFragment;
+import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.DoubleUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class MedicineMeasureValueDialogFragment extends BaseDialogFragment<MedicineMeasureValueDialogArguments> {
+public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<MedicineMeasureValueDialogArguments> {
     @BindView(R.id.rootView)
     View rootView;
 

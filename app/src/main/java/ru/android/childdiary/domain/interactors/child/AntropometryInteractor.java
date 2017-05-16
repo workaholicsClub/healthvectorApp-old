@@ -8,9 +8,8 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.child.AntropometryDataRepository;
-import ru.android.childdiary.domain.core.Interactor;
 
-public class AntropometryInteractor implements Interactor {
+public class AntropometryInteractor {
     private final AntropometryRepository antropometryRepository;
 
     @Inject

@@ -5,12 +5,11 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.domain.core.Repository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
 
-public interface MedicineTakingRepository extends Repository {
+public interface MedicineTakingRepository {
     Observable<List<Medicine>> getMedicines();
 
     Observable<Medicine> addMedicine(@NonNull Medicine medicine);

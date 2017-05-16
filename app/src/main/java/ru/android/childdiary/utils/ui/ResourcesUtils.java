@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
 
+import java.io.File;
+
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
@@ -19,16 +21,42 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class ResourcesUtils {
-    public static Drawable getChildIcon(Context context, @NonNull Child child, boolean toolbar) {
-        if (child.getImageFileName() == null) {
-            return ContextCompat.getDrawable(context,
-                    toolbar ? R.drawable.ic_placeholder_toolbar : R.drawable.ic_placeholder_header);
+    public static Drawable getChildIconForToolbar(Context context, @NonNull Child child) {
+        return getChildIcon(context, child,
+                ContextCompat.getDrawable(context, R.drawable.ic_placeholder_toolbar));
+    }
+
+    public static Drawable getChildIconForAccountHeader(Context context, @NonNull Child child) {
+        return getChildIcon(context, child,
+                ContextCompat.getDrawable(context, R.drawable.ic_placeholder_account_header));
+    }
+
+    public static Drawable getChildIconForProfile(Context context, @NonNull Child child) {
+        return getChildIcon(context, child,
+                ContextCompat.getDrawable(context, R.color.white));
+    }
+
+    private static Drawable getChildIcon(Context context,
+                                         @NonNull Child child,
+                                         @NonNull Drawable placeholder) {
+        return getPhotoDrawable(context, child.getImageFileName(), placeholder);
+    }
+
+    @Nullable
+    public static Drawable getPhotoDrawable(Context context,
+                                            @Nullable String imageFileName) {
+        return getPhotoDrawable(context, imageFileName, null);
+    }
+
+    @Nullable
+    public static Drawable getPhotoDrawable(Context context,
+                                            @Nullable String imageFileName,
+                                            @Nullable Drawable placeholder) {
+        if (imageFileName == null) {
+            return placeholder;
         }
-        // TODO: использовать относительное имя
-        // т.к. в будущем надо будет добавить
-        // сохранение данных в облако и восстановление данных из облака;
-        // в общем случае полный путь к файлу для разных устройств будет разный
-        return Drawable.createFromPath(child.getImageFileName());
+        File file = new File(context.getFilesDir(), imageFileName);
+        return Drawable.createFromPath(file.getAbsolutePath());
     }
 
     public static int[] getNavigationDrawerItemResources(@Nullable Sex sex) {

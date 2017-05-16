@@ -6,11 +6,10 @@ import android.support.annotation.Nullable;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.domain.core.Repository;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
 
-public interface DoctorVisitRepository extends Repository {
+public interface DoctorVisitRepository {
     Observable<Doctor> getLastDoctor();
 
     Doctor setLastDoctor(@Nullable Doctor doctor);

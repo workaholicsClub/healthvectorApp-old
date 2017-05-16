@@ -15,14 +15,13 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
-import ru.android.childdiary.domain.core.Interactor;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
 import ru.android.childdiary.utils.EventHelper;
 
-public class ChildInteractor implements Interactor {
+public class ChildInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final ChildRepository childRepository;
