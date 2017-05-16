@@ -99,6 +99,13 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
         return false;
     }
 
+    @OnClick(R.id.imageView)
+    void onImageViewClick() {
+        if (photoListener != null) {
+            photoListener.requestPhotoReview();
+        }
+    }
+
     @OnClick(R.id.buttonDeletePhoto)
     void onButtonDeletePhotoClick() {
         if (photoListener != null) {
@@ -146,6 +153,8 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
 
     public interface PhotoListener {
         void requestPhotoAdd();
+
+        void requestPhotoReview();
 
         void requestPhotoDelete();
     }
