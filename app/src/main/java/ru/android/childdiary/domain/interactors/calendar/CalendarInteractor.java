@@ -248,6 +248,11 @@ public class CalendarInteractor {
         throw new IllegalStateException("Unsupported event type");
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends MasterEvent> Observable<T> getEventDetailOnce(@NonNull MasterEvent event) {
+        return (Observable<T>) getEventDetail(event).firstOrError().toObservable();
+    }
+
     public <T extends MasterEvent> Observable<T> add(@NonNull T event) {
         return preprocessOnInsert(event)
                 .flatMap(this::validate)

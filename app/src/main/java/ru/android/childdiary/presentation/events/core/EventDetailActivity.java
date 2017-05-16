@@ -56,9 +56,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     private ViewGroup detailsView;
 
-    private T defaultEvent;
     @Nullable
     private T event;
+    private T defaultEvent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,17 +70,21 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         defaultEvent = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_EVENT);
 
         if (masterEvent == null) {
+            changeThemeIfNeeded(defaultEvent.getChild());
+            setupEventDetail(defaultEvent);
             buttonAdd.setVisibility(VISIBLE);
             buttonAdd.setOnClickListener(v -> getPresenter().addEvent(buildEvent(), true));
         } else {
+            changeThemeIfNeeded(masterEvent.getChild());
+            if (masterEvent.getClass() == defaultEvent.getClass()) {
+                //noinspection unchecked
+                setupEventDetail((T) masterEvent);
+            }
             buttonAdd.setVisibility(GONE);
             if (savedInstanceState == null) {
                 getPresenter().requestEventDetails(masterEvent);
             }
         }
-
-        changeThemeIfNeeded(defaultEvent.getChild());
-        setupEventDetail(defaultEvent);
 
         logger.debug("master event: " + masterEvent);
         logger.debug("default event: " + defaultEvent);

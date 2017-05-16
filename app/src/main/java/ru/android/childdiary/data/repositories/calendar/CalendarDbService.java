@@ -263,7 +263,7 @@ public class CalendarDbService {
         }));
     }
 
-    public Observable<MasterEvent> delete(@NonNull MasterEvent event) {
+    public <T extends MasterEvent> Observable<T> delete(@NonNull T event) {
         return DbUtils.deleteObservable(dataStore, MasterEventEntity.class, event, event.getMasterEventId());
     }
 

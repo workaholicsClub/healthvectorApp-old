@@ -12,4 +12,5 @@ public class ExtraConstants {
     public static final String EXTRA_DIALOG_ARGUMENTS = PACKAGE_NAME + ".dialog_arguments";
     public static final String EXTRA_START_TIME = PACKAGE_NAME + ".start_time";
     public static final String EXTRA_FINISH_TIME = PACKAGE_NAME + ".finish_time";
+    public static final String EXTRA_RELATIVE_PATH = PACKAGE_NAME + ".relative_path";
 }

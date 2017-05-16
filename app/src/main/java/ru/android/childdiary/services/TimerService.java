@@ -92,14 +92,13 @@ public class TimerService extends Service {
         }
 
         DateTime now = DateTime.now();
-        unsubscribeOnDestroy(calendarInteractor.getEventDetail(event)
-                .firstOrError()
+        unsubscribeOnDestroy(calendarInteractor.getEventDetailOnce(event)
                 .map(sleepEvent -> (SleepEvent) sleepEvent)
                 .map(sleepEvent -> sleepEvent.toBuilder()
                         .isTimerStarted(false)
                         .finishDateTime(now.isAfter(sleepEvent.getDateTime()) ? now : null)
                         .build())
-                .flatMapObservable(calendarInteractor::update)
+                .flatMap(calendarInteractor::update)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stoppedEvent -> logger.debug("event stopped: " + stoppedEvent), this::onUnexpectedError));
