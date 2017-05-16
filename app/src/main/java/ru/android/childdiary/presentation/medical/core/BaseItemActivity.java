@@ -59,7 +59,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParamet
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
-import ru.android.childdiary.presentation.core.images.ImageViewActivity;
+import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerActivity;
@@ -413,7 +413,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @Override
     public void requestPhotoReview() {
-        Intent intent = ImageViewActivity.getIntent(this, getNoteWithPhotoView().getImageFileName());
+        Intent intent = ImageReviewActivity.getIntent(this, getNoteWithPhotoView().getImageFileName());
         startActivity(intent);
     }
 

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.core.images;
+package ru.android.childdiary.presentation.core.images.review;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class ImageViewActivity extends BaseMvpActivity {
+public class ImageReviewActivity extends BaseMvpActivity {
     @BindView(R.id.imageView)
     ImageView imageView;
 
@@ -22,7 +22,7 @@ public class ImageViewActivity extends BaseMvpActivity {
     }
 
     public static Intent getIntent(Context context, String relativePath) {
-        Intent intent = new Intent(context, ImageViewActivity.class);
+        Intent intent = new Intent(context, ImageReviewActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_RELATIVE_PATH, relativePath);
         return intent;
     }

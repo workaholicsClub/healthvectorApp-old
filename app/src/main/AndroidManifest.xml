@@ -144,7 +144,7 @@
             android:name=".presentation.medical.pickers.medicines.MedicinePickerActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".presentation.core.images.crop.CropActivity" />
-        <activity android:name=".presentation.core.images.ImageViewActivity" />
+        <activity android:name=".presentation.core.images.review.ImageReviewActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

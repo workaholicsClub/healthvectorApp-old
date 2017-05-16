@@ -1,11 +1,13 @@
 package ru.android.childdiary.presentation.events;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -20,6 +22,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
@@ -31,16 +34,21 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
+import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
+import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class DoctorVisitEventDetailActivity
         extends EventDetailActivity<DoctorVisitEventDetailView, DoctorVisitEvent>
-        implements DoctorVisitEventDetailView {
+        implements DoctorVisitEventDetailView, FieldNoteWithPhotoView.PhotoListener,
+        ImagePickerDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
@@ -122,6 +130,7 @@ public class DoctorVisitEventDetailActivity
             hideKeyboardAndClearFocus(rootView.findFocus());
         });
         setupEditTextView(noteWithPhotoView);
+        noteWithPhotoView.setPhotoListener(this);
     }
 
     @Override
@@ -170,7 +179,7 @@ public class DoctorVisitEventDetailActivity
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(event.getNote());
-        // TODO image file name
+        noteWithPhotoView.setImageFileName(event.getImageFileName());
     }
 
     @Override
@@ -185,7 +194,7 @@ public class DoctorVisitEventDetailActivity
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
         Integer minutes = notifyTimeView.getValue();
         String note = noteWithPhotoView.getText();
-        String imageFileName = null;
+        String imageFileName = noteWithPhotoView.getImageFileName();
 
         builder.dateTime(dateTime)
                 .doctor(doctor)
@@ -222,12 +231,44 @@ public class DoctorVisitEventDetailActivity
     }
 
     @Override
-    protected boolean contentEquals(DoctorVisitEvent event1, DoctorVisitEvent event2) {
-        return ObjectUtils.contentEquals(event1, event2);
+    public void setDoctor(@Nullable Doctor doctor) {
+        doctorView.setValue(doctor);
     }
 
     @Override
-    public void setDoctor(@Nullable Doctor doctor) {
-        doctorView.setValue(doctor);
+    public void requestPhotoAdd() {
+        ImagePickerDialogFragment dialogFragment = new ImagePickerDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER,
+                ImagePickerDialogArguments.builder()
+                        .sex(getSex())
+                        .showDeleteItem(false)
+                        .imageType(ImageType.DOCTOR_VISIT_EVENT)
+                        .build());
+    }
+
+    @Override
+    public void requestPhotoReview() {
+        Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName());
+        startActivity(intent);
+    }
+
+    @Override
+    public void requestPhotoDelete() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.delete_photo_confirmation_dialog_title)
+                .setPositiveButton(R.string.delete,
+                        (DialogInterface dialog, int which) -> noteWithPhotoView.setImageFileName(null))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
+    public void onSetImage(@Nullable String relativeFileName) {
+        noteWithPhotoView.setImageFileName(relativeFileName);
+    }
+
+    @Override
+    protected boolean contentEquals(DoctorVisitEvent event1, DoctorVisitEvent event2) {
+        return ObjectUtils.contentEquals(event1, event2);
     }
 }
