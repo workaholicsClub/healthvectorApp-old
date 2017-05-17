@@ -23,10 +23,14 @@ import lombok.val;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.entities.child.ChildEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
+import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
+import ru.android.childdiary.domain.interactors.child.requests.DeleteChildResponse;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
@@ -77,7 +81,43 @@ public class CleanUpDbService {
         return id;
     }
 
-    // TODO: delete all child's photos
+    public Observable<DeleteChildResponse> deleteChild(@NonNull DeleteChildRequest request) {
+        return Observable.fromCallable(() -> {
+            Child child = request.getChild();
+            List<String> imageFilesToDelete = new ArrayList<>();
+
+            List<DoctorVisitEntity> doctorVisitEntities = blockingEntityStore.select(DoctorVisitEntity.class)
+                    .where(DoctorVisitEntity.CHILD_ID.eq(child.getId()))
+                    .get().toList();
+            imageFilesToDelete.addAll(getImageFileNamesDoctorVisit(doctorVisitEntities));
+
+            List<MedicineTakingEntity> medicineTakingEntities = blockingEntityStore.select(MedicineTakingEntity.class)
+                    .where(MedicineTakingEntity.CHILD_ID.eq(child.getId()))
+                    .get().toList();
+            imageFilesToDelete.addAll(getImageFileNamesMedicineTaking(medicineTakingEntities));
+
+            List<DoctorVisitEventEntity> doctorVisitEventEntities = blockingEntityStore.select(DoctorVisitEventEntity.class)
+                    .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
+                    .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
+                    .get().toList();
+            imageFilesToDelete.addAll(getImageFileNamesDoctorVisitEvents(doctorVisitEventEntities));
+
+            List<MedicineTakingEventEntity> medicineTakingEventEntities = blockingEntityStore.select(MedicineTakingEventEntity.class)
+                    .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(MedicineTakingEventEntity.MASTER_EVENT_ID))
+                    .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
+                    .get().toList();
+            imageFilesToDelete.addAll(getImageFileNamesMedicineTakingEvents(medicineTakingEventEntities));
+
+            ChildEntity childEntity = blockingEntityStore.findByKey(ChildEntity.class, child.getId());
+            imageFilesToDelete.add(childEntity.getImageFileName());
+            blockingEntityStore.delete(childEntity);
+
+            return DeleteChildResponse.builder()
+                    .request(request)
+                    .imageFilesToDelete(imageFilesToDelete)
+                    .build();
+        });
+    }
 
     public Observable<DeleteDoctorVisitEventsResponse> deleteDoctorVisitEvents(
             @NonNull DeleteDoctorVisitEventsRequest request) {
@@ -292,18 +332,34 @@ public class CleanUpDbService {
         }
     }
 
-    private List<String> getImageFileNamesDoctorVisitEvents(List<DoctorVisitEventEntity> events) {
-        return Observable.fromIterable(events)
+    private List<String> getImageFileNamesDoctorVisitEvents(List<DoctorVisitEventEntity> entities) {
+        return Observable.fromIterable(entities)
                 .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
                 .map(DoctorVisitEventEntity::getImageFileName)
                 .toList()
                 .blockingGet();
     }
 
-    private List<String> getImageFileNamesMedicineTakingEvents(List<MedicineTakingEventEntity> events) {
-        return Observable.fromIterable(events)
+    private List<String> getImageFileNamesMedicineTakingEvents(List<MedicineTakingEventEntity> entities) {
+        return Observable.fromIterable(entities)
                 .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
                 .map(MedicineTakingEventEntity::getImageFileName)
+                .toList()
+                .blockingGet();
+    }
+
+    private List<String> getImageFileNamesDoctorVisit(List<DoctorVisitEntity> entities) {
+        return Observable.fromIterable(entities)
+                .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
+                .map(DoctorVisitEntity::getImageFileName)
+                .toList()
+                .blockingGet();
+    }
+
+    private List<String> getImageFileNamesMedicineTaking(List<MedicineTakingEntity> entities) {
+        return Observable.fromIterable(entities)
+                .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
+                .map(MedicineTakingEntity::getImageFileName)
                 .toList()
                 .blockingGet();
     }

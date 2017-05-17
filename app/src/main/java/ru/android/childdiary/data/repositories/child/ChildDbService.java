@@ -42,8 +42,4 @@ public class ChildDbService {
     public Observable<Child> update(@NonNull Child child) {
         return DbUtils.updateObservable(dataStore, child, childMapper);
     }
-
-    public Observable<Child> delete(@NonNull Child child) {
-        return DbUtils.deleteObservable(dataStore, ChildEntity.class, child, child.getId());
-    }
 }

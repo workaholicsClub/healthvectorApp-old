@@ -24,49 +24,49 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTaki
 
 @Singleton
 public class MedicineTakingDataRepository implements MedicineTakingRepository {
-    private final MedicineTakingDbService dbService;
+    private final MedicineTakingDbService medicineTakingDbService;
     private final CleanUpDbService cleanUpDbService;
 
     @Inject
-    public MedicineTakingDataRepository(MedicineTakingDbService dbService,
+    public MedicineTakingDataRepository(MedicineTakingDbService medicineTakingDbService,
                                         CleanUpDbService cleanUpDbService) {
-        this.dbService = dbService;
+        this.medicineTakingDbService = medicineTakingDbService;
         this.cleanUpDbService = cleanUpDbService;
     }
 
     @Override
     public Observable<List<Medicine>> getMedicines() {
-        return dbService.getMedicines();
+        return medicineTakingDbService.getMedicines();
     }
 
     @Override
     public Observable<Medicine> addMedicine(@NonNull Medicine medicine) {
-        return dbService.addMedicine(medicine);
+        return medicineTakingDbService.addMedicine(medicine);
     }
 
     @Override
     public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
-        return dbService.deleteMedicine(medicine);
+        return medicineTakingDbService.deleteMedicine(medicine);
     }
 
     @Override
     public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
-        return dbService.getMedicineMeasureList();
+        return medicineTakingDbService.getMedicineMeasureList();
     }
 
     @Override
     public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {
-        return dbService.getMedicineTakingList(request);
+        return medicineTakingDbService.getMedicineTakingList(request);
     }
 
     @Override
     public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return dbService.add(medicineTaking);
+        return medicineTakingDbService.add(medicineTaking);
     }
 
     @Override
     public Observable<MedicineTaking> updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return dbService.update(medicineTaking);
+        return medicineTakingDbService.update(medicineTaking);
     }
 
     @Override

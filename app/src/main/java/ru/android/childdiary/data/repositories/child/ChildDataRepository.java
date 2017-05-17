@@ -10,8 +10,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.data.repositories.core.CleanUpDbService;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
+import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
+import ru.android.childdiary.domain.interactors.child.requests.DeleteChildResponse;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -19,12 +22,16 @@ public class ChildDataRepository implements ChildRepository {
     private static final String KEY_ACTIVE_CHILD_ID = "active_child_id";
 
     private final RxSharedPreferences preferences;
-    private final ChildDbService dbService;
+    private final ChildDbService childDbService;
+    private final CleanUpDbService cleanUpDbService;
 
     @Inject
-    public ChildDataRepository(RxSharedPreferences preferences, ChildDbService dbService) {
+    public ChildDataRepository(RxSharedPreferences preferences,
+                               ChildDbService childDbService,
+                               CleanUpDbService cleanUpDbService) {
         this.preferences = preferences;
-        this.dbService = dbService;
+        this.childDbService = childDbService;
+        this.cleanUpDbService = cleanUpDbService;
     }
 
     @Override
@@ -63,21 +70,21 @@ public class ChildDataRepository implements ChildRepository {
 
     @Override
     public Observable<List<Child>> getAll() {
-        return dbService.getAll();
+        return childDbService.getAll();
     }
 
     @Override
     public Observable<Child> add(@NonNull Child child) {
-        return dbService.add(child);
+        return childDbService.add(child);
     }
 
     @Override
     public Observable<Child> update(@NonNull Child child) {
-        return dbService.update(child);
+        return childDbService.update(child);
     }
 
     @Override
-    public Observable<Child> delete(@NonNull Child child) {
-        return dbService.delete(child);
+    public Observable<DeleteChildResponse> delete(@NonNull DeleteChildRequest request) {
+        return cleanUpDbService.deleteChild(request);
     }
 }
