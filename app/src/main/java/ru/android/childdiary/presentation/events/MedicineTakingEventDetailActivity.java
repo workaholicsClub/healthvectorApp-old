@@ -24,7 +24,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
@@ -244,7 +243,7 @@ public class MedicineTakingEventDetailActivity
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
                         .showDeleteItem(false)
-                        .imageType(ImageType.MEDICINE_TAKING_EVENT)
+                        .showCircleFrame(false)
                         .build());
     }
 

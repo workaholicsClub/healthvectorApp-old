@@ -5,13 +5,14 @@ import io.requery.ForeignKey;
 import io.requery.Generated;
 import io.requery.Key;
 import io.requery.OneToOne;
+import io.requery.Persistable;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.types.DiaperState;
 
 @Table(name = "diaper_event")
 @Entity(name = "DiaperEventEntity")
-public interface DiaperEventData {
+public interface DiaperEventData extends Persistable {
     @Key
     @Generated
     Long getId();

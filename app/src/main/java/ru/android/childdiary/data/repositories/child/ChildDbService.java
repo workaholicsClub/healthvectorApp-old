@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
@@ -18,12 +19,14 @@ import ru.android.childdiary.domain.interactors.child.Child;
 @Singleton
 public class ChildDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
+    private final BlockingEntityStore<Persistable> blockingEntityStore;
     private final ChildMapper childMapper;
 
     @Inject
     public ChildDbService(ReactiveEntityStore<Persistable> dataStore,
                           ChildMapper childMapper) {
         this.dataStore = dataStore;
+        this.blockingEntityStore = dataStore.toBlocking();
         this.childMapper = childMapper;
     }
 
@@ -36,10 +39,10 @@ public class ChildDbService {
     }
 
     public Observable<Child> add(@NonNull Child child) {
-        return DbUtils.insertObservable(dataStore, child, childMapper);
+        return DbUtils.insertObservable(blockingEntityStore, child, childMapper);
     }
 
     public Observable<Child> update(@NonNull Child child) {
-        return DbUtils.updateObservable(dataStore, child, childMapper);
+        return DbUtils.updateObservable(blockingEntityStore, child, childMapper);
     }
 }

@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
@@ -36,6 +37,7 @@ import ru.android.childdiary.utils.ObjectUtils;
 public class MedicineTakingDbService {
     private final Logger logger = LoggerFactory.getLogger(toString());
     private final ReactiveEntityStore<Persistable> dataStore;
+    private final BlockingEntityStore<Persistable> blockingEntityStore;
     private final MedicineTakingEventsGenerator eventsGenerator;
     private final MedicineMapper medicineMapper;
     private final MedicineMeasureMapper medicineMeasureMapper;
@@ -50,6 +52,7 @@ public class MedicineTakingDbService {
                                    MedicineTakingMapper medicineTakingMapper,
                                    RepeatParametersMapper repeatParametersMapper) {
         this.dataStore = dataStore;
+        this.blockingEntityStore = dataStore.toBlocking();
         this.eventsGenerator = eventsGenerator;
         this.medicineMapper = medicineMapper;
         this.medicineMeasureMapper = medicineMeasureMapper;
@@ -66,11 +69,11 @@ public class MedicineTakingDbService {
     }
 
     public Observable<Medicine> addMedicine(@NonNull Medicine medicine) {
-        return DbUtils.insertObservable(dataStore, medicine, medicineMapper);
+        return DbUtils.insertObservable(blockingEntityStore, medicine, medicineMapper);
     }
 
     public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
-        return DbUtils.deleteObservable(dataStore, MedicineEntity.class, medicine, medicine.getId());
+        return DbUtils.deleteObservable(blockingEntityStore, MedicineEntity.class, medicine, medicine.getId());
     }
 
     public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
@@ -94,19 +97,19 @@ public class MedicineTakingDbService {
     }
 
     private RepeatParameters insertRepeatParameters(@NonNull RepeatParameters repeatParameters) {
-        return DbUtils.insert(dataStore, repeatParameters, repeatParametersMapper);
+        return DbUtils.insert(blockingEntityStore, repeatParameters, repeatParametersMapper);
     }
 
     private MedicineTaking insertMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return DbUtils.insert(dataStore, medicineTaking, medicineTakingMapper);
+        return DbUtils.insert(blockingEntityStore, medicineTaking, medicineTakingMapper);
     }
 
     private RepeatParameters updateRepeatParameters(@NonNull RepeatParameters repeatParameters) {
-        return DbUtils.update(dataStore, repeatParameters, repeatParametersMapper);
+        return DbUtils.update(blockingEntityStore, repeatParameters, repeatParametersMapper);
     }
 
     private MedicineTaking updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return DbUtils.update(dataStore, medicineTaking, medicineTakingMapper);
+        return DbUtils.update(blockingEntityStore, medicineTaking, medicineTakingMapper);
     }
 
     @Nullable
@@ -122,7 +125,7 @@ public class MedicineTakingDbService {
     }
 
     public Observable<MedicineTaking> add(@NonNull MedicineTaking medicineTaking) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             RepeatParameters repeatParameters = upsertRepeatParameters(medicineTaking.getRepeatParameters());
             MedicineTaking result = medicineTaking.toBuilder().repeatParameters(repeatParameters).build();
             result = insertMedicineTaking(result);
@@ -138,8 +141,8 @@ public class MedicineTakingDbService {
     }
 
     public Observable<MedicineTaking> update(@NonNull MedicineTaking medicineTaking) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            MedicineTakingEntity oldMedicineTakingEntity = dataStore.toBlocking()
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
+            MedicineTakingEntity oldMedicineTakingEntity = blockingEntityStore
                     .select(MedicineTakingEntity.class)
                     .where(MedicineTakingEntity.ID.eq(medicineTaking.getId()))
                     .get()

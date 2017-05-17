@@ -1,9 +1,9 @@
 package ru.android.childdiary.data.repositories.core.images;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -51,31 +51,40 @@ public class ImagesDataRepository implements ImagesRepository {
     }
 
     @Override
-    public Single<String> createUniqueImageFile(@NonNull ImageType imageType, @NonNull Uri fromFileUri) {
-        return Single.fromCallable(() -> {
-            try {
-                // создаем целевой файл
-                File parentDir = new File(context.getFilesDir(), getParentDirName(imageType));
-                boolean result = parentDir.mkdirs();
-                logger.debug(parentDir.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
-                File resultFile = new File(parentDir, getPrefix() + IMAGE_FILE_SUFFIX);
+    public boolean isTemporaryImageFile(@Nullable String imageFileName) {
+        try {
+            return !TextUtils.isEmpty(imageFileName) && new File(context.getFilesDir(), imageFileName)
+                    .getName()
+                    .contains(CROPPED_IMAGE_FILE_NAME);
+        } catch (Exception e) {
+            throw new ImagesException("failed to check file is temporary", e);
+        }
+    }
 
-                // переименовываем
-                File fromFile = new File(fromFileUri.getPath());
-                result = fromFile.renameTo(resultFile);
-                if (result) {
-                    // возвращаем относительный путь (относительно files directory приложения)
-                    // т.к. фотографии будут копироваться в облако, откуда могут быть восстановлены на другом устройстве
-                    // в общем случае путь до files directory может отличаться на разных устройствах
-                    int len = context.getFilesDir().getAbsolutePath().length();
-                    return resultFile.getAbsolutePath().substring(len);
-                } else {
-                    throw new ImagesException("failed to rename from " + fromFile + " to " + resultFile);
-                }
-            } catch (Exception e) {
-                throw new ImagesException("failed to create unique file", e);
+    @Override
+    public String createUniqueImageFileRelativePath(@NonNull ImageType imageType, @NonNull String relativePath) {
+        try {
+            // создаем целевой файл
+            File parentDir = new File(context.getFilesDir(), getParentDirName(imageType));
+            boolean result = parentDir.mkdirs();
+            logger.debug(parentDir.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
+            File resultFile = new File(parentDir, getPrefix() + IMAGE_FILE_SUFFIX);
+
+            // переименовываем
+            File fromFile = new File(context.getFilesDir(), relativePath);
+            result = fromFile.renameTo(resultFile);
+            if (result) {
+                // возвращаем относительный путь (относительно files directory приложения)
+                // т.к. фотографии будут копироваться в облако, откуда могут быть восстановлены на другом устройстве
+                // в общем случае путь до files directory может отличаться на разных устройствах
+                int len = context.getFilesDir().getAbsolutePath().length();
+                return resultFile.getAbsolutePath().substring(len);
+            } else {
+                throw new ImagesException("failed to rename from " + fromFile + " to " + resultFile);
             }
-        });
+        } catch (Exception e) {
+            throw new ImagesException("failed to create unique file", e);
+        }
     }
 
     private String getParentDirName(@NonNull ImageType imageType) {
@@ -100,28 +109,49 @@ public class ImagesDataRepository implements ImagesRepository {
     }
 
     @Override
+    public Single<String> createTemporaryImageFileRelativePath(@NonNull String fromPath) {
+        return Single.fromCallable(() -> {
+            try {
+                int len = context.getFilesDir().getAbsolutePath().length();
+                return fromPath.substring(len);
+            } catch (Exception e) {
+                throw new ImagesException("failed to create temporary image file: "
+                        + context.getFilesDir() + File.separator
+                        + CROPPED_IMAGE_FILE_NAME, e);
+            }
+        });
+    }
+
+    @Override
     public Single<File> createCroppedImageFile() {
-        return createTempImageFile(CROPPED_IMAGE_FILE_NAME);
+        return Single.fromCallable(() -> {
+            try {
+                File file = new File(context.getFilesDir(), CROPPED_IMAGE_FILE_NAME);
+                return file;
+            } catch (Exception e) {
+                throw new ImagesException("failed to create cropped image file: "
+                        + context.getFilesDir() + File.separator
+                        + CROPPED_IMAGE_FILE_NAME, e);
+            }
+        });
     }
 
     @Override
     public Single<File> createCapturedImageFile() {
-        return createTempImageFile(CAPTURED_IMAGE_FILE_NAME);
-    }
-
-    private Single<File> createTempImageFile(@NonNull String fileName) {
         return Single.fromCallable(() -> {
             try {
                 File parentDir = new File(context.getCacheDir(), CACHE_ROOT);
                 boolean result = parentDir.mkdirs();
                 logger.debug(parentDir.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
-                File file = new File(parentDir, fileName);
+                File file = new File(parentDir, CAPTURED_IMAGE_FILE_NAME);
                 result = file.createNewFile();
                 logger.debug(file.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
                 return file;
             } catch (Exception e) {
-                throw new ImagesException("failed to create temp image file: "
-                        + CACHE_ROOT + File.separator + fileName, e);
+                throw new ImagesException("failed to create captured image file: "
+                        + context.getCacheDir() + File.separator
+                        + CACHE_ROOT + File.separator
+                        + CAPTURED_IMAGE_FILE_NAME, e);
             }
         });
     }

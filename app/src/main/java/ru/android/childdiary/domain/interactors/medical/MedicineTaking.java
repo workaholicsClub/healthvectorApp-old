@@ -8,8 +8,8 @@ import java.io.Serializable;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.data.repositories.core.RepeatParametersContainer;
 import ru.android.childdiary.domain.core.ContentObject;
+import ru.android.childdiary.domain.core.RepeatParametersContainer;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
@@ -18,7 +18,8 @@ import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
 @Builder(toBuilder = true)
-public class MedicineTaking implements Serializable, RepeatParametersContainer, ContentObject<MedicineTaking> {
+public class MedicineTaking implements Serializable, RepeatParametersContainer,
+        ContentObject<MedicineTaking> {
     private static final MedicineTaking NULL = MedicineTaking.builder().build();
 
     Long id;

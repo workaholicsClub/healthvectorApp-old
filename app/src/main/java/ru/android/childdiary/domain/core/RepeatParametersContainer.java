@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.repositories.core;
+package ru.android.childdiary.domain.core;
 
 import org.joda.time.DateTime;
 

@@ -18,14 +18,15 @@ import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDataRepository;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
-import ru.android.childdiary.domain.interactors.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
@@ -142,12 +143,26 @@ public class MedicineTakingInteractor {
                 });
     }
 
+    private Observable<MedicineTaking> createImageFile(@NonNull MedicineTaking medicineTaking) {
+        return Observable.fromCallable(() -> {
+            if (imagesRepository.isTemporaryImageFile(medicineTaking.getImageFileName())) {
+                String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(ImageType.MEDICINE_TAKING, medicineTaking.getImageFileName());
+                return medicineTaking.toBuilder().imageFileName(uniqueImageFileName).build();
+            }
+            return medicineTaking;
+        });
+    }
+
     public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return validate(medicineTaking).flatMap(medicineTakingRepository::addMedicineTaking);
+        return validate(medicineTaking)
+                .flatMap(this::createImageFile)
+                .flatMap(medicineTakingRepository::addMedicineTaking);
     }
 
     public Observable<MedicineTaking> updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return validate(medicineTaking).flatMap(medicineTakingRepository::updateMedicineTaking);
+        return validate(medicineTaking)
+                .flatMap(this::createImageFile)
+                .flatMap(medicineTakingRepository::updateMedicineTaking);
     }
 
     private <T extends DeleteResponse> Observable<T> deleteImageFiles(@NonNull T response) {

@@ -20,6 +20,7 @@ import io.requery.query.Result;
 import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
 import lombok.val;
+import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
@@ -28,6 +29,9 @@ import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
+import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildResponse;
@@ -250,6 +254,27 @@ public class CleanUpDbService {
                     .request(request)
                     .imageFilesToDelete(imageFilesToDelete)
                     .build();
+        }));
+    }
+
+    public <T extends MasterEvent> Observable<List<String>> deleteEvent(@NonNull T event) {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
+            List<String> imageFilesToDelete = new ArrayList<>();
+            DbUtils.delete(blockingEntityStore, MasterEventEntity.class, event, event.getMasterEventId());
+            if (event instanceof DoctorVisitEvent) {
+                DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
+                imageFilesToDelete.add(doctorVisitEvent.getImageFileName());
+                Long id = getId(doctorVisitEvent.getDoctorVisit());
+                DoctorVisitEntity doctorVisitEntity = findDoctorVisitEntity(id);
+                deleteIfPossible(doctorVisitEntity, imageFilesToDelete);
+            } else if (event instanceof MedicineTakingEvent) {
+                MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) event;
+                imageFilesToDelete.add(medicineTakingEvent.getImageFileName());
+                Long id = getId(medicineTakingEvent.getMedicineTaking());
+                MedicineTakingEntity medicineTakingEntity = findMedicineTakingEntity(id);
+                deleteIfPossible(medicineTakingEntity, imageFilesToDelete);
+            }
+            return imageFilesToDelete;
         }));
     }
 

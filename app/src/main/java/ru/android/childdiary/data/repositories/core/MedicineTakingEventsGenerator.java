@@ -54,8 +54,8 @@ public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTakin
 
     @Override
     protected MedicineTakingEvent add(@NonNull MedicineTakingEvent event) {
-        MasterEvent masterEvent = DbUtils.insert(dataStore, event, masterEventMapper);
+        MasterEvent masterEvent = DbUtils.insert(blockingEntityStore, event, masterEventMapper);
         MedicineTakingEvent medicineTakingEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
-        return DbUtils.insert(dataStore, medicineTakingEvent, medicineTakingEventMapper);
+        return DbUtils.insert(blockingEntityStore, medicineTakingEvent, medicineTakingEventMapper);
     }
 }

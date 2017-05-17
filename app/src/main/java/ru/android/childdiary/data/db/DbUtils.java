@@ -7,7 +7,6 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.requery.BlockingEntityStore;
-import io.requery.EntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import io.requery.reactivex.ReactiveResult;
@@ -31,17 +30,15 @@ public class DbUtils {
         return dataStore;
     }
 
-    public static <T, E> Observable<T> deleteObservable(EntityStore dataStore,
-                                                        Class<E> entityClass, T object, long objectId) {
-        //noinspection unchecked
-        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
-                delete(dataStore, entityClass, object, objectId)));
+    public static <T, E extends Persistable> Observable<T> deleteObservable(BlockingEntityStore<Persistable> blockingEntityStore,
+                                                                            Class<E> entityClass, T object, long objectId) {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() ->
+                delete(blockingEntityStore, entityClass, object, objectId)));
     }
 
-    public static <T, E> T delete(EntityStore dataStore,
-                                   Class<E> entityClass, T object, long objectId) {
-        BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
-        Object entity = blockingEntityStore.findByKey(entityClass, objectId);
+    public static <T, E extends Persistable> T delete(BlockingEntityStore<Persistable> blockingEntityStore,
+                                                      Class<E> entityClass, T object, long objectId) {
+        E entity = blockingEntityStore.findByKey(entityClass, objectId);
         if (entity != null) {
             blockingEntityStore.delete(entity);
             return object;
@@ -49,35 +46,29 @@ public class DbUtils {
         throw new RuntimeException(object.getClass() + " not found while deleting");
     }
 
-    public static <T, E extends D, D> Observable<T> insertObservable(EntityStore dataStore,
-                                                                     T object, EntityMapper<D, E, T> mapper) {
-        //noinspection unchecked
-        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
-                insert(dataStore, object, mapper)));
+    public static <T, E extends D, D extends Persistable> Observable<T> insertObservable(BlockingEntityStore<Persistable> blockingEntityStore,
+                                                                                         T object, EntityMapper<D, E, T> mapper) {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() ->
+                insert(blockingEntityStore, object, mapper)));
     }
 
-    public static <T, E extends D, D> T insert(EntityStore dataStore,
-                                               T object, EntityMapper<D, E, T> mapper) {
-        BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+    public static <T, E extends D, D extends Persistable> T insert(BlockingEntityStore<Persistable> blockingEntityStore,
+                                                                   T object, EntityMapper<D, E, T> mapper) {
         E entity = mapper.mapToEntity(blockingEntityStore, object);
-        //noinspection unchecked
-        entity = (E) blockingEntityStore.insert(entity);
+        entity = blockingEntityStore.insert(entity);
         return mapper.mapToPlainObject(entity);
     }
 
-    public static <T, E extends D, D> Observable<T> updateObservable(EntityStore dataStore,
-                                                                     T object, EntityMapper<D, E, T> mapper) {
-        //noinspection unchecked
-        return Observable.fromCallable(() -> (T) dataStore.toBlocking().runInTransaction(() ->
-                update(dataStore, object, mapper)));
+    public static <T, E extends D, D extends Persistable> Observable<T> updateObservable(BlockingEntityStore<Persistable> blockingEntityStore,
+                                                                                         T object, EntityMapper<D, E, T> mapper) {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() ->
+                update(blockingEntityStore, object, mapper)));
     }
 
-    public static <T, E extends D, D> T update(EntityStore dataStore,
-                                               T object, EntityMapper<D, E, T> mapper) {
-        BlockingEntityStore blockingEntityStore = dataStore.toBlocking();
+    public static <T, E extends D, D extends Persistable> T update(BlockingEntityStore<Persistable> blockingEntityStore,
+                                                                   T object, EntityMapper<D, E, T> mapper) {
         E entity = mapper.mapToEntity(blockingEntityStore, object);
-        //noinspection unchecked
-        entity = (E) blockingEntityStore.update(entity);
+        entity = blockingEntityStore.update(entity);
         return mapper.mapToPlainObject(entity);
     }
 

@@ -332,9 +332,8 @@ public class CalendarDataRepository implements CalendarRepository {
         return calendarDbService.update(event);
     }
 
-    @Override
-    public <T extends MasterEvent> Observable<T> delete(@NonNull T event) {
-        return calendarDbService.delete(event);
+    public <T extends MasterEvent> Observable<List<String>> delete(@NonNull T event) {
+        return cleanUpDbService.deleteEvent(event);
     }
 
     @Override

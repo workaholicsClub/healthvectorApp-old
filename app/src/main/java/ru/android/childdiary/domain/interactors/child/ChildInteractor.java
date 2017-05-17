@@ -15,6 +15,7 @@ import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
+import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
@@ -23,7 +24,7 @@ import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRespon
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
-import ru.android.childdiary.domain.interactors.core.DeleteResponse;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 
 public class ChildInteractor {
@@ -67,12 +68,14 @@ public class ChildInteractor {
 
     public Observable<Child> add(@NonNull Child item) {
         return validate(item)
+                .flatMap(this::createImageFile)
                 .flatMap(childRepository::add)
                 .flatMap(this::setActiveChildObservable);
     }
 
     public Observable<Child> update(@NonNull Child item) {
         return validate(item)
+                .flatMap(this::createImageFile)
                 .flatMap(childRepository::update);
     }
 
@@ -127,5 +130,15 @@ public class ChildInteractor {
                     }
                     return Observable.just(child);
                 });
+    }
+
+    private Observable<Child> createImageFile(@NonNull Child child) {
+        return Observable.fromCallable(() -> {
+            if (imagesRepository.isTemporaryImageFile(child.getImageFileName())) {
+                String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(ImageType.PROFILE, child.getImageFileName());
+                return child.toBuilder().imageFileName(uniqueImageFileName).build();
+            }
+            return child;
+        });
     }
 }

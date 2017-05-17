@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
@@ -19,12 +20,14 @@ import ru.android.childdiary.domain.interactors.child.Child;
 @Singleton
 public class AntropometryDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
+    private final BlockingEntityStore<Persistable> blockingEntityStore;
     private final AntropometryMapper antropometryMapper;
 
     @Inject
     public AntropometryDbService(ReactiveEntityStore<Persistable> dataStore,
                                  AntropometryMapper antropometryMapper) {
         this.dataStore = dataStore;
+        this.blockingEntityStore = dataStore.toBlocking();
         this.antropometryMapper = antropometryMapper;
     }
 
@@ -38,14 +41,14 @@ public class AntropometryDbService {
     }
 
     public Observable<Antropometry> add(@NonNull Antropometry antropometry) {
-        return DbUtils.insertObservable(dataStore, antropometry, antropometryMapper);
+        return DbUtils.insertObservable(blockingEntityStore, antropometry, antropometryMapper);
     }
 
     public Observable<Antropometry> update(@NonNull Antropometry antropometry) {
-        return DbUtils.updateObservable(dataStore, antropometry, antropometryMapper);
+        return DbUtils.updateObservable(blockingEntityStore, antropometry, antropometryMapper);
     }
 
     public Observable<Antropometry> delete(@NonNull Antropometry antropometry) {
-        return DbUtils.deleteObservable(dataStore, AntropometryEntity.class, antropometry, antropometry.getId());
+        return DbUtils.deleteObservable(blockingEntityStore, AntropometryEntity.class, antropometry, antropometry.getId());
     }
 }

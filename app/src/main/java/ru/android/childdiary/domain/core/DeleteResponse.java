@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.interactors.core;
+package ru.android.childdiary.domain.core;
 
 import java.util.List;
 

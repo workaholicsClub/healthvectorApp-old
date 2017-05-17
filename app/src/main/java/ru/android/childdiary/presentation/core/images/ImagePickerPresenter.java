@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
@@ -24,9 +23,9 @@ public class ImagePickerPresenter extends BasePresenter<ImagePickerView> {
         applicationComponent.inject(this);
     }
 
-    public void createUniqueImageFile(@NonNull ImageType imageType, @NonNull Uri fromFileUri) {
-        unsubscribeOnDestroy(imagesInteractor.createUniqueImageFile(imageType, fromFileUri)
-                .doOnError(throwable -> logger.error("failed to create unique image file", throwable))
+    public void createTemporaryImageFile(@NonNull Uri fromFileUri) {
+        unsubscribeOnDestroy(imagesInteractor.createTemporaryImageFile(fromFileUri.getPath())
+                .doOnError(throwable -> logger.error("failed to create temporary image file", throwable))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::setResultImageFile,

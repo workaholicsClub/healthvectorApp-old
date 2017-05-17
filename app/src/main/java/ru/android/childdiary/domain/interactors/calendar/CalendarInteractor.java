@@ -23,6 +23,7 @@ import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
@@ -48,9 +49,9 @@ import ru.android.childdiary.domain.interactors.calendar.validation.OtherEventVa
 import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
-import ru.android.childdiary.domain.interactors.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
@@ -291,6 +292,7 @@ public class CalendarInteractor {
     public <T extends MasterEvent> Observable<T> update(@NonNull T event) {
         return preprocessOnUpdate(event)
                 .flatMap(this::validate)
+                .flatMap(this::createImageFile)
                 .flatMap(this::updateInternal)
                 .flatMap(this::postprocessOnUpdate);
     }
@@ -318,40 +320,14 @@ public class CalendarInteractor {
 
     public <T extends MasterEvent> Observable<T> delete(@NonNull T event) {
         return calendarRepository.delete(event)
-                .flatMap(this::postprocessOnDelete);
+                .flatMap(imageFilesToDelete -> deleteImageFiles(event, imageFilesToDelete));
     }
 
-    @SuppressWarnings("unchecked")
-    private <T extends MasterEvent> Observable<T> postprocessOnDelete(@NonNull T event) {
+    private <T extends MasterEvent> Observable<T> deleteImageFiles(@NonNull T event, List<String> imageFilesToDelete) {
         return Observable.fromCallable(() -> {
-            if (event.getEventType() == EventType.DIAPER) {
-                return event;
-            } else if (event.getEventType() == EventType.FEED) {
-                return event;
-            } else if (event.getEventType() == EventType.OTHER) {
-                return event;
-            } else if (event.getEventType() == EventType.PUMP) {
-                return event;
-            } else if (event.getEventType() == EventType.SLEEP) {
-                return event;
-            } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
-                return (T) deleteImageFile((DoctorVisitEvent) event);
-            } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
-                return (T) deleteImageFile((MedicineTakingEvent) event);
-            }
-            // TODO EXERCISE
-            throw new IllegalStateException("Unsupported event type");
+            imagesRepository.deleteImageFiles(imageFilesToDelete);
+            return event;
         });
-    }
-
-    private DoctorVisitEvent deleteImageFile(@NonNull DoctorVisitEvent event) {
-        imagesRepository.deleteImageFile(event.getImageFileName());
-        return event;
-    }
-
-    private MedicineTakingEvent deleteImageFile(@NonNull MedicineTakingEvent event) {
-        imagesRepository.deleteImageFile(event.getImageFileName());
-        return event;
     }
 
     private <T extends DeleteResponse> Observable<T> deleteImageFiles(@NonNull T response) {
@@ -364,7 +340,6 @@ public class CalendarInteractor {
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         return calendarRepository.done(event);
     }
-
 
     public <T extends MasterEvent> Observable<Integer> deleteLinearGroup(@NonNull T event) {
         if (event.getEventType() == EventType.DIAPER) {
@@ -428,6 +403,29 @@ public class CalendarInteractor {
                     }
                     return Observable.just(event);
                 });
+    }
+
+    private <T extends MasterEvent> Observable<T> createImageFile(@NonNull T item) {
+        return Observable.fromCallable(() -> {
+            if (item.getEventType() == EventType.DOCTOR_VISIT) {
+                DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) item;
+                if (imagesRepository.isTemporaryImageFile(doctorVisitEvent.getImageFileName())) {
+                    String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(
+                            ImageType.DOCTOR_VISIT_EVENT, doctorVisitEvent.getImageFileName());
+                    //noinspection unchecked
+                    return (T) doctorVisitEvent.toBuilder().imageFileName(uniqueImageFileName).build();
+                }
+            } else if (item.getEventType() == EventType.MEDICINE_TAKING) {
+                MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) item;
+                if (imagesRepository.isTemporaryImageFile(medicineTakingEvent.getImageFileName())) {
+                    String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(
+                            ImageType.MEDICINE_TAKING_EVENT, medicineTakingEvent.getImageFileName());
+                    //noinspection unchecked
+                    return (T) medicineTakingEvent.toBuilder().imageFileName(uniqueImageFileName).build();
+                }
+            }
+            return item;
+        });
     }
 
     @SuppressWarnings("unchecked")

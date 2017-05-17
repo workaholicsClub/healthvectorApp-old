@@ -6,11 +6,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.presentation.core.BaseDialogArguments;
 
 @ToString(callSuper = true)
@@ -19,15 +17,14 @@ import ru.android.childdiary.presentation.core.BaseDialogArguments;
 @Getter
 public class ImagePickerDialogArguments extends BaseDialogArguments {
     boolean showDeleteItem;
-    @NonNull
-    ImageType imageType;
+    boolean showCircleFrame;
 
     @Builder
     public ImagePickerDialogArguments(@Nullable Sex sex,
                                       boolean showDeleteItem,
-                                      @NonNull ImageType imageType) {
+                                      boolean showCircleFrame) {
         super(sex);
         this.showDeleteItem = showDeleteItem;
-        this.imageType = imageType;
+        this.showCircleFrame = showCircleFrame;
     }
 }

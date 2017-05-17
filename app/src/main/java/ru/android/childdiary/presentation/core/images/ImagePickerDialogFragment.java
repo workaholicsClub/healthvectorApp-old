@@ -28,7 +28,6 @@ import java.util.List;
 
 import icepick.State;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.presentation.core.RequestPermissionInfo;
 import ru.android.childdiary.presentation.core.images.adapters.ImagePickerAction;
@@ -179,7 +178,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
     private void handleCropResult(@NonNull Intent result) {
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
-            presenter.createUniqueImageFile(dialogArguments.getImageType(), resultUri);
+            presenter.createTemporaryImageFile(resultUri);
         } else {
             logger.error("handleCropResult: resultUri is null");
             showToast(getString(R.string.failed_to_crop_image));
@@ -227,7 +226,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
         options.setCropGridRowCount(0);
         options.setShowCropFrame(false);
 
-        options.setCircleDimmedLayer(dialogArguments.getImageType() == ImageType.PROFILE);
+        options.setCircleDimmedLayer(dialogArguments.isShowCircleFrame());
         WidgetsUtils.setupCropActivityToolbar(getContext(), options, dialogArguments.getSex());
 
         uCrop.withOptions(options);
