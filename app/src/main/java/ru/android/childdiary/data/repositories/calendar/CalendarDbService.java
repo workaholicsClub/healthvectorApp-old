@@ -50,6 +50,7 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTak
 import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTakingEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
+import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -330,7 +331,7 @@ public class CalendarDbService {
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        boolean isDone = ObjectUtils.isTrue(event.getIsDone());
+        boolean isDone = EventHelper.isDone(event);
         MasterEvent masterEvent = event.toMasterBuilder().isDone(!isDone).build();
         return DbUtils.updateObservable(dataStore, masterEvent, masterEventMapper);
     }
