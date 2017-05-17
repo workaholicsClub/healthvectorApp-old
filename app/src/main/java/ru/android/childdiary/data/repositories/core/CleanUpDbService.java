@@ -88,7 +88,7 @@ public class CleanUpDbService {
             int count = events.size();
             List<String> imageFilesToDelete = new ArrayList<>();
             imageFilesToDelete.addAll(getImageFileNamesDoctorVisitEvents(events));
-            deleteManyEvents(events);
+            deleteDoctorVisitEvents(events);
             if (request.getLinearGroup() == null) {
                 delete(doctorVisitEntity, imageFilesToDelete);
             } else {
@@ -113,7 +113,7 @@ public class CleanUpDbService {
             int count = events.size();
             List<String> imageFilesToDelete = new ArrayList<>();
             imageFilesToDelete.addAll(getImageFileNamesMedicineTakingEvents(events));
-            deleteManyEvents(events);
+            deleteMedicineTakingEvents(events);
             if (request.getLinearGroup() == null) {
                 delete(medicineTakingEntity, imageFilesToDelete);
             } else {
@@ -139,7 +139,7 @@ public class CleanUpDbService {
                 val events = getDoctorVisitEvents(id, request.getDateTime());
                 count = events.size();
                 imageFilesToDelete.addAll(getImageFileNamesDoctorVisitEvents(events));
-                deleteManyEvents(events);
+                deleteDoctorVisitEvents(events);
             }
             return CompleteDoctorVisitResponse.builder()
                     .request(request)
@@ -161,7 +161,7 @@ public class CleanUpDbService {
                 val events = getMedicineTakingEvents(id, request.getDateTime());
                 count = events.size();
                 imageFilesToDelete.addAll(getImageFileNamesMedicineTakingEvents(events));
-                deleteManyEvents(events);
+                deleteMedicineTakingEvents(events);
             }
             return CompleteMedicineTakingResponse.builder()
                     .request(request)
@@ -265,18 +265,34 @@ public class CleanUpDbService {
         }
     }
 
-    private <T extends Persistable> void deleteManyEvents(List<T> events) {
+    private void deleteDoctorVisitEvents(List<DoctorVisitEventEntity> events) {
+        val masterEvents = Observable.fromIterable(events)
+                .map(event -> blockingEntityStore.findByKey(MasterEventEntity.class,
+                        event.getMasterEvent().getId()))
+                .toList().blockingGet();
+        delete(masterEvents);
+    }
+
+    private void deleteMedicineTakingEvents(List<MedicineTakingEventEntity> events) {
+        val masterEvents = Observable.fromIterable(events)
+                .map(event -> blockingEntityStore.findByKey(MasterEventEntity.class,
+                        event.getMasterEvent().getId()))
+                .toList().blockingGet();
+        delete(masterEvents);
+    }
+
+    private <T extends Persistable> void delete(List<T> entities) {
         final int MAX = 10;
-        for (int i = 0; i < events.size(); i += MAX) {
-            int upper = Math.min(i + MAX, events.size());
-            val subList = events.subList(i, upper);
+        for (int i = 0; i < entities.size(); i += MAX) {
+            int upper = Math.min(i + MAX, entities.size());
+            val subList = entities.subList(i, upper);
             blockingEntityStore.delete(subList);
         }
     }
 
     private List<String> getImageFileNamesDoctorVisitEvents(List<DoctorVisitEventEntity> events) {
         return Observable.fromIterable(events)
-                .map(DoctorVisitEventEntity::getImageFileName)
+                .map(event -> event.getImageFileName() == null ? "" : event.getImageFileName())
                 .filter(imageFileName -> !TextUtils.isEmpty(imageFileName))
                 .toList()
                 .blockingGet();
@@ -284,7 +300,7 @@ public class CleanUpDbService {
 
     private List<String> getImageFileNamesMedicineTakingEvents(List<MedicineTakingEventEntity> events) {
         return Observable.fromIterable(events)
-                .map(MedicineTakingEventEntity::getImageFileName)
+                .map(event -> event.getImageFileName() == null ? "" : event.getImageFileName())
                 .filter(imageFileName -> !TextUtils.isEmpty(imageFileName))
                 .toList()
                 .blockingGet();

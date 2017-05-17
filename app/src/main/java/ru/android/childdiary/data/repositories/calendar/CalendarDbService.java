@@ -42,6 +42,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class CalendarDbService {
@@ -267,7 +268,8 @@ public class CalendarDbService {
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        MasterEvent masterEvent = event.toMasterBuilder().isDone(!event.getIsDone()).build();
+        boolean isDone = ObjectUtils.isTrue(event.getIsDone());
+        MasterEvent masterEvent = event.toMasterBuilder().isDone(!isDone).build();
         return DbUtils.updateObservable(dataStore, masterEvent, masterEventMapper);
     }
 
