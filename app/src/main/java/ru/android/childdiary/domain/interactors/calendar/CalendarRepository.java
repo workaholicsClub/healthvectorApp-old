@@ -20,8 +20,14 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetDoctorVisitEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetDoctorVisitEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTakingEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTakingEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
@@ -60,7 +66,11 @@ public interface CalendarRepository {
 
     Observable<GetEventsResponse> getAll(@NonNull GetEventsRequest request);
 
-    Observable<List<SleepEvent>> getSleepEventsWithTimer();
+    Observable<GetSleepEventsResponse> getSleepEvents(@NonNull GetSleepEventsRequest request);
+
+    Observable<GetDoctorVisitEventsResponse> getDoctorVisitEvents(@NonNull GetDoctorVisitEventsRequest request);
+
+    Observable<GetMedicineTakingEventsResponse> getMedicineTakingEvents(@NonNull GetMedicineTakingEventsRequest request);
 
     Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event);
 

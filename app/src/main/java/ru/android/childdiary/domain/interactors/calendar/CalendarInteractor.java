@@ -36,6 +36,8 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.validation.DiaperEventValidator;
@@ -233,8 +235,8 @@ public class CalendarInteractor {
         return calendarRepository.getAll(request);
     }
 
-    public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
-        return calendarRepository.getSleepEventsWithTimer();
+    public Observable<GetSleepEventsResponse> getSleepEvents(@NonNull GetSleepEventsRequest request) {
+        return calendarRepository.getSleepEvents(request);
     }
 
     @SuppressWarnings("unchecked")

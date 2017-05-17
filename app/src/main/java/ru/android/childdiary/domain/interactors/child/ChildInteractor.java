@@ -16,11 +16,12 @@ import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
-import ru.android.childdiary.utils.EventHelper;
 
 public class ChildInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -86,10 +87,13 @@ public class ChildInteractor {
     }
 
     private Observable<Child> stopSleepTimersBeforeChildDelete(@NonNull Child child) {
-        return calendarRepository.getSleepEventsWithTimer()
+        return calendarRepository.getSleepEvents(GetSleepEventsRequest.builder()
+                .child(child)
+                .withStartedTimer(true)
+                .build())
+                .map(GetSleepEventsResponse::getEvents)
                 .first(Collections.emptyList())
                 .flatMapObservable(Observable::fromIterable)
-                .filter(event -> EventHelper.sameChild(child, event))
                 .map(event -> event.toBuilder().isTimerStarted(false).build())
                 .map(event -> calendarRepository.update(event).blockingFirst())
                 .count()

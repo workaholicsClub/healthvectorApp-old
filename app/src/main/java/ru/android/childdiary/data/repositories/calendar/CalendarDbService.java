@@ -9,7 +9,9 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.requery.Persistable;
+import io.requery.query.JoinAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
+import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
@@ -42,6 +44,12 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetDoctorVisitEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetDoctorVisitEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTakingEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTakingEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -107,15 +115,69 @@ public class CalendarDbService {
         return DbUtils.insertObservable(dataStore, food, foodMapper);
     }
 
-    public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
-        return dataStore.select(SleepEventEntity.class)
+    public Observable<GetSleepEventsResponse> getSleepEvents(@NonNull GetSleepEventsRequest request) {
+        JoinAndOr<ReactiveResult<SleepEventEntity>> select = dataStore.select(SleepEventEntity.class)
                 .join(MasterEventEntity.class).on(SleepEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
-                .and(MasterEventEntity.EVENT_TYPE.eq(EventType.SLEEP))
-                .and(SleepEventEntity.TIMER_STARTED.eq(true))
+                .and(MasterEventEntity.EVENT_TYPE.eq(EventType.SLEEP));
+
+        if (request.getChild() != null && request.getChild().getId() != null) {
+            select = select.and(MasterEventEntity.CHILD_ID.eq(request.getChild().getId()));
+        }
+
+        if (request.isWithStartedTimer()) {
+            select = select.and(SleepEventEntity.TIMER_STARTED.eq(true));
+        }
+
+        return select
                 .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, sleepEventMapper));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, sleepEventMapper))
+                .map(events -> GetSleepEventsResponse.builder().request(request).events(events).build());
+    }
+
+    public Observable<GetDoctorVisitEventsResponse> getDoctorVisitEvents(@NonNull GetDoctorVisitEventsRequest request) {
+        JoinAndOr<ReactiveResult<DoctorVisitEventEntity>> select = dataStore.select(DoctorVisitEventEntity.class)
+                .join(MasterEventEntity.class).on(DoctorVisitEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .and(MasterEventEntity.EVENT_TYPE.eq(EventType.DOCTOR_VISIT));
+
+        if (request.getChild() != null && request.getChild().getId() != null) {
+            select = select.and(MasterEventEntity.CHILD_ID.eq(request.getChild().getId()));
+        }
+
+        if (request.isWithImages()) {
+            select = select.and(DoctorVisitEventEntity.IMAGE_FILE_NAME.notNull())
+                    .and(DoctorVisitEventEntity.IMAGE_FILE_NAME.ne(""));
+        }
+
+        return select
+                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.ID)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, doctorVisitEventMapper))
+                .map(events -> GetDoctorVisitEventsResponse.builder().request(request).events(events).build());
+    }
+
+    public Observable<GetMedicineTakingEventsResponse> getMedicineTakingEvents(@NonNull GetMedicineTakingEventsRequest request) {
+        JoinAndOr<ReactiveResult<MedicineTakingEventEntity>> select = dataStore.select(MedicineTakingEventEntity.class)
+                .join(MasterEventEntity.class).on(MedicineTakingEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .and(MasterEventEntity.EVENT_TYPE.eq(EventType.MEDICINE_TAKING));
+
+        if (request.getChild() != null && request.getChild().getId() != null) {
+            select = select.and(MasterEventEntity.CHILD_ID.eq(request.getChild().getId()));
+        }
+
+        if (request.isWithImages()) {
+            select = select.and(MedicineTakingEventEntity.IMAGE_FILE_NAME.notNull())
+                    .and(MedicineTakingEventEntity.IMAGE_FILE_NAME.ne(""));
+        }
+
+        return select
+                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.ID)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineTakingEventMapper))
+                .map(events -> GetMedicineTakingEventsResponse.builder().request(request).events(events).build());
     }
 
     public Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event) {

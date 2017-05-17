@@ -77,6 +77,8 @@ public class CleanUpDbService {
         return id;
     }
 
+    // TODO: delete all child's photos
+
     public Observable<DeleteDoctorVisitEventsResponse> deleteDoctorVisitEvents(
             @NonNull DeleteDoctorVisitEventsRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
@@ -292,16 +294,16 @@ public class CleanUpDbService {
 
     private List<String> getImageFileNamesDoctorVisitEvents(List<DoctorVisitEventEntity> events) {
         return Observable.fromIterable(events)
-                .map(event -> event.getImageFileName() == null ? "" : event.getImageFileName())
-                .filter(imageFileName -> !TextUtils.isEmpty(imageFileName))
+                .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
+                .map(DoctorVisitEventEntity::getImageFileName)
                 .toList()
                 .blockingGet();
     }
 
     private List<String> getImageFileNamesMedicineTakingEvents(List<MedicineTakingEventEntity> events) {
         return Observable.fromIterable(events)
-                .map(event -> event.getImageFileName() == null ? "" : event.getImageFileName())
-                .filter(imageFileName -> !TextUtils.isEmpty(imageFileName))
+                .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
+                .map(MedicineTakingEventEntity::getImageFileName)
                 .toList()
                 .blockingGet();
     }
