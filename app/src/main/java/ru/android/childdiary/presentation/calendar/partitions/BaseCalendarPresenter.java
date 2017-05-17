@@ -28,6 +28,7 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsReque
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.utils.EventHelper;
 
 @InjectViewState
 public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
@@ -240,9 +241,15 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     // TODO EXERCISE
 
     public void done(@NonNull MasterEvent event) {
-        unsubscribeOnDestroy(calendarInteractor.done(event)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(doneEvent -> logger.debug("event done: " + doneEvent), this::onUnexpectedError));
+        if (EventHelper.needToFillNoteOrPhoto(event)) {
+            getViewState().showNeedToFillNoteOrPhoto();
+        } else {
+            unsubscribeOnDestroy(calendarInteractor.done(event)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(doneEvent -> logger.debug("event done: " + doneEvent))
+                    .subscribe(doneEvent -> {
+                    }, this::onUnexpectedError));
+        }
     }
 }

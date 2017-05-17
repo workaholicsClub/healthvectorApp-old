@@ -280,6 +280,14 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
+    public void showNeedToFillNoteOrPhoto() {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.need_to_fill_not_or_photo)
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
+    @Override
     public void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event) {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_one_event_or_linear_group)
