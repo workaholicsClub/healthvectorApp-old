@@ -82,7 +82,7 @@ public class CleanUpDbService {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             Long id = getId(request.getDoctorVisit());
             DoctorVisitEntity doctorVisitEntity = findDoctorVisitEntity(id);
-            List<DoctorVisitEventEntity> events = request.getLinearGroup() == null
+            val events = request.getLinearGroup() == null
                     ? getDoctorVisitEvents(id)
                     : getDoctorVisitEvents(id, request.getLinearGroup());
             int count = events.size();
@@ -107,7 +107,7 @@ public class CleanUpDbService {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             Long id = getId(request.getMedicineTaking());
             MedicineTakingEntity medicineTakingEntity = findMedicineTakingEntity(id);
-            List<MedicineTakingEventEntity> events = request.getLinearGroup() == null
+            val events = request.getLinearGroup() == null
                     ? getMedicineTakingEvents(id)
                     : getMedicineTakingEvents(id, request.getLinearGroup());
             int count = events.size();

@@ -42,9 +42,9 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
         super.onFirstViewAttach();
 
         unsubscribeOnDestroy(Observable.combineLatest(
-                Observable.just(GetDoctorVisitsRequest.builder().build()),
+                Observable.just(0), // TODO filters
                 childInteractor.getActiveChild(),
-                (request, child) -> request.toBuilder().child(child).build())
+                (number, child) -> GetDoctorVisitsRequest.builder().child(child).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::requestData, this::onUnexpectedError));

@@ -42,9 +42,9 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
         super.onFirstViewAttach();
 
         unsubscribeOnDestroy(Observable.combineLatest(
-                Observable.just(GetMedicineTakingListRequest.builder().build()),
+                Observable.just(0), // TODO filters
                 childInteractor.getActiveChild(),
-                (request, child) -> request.toBuilder().child(child).build())
+                (number, child) -> GetMedicineTakingListRequest.builder().child(child).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::requestData, this::onUnexpectedError));
