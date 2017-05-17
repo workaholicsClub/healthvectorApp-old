@@ -10,22 +10,17 @@ import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntit
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventData;
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
-import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
 public class PumpEventMapper implements EntityMapper<PumpEventData, PumpEventEntity, PumpEvent> {
     private final ChildMapper childMapper;
-    private final RepeatParametersMapper repeatParametersMapper;
 
     @Inject
-    public PumpEventMapper(ChildMapper childMapper,
-                           RepeatParametersMapper repeatParametersMapper) {
+    public PumpEventMapper(ChildMapper childMapper) {
         this.childMapper = childMapper;
-        this.repeatParametersMapper = repeatParametersMapper;
     }
 
     @Override
@@ -33,8 +28,6 @@ public class PumpEventMapper implements EntityMapper<PumpEventData, PumpEventEnt
         MasterEventData masterEventData = pumpEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
-        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return PumpEvent.builder()
                 .id(pumpEventData.getId())
                 .masterEventId(masterEventData.getId())
@@ -44,7 +37,6 @@ public class PumpEventMapper implements EntityMapper<PumpEventData, PumpEventEnt
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
                 .child(child)
-                .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
                 .breast(pumpEventData.getBreast())
                 .leftAmountMl(pumpEventData.getLeftAmountMl())

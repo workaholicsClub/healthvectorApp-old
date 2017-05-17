@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
+import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
@@ -33,10 +34,10 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
-import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.validation.DiaperEventValidator;
@@ -47,8 +48,16 @@ import ru.android.childdiary.domain.interactors.calendar.validation.OtherEventVa
 import ru.android.childdiary.domain.interactors.calendar.validation.PumpEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.SleepEventValidator;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
+import ru.android.childdiary.domain.interactors.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
 
 public class CalendarInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -63,6 +72,7 @@ public class CalendarInteractor {
     private final SleepEventValidator sleepEventValidator;
     private final DoctorVisitEventValidator doctorVisitEventValidator;
     private final MedicineTakingEventValidator medicineTakingEventValidator;
+    private final ImagesRepository imagesRepository;
 
     @Inject
     public CalendarInteractor(Context context,
@@ -74,7 +84,8 @@ public class CalendarInteractor {
                               PumpEventValidator pumpEventValidator,
                               SleepEventValidator sleepEventValidator,
                               DoctorVisitEventValidator doctorVisitEventValidator,
-                              MedicineTakingEventValidator medicineTakingEventValidator) {
+                              MedicineTakingEventValidator medicineTakingEventValidator,
+                              ImagesDataRepository imagesRepository) {
         this.context = context;
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
@@ -85,6 +96,7 @@ public class CalendarInteractor {
         this.sleepEventValidator = sleepEventValidator;
         this.doctorVisitEventValidator = doctorVisitEventValidator;
         this.medicineTakingEventValidator = medicineTakingEventValidator;
+        this.imagesRepository = imagesRepository;
     }
 
     public Observable<LocalDate> getSelectedDate() {
@@ -223,8 +235,8 @@ public class CalendarInteractor {
         return calendarRepository.getAll(request);
     }
 
-    public Observable<List<SleepEvent>> getSleepEventsWithTimer() {
-        return calendarRepository.getSleepEventsWithTimer();
+    public Observable<GetSleepEventsResponse> getSleepEvents(@NonNull GetSleepEventsRequest request) {
+        return calendarRepository.getSleepEvents(request);
     }
 
     @SuppressWarnings("unchecked")
@@ -304,12 +316,90 @@ public class CalendarInteractor {
         throw new IllegalStateException("Unsupported event type");
     }
 
-    public Observable<DeleteEventsResponse> delete(@NonNull DeleteEventsRequest request) {
-        return calendarRepository.delete(request);
+    public <T extends MasterEvent> Observable<T> delete(@NonNull T event) {
+        return calendarRepository.delete(event)
+                .flatMap(this::postprocessOnDelete);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> Observable<T> postprocessOnDelete(@NonNull T event) {
+        return Observable.fromCallable(() -> {
+            if (event.getEventType() == EventType.DIAPER) {
+                return event;
+            } else if (event.getEventType() == EventType.FEED) {
+                return event;
+            } else if (event.getEventType() == EventType.OTHER) {
+                return event;
+            } else if (event.getEventType() == EventType.PUMP) {
+                return event;
+            } else if (event.getEventType() == EventType.SLEEP) {
+                return event;
+            } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
+                return (T) deleteImageFile((DoctorVisitEvent) event);
+            } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
+                return (T) deleteImageFile((MedicineTakingEvent) event);
+            }
+            // TODO EXERCISE
+            throw new IllegalStateException("Unsupported event type");
+        });
+    }
+
+    private DoctorVisitEvent deleteImageFile(@NonNull DoctorVisitEvent event) {
+        imagesRepository.deleteImageFile(event.getImageFileName());
+        return event;
+    }
+
+    private MedicineTakingEvent deleteImageFile(@NonNull MedicineTakingEvent event) {
+        imagesRepository.deleteImageFile(event.getImageFileName());
+        return event;
+    }
+
+    private <T extends DeleteResponse> Observable<T> deleteImageFiles(@NonNull T response) {
+        return Observable.fromCallable(() -> {
+            imagesRepository.deleteImageFiles(response.getImageFilesToDelete());
+            return response;
+        });
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         return calendarRepository.done(event);
+    }
+
+
+    public <T extends MasterEvent> Observable<Integer> deleteLinearGroup(@NonNull T event) {
+        if (event.getEventType() == EventType.DIAPER) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.FEED) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.OTHER) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.PUMP) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.SLEEP) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
+            DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
+            DoctorVisit doctorVisit = doctorVisitEvent.getDoctorVisit();
+            Integer linearGroup = doctorVisitEvent.getLinearGroup();
+            return calendarRepository.deleteLinearGroup(DeleteDoctorVisitEventsRequest.builder()
+                    .doctorVisit(doctorVisit)
+                    .linearGroup(linearGroup)
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(DeleteDoctorVisitEventsResponse::getCount);
+        } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
+            MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) event;
+            MedicineTaking medicineTaking = medicineTakingEvent.getMedicineTaking();
+            Integer linearGroup = medicineTakingEvent.getLinearGroup();
+            return calendarRepository.deleteLinearGroup(DeleteMedicineTakingEventsRequest.builder()
+                    .medicineTaking(medicineTaking)
+                    .linearGroup(linearGroup)
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(DeleteMedicineTakingEventsResponse::getCount);
+        }
+        // TODO EXERCISE
+        throw new IllegalStateException("Unsupported event type");
     }
 
     public Observable<Boolean> controlOtherEventDoneButton(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
@@ -379,22 +469,21 @@ public class CalendarInteractor {
         });
     }
 
-    @SuppressWarnings("unchecked")
     private <T extends MasterEvent> Observable<T> preprocessOnUpdate(@NonNull T event) {
         return Observable.fromCallable(() -> {
-            if (event instanceof DiaperEvent) {
+            if (event.getEventType() == EventType.DIAPER) {
                 return event;
-            } else if (event instanceof FeedEvent) {
+            } else if (event.getEventType() == EventType.FEED) {
                 return event;
-            } else if (event instanceof OtherEvent) {
+            } else if (event.getEventType() == EventType.OTHER) {
                 return event;
-            } else if (event instanceof PumpEvent) {
+            } else if (event.getEventType() == EventType.PUMP) {
                 return event;
-            } else if (event instanceof SleepEvent) {
+            } else if (event.getEventType() == EventType.SLEEP) {
                 return event;
-            } else if (event instanceof DoctorVisitEvent) {
+            } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
                 return event;
-            } else if (event instanceof MedicineTakingEvent) {
+            } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
                 return event;
             }
             // TODO EXERCISE
@@ -449,7 +538,7 @@ public class CalendarInteractor {
             if (event.getEventType() == EventType.DIAPER) {
                 return event;
             } else if (event.getEventType() == EventType.FEED) {
-                return (T) postprocessFeedEvent((FeedEvent) event);
+                return (T) postprocessFeedEventOnUpsert((FeedEvent) event);
             } else if (event.getEventType() == EventType.OTHER) {
                 return event;
             } else if (event.getEventType() == EventType.PUMP) {
@@ -468,7 +557,7 @@ public class CalendarInteractor {
             if (event.getEventType() == EventType.DIAPER) {
                 return event;
             } else if (event.getEventType() == EventType.FEED) {
-                return (T) postprocessFeedEvent((FeedEvent) event);
+                return (T) postprocessFeedEventOnUpsert((FeedEvent) event);
             } else if (event.getEventType() == EventType.OTHER) {
                 return event;
             } else if (event.getEventType() == EventType.PUMP) {
@@ -485,7 +574,7 @@ public class CalendarInteractor {
         });
     }
 
-    private FeedEvent postprocessFeedEvent(FeedEvent feedEvent) {
+    private FeedEvent postprocessFeedEventOnUpsert(FeedEvent feedEvent) {
         calendarRepository.setLastFeedType(feedEvent.getFeedType());
         calendarRepository.setLastFoodMeasure(feedEvent.getFoodMeasure());
         calendarRepository.setLastFood(feedEvent.getFood());

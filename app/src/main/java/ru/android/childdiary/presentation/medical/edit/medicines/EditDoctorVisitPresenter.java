@@ -6,22 +6,18 @@ import com.arellomobile.mvp.InjectViewState;
 
 import org.joda.time.DateTime;
 
-import javax.inject.Inject;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
-import ru.android.childdiary.domain.interactors.calendar.requests.DeleteEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
 import ru.android.childdiary.presentation.medical.core.BaseEditItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVisitView, DoctorVisit> {
-    @Inject
-    CalendarInteractor calendarInteractor;
-
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
@@ -63,24 +59,26 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
 
     @Override
     public void deleteOneItem(@NonNull DoctorVisit doctorVisit) {
-        unsubscribeOnDestroy(doctorVisitInteractor.deleteDoctorVisit(doctorVisit)
+        unsubscribeOnDestroy(doctorVisitInteractor.deleteDoctorVisit(DeleteDoctorVisitRequest.builder()
+                .doctorVisit(doctorVisit)
+                .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::deleted, this::onUnexpectedError));
+                .subscribe(response -> getViewState().deleted(doctorVisit), this::onUnexpectedError));
     }
 
     @Override
     public void deleteWithConnectedEvents(@NonNull DoctorVisit doctorVisit) {
         getViewState().showDeletingEvents(true);
-        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
-                .deleteType(DeleteEventsRequest.DeleteType.DELETE_ALL_DOCTOR_VISIT_EVENTS)
+        unsubscribeOnDestroy(doctorVisitInteractor.deleteDoctorVisitWithEvents(DeleteDoctorVisitEventsRequest.builder()
                 .doctorVisit(doctorVisit)
+                .linearGroup(null)
                 .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(count -> getViewState().showDeletingEvents(false))
+                .doOnNext(response -> getViewState().showDeletingEvents(false))
                 .doOnError(throwable -> getViewState().showDeletingEvents(false))
-                .subscribe(count -> getViewState().deleted(doctorVisit), this::onUnexpectedError));
+                .subscribe(response -> getViewState().deleted(doctorVisit), this::onUnexpectedError));
     }
 
     @Override
@@ -94,8 +92,7 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
 
     @Override
     public void completeWithoutDeletion(@NonNull DoctorVisit doctorVisit, @NonNull DateTime dateTime) {
-        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
-                .deleteType(DeleteEventsRequest.DeleteType.COMPLETE_DOCTOR_VISIT)
+        unsubscribeOnDestroy(doctorVisitInteractor.completeDoctorVisit(CompleteDoctorVisitRequest.builder()
                 .doctorVisit(doctorVisit)
                 .dateTime(dateTime)
                 .delete(false)
@@ -108,8 +105,7 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
     @Override
     public void completeAndDeleteFromDate(@NonNull DoctorVisit doctorVisit, @NonNull DateTime dateTime) {
         getViewState().showDeletingEvents(true);
-        unsubscribeOnDestroy(calendarInteractor.delete(DeleteEventsRequest.builder()
-                .deleteType(DeleteEventsRequest.DeleteType.COMPLETE_DOCTOR_VISIT)
+        unsubscribeOnDestroy(doctorVisitInteractor.completeDoctorVisit(CompleteDoctorVisitRequest.builder()
                 .doctorVisit(doctorVisit)
                 .dateTime(dateTime)
                 .delete(true)

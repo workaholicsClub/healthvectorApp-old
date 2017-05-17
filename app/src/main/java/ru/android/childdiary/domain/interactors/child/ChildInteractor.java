@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,11 +14,14 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
+import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 
 public class ChildInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -27,14 +29,17 @@ public class ChildInteractor {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
     private final ChildValidator childValidator;
+    private final ImagesRepository imagesRepository;
 
     @Inject
     public ChildInteractor(ChildDataRepository childRepository,
                            CalendarDataRepository calendarRepository,
-                           ChildValidator childValidator) {
+                           ChildValidator childValidator,
+                           ImagesDataRepository imagesRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.childValidator = childValidator;
+        this.imagesRepository = imagesRepository;
     }
 
     public Observable<Child> getActiveChild() {
@@ -70,35 +75,31 @@ public class ChildInteractor {
 
     public Observable<Child> delete(@NonNull Child child) {
         return stopSleepTimersBeforeChildDelete(child)
-                .flatMap(this::deleteInternal);
+                .flatMap(childRepository::delete)
+                .flatMap(this::deleteImageFile);
+    }
+
+    private Observable<Child> deleteImageFile(@NonNull Child child) {
+        return Observable.fromCallable(() -> {
+            imagesRepository.deleteImageFile(child.getImageFileName());
+            return child;
+        });
     }
 
     private Observable<Child> stopSleepTimersBeforeChildDelete(@NonNull Child child) {
-        return calendarRepository.getSleepEventsWithTimer()
+        return calendarRepository.getSleepEvents(GetSleepEventsRequest.builder()
+                .child(child)
+                .withStartedTimer(true)
+                .build())
+                .map(GetSleepEventsResponse::getEvents)
                 .first(Collections.emptyList())
                 .flatMapObservable(Observable::fromIterable)
-                .filter(event -> EventHelper.sameChild(child, event))
                 .map(event -> event.toBuilder().isTimerStarted(false).build())
                 .map(event -> calendarRepository.update(event).blockingFirst())
                 .count()
                 .toObservable()
                 .doOnNext(count -> logger.debug("stopped sleep timers count: " + count))
                 .map(count -> child);
-    }
-
-    private Observable<Child> deleteInternal(@NonNull Child child) {
-        return childRepository.delete(child)
-                .doOnNext(deletedChild -> {
-                    String path = deletedChild.getImageFileName();
-                    if (path != null) {
-                        boolean result = new File(path).delete();
-                        if (result) {
-                            logger.debug("file " + path + " deleted");
-                        } else {
-                            logger.error("file " + path + " not deleted");
-                        }
-                    }
-                });
     }
 
     public Observable<Boolean> controlDoneButton(@NonNull Observable<Child> childObservable) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,6 +15,8 @@ import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.TimeUtils;
 
@@ -32,11 +35,14 @@ public class SleepEventValidator extends Validator<SleepEvent, CalendarValidatio
         List<CalendarValidationResult> results = new ArrayList<>();
 
         if (EventHelper.isTimerStarted(event)) {
-            Long count = calendarRepository.getSleepEventsWithTimer()
-                    .firstOrError()
+            Long count = calendarRepository.getSleepEvents(GetSleepEventsRequest.builder()
+                    .child(event.getChild())
+                    .withStartedTimer(true)
+                    .build())
+                    .map(GetSleepEventsResponse::getEvents)
+                    .first(Collections.emptyList())
                     .flatMapObservable(Observable::fromIterable)
-                    .filter(sleepEvent -> EventHelper.sameChild(sleepEvent, event)
-                            && !EventHelper.sameEvent(sleepEvent, event))
+                    .filter(sleepEvent -> !EventHelper.sameEvent(sleepEvent, event))
                     .count()
                     .blockingGet();
 

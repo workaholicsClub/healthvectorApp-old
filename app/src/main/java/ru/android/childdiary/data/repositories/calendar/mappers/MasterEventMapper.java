@@ -9,31 +9,23 @@ import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
-import ru.android.childdiary.data.entities.core.RepeatParametersData;
-import ru.android.childdiary.data.entities.core.RepeatParametersEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 
 public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEventEntity, MasterEvent> {
     private final ChildMapper childMapper;
-    private final RepeatParametersMapper repeatParametersMapper;
 
     @Inject
-    public MasterEventMapper(ChildMapper childMapper,
-                             RepeatParametersMapper repeatParametersMapper) {
+    public MasterEventMapper(ChildMapper childMapper) {
         this.childMapper = childMapper;
-        this.repeatParametersMapper = repeatParametersMapper;
     }
 
     @Override
     public MasterEvent mapToPlainObject(@NonNull MasterEventData masterEventData) {
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
-        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         return MasterEvent.masterBuilder()
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
@@ -41,7 +33,6 @@ public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEv
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
-                .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
                 .child(child)
                 .build();
@@ -61,11 +52,6 @@ public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEv
         if (child != null) {
             ChildEntity childEntity = (ChildEntity) blockingEntityStore.findByKey(ChildEntity.class, child.getId());
             masterEventEntity.setChild(childEntity);
-        }
-        RepeatParameters repeatParameters = masterEvent.getRepeatParameters();
-        if (repeatParameters != null) {
-            RepeatParametersEntity repeatParametersEntity = (RepeatParametersEntity) blockingEntityStore.findByKey(RepeatParametersEntity.class, repeatParameters.getId());
-            masterEventEntity.setRepeatParameters(repeatParametersEntity);
         }
         return masterEventEntity;
     }

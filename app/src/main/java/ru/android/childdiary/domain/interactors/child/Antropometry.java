@@ -10,8 +10,6 @@ import lombok.Value;
 @Value
 @Builder(toBuilder = true)
 public class Antropometry implements Serializable {
-    public static final Antropometry NULL = Antropometry.builder().build();
-
     Long id;
 
     Child child;

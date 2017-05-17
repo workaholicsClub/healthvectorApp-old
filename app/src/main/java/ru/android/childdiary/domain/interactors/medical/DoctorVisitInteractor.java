@@ -17,19 +17,28 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
+import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
+import ru.android.childdiary.domain.interactors.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
-import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.DoctorVisitsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorVisitValidator;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
@@ -41,18 +50,21 @@ public class DoctorVisitInteractor {
     private final SettingsRepository settingsRepository;
     private final DoctorVisitRepository doctorVisitRepository;
     private final DoctorVisitValidator doctorVisitValidator;
+    private final ImagesRepository imagesRepository;
 
     @Inject
     public DoctorVisitInteractor(ChildDataRepository childRepository,
                                  CalendarDataRepository calendarRepository,
                                  SettingsDataRepository settingsRepository,
                                  DoctorVisitDataRepository doctorVisitRepository,
-                                 DoctorVisitValidator doctorVisitValidator) {
+                                 DoctorVisitValidator doctorVisitValidator,
+                                 ImagesDataRepository imagesRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
         this.doctorVisitRepository = doctorVisitRepository;
         this.doctorVisitValidator = doctorVisitValidator;
+        this.imagesRepository = imagesRepository;
     }
 
     public Observable<List<Doctor>> getDoctors() {
@@ -109,9 +121,8 @@ public class DoctorVisitInteractor {
         return settingsRepository.getFinishTimeOnce();
     }
 
-    public Observable<DoctorVisitsResponse> getDoctorVisits(@NonNull DoctorVisitsRequest request) {
-        return doctorVisitRepository.getDoctorVisits(request)
-                .map(doctorVisits -> DoctorVisitsResponse.builder().request(request).doctorVisits(doctorVisits).build());
+    public Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request) {
+        return doctorVisitRepository.getDoctorVisits(request);
     }
 
     private Observable<DoctorVisit> validate(@NonNull DoctorVisit doctorVisit) {
@@ -144,8 +155,26 @@ public class DoctorVisitInteractor {
         });
     }
 
-    public Observable<DoctorVisit> deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return doctorVisitRepository.deleteDoctorVisit(doctorVisit);
+    private <T extends DeleteResponse> Observable<T> deleteImageFiles(@NonNull T response) {
+        return Observable.fromCallable(() -> {
+            imagesRepository.deleteImageFiles(response.getImageFilesToDelete());
+            return response;
+        });
+    }
+
+    public Observable<DeleteDoctorVisitResponse> deleteDoctorVisit(@NonNull DeleteDoctorVisitRequest request) {
+        return doctorVisitRepository.deleteDoctorVisit(request)
+                .flatMap(this::deleteImageFiles);
+    }
+
+    public Observable<DeleteDoctorVisitEventsResponse> deleteDoctorVisitWithEvents(@NonNull DeleteDoctorVisitEventsRequest request) {
+        return doctorVisitRepository.deleteDoctorVisitWithEvents(request)
+                .flatMap(this::deleteImageFiles);
+    }
+
+    public Observable<CompleteDoctorVisitResponse> completeDoctorVisit(@NonNull CompleteDoctorVisitRequest request) {
+        return doctorVisitRepository.completeDoctorVisit(request)
+                .flatMap(this::deleteImageFiles);
     }
 
     public Observable<Boolean> controlDoneButton(

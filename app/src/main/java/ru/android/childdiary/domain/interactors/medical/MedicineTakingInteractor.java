@@ -14,21 +14,30 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
+import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
+import ru.android.childdiary.domain.interactors.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
-import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.MedicineTakingListResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicineTakingValidator;
@@ -40,18 +49,21 @@ public class MedicineTakingInteractor {
     private final SettingsRepository settingsRepository;
     private final MedicineTakingRepository medicineTakingRepository;
     private final MedicineTakingValidator medicineTakingValidator;
+    private final ImagesRepository imagesRepository;
 
     @Inject
     public MedicineTakingInteractor(ChildDataRepository childRepository,
                                     CalendarDataRepository calendarRepository,
                                     SettingsDataRepository settingsRepository,
                                     MedicineTakingDataRepository medicineTakingRepository,
-                                    MedicineTakingValidator medicineTakingValidator) {
+                                    MedicineTakingValidator medicineTakingValidator,
+                                    ImagesDataRepository imagesRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
         this.medicineTakingRepository = medicineTakingRepository;
         this.medicineTakingValidator = medicineTakingValidator;
+        this.imagesRepository = imagesRepository;
     }
 
     public Observable<List<Medicine>> getMedicines() {
@@ -115,9 +127,8 @@ public class MedicineTakingInteractor {
         return medicineTakingRepository.getMedicineMeasureList();
     }
 
-    public Observable<MedicineTakingListResponse> getMedicineTakingList(@NonNull MedicineTakingListRequest request) {
-        return medicineTakingRepository.getMedicineTakingList(request)
-                .map(medicineTakingList -> MedicineTakingListResponse.builder().request(request).medicineTakingList(medicineTakingList).build());
+    public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {
+        return medicineTakingRepository.getMedicineTakingList(request);
     }
 
     private Observable<MedicineTaking> validate(@NonNull MedicineTaking medicineTaking) {
@@ -139,8 +150,26 @@ public class MedicineTakingInteractor {
         return validate(medicineTaking).flatMap(medicineTakingRepository::updateMedicineTaking);
     }
 
-    public Observable<MedicineTaking> deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return medicineTakingRepository.deleteMedicineTaking(medicineTaking);
+    private <T extends DeleteResponse> Observable<T> deleteImageFiles(@NonNull T response) {
+        return Observable.fromCallable(() -> {
+            imagesRepository.deleteImageFiles(response.getImageFilesToDelete());
+            return response;
+        });
+    }
+
+    public Observable<DeleteMedicineTakingResponse> deleteMedicineTaking(@NonNull DeleteMedicineTakingRequest request) {
+        return medicineTakingRepository.deleteMedicineTaking(request)
+                .flatMap(this::deleteImageFiles);
+    }
+
+    public Observable<DeleteMedicineTakingEventsResponse> deleteMedicineTakingWithEvents(@NonNull DeleteMedicineTakingEventsRequest request) {
+        return medicineTakingRepository.deleteMedicineTakingWithEvents(request)
+                .flatMap(this::deleteImageFiles);
+    }
+
+    public Observable<CompleteMedicineTakingResponse> completeMedicineTaking(@NonNull CompleteMedicineTakingRequest request) {
+        return medicineTakingRepository.completeMedicineTaking(request)
+                .flatMap(this::deleteImageFiles);
     }
 
     public Observable<Boolean> controlDoneButton(

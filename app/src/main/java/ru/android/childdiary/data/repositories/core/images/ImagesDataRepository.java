@@ -3,6 +3,7 @@ package ru.android.childdiary.data.repositories.core.images;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -11,19 +12,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Single;
 import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 
+@Singleton
 public class ImagesDataRepository implements ImagesRepository {
-    private static final String PARENT_DIR_NAME_PROFILE = "profile";
-    private static final String PARENT_DIR_NAME_DOCTOR_VISIT = "doctor_visit";
-    private static final String PARENT_DIR_NAME_DOCTOR_VISIT_EVENT = "doctor_visit_event";
-    private static final String PARENT_DIR_NAME_MEDICINE_TAKING = "medicine_taking";
-    private static final String PARENT_DIR_NAME_MEDICINE_TAKING_EVENT = "medicine_taking_event";
+    private static final String PARENT_DIR_NAME_IMAGES = "images";
+    private static final String PARENT_DIR_NAME_PROFILE = PARENT_DIR_NAME_IMAGES + File.separator + "profile";
+    private static final String PARENT_DIR_NAME_DOCTOR_VISIT = PARENT_DIR_NAME_IMAGES + File.separator + "doctor_visit";
+    private static final String PARENT_DIR_NAME_DOCTOR_VISIT_EVENT = PARENT_DIR_NAME_IMAGES + File.separator + "doctor_visit_event";
+    private static final String PARENT_DIR_NAME_MEDICINE_TAKING = PARENT_DIR_NAME_IMAGES + File.separator + "medicine_taking";
+    private static final String PARENT_DIR_NAME_MEDICINE_TAKING_EVENT = PARENT_DIR_NAME_IMAGES + File.separator + "medicine_taking_event";
     // TODO EXERCISE
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy_MM_dd'T'HH_mm_ss_SSS");
@@ -50,9 +55,9 @@ public class ImagesDataRepository implements ImagesRepository {
         return Single.fromCallable(() -> {
             try {
                 // создаем целевой файл
-                File parentDir = new File(getRootDir(), getParentDirName(imageType));
+                File parentDir = new File(context.getFilesDir(), getParentDirName(imageType));
                 boolean result = parentDir.mkdirs();
-                logger.debug(parentDir.getAbsolutePath() + "was" + (result ? "" : "n't") + " created");
+                logger.debug(parentDir.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
                 File resultFile = new File(parentDir, getPrefix() + IMAGE_FILE_SUFFIX);
 
                 // переименовываем
@@ -71,10 +76,6 @@ public class ImagesDataRepository implements ImagesRepository {
                 throw new ImagesException("failed to create unique file", e);
             }
         });
-    }
-
-    private File getRootDir() {
-        return context.getFilesDir();
     }
 
     private String getParentDirName(@NonNull ImageType imageType) {
@@ -113,15 +114,36 @@ public class ImagesDataRepository implements ImagesRepository {
             try {
                 File parentDir = new File(context.getCacheDir(), CACHE_ROOT);
                 boolean result = parentDir.mkdirs();
-                logger.debug(parentDir.getAbsolutePath() + "was" + (result ? "" : "n't") + " created");
+                logger.debug(parentDir.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
                 File file = new File(parentDir, fileName);
                 result = file.createNewFile();
-                logger.debug(file.getAbsolutePath() + "was" + (result ? "" : "n't") + " created");
+                logger.debug(file.getAbsolutePath() + " was" + (result ? "" : "n't") + " created");
                 return file;
             } catch (Exception e) {
                 throw new ImagesException("failed to create temp image file: "
                         + CACHE_ROOT + File.separator + fileName, e);
             }
         });
+    }
+
+    @Override
+    public void deleteImageFile(@Nullable String relativePath) {
+        if (relativePath == null) {
+            return;
+        }
+        File file = new File(context.getFilesDir(), relativePath);
+        boolean result = file.delete();
+        if (result) {
+            logger.debug(file.getAbsolutePath() + " was deleted");
+        } else {
+            logger.error(file.getAbsolutePath() + " wasn't deleted");
+        }
+    }
+
+    @Override
+    public void deleteImageFiles(@NonNull List<String> relativePaths) {
+        for (String relativePath : relativePaths) {
+            deleteImageFile(relativePath);
+        }
     }
 }

@@ -464,7 +464,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     }
 
     private void saveChangesOrExit() {
-        if (child == null && ObjectUtils.isEmpty(editedChild)) {
+        if (ObjectUtils.isEmpty(editedChild)) {
             finish();
             return;
         }

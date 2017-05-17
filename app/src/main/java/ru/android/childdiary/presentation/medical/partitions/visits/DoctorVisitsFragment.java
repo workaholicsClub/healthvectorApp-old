@@ -111,7 +111,7 @@ public class DoctorVisitsFragment extends AppPartitionFragment
                 .setPositiveButton(R.string.delete_only_doctor_visit,
                         (DialogInterface dialog, int which) -> presenter.deleteDoctorVisit(doctorVisit))
                 .setNegativeButton(R.string.delete_doctor_visit_and_events,
-                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisitAndConnectedEvents(doctorVisit))
+                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisitWithConnectedEvents(doctorVisit))
                 .show();
     }
 

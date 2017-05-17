@@ -111,7 +111,7 @@ public class MedicineTakingListFragment extends AppPartitionFragment
                 .setPositiveButton(R.string.delete_only_medicine_taking,
                         (DialogInterface dialog, int which) -> presenter.deleteMedicineTaking(medicineTaking))
                 .setNegativeButton(R.string.delete_medicine_taking_and_events,
-                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTakingAndConnectedEvents(medicineTaking))
+                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTakingWithConnectedEvents(medicineTaking))
                 .show();
     }
 

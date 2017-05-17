@@ -10,7 +10,6 @@ import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntit
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
-import ru.android.childdiary.data.entities.core.RepeatParametersData;
 import ru.android.childdiary.data.entities.medical.DoctorVisitData;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorData;
@@ -21,23 +20,19 @@ import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 
 public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData, DoctorVisitEventEntity, DoctorVisitEvent> {
     private final ChildMapper childMapper;
-    private final RepeatParametersMapper repeatParametersMapper;
     private final DoctorVisitMapper doctorVisitMapper;
     private final DoctorMapper doctorMapper;
 
     @Inject
     public DoctorVisitEventMapper(ChildMapper childMapper,
-                                  RepeatParametersMapper repeatParametersMapper,
                                   DoctorVisitMapper doctorVisitMapper,
                                   DoctorMapper doctorMapper) {
         this.childMapper = childMapper;
-        this.repeatParametersMapper = repeatParametersMapper;
         this.doctorVisitMapper = doctorVisitMapper;
         this.doctorMapper = doctorMapper;
     }
@@ -47,8 +42,6 @@ public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData
         MasterEventData masterEventData = doctorVisitEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
-        RepeatParametersData repeatParametersData = masterEventData.getRepeatParameters();
-        RepeatParameters repeatParameters = repeatParametersData == null ? null : repeatParametersMapper.mapToPlainObject(repeatParametersData);
         DoctorVisitData doctorVisitData = doctorVisitEventData.getDoctorVisit();
         DoctorVisit doctorVisit = doctorVisitData == null ? null : doctorVisitMapper.mapToPlainObject(doctorVisitData);
         DoctorData doctorData = doctorVisitEventData.getDoctor();
@@ -62,7 +55,6 @@ public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
                 .child(child)
-                .repeatParameters(repeatParameters)
                 .linearGroup(masterEventData.getLinearGroup())
                 .doctorVisit(doctorVisit)
                 .doctor(doctor)

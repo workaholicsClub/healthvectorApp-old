@@ -38,6 +38,16 @@ public class EventHelper {
         // TODO EXERCISE
     }
 
+    public static boolean needToFillNoteOrPhoto(@NonNull MasterEvent event) {
+        if (event instanceof DoctorVisitEvent) {
+            // TODO EXERCISE
+            DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
+            return TextUtils.isEmpty(doctorVisitEvent.getNote())
+                    && TextUtils.isEmpty(doctorVisitEvent.getImageFileName());
+        }
+        return false;
+    }
+
     public static boolean isDone(@NonNull MasterEvent event) {
         return ObjectUtils.isTrue(event.getIsDone());
     }

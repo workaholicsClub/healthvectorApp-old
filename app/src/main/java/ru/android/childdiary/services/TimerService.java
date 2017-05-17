@@ -28,6 +28,8 @@ import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.utils.EventHelper;
 import ru.android.childdiary.utils.log.LogSystem;
@@ -65,7 +67,11 @@ public class TimerService extends Service {
         logger.debug("onCreate");
         ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
         component.inject(this);
-        unsubscribeOnDestroy(calendarInteractor.getSleepEventsWithTimer()
+        unsubscribeOnDestroy(calendarInteractor.getSleepEvents(GetSleepEventsRequest.builder()
+                .child(null)
+                .withStartedTimer(true)
+                .build())
+                .map(GetSleepEventsResponse::getEvents)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResult, this::onUnexpectedError));

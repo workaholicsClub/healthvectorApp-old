@@ -9,7 +9,6 @@ import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -38,7 +37,6 @@ public class MedicineTakingEvent extends MasterEvent {
                                 String note,
                                 Boolean isDone,
                                 Child child,
-                                RepeatParameters repeatParameters,
                                 Integer linearGroup,
                                 Long id,
                                 MedicineTaking medicineTaking,
@@ -46,7 +44,7 @@ public class MedicineTakingEvent extends MasterEvent {
                                 Double amount,
                                 MedicineMeasure medicineMeasure,
                                 String imageFileName) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, repeatParameters, linearGroup);
+        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
         this.id = id;
         this.medicineTaking = medicineTaking;
         this.medicine = medicine;

@@ -54,6 +54,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     private static final String MASTER_EVENT_ENTITY_ID = "MASTER_EVENT_ENTITY_ID";
     private static final String MASTER_EVENT_ENTITY_EVENT_TYPE = "MASTER_EVENT_ENTITY_EVENT_TYPE";
     private static final String MASTER_EVENT_ENTITY_DATE_TIME = "MASTER_EVENT_ENTITY_DATE_TIME";
+    private static final String MASTER_EVENT_ENTITY_NOTE = "MASTER_EVENT_ENTITY_NOTE";
     private static final String MASTER_EVENT_ENTITY_DONE = "MASTER_EVENT_ENTITY_DONE";
     private static final String MASTER_EVENT_ENTITY_LINEAR_GROUP = "MASTER_EVENT_ENTITY_LINEAR_GROUP";
     private static final String CHILD_ENTITY_ID = "CHILD_ENTITY_ID";
@@ -68,13 +69,16 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     private static final String DOCTOR_VISIT_EVENT_ENTITY_NAME = "DOCTOR_VISIT_EVENT_ENTITY_NAME";
     private static final String DOCTOR_VISIT_ENTITY_ID = "DOCTOR_VISIT_ENTITY_ID";
     private static final String DOCTOR_ENTITY_NAME = "DOCTOR_ENTITY_NAME";
+    private static final String DOCTOR_VISIT_EVENT_ENTITY_IMAGE_FILE_NAME = "DOCTOR_VISIT_EVENT_ENTITY_IMAGE_FILE_NAME";
     private static final String MEDICINE_TAKING_ENTITY_ID = "MEDICINE_TAKING_ENTITY_ID";
     private static final String MEDICINE_ENTITY_NAME = "MEDICINE_ENTITY_NAME";
+    private static final String MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME = "MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME";
 
     private final static Expression[] EXPRESSIONS = new Expression[]{
             MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID),
             MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE),
             MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME),
+            MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE),
             MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE),
             MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP),
             // child
@@ -95,11 +99,13 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
             SleepEventEntity.TIMER_STARTED.as(SLEEP_EVENT_ENTITY_TIMER_STARTED),
             // doctor visit event
             DoctorVisitEventEntity.NAME.as(DOCTOR_VISIT_EVENT_ENTITY_NAME),
+            DoctorVisitEventEntity.IMAGE_FILE_NAME.as(DOCTOR_VISIT_EVENT_ENTITY_IMAGE_FILE_NAME),
             // doctor visit
             DoctorVisitEntity.ID.as(DOCTOR_VISIT_ENTITY_ID),
             // doctor
             DoctorEntity.NAME.as(DOCTOR_ENTITY_NAME),
             // medicine taking event
+            MedicineTakingEventEntity.IMAGE_FILE_NAME.as(MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME),
             // medicine taking
             MedicineTakingEntity.ID.as(MEDICINE_TAKING_ENTITY_ID),
             // medicine
@@ -132,6 +138,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
+                .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP)))
@@ -144,6 +151,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
+                .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP)))
@@ -164,6 +172,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
+                .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP)))
@@ -176,6 +185,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
+                .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP)))
@@ -188,6 +198,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
+                .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP)))
@@ -201,12 +212,14 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
+                .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP)))
                 .doctorVisit(mapToDoctorVisit(data))
                 .name(data.get(DoctorVisitEventEntity.NAME.as(DOCTOR_VISIT_EVENT_ENTITY_NAME)))
                 .doctor(mapToDoctor(data))
+                .imageFileName(data.get(DoctorVisitEventEntity.IMAGE_FILE_NAME.as(DOCTOR_VISIT_EVENT_ENTITY_IMAGE_FILE_NAME)))
                 .build();
     }
 
@@ -227,11 +240,13 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
+                .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP)))
                 .medicineTaking(mapToMedicineTaking(data))
                 .medicine(mapToMedicine(data))
+                .imageFileName(data.get(MedicineTakingEventEntity.IMAGE_FILE_NAME.as(MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME)))
                 .build();
     }
 
