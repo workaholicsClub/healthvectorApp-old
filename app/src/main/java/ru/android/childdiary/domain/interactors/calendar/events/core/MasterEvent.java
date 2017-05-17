@@ -1,5 +1,7 @@
 package ru.android.childdiary.domain.interactors.calendar.events.core;
 
+import android.support.annotation.NonNull;
+
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
@@ -13,6 +15,7 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @ToString
 @EqualsAndHashCode
@@ -51,5 +54,11 @@ public class MasterEvent implements Serializable {
                 .isDone(isDone)
                 .child(child)
                 .linearGroup(linearGroup);
+    }
+
+    protected static boolean contentEquals(@NonNull MasterEvent event1, @NonNull MasterEvent event2) {
+        return ObjectUtils.equalsToMinutes(event1.getDateTime(), event2.getDateTime())
+                && ObjectUtils.equals(event1.getNotifyTimeInMinutes(), event2.getNotifyTimeInMinutes())
+                && ObjectUtils.contentEquals(event1.getNote(), event2.getNote());
     }
 }
