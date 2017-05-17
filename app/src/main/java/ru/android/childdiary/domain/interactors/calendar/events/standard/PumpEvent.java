@@ -1,5 +1,7 @@
 package ru.android.childdiary.domain.interactors.calendar.events.standard;
 
+import android.support.annotation.NonNull;
+
 import org.joda.time.DateTime;
 
 import lombok.Builder;
@@ -8,13 +10,17 @@ import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.core.ContentObject;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PumpEvent extends MasterEvent {
+public class PumpEvent extends MasterEvent implements ContentObject<PumpEvent> {
+    private static final PumpEvent NULL = PumpEvent.builder().build();
+
     Long id;
 
     Breast breast;
@@ -41,5 +47,18 @@ public class PumpEvent extends MasterEvent {
         this.breast = breast;
         this.leftAmountMl = leftAmountMl;
         this.rightAmountMl = rightAmountMl;
+    }
+
+    @Override
+    public boolean isContentEmpty() {
+        return isContentEqual(NULL);
+    }
+
+    @Override
+    public boolean isContentEqual(@NonNull PumpEvent other) {
+        return contentEquals(getMasterEvent(), other.getMasterEvent())
+                && getBreast() == other.getBreast()
+                && ObjectUtils.equals(getLeftAmountMl(), other.getLeftAmountMl())
+                && ObjectUtils.equals(getRightAmountMl(), other.getRightAmountMl());
     }
 }
