@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.query.JoinAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
@@ -51,11 +52,11 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTak
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.utils.EventHelper;
-import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class CalendarDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
+    private final BlockingEntityStore<Persistable> blockingEntityStore;
     private final DiaperEventMapper diaperEventMapper;
     private final DoctorVisitEventMapper doctorVisitEventMapper;
     private final FeedEventMapper feedEventMapper;
@@ -80,6 +81,7 @@ public class CalendarDbService {
                              PumpEventMapper pumpEventMapper,
                              SleepEventMapper sleepEventMapper) {
         this.dataStore = dataStore;
+        this.blockingEntityStore = dataStore.toBlocking();
         this.diaperEventMapper = diaperEventMapper;
         this.doctorVisitEventMapper = doctorVisitEventMapper;
         this.feedEventMapper = feedEventMapper;
@@ -101,7 +103,7 @@ public class CalendarDbService {
     }
 
     public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
-        return DbUtils.insertObservable(dataStore, foodMeasure, foodMeasureMapper);
+        return DbUtils.insertObservable(blockingEntityStore, foodMeasure, foodMeasureMapper);
     }
 
     public Observable<List<Food>> getFoodList() {
@@ -113,7 +115,7 @@ public class CalendarDbService {
     }
 
     public Observable<Food> addFood(@NonNull Food food) {
-        return DbUtils.insertObservable(dataStore, food, foodMapper);
+        return DbUtils.insertObservable(blockingEntityStore, food, foodMapper);
     }
 
     public Observable<GetSleepEventsResponse> getSleepEvents(@NonNull GetSleepEventsRequest request) {
@@ -238,109 +240,105 @@ public class CalendarDbService {
     }
 
     public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
             DiaperEvent diaperEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
-            return DbUtils.insert(dataStore, diaperEvent, diaperEventMapper);
+            return DbUtils.insert(blockingEntityStore, diaperEvent, diaperEventMapper);
         }));
     }
 
     public Observable<FeedEvent> add(@NonNull FeedEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
             FeedEvent feedEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
-            return DbUtils.insert(dataStore, feedEvent, feedEventMapper);
+            return DbUtils.insert(blockingEntityStore, feedEvent, feedEventMapper);
         }));
     }
 
     public Observable<OtherEvent> add(@NonNull OtherEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
             OtherEvent otherEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
-            return DbUtils.insert(dataStore, otherEvent, otherEventMapper);
+            return DbUtils.insert(blockingEntityStore, otherEvent, otherEventMapper);
         }));
     }
 
     public Observable<PumpEvent> add(@NonNull PumpEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
             PumpEvent pumpEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
-            return DbUtils.insert(dataStore, pumpEvent, pumpEventMapper);
+            return DbUtils.insert(blockingEntityStore, pumpEvent, pumpEventMapper);
         }));
     }
 
     public Observable<SleepEvent> add(@NonNull SleepEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
             SleepEvent sleepEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
-            return DbUtils.insert(dataStore, sleepEvent, sleepEventMapper);
+            return DbUtils.insert(blockingEntityStore, sleepEvent, sleepEventMapper);
         }));
     }
 
     public Observable<DiaperEvent> update(@NonNull DiaperEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             updateMasterEvent(event);
-            return DbUtils.update(dataStore, event, diaperEventMapper);
+            return DbUtils.update(blockingEntityStore, event, diaperEventMapper);
         }));
     }
 
     public Observable<FeedEvent> update(@NonNull FeedEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             updateMasterEvent(event);
-            return DbUtils.update(dataStore, event, feedEventMapper);
+            return DbUtils.update(blockingEntityStore, event, feedEventMapper);
         }));
     }
 
     public Observable<OtherEvent> update(@NonNull OtherEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             updateMasterEvent(event);
-            return DbUtils.update(dataStore, event, otherEventMapper);
+            return DbUtils.update(blockingEntityStore, event, otherEventMapper);
         }));
     }
 
     public Observable<PumpEvent> update(@NonNull PumpEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             updateMasterEvent(event);
-            return DbUtils.update(dataStore, event, pumpEventMapper);
+            return DbUtils.update(blockingEntityStore, event, pumpEventMapper);
         }));
     }
 
     public Observable<SleepEvent> update(@NonNull SleepEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             updateMasterEvent(event);
-            return DbUtils.update(dataStore, event, sleepEventMapper);
+            return DbUtils.update(blockingEntityStore, event, sleepEventMapper);
         }));
     }
 
     public Observable<DoctorVisitEvent> update(@NonNull DoctorVisitEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             updateMasterEvent(event);
-            return DbUtils.update(dataStore, event, doctorVisitEventMapper);
+            return DbUtils.update(blockingEntityStore, event, doctorVisitEventMapper);
         }));
     }
 
     public Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             updateMasterEvent(event);
-            return DbUtils.update(dataStore, event, medicineTakingEventMapper);
+            return DbUtils.update(blockingEntityStore, event, medicineTakingEventMapper);
         }));
-    }
-
-    public <T extends MasterEvent> Observable<T> delete(@NonNull T event) {
-        return DbUtils.deleteObservable(dataStore, MasterEventEntity.class, event, event.getMasterEventId());
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
         boolean isDone = EventHelper.isDone(event);
         MasterEvent masterEvent = event.toMasterBuilder().isDone(!isDone).build();
-        return DbUtils.updateObservable(dataStore, masterEvent, masterEventMapper);
+        return DbUtils.updateObservable(blockingEntityStore, masterEvent, masterEventMapper);
     }
 
     private MasterEvent insertMasterEvent(@NonNull MasterEvent event) {
-        return DbUtils.insert(dataStore, event, masterEventMapper);
+        return DbUtils.insert(blockingEntityStore, event, masterEventMapper);
     }
 
     private MasterEvent updateMasterEvent(@NonNull MasterEvent event) {
-        return DbUtils.update(dataStore, event, masterEventMapper);
+        return DbUtils.update(blockingEntityStore, event, masterEventMapper);
     }
 }

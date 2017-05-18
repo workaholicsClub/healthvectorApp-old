@@ -15,12 +15,16 @@ import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
+import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
+import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
+import ru.android.childdiary.domain.interactors.child.requests.DeleteChildResponse;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 
 public class ChildInteractor {
@@ -64,29 +68,31 @@ public class ChildInteractor {
 
     public Observable<Child> add(@NonNull Child item) {
         return validate(item)
+                .flatMap(this::createImageFile)
                 .flatMap(childRepository::add)
                 .flatMap(this::setActiveChildObservable);
     }
 
     public Observable<Child> update(@NonNull Child item) {
         return validate(item)
+                .flatMap(this::createImageFile)
                 .flatMap(childRepository::update);
     }
 
-    public Observable<Child> delete(@NonNull Child child) {
-        return stopSleepTimersBeforeChildDelete(child)
-                .flatMap(childRepository::delete)
-                .flatMap(this::deleteImageFile);
+    public Observable<DeleteChildResponse> delete(@NonNull DeleteChildRequest request) {
+        return stopSleepTimersBeforeChildDelete(request.getChild())
+                .flatMap(count -> childRepository.delete(request))
+                .flatMap(this::deleteImageFiles);
     }
 
-    private Observable<Child> deleteImageFile(@NonNull Child child) {
+    private <T extends DeleteResponse> Observable<T> deleteImageFiles(@NonNull T response) {
         return Observable.fromCallable(() -> {
-            imagesRepository.deleteImageFile(child.getImageFileName());
-            return child;
+            imagesRepository.deleteImageFiles(response.getImageFilesToDelete());
+            return response;
         });
     }
 
-    private Observable<Child> stopSleepTimersBeforeChildDelete(@NonNull Child child) {
+    private Observable<Long> stopSleepTimersBeforeChildDelete(@NonNull Child child) {
         return calendarRepository.getSleepEvents(GetSleepEventsRequest.builder()
                 .child(child)
                 .withStartedTimer(true)
@@ -98,8 +104,7 @@ public class ChildInteractor {
                 .map(event -> calendarRepository.update(event).blockingFirst())
                 .count()
                 .toObservable()
-                .doOnNext(count -> logger.debug("stopped sleep timers count: " + count))
-                .map(count -> child);
+                .doOnNext(count -> logger.debug("stopped sleep timers count: " + count));
     }
 
     public Observable<Boolean> controlDoneButton(@NonNull Observable<Child> childObservable) {
@@ -125,5 +130,15 @@ public class ChildInteractor {
                     }
                     return Observable.just(child);
                 });
+    }
+
+    private Observable<Child> createImageFile(@NonNull Child child) {
+        return Observable.fromCallable(() -> {
+            if (imagesRepository.isTemporaryImageFile(child.getImageFileName())) {
+                String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(ImageType.PROFILE, child.getImageFileName());
+                return child.toBuilder().imageFileName(uniqueImageFileName).build();
+            }
+            return child;
+        });
     }
 }

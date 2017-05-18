@@ -14,30 +14,30 @@ import ru.android.childdiary.domain.interactors.child.Child;
 
 @Singleton
 public class AntropometryDataRepository implements AntropometryRepository {
-    private final AntropometryDbService dbService;
+    private final AntropometryDbService antropometryDbService;
 
     @Inject
-    public AntropometryDataRepository(AntropometryDbService dbService) {
-        this.dbService = dbService;
+    public AntropometryDataRepository(AntropometryDbService antropometryDbService) {
+        this.antropometryDbService = antropometryDbService;
     }
 
     @Override
     public Observable<List<Antropometry>> getAll(@NonNull Child child) {
-        return dbService.getAll(child);
+        return antropometryDbService.getAll(child);
     }
 
     @Override
     public Observable<Antropometry> add(@NonNull Antropometry antropometry) {
-        return dbService.add(antropometry);
+        return antropometryDbService.add(antropometry);
     }
 
     @Override
     public Observable<Antropometry> update(@NonNull Antropometry antropometry) {
-        return dbService.update(antropometry);
+        return antropometryDbService.update(antropometry);
     }
 
     @Override
     public Observable<Antropometry> delete(@NonNull Antropometry antropometry) {
-        return dbService.delete(antropometry);
+        return antropometryDbService.delete(antropometry);
     }
 }

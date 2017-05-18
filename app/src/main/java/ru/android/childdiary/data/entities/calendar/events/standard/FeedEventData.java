@@ -6,6 +6,7 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.ManyToOne;
 import io.requery.OneToOne;
+import io.requery.Persistable;
 import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodData;
@@ -16,7 +17,7 @@ import ru.android.childdiary.data.types.FeedType;
 
 @Table(name = "feed_event")
 @Entity(name = "FeedEventEntity")
-public interface FeedEventData {
+public interface FeedEventData extends Persistable {
     @Key
     @Generated
     Long getId();

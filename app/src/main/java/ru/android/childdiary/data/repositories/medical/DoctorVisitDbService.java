@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
@@ -33,6 +34,7 @@ import ru.android.childdiary.utils.ObjectUtils;
 public class DoctorVisitDbService {
     private final Logger logger = LoggerFactory.getLogger(toString());
     private final ReactiveEntityStore<Persistable> dataStore;
+    private final BlockingEntityStore<Persistable> blockingEntityStore;
     private final DoctorVisitEventsGenerator eventsGenerator;
     private final DoctorMapper doctorMapper;
     private final DoctorVisitMapper doctorVisitMapper;
@@ -45,6 +47,7 @@ public class DoctorVisitDbService {
                                 DoctorVisitMapper doctorVisitMapper,
                                 RepeatParametersMapper repeatParametersMapper) {
         this.dataStore = dataStore;
+        this.blockingEntityStore = dataStore.toBlocking();
         this.eventsGenerator = eventsGenerator;
         this.doctorMapper = doctorMapper;
         this.doctorVisitMapper = doctorVisitMapper;
@@ -60,11 +63,11 @@ public class DoctorVisitDbService {
     }
 
     public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {
-        return DbUtils.insertObservable(dataStore, doctor, doctorMapper);
+        return DbUtils.insertObservable(blockingEntityStore, doctor, doctorMapper);
     }
 
     public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
-        return DbUtils.deleteObservable(dataStore, DoctorEntity.class, doctor, doctor.getId());
+        return DbUtils.deleteObservable(blockingEntityStore, DoctorEntity.class, doctor, doctor.getId());
     }
 
     public Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request) {
@@ -80,19 +83,19 @@ public class DoctorVisitDbService {
     }
 
     private RepeatParameters insertRepeatParameters(@NonNull RepeatParameters repeatParameters) {
-        return DbUtils.insert(dataStore, repeatParameters, repeatParametersMapper);
+        return DbUtils.insert(blockingEntityStore, repeatParameters, repeatParametersMapper);
     }
 
     private DoctorVisit insertDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return DbUtils.insert(dataStore, doctorVisit, doctorVisitMapper);
+        return DbUtils.insert(blockingEntityStore, doctorVisit, doctorVisitMapper);
     }
 
     private RepeatParameters updateRepeatParameters(@NonNull RepeatParameters repeatParameters) {
-        return DbUtils.update(dataStore, repeatParameters, repeatParametersMapper);
+        return DbUtils.update(blockingEntityStore, repeatParameters, repeatParametersMapper);
     }
 
     private DoctorVisit updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return DbUtils.update(dataStore, doctorVisit, doctorVisitMapper);
+        return DbUtils.update(blockingEntityStore, doctorVisit, doctorVisitMapper);
     }
 
     @Nullable
@@ -108,7 +111,7 @@ public class DoctorVisitDbService {
     }
 
     public Observable<DoctorVisit> add(@NonNull DoctorVisit doctorVisit) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             RepeatParameters repeatParameters = upsertRepeatParameters(doctorVisit.getRepeatParameters());
             DoctorVisit result = doctorVisit.toBuilder().repeatParameters(repeatParameters).build();
             result = insertDoctorVisit(result);
@@ -124,8 +127,8 @@ public class DoctorVisitDbService {
     }
 
     public Observable<DoctorVisit> update(@NonNull DoctorVisit doctorVisit) {
-        return Observable.fromCallable(() -> dataStore.toBlocking().runInTransaction(() -> {
-            DoctorVisitEntity oldDoctorVisitEntity = dataStore.toBlocking()
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
+            DoctorVisitEntity oldDoctorVisitEntity = blockingEntityStore
                     .select(DoctorVisitEntity.class)
                     .where(DoctorVisitEntity.ID.eq(doctorVisit.getId()))
                     .get()

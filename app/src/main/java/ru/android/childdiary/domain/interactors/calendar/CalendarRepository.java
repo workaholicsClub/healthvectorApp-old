@@ -110,7 +110,7 @@ public interface CalendarRepository {
 
     Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event);
 
-    <T extends MasterEvent> Observable<T> delete(@NonNull T event);
+    <T extends MasterEvent> Observable<List<String>> delete(@NonNull T request);
 
     Observable<MasterEvent> done(@NonNull MasterEvent event);
 

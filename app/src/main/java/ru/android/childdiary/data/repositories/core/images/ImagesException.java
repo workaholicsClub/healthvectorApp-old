@@ -1,6 +1,6 @@
 package ru.android.childdiary.data.repositories.core.images;
 
-public class ImagesException extends Exception {
+public class ImagesException extends RuntimeException {
     public ImagesException(String message) {
         super(message);
     }

@@ -21,13 +21,14 @@ import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
-import ru.android.childdiary.domain.interactors.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -136,14 +137,26 @@ public class DoctorVisitInteractor {
                 });
     }
 
+    private Observable<DoctorVisit> createImageFile(@NonNull DoctorVisit doctorVisit) {
+        return Observable.fromCallable(() -> {
+            if (imagesRepository.isTemporaryImageFile(doctorVisit.getImageFileName())) {
+                String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(ImageType.DOCTOR_VISIT, doctorVisit.getImageFileName());
+                return doctorVisit.toBuilder().imageFileName(uniqueImageFileName).build();
+            }
+            return doctorVisit;
+        });
+    }
+
     public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
         return validate(doctorVisit)
+                .flatMap(this::createImageFile)
                 .flatMap(doctorVisitRepository::addDoctorVisit)
                 .flatMap(this::postprocess);
     }
 
     public Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
         return validate(doctorVisit)
+                .flatMap(this::createImageFile)
                 .flatMap(doctorVisitRepository::updateDoctorVisit)
                 .flatMap(this::postprocess);
     }

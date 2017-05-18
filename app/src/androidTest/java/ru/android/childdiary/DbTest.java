@@ -25,13 +25,21 @@ import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.child.AntropometryDbService;
 import ru.android.childdiary.data.repositories.child.ChildDbService;
 import ru.android.childdiary.data.repositories.child.mappers.AntropometryMapper;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
+import ru.android.childdiary.data.repositories.core.CleanUpDbService;
+import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
+import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
+import ru.android.childdiary.data.repositories.medical.mappers.MedicineMapper;
+import ru.android.childdiary.data.repositories.medical.mappers.MedicineMeasureMapper;
+import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 
@@ -52,6 +60,7 @@ public class DbTest {
     private static ReactiveEntityStore<Persistable> dataStore;
 
     private static ChildDbService childDbService;
+    private static CleanUpDbService cleanUpDbService;
     private static AntropometryDbService antropometryDbService;
 
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -73,7 +82,16 @@ public class DbTest {
 
         ChildMapper childMapper = new ChildMapper();
         AntropometryMapper antropometryMapper = new AntropometryMapper(childMapper);
+        DoctorMapper doctorMapper = new DoctorMapper();
+        MedicineMapper medicineMapper = new MedicineMapper();
+        MedicineMeasureMapper medicineMeasureMapper = new MedicineMeasureMapper();
+        RepeatParametersMapper repeatParametersMapper = new RepeatParametersMapper();
+        DoctorVisitMapper doctorVisitMapper = new DoctorVisitMapper(childMapper, doctorMapper,
+                repeatParametersMapper);
+        MedicineTakingMapper medicineTakingMapper = new MedicineTakingMapper(childMapper,
+                medicineMapper, medicineMeasureMapper, repeatParametersMapper);
         childDbService = new ChildDbService(dataStore, childMapper);
+        cleanUpDbService = new CleanUpDbService(dataStore, doctorVisitMapper, medicineTakingMapper);
         antropometryDbService = new AntropometryDbService(dataStore, antropometryMapper);
     }
 
@@ -176,9 +194,9 @@ public class DbTest {
 
     private Child delete(Child item) {
         List<Child> deleted = new ArrayList<>();
-        childDbService.delete(item)
+        cleanUpDbService.deleteChild(DeleteChildRequest.builder().child(item).build())
                 .doOnNext(this::logOnNextDelete)
-                .doOnNext(deleted::add)
+                .doOnNext(response -> deleted.add(response.getRequest().getChild()))
                 .doOnError(this::logOnErrorDelete)
                 .subscribe();
         assertEquals("deleted values size", 1, deleted.size());

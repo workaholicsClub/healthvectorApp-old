@@ -14,6 +14,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.StringUtils;
 
@@ -86,7 +87,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void deleteChild(@NonNull Child child) {
-        unsubscribeOnDestroy(childInteractor.delete(child)
+        unsubscribeOnDestroy(childInteractor.delete(DeleteChildRequest.builder().child(child).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(deletedChild -> logger.debug("child deleted: " + deletedChild), this::onUnexpectedError));

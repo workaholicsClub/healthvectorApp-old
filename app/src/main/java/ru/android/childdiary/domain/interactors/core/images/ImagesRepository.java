@@ -1,6 +1,5 @@
 package ru.android.childdiary.domain.interactors.core.images;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,7 +9,11 @@ import java.util.List;
 import io.reactivex.Single;
 
 public interface ImagesRepository {
-    Single<String> createUniqueImageFile(@NonNull ImageType imageType, @NonNull Uri fromFileUri);
+    boolean isTemporaryImageFile(@Nullable String imageFileName);
+
+    String createUniqueImageFileRelativePath(@NonNull ImageType imageType, @NonNull String fromPath);
+
+    Single<String> createTemporaryImageFileRelativePath(@NonNull String fromPath);
 
     Single<File> createCroppedImageFile();
 

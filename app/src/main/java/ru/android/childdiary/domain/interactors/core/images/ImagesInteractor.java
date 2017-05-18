@@ -1,6 +1,5 @@
 package ru.android.childdiary.domain.interactors.core.images;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import java.io.File;
@@ -18,8 +17,8 @@ public class ImagesInteractor {
         this.imagesRepository = imagesRepository;
     }
 
-    public Single<String> createUniqueImageFile(@NonNull ImageType imageType, @NonNull Uri fromFileUri) {
-        return imagesRepository.createUniqueImageFile(imageType, fromFileUri);
+    public Single<String> createTemporaryImageFile(@NonNull String fromPath) {
+        return imagesRepository.createTemporaryImageFileRelativePath(fromPath);
     }
 
     public Single<File> createCroppedImageFile() {

@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import io.reactivex.functions.Function;
+import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import lombok.Builder;
 import lombok.Value;
+import ru.android.childdiary.domain.core.RepeatParametersContainer;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
@@ -26,11 +28,13 @@ import ru.android.childdiary.utils.log.LogSystem;
 
 public abstract class EventsGenerator<From extends RepeatParametersContainer, To extends MasterEvent> {
     protected final ReactiveEntityStore<Persistable> dataStore;
+    protected final BlockingEntityStore<Persistable> blockingEntityStore;
 
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     public EventsGenerator(ReactiveEntityStore<Persistable> dataStore) {
         this.dataStore = dataStore;
+        this.blockingEntityStore = dataStore.toBlocking();
     }
 
     public void generateEvents(@NonNull From from) {

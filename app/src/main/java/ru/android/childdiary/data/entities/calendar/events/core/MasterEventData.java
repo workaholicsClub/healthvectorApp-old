@@ -7,13 +7,14 @@ import io.requery.ForeignKey;
 import io.requery.Generated;
 import io.requery.Key;
 import io.requery.ManyToOne;
+import io.requery.Persistable;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.types.EventType;
 
 @Table(name = "master_event")
 @Entity(name = "MasterEventEntity")
-public interface MasterEventData {
+public interface MasterEventData extends Persistable {
     @Key
     @Generated
     Long getId();

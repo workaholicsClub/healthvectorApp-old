@@ -46,7 +46,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
@@ -317,7 +316,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
                         .showDeleteItem(editedChild.getImageFileName() != null)
-                        .imageType(ImageType.PROFILE)
+                        .showCircleFrame(true)
                         .build());
     }
 

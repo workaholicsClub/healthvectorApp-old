@@ -407,7 +407,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
                         .showDeleteItem(false)
-                        .imageType(getImageType())
+                        .showCircleFrame(false)
                         .build());
     }
 

@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.interactors.medical.requests;
+package ru.android.childdiary.domain.interactors.child.requests;
 
 import java.util.List;
 
@@ -9,10 +9,9 @@ import ru.android.childdiary.domain.core.DeleteResponse;
 
 @Value
 @Builder
-public class DeleteMedicineTakingEventsResponse implements DeleteResponse {
+public class DeleteChildResponse implements DeleteResponse {
     @NonNull
-    DeleteMedicineTakingEventsRequest request;
-    int count;
+    DeleteChildRequest request;
     @NonNull
     List<String> imageFilesToDelete;
 }

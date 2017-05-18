@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.core.DeleteResponse;
+import ru.android.childdiary.domain.core.DeleteResponse;
 
 @Value
 @Builder
