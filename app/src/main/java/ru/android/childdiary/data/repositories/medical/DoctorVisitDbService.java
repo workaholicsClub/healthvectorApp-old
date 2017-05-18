@@ -12,10 +12,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
@@ -28,6 +30,8 @@ import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -82,6 +86,14 @@ public class DoctorVisitDbService {
                 .map(doctorVisits -> GetDoctorVisitsResponse.builder().request(request).doctorVisits(doctorVisits).build());
     }
 
+    public Single<Boolean> hasConnectedEvents(@lombok.NonNull DoctorVisit doctorVisit) {
+        return dataStore.count(DoctorVisitEventEntity.class)
+                .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisit.getId()))
+                .get()
+                .single()
+                .map(count -> count > 0);
+    }
+
     private RepeatParameters insertRepeatParameters(@NonNull RepeatParameters repeatParameters) {
         return DbUtils.insert(blockingEntityStore, repeatParameters, repeatParametersMapper);
     }
@@ -110,24 +122,31 @@ public class DoctorVisitDbService {
         return null;
     }
 
-    public Observable<DoctorVisit> add(@NonNull DoctorVisit doctorVisit) {
+    public Observable<UpsertDoctorVisitResponse> add(@NonNull UpsertDoctorVisitRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
+            DoctorVisit doctorVisit = request.getDoctorVisit();
             RepeatParameters repeatParameters = upsertRepeatParameters(doctorVisit.getRepeatParameters());
             DoctorVisit result = doctorVisit.toBuilder().repeatParameters(repeatParameters).build();
             result = insertDoctorVisit(result);
 
             boolean needToAddEvents = ObjectUtils.isTrue(result.getIsExported());
 
+            int count = 0;
             if (needToAddEvents) {
-                eventsGenerator.generateEvents(result);
+                count = eventsGenerator.generateEvents(result);
             }
 
-            return result;
+            return UpsertDoctorVisitResponse.builder()
+                    .request(request)
+                    .addedEventsCount(count)
+                    .doctorVisit(result)
+                    .build();
         }));
     }
 
-    public Observable<DoctorVisit> update(@NonNull DoctorVisit doctorVisit) {
+    public Observable<UpsertDoctorVisitResponse> update(@NonNull UpsertDoctorVisitRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
+            DoctorVisit doctorVisit = request.getDoctorVisit();
             DoctorVisitEntity oldDoctorVisitEntity = blockingEntityStore
                     .select(DoctorVisitEntity.class)
                     .where(DoctorVisitEntity.ID.eq(doctorVisit.getId()))
@@ -141,11 +160,16 @@ public class DoctorVisitDbService {
             DoctorVisit result = doctorVisit.toBuilder().repeatParameters(repeatParameters).build();
             result = updateDoctorVisit(result);
 
+            int count = 0;
             if (needToAddEvents) {
-                eventsGenerator.generateEvents(result);
+                count = eventsGenerator.generateEvents(result);
             }
 
-            return result;
+            return UpsertDoctorVisitResponse.builder()
+                    .request(request)
+                    .addedEventsCount(count)
+                    .doctorVisit(result)
+                    .build();
         }));
     }
 }

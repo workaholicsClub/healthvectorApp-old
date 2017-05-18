@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.core.CleanUpDbService;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingRepository;
@@ -21,6 +22,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
 
 @Singleton
 public class MedicineTakingDataRepository implements MedicineTakingRepository {
@@ -60,13 +63,18 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     }
 
     @Override
-    public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return medicineTakingDbService.add(medicineTaking);
+    public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {
+        return medicineTakingDbService.hasConnectedEvents(medicineTaking);
     }
 
     @Override
-    public Observable<MedicineTaking> updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return medicineTakingDbService.update(medicineTaking);
+    public Observable<UpsertMedicineTakingResponse> addMedicineTaking(@NonNull UpsertMedicineTakingRequest request) {
+        return medicineTakingDbService.add(request);
+    }
+
+    @Override
+    public Observable<UpsertMedicineTakingResponse> updateMedicineTaking(@NonNull UpsertMedicineTakingRequest request) {
+        return medicineTakingDbService.update(request);
     }
 
     @Override

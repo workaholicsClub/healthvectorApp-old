@@ -17,6 +17,7 @@ import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 import ru.android.childdiary.presentation.medical.core.BaseAddItemPresenter;
@@ -33,13 +34,16 @@ public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisit
     public void add(@NonNull DoctorVisit doctorVisit) {
         showProgressAdd(doctorVisit);
         unsubscribeOnDestroy(
-                doctorVisitInteractor.addDoctorVisit(doctorVisit)
+                doctorVisitInteractor.addDoctorVisit(UpsertDoctorVisitRequest.builder()
+                        .doctorVisit(doctorVisit)
+                        .build())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(added -> logger.debug("added: " + added))
                         .doOnNext(added -> hideProgressAdd(doctorVisit))
                         .doOnError(throwable -> hideProgressAdd(doctorVisit))
-                        .subscribe(getViewState()::added, this::onUnexpectedError));
+                        .subscribe(response -> getViewState().added(response.getDoctorVisit(), response.getAddedEventsCount()),
+                                this::onUnexpectedError));
     }
 
     private void showProgressAdd(@NonNull DoctorVisit doctorVisit) {

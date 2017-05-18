@@ -55,7 +55,8 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
     }
 
     @Override
-    public void updated(@NonNull T item) {
+    public void updated(@NonNull T item, int count) {
+        showToast(getResources().getQuantityString(R.plurals.numberOfAddedEvents, count, count));
         finish();
     }
 

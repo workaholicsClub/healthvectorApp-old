@@ -51,6 +51,9 @@ public interface BaseCalendarView extends AppPartitionView {
     // TODO EXERCISE
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void confirmDeleteOneEvent(@NonNull MasterEvent event);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

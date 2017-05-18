@@ -194,7 +194,12 @@
     <string name="events_deleting">Идет удаление событий&#8230;</string>
     <string name="default_doctor_name">Педиатр</string>
     <string name="delete_photo_confirmation_dialog_title">Удалить фото?</string>
-    <string name="need_to_fill_not_or_photo">Добавьте к событию описание или фотографию</string>
+    <string name="need_to_fill_not_or_photo">Для выполнения события добавьте к событию описание или фотографию</string>
+    <string name="add_doctor_visit">Добавьте визит к врачу</string>
+    <string name="add_medicine_taking">Добавьте рецепт</string>
+    <string name="delete_event_confirmation_dialog_title">Удалить событие?</string>
+    <string name="delete_doctor_visit_confirmation_dialog_title">Удалить визит к врачу?</string>
+    <string name="delete_medicine_taking_confirmation_dialog_title">Удалить рецепт?</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
@@ -406,5 +411,12 @@
         <item quantity="other">%d раз в день</item>
         <item quantity="many">%d раз в день</item>
         <item quantity="zero">%d раз в день</item>
+    </plurals>
+    <plurals name="numberOfAddedEvents">
+        <item quantity="one">Добавлено %d событие</item>
+        <item quantity="few">Добавлено %d события</item>
+        <item quantity="other">Добавлено %d событий</item>
+        <item quantity="many">Добавлено %d событий</item>
+        <item quantity="zero">Добавлено %d событий</item>
     </plurals>
 </resources>

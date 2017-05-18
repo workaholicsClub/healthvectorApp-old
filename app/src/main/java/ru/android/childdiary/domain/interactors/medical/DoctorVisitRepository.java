@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
@@ -15,6 +16,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
 
 public interface DoctorVisitRepository {
     Observable<Doctor> getLastDoctor();
@@ -29,9 +32,11 @@ public interface DoctorVisitRepository {
 
     Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request);
 
-    Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit);
+    Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit);
 
-    Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit);
+    Observable<UpsertDoctorVisitResponse> addDoctorVisit(@NonNull UpsertDoctorVisitRequest request);
+
+    Observable<UpsertDoctorVisitResponse> updateDoctorVisit(@NonNull UpsertDoctorVisitRequest request);
 
     Observable<DeleteDoctorVisitResponse> deleteDoctorVisit(@NonNull DeleteDoctorVisitRequest request);
 

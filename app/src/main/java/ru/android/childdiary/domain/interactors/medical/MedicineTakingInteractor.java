@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
@@ -39,6 +40,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicineTakingValidator;
@@ -128,39 +131,44 @@ public class MedicineTakingInteractor {
         return medicineTakingRepository.getMedicineMeasureList();
     }
 
+    public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {
+        return medicineTakingRepository.hasConnectedEvents(medicineTaking);
+    }
+
     public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {
         return medicineTakingRepository.getMedicineTakingList(request);
     }
 
-    private Observable<MedicineTaking> validate(@NonNull MedicineTaking medicineTaking) {
-        return Observable.just(medicineTaking)
-                .flatMap(item -> {
-                    List<MedicalValidationResult> results = medicineTakingValidator.validate(item);
-                    if (!medicineTakingValidator.isValid(results)) {
-                        return Observable.error(new MedicalValidationException(results));
-                    }
-                    return Observable.just(item);
-                });
-    }
-
-    private Observable<MedicineTaking> createImageFile(@NonNull MedicineTaking medicineTaking) {
-        return Observable.fromCallable(() -> {
-            if (imagesRepository.isTemporaryImageFile(medicineTaking.getImageFileName())) {
-                String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(ImageType.MEDICINE_TAKING, medicineTaking.getImageFileName());
-                return medicineTaking.toBuilder().imageFileName(uniqueImageFileName).build();
+    private Observable<UpsertMedicineTakingRequest> validate(@NonNull UpsertMedicineTakingRequest request) {
+        return Observable.defer(() -> {
+            List<MedicalValidationResult> results = medicineTakingValidator.validate(request.getMedicineTaking());
+            if (!medicineTakingValidator.isValid(results)) {
+                return Observable.error(new MedicalValidationException(results));
             }
-            return medicineTaking;
+            return Observable.just(request);
         });
     }
 
-    public Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return validate(medicineTaking)
+    private Observable<UpsertMedicineTakingRequest> createImageFile(@NonNull UpsertMedicineTakingRequest request) {
+        return Observable.fromCallable(() -> {
+            MedicineTaking medicineTaking = request.getMedicineTaking();
+            if (imagesRepository.isTemporaryImageFile(medicineTaking.getImageFileName())) {
+                String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(ImageType.MEDICINE_TAKING, medicineTaking.getImageFileName());
+                medicineTaking = medicineTaking.toBuilder().imageFileName(uniqueImageFileName).build();
+                return request.toBuilder().medicineTaking(medicineTaking).build();
+            }
+            return request;
+        });
+    }
+
+    public Observable<UpsertMedicineTakingResponse> addMedicineTaking(@NonNull UpsertMedicineTakingRequest request) {
+        return validate(request)
                 .flatMap(this::createImageFile)
                 .flatMap(medicineTakingRepository::addMedicineTaking);
     }
 
-    public Observable<MedicineTaking> updateMedicineTaking(@NonNull MedicineTaking medicineTaking) {
-        return validate(medicineTaking)
+    public Observable<UpsertMedicineTakingResponse> updateMedicineTaking(@NonNull UpsertMedicineTakingRequest request) {
+        return validate(request)
                 .flatMap(this::createImageFile)
                 .flatMap(medicineTakingRepository::updateMedicineTaking);
     }

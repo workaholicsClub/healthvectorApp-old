@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
@@ -15,6 +16,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
 
 public interface MedicineTakingRepository {
     Observable<List<Medicine>> getMedicines();
@@ -25,11 +28,13 @@ public interface MedicineTakingRepository {
 
     Observable<List<MedicineMeasure>> getMedicineMeasureList();
 
+    Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking);
+
     Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request);
 
-    Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking);
+    Observable<UpsertMedicineTakingResponse> addMedicineTaking(@NonNull UpsertMedicineTakingRequest request);
 
-    Observable<MedicineTaking> updateMedicineTaking(@NonNull MedicineTaking medicineTaking);
+    Observable<UpsertMedicineTakingResponse> updateMedicineTaking(@NonNull UpsertMedicineTakingRequest request);
 
     Observable<DeleteMedicineTakingResponse> deleteMedicineTaking(@NonNull DeleteMedicineTakingRequest request);
 

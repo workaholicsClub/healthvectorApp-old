@@ -13,6 +13,7 @@ import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
 import ru.android.childdiary.presentation.medical.core.BaseEditItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -27,13 +28,16 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
     public void update(@NonNull MedicineTaking medicineTaking) {
         showProgressUpdate(medicineTaking);
         unsubscribeOnDestroy(
-                medicineTakingInteractor.updateMedicineTaking(medicineTaking)
+                medicineTakingInteractor.updateMedicineTaking(UpsertMedicineTakingRequest.builder()
+                        .medicineTaking(medicineTaking)
+                        .build())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(updated -> logger.debug("updated: " + updated))
                         .doOnNext(added -> hideProgressUpdate(medicineTaking))
                         .doOnError(throwable -> hideProgressUpdate(medicineTaking))
-                        .subscribe(getViewState()::updated, this::onUnexpectedError));
+                        .subscribe(response -> getViewState().updated(response.getMedicineTaking(), response.getAddedEventsCount()),
+                                this::onUnexpectedError));
     }
 
     private void showProgressUpdate(@NonNull MedicineTaking medicineTaking) {
@@ -51,9 +55,18 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
     @Override
     public void delete(@NonNull MedicineTaking medicineTaking) {
         if (ObjectUtils.isTrue(medicineTaking.getIsExported())) {
-            getViewState().askDeleteConnectedEventsOrNot(medicineTaking);
+            unsubscribeOnDestroy(medicineTakingInteractor.hasConnectedEvents(medicineTaking)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(hasConnectedEvents -> {
+                        if (hasConnectedEvents) {
+                            getViewState().askDeleteConnectedEventsOrNot(medicineTaking);
+                        } else {
+                            getViewState().confirmDeleteOneItem(medicineTaking);
+                        }
+                    }, this::onUnexpectedError));
         } else {
-            deleteOneItem(medicineTaking);
+            getViewState().confirmDeleteOneItem(medicineTaking);
         }
     }
 

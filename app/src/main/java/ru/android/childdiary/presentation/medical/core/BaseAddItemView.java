@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public interface BaseAddItemView<T extends Serializable> extends BaseItemView<T> {
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void added(@NonNull T item);
+    void added(@NonNull T item, int count);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void setButtonDoneEnabled(boolean enabled);

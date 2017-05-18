@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.View;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,6 +33,9 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class BasePickerActivity<T extends Serializable, V extends BasePickerView<T>> extends BaseMvpActivity
         implements BasePickerView<T>, ItemActionListener<T>, FabController {
+    @BindView(R.id.rootView)
+    View rootView;
+
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -50,6 +54,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
         adapter = createAdapter();
         adapter.setSex(getSex());
         recyclerView.setAdapter(adapter);
+        recyclerView.setVisibility(View.GONE);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
@@ -67,6 +72,12 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
             adapter.setSex(getSex());
         }
         fab.setBackgroundTintList(ColorStateList.valueOf(ThemeUtils.getColorAccent(this, getSex())));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @OnClick(R.id.fab)
@@ -95,6 +106,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     @Override
     public void showList(@NonNull List<T> list) {
         adapter.setItems(list);
+        recyclerView.setVisibility(list.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override

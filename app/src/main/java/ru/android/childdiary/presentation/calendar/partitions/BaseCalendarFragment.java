@@ -288,6 +288,16 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
+    public void confirmDeleteOneEvent(@NonNull MasterEvent event) {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.delete_event_confirmation_dialog_title)
+                .setPositiveButton(R.string.delete,
+                        (DialogInterface dialog, int which) -> presenter.deleteOneEvent(event))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
     public void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event) {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_one_event_or_linear_group)

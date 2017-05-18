@@ -15,6 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
@@ -40,6 +41,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorVisitValidator;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
@@ -126,45 +129,51 @@ public class DoctorVisitInteractor {
         return doctorVisitRepository.getDoctorVisits(request);
     }
 
-    private Observable<DoctorVisit> validate(@NonNull DoctorVisit doctorVisit) {
-        return Observable.just(doctorVisit)
-                .flatMap(item -> {
-                    List<MedicalValidationResult> results = doctorVisitValidator.validate(item);
-                    if (!doctorVisitValidator.isValid(results)) {
-                        return Observable.error(new MedicalValidationException(results));
-                    }
-                    return Observable.just(item);
-                });
+    public Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit) {
+        return doctorVisitRepository.hasConnectedEvents(doctorVisit);
     }
 
-    private Observable<DoctorVisit> createImageFile(@NonNull DoctorVisit doctorVisit) {
-        return Observable.fromCallable(() -> {
-            if (imagesRepository.isTemporaryImageFile(doctorVisit.getImageFileName())) {
-                String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(ImageType.DOCTOR_VISIT, doctorVisit.getImageFileName());
-                return doctorVisit.toBuilder().imageFileName(uniqueImageFileName).build();
+    private Observable<UpsertDoctorVisitRequest> validate(@NonNull UpsertDoctorVisitRequest request) {
+        DoctorVisit doctorVisit = request.getDoctorVisit();
+        return Observable.defer(() -> {
+            List<MedicalValidationResult> results = doctorVisitValidator.validate(request.getDoctorVisit());
+            if (!doctorVisitValidator.isValid(results)) {
+                return Observable.error(new MedicalValidationException(results));
             }
-            return doctorVisit;
+            return Observable.just(request);
         });
     }
 
-    public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return validate(doctorVisit)
+    private Observable<UpsertDoctorVisitRequest> createImageFile(@NonNull UpsertDoctorVisitRequest request) {
+        return Observable.fromCallable(() -> {
+            DoctorVisit doctorVisit = request.getDoctorVisit();
+            if (imagesRepository.isTemporaryImageFile(doctorVisit.getImageFileName())) {
+                String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(ImageType.DOCTOR_VISIT, doctorVisit.getImageFileName());
+                doctorVisit = doctorVisit.toBuilder().imageFileName(uniqueImageFileName).build();
+                return request.toBuilder().doctorVisit(doctorVisit).build();
+            }
+            return request;
+        });
+    }
+
+    public Observable<UpsertDoctorVisitResponse> addDoctorVisit(@NonNull UpsertDoctorVisitRequest request) {
+        return validate(request)
                 .flatMap(this::createImageFile)
                 .flatMap(doctorVisitRepository::addDoctorVisit)
                 .flatMap(this::postprocess);
     }
 
-    public Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return validate(doctorVisit)
+    public Observable<UpsertDoctorVisitResponse> updateDoctorVisit(@NonNull UpsertDoctorVisitRequest request) {
+        return validate(request)
                 .flatMap(this::createImageFile)
                 .flatMap(doctorVisitRepository::updateDoctorVisit)
                 .flatMap(this::postprocess);
     }
 
-    private Observable<DoctorVisit> postprocess(@NonNull DoctorVisit doctorVisit) {
+    private Observable<UpsertDoctorVisitResponse> postprocess(@NonNull UpsertDoctorVisitResponse response) {
         return Observable.fromCallable(() -> {
-            doctorVisitRepository.setLastDoctor(doctorVisit.getDoctor());
-            return doctorVisit;
+            doctorVisitRepository.setLastDoctor(response.getDoctorVisit().getDoctor());
+            return response;
         });
     }
 

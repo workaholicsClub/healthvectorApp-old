@@ -24,7 +24,6 @@ import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.utils.ObjectUtils;
-import ru.android.childdiary.utils.log.LogSystem;
 
 public abstract class EventsGenerator<From extends RepeatParametersContainer, To extends MasterEvent> {
     protected final ReactiveEntityStore<Persistable> dataStore;
@@ -37,17 +36,17 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
         this.blockingEntityStore = dataStore.toBlocking();
     }
 
-    public void generateEvents(@NonNull From from) {
+    public int generateEvents(@NonNull From from) {
         try {
-            generateEventsInternal(from);
+            return generateEventsInternal(from);
         } catch (EventsGeneratorException e) {
-            LogSystem.report(logger, "generating events: no events inserted", e);
+            throw new RuntimeException("generating events: no events inserted", e);
         } catch (Exception e) {
-            LogSystem.report(logger, "generating events: unexpected error", e);
+            throw new RuntimeException("generating events: unexpected error", e);
         }
     }
 
-    private void generateEventsInternal(@NonNull From from) throws Exception {
+    private int generateEventsInternal(@NonNull From from) throws Exception {
         RepeatParameters repeatParameters = from.getRepeatParameters();
         checkRepeatParameters(repeatParameters);
 
@@ -61,7 +60,7 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
         if (times.size() == 0) {
             To event = createEvent(from, dateTime, null);
             add(event);
-            return;
+            return 1;
         }
 
         PeriodicityType periodicityType = repeatParameters.getPeriodicity();
@@ -96,6 +95,7 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
             startIndex = 0;
         }
         logger.debug("generating events: inserted " + count + " events");
+        return count;
     }
 
     private void checkRepeatParameters(@Nullable RepeatParameters repeatParameters) {

@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.core.CleanUpDbService;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
@@ -26,6 +27,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -112,13 +115,18 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
     }
 
     @Override
-    public Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return doctorVisitDbService.add(doctorVisit);
+    public Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit) {
+        return doctorVisitDbService.hasConnectedEvents(doctorVisit);
     }
 
     @Override
-    public Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit) {
-        return doctorVisitDbService.update(doctorVisit);
+    public Observable<UpsertDoctorVisitResponse> addDoctorVisit(@NonNull UpsertDoctorVisitRequest request) {
+        return doctorVisitDbService.add(request);
+    }
+
+    @Override
+    public Observable<UpsertDoctorVisitResponse> updateDoctorVisit(@NonNull UpsertDoctorVisitRequest request) {
+        return doctorVisitDbService.update(request);
     }
 
     @Override

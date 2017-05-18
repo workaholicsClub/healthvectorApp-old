@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public interface BaseEditItemView<T extends Serializable> extends BaseItemView<T> {
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void updated(@NonNull T item);
+    void updated(@NonNull T item, int count);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void deleted(@NonNull T item);
@@ -22,6 +22,9 @@ public interface BaseEditItemView<T extends Serializable> extends BaseItemView<T
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteConnectedEventsOrNot(@NonNull T item);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void confirmDeleteOneItem(@NonNull T item);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void askCompleteFromDate(@NonNull T item, @NonNull DateTime dateTime);
