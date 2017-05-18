@@ -86,7 +86,16 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
 
     public void delete(@NonNull DoctorVisit doctorVisit) {
         if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
-            getViewState().askDeleteConnectedEventsOrNot(doctorVisit);
+            unsubscribeOnDestroy(doctorVisitInteractor.hasConnectedEvents(doctorVisit)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(hasConnectedEvents -> {
+                        if (hasConnectedEvents) {
+                            getViewState().askDeleteConnectedEventsOrNot(doctorVisit);
+                        } else {
+                            deleteDoctorVisit(doctorVisit);
+                        }
+                    }, this::onUnexpectedError));
         } else {
             deleteDoctorVisit(doctorVisit);
         }

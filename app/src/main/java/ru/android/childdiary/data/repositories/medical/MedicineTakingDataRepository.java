@@ -8,7 +8,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.core.CleanUpDbService;
+import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -58,6 +60,11 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     @Override
     public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {
         return medicineTakingDbService.getMedicineTakingList(request);
+    }
+
+    @Override
+    public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {
+        return medicineTakingDbService.hasConnectedEvents(medicineTaking);
     }
 
     @Override

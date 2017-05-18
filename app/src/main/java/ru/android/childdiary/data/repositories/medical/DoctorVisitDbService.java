@@ -12,10 +12,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
@@ -82,6 +84,14 @@ public class DoctorVisitDbService {
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, doctorVisitMapper))
                 .map(doctorVisits -> GetDoctorVisitsResponse.builder().request(request).doctorVisits(doctorVisits).build());
+    }
+
+    public Single<Boolean> hasConnectedEvents(@lombok.NonNull DoctorVisit doctorVisit) {
+        return dataStore.count(DoctorVisitEventEntity.class)
+                .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisit.getId()))
+                .get()
+                .single()
+                .map(count -> count > 0);
     }
 
     private RepeatParameters insertRepeatParameters(@NonNull RepeatParameters repeatParameters) {

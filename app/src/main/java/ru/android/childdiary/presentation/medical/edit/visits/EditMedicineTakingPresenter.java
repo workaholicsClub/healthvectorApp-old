@@ -55,7 +55,16 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
     @Override
     public void delete(@NonNull MedicineTaking medicineTaking) {
         if (ObjectUtils.isTrue(medicineTaking.getIsExported())) {
-            getViewState().askDeleteConnectedEventsOrNot(medicineTaking);
+            unsubscribeOnDestroy(medicineTakingInteractor.hasConnectedEvents(medicineTaking)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(hasConnectedEvents -> {
+                        if (hasConnectedEvents) {
+                            getViewState().askDeleteConnectedEventsOrNot(medicineTaking);
+                        } else {
+                            deleteOneItem(medicineTaking);
+                        }
+                    }, this::onUnexpectedError));
         } else {
             deleteOneItem(medicineTaking);
         }

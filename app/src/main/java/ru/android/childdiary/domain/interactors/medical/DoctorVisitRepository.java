@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
@@ -30,6 +31,8 @@ public interface DoctorVisitRepository {
     Observable<Doctor> deleteDoctor(@NonNull Doctor doctor);
 
     Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request);
+
+    Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit);
 
     Observable<UpsertDoctorVisitResponse> addDoctorVisit(@NonNull UpsertDoctorVisitRequest request);
 

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
@@ -26,6 +27,8 @@ public interface MedicineTakingRepository {
     Observable<Medicine> deleteMedicine(@NonNull Medicine medicine);
 
     Observable<List<MedicineMeasure>> getMedicineMeasureList();
+
+    Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking);
 
     Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request);
 

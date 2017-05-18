@@ -12,10 +12,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
@@ -96,6 +98,14 @@ public class MedicineTakingDbService {
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineTakingMapper))
                 .map(medicineTakingList -> GetMedicineTakingListResponse.builder().request(request).medicineTakingList(medicineTakingList).build());
+    }
+
+    public Single<Boolean> hasConnectedEvents(@lombok.NonNull MedicineTaking medicineTaking) {
+        return dataStore.count(MedicineTakingEventEntity.class)
+                .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTaking.getId()))
+                .get()
+                .single()
+                .map(count -> count > 0);
     }
 
     private RepeatParameters insertRepeatParameters(@NonNull RepeatParameters repeatParameters) {

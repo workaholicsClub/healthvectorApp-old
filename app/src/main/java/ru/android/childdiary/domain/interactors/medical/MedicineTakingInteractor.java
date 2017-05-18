@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
@@ -128,6 +129,10 @@ public class MedicineTakingInteractor {
 
     public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
         return medicineTakingRepository.getMedicineMeasureList();
+    }
+
+    public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {
+        return medicineTakingRepository.hasConnectedEvents(medicineTaking);
     }
 
     public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {

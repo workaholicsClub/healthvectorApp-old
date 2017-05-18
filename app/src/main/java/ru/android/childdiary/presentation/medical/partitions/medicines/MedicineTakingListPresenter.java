@@ -86,7 +86,16 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
 
     public void delete(@NonNull MedicineTaking medicineTaking) {
         if (ObjectUtils.isTrue(medicineTaking.getIsExported())) {
-            getViewState().askDeleteConnectedEventsOrNot(medicineTaking);
+            unsubscribeOnDestroy(medicineTakingInteractor.hasConnectedEvents(medicineTaking)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(hasConnectedEvents -> {
+                        if (hasConnectedEvents) {
+                            getViewState().askDeleteConnectedEventsOrNot(medicineTaking);
+                        } else {
+                            deleteMedicineTaking(medicineTaking);
+                        }
+                    }, this::onUnexpectedError));
         } else {
             deleteMedicineTaking(medicineTaking);
         }

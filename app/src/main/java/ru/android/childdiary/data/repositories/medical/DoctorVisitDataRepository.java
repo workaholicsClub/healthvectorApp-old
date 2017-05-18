@@ -13,8 +13,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.core.CleanUpDbService;
+import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
@@ -110,6 +112,11 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
     @Override
     public Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request) {
         return doctorVisitDbService.getDoctorVisits(request);
+    }
+
+    @Override
+    public Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit) {
+        return doctorVisitDbService.hasConnectedEvents(doctorVisit);
     }
 
     @Override
