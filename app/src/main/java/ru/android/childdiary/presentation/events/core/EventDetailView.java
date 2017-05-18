@@ -35,6 +35,9 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
     void setButtonAddEnabled(boolean enabled);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void confirmDeleteOneEvent(@NonNull MasterEvent event);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

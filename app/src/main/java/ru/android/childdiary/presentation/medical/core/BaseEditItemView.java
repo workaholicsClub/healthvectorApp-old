@@ -24,6 +24,9 @@ public interface BaseEditItemView<T extends Serializable> extends BaseItemView<T
     void askDeleteConnectedEventsOrNot(@NonNull T item);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void confirmDeleteOneItem(@NonNull T item);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void askCompleteFromDate(@NonNull T item, @NonNull DateTime dateTime);
 
     @StateStrategyType(AddToEndSingleStrategy.class)

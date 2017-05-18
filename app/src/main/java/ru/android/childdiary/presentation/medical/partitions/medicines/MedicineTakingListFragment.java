@@ -114,6 +114,16 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     }
 
     @Override
+    public void confirmDeleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.delete_medicine_taking_confirmation_dialog_title)
+                .setPositiveButton(R.string.delete,
+                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTaking(medicineTaking))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
     public void askDeleteConnectedEventsOrNot(@NonNull MedicineTaking medicineTaking) {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_medicine_taking_connected_events_or_not)

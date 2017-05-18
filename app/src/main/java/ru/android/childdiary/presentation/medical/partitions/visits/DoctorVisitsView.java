@@ -27,6 +27,9 @@ public interface DoctorVisitsView extends AppPartitionView {
     void doctorVisitDeleted(@NonNull DoctorVisit doctorVisit);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void confirmDeleteDoctorVisit(@NonNull DoctorVisit item);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteConnectedEventsOrNot(@NonNull DoctorVisit doctorVisit);
 
     @StateStrategyType(AddToEndSingleStrategy.class)

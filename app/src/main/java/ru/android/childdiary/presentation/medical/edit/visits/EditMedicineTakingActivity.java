@@ -253,6 +253,16 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
     }
 
     @Override
+    public void confirmDeleteOneItem(@NonNull MedicineTaking medicineTaking) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.delete_medicine_taking_confirmation_dialog_title)
+                .setPositiveButton(R.string.delete,
+                        (DialogInterface dialog, int which) -> getPresenter().deleteOneItem(medicineTaking))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
     public void askDeleteConnectedEventsOrNot(@NonNull MedicineTaking medicineTaking) {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_medicine_taking_connected_events_or_not)

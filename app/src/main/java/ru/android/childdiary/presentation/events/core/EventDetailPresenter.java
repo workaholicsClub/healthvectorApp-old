@@ -78,7 +78,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     public void delete(@NonNull MasterEvent event) {
         if (event.getLinearGroup() == null) {
-            deleteOneEvent(event);
+            getViewState().confirmDeleteOneEvent(event);
         } else {
             getViewState().askDeleteOneEventOrLinerGroup(event);
         }

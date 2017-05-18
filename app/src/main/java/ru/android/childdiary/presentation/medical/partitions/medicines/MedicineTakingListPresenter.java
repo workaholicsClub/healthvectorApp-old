@@ -93,11 +93,11 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
                         if (hasConnectedEvents) {
                             getViewState().askDeleteConnectedEventsOrNot(medicineTaking);
                         } else {
-                            deleteMedicineTaking(medicineTaking);
+                            getViewState().confirmDeleteMedicineTaking(medicineTaking);
                         }
                     }, this::onUnexpectedError));
         } else {
-            deleteMedicineTaking(medicineTaking);
+            getViewState().confirmDeleteMedicineTaking(medicineTaking);
         }
     }
 

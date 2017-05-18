@@ -197,6 +197,9 @@
     <string name="need_to_fill_not_or_photo">Для выполнения события добавьте к событию описание или фотографию</string>
     <string name="add_doctor_visit">Добавьте визит к врачу</string>
     <string name="add_medicine_taking">Добавьте рецепт</string>
+    <string name="delete_event_confirmation_dialog_title">Удалить событие?</string>
+    <string name="delete_doctor_visit_confirmation_dialog_title">Удалить визит к врачу?</string>
+    <string name="delete_medicine_taking_confirmation_dialog_title">Удалить рецепт?</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

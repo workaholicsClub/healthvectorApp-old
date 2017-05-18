@@ -93,11 +93,11 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
                         if (hasConnectedEvents) {
                             getViewState().askDeleteConnectedEventsOrNot(doctorVisit);
                         } else {
-                            deleteDoctorVisit(doctorVisit);
+                            getViewState().confirmDeleteDoctorVisit(doctorVisit);
                         }
                     }, this::onUnexpectedError));
         } else {
-            deleteDoctorVisit(doctorVisit);
+            getViewState().confirmDeleteDoctorVisit(doctorVisit);
         }
     }
 

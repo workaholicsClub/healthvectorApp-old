@@ -62,11 +62,11 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
                         if (hasConnectedEvents) {
                             getViewState().askDeleteConnectedEventsOrNot(doctorVisit);
                         } else {
-                            deleteOneItem(doctorVisit);
+                            getViewState().confirmDeleteOneItem(doctorVisit);
                         }
                     }, this::onUnexpectedError));
         } else {
-            deleteOneItem(doctorVisit);
+            getViewState().confirmDeleteOneItem(doctorVisit);
         }
     }
 
