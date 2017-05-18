@@ -10,6 +10,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -36,6 +38,9 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     @InjectPresenter
     MedicineTakingListPresenter presenter;
 
+    @BindView(R.id.textViewIntention)
+    TextView textViewIntention;
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -55,6 +60,8 @@ public class MedicineTakingListFragment extends AppPartitionFragment
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MedicineTakingAdapter(getContext(), this, fabController);
         recyclerView.setAdapter(adapter);
+        recyclerView.setVisibility(View.GONE);
+        textViewIntention.setText(R.string.add_medicine_taking);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
@@ -88,6 +95,8 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     @Override
     public void showMedicineTakingList(@NonNull MedicineTakingListFilter filter, @NonNull List<MedicineTaking> medicineTakingList) {
         adapter.setItems(medicineTakingList);
+        recyclerView.setVisibility(medicineTakingList.isEmpty() ? View.GONE : View.VISIBLE);
+        textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override

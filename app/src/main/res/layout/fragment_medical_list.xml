@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_background"
-    android:orientation="vertical">
+    android:background="@color/gray_background">
 
     <include layout="@layout/request_focus_view_white" />
+
+    <TextView
+        android:id="@+id/textViewIntention"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="@dimen/base_margin"
+        android:textAppearance="@style/IntentionTextAppearance" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -27,4 +34,4 @@
             <include layout="@layout/events_view_footer" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-</LinearLayout>
+</FrameLayout>

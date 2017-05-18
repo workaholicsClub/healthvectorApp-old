@@ -1,6 +1,9 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -87,7 +90,11 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            int rightDrawableWidth = editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width();
+            Drawable drawableRight = editText.getCompoundDrawables()[DRAWABLE_RIGHT];
+            if (drawableRight == null) {
+                return false;
+            }
+            int rightDrawableWidth = drawableRight.getBounds().width();
             int right = editText.getRight() - rightDrawableWidth;
             if (event.getRawX() >= right) {
                 if (photoListener != null) {
@@ -146,7 +153,17 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        editText.setVisibility(TextUtils.isEmpty(getText()) ? INVISIBLE : VISIBLE);
+        if (TextUtils.isEmpty(getText()) && TextUtils.isEmpty(imageFileName)) {
+            setVisibility(GONE);
+        } else {
+            setVisibility(VISIBLE);
+        }
+        editText.setHint(readOnly ? null : getContext().getString(R.string.note_with_photo));
+        @DrawableRes int right = readOnly ? 0 : R.drawable.ic_add_photo;
+        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, right, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            editText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, right, 0);
+        }
         editText.setEnabled(!readOnly);
         buttonDeletePhoto.setVisibility(readOnly ? GONE : VISIBLE);
     }

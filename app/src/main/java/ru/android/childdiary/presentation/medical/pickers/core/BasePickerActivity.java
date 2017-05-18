@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.View;
 
 import java.io.Serializable;
 import java.util.List;
@@ -50,6 +51,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
         adapter = createAdapter();
         adapter.setSex(getSex());
         recyclerView.setAdapter(adapter);
+        recyclerView.setVisibility(View.GONE);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
@@ -95,6 +97,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     @Override
     public void showList(@NonNull List<T> list) {
         adapter.setItems(list);
+        recyclerView.setVisibility(list.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override
