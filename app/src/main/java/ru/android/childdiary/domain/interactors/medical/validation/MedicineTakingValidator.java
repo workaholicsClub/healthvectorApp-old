@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
+import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public class MedicineTakingValidator extends MedicalValidator<MedicineTaking> {
@@ -22,7 +23,8 @@ public class MedicineTakingValidator extends MedicalValidator<MedicineTaking> {
     public List<MedicalValidationResult> validate(@NonNull MedicineTaking medicineTaking) {
         List<MedicalValidationResult> results = new ArrayList<>();
 
-        if (medicineTaking.getMedicine() == null) {
+        Medicine medicine = medicineTaking.getMedicine();
+        if (medicine == null || medicine.getId() == null) {
             MedicalValidationResult result = new MedicalValidationResult();
             result.addMessage(context.getString(R.string.validate_medicine_taking_medicine_empty));
             results.add(result);

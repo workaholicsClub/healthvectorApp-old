@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public class DoctorVisitValidator extends MedicalValidator<DoctorVisit> {
@@ -31,7 +32,8 @@ public class DoctorVisitValidator extends MedicalValidator<DoctorVisit> {
         }
         results.add(result);
 
-        if (doctorVisit.getDoctor() == null) {
+        Doctor doctor = doctorVisit.getDoctor();
+        if (doctor == null || doctor.getId() == null) {
             result = new MedicalValidationResult();
             result.addMessage(context.getString(R.string.validate_doctor_visit_doctor_empty));
             results.add(result);

@@ -34,7 +34,7 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(updated -> logger.debug("updated: " + updated))
-                        .doOnNext(added -> hideProgressUpdate(medicineTaking))
+                        .doOnNext(updated -> hideProgressUpdate(medicineTaking))
                         .doOnError(throwable -> hideProgressUpdate(medicineTaking))
                         .subscribe(response -> getViewState().updated(response.getMedicineTaking(), response.getAddedEventsCount()),
                                 this::onUnexpectedError));
