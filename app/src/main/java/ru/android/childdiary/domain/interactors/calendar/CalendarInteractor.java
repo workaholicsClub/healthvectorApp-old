@@ -39,6 +39,10 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsReque
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.validation.DiaperEventValidator;
@@ -310,9 +314,17 @@ public class CalendarInteractor {
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.update((SleepEvent) event);
         } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
-            return (Observable<T>) calendarRepository.update((DoctorVisitEvent) event);
+            return (Observable<T>) calendarRepository.update(UpdateDoctorVisitEventRequest.builder()
+                    .doctorVisitEvent((DoctorVisitEvent) event)
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(UpdateDoctorVisitEventResponse::getDoctorVisitEvent);
         } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
-            return (Observable<T>) calendarRepository.update((MedicineTakingEvent) event);
+            return (Observable<T>) calendarRepository.update(UpdateMedicineTakingEventRequest.builder()
+                    .medicineTakingEvent((MedicineTakingEvent) event)
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);
         }
         // TODO EXERCISE
         throw new IllegalStateException("Unsupported event type");

@@ -166,7 +166,8 @@ public class DoctorVisitInteractor {
         return validate(request)
                 .flatMap(this::createImageFile)
                 .flatMap(doctorVisitRepository::updateDoctorVisit)
-                .flatMap(this::postprocess);
+                .flatMap(this::postprocess)
+                .flatMap(this::deleteImageFiles);
     }
 
     private Observable<UpsertDoctorVisitResponse> postprocess(@NonNull UpsertDoctorVisitResponse response) {

@@ -1,7 +1,9 @@
 package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,6 +53,10 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTak
 import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTakingEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
 import ru.android.childdiary.utils.EventHelper;
 
 @Singleton
@@ -314,17 +320,55 @@ public class CalendarDbService {
         }));
     }
 
-    public Observable<DoctorVisitEvent> update(@NonNull DoctorVisitEvent event) {
+    public Observable<UpdateDoctorVisitEventResponse> update(@NonNull UpdateDoctorVisitEventRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            updateMasterEvent(event);
-            return DbUtils.update(blockingEntityStore, event, doctorVisitEventMapper);
+            DoctorVisitEvent doctorVisitEvent = request.getDoctorVisitEvent();
+
+            DoctorVisitEventEntity oldDoctorVisitEventEntity = blockingEntityStore
+                    .select(DoctorVisitEventEntity.class)
+                    .where(DoctorVisitEventEntity.ID.eq(doctorVisitEvent.getId()))
+                    .get()
+                    .first();
+
+            List<String> imageFilesToDelete = new ArrayList<>();
+            if (!TextUtils.isEmpty(oldDoctorVisitEventEntity.getImageFileName())
+                    && !oldDoctorVisitEventEntity.getImageFileName().equals(doctorVisitEvent.getImageFileName())) {
+                imageFilesToDelete.add(oldDoctorVisitEventEntity.getImageFileName());
+            }
+
+            updateMasterEvent(doctorVisitEvent);
+            DoctorVisitEvent result = DbUtils.update(blockingEntityStore, doctorVisitEvent, doctorVisitEventMapper);
+            return UpdateDoctorVisitEventResponse.builder()
+                    .request(request)
+                    .doctorVisitEvent(result)
+                    .imageFilesToDelete(imageFilesToDelete)
+                    .build();
         }));
     }
 
-    public Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event) {
+    public Observable<UpdateMedicineTakingEventResponse> update(@NonNull UpdateMedicineTakingEventRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            updateMasterEvent(event);
-            return DbUtils.update(blockingEntityStore, event, medicineTakingEventMapper);
+            MedicineTakingEvent medicineTakingEvent = request.getMedicineTakingEvent();
+
+            MedicineTakingEventEntity oldMedicineTakingEventEntity = blockingEntityStore
+                    .select(MedicineTakingEventEntity.class)
+                    .where(MedicineTakingEventEntity.ID.eq(medicineTakingEvent.getId()))
+                    .get()
+                    .first();
+
+            List<String> imageFilesToDelete = new ArrayList<>();
+            if (!TextUtils.isEmpty(oldMedicineTakingEventEntity.getImageFileName())
+                    && !oldMedicineTakingEventEntity.getImageFileName().equals(medicineTakingEvent.getImageFileName())) {
+                imageFilesToDelete.add(oldMedicineTakingEventEntity.getImageFileName());
+            }
+
+            updateMasterEvent(medicineTakingEvent);
+            MedicineTakingEvent result = DbUtils.update(blockingEntityStore, medicineTakingEvent, medicineTakingEventMapper);
+            return UpdateMedicineTakingEventResponse.builder()
+                    .request(request)
+                    .medicineTakingEvent(result)
+                    .imageFilesToDelete(imageFilesToDelete)
+                    .build();
         }));
     }
 

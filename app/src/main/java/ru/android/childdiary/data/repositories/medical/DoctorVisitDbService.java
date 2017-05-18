@@ -2,10 +2,13 @@ package ru.android.childdiary.data.repositories.medical;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -140,6 +143,7 @@ public class DoctorVisitDbService {
                     .request(request)
                     .addedEventsCount(count)
                     .doctorVisit(result)
+                    .imageFilesToDelete(Collections.emptyList())
                     .build();
         }));
     }
@@ -152,6 +156,12 @@ public class DoctorVisitDbService {
                     .where(DoctorVisitEntity.ID.eq(doctorVisit.getId()))
                     .get()
                     .first();
+
+            List<String> imageFilesToDelete = new ArrayList<>();
+            if (!TextUtils.isEmpty(oldDoctorVisitEntity.getImageFileName())
+                    && !oldDoctorVisitEntity.getImageFileName().equals(doctorVisit.getImageFileName())) {
+                imageFilesToDelete.add(oldDoctorVisitEntity.getImageFileName());
+            }
 
             boolean needToAddEvents = ObjectUtils.isFalse(oldDoctorVisitEntity.isExported())
                     && ObjectUtils.isTrue(doctorVisit.getIsExported());
@@ -169,6 +179,7 @@ public class DoctorVisitDbService {
                     .request(request)
                     .addedEventsCount(count)
                     .doctorVisit(result)
+                    .imageFilesToDelete(imageFilesToDelete)
                     .build();
         }));
     }
