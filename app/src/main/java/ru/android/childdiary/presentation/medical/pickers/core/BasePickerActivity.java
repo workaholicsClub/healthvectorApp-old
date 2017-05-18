@@ -33,6 +33,9 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class BasePickerActivity<T extends Serializable, V extends BasePickerView<T>> extends BaseMvpActivity
         implements BasePickerView<T>, ItemActionListener<T>, FabController {
+    @BindView(R.id.rootView)
+    View rootView;
+    
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -69,6 +72,12 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
             adapter.setSex(getSex());
         }
         fab.setBackgroundTintList(ColorStateList.valueOf(ThemeUtils.getColorAccent(this, getSex())));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @OnClick(R.id.fab)
