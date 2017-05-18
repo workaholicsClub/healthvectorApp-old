@@ -41,7 +41,9 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
 
     @Override
     public void added(@NonNull T item, int count) {
-        showToast(getResources().getQuantityString(R.plurals.numberOfAddedEvents, count, count));
+        if (count > 0) {
+            showToast(getResources().getQuantityString(R.plurals.numberOfAddedEvents, count, count));
+        }
         finish();
     }
 

@@ -134,7 +134,6 @@ public class DoctorVisitInteractor {
     }
 
     private Observable<UpsertDoctorVisitRequest> validate(@NonNull UpsertDoctorVisitRequest request) {
-        DoctorVisit doctorVisit = request.getDoctorVisit();
         return Observable.defer(() -> {
             List<MedicalValidationResult> results = doctorVisitValidator.validate(request.getDoctorVisit());
             if (!doctorVisitValidator.isValid(results)) {
