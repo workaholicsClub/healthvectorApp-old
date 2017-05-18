@@ -1,8 +1,10 @@
 package ru.android.childdiary.presentation.medical.pickers.medicines;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -19,6 +21,7 @@ import ru.android.childdiary.presentation.medical.pickers.adapters.medicines.Med
 import ru.android.childdiary.presentation.medical.pickers.core.BaseAddActivity;
 import ru.android.childdiary.presentation.medical.pickers.core.BaseAddView;
 import ru.android.childdiary.presentation.medical.pickers.core.BasePickerActivity;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MedicinePickerActivity extends BasePickerActivity<Medicine, MedicinePickerView>
         implements MedicinePickerView, MedicineActionListener {
@@ -39,6 +42,16 @@ public class MedicinePickerActivity extends BasePickerActivity<Medicine, Medicin
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.medicines_title);
+    }
+
+    @Override
+    public void delete(Medicine medicine) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.delete_medicine_confirmation_dialog_title)
+                .setPositiveButton(R.string.delete,
+                        (DialogInterface dialog, int which) -> getPresenter().deleteItem(medicine))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override

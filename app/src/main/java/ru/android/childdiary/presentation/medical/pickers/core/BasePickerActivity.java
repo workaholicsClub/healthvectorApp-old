@@ -114,11 +114,6 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     }
 
     @Override
-    public void delete(T item) {
-        getPresenter().deleteItem(item);
-    }
-
-    @Override
     public void edit(T item) {
         Intent data = new Intent().putExtra(ExtraConstants.EXTRA_ITEM, item);
         setResult(RESULT_OK, data);
