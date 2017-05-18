@@ -1,8 +1,10 @@
 package ru.android.childdiary.presentation.medical.pickers.visits;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -19,6 +21,7 @@ import ru.android.childdiary.presentation.medical.pickers.adapters.doctors.Docto
 import ru.android.childdiary.presentation.medical.pickers.core.BaseAddActivity;
 import ru.android.childdiary.presentation.medical.pickers.core.BaseAddView;
 import ru.android.childdiary.presentation.medical.pickers.core.BasePickerActivity;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class DoctorPickerActivity extends BasePickerActivity<Doctor, DoctorPickerView>
         implements DoctorPickerView, DoctorActionListener {
@@ -39,6 +42,16 @@ public class DoctorPickerActivity extends BasePickerActivity<Doctor, DoctorPicke
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.doctors_title);
+    }
+
+    @Override
+    public void delete(Doctor doctor) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.delete_doctor_confirmation_dialog_title)
+                .setPositiveButton(R.string.delete,
+                        (DialogInterface dialog, int which) -> getPresenter().deleteItem(doctor))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override

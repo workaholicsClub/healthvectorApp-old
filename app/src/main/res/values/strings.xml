@@ -200,6 +200,8 @@
     <string name="delete_event_confirmation_dialog_title">Удалить событие?</string>
     <string name="delete_doctor_visit_confirmation_dialog_title">Удалить визит к врачу?</string>
     <string name="delete_medicine_taking_confirmation_dialog_title">Удалить рецепт?</string>
+    <string name="delete_doctor_confirmation_dialog_title">Удалить специализацию?</string>
+    <string name="delete_medicine_confirmation_dialog_title">Удалить лекарство?</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
