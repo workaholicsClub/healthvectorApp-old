@@ -35,7 +35,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
         implements BasePickerView<T>, ItemActionListener<T>, FabController {
     @BindView(R.id.rootView)
     View rootView;
-    
+
     @BindView(R.id.fab)
     FloatingActionButton fab;
 

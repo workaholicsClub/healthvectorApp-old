@@ -28,6 +28,8 @@ import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -110,24 +112,31 @@ public class DoctorVisitDbService {
         return null;
     }
 
-    public Observable<DoctorVisit> add(@NonNull DoctorVisit doctorVisit) {
+    public Observable<UpsertDoctorVisitResponse> add(@NonNull UpsertDoctorVisitRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
+            DoctorVisit doctorVisit = request.getDoctorVisit();
             RepeatParameters repeatParameters = upsertRepeatParameters(doctorVisit.getRepeatParameters());
             DoctorVisit result = doctorVisit.toBuilder().repeatParameters(repeatParameters).build();
             result = insertDoctorVisit(result);
 
             boolean needToAddEvents = ObjectUtils.isTrue(result.getIsExported());
 
+            int count = 0;
             if (needToAddEvents) {
-                eventsGenerator.generateEvents(result);
+                count = eventsGenerator.generateEvents(result);
             }
 
-            return result;
+            return UpsertDoctorVisitResponse.builder()
+                    .request(request)
+                    .addedEventsCount(count)
+                    .doctorVisit(result)
+                    .build();
         }));
     }
 
-    public Observable<DoctorVisit> update(@NonNull DoctorVisit doctorVisit) {
+    public Observable<UpsertDoctorVisitResponse> update(@NonNull UpsertDoctorVisitRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
+            DoctorVisit doctorVisit = request.getDoctorVisit();
             DoctorVisitEntity oldDoctorVisitEntity = blockingEntityStore
                     .select(DoctorVisitEntity.class)
                     .where(DoctorVisitEntity.ID.eq(doctorVisit.getId()))
@@ -141,11 +150,16 @@ public class DoctorVisitDbService {
             DoctorVisit result = doctorVisit.toBuilder().repeatParameters(repeatParameters).build();
             result = updateDoctorVisit(result);
 
+            int count = 0;
             if (needToAddEvents) {
-                eventsGenerator.generateEvents(result);
+                count = eventsGenerator.generateEvents(result);
             }
 
-            return result;
+            return UpsertDoctorVisitResponse.builder()
+                    .request(request)
+                    .addedEventsCount(count)
+                    .doctorVisit(result)
+                    .build();
         }));
     }
 }

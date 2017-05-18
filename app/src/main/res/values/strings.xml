@@ -409,4 +409,11 @@
         <item quantity="many">%d раз в день</item>
         <item quantity="zero">%d раз в день</item>
     </plurals>
+    <plurals name="numberOfAddedEvents">
+        <item quantity="one">Добавлено %d событие</item>
+        <item quantity="few">Добавлено %d события</item>
+        <item quantity="other">Добавлено %d событий</item>
+        <item quantity="many">Добавлено %d событий</item>
+        <item quantity="zero">Добавлено %d событий</item>
+    </plurals>
 </resources>

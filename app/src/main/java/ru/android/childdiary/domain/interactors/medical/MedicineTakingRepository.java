@@ -15,6 +15,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
 
 public interface MedicineTakingRepository {
     Observable<List<Medicine>> getMedicines();
@@ -27,9 +29,9 @@ public interface MedicineTakingRepository {
 
     Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request);
 
-    Observable<MedicineTaking> addMedicineTaking(@NonNull MedicineTaking medicineTaking);
+    Observable<UpsertMedicineTakingResponse> addMedicineTaking(@NonNull UpsertMedicineTakingRequest request);
 
-    Observable<MedicineTaking> updateMedicineTaking(@NonNull MedicineTaking medicineTaking);
+    Observable<UpsertMedicineTakingResponse> updateMedicineTaking(@NonNull UpsertMedicineTakingRequest request);
 
     Observable<DeleteMedicineTakingResponse> deleteMedicineTaking(@NonNull DeleteMedicineTakingRequest request);
 

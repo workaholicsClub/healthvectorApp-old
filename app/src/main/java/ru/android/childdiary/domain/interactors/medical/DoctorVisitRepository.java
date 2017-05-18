@@ -15,6 +15,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
 
 public interface DoctorVisitRepository {
     Observable<Doctor> getLastDoctor();
@@ -29,9 +31,9 @@ public interface DoctorVisitRepository {
 
     Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request);
 
-    Observable<DoctorVisit> addDoctorVisit(@NonNull DoctorVisit doctorVisit);
+    Observable<UpsertDoctorVisitResponse> addDoctorVisit(@NonNull UpsertDoctorVisitRequest request);
 
-    Observable<DoctorVisit> updateDoctorVisit(@NonNull DoctorVisit doctorVisit);
+    Observable<UpsertDoctorVisitResponse> updateDoctorVisit(@NonNull UpsertDoctorVisitRequest request);
 
     Observable<DeleteDoctorVisitResponse> deleteDoctorVisit(@NonNull DeleteDoctorVisitRequest request);
 

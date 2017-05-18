@@ -13,6 +13,7 @@ import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
+import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
 import ru.android.childdiary.presentation.medical.core.BaseEditItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -27,13 +28,16 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
     public void update(@NonNull DoctorVisit doctorVisit) {
         showProgressUpdate(doctorVisit);
         unsubscribeOnDestroy(
-                doctorVisitInteractor.updateDoctorVisit(doctorVisit)
+                doctorVisitInteractor.updateDoctorVisit(UpsertDoctorVisitRequest.builder()
+                        .doctorVisit(doctorVisit)
+                        .build())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(updated -> logger.debug("updated: " + updated))
                         .doOnNext(added -> hideProgressUpdate(doctorVisit))
                         .doOnError(throwable -> hideProgressUpdate(doctorVisit))
-                        .subscribe(getViewState()::updated, this::onUnexpectedError));
+                        .subscribe(response -> getViewState().updated(response.getDoctorVisit(), response.getAddedEventsCount()),
+                                this::onUnexpectedError));
     }
 
     private void showProgressUpdate(@NonNull DoctorVisit doctorVisit) {
