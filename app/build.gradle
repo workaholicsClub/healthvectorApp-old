@@ -16,7 +16,7 @@ android {
         applicationId "ru.android.childdiary"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 12
+        versionCode 13
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField "int", "DB_VERSION", "1"

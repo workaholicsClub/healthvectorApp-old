@@ -195,7 +195,8 @@ public class MedicineTakingEventDetailActivity
                 .dateTime(dateTime)
                 .notifyTimeInMinutes(minutes)
                 .note(note)
-                .imageFileName(imageFileName);
+                .imageFileName(imageFileName)
+                .isDone(isDone());
 
         return builder.build();
     }

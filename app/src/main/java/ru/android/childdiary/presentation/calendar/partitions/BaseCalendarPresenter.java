@@ -241,15 +241,26 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     // TODO EXERCISE
 
     public void done(@NonNull MasterEvent event) {
-        if (EventHelper.needToFillNoteOrPhoto(event)) {
-            getViewState().showNeedToFillNoteOrPhoto();
+        boolean willBeUndone = EventHelper.isDone(event);
+        if (willBeUndone) {
+            // можно развыполнить, не делаем проверок
+            switchDone(event);
         } else {
-            unsubscribeOnDestroy(calendarInteractor.done(event)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(doneEvent -> logger.debug("event done: " + doneEvent))
-                    .subscribe(doneEvent -> {
-                    }, this::onUnexpectedError));
+            // проверяем, можно ли выполнить событие
+            if (EventHelper.needToFillNoteOrPhoto(event)) {
+                getViewState().showNeedToFillNoteOrPhoto();
+            } else {
+                switchDone(event);
+            }
         }
+    }
+
+    private void switchDone(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(calendarInteractor.done(event)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(doneEvent -> logger.debug("event isDone: " + doneEvent))
+                .subscribe(doneEvent -> {
+                }, this::onUnexpectedError));
     }
 }

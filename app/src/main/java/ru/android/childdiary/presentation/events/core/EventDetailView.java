@@ -23,7 +23,7 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
     void eventDeleted(@NonNull MasterEvent event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void eventDone(@NonNull MasterEvent event);
+    void eventDone(boolean done);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void validationFailed();

@@ -103,15 +103,23 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     public void done(@NonNull T event) {
-        if (EventHelper.needToFillNoteOrPhoto(event)) {
-            getViewState().showNeedToFillNoteOrPhoto();
+        boolean willBeUndone = EventHelper.isDone(event);
+        if (willBeUndone) {
+            // можно развыполнить, не делаем проверок
+            switchDone(false);
         } else {
-            unsubscribeOnDestroy(calendarInteractor.done(event)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(doneEvent -> logger.debug("event done: " + doneEvent))
-                    .subscribe(doneEvent -> getViewState().eventDone(doneEvent), this::onUnexpectedError));
+            // проверяем, можно ли выполнить событие
+            if (EventHelper.needToFillNoteOrPhoto(event)) {
+                getViewState().showNeedToFillNoteOrPhoto();
+            } else {
+                switchDone(true);
+            }
         }
+    }
+
+    private void switchDone(boolean done) {
+        // будет сохранено в базу при выходе из окна деталей события
+        getViewState().eventDone(done);
     }
 
     @Override

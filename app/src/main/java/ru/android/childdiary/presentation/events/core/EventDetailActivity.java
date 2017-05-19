@@ -28,7 +28,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import icepick.State;
 import io.reactivex.disposables.Disposable;
+import lombok.AccessLevel;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
@@ -53,6 +56,10 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @BindView(R.id.rootView)
     protected View rootView;
+
+    @State
+    @Getter(AccessLevel.PROTECTED)
+    boolean done;
 
     private ViewGroup detailsView;
 
@@ -82,6 +89,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             }
             buttonAdd.setVisibility(GONE);
             if (savedInstanceState == null) {
+                done = EventHelper.isDone(masterEvent);
                 getPresenter().requestEventDetails(masterEvent);
             }
         }
@@ -189,8 +197,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void eventDone(@NonNull MasterEvent event) {
-        showToast(getString(EventHelper.isDone(event) ? R.string.event_is_done : R.string.event_is_not_done));
+    public void eventDone(boolean done) {
+        this.done = done;
+        showToast(getString(done ? R.string.event_is_done : R.string.event_is_not_done));
     }
 
     @Override
@@ -304,7 +313,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
         MenuItem item = menu.findItem(R.id.menu_done);
         item.setVisible(EventHelper.canBeDone(getPresenter().getEventType()));
-        item.setChecked(EventHelper.isDone(event));
+        item.setChecked(done);
         return true;
     }
 
@@ -319,7 +328,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
         switch (item.getItemId()) {
             case R.id.menu_done:
-                getPresenter().done(event);
+                getPresenter().done(buildEvent());
                 return true;
             case R.id.menu_move:
                 return true;
@@ -338,7 +347,13 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             return;
         }
         if (event != null && contentEquals(editedEvent, event)) {
-            finish();
+            if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+                showNeedToFillNoteOrPhoto();
+            } else if (EventHelper.isDone(editedEvent) == EventHelper.isDone(event)) {
+                finish();
+            } else {
+                getPresenter().updateEvent(editedEvent, true);
+            }
             return;
         }
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
@@ -348,7 +363,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                             if (event == null) {
                                 getPresenter().addEvent(editedEvent, true);
                             } else {
-                                getPresenter().updateEvent(editedEvent, true);
+                                if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+                                    showNeedToFillNoteOrPhoto();
+                                } else {
+                                    getPresenter().updateEvent(editedEvent, true);
+                                }
                             }
                         })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
