@@ -170,7 +170,8 @@ public class MedicineTakingInteractor {
     public Observable<UpsertMedicineTakingResponse> updateMedicineTaking(@NonNull UpsertMedicineTakingRequest request) {
         return validate(request)
                 .flatMap(this::createImageFile)
-                .flatMap(medicineTakingRepository::updateMedicineTaking);
+                .flatMap(medicineTakingRepository::updateMedicineTaking)
+                .flatMap(this::deleteImageFiles);
     }
 
     private <T extends DeleteResponse> Observable<T> deleteImageFiles(@NonNull T response) {

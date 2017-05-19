@@ -43,6 +43,10 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTak
 import ru.android.childdiary.domain.interactors.calendar.requests.GetMedicineTakingEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
@@ -323,13 +327,13 @@ public class CalendarDataRepository implements CalendarRepository {
     }
 
     @Override
-    public Observable<DoctorVisitEvent> update(@NonNull DoctorVisitEvent event) {
-        return calendarDbService.update(event);
+    public Observable<UpdateDoctorVisitEventResponse> update(@NonNull UpdateDoctorVisitEventRequest request) {
+        return calendarDbService.update(request);
     }
 
     @Override
-    public Observable<MedicineTakingEvent> update(@NonNull MedicineTakingEvent event) {
-        return calendarDbService.update(event);
+    public Observable<UpdateMedicineTakingEventResponse> update(@NonNull UpdateMedicineTakingEventRequest request) {
+        return calendarDbService.update(request);
     }
 
     public <T extends MasterEvent> Observable<List<String>> delete(@NonNull T event) {
