@@ -233,8 +233,8 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     @Override
     public void showEvents(@NonNull LocalDate date, @NonNull List<MasterEvent> events) {
         logger.debug("showEvents: " + StringUtils.eventsList(events));
-        updateEventsTitle(date);
         eventAdapter.setItems(events);
+        updateEventsTitle(date);
     }
 
     @Override
