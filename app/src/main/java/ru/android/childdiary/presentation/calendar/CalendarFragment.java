@@ -13,6 +13,8 @@ import android.support.v4.view.ViewPager;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -25,7 +27,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarFragment;
 import ru.android.childdiary.presentation.calendar.partitions.DayFragment;
 import ru.android.childdiary.presentation.calendar.partitions.MonthFragment;
 import ru.android.childdiary.presentation.calendar.partitions.WeekFragment;
@@ -243,11 +244,19 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
 
     @Nullable
     private SwipeViewAdapter getSwipeViewAdapter(int position) {
-        Fragment fragment = viewPagerAdapter.getItem(position);
-        SwipeViewAdapter adapter = null;
-        if (fragment instanceof BaseCalendarFragment) {
-            adapter = ((BaseCalendarFragment) fragment).getEventAdapter();
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments == null) {
+            return null;
         }
-        return adapter;
+        for (Fragment fragment : fragments) {
+            if (position == 0 && fragment instanceof DayFragment) {
+                return ((DayFragment) fragment).getEventAdapter();
+            } else if (position == 1 && fragment instanceof WeekFragment) {
+                return ((WeekFragment) fragment).getEventAdapter();
+            } else if (position == 2 && fragment instanceof MonthFragment) {
+                return ((MonthFragment) fragment).getEventAdapter();
+            }
+        }
+        return null;
     }
 }

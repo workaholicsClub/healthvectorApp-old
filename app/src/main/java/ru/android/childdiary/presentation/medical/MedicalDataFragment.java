@@ -16,6 +16,8 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import org.joda.time.LocalTime;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -199,13 +201,17 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
 
     @Nullable
     private SwipeViewAdapter getSwipeViewAdapter(int position) {
-        Fragment fragment = viewPagerAdapter.getItem(position);
-        SwipeViewAdapter adapter = null;
-        if (fragment instanceof DoctorVisitsFragment) {
-            adapter = ((DoctorVisitsFragment) fragment).getAdapter();
-        } else if (fragment instanceof MedicineTakingListFragment) {
-            adapter = ((MedicineTakingListFragment) fragment).getAdapter();
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments == null) {
+            return null;
         }
-        return adapter;
+        for (Fragment fragment : fragments) {
+            if (position == 0 && fragment instanceof DoctorVisitsFragment) {
+                return ((DoctorVisitsFragment) fragment).getAdapter();
+            } else if (position == 1 && fragment instanceof MedicineTakingListFragment) {
+                return ((MedicineTakingListFragment) fragment).getAdapter();
+            }
+        }
+        return null;
     }
 }
