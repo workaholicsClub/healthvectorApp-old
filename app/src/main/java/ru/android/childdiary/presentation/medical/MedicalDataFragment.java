@@ -124,7 +124,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         if (adapter != null) {
             adapter.closeAllItems();
         } else {
-            logger.error("selected page: " + position + "; event adapter is null");
+            logger.error("selected page: " + position + "; adapter is null");
         }
     }
 

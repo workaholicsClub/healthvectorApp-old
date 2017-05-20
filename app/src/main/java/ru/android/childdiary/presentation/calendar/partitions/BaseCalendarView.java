@@ -6,10 +6,6 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-import org.joda.time.LocalDate;
-
-import java.util.List;
-
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
@@ -18,14 +14,11 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.presentation.core.AppPartitionView;
+import ru.android.childdiary.presentation.core.BaseView;
 
-public interface BaseCalendarView extends AppPartitionView {
+public interface BaseCalendarView extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void setSelectedDate(@NonNull LocalDate date);
-
-    @StateStrategyType(AddToEndSingleStrategy.class)
-    void showEvents(@NonNull LocalDate date, @NonNull List<MasterEvent> events);
+    void showCalendarState(CalendarState calendarState);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToDiaperEvent(@NonNull MasterEvent event, @NonNull DiaperEvent defaultEvent);

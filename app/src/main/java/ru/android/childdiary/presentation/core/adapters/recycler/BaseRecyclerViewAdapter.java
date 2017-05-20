@@ -20,12 +20,11 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
     protected final LayoutInflater inflater;
 
     protected Sex sex;
-    protected List<T> items;
+    protected List<T> items = new ArrayList<>();
 
     public BaseRecyclerViewAdapter(Context context) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
-        this.items = new ArrayList<>();
     }
 
     public final void setSex(@Nullable Sex sex) {
@@ -36,9 +35,14 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
     }
 
     public void setItems(@NonNull List<T> items) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListDiff<>(this.items, items, this), false);
-        diffResult.dispatchUpdatesTo(this);
-        this.items = new ArrayList<>(items);
+        if (this.items.isEmpty() || items.isEmpty()) {
+            this.items = new ArrayList<>(items);
+            notifyDataSetChanged();
+        } else {
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListDiff<>(this.items, items, this), false);
+            diffResult.dispatchUpdatesTo(this);
+            this.items = new ArrayList<>(items);
+        }
     }
 
     public final void updatePartially(@NonNull T item) {

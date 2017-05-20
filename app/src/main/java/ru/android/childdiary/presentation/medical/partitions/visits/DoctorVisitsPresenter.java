@@ -18,12 +18,14 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
-import ru.android.childdiary.presentation.core.AppPartitionPresenter;
+import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.DoctorVisitParameters;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
-public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsView> {
+public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
+    private final GetDoctorVisitsRequest.GetDoctorVisitsRequestBuilder requestBuilder = GetDoctorVisitsRequest.builder();
+
     @Inject
     ChildInteractor childInteractor;
 
@@ -47,12 +49,18 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
                 (number, child) -> GetDoctorVisitsRequest.builder().child(child).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::requestData, this::onUnexpectedError));
+                .subscribe(this::onGetRequest, this::onUnexpectedError));
     }
 
-    private void requestData(GetDoctorVisitsRequest request) {
+    private void onGetRequest(GetDoctorVisitsRequest request) {
+        logger.debug("onGetRequest: " + request);
+        requestBuilder.child(request.getChild());
+        requestData();
+    }
+
+    private void requestData() {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(doctorVisitInteractor.getDoctorVisits(request)
+        subscription = unsubscribeOnDestroy(doctorVisitInteractor.getDoctorVisits(requestBuilder.build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetData, this::onUnexpectedError));
@@ -60,7 +68,10 @@ public class DoctorVisitsPresenter extends AppPartitionPresenter<DoctorVisitsVie
 
     private void onGetData(@NonNull GetDoctorVisitsResponse response) {
         logger.debug("onGetData: " + response);
-        getViewState().showDoctorVisits(DoctorVisitsFilter.builder().build(), response.getDoctorVisits());
+        getViewState().showDoctorVisitsState(DoctorVisitsState.builder()
+                .child(response.getRequest().getChild())
+                .doctorVisits(response.getDoctorVisits())
+                .build());
     }
 
     public void editDoctorVisit(@NonNull DoctorVisit doctorVisit) {

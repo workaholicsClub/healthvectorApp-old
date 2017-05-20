@@ -88,16 +88,17 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     }
 
     @Override
-    public void showChild(@NonNull Child child) {
-        super.showChild(child);
-        adapter.setFabController(child.getId() == null ? null : fabController);
-    }
+    public void showDoctorVisitsState(@NonNull DoctorVisitsState doctorVisitsState) {
+        logger.debug("showDoctorVisitsState: " + doctorVisitsState);
 
-    @Override
-    public void showDoctorVisits(@NonNull DoctorVisitsFilter filter, @NonNull List<DoctorVisit> doctorVisits) {
+        Child child = doctorVisitsState.getChild();
+        showChild(child);
+
+        List<DoctorVisit> doctorVisits = doctorVisitsState.getDoctorVisits();
         adapter.setItems(doctorVisits);
         recyclerView.setVisibility(doctorVisits.isEmpty() ? View.GONE : View.VISIBLE);
         textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
+        adapter.setFabController(child.getId() == null ? null : fabController);
     }
 
     @Override

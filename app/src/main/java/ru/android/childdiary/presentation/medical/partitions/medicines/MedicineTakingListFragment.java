@@ -88,16 +88,17 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     }
 
     @Override
-    public void showChild(@NonNull Child child) {
-        super.showChild(child);
-        adapter.setFabController(child.getId() == null ? null : fabController);
-    }
+    public void showMedicineTakingListState(@NonNull MedicineTakingListState medicineTakingListState) {
+        logger.debug("showMedicineTakingListState: " + medicineTakingListState);
 
-    @Override
-    public void showMedicineTakingList(@NonNull MedicineTakingListFilter filter, @NonNull List<MedicineTaking> medicineTakingList) {
+        Child child = medicineTakingListState.getChild();
+        showChild(child);
+
+        List<MedicineTaking> medicineTakingList = medicineTakingListState.getMedicineTakingList();
         adapter.setItems(medicineTakingList);
         recyclerView.setVisibility(medicineTakingList.isEmpty() ? View.GONE : View.VISIBLE);
         textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
+        adapter.setFabController(child.getId() == null ? null : fabController);
     }
 
     @Override
