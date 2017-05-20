@@ -94,18 +94,38 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
             @Override
             public void onPageSelected(int position) {
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
-                SwipeViewAdapter adapter = getSwipeListAdapter(position);
-                if (adapter != null) {
-                    adapter.getSwipeManager().update();
-                } else {
-                    logger.error("selected page: " + position + "; event adapter is null");
-                }
+                updateSwipeLayouts(position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int position = viewPager.getCurrentItem();
+        closeAllItems(position);
+    }
+
+    private void updateSwipeLayouts(int position) {
+        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        if (adapter != null) {
+            adapter.updateFabState();
+        } else {
+            logger.error("selected page: " + position + "; event adapter is null");
+        }
+    }
+
+    private void closeAllItems(int position) {
+        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        if (adapter != null) {
+            adapter.closeAllItems();
+        } else {
+            logger.error("selected page: " + position + "; event adapter is null");
+        }
     }
 
     private Fragment putArguments(Fragment fragment) {
@@ -178,7 +198,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     }
 
     @Nullable
-    private SwipeViewAdapter getSwipeListAdapter(int position) {
+    private SwipeViewAdapter getSwipeViewAdapter(int position) {
         Fragment fragment = viewPagerAdapter.getItem(position);
         SwipeViewAdapter adapter = null;
         if (fragment instanceof DoctorVisitsFragment) {

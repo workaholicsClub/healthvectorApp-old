@@ -90,7 +90,7 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     @Override
     public void showChild(@NonNull Child child) {
         super.showChild(child);
-        adapter.getSwipeManager().setFabController(child.getId() == null ? null : fabController);
+        adapter.setFabController(child.getId() == null ? null : fabController);
     }
 
     @Override

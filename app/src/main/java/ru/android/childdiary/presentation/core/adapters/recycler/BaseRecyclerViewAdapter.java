@@ -35,7 +35,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
         }
     }
 
-    public final void setItems(@NonNull List<T> items) {
+    public void setItems(@NonNull List<T> items) {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListDiff<>(this.items, items, this), false);
         diffResult.dispatchUpdatesTo(this);
         this.items = new ArrayList<>(items);

@@ -25,7 +25,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarFragment;
 import ru.android.childdiary.presentation.calendar.partitions.DayFragment;
 import ru.android.childdiary.presentation.calendar.partitions.MonthFragment;
@@ -103,18 +102,38 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
             @Override
             public void onPageSelected(int position) {
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
-                SwipeViewAdapter adapter = getSwipeListAdapter(position);
-                if (adapter != null) {
-                    adapter.getSwipeManager().update();
-                } else {
-                    logger.error("selected page: " + position + "; event adapter is null");
-                }
+                updateSwipeLayouts(position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int position = viewPager.getCurrentItem();
+        closeAllItems(position);
+    }
+
+    private void updateSwipeLayouts(int position) {
+        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        if (adapter != null) {
+            adapter.updateFabState();
+        } else {
+            logger.error("selected page: " + position + "; event adapter is null");
+        }
+    }
+
+    private void closeAllItems(int position) {
+        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        if (adapter != null) {
+            adapter.closeAllItems();
+        } else {
+            logger.error("selected page: " + position + "; event adapter is null");
+        }
     }
 
     private Fragment putArguments(Fragment fragment) {
@@ -223,9 +242,12 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     }
 
     @Nullable
-    private SwipeViewAdapter getSwipeListAdapter(int position) {
-        BaseCalendarFragment fragment = (BaseCalendarFragment) viewPagerAdapter.getItem(position);
-        EventAdapter eventAdapter = fragment.getEventAdapter();
-        return eventAdapter;
+    private SwipeViewAdapter getSwipeViewAdapter(int position) {
+        Fragment fragment = viewPagerAdapter.getItem(position);
+        SwipeViewAdapter adapter = null;
+        if (fragment instanceof BaseCalendarFragment) {
+            adapter = ((BaseCalendarFragment) fragment).getEventAdapter();
+        }
+        return adapter;
     }
 }

@@ -220,7 +220,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     @Override
     public void showChild(@NonNull Child child) {
         super.showChild(child);
-        eventAdapter.getSwipeManager().setFabController(child.getId() == null ? null : fabController);
+        eventAdapter.setFabController(child.getId() == null ? null : fabController);
     }
 
     @Override
