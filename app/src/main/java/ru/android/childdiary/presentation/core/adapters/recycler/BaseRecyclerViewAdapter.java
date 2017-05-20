@@ -35,14 +35,9 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
     }
 
     public void setItems(@NonNull List<T> items) {
-        if (this.items.isEmpty() || items.isEmpty()) {
-            this.items = new ArrayList<>(items);
-            notifyDataSetChanged();
-        } else {
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListDiff<>(this.items, items, this), false);
-            diffResult.dispatchUpdatesTo(this);
-            this.items = new ArrayList<>(items);
-        }
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListDiff<>(this.items, items, this), false);
+        diffResult.dispatchUpdatesTo(this);
+        this.items = new ArrayList<>(items);
     }
 
     public final void updatePartially(@NonNull T item) {

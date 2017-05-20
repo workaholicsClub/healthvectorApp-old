@@ -19,5 +19,4 @@ class CalendarState {
     LocalDate date;
     @NonNull
     List<MasterEvent> events;
-    boolean loading;
 }

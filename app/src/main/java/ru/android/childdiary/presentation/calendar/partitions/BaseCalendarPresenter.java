@@ -7,7 +7,6 @@ import com.arellomobile.mvp.InjectViewState;
 import org.joda.time.LocalDate;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -63,12 +62,6 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
 
     private void onGetRequest(@NonNull GetEventsRequest request) {
         logger.debug("onGetRequest: " + request);
-        getViewState().showCalendarState(CalendarState.builder()
-                .child(request.getChild())
-                .date(request.getDate())
-                .events(Collections.emptyList())
-                .loading(true)
-                .build());
         requestBuilder.date(request.getDate()).child(request.getChild());
         requestData();
     }
@@ -87,7 +80,6 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                 .child(response.getRequest().getChild())
                 .date(response.getRequest().getDate())
                 .events(response.getEvents())
-                .loading(false)
                 .build());
     }
 
