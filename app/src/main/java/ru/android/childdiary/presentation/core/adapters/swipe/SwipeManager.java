@@ -9,6 +9,8 @@ import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.val;
+
 final class SwipeManager {
     private static final int INVALID_POSITION = -1;
     private final Set<WeakReference<SwipeLayout>> shownLayouts = new HashSet<>();
@@ -40,9 +42,12 @@ final class SwipeManager {
     }
 
     public void closeAllExcept(SwipeLayout layout) {
-        for (WeakReference<SwipeLayout> ref : shownLayouts) {
-            SwipeLayout swipeLayout = ref.get();
-            if (swipeLayout != null && swipeLayout != layout) {
+        val iterator = shownLayouts.iterator();
+        while (iterator.hasNext()) {
+            SwipeLayout swipeLayout = iterator.next().get();
+            if (swipeLayout == null) {
+                iterator.remove();
+            } else if (swipeLayout != layout) {
                 swipeLayout.close();
             }
         }
@@ -51,9 +56,12 @@ final class SwipeManager {
     public void closeAllItems() {
         openPosition = INVALID_POSITION;
         openedOrOpeningPositions.clear();
-        for (WeakReference<SwipeLayout> ref : shownLayouts) {
-            SwipeLayout swipeLayout = ref.get();
-            if (swipeLayout != null) {
+        val iterator = shownLayouts.iterator();
+        while (iterator.hasNext()) {
+            SwipeLayout swipeLayout = iterator.next().get();
+            if (swipeLayout == null) {
+                iterator.remove();
+            } else {
                 swipeLayout.close();
             }
         }
