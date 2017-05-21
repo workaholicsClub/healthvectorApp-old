@@ -202,6 +202,11 @@
     <string name="delete_medicine_taking_confirmation_dialog_title">Удалить рецепт?</string>
     <string name="delete_doctor_confirmation_dialog_title">Удалить специализацию?</string>
     <string name="delete_medicine_confirmation_dialog_title">Удалить лекарство?</string>
+    <string name="filter_by_date">По периоду</string>
+    <string name="filter_by_doctor">По специализации</string>
+    <string name="filter_by_medicine">По лекарству</string>
+    <string name="filter_from_date">Дата с</string>
+    <string name="filter_to_date">Дата по</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

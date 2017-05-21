@@ -15,8 +15,10 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,14 +26,16 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingActionListener;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingAdapter;
 import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingActivity;
+import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
+import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogFragment;
+import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class MedicineTakingListFragment extends AppPartitionFragment
+public class MedicineTakingListFragment extends BaseMedicalDataFragment
         implements MedicineTakingListView, MedicineTakingActionListener {
     private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
 
@@ -85,6 +89,19 @@ public class MedicineTakingListFragment extends AppPartitionFragment
     public void onDetach() {
         super.onDetach();
         fabController = null;
+    }
+
+    @Override
+    public void showFilter() {
+        MedicineTakingFilterDialogFragment fragment = new MedicineTakingFilterDialogFragment();
+        fragment.showAllowingStateLoss(getActivity().getSupportFragmentManager(), TAG_FILTER,
+                MedicineTakingFilterDialogArguments.builder()
+                        .items(Collections.emptyList())
+                        .selectedItem(null)
+                        .fromDate(LocalDate.now())
+                        .toDate(LocalDate.now())
+                        .sex(getSex())
+                        .build());
     }
 
     @Override

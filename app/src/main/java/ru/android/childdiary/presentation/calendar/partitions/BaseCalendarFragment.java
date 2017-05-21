@@ -214,6 +214,12 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
+    public void showFilter() {
+        // TODO filter events
+        showToast("filter");
+    }
+
+    @Override
     public void showCalendarState(CalendarState calendarState) {
         logger.debug("showCalendarState: " + calendarState);
 

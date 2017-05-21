@@ -34,6 +34,7 @@ import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.medical.add.medicines.AddDoctorVisitActivity;
 import ru.android.childdiary.presentation.medical.add.visits.AddMedicineTakingActivity;
+import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
 import ru.android.childdiary.presentation.medical.partitions.medicines.MedicineTakingListFragment;
 import ru.android.childdiary.presentation.medical.partitions.visits.DoctorVisitsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -132,15 +133,21 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
 
     @Nullable
     private SwipeViewAdapter getSwipeViewAdapter(int position) {
+        BaseMedicalDataFragment fragment = getSelectedPage(position);
+        return fragment == null ? null : fragment.getAdapter();
+    }
+
+    @Nullable
+    private BaseMedicalDataFragment getSelectedPage(int position) {
         List<Fragment> fragments = getChildFragmentManager().getFragments();
         if (fragments == null) {
             return null;
         }
         for (Fragment fragment : fragments) {
             if (position == 0 && fragment instanceof DoctorVisitsFragment) {
-                return ((DoctorVisitsFragment) fragment).getAdapter();
+                return (DoctorVisitsFragment) fragment;
             } else if (position == 1 && fragment instanceof MedicineTakingListFragment) {
-                return ((MedicineTakingListFragment) fragment).getAdapter();
+                return (MedicineTakingListFragment) fragment;
             }
         }
         return null;
@@ -165,6 +172,17 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         super.showChild(child);
         if (child.getId() == null) {
             hideFabBar();
+        }
+    }
+
+    @Override
+    public void showFilter() {
+        int position = viewPager.getCurrentItem();
+        BaseMedicalDataFragment fragment = getSelectedPage(position);
+        if (fragment != null) {
+            fragment.showFilter();
+        } else {
+            logger.error("selected page: " + position + "; partition is null");
         }
     }
 

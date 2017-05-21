@@ -3,12 +3,12 @@ package ru.android.childdiary.presentation.calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.widget.FrameLayout;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
@@ -49,6 +49,9 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     private static final String KEY_SELECTED_PAGE = "calendar.selected_page";
     private static final int REQUEST_ADD_EVENT = 1;
 
+    @IdRes
+    private static final int FRAGMENT_CONTAINER_ID = R.id.fragmentContainer;
+
     @Inject
     RxSharedPreferences preferences;
 
@@ -57,9 +60,6 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
 
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
-
-    @BindView(R.id.fragmentContainer)
-    FrameLayout fragmentContainer;
 
     @BindView(R.id.fabToolbar)
     FabToolbar fabToolbar;
@@ -153,7 +153,7 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
         getChildFragmentManager()
                 .beginTransaction()
                 .setTransition(TRANSIT_UNSET)
-                .replace(R.id.fragmentContainer, fragment, tag)
+                .replace(FRAGMENT_CONTAINER_ID, fragment, tag)
                 .commit();
     }
 
@@ -175,10 +175,16 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
 
     @Nullable
     private SwipeViewAdapter getSwipeViewAdapter(int position) {
+        BaseCalendarFragment fragment = getSelectedPage(position);
+        return fragment == null ? null : fragment.getEventAdapter();
+    }
+
+    @Nullable
+    private BaseCalendarFragment getSelectedPage(int position) {
         String tag = getTagForPosition(position);
         Fragment fragment = getChildFragmentManager().findFragmentByTag(tag);
         if (fragment instanceof BaseCalendarFragment) {
-            return ((BaseCalendarFragment) fragment).getEventAdapter();
+            return (BaseCalendarFragment) fragment;
         }
         return null;
     }
@@ -210,6 +216,17 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
         super.showChild(child);
         if (child.getId() == null) {
             hideFabBar();
+        }
+    }
+
+    @Override
+    public void showFilter() {
+        int position = tabLayout.getSelectedTabPosition();
+        BaseCalendarFragment fragment = getSelectedPage(position);
+        if (fragment != null) {
+            fragment.showFilter();
+        } else {
+            logger.error("selected page: " + position + "; partition is null");
         }
     }
 

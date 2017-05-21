@@ -15,8 +15,10 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,14 +26,16 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitActionListener;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitAdapter;
 import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitActivity;
+import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogArguments;
+import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogFragment;
+import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class DoctorVisitsFragment extends AppPartitionFragment
+public class DoctorVisitsFragment extends BaseMedicalDataFragment
         implements DoctorVisitsView, DoctorVisitActionListener {
     private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
 
@@ -85,6 +89,19 @@ public class DoctorVisitsFragment extends AppPartitionFragment
     public void onDetach() {
         super.onDetach();
         fabController = null;
+    }
+
+    @Override
+    public void showFilter() {
+        DoctorVisitFilterDialogFragment fragment = new DoctorVisitFilterDialogFragment();
+        fragment.showAllowingStateLoss(getActivity().getSupportFragmentManager(), TAG_FILTER,
+                DoctorVisitFilterDialogArguments.builder()
+                        .items(Collections.emptyList())
+                        .selectedItem(null)
+                        .fromDate(LocalDate.now())
+                        .toDate(LocalDate.now())
+                        .sex(getSex())
+                        .build());
     }
 
     @Override

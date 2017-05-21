@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +42,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
+import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
@@ -75,6 +78,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     private static final int PROFILE_SETTINGS_DELETE = 3;
     private static final int PROFILE_SETTINGS_USER = 10;
 
+    @IdRes
     private static final int FRAGMENT_CONTAINER_ID = R.id.mainContent;
 
     private final PrimaryDrawerItem[] drawerItems = new PrimaryDrawerItem[]{
@@ -296,7 +300,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(TRANSIT_UNSET)
-                .replace(R.id.mainContent, fragment, tag)
+                .replace(FRAGMENT_CONTAINER_ID, fragment, tag)
                 .addToBackStack(null)
                 .commit();
 
@@ -304,7 +308,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     }
 
     private void hidePreviousPartition() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainContent);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(FRAGMENT_CONTAINER_ID);
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -548,7 +552,13 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 || selectedPartition == AppPartition.MEDICAL_DATA) {
             switch (item.getItemId()) {
                 case R.id.menu_filter:
-                    return true;
+                    AppPartitionFragment fragment = findAppPartition();
+                    if (fragment != null) {
+                        fragment.showFilter();
+                        return true;
+                    } else {
+                        logger.error("no partition found");
+                    }
             }
         }
         return super.onOptionsItemSelected(item);
@@ -584,8 +594,15 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         }
     }
 
+    @Nullable
     private FabController findFabController() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(FRAGMENT_CONTAINER_ID);
-        return fragment != null && fragment instanceof FabController ? (FabController) fragment : null;
+        return fragment instanceof FabController ? (FabController) fragment : null;
+    }
+
+    @Nullable
+    private AppPartitionFragment findAppPartition() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(FRAGMENT_CONTAINER_ID);
+        return fragment instanceof AppPartitionFragment ? (AppPartitionFragment) fragment : null;
     }
 }
