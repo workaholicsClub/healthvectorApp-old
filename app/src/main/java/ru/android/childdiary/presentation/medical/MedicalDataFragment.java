@@ -105,11 +105,11 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        int position = viewPager.getCurrentItem();
-        closeAllItems(position);
+    private Fragment putArguments(Fragment fragment) {
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, getChild());
+        fragment.setArguments(arguments);
+        return fragment;
     }
 
     private void updateSwipeLayouts(int position) {
@@ -130,11 +130,20 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         }
     }
 
-    private Fragment putArguments(Fragment fragment) {
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, getChild());
-        fragment.setArguments(arguments);
-        return fragment;
+    @Nullable
+    private SwipeViewAdapter getSwipeViewAdapter(int position) {
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments == null) {
+            return null;
+        }
+        for (Fragment fragment : fragments) {
+            if (position == 0 && fragment instanceof DoctorVisitsFragment) {
+                return ((DoctorVisitsFragment) fragment).getAdapter();
+            } else if (position == 1 && fragment instanceof MedicineTakingListFragment) {
+                return ((MedicineTakingListFragment) fragment).getAdapter();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -142,6 +151,13 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         super.themeChanged();
         tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(getContext(), getSex()));
         fab.setBackgroundTintList(ColorStateList.valueOf(ThemeUtils.getColorAccent(getContext(), getSex())));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int position = viewPager.getCurrentItem();
+        closeAllItems(position);
     }
 
     @Override
@@ -197,21 +213,5 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     @Override
     public void hideFabBar() {
         fab.hide();
-    }
-
-    @Nullable
-    private SwipeViewAdapter getSwipeViewAdapter(int position) {
-        List<Fragment> fragments = getChildFragmentManager().getFragments();
-        if (fragments == null) {
-            return null;
-        }
-        for (Fragment fragment : fragments) {
-            if (position == 0 && fragment instanceof DoctorVisitsFragment) {
-                return ((DoctorVisitsFragment) fragment).getAdapter();
-            } else if (position == 1 && fragment instanceof MedicineTakingListFragment) {
-                return ((MedicineTakingListFragment) fragment).getAdapter();
-            }
-        }
-        return null;
     }
 }

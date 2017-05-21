@@ -8,12 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.widget.FrameLayout;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -27,12 +25,12 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarFragment;
 import ru.android.childdiary.presentation.calendar.partitions.DayFragment;
 import ru.android.childdiary.presentation.calendar.partitions.MonthFragment;
 import ru.android.childdiary.presentation.calendar.partitions.WeekFragment;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
@@ -43,6 +41,8 @@ import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
+
+import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
 public class CalendarFragment extends AppPartitionFragment implements CalendarView,
         FabController {
@@ -58,13 +58,11 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
 
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
+    @BindView(R.id.fragmentContainer)
+    FrameLayout fragmentContainer;
 
     @BindView(R.id.fabToolbar)
     FabToolbar fabToolbar;
-
-    private ViewPagerAdapter viewPagerAdapter;
 
     @Override
     protected void injectFragment(ApplicationComponent component) {
@@ -86,46 +84,84 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     private void setupViewPager() {
         Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 2).get();
         selectedPage = selectedPage == null ? 2 : selectedPage;
-        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(putArguments(new DayFragment()), getString(R.string.day));
-        viewPagerAdapter.addFragment(putArguments(new WeekFragment()), getString(R.string.week));
-        viewPagerAdapter.addFragment(putArguments(new MonthFragment()), getString(R.string.month));
-        viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setCurrentItem(selectedPage, false);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.day));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.week));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.month));
+        tabLayout.getTabAt(selectedPage).select();
+        showPage(selectedPage);
         WidgetsUtils.setupTabLayoutFont(tabLayout);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
-                updateSwipeLayouts(position);
+                showPage(position);
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        int position = viewPager.getCurrentItem();
-        closeAllItems(position);
+    @Nullable
+    private String getTagForPosition(int position) {
+        switch (position) {
+            case 0:
+                return DayFragment.class.getSimpleName();
+            case 1:
+                return WeekFragment.class.getSimpleName();
+            case 2:
+                return MonthFragment.class.getSimpleName();
+        }
+        return null;
     }
 
-    private void updateSwipeLayouts(int position) {
-        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
-        if (adapter != null) {
-            adapter.updateFabState();
+    private void showPage(int position) {
+        String tag = getTagForPosition(position);
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            fragment = createFragmentAtPosition(position);
+            logger.debug("fragment cache: create new fragment: " + fragment);
         } else {
-            logger.error("selected page: " + position + "; event adapter is null");
+            logger.debug("fragment cache: show fragment: " + fragment);
         }
+        if (fragment == null) {
+            logger.error("no fragment found for position " + position);
+        }
+        showFragment(fragment, tag);
+    }
+
+    @Nullable
+    private Fragment createFragmentAtPosition(int position) {
+        switch (position) {
+            case 0:
+                return putArguments(new DayFragment());
+            case 1:
+                return putArguments(new WeekFragment());
+            case 2:
+                return putArguments(new MonthFragment());
+        }
+        return null;
+    }
+
+    private void showFragment(Fragment fragment, String tag) {
+        getChildFragmentManager()
+                .beginTransaction()
+                .setTransition(TRANSIT_UNSET)
+                .replace(R.id.fragmentContainer, fragment, tag)
+                .commit();
+    }
+
+    private Fragment putArguments(Fragment fragment) {
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, getChild());
+        fragment.setArguments(arguments);
+        return fragment;
     }
 
     private void closeAllItems(int position) {
@@ -137,11 +173,14 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
         }
     }
 
-    private Fragment putArguments(Fragment fragment) {
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, getChild());
-        fragment.setArguments(arguments);
-        return fragment;
+    @Nullable
+    private SwipeViewAdapter getSwipeViewAdapter(int position) {
+        String tag = getTagForPosition(position);
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(tag);
+        if (fragment instanceof BaseCalendarFragment) {
+            return ((BaseCalendarFragment) fragment).getEventAdapter();
+        }
+        return null;
     }
 
     @Override
@@ -149,6 +188,21 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
         super.themeChanged();
         tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(getContext(), getSex()));
         fabToolbar.setColor(ThemeUtils.getColorAccent(getContext(), getSex()));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ADD_EVENT && resultCode == Activity.RESULT_OK) {
+            hideBarWithoutAnimation();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int position = tabLayout.getSelectedTabPosition();
+        closeAllItems(position);
     }
 
     @Override
@@ -215,14 +269,6 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ADD_EVENT && resultCode == Activity.RESULT_OK) {
-            hideBarWithoutAnimation();
-        }
-    }
-
-    @Override
     public void showFab() {
         fabToolbar.showFab();
     }
@@ -240,23 +286,5 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     @Override
     public void hideFabBar() {
         fabToolbar.hideFabBar();
-    }
-
-    @Nullable
-    private SwipeViewAdapter getSwipeViewAdapter(int position) {
-        List<Fragment> fragments = getChildFragmentManager().getFragments();
-        if (fragments == null) {
-            return null;
-        }
-        for (Fragment fragment : fragments) {
-            if (position == 0 && fragment instanceof DayFragment) {
-                return ((DayFragment) fragment).getEventAdapter();
-            } else if (position == 1 && fragment instanceof WeekFragment) {
-                return ((WeekFragment) fragment).getEventAdapter();
-            } else if (position == 2 && fragment instanceof MonthFragment) {
-                return ((MonthFragment) fragment).getEventAdapter();
-            }
-        }
-        return null;
     }
 }
