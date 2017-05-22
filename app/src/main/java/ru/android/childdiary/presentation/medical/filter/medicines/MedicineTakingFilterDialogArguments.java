@@ -14,20 +14,20 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
+import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.presentation.medical.filter.core.MedicalFilterDialogArguments;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
-public class MedicineTakingFilterDialogArguments extends MedicalFilterDialogArguments<MedicineTaking> {
-    @Builder
+public class MedicineTakingFilterDialogArguments extends MedicalFilterDialogArguments<Medicine> {
+    @Builder(toBuilder = true)
     public MedicineTakingFilterDialogArguments(@Nullable Sex sex,
-                                               @NonNull List<MedicineTaking> items,
-                                               @Nullable MedicineTaking selectedItem,
-                                               @NonNull LocalDate fromDate,
-                                               @NonNull LocalDate toDate) {
-        super(sex, items, selectedItem, fromDate, toDate);
+                                               @NonNull List<Medicine> items,
+                                               @NonNull List<Medicine> selectedItems,
+                                               @Nullable LocalDate fromDate,
+                                               @Nullable LocalDate toDate) {
+        super(sex, items, selectedItems, fromDate, toDate);
     }
 }

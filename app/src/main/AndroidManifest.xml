@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-sdk
+        android:minSdkVersion="14"
+        tools:overrideLibrary="com.xiaofeng.flowlayoutmanager" />
+
     <application
         android:name=".app.ChildDiaryApplication"
         android:allowBackup="true"

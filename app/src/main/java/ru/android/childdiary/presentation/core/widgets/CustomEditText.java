@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.widgets;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import lombok.Setter;
 
 public class CustomEditText extends AppCompatEditText {
     @Setter
+    @Nullable
     private OnKeyboardHiddenListener onKeyboardHiddenListener;
 
     public CustomEditText(Context context) {

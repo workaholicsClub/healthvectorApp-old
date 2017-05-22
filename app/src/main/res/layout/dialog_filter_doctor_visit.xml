@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="400dp">
+    android:minWidth="@dimen/filter_dialog_width">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,20 +25,20 @@
             layout="@layout/dialog_filter_by_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp" />
+            android:layout_marginEnd="@dimen/filter_base_margin"
+            android:layout_marginLeft="@dimen/filter_base_margin"
+            android:layout_marginRight="@dimen/filter_base_margin"
+            android:layout_marginStart="@dimen/filter_base_margin" />
 
         <include
             android:id="@+id/filter_by_date_to"
             layout="@layout/dialog_filter_by_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp" />
+            android:layout_marginEnd="@dimen/filter_base_margin"
+            android:layout_marginLeft="@dimen/filter_base_margin"
+            android:layout_marginRight="@dimen/filter_base_margin"
+            android:layout_marginStart="@dimen/filter_base_margin" />
 
         <TextView
             android:id="@+id/filter_by_item"
@@ -50,7 +50,7 @@
             android:text="@string/filter_by_doctor"
             android:textAppearance="@style/FilterPlaceholderTextAppearance" />
 
-        <AutoCompleteTextView
+        <ru.android.childdiary.presentation.medical.filter.visits.DoctorTokenCompleteTextView
             android:id="@+id/autoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

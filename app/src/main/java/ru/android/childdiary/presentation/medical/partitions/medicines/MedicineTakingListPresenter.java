@@ -20,6 +20,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTaki
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.MedicineTakingParameters;
+import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
@@ -44,9 +45,12 @@ public class MedicineTakingListPresenter extends BasePresenter<MedicineTakingLis
         super.onFirstViewAttach();
 
         unsubscribeOnDestroy(Observable.combineLatest(
-                Observable.just(0), // TODO filters
+                medicineTakingInteractor.getSelectedFilterValue(),
                 childInteractor.getActiveChild(),
-                (number, child) -> GetMedicineTakingListRequest.builder().child(child).build())
+                (filter, child) -> GetMedicineTakingListRequest.builder()
+                        .child(child)
+                        .filter(filter)
+                        .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetRequest, this::onUnexpectedError));
@@ -72,6 +76,21 @@ public class MedicineTakingListPresenter extends BasePresenter<MedicineTakingLis
                 .child(response.getRequest().getChild())
                 .medicineTakingList(response.getMedicineTakingList())
                 .build());
+    }
+
+    public void requestFilterDialog() {
+        unsubscribeOnDestroy(
+                Observable.combineLatest(medicineTakingInteractor.getMedicines(),
+                        medicineTakingInteractor.getSelectedFilterValue(),
+                        ((medicines, filter) -> MedicineTakingFilterDialogArguments.builder()
+                                .items(medicines)
+                                .selectedItems(filter.getSelectedItems())
+                                .fromDate(filter.getFromDate())
+                                .toDate(filter.getToDate())
+                                .build()))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::showFilterDialog, this::onUnexpectedError));
     }
 
     public void editMedicineTaking(@NonNull MedicineTaking medicineTaking) {

@@ -16,7 +16,7 @@ import ru.android.childdiary.data.types.Sex;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
 @Getter
 @Builder(builderMethodName = "baseBuilder")
 public class BaseDialogArguments implements Serializable {

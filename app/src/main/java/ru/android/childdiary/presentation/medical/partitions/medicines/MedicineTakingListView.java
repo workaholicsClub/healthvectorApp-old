@@ -11,8 +11,12 @@ import org.joda.time.LocalTime;
 
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.presentation.core.BaseView;
+import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
 
 public interface MedicineTakingListView extends BaseView {
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showFilterDialog(@NonNull MedicineTakingFilterDialogArguments dialogArguments);
+
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showMedicineTakingListState(@NonNull MedicineTakingListState medicineTakingListState);
 

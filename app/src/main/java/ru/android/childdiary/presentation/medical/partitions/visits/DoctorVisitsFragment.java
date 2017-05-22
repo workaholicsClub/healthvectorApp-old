@@ -14,11 +14,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,6 +44,9 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
     @BindView(R.id.textViewIntention)
     TextView textViewIntention;
 
+    @BindView(R.id.recyclerViewChips)
+    RecyclerView recyclerViewChips;
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -69,6 +71,10 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         textViewIntention.setText(R.string.add_doctor_visit);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+
+        FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
+        flowLayoutManager.setAutoMeasureEnabled(true);
+        recyclerViewChips.setLayoutManager(flowLayoutManager);
     }
 
     @Override
@@ -93,13 +99,14 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
 
     @Override
     public void showFilter() {
+        presenter.requestFilterDialog();
+    }
+
+    @Override
+    public void showFilterDialog(@NonNull DoctorVisitFilterDialogArguments dialogArguments) {
         DoctorVisitFilterDialogFragment fragment = new DoctorVisitFilterDialogFragment();
         fragment.showAllowingStateLoss(getActivity().getSupportFragmentManager(), TAG_FILTER,
-                DoctorVisitFilterDialogArguments.builder()
-                        .items(Collections.emptyList())
-                        .selectedItem(null)
-                        .fromDate(LocalDate.now())
-                        .toDate(LocalDate.now())
+                dialogArguments.toBuilder()
                         .sex(getSex())
                         .build());
     }

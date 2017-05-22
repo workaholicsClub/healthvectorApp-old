@@ -192,6 +192,12 @@
         <item name="fontPath">@string/font_path_regular</item>
     </style>
 
+    <style name="TokenItemTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/token_item_text</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="fontPath">@string/font_path_regular</item>
+    </style>
+
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
     </style>

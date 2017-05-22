@@ -21,6 +21,7 @@ import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository;
+import ru.android.childdiary.data.repositories.medical.DoctorVisitFilterDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
@@ -39,6 +40,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsFilter;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
@@ -55,6 +57,7 @@ public class DoctorVisitInteractor {
     private final DoctorVisitRepository doctorVisitRepository;
     private final DoctorVisitValidator doctorVisitValidator;
     private final ImagesRepository imagesRepository;
+    private final DoctorVisitFilterDataRepository filterRepository;
 
     @Inject
     public DoctorVisitInteractor(ChildDataRepository childRepository,
@@ -62,13 +65,31 @@ public class DoctorVisitInteractor {
                                  SettingsDataRepository settingsRepository,
                                  DoctorVisitDataRepository doctorVisitRepository,
                                  DoctorVisitValidator doctorVisitValidator,
-                                 ImagesDataRepository imagesRepository) {
+                                 ImagesDataRepository imagesRepository,
+                                 DoctorVisitFilterDataRepository filterRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
         this.doctorVisitRepository = doctorVisitRepository;
         this.doctorVisitValidator = doctorVisitValidator;
         this.imagesRepository = imagesRepository;
+        this.filterRepository = filterRepository;
+    }
+
+    public Observable<GetDoctorVisitsFilter> getSelectedFilterValue() {
+        return filterRepository.getSelectedValue();
+    }
+
+    public void setSelectedFilterValue(@NonNull GetDoctorVisitsFilter value) {
+        filterRepository.setSelectedValue(value);
+    }
+
+    public Observable<GetDoctorVisitsFilter> getSelectedFilterValueOnce() {
+        return filterRepository.getSelectedValueOnce();
+    }
+
+    public Observable<GetDoctorVisitsFilter> setSelectedFilterValueObservable(@NonNull GetDoctorVisitsFilter value) {
+        return filterRepository.setSelectedValueObservable(value);
     }
 
     public Observable<List<Doctor>> getDoctors() {

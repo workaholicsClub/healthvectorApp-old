@@ -18,6 +18,7 @@ import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDataRepository;
+import ru.android.childdiary.data.repositories.medical.MedicineTakingFilterDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
@@ -38,6 +39,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
+import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListFilter;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
@@ -54,6 +56,7 @@ public class MedicineTakingInteractor {
     private final MedicineTakingRepository medicineTakingRepository;
     private final MedicineTakingValidator medicineTakingValidator;
     private final ImagesRepository imagesRepository;
+    private final MedicineTakingFilterDataRepository filterRepository;
 
     @Inject
     public MedicineTakingInteractor(ChildDataRepository childRepository,
@@ -61,13 +64,31 @@ public class MedicineTakingInteractor {
                                     SettingsDataRepository settingsRepository,
                                     MedicineTakingDataRepository medicineTakingRepository,
                                     MedicineTakingValidator medicineTakingValidator,
-                                    ImagesDataRepository imagesRepository) {
+                                    ImagesDataRepository imagesRepository,
+                                    MedicineTakingFilterDataRepository filterRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
         this.medicineTakingRepository = medicineTakingRepository;
         this.medicineTakingValidator = medicineTakingValidator;
         this.imagesRepository = imagesRepository;
+        this.filterRepository = filterRepository;
+    }
+
+    public Observable<GetMedicineTakingListFilter> getSelectedFilterValue() {
+        return filterRepository.getSelectedValue();
+    }
+
+    public void setSelectedFilterValue(@NonNull GetMedicineTakingListFilter value) {
+        filterRepository.setSelectedValue(value);
+    }
+
+    public Observable<GetMedicineTakingListFilter> getSelectedFilterValueOnce() {
+        return filterRepository.getSelectedValueOnce();
+    }
+
+    public Observable<GetMedicineTakingListFilter> setSelectedFilterValueObservable(@NonNull GetMedicineTakingListFilter value) {
+        return filterRepository.setSelectedValueObservable(value);
     }
 
     public Observable<List<Medicine>> getMedicines() {

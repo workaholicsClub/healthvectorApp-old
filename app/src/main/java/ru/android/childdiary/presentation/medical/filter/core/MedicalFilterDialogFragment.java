@@ -2,16 +2,17 @@ package ru.android.childdiary.presentation.medical.filter.core;
 
 import android.app.Dialog;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
+import com.tokenautocomplete.FilteredArrayAdapter;
+
+import org.joda.time.LocalDate;
+
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,19 +33,11 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
     @BindView(R.id.filter_by_date_to)
     View filterByDateTo;
 
-    @BindView(R.id.filter_by_item)
-    TextView filterByItem;
-
     @BindView(R.id.autoCompleteTextView)
-    AutoCompleteTextView autoCompleteTextView;
+    BaseTokenCompleteTextView<T> autoCompleteTextView;
 
     private TextView textViewFromDateValue;
     private TextView textViewToDateValue;
-
-    @Override
-    protected int getLayoutResourceId() {
-        return R.layout.dialog_filter_medical_data;
-    }
 
     @Override
     protected void setupUi() {
@@ -55,21 +48,17 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
         textViewFromDateValue.setText(DateUtils.date(getContext(), dialogArguments.getFromDate()));
         textViewFromDateValue.setOnClickListener(this);
 
-        TextView textViewToDate = ButterKnife.findById(filterByDateTo, R.id.filter_by_date_caption);
-        textViewToDate.setText(R.string.filter_to_date);
+        TextView textViewToDateCaption = ButterKnife.findById(filterByDateTo, R.id.filter_by_date_caption);
+        textViewToDateCaption.setText(R.string.filter_to_date);
 
         textViewToDateValue = ButterKnife.findById(filterByDateTo, R.id.filter_by_date_value);
         textViewToDateValue.setText(DateUtils.date(getContext(), dialogArguments.getToDate()));
         textViewToDateValue.setOnClickListener(this);
 
-        filterByItem.setText(getFilterByItemTextResId());
-
-        int layoutItemId = android.R.layout.simple_dropdown_item_1line;
-        List<String> strings = Arrays.asList("test1", "test2", "test3");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), layoutItemId, strings);
-
+        ArrayAdapter<T> adapter = createFilteredAdapter();
         autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView.setHint(getAutoCompleteHintResId());
+
+        autoCompleteTextView.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
     }
 
     @NonNull
@@ -78,7 +67,12 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(R.string.menu_filter)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    List<T> selectedItems = autoCompleteTextView.getObjects();
+                    LocalDate fromDate = LocalDate.now(); // TODO
+                    LocalDate toDate = LocalDate.now(); // TODO
+                    buildFilter(selectedItems, fromDate, toDate);
+                })
                 .setNegativeButton(R.string.cancel, null);
         AlertDialog dialog = builder.create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -87,11 +81,11 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
         return dialog;
     }
 
-    @StringRes
-    protected abstract int getFilterByItemTextResId();
+    protected abstract FilteredArrayAdapter<T> createFilteredAdapter();
 
-    @StringRes
-    protected abstract int getAutoCompleteHintResId();
+    protected abstract void buildFilter(@NonNull List<T> selectedItems,
+                                        @NonNull LocalDate fromDate,
+                                        @NonNull LocalDate toDate);
 
     @Override
     public void onClick(View v) {

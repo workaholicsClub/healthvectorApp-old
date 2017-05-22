@@ -20,6 +20,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisits
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.DoctorVisitParameters;
+import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogArguments;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
@@ -44,9 +45,12 @@ public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
         super.onFirstViewAttach();
 
         unsubscribeOnDestroy(Observable.combineLatest(
-                Observable.just(0), // TODO filters
+                doctorVisitInteractor.getSelectedFilterValue(),
                 childInteractor.getActiveChild(),
-                (number, child) -> GetDoctorVisitsRequest.builder().child(child).build())
+                (filter, child) -> GetDoctorVisitsRequest.builder()
+                        .child(child)
+                        .filter(filter)
+                        .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetRequest, this::onUnexpectedError));
@@ -72,6 +76,21 @@ public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
                 .child(response.getRequest().getChild())
                 .doctorVisits(response.getDoctorVisits())
                 .build());
+    }
+
+    public void requestFilterDialog() {
+        unsubscribeOnDestroy(
+                Observable.combineLatest(doctorVisitInteractor.getDoctors(),
+                        doctorVisitInteractor.getSelectedFilterValue(),
+                        ((doctors, filter) -> DoctorVisitFilterDialogArguments.builder()
+                                .items(doctors)
+                                .selectedItems(filter.getSelectedItems())
+                                .fromDate(filter.getFromDate())
+                                .toDate(filter.getToDate())
+                                .build()))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::showFilterDialog, this::onUnexpectedError));
     }
 
     public void editDoctorVisit(@NonNull DoctorVisit doctorVisit) {
