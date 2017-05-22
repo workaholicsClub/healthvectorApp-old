@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,14 +23,14 @@
             app:tabTextColor="@color/white_transparent" />
     </android.support.design.widget.AppBarLayout>
 
-    <ru.android.childdiary.presentation.main.widgets.NotSwipeableViewPager
-        android:id="@+id/viewPager"
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_below="@+id/appBarLayout" />
 
     <ru.android.childdiary.presentation.main.widgets.FabToolbar
         android:id="@+id/fabToolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

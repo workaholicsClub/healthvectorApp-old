@@ -16,6 +16,8 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import org.joda.time.LocalTime;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -32,6 +34,7 @@ import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.medical.add.medicines.AddDoctorVisitActivity;
 import ru.android.childdiary.presentation.medical.add.visits.AddMedicineTakingActivity;
+import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
 import ru.android.childdiary.presentation.medical.partitions.medicines.MedicineTakingListFragment;
 import ru.android.childdiary.presentation.medical.partitions.visits.DoctorVisitsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -94,12 +97,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
             @Override
             public void onPageSelected(int position) {
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
-                SwipeViewAdapter adapter = getSwipeListAdapter(position);
-                if (adapter != null) {
-                    adapter.getSwipeManager().update();
-                } else {
-                    logger.error("selected page: " + position + "; event adapter is null");
-                }
+                updateSwipeLayouts(position);
             }
 
             @Override
@@ -115,6 +113,46 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         return fragment;
     }
 
+    private void updateSwipeLayouts(int position) {
+        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        if (adapter != null) {
+            adapter.updateFabState();
+        } else {
+            logger.error("selected page: " + position + "; event adapter is null");
+        }
+    }
+
+    private void closeAllItems(int position) {
+        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        if (adapter != null) {
+            adapter.closeAllItems();
+        } else {
+            logger.error("selected page: " + position + "; adapter is null");
+        }
+    }
+
+    @Nullable
+    private SwipeViewAdapter getSwipeViewAdapter(int position) {
+        BaseMedicalDataFragment fragment = getSelectedPage(position);
+        return fragment == null ? null : fragment.getAdapter();
+    }
+
+    @Nullable
+    private BaseMedicalDataFragment getSelectedPage(int position) {
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments == null) {
+            return null;
+        }
+        for (Fragment fragment : fragments) {
+            if (position == 0 && fragment instanceof DoctorVisitsFragment) {
+                return (DoctorVisitsFragment) fragment;
+            } else if (position == 1 && fragment instanceof MedicineTakingListFragment) {
+                return (MedicineTakingListFragment) fragment;
+            }
+        }
+        return null;
+    }
+
     @Override
     protected void themeChanged() {
         super.themeChanged();
@@ -123,10 +161,28 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        int position = viewPager.getCurrentItem();
+        closeAllItems(position);
+    }
+
+    @Override
     public void showChild(@NonNull Child child) {
         super.showChild(child);
         if (child.getId() == null) {
             hideFabBar();
+        }
+    }
+
+    @Override
+    public void showFilter() {
+        int position = viewPager.getCurrentItem();
+        BaseMedicalDataFragment fragment = getSelectedPage(position);
+        if (fragment != null) {
+            fragment.showFilter();
+        } else {
+            logger.error("selected page: " + position + "; partition is null");
         }
     }
 
@@ -175,17 +231,5 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     @Override
     public void hideFabBar() {
         fab.hide();
-    }
-
-    @Nullable
-    private SwipeViewAdapter getSwipeListAdapter(int position) {
-        Fragment fragment = viewPagerAdapter.getItem(position);
-        SwipeViewAdapter adapter = null;
-        if (fragment instanceof DoctorVisitsFragment) {
-            adapter = ((DoctorVisitsFragment) fragment).getAdapter();
-        } else if (fragment instanceof MedicineTakingListFragment) {
-            adapter = ((MedicineTakingListFragment) fragment).getAdapter();
-        }
-        return adapter;
     }
 }

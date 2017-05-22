@@ -36,12 +36,12 @@ public class EventAdapter extends SwipeViewAdapter<
     @Override
     public void done(EventViewHolder viewHolder) {
         viewHolder.swipeLayout.addSwipeListener(new SwipeDoneAction(viewHolder.getItem(), itemActionListener));
-        swipeManager.closeAllItems();
+        closeAllItems();
     }
 
     @Override
     public void move(EventViewHolder viewHolder) {
         viewHolder.swipeLayout.addSwipeListener(new SwipeMoveAction(viewHolder.getItem(), itemActionListener));
-        swipeManager.closeAllItems();
+        closeAllItems();
     }
 }

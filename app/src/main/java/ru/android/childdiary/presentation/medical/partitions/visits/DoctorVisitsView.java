@@ -9,14 +9,12 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import org.joda.time.LocalTime;
 
-import java.util.List;
-
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.presentation.core.AppPartitionView;
+import ru.android.childdiary.presentation.core.BaseView;
 
-public interface DoctorVisitsView extends AppPartitionView {
+public interface DoctorVisitsView extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showDoctorVisits(@NonNull DoctorVisitsFilter filter, @NonNull List<DoctorVisit> doctorVisits);
+    void showDoctorVisitsState(@NonNull DoctorVisitsState doctorVisitsState);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToDoctorVisit(@NonNull DoctorVisit doctorVisit, @NonNull DoctorVisit defaultDoctorVisit,

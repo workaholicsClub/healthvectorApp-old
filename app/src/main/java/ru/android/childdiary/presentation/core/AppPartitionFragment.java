@@ -11,6 +11,8 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public abstract class AppPartitionFragment extends BaseMvpFragment implements AppPartitionView {
+    protected static final String TAG_FILTER = "TAG_FILTER";
+
     @NonNull
     @Getter(AccessLevel.PROTECTED)
     private Child child;
@@ -49,5 +51,8 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
             sex = child.getSex();
             themeChanged();
         }
+    }
+
+    public void showFilter() {
     }
 }

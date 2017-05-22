@@ -181,7 +181,8 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                 .dateTime(startDateTime)
                 .finishDateTime(finishDateTime)
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(noteView.getText());
+                .note(noteView.getText())
+                .isDone(isDone());
 
         return builder.build();
     }

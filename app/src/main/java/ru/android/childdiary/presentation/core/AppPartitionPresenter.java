@@ -8,7 +8,7 @@ import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 
 public abstract class AppPartitionPresenter<V extends AppPartitionView> extends BasePresenter<V> {
     @Inject
-    ChildInteractor childInteractor;
+    protected ChildInteractor childInteractor;
 
     @Override
     protected void onFirstViewAttach() {

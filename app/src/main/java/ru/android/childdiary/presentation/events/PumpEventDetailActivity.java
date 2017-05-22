@@ -145,7 +145,8 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
                 .leftAmountMl(amountMlPumpView.getAmountMlLeft())
                 .rightAmountMl(amountMlPumpView.getAmountMlRight())
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(noteView.getText());
+                .note(noteView.getText())
+                .isDone(isDone());
 
         return builder.build();
     }

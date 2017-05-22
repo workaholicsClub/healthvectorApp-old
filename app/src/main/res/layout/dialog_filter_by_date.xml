@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/field_height"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/filter_by_date_caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/date"
+        android:textAppearance="@style/SecondaryTextAppearance"
+        tools:ignore="Deprecated" />
+
+    <TextView
+        android:id="@+id/filter_by_date_value"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/field_height"
+        android:background="@drawable/background_clickable"
+        android:drawableEnd="@drawable/arrow_down_black"
+        android:drawablePadding="8dp"
+        android:drawableRight="@drawable/arrow_down_black"
+        android:gravity="center_vertical|end"
+        android:minWidth="@dimen/field_text_view_min_width"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textAppearance="@style/PrimaryTextAppearance" />
+</LinearLayout>

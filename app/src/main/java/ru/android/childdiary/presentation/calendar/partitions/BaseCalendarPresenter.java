@@ -62,8 +62,6 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
 
     private void onGetRequest(@NonNull GetEventsRequest request) {
         logger.debug("onGetRequest: " + request);
-        getViewState().showChild(request.getChild());
-        getViewState().setSelectedDate(request.getDate());
         requestBuilder.date(request.getDate()).child(request.getChild());
         requestData();
     }
@@ -78,7 +76,11 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
 
     private void onGetData(@NonNull GetEventsResponse response) {
         logger.debug("onGetData: " + response);
-        getViewState().showEvents(response.getRequest().getDate(), response.getEvents());
+        getViewState().showCalendarState(CalendarState.builder()
+                .child(response.getRequest().getChild())
+                .date(response.getRequest().getDate())
+                .events(response.getEvents())
+                .build());
     }
 
     public void switchDate(@NonNull LocalDate date) {
@@ -241,15 +243,26 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     // TODO EXERCISE
 
     public void done(@NonNull MasterEvent event) {
-        if (EventHelper.needToFillNoteOrPhoto(event)) {
-            getViewState().showNeedToFillNoteOrPhoto();
+        boolean willBeUndone = EventHelper.isDone(event);
+        if (willBeUndone) {
+            // можно развыполнить, не делаем проверок
+            switchDone(event);
         } else {
-            unsubscribeOnDestroy(calendarInteractor.done(event)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(doneEvent -> logger.debug("event done: " + doneEvent))
-                    .subscribe(doneEvent -> {
-                    }, this::onUnexpectedError));
+            // проверяем, можно ли выполнить событие
+            if (EventHelper.needToFillNoteOrPhoto(event)) {
+                getViewState().showNeedToFillNoteOrPhoto();
+            } else {
+                switchDone(event);
+            }
         }
+    }
+
+    private void switchDone(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(calendarInteractor.done(event)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(doneEvent -> logger.debug("event isDone: " + doneEvent))
+                .subscribe(doneEvent -> {
+                }, this::onUnexpectedError));
     }
 }

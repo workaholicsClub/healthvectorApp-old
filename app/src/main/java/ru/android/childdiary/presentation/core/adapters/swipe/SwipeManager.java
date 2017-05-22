@@ -5,12 +5,15 @@ import android.support.annotation.Nullable;
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class SwipeManager {
+import lombok.val;
+
+final class SwipeManager {
     private static final int INVALID_POSITION = -1;
-    private final Set<SwipeLayout> shownLayouts = new HashSet<>();
+    private final Set<WeakReference<SwipeLayout>> shownLayouts = new HashSet<>();
     private final Set<Integer> openedOrOpeningPositions = new HashSet<>();
     private FabController fabController;
     private int openPosition = INVALID_POSITION;
@@ -28,7 +31,7 @@ public final class SwipeManager {
             valueBox.onLayoutListener = new OnLayoutListener();
             swipeLayout.addSwipeListener(valueBox.swipeListener);
             swipeLayout.addOnLayoutListener(valueBox.onLayoutListener);
-            shownLayouts.add(swipeLayout);
+            shownLayouts.add(new WeakReference<>(swipeLayout));
             swipeLayout.setTag(valueBox);
         } else {
             valueBox = (ValueBox) swipeLayout.getTag();
@@ -39,8 +42,12 @@ public final class SwipeManager {
     }
 
     public void closeAllExcept(SwipeLayout layout) {
-        for (SwipeLayout swipeLayout : shownLayouts) {
-            if (swipeLayout != layout) {
+        val iterator = shownLayouts.iterator();
+        while (iterator.hasNext()) {
+            SwipeLayout swipeLayout = iterator.next().get();
+            if (swipeLayout == null) {
+                iterator.remove();
+            } else if (swipeLayout != layout) {
                 swipeLayout.close();
             }
         }
@@ -49,18 +56,24 @@ public final class SwipeManager {
     public void closeAllItems() {
         openPosition = INVALID_POSITION;
         openedOrOpeningPositions.clear();
-        for (SwipeLayout swipeLayout : shownLayouts) {
-            swipeLayout.close();
+        val iterator = shownLayouts.iterator();
+        while (iterator.hasNext()) {
+            SwipeLayout swipeLayout = iterator.next().get();
+            if (swipeLayout == null) {
+                iterator.remove();
+            } else {
+                swipeLayout.close();
+            }
         }
         showFabIfPossible();
     }
 
     public void setFabController(FabController fabController) {
         this.fabController = fabController;
-        update();
+        updateFabState();
     }
 
-    public void update() {
+    public void updateFabState() {
         if (hasOpenedItems()) {
             hideFab();
         } else {

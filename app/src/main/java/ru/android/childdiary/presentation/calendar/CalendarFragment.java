@@ -3,12 +3,12 @@ package ru.android.childdiary.presentation.calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
@@ -25,14 +25,12 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarFragment;
 import ru.android.childdiary.presentation.calendar.partitions.DayFragment;
 import ru.android.childdiary.presentation.calendar.partitions.MonthFragment;
 import ru.android.childdiary.presentation.calendar.partitions.WeekFragment;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
@@ -44,10 +42,15 @@ import ru.android.childdiary.presentation.main.widgets.FabToolbar;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
+import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
+
 public class CalendarFragment extends AppPartitionFragment implements CalendarView,
         FabController {
     private static final String KEY_SELECTED_PAGE = "calendar.selected_page";
     private static final int REQUEST_ADD_EVENT = 1;
+
+    @IdRes
+    private static final int FRAGMENT_CONTAINER_ID = R.id.fragmentContainer;
 
     @Inject
     RxSharedPreferences preferences;
@@ -58,13 +61,8 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
 
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
-
     @BindView(R.id.fabToolbar)
     FabToolbar fabToolbar;
-
-    private ViewPagerAdapter viewPagerAdapter;
 
     @Override
     protected void injectFragment(ApplicationComponent component) {
@@ -86,35 +84,77 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     private void setupViewPager() {
         Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 2).get();
         selectedPage = selectedPage == null ? 2 : selectedPage;
-        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(putArguments(new DayFragment()), getString(R.string.day));
-        viewPagerAdapter.addFragment(putArguments(new WeekFragment()), getString(R.string.week));
-        viewPagerAdapter.addFragment(putArguments(new MonthFragment()), getString(R.string.month));
-        viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setCurrentItem(selectedPage, false);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.day));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.week));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.month));
+        tabLayout.getTabAt(selectedPage).select();
+        showPage(selectedPage);
         WidgetsUtils.setupTabLayoutFont(tabLayout);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
-                SwipeViewAdapter adapter = getSwipeListAdapter(position);
-                if (adapter != null) {
-                    adapter.getSwipeManager().update();
-                } else {
-                    logger.error("selected page: " + position + "; event adapter is null");
-                }
+                showPage(position);
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+    }
+
+    @Nullable
+    private String getTagForPosition(int position) {
+        switch (position) {
+            case 0:
+                return DayFragment.class.getSimpleName();
+            case 1:
+                return WeekFragment.class.getSimpleName();
+            case 2:
+                return MonthFragment.class.getSimpleName();
+        }
+        return null;
+    }
+
+    private void showPage(int position) {
+        String tag = getTagForPosition(position);
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            fragment = createFragmentAtPosition(position);
+            logger.debug("fragment cache: create new fragment: " + fragment);
+        } else {
+            logger.debug("fragment cache: show fragment: " + fragment);
+        }
+        if (fragment == null) {
+            logger.error("no fragment found for position " + position);
+        }
+        showFragment(fragment, tag);
+    }
+
+    @Nullable
+    private Fragment createFragmentAtPosition(int position) {
+        switch (position) {
+            case 0:
+                return putArguments(new DayFragment());
+            case 1:
+                return putArguments(new WeekFragment());
+            case 2:
+                return putArguments(new MonthFragment());
+        }
+        return null;
+    }
+
+    private void showFragment(Fragment fragment, String tag) {
+        getChildFragmentManager()
+                .beginTransaction()
+                .setTransition(TRANSIT_UNSET)
+                .replace(FRAGMENT_CONTAINER_ID, fragment, tag)
+                .commit();
     }
 
     private Fragment putArguments(Fragment fragment) {
@@ -122,6 +162,31 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
         arguments.putSerializable(ExtraConstants.EXTRA_CHILD, getChild());
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    private void closeAllItems(int position) {
+        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        if (adapter != null) {
+            adapter.closeAllItems();
+        } else {
+            logger.error("selected page: " + position + "; event adapter is null");
+        }
+    }
+
+    @Nullable
+    private SwipeViewAdapter getSwipeViewAdapter(int position) {
+        BaseCalendarFragment fragment = getSelectedPage(position);
+        return fragment == null ? null : fragment.getEventAdapter();
+    }
+
+    @Nullable
+    private BaseCalendarFragment getSelectedPage(int position) {
+        String tag = getTagForPosition(position);
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(tag);
+        if (fragment instanceof BaseCalendarFragment) {
+            return (BaseCalendarFragment) fragment;
+        }
+        return null;
     }
 
     @Override
@@ -132,10 +197,36 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ADD_EVENT && resultCode == Activity.RESULT_OK) {
+            hideBarWithoutAnimation();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int position = tabLayout.getSelectedTabPosition();
+        closeAllItems(position);
+    }
+
+    @Override
     public void showChild(@NonNull Child child) {
         super.showChild(child);
         if (child.getId() == null) {
             hideFabBar();
+        }
+    }
+
+    @Override
+    public void showFilter() {
+        int position = tabLayout.getSelectedTabPosition();
+        BaseCalendarFragment fragment = getSelectedPage(position);
+        if (fragment != null) {
+            fragment.showFilter();
+        } else {
+            logger.error("selected page: " + position + "; partition is null");
         }
     }
 
@@ -195,14 +286,6 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ADD_EVENT && resultCode == Activity.RESULT_OK) {
-            hideBarWithoutAnimation();
-        }
-    }
-
-    @Override
     public void showFab() {
         fabToolbar.showFab();
     }
@@ -220,12 +303,5 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     @Override
     public void hideFabBar() {
         fabToolbar.hideFabBar();
-    }
-
-    @Nullable
-    private SwipeViewAdapter getSwipeListAdapter(int position) {
-        BaseCalendarFragment fragment = (BaseCalendarFragment) viewPagerAdapter.getItem(position);
-        EventAdapter eventAdapter = fragment.getEventAdapter();
-        return eventAdapter;
     }
 }

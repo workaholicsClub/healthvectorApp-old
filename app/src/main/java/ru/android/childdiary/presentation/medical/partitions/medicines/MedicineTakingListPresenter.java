@@ -18,12 +18,14 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
-import ru.android.childdiary.presentation.core.AppPartitionPresenter;
+import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.MedicineTakingParameters;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
-public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineTakingListView> {
+public class MedicineTakingListPresenter extends BasePresenter<MedicineTakingListView> {
+    private final GetMedicineTakingListRequest.GetMedicineTakingListRequestBuilder requestBuilder = GetMedicineTakingListRequest.builder();
+
     @Inject
     ChildInteractor childInteractor;
 
@@ -47,12 +49,18 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
                 (number, child) -> GetMedicineTakingListRequest.builder().child(child).build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::requestData, this::onUnexpectedError));
+                .subscribe(this::onGetRequest, this::onUnexpectedError));
     }
 
-    private void requestData(GetMedicineTakingListRequest request) {
+    private void onGetRequest(GetMedicineTakingListRequest request) {
+        logger.debug("onGetRequest: " + request);
+        requestBuilder.child(request.getChild());
+        requestData();
+    }
+
+    private void requestData() {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(medicineTakingInteractor.getMedicineTakingList(request)
+        subscription = unsubscribeOnDestroy(medicineTakingInteractor.getMedicineTakingList(requestBuilder.build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetData, this::onUnexpectedError));
@@ -60,7 +68,10 @@ public class MedicineTakingListPresenter extends AppPartitionPresenter<MedicineT
 
     private void onGetData(@NonNull GetMedicineTakingListResponse response) {
         logger.debug("onGetData: " + response);
-        getViewState().showMedicineTakingList(MedicineTakingListFilter.builder().build(), response.getMedicineTakingList());
+        getViewState().showMedicineTakingListState(MedicineTakingListState.builder()
+                .child(response.getRequest().getChild())
+                .medicineTakingList(response.getMedicineTakingList())
+                .build());
     }
 
     public void editMedicineTaking(@NonNull MedicineTaking medicineTaking) {

@@ -20,8 +20,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import org.joda.time.LocalDate;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lombok.Getter;
@@ -34,7 +32,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.adapters.calendar.CalendarViewAdapter;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
@@ -50,7 +47,6 @@ import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.DateUtils;
-import ru.android.childdiary.utils.StringUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> extends AppPartitionFragment implements BaseCalendarView,
@@ -218,23 +214,23 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
-    public void showChild(@NonNull Child child) {
-        super.showChild(child);
-        eventAdapter.getSwipeManager().setFabController(child.getId() == null ? null : fabController);
+    public void showFilter() {
+        // TODO filter events
+        showToast("filter");
     }
 
     @Override
-    public void setSelectedDate(@NonNull LocalDate date) {
-        logger.debug("setSelected: " + date);
-        calendarAdapter.setSelectedDate(date, false);
+    public void showCalendarState(CalendarState calendarState) {
+        logger.debug("showCalendarState: " + calendarState);
+
+        showChild(calendarState.getChild());
+
+        calendarAdapter.setSelectedDate(calendarState.getDate(), false);
         updateCalendarTitle();
-    }
+        updateEventsTitle(calendarState.getDate());
 
-    @Override
-    public void showEvents(@NonNull LocalDate date, @NonNull List<MasterEvent> events) {
-        logger.debug("showEvents: " + StringUtils.eventsList(events));
-        updateEventsTitle(date);
-        eventAdapter.setItems(events);
+        eventAdapter.setItems(calendarState.getEvents());
+        eventAdapter.setFabController(calendarState.getChild().getId() == null ? null : fabController);
     }
 
     @Override
