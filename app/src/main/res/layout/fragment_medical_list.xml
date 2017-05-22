@@ -26,17 +26,23 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewChips"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/chips_recycler_view_padding_bottom"
+                android:paddingEnd="@dimen/chips_recycler_view_padding_right"
+                android:paddingLeft="@dimen/chips_recycler_view_padding_left"
+                android:paddingRight="@dimen/chips_recycler_view_padding_right"
+                android:paddingStart="@dimen/chips_recycler_view_padding_left"
+                android:paddingTop="@dimen/chips_recycler_view_padding_top" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/footer_height"
                 android:background="@color/white"
-                android:paddingBottom="@dimen/events_padding_vertical"
-                android:paddingTop="@dimen/events_padding_vertical" />
-
-            <include layout="@layout/events_view_footer" />
+                android:paddingBottom="@dimen/recycler_view_padding_bottom"
+                android:paddingTop="@dimen/recycler_view_padding_top" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </FrameLayout>

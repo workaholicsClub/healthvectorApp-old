@@ -25,7 +25,9 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
+import ru.android.childdiary.presentation.medical.adapters.visits.DoctorChipsAdapter;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitActionListener;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitAdapter;
 import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitActivity;
@@ -53,6 +55,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
     @Getter
     private DoctorVisitAdapter adapter;
     private FabController fabController;
+    private DoctorChipsAdapter doctorChipsAdapter;
 
     @Override
     @LayoutRes
@@ -75,6 +78,10 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
         flowLayoutManager.setAutoMeasureEnabled(true);
         recyclerViewChips.setLayoutManager(flowLayoutManager);
+
+        doctorChipsAdapter = new DoctorChipsAdapter(getContext());
+        recyclerViewChips.setAdapter(doctorChipsAdapter);
+        recyclerViewChips.setVisibility(View.GONE);
     }
 
     @Override
@@ -123,6 +130,10 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         recyclerView.setVisibility(doctorVisits.isEmpty() ? View.GONE : View.VISIBLE);
         textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setFabController(child.getId() == null ? null : fabController);
+
+        List<Doctor> doctors = doctorVisitsState.getFilter().getSelectedItems();
+        doctorChipsAdapter.setItems(doctors);
+        recyclerViewChips.setVisibility(doctors.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override

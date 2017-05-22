@@ -104,4 +104,16 @@
     <dimen name="token_item_padding_vertical">5dp</dimen>
     <dimen name="token_item_radius">16dp</dimen>
     <dimen name="token_item_height">32dp</dimen>
+    <!-- medical data & chips recycler views -->
+    <dimen name="footer_height">80dp</dimen>
+    <dimen name="recycler_view_padding_top">16dp</dimen>
+    <dimen name="recycler_view_padding_bottom">16dp</dimen>
+    <dimen name="chips_recycler_view_padding_top">8dp</dimen>
+    <dimen name="chips_recycler_view_padding_bottom">0dp</dimen>
+    <dimen name="chips_recycler_view_padding_left">8dp</dimen>
+    <dimen name="chips_recycler_view_padding_right">8dp</dimen>
+    <dimen name="chips_item_padding_top">8dp</dimen>
+    <dimen name="chips_item_padding_bottom">0dp</dimen>
+    <dimen name="chips_item_padding_left">8dp</dimen>
+    <dimen name="chips_item_padding_right">8dp</dimen>
 </resources>

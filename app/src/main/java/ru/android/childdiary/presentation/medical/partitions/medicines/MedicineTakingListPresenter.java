@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import java.util.Collections;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -25,8 +27,6 @@ import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class MedicineTakingListPresenter extends BasePresenter<MedicineTakingListView> {
-    private final GetMedicineTakingListRequest.GetMedicineTakingListRequestBuilder requestBuilder = GetMedicineTakingListRequest.builder();
-
     @Inject
     ChildInteractor childInteractor;
 
@@ -51,37 +51,35 @@ public class MedicineTakingListPresenter extends BasePresenter<MedicineTakingLis
                         .child(child)
                         .filter(filter)
                         .build())
+                .doOnNext(request -> logger.debug("onGetRequest: " + request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetRequest, this::onUnexpectedError));
+                .subscribe(this::requestData, this::onUnexpectedError));
     }
 
-    private void onGetRequest(GetMedicineTakingListRequest request) {
-        logger.debug("onGetRequest: " + request);
-        requestBuilder.child(request.getChild());
-        requestData();
-    }
-
-    private void requestData() {
+    private void requestData(@NonNull GetMedicineTakingListRequest request) {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(medicineTakingInteractor.getMedicineTakingList(requestBuilder.build())
+        subscription = unsubscribeOnDestroy(medicineTakingInteractor.getMedicineTakingList(request)
+                .doOnNext(response -> logger.debug("onGetData: " + response))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetData, this::onUnexpectedError));
     }
 
     private void onGetData(@NonNull GetMedicineTakingListResponse response) {
-        logger.debug("onGetData: " + response);
         getViewState().showMedicineTakingListState(MedicineTakingListState.builder()
                 .child(response.getRequest().getChild())
                 .medicineTakingList(response.getMedicineTakingList())
+                .filter(response.getRequest().getFilter())
                 .build());
     }
 
     public void requestFilterDialog() {
         unsubscribeOnDestroy(
-                Observable.combineLatest(medicineTakingInteractor.getMedicines(),
-                        medicineTakingInteractor.getSelectedFilterValue(),
+                Observable.combineLatest(medicineTakingInteractor.getMedicines()
+                                .first(Collections.emptyList())
+                                .toObservable(),
+                        medicineTakingInteractor.getSelectedFilterValueOnce(),
                         ((medicines, filter) -> MedicineTakingFilterDialogArguments.builder()
                                 .items(medicines)
                                 .selectedItems(filter.getSelectedItems())

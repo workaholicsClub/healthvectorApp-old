@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import java.util.Collections;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -25,8 +27,6 @@ import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
-    private final GetDoctorVisitsRequest.GetDoctorVisitsRequestBuilder requestBuilder = GetDoctorVisitsRequest.builder();
-
     @Inject
     ChildInteractor childInteractor;
 
@@ -51,37 +51,35 @@ public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
                         .child(child)
                         .filter(filter)
                         .build())
+                .doOnNext(request -> logger.debug("onGetRequest: " + request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetRequest, this::onUnexpectedError));
+                .subscribe(this::requestData, this::onUnexpectedError));
     }
 
-    private void onGetRequest(GetDoctorVisitsRequest request) {
-        logger.debug("onGetRequest: " + request);
-        requestBuilder.child(request.getChild());
-        requestData();
-    }
-
-    private void requestData() {
+    private void requestData(@NonNull GetDoctorVisitsRequest request) {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(doctorVisitInteractor.getDoctorVisits(requestBuilder.build())
+        subscription = unsubscribeOnDestroy(doctorVisitInteractor.getDoctorVisits(request)
+                .doOnNext(response -> logger.debug("onGetData: " + response))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetData, this::onUnexpectedError));
     }
 
     private void onGetData(@NonNull GetDoctorVisitsResponse response) {
-        logger.debug("onGetData: " + response);
         getViewState().showDoctorVisitsState(DoctorVisitsState.builder()
                 .child(response.getRequest().getChild())
                 .doctorVisits(response.getDoctorVisits())
+                .filter(response.getRequest().getFilter())
                 .build());
     }
 
     public void requestFilterDialog() {
         unsubscribeOnDestroy(
-                Observable.combineLatest(doctorVisitInteractor.getDoctors(),
-                        doctorVisitInteractor.getSelectedFilterValue(),
+                Observable.combineLatest(doctorVisitInteractor.getDoctors()
+                                .first(Collections.emptyList())
+                                .toObservable(),
+                        doctorVisitInteractor.getSelectedFilterValueOnce(),
                         ((doctors, filter) -> DoctorVisitFilterDialogArguments.builder()
                                 .items(doctors)
                                 .selectedItems(filter.getSelectedItems())

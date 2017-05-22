@@ -25,7 +25,9 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
+import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
+import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineChipsAdapter;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingActionListener;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingAdapter;
 import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingActivity;
@@ -53,6 +55,7 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
     @Getter
     private MedicineTakingAdapter adapter;
     private FabController fabController;
+    private MedicineChipsAdapter medicineChipsAdapter;
 
     @Override
     @LayoutRes
@@ -75,6 +78,10 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
         flowLayoutManager.setAutoMeasureEnabled(true);
         recyclerViewChips.setLayoutManager(flowLayoutManager);
+
+        medicineChipsAdapter = new MedicineChipsAdapter(getContext());
+        recyclerViewChips.setAdapter(medicineChipsAdapter);
+        recyclerViewChips.setVisibility(View.GONE);
     }
 
     @Override
@@ -123,6 +130,10 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         recyclerView.setVisibility(medicineTakingList.isEmpty() ? View.GONE : View.VISIBLE);
         textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setFabController(child.getId() == null ? null : fabController);
+
+        List<Medicine> medicines = medicineTakingListState.getFilter().getSelectedItems();
+        medicineChipsAdapter.setItems(medicines);
+        recyclerViewChips.setVisibility(medicines.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override
