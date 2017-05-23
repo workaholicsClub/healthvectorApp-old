@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/textView"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="@dimen/token_item_height"
-    android:background="@drawable/token_item_background"
-    android:gravity="center"
-    android:paddingBottom="@dimen/token_item_padding_vertical"
-    android:paddingLeft="@dimen/token_item_padding_horizontal"
-    android:paddingRight="@dimen/token_item_padding_horizontal"
-    android:paddingTop="@dimen/token_item_padding_vertical"
-    android:textAppearance="@style/TokenItemTextAppearance" />
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/token_item_height"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/token_item_background"
+        android:gravity="center"
+        android:paddingLeft="@dimen/token_item_padding_horizontal"
+        android:paddingRight="@dimen/token_item_padding_horizontal"
+        android:textAppearance="@style/TokenItemTextAppearance" />
+</FrameLayout>

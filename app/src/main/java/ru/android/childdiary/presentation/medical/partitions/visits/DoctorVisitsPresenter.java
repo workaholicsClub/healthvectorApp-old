@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.InjectViewState;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,14 +21,15 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
-import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.DoctorVisitParameters;
+import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
 import ru.android.childdiary.presentation.medical.filter.adapters.ChipsUtils;
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogArguments;
+import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
-public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
+public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisitsView> {
     @Inject
     ChildInteractor childInteractor;
 
@@ -75,9 +77,11 @@ public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
                 .build());
     }
 
+    @Override
     public void requestFilterDialog() {
         unsubscribeOnDestroy(
-                Observable.combineLatest(doctorVisitInteractor.getDoctors()
+                Observable.combineLatest(
+                        doctorVisitInteractor.getDoctors()
                                 .first(Collections.emptyList())
                                 .toObservable(),
                         doctorVisitInteractor.getSelectedFilterValueOnce(),
@@ -150,5 +154,14 @@ public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
                 .doOnNext(response -> getViewState().showDeletingEvents(false))
                 .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(response -> getViewState().doctorVisitDeleted(doctorVisit), this::onUnexpectedError));
+    }
+
+    @Override
+    public void setFilter(@NonNull List<Chips> chips) {
+        unsubscribeOnDestroy(doctorVisitInteractor.setSelectedFilterValueObservable(ChipsUtils.mapToDoctorFilter(chips))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filter -> {
+                }, this::onUnexpectedError));
     }
 }

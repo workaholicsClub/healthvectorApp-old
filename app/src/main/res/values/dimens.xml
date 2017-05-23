@@ -101,7 +101,6 @@
     <dimen name="filter_base_padding">8dp</dimen>
     <dimen name="filter_dialog_width">400dp</dimen>
     <dimen name="token_item_padding_horizontal">12dp</dimen>
-    <dimen name="token_item_padding_vertical">5dp</dimen>
     <dimen name="token_item_radius">16dp</dimen>
     <dimen name="token_item_height">32dp</dimen>
     <!-- medical data & chips recycler views -->
@@ -116,4 +115,7 @@
     <dimen name="chips_item_padding_bottom">0dp</dimen>
     <dimen name="chips_item_padding_left">8dp</dimen>
     <dimen name="chips_item_padding_right">8dp</dimen>
+    <dimen name="auto_complete_text_view_margin_right">24dp</dimen>
+    <dimen name="delimiter_height">1dp</dimen>
+    <dimen name="delimiter_margin">6dp</dimen>
 </resources>

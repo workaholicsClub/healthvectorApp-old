@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.medical.filter.visits;
 
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.tokenautocomplete.FilteredArrayAdapter;
@@ -9,10 +10,10 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
-import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsFilter;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorFilteredAdapter;
+import ru.android.childdiary.presentation.medical.filter.core.BaseTokenCompleteTextView;
 import ru.android.childdiary.presentation.medical.filter.core.MedicalFilterDialogFragment;
 
 public class DoctorVisitFilterDialogFragment
@@ -22,8 +23,22 @@ public class DoctorVisitFilterDialogFragment
     DoctorVisitFilterPresenter presenter;
 
     @Override
-    protected int getLayoutResourceId() {
-        return R.layout.dialog_filter_doctor_visit;
+    protected void setupUi() {
+        super.setupUi();
+
+        textViewByDoctor.setVisibility(View.VISIBLE);
+        doctorTokenCompleteTextView.setVisibility(View.VISIBLE);
+        textViewByMedicine.setVisibility(View.GONE);
+        medicineTokenCompleteTextView.setVisibility(View.GONE);
+
+        for (Doctor doctor : dialogArguments.getSelectedItems()) {
+            getAutoCompleteTextView().addObject(doctor);
+        }
+    }
+
+    @Override
+    protected BaseTokenCompleteTextView<Doctor> getAutoCompleteTextView() {
+        return doctorTokenCompleteTextView;
     }
 
     @Override

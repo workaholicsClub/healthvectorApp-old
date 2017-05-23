@@ -34,10 +34,24 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
         }
     }
 
+    public List<T> getItems() {
+        return new ArrayList<>(items);
+    }
+
     public void setItems(@NonNull List<T> items) {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListDiff<>(this.items, items, this), false);
         diffResult.dispatchUpdatesTo(this);
         this.items = new ArrayList<>(items);
+    }
+
+    public boolean deleteItem(T item) {
+        int position = items.indexOf(item);
+        if (position < 0) {
+            return false;
+        }
+        items.remove(item);
+        notifyItemRemoved(position);
+        return true;
     }
 
     public final void updatePartially(@NonNull T item) {

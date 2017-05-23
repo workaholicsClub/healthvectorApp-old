@@ -30,12 +30,16 @@
     <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
         android:id="@+id/checkBoxView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/delimiter_margin" />
+
+    <include layout="@layout/delimiter" />
 
     <ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView
         android:id="@+id/repeatParametersView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/delimiter_margin" />
 
     <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView
         android:id="@+id/noteWithPhotoView"

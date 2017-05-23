@@ -201,4 +201,22 @@
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
     </style>
+
+    <style name="BaseAutoCompleteTextViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/profile_margin_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/profile_margin_horizontal</item>
+        <item name="android:layout_marginRight">@dimen/auto_complete_text_view_margin_right</item>
+        <item name="android:layout_marginTop">@dimen/profile_margin_vertical</item>
+        <item name="android:background">@drawable/edit_text_background</item>
+        <item name="android:drawableEnd">@drawable/arrow_down_black</item>
+        <item name="android:drawableRight">@drawable/arrow_down_black</item>
+        <item name="android:paddingBottom">@dimen/name_edit_text_padding_bottom</item>
+        <item name="android:textAppearance">@style/PrimaryTextAppearance</item>
+        <item name="android:textColorHint">@color/placeholder_text</item>
+        <item name="android:textCursorDrawable">@drawable/edit_text_cursor</item>
+    </style>
+
+    <style name="AutoCompleteTextViewStyle" parent="BaseAutoCompleteTextViewStyle" />
 </resources>

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.InjectViewState;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,14 +21,15 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
-import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.MedicineTakingParameters;
+import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
 import ru.android.childdiary.presentation.medical.filter.adapters.ChipsUtils;
 import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
+import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
-public class MedicineTakingListPresenter extends BasePresenter<MedicineTakingListView> {
+public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<MedicineTakingListView> {
     @Inject
     ChildInteractor childInteractor;
 
@@ -75,9 +77,11 @@ public class MedicineTakingListPresenter extends BasePresenter<MedicineTakingLis
                 .build());
     }
 
+    @Override
     public void requestFilterDialog() {
         unsubscribeOnDestroy(
-                Observable.combineLatest(medicineTakingInteractor.getMedicines()
+                Observable.combineLatest(
+                        medicineTakingInteractor.getMedicines()
                                 .first(Collections.emptyList())
                                 .toObservable(),
                         medicineTakingInteractor.getSelectedFilterValueOnce(),
@@ -150,5 +154,14 @@ public class MedicineTakingListPresenter extends BasePresenter<MedicineTakingLis
                 .doOnNext(response -> getViewState().showDeletingEvents(false))
                 .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(response -> getViewState().medicineTakingDeleted(medicineTaking), this::onUnexpectedError));
+    }
+
+    @Override
+    public void setFilter(@NonNull List<Chips> chips) {
+        unsubscribeOnDestroy(medicineTakingInteractor.setSelectedFilterValueObservable(ChipsUtils.mapToMedicineFilter(chips))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filter -> {
+                }, this::onUnexpectedError));
     }
 }
