@@ -15,6 +15,7 @@ final class SwipeManager {
     private static final int INVALID_POSITION = -1;
     private final Set<WeakReference<SwipeLayout>> shownLayouts = new HashSet<>();
     private final Set<Integer> openedOrOpeningPositions = new HashSet<>();
+    @Nullable
     private FabController fabController;
     private int openPosition = INVALID_POSITION;
 
@@ -68,7 +69,7 @@ final class SwipeManager {
         showFabIfPossible();
     }
 
-    public void setFabController(FabController fabController) {
+    public void setFabController(@Nullable FabController fabController) {
         if (this.fabController != null && fabController == null) {
             this.fabController.hideFabBar();
         }

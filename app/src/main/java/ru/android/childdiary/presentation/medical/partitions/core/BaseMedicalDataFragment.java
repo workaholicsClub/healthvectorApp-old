@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.medical.partitions.core;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
     protected RecyclerView recyclerView;
 
     protected ChipsAdapter chipsAdapter;
+    @Nullable
     protected FabController fabController;
 
     public abstract SwipeViewAdapter getAdapter();
