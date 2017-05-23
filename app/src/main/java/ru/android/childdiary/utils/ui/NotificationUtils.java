@@ -56,14 +56,15 @@ public class NotificationUtils {
         DateTime now = DateTime.now();
         DateTime start = event.getDateTime();
         if (now.isAfter(start) || now.isEqual(start)) {
-            contentTitle = context.getString(R.string.child_sleep, event.getChild().getName());
+            contentTitle = context.getString(R.string.child_sleep,
+                    event.getChild() == null ? null : event.getChild().getName());
             contentText = TimeUtils.timerString(context, start, now);
         } else {
             contentTitle = context.getString(R.string.sleep_timer);
             String duration = TimeUtils.timerString(context, now, start);
             contentText = context.getString(R.string.will_start, duration);
         }
-        builder.setSmallIcon(ResourcesUtils.getNotificationSleepRes(event.getChild().getSex()))
+        builder.setSmallIcon(ResourcesUtils.getNotificationSleepRes(event.getChild()))
                 .setContentTitle(contentTitle)
                 .setWhen(event.getDateTime().toDate().getTime())
                 .setContentText(contentText);

@@ -25,12 +25,12 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
-import ru.android.childdiary.presentation.medical.adapters.visits.DoctorChipsAdapter;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitActionListener;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitAdapter;
 import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitActivity;
+import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
+import ru.android.childdiary.presentation.medical.filter.adapters.ChipsAdapter;
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogArguments;
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogFragment;
 import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
@@ -55,7 +55,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
     @Getter
     private DoctorVisitAdapter adapter;
     private FabController fabController;
-    private DoctorChipsAdapter doctorChipsAdapter;
+    private ChipsAdapter chipsAdapter;
 
     @Override
     @LayoutRes
@@ -79,8 +79,8 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         flowLayoutManager.setAutoMeasureEnabled(true);
         recyclerViewChips.setLayoutManager(flowLayoutManager);
 
-        doctorChipsAdapter = new DoctorChipsAdapter(getContext());
-        recyclerViewChips.setAdapter(doctorChipsAdapter);
+        chipsAdapter = new ChipsAdapter(getContext());
+        recyclerViewChips.setAdapter(chipsAdapter);
         recyclerViewChips.setVisibility(View.GONE);
     }
 
@@ -131,9 +131,9 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setFabController(child.getId() == null ? null : fabController);
 
-        List<Doctor> doctors = doctorVisitsState.getFilter().getSelectedItems();
-        doctorChipsAdapter.setItems(doctors);
-        recyclerViewChips.setVisibility(doctors.isEmpty() ? View.GONE : View.VISIBLE);
+        List<Chips> chips = doctorVisitsState.getChips();
+        chipsAdapter.setItems(chips);
+        recyclerViewChips.setVisibility(chips.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override

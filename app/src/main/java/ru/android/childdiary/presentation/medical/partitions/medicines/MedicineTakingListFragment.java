@@ -25,12 +25,12 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
-import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineChipsAdapter;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingActionListener;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingAdapter;
 import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingActivity;
+import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
+import ru.android.childdiary.presentation.medical.filter.adapters.ChipsAdapter;
 import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
 import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogFragment;
 import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
@@ -55,7 +55,7 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
     @Getter
     private MedicineTakingAdapter adapter;
     private FabController fabController;
-    private MedicineChipsAdapter medicineChipsAdapter;
+    private ChipsAdapter chipsAdapter;
 
     @Override
     @LayoutRes
@@ -79,8 +79,8 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         flowLayoutManager.setAutoMeasureEnabled(true);
         recyclerViewChips.setLayoutManager(flowLayoutManager);
 
-        medicineChipsAdapter = new MedicineChipsAdapter(getContext());
-        recyclerViewChips.setAdapter(medicineChipsAdapter);
+        chipsAdapter = new ChipsAdapter(getContext());
+        recyclerViewChips.setAdapter(chipsAdapter);
         recyclerViewChips.setVisibility(View.GONE);
     }
 
@@ -131,9 +131,9 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setFabController(child.getId() == null ? null : fabController);
 
-        List<Medicine> medicines = medicineTakingListState.getFilter().getSelectedItems();
-        medicineChipsAdapter.setItems(medicines);
-        recyclerViewChips.setVisibility(medicines.isEmpty() ? View.GONE : View.VISIBLE);
+        List<Chips> chips = medicineTakingListState.getChips();
+        chipsAdapter.setItems(chips);
+        recyclerViewChips.setVisibility(chips.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override

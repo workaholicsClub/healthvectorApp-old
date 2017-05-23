@@ -22,6 +22,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTaki
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.MedicineTakingParameters;
+import ru.android.childdiary.presentation.medical.filter.adapters.ChipsUtils;
 import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -70,7 +71,7 @@ public class MedicineTakingListPresenter extends BasePresenter<MedicineTakingLis
         getViewState().showMedicineTakingListState(MedicineTakingListState.builder()
                 .child(response.getRequest().getChild())
                 .medicineTakingList(response.getMedicineTakingList())
-                .filter(response.getRequest().getFilter())
+                .chips(ChipsUtils.mapFilterToChips(response.getRequest().getFilter()))
                 .build());
     }
 

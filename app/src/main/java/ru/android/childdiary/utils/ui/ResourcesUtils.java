@@ -292,8 +292,9 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
-    public static int getNotificationSleepRes(@Nullable Sex sex) {
+    public static int getNotificationSleepRes(@Nullable Child child) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Sex sex = child == null ? null : child.getSex();
             return sex == null || sex == Sex.MALE
                     ? R.drawable.ic_notification_sleep_pre_lollipop_boy
                     : R.drawable.ic_notification_sleep_pre_lollipop_girl;

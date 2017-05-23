@@ -22,6 +22,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisits
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.DoctorVisitParameters;
+import ru.android.childdiary.presentation.medical.filter.adapters.ChipsUtils;
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogArguments;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -70,7 +71,7 @@ public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
         getViewState().showDoctorVisitsState(DoctorVisitsState.builder()
                 .child(response.getRequest().getChild())
                 .doctorVisits(response.getDoctorVisits())
-                .filter(response.getRequest().getFilter())
+                .chips(ChipsUtils.mapFilterToChips(response.getRequest().getFilter()))
                 .build());
     }
 
