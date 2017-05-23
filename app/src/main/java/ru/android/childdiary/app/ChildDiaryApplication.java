@@ -45,8 +45,7 @@ public class ChildDiaryApplication extends MultiDexApplication {
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath(FontUtils.getFontPathRegular(this))
                 .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+                .build());
 
         startService(new Intent(this, TimerService.class));
     }
