@@ -80,15 +80,16 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
 
         List<DoctorVisit> doctorVisits = doctorVisitsState.getDoctorVisits();
         adapter.setItems(doctorVisits);
-        recyclerView.setVisibility(doctorVisits.isEmpty() ? View.GONE : View.VISIBLE);
-        textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setFabController(child.getId() == null ? null : fabController);
+        recyclerView.setVisibility(doctorVisits.isEmpty() ? View.GONE : View.VISIBLE);
 
         List<Chips> chips = doctorVisitsState.getChips();
         chipsAdapter.setItems(chips);
         recyclerViewChips.setVisibility(chips.isEmpty() ? View.GONE : View.VISIBLE);
 
         line.setVisibility(doctorVisits.isEmpty() && chips.isEmpty() ? View.GONE : View.VISIBLE);
+        textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
+        textViewIntention.setText(chips.isEmpty() ? R.string.add_doctor_visit : R.string.nothing_found);
     }
 
     @Override

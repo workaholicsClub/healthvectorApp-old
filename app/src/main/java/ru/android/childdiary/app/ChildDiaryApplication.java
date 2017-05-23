@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lombok.Getter;
+import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.di.DaggerApplicationComponent;
@@ -27,8 +28,9 @@ public class ChildDiaryApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        // TODO: setup custom uncaught exception handler; log exception to file; for debug purposes
-        // TODO: log to external files path if available
+        // install uncaught exception handler before initializing crash report system
+        Thread.setDefaultUncaughtExceptionHandler(
+                new ChildDiaryUncaugthExceptionHandler(this, BuildConfig.DEBUG));
 
         LogSystem.initLogger(this);
         logger = LoggerFactory.getLogger(toString());

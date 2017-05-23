@@ -5,6 +5,10 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -167,5 +171,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <!--meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="4a66c48113129e763de187db25f4c15319412272" /-->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="9a8fc272c5361d9a35b084ac9b0e810d8a453b93" />
     </application>
 </manifest>

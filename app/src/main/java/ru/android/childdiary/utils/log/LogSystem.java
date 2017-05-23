@@ -26,7 +26,7 @@ public class LogSystem {
             factories.add(new FileCustomAppenderFactory());
         }
         factories.add(new CrashReportSystemCustomAppenderFactory());
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && !CrashReportSystem.isWritingToLogCat()) {
             factories.add(new LogcatCustomAppenderFactory());
         }
 

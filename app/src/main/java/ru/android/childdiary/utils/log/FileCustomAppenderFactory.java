@@ -13,6 +13,7 @@ import ch.qos.logback.core.rolling.RollingPolicy;
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
 import ch.qos.logback.core.rolling.TriggeringPolicy;
 import lombok.val;
+import ru.android.childdiary.utils.DeviceUtils;
 
 class FileCustomAppenderFactory extends AbstractCustomAppenderFactory {
     private static final int MAX_LOG_FILE_COUNT = 2;
@@ -25,7 +26,8 @@ class FileCustomAppenderFactory extends AbstractCustomAppenderFactory {
 
     @Override
     public Appender<ILoggingEvent> getAppender(LoggerContext loggerContext, Context appContext) {
-        val filesDir = appContext.getFilesDir();
+        val filesDir = DeviceUtils.isExternalStorageWritable()
+                ? appContext.getExternalFilesDir(null) : appContext.getFilesDir();
         return getAppender(loggerContext, filesDir);
     }
 

@@ -80,15 +80,16 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
 
         List<MedicineTaking> medicineTakingList = medicineTakingListState.getMedicineTakingList();
         adapter.setItems(medicineTakingList);
-        recyclerView.setVisibility(medicineTakingList.isEmpty() ? View.GONE : View.VISIBLE);
-        textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setFabController(child.getId() == null ? null : fabController);
+        recyclerView.setVisibility(medicineTakingList.isEmpty() ? View.GONE : View.VISIBLE);
 
         List<Chips> chips = medicineTakingListState.getChips();
         chipsAdapter.setItems(chips);
         recyclerViewChips.setVisibility(chips.isEmpty() ? View.GONE : View.VISIBLE);
 
         line.setVisibility(medicineTakingList.isEmpty() && chips.isEmpty() ? View.GONE : View.VISIBLE);
+        textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
+        textViewIntention.setText(chips.isEmpty() ? R.string.add_medicine_taking : R.string.nothing_found);
     }
 
     @Override
