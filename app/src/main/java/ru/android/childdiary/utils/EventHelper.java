@@ -19,7 +19,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 
@@ -122,16 +121,5 @@ public class EventHelper {
     public static boolean sameEvent(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {
         return event1 != null && event2 != null
                 && ObjectUtils.equals(event1.getMasterEventId(), event2.getMasterEventId());
-    }
-
-    public static boolean sameChild(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {
-        return event1 != null && event2 != null
-                && event1.getChild() != null && event2.getChild() != null
-                && ObjectUtils.equals(event1.getChild().getId(), event2.getChild().getId());
-    }
-
-    public static boolean sameChild(@Nullable Child child, @Nullable MasterEvent event) {
-        return child != null && event != null && event.getChild() != null
-                && ObjectUtils.equals(child.getId(), event.getChild().getId());
     }
 }

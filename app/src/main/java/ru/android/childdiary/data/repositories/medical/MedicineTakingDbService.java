@@ -103,7 +103,7 @@ public class MedicineTakingDbService {
                 .map(medicineTakingList -> GetMedicineTakingListResponse.builder().request(request).medicineTakingList(medicineTakingList).build());
     }
 
-    public Single<Boolean> hasConnectedEvents(@lombok.NonNull MedicineTaking medicineTaking) {
+    public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {
         return dataStore.count(MedicineTakingEventEntity.class)
                 .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTaking.getId()))
                 .get()

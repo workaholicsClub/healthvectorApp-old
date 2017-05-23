@@ -89,7 +89,7 @@ public class DoctorVisitDbService {
                 .map(doctorVisits -> GetDoctorVisitsResponse.builder().request(request).doctorVisits(doctorVisits).build());
     }
 
-    public Single<Boolean> hasConnectedEvents(@lombok.NonNull DoctorVisit doctorVisit) {
+    public Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit) {
         return dataStore.count(DoctorVisitEventEntity.class)
                 .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisit.getId()))
                 .get()
