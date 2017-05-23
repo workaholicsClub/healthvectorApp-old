@@ -83,4 +83,12 @@ public class DateUtils {
         String pattern = context.getString(R.string.time_format);
         return DateTimeFormat.forPattern(pattern);
     }
+
+    public static DateTime midnight(LocalDate date) {
+        return date.toDateTime(LocalTime.MIDNIGHT);
+    }
+
+    public static DateTime nextDayMidnight(LocalDate date) {
+        return date.plusDays(1).toDateTime(LocalTime.MIDNIGHT);
+    }
 }

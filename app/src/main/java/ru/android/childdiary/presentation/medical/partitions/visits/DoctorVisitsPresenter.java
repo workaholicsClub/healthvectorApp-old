@@ -10,10 +10,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
@@ -78,7 +80,12 @@ public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisits
     }
 
     @Override
-    public void requestFilterDialog() {
+    protected Single<Boolean> hasDataToFilter(@NonNull Child child) {
+        return doctorVisitInteractor.hasDataToFilter(child);
+    }
+
+    @Override
+    protected void showFilterDialog() {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         doctorVisitInteractor.getDoctors()

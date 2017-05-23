@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.core.CleanUpDbService;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
@@ -65,6 +66,11 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     @Override
     public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {
         return medicineTakingDbService.hasConnectedEvents(medicineTaking);
+    }
+
+    @Override
+    public Single<Boolean> hasDataToFilter(@NonNull Child child) {
+        return medicineTakingDbService.hasDataToFilter(child);
     }
 
     @Override

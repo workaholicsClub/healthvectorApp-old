@@ -22,6 +22,7 @@ import ru.android.childdiary.data.repositories.medical.MedicineTakingFilterDataR
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
@@ -154,6 +155,10 @@ public class MedicineTakingInteractor {
 
     public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {
         return medicineTakingRepository.hasConnectedEvents(medicineTaking);
+    }
+
+    public Single<Boolean> hasDataToFilter(@NonNull Child child) {
+        return medicineTakingRepository.hasDataToFilter(child);
     }
 
     public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {

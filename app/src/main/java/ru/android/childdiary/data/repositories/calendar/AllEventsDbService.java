@@ -2,9 +2,7 @@ package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -48,6 +46,7 @@ import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.utils.DateUtils;
 
 @Singleton
 public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEvent> {
@@ -117,14 +116,6 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     @Inject
     public AllEventsDbService(ReactiveEntityStore<Persistable> dataStore) {
         this.dataStore = dataStore;
-    }
-
-    private static DateTime midnight(LocalDate date) {
-        return date.toDateTime(LocalTime.MIDNIGHT);
-    }
-
-    private static DateTime nextDayMidnight(LocalDate date) {
-        return date.plusDays(1).toDateTime(LocalTime.MIDNIGHT);
     }
 
     private static Child mapToChild(@NonNull Tuple data) {
@@ -281,8 +272,8 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .leftJoin(MedicineTakingEntity.class).on(MedicineTakingEntity.ID.eq(MedicineTakingEventEntity.MEDICINE_TAKING_ID))
                 .leftJoin(MedicineEntity.class).on(MedicineEntity.ID.eq(MedicineTakingEventEntity.MEDICINE_ID))
                 .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(midnight(selectedDate)))
-                .and(MasterEventEntity.DATE_TIME.lessThan(nextDayMidnight(selectedDate)))
+                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.midnight(selectedDate)))
+                .and(MasterEventEntity.DATE_TIME.lessThan(DateUtils.nextDayMidnight(selectedDate)))
                 .and(MasterEventEntity.EVENT_TYPE.notNull())
                 .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
                 .get()

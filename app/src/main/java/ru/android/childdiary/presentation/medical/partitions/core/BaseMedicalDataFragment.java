@@ -80,6 +80,11 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
     }
 
     @Override
+    public void showNoDataToFilter() {
+        showToast(getString(R.string.no_data_to_filter));
+    }
+
+    @Override
     public void onChipsDeleteClick(Chips chips) {
         boolean result = chipsAdapter.deleteItem(chips);
         if (result) {

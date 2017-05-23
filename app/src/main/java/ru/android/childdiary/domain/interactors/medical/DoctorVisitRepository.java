@@ -7,6 +7,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
@@ -33,6 +34,8 @@ public interface DoctorVisitRepository {
     Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request);
 
     Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit);
+
+    Single<Boolean> hasDataToFilter(@NonNull Child child);
 
     Observable<UpsertDoctorVisitResponse> addDoctorVisit(@NonNull UpsertDoctorVisitRequest request);
 

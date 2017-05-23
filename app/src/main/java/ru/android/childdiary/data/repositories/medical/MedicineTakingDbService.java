@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,9 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
+import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
+import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
@@ -34,10 +37,12 @@ import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListFilter;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
+import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -93,10 +98,33 @@ public class MedicineTakingDbService {
 
     public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {
         Child child = request.getChild();
-        return dataStore.select(MedicineTakingEntity.class)
+        WhereAndOr<ReactiveResult<MedicineTakingEntity>> select = dataStore.select(MedicineTakingEntity.class)
                 .where(MedicineTakingEntity.CHILD_ID.eq(child.getId()))
-                .and(MedicineTakingEntity.DELETED.isNull().or(MedicineTakingEntity.DELETED.eq(false)))
-                .orderBy(MedicineTakingEntity.DATE_TIME, MedicineTakingEntity.MEDICINE_ID, MedicineTakingEntity.ID)
+                .and(MedicineTakingEntity.DELETED.isNull().or(MedicineTakingEntity.DELETED.eq(false)));
+
+        GetMedicineTakingListFilter filter = request.getFilter();
+
+        LocalDate fromDate = filter.getFromDate();
+        if (fromDate != null) {
+            select = select.and(MedicineTakingEntity.DATE_TIME.greaterThanOrEqual(DateUtils.midnight(fromDate)));
+        }
+
+        LocalDate toDate = filter.getToDate();
+        if (toDate != null) {
+            select = select.and(MedicineTakingEntity.DATE_TIME.lessThan(DateUtils.nextDayMidnight(toDate)));
+        }
+
+        List<Medicine> medicines = filter.getSelectedItems();
+        if (!medicines.isEmpty()) {
+            List<Long> ids = Observable.fromIterable(medicines)
+                    .filter(medicine -> medicine.getId() != null)
+                    .map(Medicine::getId)
+                    .toList()
+                    .blockingGet();
+            select = select.and(MedicineTakingEntity.MEDICINE_ID.in(ids));
+        }
+
+        return select.orderBy(MedicineTakingEntity.DATE_TIME, MedicineTakingEntity.MEDICINE_ID, MedicineTakingEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineTakingMapper))
@@ -106,6 +134,15 @@ public class MedicineTakingDbService {
     public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {
         return dataStore.count(MedicineTakingEventEntity.class)
                 .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTaking.getId()))
+                .get()
+                .single()
+                .map(count -> count > 0);
+    }
+
+    public Single<Boolean> hasDataToFilter(@NonNull Child child) {
+        return dataStore.count(MedicineTakingEntity.class)
+                .where(MedicineTakingEntity.CHILD_ID.eq(child.getId()))
+                .and(MedicineTakingEntity.DELETED.isNull().or(MedicineTakingEntity.DELETED.eq(false)))
                 .get()
                 .single()
                 .map(count -> count > 0);
