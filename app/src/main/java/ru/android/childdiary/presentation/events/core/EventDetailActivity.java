@@ -55,6 +55,8 @@ import static android.view.View.VISIBLE;
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent & ContentObject<T> & LinearGroupItem<T>>
         extends BaseMvpActivity
         implements EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener {
+    private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
+
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
 
@@ -247,6 +249,17 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 .setMessage(R.string.need_to_fill_not_or_photo)
                 .setPositiveButton(R.string.ok, null)
                 .show();
+    }
+
+    @Override
+    public void showDeletingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_deleting));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS);
+        }
     }
 
     @Override

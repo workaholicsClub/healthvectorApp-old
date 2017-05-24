@@ -107,10 +107,13 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     public void deleteLinearGroup(@NonNull MasterEvent event) {
         unsubscribe();
+        getViewState().showDeletingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.deleteLinearGroup(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(count -> logger.debug("deleted " + count + " events"))
+                .doOnNext(response -> getViewState().showDeletingEvents(false))
+                .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> getViewState().eventDeleted(event), this::onUnexpectedError));
     }
 

@@ -51,6 +51,8 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> extends AppPartitionFragment implements BaseCalendarView,
         AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener {
+    private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
+
     private static final int REQUEST_UPDATE_EVENT = 1;
 
     @InjectPresenter
@@ -277,14 +279,6 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
-    public void showNeedToFillNoteOrPhoto() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.need_to_fill_not_or_photo)
-                .setPositiveButton(R.string.ok, null)
-                .show();
-    }
-
-    @Override
     public void confirmDeleteOneEvent(@NonNull MasterEvent event) {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_event_confirmation_dialog_title)
@@ -303,6 +297,25 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
                 .setNegativeButton(R.string.delete_linear_group,
                         (DialogInterface dialog, int which) -> presenter.deleteLinearGroup(event))
                 .show();
+    }
+
+    @Override
+    public void showNeedToFillNoteOrPhoto() {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.need_to_fill_not_or_photo)
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
+    @Override
+    public void showDeletingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_deleting));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS);
+        }
     }
 
     @Override
