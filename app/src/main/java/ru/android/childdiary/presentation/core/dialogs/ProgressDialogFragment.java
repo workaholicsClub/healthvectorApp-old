@@ -3,7 +3,6 @@ package ru.android.childdiary.presentation.core.dialogs;
 import android.app.Dialog;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
 
@@ -44,9 +43,12 @@ public class ProgressDialogFragment extends BaseMvpDialogFragment<ProgressDialog
     @NonNull
     @Override
     protected Dialog createDialog(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
-                .setView(view);
-        AlertDialog dialog = builder.create();
+        Dialog dialog = new Dialog(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex())) {
+            @Override
+            public void onBackPressed() {
+            }
+        };
+        dialog.setContentView(view);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
