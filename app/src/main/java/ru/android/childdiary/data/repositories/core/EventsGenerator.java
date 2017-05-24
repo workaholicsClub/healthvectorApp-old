@@ -17,7 +17,6 @@ import io.requery.reactivex.ReactiveEntityStore;
 import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.domain.core.RepeatParametersContainer;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
@@ -25,7 +24,7 @@ import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.utils.ObjectUtils;
 
-public abstract class EventsGenerator<From extends RepeatParametersContainer, To extends MasterEvent> {
+public abstract class EventsGenerator<From extends RepeatParametersContainer> {
     protected final ReactiveEntityStore<Persistable> dataStore;
     protected final BlockingEntityStore<Persistable> blockingEntityStore;
 
@@ -58,8 +57,9 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
 
         List<LocalTime> times = linearGroups.getTimes();
         if (times.size() == 0) {
-            To event = createEvent(from, dateTime, null);
-            add(event);
+            startInsertion();
+            createEvent(from, dateTime, null);
+            finishInsertion();
             return 1;
         }
 
@@ -75,6 +75,7 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
         DateTime finishDateTime = getFinishDateTime(startDateTime, lengthValue);
         Function<DateTime, DateTime> increment = getIncrementFunction(periodicityType);
 
+        startInsertion();
         int count = 0;
         boolean isFinished = false;
         while (!isFinished) {
@@ -83,8 +84,7 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
                 DateTime linearGroupDateTime = startDateTime.withTime(time);
 
                 if (linearGroupDateTime.isBefore(finishDateTime)) {
-                    To event = createEvent(from, linearGroupDateTime, linearGroup);
-                    add(event);
+                    createEvent(from, linearGroupDateTime, linearGroup);
                     ++count;
                 } else {
                     isFinished = true;
@@ -94,6 +94,7 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
             startDateTime = increment.apply(startDateTime);
             startIndex = 0;
         }
+        finishInsertion();
         logger.debug("generating events: inserted " + count + " events");
         return count;
     }
@@ -173,9 +174,11 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer, To
         throw new EventsGeneratorException("Unsupported periodicity type");
     }
 
-    protected abstract To createEvent(@NonNull From from, @NonNull DateTime dateTime, @Nullable Integer linearGroup);
+    protected abstract void startInsertion();
 
-    protected abstract To add(@NonNull To event);
+    protected abstract void createEvent(@NonNull From from, @NonNull DateTime dateTime, @Nullable Integer linearGroup);
+
+    protected abstract void finishInsertion();
 
     @Value
     @Builder
