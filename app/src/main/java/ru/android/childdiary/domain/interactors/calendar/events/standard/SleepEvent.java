@@ -56,7 +56,7 @@ public class SleepEvent extends MasterEvent implements ContentObject<SleepEvent>
 
     @Override
     public boolean isContentEqual(@NonNull SleepEvent other) {
-        return contentEquals(getMasterEvent(), other.getMasterEvent())
+        return contentEquals(this, other)
                 && ObjectUtils.equalsToMinutes(getFinishDateTime(), other.getFinishDateTime());
     }
 

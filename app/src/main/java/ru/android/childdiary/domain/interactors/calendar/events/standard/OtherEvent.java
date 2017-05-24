@@ -56,7 +56,7 @@ public class OtherEvent extends MasterEvent implements ContentObject<OtherEvent>
 
     @Override
     public boolean isContentEqual(@NonNull OtherEvent other) {
-        return contentEquals(getMasterEvent(), other.getMasterEvent())
+        return contentEquals(this, other)
                 && ObjectUtils.contentEquals(getName(), other.getName())
                 && ObjectUtils.equalsToMinutes(getFinishDateTime(), other.getFinishDateTime());
     }

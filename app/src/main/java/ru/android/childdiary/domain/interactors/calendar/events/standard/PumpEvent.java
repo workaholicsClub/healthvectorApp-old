@@ -61,7 +61,7 @@ public class PumpEvent extends MasterEvent implements ContentObject<PumpEvent>, 
 
     @Override
     public boolean isContentEqual(@NonNull PumpEvent other) {
-        return contentEquals(getMasterEvent(), other.getMasterEvent())
+        return contentEquals(this, other)
                 && getBreast() == other.getBreast()
                 && ObjectUtils.equals(getLeftAmountMl(), other.getLeftAmountMl())
                 && ObjectUtils.equals(getRightAmountMl(), other.getRightAmountMl());

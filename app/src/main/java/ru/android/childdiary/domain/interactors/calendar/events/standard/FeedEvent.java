@@ -84,7 +84,7 @@ public class FeedEvent extends MasterEvent implements ContentObject<FeedEvent>, 
 
     @Override
     public boolean isContentEqual(@NonNull FeedEvent other) {
-        if (!contentEquals(getMasterEvent(), other.getMasterEvent())) {
+        if (!contentEquals(this, other)) {
             return false;
         }
         if (getFeedType() != other.getFeedType()) {

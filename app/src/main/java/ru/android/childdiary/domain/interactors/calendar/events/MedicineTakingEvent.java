@@ -71,7 +71,7 @@ public class MedicineTakingEvent extends MasterEvent implements ContentObject<Me
 
     @Override
     public boolean isContentEqual(@NonNull MedicineTakingEvent other) {
-        return contentEquals(getMasterEvent(), other.getMasterEvent())
+        return contentEquals(this, other)
                 && ObjectUtils.equals(getMedicine(), other.getMedicine())
                 && ObjectUtils.equals(getAmount(), other.getAmount())
                 && ObjectUtils.equals(getMedicineMeasure(), other.getMedicineMeasure())
@@ -80,7 +80,7 @@ public class MedicineTakingEvent extends MasterEvent implements ContentObject<Me
 
     public List<LinearGroupFieldType> getChangedFields(@NonNull MedicineTakingEvent other) {
         List<LinearGroupFieldType> significantFields = new ArrayList<>(
-                MasterEvent.getChangedFields(getMasterEvent(), other.getMasterEvent()));
+                MasterEvent.getChangedFields(this, other));
 
         if (!ObjectUtils.equals(getMedicine(), other.getMedicine())) {
             significantFields.add(LinearGroupFieldType.MEDICINE);

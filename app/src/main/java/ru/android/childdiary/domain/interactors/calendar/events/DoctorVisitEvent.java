@@ -70,7 +70,7 @@ public class DoctorVisitEvent extends MasterEvent implements ContentObject<Docto
 
     @Override
     public boolean isContentEqual(@NonNull DoctorVisitEvent other) {
-        return contentEquals(getMasterEvent(), other.getMasterEvent())
+        return contentEquals(this, other)
                 && ObjectUtils.equals(getDoctor(), other.getDoctor())
                 && ObjectUtils.contentEquals(getName(), other.getName())
                 && ObjectUtils.equals(getDurationInMinutes(), other.getDurationInMinutes())
@@ -80,7 +80,7 @@ public class DoctorVisitEvent extends MasterEvent implements ContentObject<Docto
     @Override
     public List<LinearGroupFieldType> getChangedFields(@NonNull DoctorVisitEvent other) {
         List<LinearGroupFieldType> significantFields = new ArrayList<>(
-                MasterEvent.getChangedFields(getMasterEvent(), other.getMasterEvent()));
+                MasterEvent.getChangedFields(this, other));
 
         if (!ObjectUtils.contentEquals(getName(), other.getName())) {
             significantFields.add(LinearGroupFieldType.NAME);

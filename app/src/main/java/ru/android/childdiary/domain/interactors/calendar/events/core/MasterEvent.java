@@ -58,10 +58,6 @@ public class MasterEvent implements Serializable {
         return significantFields;
     }
 
-    public MasterEvent getMasterEvent() {
-        return this;
-    }
-
     public MasterEvent.MasterEventBuilder toMasterBuilder() {
         return MasterEvent.masterBuilder()
                 .masterEventId(masterEventId)

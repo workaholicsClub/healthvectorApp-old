@@ -52,7 +52,7 @@ public class DiaperEvent extends MasterEvent implements ContentObject<DiaperEven
 
     @Override
     public boolean isContentEqual(@NonNull DiaperEvent other) {
-        return contentEquals(getMasterEvent(), other.getMasterEvent())
+        return contentEquals(this, other)
                 && getDiaperState() == other.getDiaperState();
     }
 
