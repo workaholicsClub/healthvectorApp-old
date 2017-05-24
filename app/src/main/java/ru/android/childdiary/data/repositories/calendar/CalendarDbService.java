@@ -415,7 +415,7 @@ public class CalendarDbService extends EventsDbService {
                 }
             }
 
-            blockingEntityStore.update(events);
+            blockingEntityStore.update(masterEvents);
         }
     }
 
@@ -452,7 +452,7 @@ public class CalendarDbService extends EventsDbService {
                 }
             }
 
-            blockingEntityStore.update(events);
+            blockingEntityStore.update(masterEvents);
         }
     }
 

@@ -51,10 +51,6 @@ public class MasterEvent implements Serializable {
     public static List<LinearGroupFieldType> getChangedFields(@NonNull MasterEvent event1, @NonNull MasterEvent event2) {
         List<LinearGroupFieldType> significantFields = new ArrayList<>();
 
-        if (!ObjectUtils.equalsToMinutes(event1.getDateTime(), event2.getDateTime())) {
-            significantFields.add(LinearGroupFieldType.TIME);
-        }
-
         if (!ObjectUtils.equals(event1.getNotifyTimeInMinutes(), event2.getNotifyTimeInMinutes())) {
             significantFields.add(LinearGroupFieldType.NOTIFY_TIME_IN_MINUTES);
         }
