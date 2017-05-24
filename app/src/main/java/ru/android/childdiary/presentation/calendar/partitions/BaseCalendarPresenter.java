@@ -116,6 +116,7 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     }
 
     public void move(@NonNull MasterEvent event) {
+        getViewState().showUpdatingEvents(true);
     }
 
     public void requestEventDetail(@NonNull MasterEvent event) {

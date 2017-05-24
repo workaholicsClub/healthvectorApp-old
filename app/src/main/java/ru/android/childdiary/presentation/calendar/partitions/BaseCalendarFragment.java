@@ -52,6 +52,7 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> extends AppPartitionFragment implements BaseCalendarView,
         AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener {
     private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
+    private static final String TAG_PROGRESS_DIALOG_UPDATING_EVENTS = "TAG_PROGRESS_DIALOG_UPDATING_EVENTS";
 
     private static final int REQUEST_UPDATE_EVENT = 1;
 
@@ -319,6 +320,17 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
+    public void showUpdatingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_UPDATING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_updating));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_UPDATING_EVENTS);
+        }
+    }
+
+    @Override
     public void delete(MasterEvent event) {
         presenter.delete(event);
     }
@@ -330,6 +342,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
 
     @Override
     public void move(MasterEvent event) {
+        presenter.move(event);
     }
 
     @Override

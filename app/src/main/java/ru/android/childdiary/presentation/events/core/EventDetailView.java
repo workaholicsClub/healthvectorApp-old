@@ -45,4 +45,7 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showDeletingEvents(boolean loading);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showUpdatingEvents(boolean loading);
 }

@@ -56,6 +56,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         extends BaseMvpActivity
         implements EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener {
     private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
+    private static final String TAG_PROGRESS_DIALOG_UPDATING_EVENTS = "TAG_PROGRESS_DIALOG_UPDATING_EVENTS";
 
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
@@ -263,6 +264,17 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
+    public void showUpdatingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_UPDATING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_updating));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_UPDATING_EVENTS);
+        }
+    }
+
+    @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         if (fragment instanceof TimePickerDialog) {
@@ -348,6 +360,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 getPresenter().done(buildEvent());
                 return true;
             case R.id.menu_move:
+                getPresenter().move(event);
                 return true;
             case R.id.menu_delete:
                 getPresenter().delete(event);

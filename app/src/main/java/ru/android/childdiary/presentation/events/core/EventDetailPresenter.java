@@ -73,11 +73,13 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     public void updateLinearGroup(@NonNull T event, List<LinearGroupFieldType> fields, boolean afterButtonPressed) {
-        // TODO show progress
+        getViewState().showUpdatingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.updateLinearGroup(event, fields)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(updatedEvent -> logger.debug("linear group updated: " + updatedEvent))
+                .doOnNext(response -> getViewState().showUpdatingEvents(false))
+                .doOnError(throwable -> getViewState().showUpdatingEvents(false))
                 .subscribe(updatedEvent -> getViewState().eventUpdated(updatedEvent, afterButtonPressed), this::onUnexpectedError));
     }
 
@@ -115,6 +117,10 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .doOnNext(response -> getViewState().showDeletingEvents(false))
                 .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> getViewState().eventDeleted(event), this::onUnexpectedError));
+    }
+
+    public void move(@NonNull T event) {
+        getViewState().showUpdatingEvents(true);
     }
 
     public void done(@NonNull T event) {
