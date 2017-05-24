@@ -10,7 +10,6 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public class GetMedicineTakingListRequest {
     @NonNull
     Child child;
-    // TODO DateTime fromDateTime;
-    // TODO DateTime toDateTime;
-    // TODO Medicine medicine;
+    @NonNull
+    GetMedicineTakingListFilter filter;
 }

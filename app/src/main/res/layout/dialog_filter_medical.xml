@@ -2,9 +2,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="400dp">
+    android:minWidth="@dimen/filter_dialog_width">
 
     <LinearLayout
+        android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -20,28 +21,21 @@
             android:text="@string/filter_by_date"
             android:textAppearance="@style/FilterPlaceholderTextAppearance" />
 
-        <include
-            android:id="@+id/filter_by_date_from"
-            layout="@layout/dialog_filter_by_date"
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateFilterView
+            android:id="@+id/dateFromView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp" />
+            android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/filter_by_date_to"
-            layout="@layout/dialog_filter_by_date"
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateFilterView
+            android:id="@+id/dateToView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp" />
+            android:layout_marginBottom="@dimen/delimiter_margin" />
+
+        <include layout="@layout/delimiter" />
 
         <TextView
-            android:id="@+id/filter_by_item"
+            android:id="@+id/textViewByDoctor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/profile_margin_horizontal"
@@ -50,21 +44,24 @@
             android:text="@string/filter_by_doctor"
             android:textAppearance="@style/FilterPlaceholderTextAppearance" />
 
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
+        <ru.android.childdiary.presentation.medical.filter.visits.DoctorTokenCompleteTextView
+            android:id="@+id/doctorAutoCompleteTextView"
+            style="@style/AutoCompleteTextViewStyle"
+            android:hint="@string/doctor" />
+
+        <TextView
+            android:id="@+id/textViewByMedicine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/profile_margin_vertical"
             android:layout_marginLeft="@dimen/profile_margin_horizontal"
             android:layout_marginRight="@dimen/profile_margin_horizontal"
             android:layout_marginTop="@dimen/profile_margin_vertical"
-            android:background="@drawable/edit_text_background"
-            android:drawableEnd="@drawable/arrow_down_black"
-            android:drawableRight="@drawable/arrow_down_black"
-            android:hint="@string/doctor"
-            android:paddingBottom="@dimen/name_edit_text_padding_bottom"
-            android:textAppearance="@style/PrimaryTextAppearance"
-            android:textColorHint="@color/placeholder_text"
-            android:textCursorDrawable="@drawable/edit_text_cursor" />
+            android:text="@string/filter_by_medicine"
+            android:textAppearance="@style/FilterPlaceholderTextAppearance" />
+
+        <ru.android.childdiary.presentation.medical.filter.medicines.MedicineTokenCompleteTextView
+            android:id="@+id/medicineAutoCompleteTextView"
+            style="@style/AutoCompleteTextViewStyle"
+            android:hint="@string/medicine" />
     </LinearLayout>
 </ScrollView>

@@ -10,9 +10,13 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import org.joda.time.LocalTime;
 
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.presentation.core.BaseView;
+import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
+import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataView;
 
-public interface MedicineTakingListView extends BaseView {
+public interface MedicineTakingListView extends BaseMedicalDataView {
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showFilterDialog(@NonNull MedicineTakingFilterDialogArguments dialogArguments);
+
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showMedicineTakingListState(@NonNull MedicineTakingListState medicineTakingListState);
 
@@ -29,7 +33,4 @@ public interface MedicineTakingListView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteConnectedEventsOrNot(@NonNull MedicineTaking medicineTaking);
-
-    @StateStrategyType(AddToEndSingleStrategy.class)
-    void showDeletingEvents(boolean loading);
 }

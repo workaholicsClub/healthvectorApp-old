@@ -1,35 +1,30 @@
 package ru.android.childdiary.presentation.medical.partitions.medicines;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingActionListener;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingAdapter;
 import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingActivity;
+import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
+import ru.android.childdiary.presentation.medical.filter.adapters.ChipsAdapter;
 import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
 import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogFragment;
 import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
@@ -37,26 +32,12 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MedicineTakingListFragment extends BaseMedicalDataFragment
         implements MedicineTakingListView, MedicineTakingActionListener {
-    private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
-
+    @Getter
     @InjectPresenter
     MedicineTakingListPresenter presenter;
 
-    @BindView(R.id.textViewIntention)
-    TextView textViewIntention;
-
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-
     @Getter
     private MedicineTakingAdapter adapter;
-    private FabController fabController;
-
-    @Override
-    @LayoutRes
-    protected int getLayoutResourceId() {
-        return R.layout.fragment_medical_list;
-    }
 
     @Override
     protected void setupUi() {
@@ -69,37 +50,23 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         textViewIntention.setText(R.string.add_medicine_taking);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+
+        FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
+        flowLayoutManager.setAutoMeasureEnabled(true);
+        recyclerViewChips.setLayoutManager(flowLayoutManager);
+
+        chipsAdapter = new ChipsAdapter(getContext(), this);
+        recyclerViewChips.setAdapter(chipsAdapter);
+        recyclerViewChips.setVisibility(View.GONE);
+
+        line.setVisibility(View.GONE);
     }
 
     @Override
-    protected void themeChanged() {
-        super.themeChanged();
-        adapter.setSex(getSex());
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof FabController) {
-            fabController = (FabController) context;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        fabController = null;
-    }
-
-    @Override
-    public void showFilter() {
+    public void showFilterDialog(@NonNull MedicineTakingFilterDialogArguments dialogArguments) {
         MedicineTakingFilterDialogFragment fragment = new MedicineTakingFilterDialogFragment();
-        fragment.showAllowingStateLoss(getActivity().getSupportFragmentManager(), TAG_FILTER,
-                MedicineTakingFilterDialogArguments.builder()
-                        .items(Collections.emptyList())
-                        .selectedItem(null)
-                        .fromDate(LocalDate.now())
-                        .toDate(LocalDate.now())
+        fragment.showAllowingStateLoss(getChildFragmentManager(), TAG_FILTER,
+                dialogArguments.toBuilder()
                         .sex(getSex())
                         .build());
     }
@@ -113,9 +80,16 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
 
         List<MedicineTaking> medicineTakingList = medicineTakingListState.getMedicineTakingList();
         adapter.setItems(medicineTakingList);
-        recyclerView.setVisibility(medicineTakingList.isEmpty() ? View.GONE : View.VISIBLE);
-        textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setFabController(child.getId() == null ? null : fabController);
+        recyclerView.setVisibility(medicineTakingList.isEmpty() ? View.GONE : View.VISIBLE);
+
+        List<Chips> chips = medicineTakingListState.getChips();
+        chipsAdapter.setItems(chips);
+        recyclerViewChips.setVisibility(chips.isEmpty() ? View.GONE : View.VISIBLE);
+
+        line.setVisibility(medicineTakingList.isEmpty() && chips.isEmpty() ? View.GONE : View.VISIBLE);
+        textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
+        textViewIntention.setText(chips.isEmpty() ? R.string.add_medicine_taking : R.string.nothing_found);
     }
 
     @Override
@@ -161,16 +135,5 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
     @Override
     public void edit(MedicineTaking item) {
         presenter.editMedicineTaking(item);
-    }
-
-    @Override
-    public void showDeletingEvents(boolean loading) {
-        if (loading) {
-            showProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS,
-                    getString(R.string.please_wait),
-                    getString(R.string.events_deleting));
-        } else {
-            hideProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS);
-        }
     }
 }

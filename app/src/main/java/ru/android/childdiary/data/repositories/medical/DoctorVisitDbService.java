@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,9 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
+import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
+import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
@@ -31,10 +34,12 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsFilter;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
+import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -79,19 +84,51 @@ public class DoctorVisitDbService {
 
     public Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request) {
         Child child = request.getChild();
-        return dataStore.select(DoctorVisitEntity.class)
+        WhereAndOr<ReactiveResult<DoctorVisitEntity>> select = dataStore.select(DoctorVisitEntity.class)
                 .where(DoctorVisitEntity.CHILD_ID.eq(child.getId()))
-                .and(DoctorVisitEntity.DELETED.isNull().or(DoctorVisitEntity.DELETED.eq(false)))
-                .orderBy(DoctorVisitEntity.DATE_TIME, DoctorVisitEntity.DOCTOR_ID, DoctorVisitEntity.ID)
+                .and(DoctorVisitEntity.DELETED.isNull().or(DoctorVisitEntity.DELETED.eq(false)));
+
+        GetDoctorVisitsFilter filter = request.getFilter();
+
+        LocalDate fromDate = filter.getFromDate();
+        if (fromDate != null) {
+            select = select.and(DoctorVisitEntity.DATE_TIME.greaterThanOrEqual(DateUtils.midnight(fromDate)));
+        }
+
+        LocalDate toDate = filter.getToDate();
+        if (toDate != null) {
+            select = select.and(DoctorVisitEntity.DATE_TIME.lessThan(DateUtils.nextDayMidnight(toDate)));
+        }
+
+        List<Doctor> doctors = filter.getSelectedItems();
+        if (!doctors.isEmpty()) {
+            List<Long> ids = Observable.fromIterable(doctors)
+                    .filter(doctor -> doctor.getId() != null)
+                    .map(Doctor::getId)
+                    .toList()
+                    .blockingGet();
+            select = select.and(DoctorVisitEntity.DOCTOR_ID.in(ids));
+        }
+
+        return select.orderBy(DoctorVisitEntity.DATE_TIME, DoctorVisitEntity.DOCTOR_ID, DoctorVisitEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, doctorVisitMapper))
                 .map(doctorVisits -> GetDoctorVisitsResponse.builder().request(request).doctorVisits(doctorVisits).build());
     }
 
-    public Single<Boolean> hasConnectedEvents(@lombok.NonNull DoctorVisit doctorVisit) {
+    public Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit) {
         return dataStore.count(DoctorVisitEventEntity.class)
                 .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisit.getId()))
+                .get()
+                .single()
+                .map(count -> count > 0);
+    }
+
+    public Single<Boolean> hasDataToFilter(@NonNull Child child) {
+        return dataStore.count(DoctorVisitEntity.class)
+                .where(DoctorVisitEntity.CHILD_ID.eq(child.getId()))
+                .and(DoctorVisitEntity.DELETED.isNull().or(DoctorVisitEntity.DELETED.eq(false)))
                 .get()
                 .single()
                 .map(count -> count > 0);

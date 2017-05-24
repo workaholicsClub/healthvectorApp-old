@@ -20,27 +20,27 @@ import ru.android.childdiary.presentation.core.BaseDialogArguments;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
 @Getter
 public class MedicalFilterDialogArguments<T extends Serializable> extends BaseDialogArguments {
     @NonNull
     ArrayList<T> items;
+    @NonNull
+    ArrayList<T> selectedItems;
     @Nullable
-    T selectedItem;
-    @NonNull
     LocalDate fromDate;
-    @NonNull
+    @Nullable
     LocalDate toDate;
 
     @Builder(builderMethodName = "medicalBuilder")
     public MedicalFilterDialogArguments(@Nullable Sex sex,
                                         @NonNull List<T> items,
-                                        @Nullable T selectedItem,
-                                        @NonNull LocalDate fromDate,
-                                        @NonNull LocalDate toDate) {
+                                        @NonNull List<T> selectedItems,
+                                        @Nullable LocalDate fromDate,
+                                        @Nullable LocalDate toDate) {
         super(sex);
         this.items = new ArrayList<>(items);
-        this.selectedItem = selectedItem;
+        this.selectedItems = new ArrayList<>(selectedItems);
         this.fromDate = fromDate;
         this.toDate = toDate;
     }

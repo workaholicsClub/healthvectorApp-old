@@ -4,13 +4,18 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
@@ -18,14 +23,15 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
-import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.DoctorVisitParameters;
+import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
+import ru.android.childdiary.presentation.medical.filter.adapters.ChipsUtils;
+import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogArguments;
+import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
-public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
-    private final GetDoctorVisitsRequest.GetDoctorVisitsRequestBuilder requestBuilder = GetDoctorVisitsRequest.builder();
-
+public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisitsView> {
     @Inject
     ChildInteractor childInteractor;
 
@@ -44,34 +50,57 @@ public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
         super.onFirstViewAttach();
 
         unsubscribeOnDestroy(Observable.combineLatest(
-                Observable.just(0), // TODO filters
+                doctorVisitInteractor.getSelectedFilterValue(),
                 childInteractor.getActiveChild(),
-                (number, child) -> GetDoctorVisitsRequest.builder().child(child).build())
+                (filter, child) -> GetDoctorVisitsRequest.builder()
+                        .child(child)
+                        .filter(filter)
+                        .build())
+                .doOnNext(request -> logger.debug("onGetRequest: " + request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetRequest, this::onUnexpectedError));
+                .subscribe(this::requestData, this::onUnexpectedError));
     }
 
-    private void onGetRequest(GetDoctorVisitsRequest request) {
-        logger.debug("onGetRequest: " + request);
-        requestBuilder.child(request.getChild());
-        requestData();
-    }
-
-    private void requestData() {
+    private void requestData(@NonNull GetDoctorVisitsRequest request) {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(doctorVisitInteractor.getDoctorVisits(requestBuilder.build())
+        subscription = unsubscribeOnDestroy(doctorVisitInteractor.getDoctorVisits(request)
+                .doOnNext(response -> logger.debug("onGetData: " + response))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetData, this::onUnexpectedError));
     }
 
     private void onGetData(@NonNull GetDoctorVisitsResponse response) {
-        logger.debug("onGetData: " + response);
         getViewState().showDoctorVisitsState(DoctorVisitsState.builder()
                 .child(response.getRequest().getChild())
                 .doctorVisits(response.getDoctorVisits())
+                .chips(ChipsUtils.mapFilterToChips(response.getRequest().getFilter()))
                 .build());
+    }
+
+    @Override
+    protected Single<Boolean> hasDataToFilter(@NonNull Child child) {
+        return doctorVisitInteractor.hasDataToFilter(child);
+    }
+
+    @Override
+    protected void showFilterDialog() {
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        doctorVisitInteractor.getDoctors()
+                                .first(Collections.emptyList())
+                                .toObservable(),
+                        doctorVisitInteractor.getSelectedFilterValueOnce(),
+                        ((doctors, filter) -> DoctorVisitFilterDialogArguments.builder()
+                                .items(doctors)
+                                .selectedItems(filter.getSelectedItems())
+                                .fromDate(filter.getFromDate())
+                                .toDate(filter.getToDate())
+                                .build()))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::showFilterDialog, this::onUnexpectedError));
     }
 
     public void editDoctorVisit(@NonNull DoctorVisit doctorVisit) {
@@ -132,5 +161,14 @@ public class DoctorVisitsPresenter extends BasePresenter<DoctorVisitsView> {
                 .doOnNext(response -> getViewState().showDeletingEvents(false))
                 .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(response -> getViewState().doctorVisitDeleted(doctorVisit), this::onUnexpectedError));
+    }
+
+    @Override
+    public void setFilter(@NonNull List<Chips> chips) {
+        unsubscribeOnDestroy(doctorVisitInteractor.setSelectedFilterValueObservable(ChipsUtils.mapToDoctorFilter(chips))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filter -> {
+                }, this::onUnexpectedError));
     }
 }

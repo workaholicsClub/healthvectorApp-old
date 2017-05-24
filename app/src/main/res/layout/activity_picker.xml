@@ -32,11 +32,10 @@
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/footer_height"
                         android:background="@color/white"
                         android:paddingBottom="@dimen/events_padding_vertical"
                         android:paddingTop="@dimen/events_padding_vertical" />
-
-                    <include layout="@layout/events_view_footer" />
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
         </LinearLayout>

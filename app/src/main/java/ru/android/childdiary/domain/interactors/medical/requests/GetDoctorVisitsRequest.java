@@ -10,7 +10,6 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public class GetDoctorVisitsRequest {
     @NonNull
     Child child;
-// TODO DateTime fromDateTime;
-// TODO DateTime toDateTime;
-// TODO Doctor doctor;
+    @NonNull
+    GetDoctorVisitsFilter filter;
 }

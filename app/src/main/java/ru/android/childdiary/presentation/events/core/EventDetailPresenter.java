@@ -39,7 +39,9 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
         unsubscribe();
         subscription = unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
                 .map(event -> {
-                    childInteractor.setActiveChild(event.getChild());
+                    if (event.getChild() != null) {
+                        childInteractor.setActiveChild(event.getChild());
+                    }
                     calendarInteractor.setSelectedDate(event.getDateTime().toLocalDate());
                     return event;
                 })

@@ -16,6 +16,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.core.CleanUpDbService;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -117,6 +118,11 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
     @Override
     public Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit) {
         return doctorVisitDbService.hasConnectedEvents(doctorVisit);
+    }
+
+    @Override
+    public Single<Boolean> hasDataToFilter(@NonNull Child child) {
+        return doctorVisitDbService.hasDataToFilter(child);
     }
 
     @Override

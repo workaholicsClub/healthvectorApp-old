@@ -174,8 +174,8 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
         }
     }
 
-    protected final void changeThemeIfNeeded(@NonNull Child child) {
-        Sex sex = child.getSex();
+    protected final void changeThemeIfNeeded(@Nullable Child child) {
+        Sex sex = child == null ? null : child.getSex();
         changeThemeIfNeeded(sex);
     }
 

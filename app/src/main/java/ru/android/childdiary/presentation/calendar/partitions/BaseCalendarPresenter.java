@@ -32,8 +32,6 @@ import ru.android.childdiary.utils.EventHelper;
 
 @InjectViewState
 public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
-    private final GetEventsRequest.GetEventsRequestBuilder requestBuilder = GetEventsRequest.builder();
-
     @Inject
     ChildInteractor childInteractor;
 
@@ -55,27 +53,22 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                 calendarInteractor.getSelectedDate(),
                 childInteractor.getActiveChild(),
                 (date, child) -> GetEventsRequest.builder().date(date).child(child).build())
+                .doOnNext(request -> logger.debug("onGetRequest: " + request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetRequest, this::onUnexpectedError));
+                .subscribe(this::requestData, this::onUnexpectedError));
     }
 
-    private void onGetRequest(@NonNull GetEventsRequest request) {
-        logger.debug("onGetRequest: " + request);
-        requestBuilder.date(request.getDate()).child(request.getChild());
-        requestData();
-    }
-
-    private void requestData() {
+    private void requestData(@NonNull GetEventsRequest request) {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(calendarInteractor.getAll(requestBuilder.build())
+        subscription = unsubscribeOnDestroy(calendarInteractor.getAll(request)
+                .doOnNext(response -> logger.debug("onGetData: " + response))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetData, this::onUnexpectedError));
     }
 
     private void onGetData(@NonNull GetEventsResponse response) {
-        logger.debug("onGetData: " + response);
         getViewState().showCalendarState(CalendarState.builder()
                 .child(response.getRequest().getChild())
                 .date(response.getRequest().getDate())

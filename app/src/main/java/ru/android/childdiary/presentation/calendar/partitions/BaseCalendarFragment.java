@@ -75,6 +75,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     private Adapter calendarAdapter;
     @Getter
     private EventAdapter eventAdapter;
+    @Nullable
     private FabController fabController;
 
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(getContext(), this);

@@ -38,6 +38,8 @@ import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisit
 import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitPresenter;
 import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingActivity;
 import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingPresenter;
+import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterPresenter;
+import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterPresenter;
 import ru.android.childdiary.presentation.medical.partitions.medicines.MedicineTakingListPresenter;
 import ru.android.childdiary.presentation.medical.partitions.visits.DoctorVisitsPresenter;
 import ru.android.childdiary.presentation.medical.pickers.medicines.MedicineAddActivity;
@@ -114,6 +116,10 @@ public interface ApplicationComponent {
     void inject(MedicineTakingEventDetailPresenter presenter);
 
     void inject(ImagePickerPresenter presenter);
+
+    void inject(DoctorVisitFilterPresenter presenter);
+
+    void inject(MedicineTakingFilterPresenter presenter);
 
     // TODO EXERCISE
 

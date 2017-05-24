@@ -7,19 +7,16 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import org.joda.time.LocalDate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.data.repositories.core.CleanUpDbService;
+import ru.android.childdiary.data.repositories.core.ValueDataRepository;
 import ru.android.childdiary.data.repositories.medical.DoctorVisitDbService;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDbService;
 import ru.android.childdiary.data.types.EventType;
@@ -57,7 +54,7 @@ import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 
 @Singleton
-public class CalendarDataRepository implements CalendarRepository {
+public class CalendarDataRepository extends ValueDataRepository<LocalDate> implements CalendarRepository {
     private static final String KEY_LAST_FEED_TYPE = "last_feed_type";
     private static final String KEY_LAST_FOOD_MEASURE_ID = "last_food_measure";
     private static final String KEY_LAST_FOOD_ID = "last_food";
@@ -68,8 +65,6 @@ public class CalendarDataRepository implements CalendarRepository {
     private final DoctorVisitDbService doctorVisitDbService;
     private final MedicineTakingDbService medicineTakingDbService;
     private final CleanUpDbService cleanUpDbService;
-    private final List<OnSelectedDateChangedListener> selectedDateChangedListeners = new ArrayList<>();
-    private LocalDate selectedDate = LocalDate.now();
 
     @Inject
     public CalendarDataRepository(RxSharedPreferences preferences,
@@ -86,44 +81,29 @@ public class CalendarDataRepository implements CalendarRepository {
         this.cleanUpDbService = cleanUpDbService;
     }
 
-    void addOnActiveChildChangedListener(OnSelectedDateChangedListener listener) {
-        synchronized (selectedDateChangedListeners) {
-            selectedDateChangedListeners.add(listener);
-        }
-    }
-
-    void removeOnActiveChildChangedListener(OnSelectedDateChangedListener listener) {
-        synchronized (selectedDateChangedListeners) {
-            selectedDateChangedListeners.remove(listener);
-        }
-    }
-
     @Override
     public Observable<LocalDate> getSelectedDate() {
-        return new SelectedDateObservable();
+        return getSelectedValue();
     }
 
     @Override
     public void setSelectedDate(@NonNull LocalDate date) {
-        selectedDate = date;
-        synchronized (selectedDateChangedListeners) {
-            for (OnSelectedDateChangedListener listener : selectedDateChangedListeners) {
-                listener.onSelectedDateChanged(date);
-            }
-        }
+        setSelectedValue(date);
     }
 
     @Override
     public Observable<LocalDate> getSelectedDateOnce() {
-        return getSelectedDate().first(LocalDate.now()).toObservable();
+        return getSelectedValueOnce();
     }
 
     @Override
     public Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date) {
-        return Observable.fromCallable(() -> {
-            setSelectedDate(date);
-            return date;
-        });
+        return setSelectedValueObservable(date);
+    }
+
+    @Override
+    protected LocalDate getDefaultValue() {
+        return LocalDate.now();
     }
 
     @Override
@@ -388,49 +368,5 @@ public class CalendarDataRepository implements CalendarRepository {
     @Override
     public Observable<List<TimeUnit>> getTimeUnits() {
         return Observable.just(Arrays.asList(TimeUnit.values()));
-    }
-
-    private interface OnSelectedDateChangedListener {
-        void onSelectedDateChanged(LocalDate date);
-    }
-
-    private class SelectedDateObservable extends Observable<LocalDate> {
-        @Override
-        protected void subscribeActual(Observer<? super LocalDate> observer) {
-            OnSelectedDateChangedSubscription listener = new OnSelectedDateChangedSubscription(observer);
-            listener.subscribe();
-        }
-    }
-
-    private class OnSelectedDateChangedSubscription implements Disposable, OnSelectedDateChangedListener {
-        private final Observer<? super LocalDate> observer;
-        private final AtomicBoolean unsubscribed = new AtomicBoolean();
-
-        public OnSelectedDateChangedSubscription(Observer<? super LocalDate> observer) {
-            this.observer = observer;
-        }
-
-        public void subscribe() {
-            addOnActiveChildChangedListener(this);
-            observer.onSubscribe(this);
-            observer.onNext(selectedDate);
-        }
-
-        @Override
-        public void onSelectedDateChanged(@NonNull LocalDate date) {
-            observer.onNext(date);
-        }
-
-        @Override
-        public void dispose() {
-            if (unsubscribed.compareAndSet(false, true)) {
-                removeOnActiveChildChangedListener(this);
-            }
-        }
-
-        @Override
-        public boolean isDisposed() {
-            return unsubscribed.get();
-        }
     }
 }

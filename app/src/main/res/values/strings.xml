@@ -207,6 +207,14 @@
     <string name="filter_by_medicine">По лекарству</string>
     <string name="filter_from_date">Дата с</string>
     <string name="filter_to_date">Дата по</string>
+    <!-- %1$s - параметр "Дата, с", %2$s - параметр "Дата, по" -->
+    <string name="chips_from_date_to_date">с %1$s по %2$s</string>
+    <!-- %s - параметр "Дата, с" -->
+    <string name="chips_from_date">с %s</string>
+    <!-- %s - параметр "Дата, по" -->
+    <string name="chips_to_date">по %s</string>
+    <string name="no_data_to_filter">Нет данных для фильтрации</string>
+    <string name="nothing_found">Ничего не найдено</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
