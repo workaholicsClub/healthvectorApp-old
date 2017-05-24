@@ -31,11 +31,11 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeVie
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView<PumpEvent>, PumpEvent> implements EventDetailView<PumpEvent> {
+public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView<PumpEvent>, PumpEvent>
+        implements EventDetailView<PumpEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
@@ -164,10 +164,5 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @Override
     public void onSetTime(String tag, int minutes) {
         notifyTimeView.setValue(minutes);
-    }
-
-    @Override
-    protected boolean contentEquals(PumpEvent event1, PumpEvent event2) {
-        return ObjectUtils.contentEquals(event1, event2);
     }
 }

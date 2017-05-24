@@ -4,12 +4,17 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.ContentObject;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupItem;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
@@ -19,7 +24,7 @@ import ru.android.childdiary.utils.ObjectUtils;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DoctorVisitEvent extends MasterEvent implements ContentObject<DoctorVisitEvent> {
+public class DoctorVisitEvent extends MasterEvent implements ContentObject<DoctorVisitEvent>, LinearGroupItem<DoctorVisitEvent> {
     private static final DoctorVisitEvent NULL = DoctorVisitEvent.builder().build();
 
     Long id;
@@ -70,5 +75,21 @@ public class DoctorVisitEvent extends MasterEvent implements ContentObject<Docto
                 && ObjectUtils.contentEquals(getName(), other.getName())
                 && ObjectUtils.equals(getDurationInMinutes(), other.getDurationInMinutes())
                 && ObjectUtils.contentEquals(getImageFileName(), other.getImageFileName());
+    }
+
+    @Override
+    public List<LinearGroupFieldType> getChangedFields(@NonNull DoctorVisitEvent other) {
+        List<LinearGroupFieldType> significantFields = new ArrayList<>(
+                MasterEvent.getChangedFields(getMasterEvent(), other.getMasterEvent()));
+
+        if (!ObjectUtils.contentEquals(getName(), other.getName())) {
+            significantFields.add(LinearGroupFieldType.NAME);
+        }
+
+        if (!ObjectUtils.equals(getDurationInMinutes(), other.getDurationInMinutes())) {
+            significantFields.add(LinearGroupFieldType.DURATION_IN_MINUTES);
+        }
+
+        return significantFields;
     }
 }

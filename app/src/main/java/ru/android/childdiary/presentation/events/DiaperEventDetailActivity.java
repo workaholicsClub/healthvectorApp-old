@@ -30,11 +30,11 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeVie
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailView<DiaperEvent>, DiaperEvent> implements EventDetailView<DiaperEvent> {
+public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailView<DiaperEvent>, DiaperEvent>
+        implements EventDetailView<DiaperEvent> {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
@@ -155,10 +155,5 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @Override
     public void onSetTime(String tag, int minutes) {
         notifyTimeView.setValue(minutes);
-    }
-
-    @Override
-    protected boolean contentEquals(DiaperEvent event1, DiaperEvent event2) {
-        return ObjectUtils.contentEquals(event1, event2);
     }
 }

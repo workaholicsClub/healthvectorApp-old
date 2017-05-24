@@ -215,6 +215,9 @@
     <string name="chips_to_date">по %s</string>
     <string name="no_data_to_filter">Нет данных для фильтрации</string>
     <string name="nothing_found">Ничего не найдено</string>
+    <string name="ask_update_linear_group">Обновить линейную группу событий?</string>
+    <string name="update_one_event">Обновить одно событие</string>
+    <string name="update_linear_group">Обновить линейную группу</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

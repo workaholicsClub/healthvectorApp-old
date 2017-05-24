@@ -12,6 +12,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
@@ -68,6 +69,15 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(updatedEvent -> logger.debug("event updated: " + updatedEvent))
+                .subscribe(updatedEvent -> getViewState().eventUpdated(updatedEvent, afterButtonPressed), this::onUnexpectedError));
+    }
+
+    public void updateLinearGroup(@NonNull T event, List<LinearGroupFieldType> fields, boolean afterButtonPressed) {
+        // TODO show progress
+        unsubscribeOnDestroy(calendarInteractor.updateLinearGroup(event, fields)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(updatedEvent -> logger.debug("linear group updated: " + updatedEvent))
                 .subscribe(updatedEvent -> getViewState().eventUpdated(updatedEvent, afterButtonPressed), this::onUnexpectedError));
     }
 

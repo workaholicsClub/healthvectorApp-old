@@ -12,6 +12,7 @@ import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -301,6 +303,14 @@ public class CalendarInteractor {
                 .flatMap(this::postprocessOnUpdate);
     }
 
+    public <T extends MasterEvent> Observable<T> updateLinearGroup(@NonNull T event, List<LinearGroupFieldType> fields) {
+        return preprocessOnUpdate(event)
+                .flatMap(this::validate)
+                .flatMap(this::createImageFile)
+                .flatMap(processedEvent -> updateLinearGroupInternal(processedEvent, fields))
+                .flatMap(this::postprocessOnUpdate);
+    }
+
     @SuppressWarnings("unchecked")
     private <T extends MasterEvent> Observable<T> updateInternal(@NonNull T event) {
         if (event.getEventType() == EventType.DIAPER) {
@@ -316,12 +326,45 @@ public class CalendarInteractor {
         } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
             return (Observable<T>) calendarRepository.update(UpdateDoctorVisitEventRequest.builder()
                     .doctorVisitEvent((DoctorVisitEvent) event)
+                    .fields(Collections.emptyList())
                     .build())
                     .flatMap(this::deleteImageFiles)
                     .map(UpdateDoctorVisitEventResponse::getDoctorVisitEvent);
         } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
             return (Observable<T>) calendarRepository.update(UpdateMedicineTakingEventRequest.builder()
                     .medicineTakingEvent((MedicineTakingEvent) event)
+                    .fields(Collections.emptyList())
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);
+        }
+        // TODO EXERCISE
+        throw new IllegalStateException("Unsupported event type");
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> Observable<T> updateLinearGroupInternal(@NonNull T event, List<LinearGroupFieldType> fields) {
+        if (event.getEventType() == EventType.DIAPER) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.FEED) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.OTHER) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.PUMP) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.SLEEP) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
+            return (Observable<T>) calendarRepository.update(UpdateDoctorVisitEventRequest.builder()
+                    .doctorVisitEvent((DoctorVisitEvent) event)
+                    .fields(fields)
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(UpdateDoctorVisitEventResponse::getDoctorVisitEvent);
+        } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
+            return (Observable<T>) calendarRepository.update(UpdateMedicineTakingEventRequest.builder()
+                    .medicineTakingEvent((MedicineTakingEvent) event)
+                    .fields(fields)
                     .build())
                     .flatMap(this::deleteImageFiles)
                     .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);

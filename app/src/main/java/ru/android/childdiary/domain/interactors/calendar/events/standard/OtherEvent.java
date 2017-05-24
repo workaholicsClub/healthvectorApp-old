@@ -4,12 +4,17 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
 
+import java.util.Collections;
+import java.util.List;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.ContentObject;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupItem;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -17,7 +22,7 @@ import ru.android.childdiary.utils.ObjectUtils;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class OtherEvent extends MasterEvent implements ContentObject<OtherEvent> {
+public class OtherEvent extends MasterEvent implements ContentObject<OtherEvent>, LinearGroupItem<OtherEvent> {
     private static final OtherEvent NULL = OtherEvent.builder().build();
 
     Long id;
@@ -54,5 +59,10 @@ public class OtherEvent extends MasterEvent implements ContentObject<OtherEvent>
         return contentEquals(getMasterEvent(), other.getMasterEvent())
                 && ObjectUtils.contentEquals(getName(), other.getName())
                 && ObjectUtils.equalsToMinutes(getFinishDateTime(), other.getFinishDateTime());
+    }
+
+    @Override
+    public List<LinearGroupFieldType> getChangedFields(OtherEvent other) {
+        return Collections.emptyList();
     }
 }

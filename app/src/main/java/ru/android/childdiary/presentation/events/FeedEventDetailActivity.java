@@ -45,12 +45,12 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeVie
 import ru.android.childdiary.presentation.core.fields.widgets.FieldSpinnerView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent> implements FeedEventDetailView,
-        FieldSpinnerView.FieldSpinnerListener, FoodMeasureDialogFragment.Listener, FoodDialogFragment.Listener {
+public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent>
+        implements FeedEventDetailView, FieldSpinnerView.FieldSpinnerListener,
+        FoodMeasureDialogFragment.Listener, FoodDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_FOOD_MEASURE_DIALOG = "FOOD_MEASURE_DIALOG";
@@ -370,10 +370,5 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         }
 
         super.onBackPressed();
-    }
-
-    @Override
-    protected boolean contentEquals(FeedEvent event1, FeedEvent event2) {
-        return ObjectUtils.contentEquals(event1, event2);
     }
 }
