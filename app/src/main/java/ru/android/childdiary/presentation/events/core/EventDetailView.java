@@ -25,6 +25,9 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void eventDone(boolean done);
 
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void eventMoved(@NonNull MasterEvent event);
+
     @StateStrategyType(AddToEndSingleStrategy.class)
     void validationFailed();
 

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
@@ -65,6 +66,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
+import ru.android.childdiary.utils.EventHelper;
 
 public class CalendarInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -393,7 +395,15 @@ public class CalendarInteractor {
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        return calendarRepository.done(event);
+        boolean isDone = EventHelper.isDone(event);
+        MasterEvent masterEvent = event.toMasterBuilder().isDone(!isDone).build();
+        return calendarRepository.updateMasterEvent(masterEvent);
+    }
+
+    public Observable<MasterEvent> move(@NonNull MasterEvent event, int minutes) {
+        DateTime dateTime = event.getDateTime();
+        MasterEvent masterEvent = event.toMasterBuilder().dateTime(dateTime.plusMinutes(minutes)).build();
+        return calendarRepository.updateMasterEvent(masterEvent);
     }
 
     public <T extends MasterEvent> Observable<Integer> deleteLinearGroup(@NonNull T event) {

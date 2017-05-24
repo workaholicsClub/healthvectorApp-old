@@ -219,6 +219,15 @@
     <string name="ask_update_linear_group">Обновить линейную группу событий?</string>
     <string name="update_one_event">Обновить одно событие</string>
     <string name="update_linear_group">Обновить линейную группу</string>
+    <string name="move_event">Перенести событие</string>
+    <string name="move_one_event">Перенести одно событие</string>
+    <string name="move_linear_group">Перенести линейную группу</string>
+    <!-- %1$s - параметр "Количество минут (часов), на которые переносим событие", например, "5 мин.";
+     %2$s - параметр "Время, на которое переносим событие", например, "10:00" -->
+    <string name="move_time_format_positive">+ %1$s (%2$s)</string>
+    <!-- %1$s - параметр "Количество минут (часов), на которые переносим событие", например, "5 мин.";
+     %2$s - параметр "Время, на которое переносим событие", например, "10:00" -->
+    <string name="move_time_format_negative">- %1$s (%2$s)</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

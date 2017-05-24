@@ -30,6 +30,7 @@ public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<Me
     @BindView(R.id.numberPicker)
     NumberPicker numberPicker;
 
+    @Nullable
     private Listener listener;
 
     @Override

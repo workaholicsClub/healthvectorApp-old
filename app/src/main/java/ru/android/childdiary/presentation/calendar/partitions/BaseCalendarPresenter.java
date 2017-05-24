@@ -115,8 +115,20 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                 }, this::onUnexpectedError));
     }
 
-    public void move(@NonNull MasterEvent event) {
-        getViewState().showUpdatingEvents(true);
+    public void moveOneEvent(@NonNull MasterEvent event, int minutes) {
+        unsubscribeOnDestroy(calendarInteractor.move(event, minutes)
+                .map(masterEvent -> {
+                    calendarInteractor.setSelectedDate(masterEvent.getDateTime().toLocalDate());
+                    return masterEvent;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(movedEvent -> logger.debug("event moved: " + movedEvent))
+                .subscribe(movedEvent -> {
+                }, this::onUnexpectedError));
+    }
+
+    public void moveLinearGroup(@NonNull MasterEvent event, int minutes) {
     }
 
     public void requestEventDetail(@NonNull MasterEvent event) {

@@ -64,7 +64,6 @@ import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVi
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
-import ru.android.childdiary.utils.EventHelper;
 
 @Singleton
 public class CalendarDbService extends EventsDbService {
@@ -397,16 +396,22 @@ public class CalendarDbService extends EventsDbService {
         Long doctorVisitId = getDoctorVisitId(doctorVisitEvent);
         List<DoctorVisitEventEntity> events = getDoctorVisitEvents(doctorVisitId, linearGroup);
 
-        for (DoctorVisitEventEntity event : events) {
-            for (LinearGroupFieldType field : fields) {
-                updateEventField(doctorVisitEvent, event, field);
-            }
-        }
+        if (fields.contains(LinearGroupFieldType.DOCTOR)
+                || fields.contains(LinearGroupFieldType.NAME)
+                || fields.contains(LinearGroupFieldType.DURATION_IN_MINUTES)) {
 
-        blockingEntityStore.update(events);
+            for (DoctorVisitEventEntity event : events) {
+                for (LinearGroupFieldType field : fields) {
+                    updateEventField(doctorVisitEvent, event, field);
+                }
+            }
+
+            blockingEntityStore.update(events);
+        }
 
         if (fields.contains(LinearGroupFieldType.NOTIFY_TIME_IN_MINUTES)
                 || fields.contains(LinearGroupFieldType.TIME)) {
+
             List<MasterEventEntity> masterEvents = getMasterEventsFromDoctorVisitEvents(events);
 
             for (MasterEventEntity masterEvent : masterEvents) {
@@ -434,13 +439,18 @@ public class CalendarDbService extends EventsDbService {
         Long medicineTakingId = getMedicineTakingId(medicineTakingEvent);
         List<MedicineTakingEventEntity> events = getMedicineTakingEvents(medicineTakingId, linearGroup);
 
-        for (MedicineTakingEventEntity event : events) {
-            for (LinearGroupFieldType field : fields) {
-                updateEventField(medicineTakingEvent, event, field);
-            }
-        }
+        if (fields.contains(LinearGroupFieldType.MEDICINE)
+                || fields.contains(LinearGroupFieldType.AMOUNT)
+                || fields.contains(LinearGroupFieldType.MEDICINE_MEASURE)) {
 
-        blockingEntityStore.update(events);
+            for (MedicineTakingEventEntity event : events) {
+                for (LinearGroupFieldType field : fields) {
+                    updateEventField(medicineTakingEvent, event, field);
+                }
+            }
+
+            blockingEntityStore.update(events);
+        }
 
         if (fields.contains(LinearGroupFieldType.NOTIFY_TIME_IN_MINUTES)
                 || fields.contains(LinearGroupFieldType.TIME)) {
@@ -510,17 +520,15 @@ public class CalendarDbService extends EventsDbService {
         }
     }
 
-    public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        boolean isDone = EventHelper.isDone(event);
-        MasterEvent masterEvent = event.toMasterBuilder().isDone(!isDone).build();
-        return DbUtils.updateObservable(blockingEntityStore, masterEvent, masterEventMapper);
-    }
-
     private MasterEvent insertMasterEvent(@NonNull MasterEvent event) {
         return DbUtils.insert(blockingEntityStore, event, masterEventMapper);
     }
 
-    private MasterEvent updateMasterEvent(@NonNull MasterEvent event) {
+    public MasterEvent updateMasterEvent(@NonNull MasterEvent event) {
         return DbUtils.update(blockingEntityStore, event, masterEventMapper);
+    }
+
+    public Observable<MasterEvent> updateMasterEventObservable(@NonNull MasterEvent event) {
+        return DbUtils.updateObservable(blockingEntityStore, event, masterEventMapper);
     }
 }

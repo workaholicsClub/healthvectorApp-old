@@ -119,8 +119,15 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribe(count -> getViewState().eventDeleted(event), this::onUnexpectedError));
     }
 
-    public void move(@NonNull T event) {
-        getViewState().showUpdatingEvents(true);
+    public void moveOneEvent(@NonNull MasterEvent event, int minutes) {
+        unsubscribeOnDestroy(calendarInteractor.move(event, minutes)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(movedEvent -> logger.debug("event moved: " + movedEvent))
+                .subscribe(getViewState()::eventMoved, this::onUnexpectedError));
+    }
+
+    public void moveLinearGroup(@NonNull MasterEvent event, int minutes) {
     }
 
     public void done(@NonNull T event) {
