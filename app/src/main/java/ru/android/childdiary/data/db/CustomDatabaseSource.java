@@ -10,6 +10,7 @@ import io.requery.meta.EntityModel;
 import io.requery.sql.Mapping;
 import io.requery.sql.Platform;
 import io.requery.sql.platform.SQLite;
+import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
 
 public class CustomDatabaseSource extends DatabaseSource {
@@ -18,21 +19,29 @@ public class CustomDatabaseSource extends DatabaseSource {
     public CustomDatabaseSource(Context context, EntityModel model, int version) {
         super(context, model, version);
         this.context = context;
+        init();
     }
 
     public CustomDatabaseSource(Context context, EntityModel model, @Nullable String name, int version) {
         super(context, model, name, version);
         this.context = context;
+        init();
     }
 
     public CustomDatabaseSource(Context context, EntityModel model, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, model, name, factory, version);
         this.context = context;
+        init();
     }
 
     public CustomDatabaseSource(Context context, EntityModel model, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version, SQLite platform) {
         super(context, model, name, factory, version, platform);
         this.context = context;
+        init();
+    }
+
+    private void init() {
+        setLoggingEnabled(BuildConfig.DEBUG);
     }
 
     @Override
