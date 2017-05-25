@@ -282,6 +282,11 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     @Override
+    public Observable<MasterEvent> updateMasterEvent(@NonNull MasterEvent event) {
+        return calendarDbService.updateMasterEventObservable(event);
+    }
+
+    @Override
     public Observable<DiaperEvent> update(@NonNull DiaperEvent event) {
         return calendarDbService.update(event);
     }
@@ -318,11 +323,6 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
 
     public <T extends MasterEvent> Observable<List<String>> delete(@NonNull T event) {
         return cleanUpDbService.deleteEvent(event);
-    }
-
-    @Override
-    public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        return calendarDbService.done(event);
     }
 
     public Observable<DeleteDoctorVisitEventsResponse> deleteLinearGroup(@NonNull DeleteDoctorVisitEventsRequest request) {

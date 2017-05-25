@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -46,8 +48,14 @@ public class MasterEvent implements Serializable {
                 && ObjectUtils.contentEquals(event1.getNote(), event2.getNote());
     }
 
-    public MasterEvent getMasterEvent() {
-        return this;
+    public static List<LinearGroupFieldType> getChangedFields(@NonNull MasterEvent event1, @NonNull MasterEvent event2) {
+        List<LinearGroupFieldType> significantFields = new ArrayList<>();
+
+        if (!ObjectUtils.equals(event1.getNotifyTimeInMinutes(), event2.getNotifyTimeInMinutes())) {
+            significantFields.add(LinearGroupFieldType.NOTIFY_TIME_IN_MINUTES);
+        }
+
+        return significantFields;
     }
 
     public MasterEvent.MasterEventBuilder toMasterBuilder() {

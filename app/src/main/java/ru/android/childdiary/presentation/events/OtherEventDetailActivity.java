@@ -31,11 +31,11 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldOtherEventNam
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDetailView, OtherEvent> implements OtherEventDetailView {
+public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDetailView, OtherEvent>
+        implements OtherEventDetailView {
     private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
     private static final String TAG_DATE_PICKER_START = "DATE_PICKER_START";
     private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
@@ -233,10 +233,5 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     @Override
     public void onSetTime(String tag, int minutes) {
         notifyTimeView.setValue(minutes);
-    }
-
-    @Override
-    protected boolean contentEquals(OtherEvent event1, OtherEvent event2) {
-        return ObjectUtils.contentEquals(event1, event2);
     }
 }

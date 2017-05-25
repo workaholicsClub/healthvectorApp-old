@@ -100,6 +100,8 @@ public interface CalendarRepository {
 
     Observable<SleepEvent> add(@NonNull SleepEvent event);
 
+    Observable<MasterEvent> updateMasterEvent(@NonNull MasterEvent event);
+
     Observable<DiaperEvent> update(@NonNull DiaperEvent event);
 
     Observable<FeedEvent> update(@NonNull FeedEvent event);
@@ -115,8 +117,6 @@ public interface CalendarRepository {
     Observable<UpdateMedicineTakingEventResponse> update(@NonNull UpdateMedicineTakingEventRequest request);
 
     <T extends MasterEvent> Observable<List<String>> delete(@NonNull T request);
-
-    Observable<MasterEvent> done(@NonNull MasterEvent event);
 
     Observable<DeleteDoctorVisitEventsResponse> deleteLinearGroup(@NonNull DeleteDoctorVisitEventsRequest request);
 

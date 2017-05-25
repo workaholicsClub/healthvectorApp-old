@@ -37,13 +37,12 @@ import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class SleepEventDetailActivity extends EventDetailActivity<EventDetailView<SleepEvent>, SleepEvent> implements EventDetailView<SleepEvent>,
-        TimerServiceListener {
+public class SleepEventDetailActivity extends EventDetailActivity<EventDetailView<SleepEvent>, SleepEvent>
+        implements EventDetailView<SleepEvent>, TimerServiceListener {
     private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
     private static final String TAG_DATE_PICKER_START = "DATE_PICKER_START";
     private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
@@ -344,10 +343,5 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         if (isTimerStarted()) {
             presenter.updateEvent(buildEvent(), false);
         }
-    }
-
-    @Override
-    protected boolean contentEquals(SleepEvent event1, SleepEvent event2) {
-        return ObjectUtils.contentEquals(event1, event2);
     }
 }

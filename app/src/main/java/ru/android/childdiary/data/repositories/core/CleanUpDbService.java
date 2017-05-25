@@ -3,10 +3,6 @@ package ru.android.childdiary.data.repositories.core;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
-import io.requery.query.Result;
-import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
 import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
@@ -35,8 +28,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildResponse;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
@@ -52,10 +43,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
-public class CleanUpDbService {
-    private final Logger logger = LoggerFactory.getLogger(toString());
-    private final ReactiveEntityStore<Persistable> dataStore;
-    private final BlockingEntityStore<Persistable> blockingEntityStore;
+public class CleanUpDbService extends EventsDbService {
     private final DoctorVisitMapper doctorVisitMapper;
     private final MedicineTakingMapper medicineTakingMapper;
 
@@ -63,26 +51,9 @@ public class CleanUpDbService {
     public CleanUpDbService(ReactiveEntityStore<Persistable> dataStore,
                             DoctorVisitMapper doctorVisitMapper,
                             MedicineTakingMapper medicineTakingMapper) {
-        this.dataStore = dataStore;
-        this.blockingEntityStore = dataStore.toBlocking();
+        super(dataStore);
         this.doctorVisitMapper = doctorVisitMapper;
         this.medicineTakingMapper = medicineTakingMapper;
-    }
-
-    private Long getId(@NonNull DoctorVisit doctorVisit) {
-        Long id = doctorVisit.getId();
-        if (id == null) {
-            throw new IllegalStateException("Doctor visit id is null");
-        }
-        return id;
-    }
-
-    private Long getId(@NonNull MedicineTaking medicineTaking) {
-        Long id = medicineTaking.getId();
-        if (id == null) {
-            throw new IllegalStateException("Medicine taking id is null");
-        }
-        return id;
     }
 
     public Observable<DeleteChildResponse> deleteChild(@NonNull DeleteChildRequest request) {
@@ -126,7 +97,7 @@ public class CleanUpDbService {
     public Observable<DeleteDoctorVisitEventsResponse> deleteDoctorVisitEvents(
             @NonNull DeleteDoctorVisitEventsRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            Long id = getId(request.getDoctorVisit());
+            Long id = getDoctorVisitId(request.getDoctorVisit());
             DoctorVisitEntity doctorVisitEntity = findDoctorVisitEntity(id);
             val events = request.getLinearGroup() == null
                     ? getDoctorVisitEvents(id)
@@ -151,7 +122,7 @@ public class CleanUpDbService {
     public Observable<DeleteMedicineTakingEventsResponse> deleteMedicineTakingEvents(
             @NonNull DeleteMedicineTakingEventsRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            Long id = getId(request.getMedicineTaking());
+            Long id = getMedicineTakingId(request.getMedicineTaking());
             MedicineTakingEntity medicineTakingEntity = findMedicineTakingEntity(id);
             val events = request.getLinearGroup() == null
                     ? getMedicineTakingEvents(id)
@@ -175,7 +146,7 @@ public class CleanUpDbService {
 
     public Observable<CompleteDoctorVisitResponse> completeDoctorVisit(@NonNull CompleteDoctorVisitRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            Long id = getId(request.getDoctorVisit());
+            Long id = getDoctorVisitId(request.getDoctorVisit());
             DoctorVisitEntity doctorVisitEntity = findDoctorVisitEntity(id);
             doctorVisitEntity.setFinishDateTime(request.getDateTime());
             blockingEntityStore.update(doctorVisitEntity);
@@ -197,7 +168,7 @@ public class CleanUpDbService {
 
     public Observable<CompleteMedicineTakingResponse> completeMedicineTaking(@NonNull CompleteMedicineTakingRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            Long id = getId(request.getMedicineTaking());
+            Long id = getMedicineTakingId(request.getMedicineTaking());
             MedicineTakingEntity medicineTakingEntity = findMedicineTakingEntity(id);
             medicineTakingEntity.setFinishDateTime(request.getDateTime());
             blockingEntityStore.update(medicineTakingEntity);
@@ -219,7 +190,7 @@ public class CleanUpDbService {
 
     public Observable<DeleteDoctorVisitResponse> deleteDoctorVisit(@NonNull DeleteDoctorVisitRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            Long id = getId(request.getDoctorVisit());
+            Long id = getDoctorVisitId(request.getDoctorVisit());
             val events = getDoctorVisitEvents(id);
             int count = events.size();
             List<String> imageFilesToDelete = new ArrayList<>();
@@ -239,7 +210,7 @@ public class CleanUpDbService {
 
     public Observable<DeleteMedicineTakingResponse> deleteMedicineTaking(@NonNull DeleteMedicineTakingRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            Long id = getId(request.getMedicineTaking());
+            Long id = getMedicineTakingId(request.getMedicineTaking());
             val events = getMedicineTakingEvents(id);
             int count = events.size();
             List<String> imageFilesToDelete = new ArrayList<>();
@@ -264,26 +235,18 @@ public class CleanUpDbService {
             if (event instanceof DoctorVisitEvent) {
                 DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
                 imageFilesToDelete.add(doctorVisitEvent.getImageFileName());
-                Long id = getId(doctorVisitEvent.getDoctorVisit());
+                Long id = getDoctorVisitId(doctorVisitEvent.getDoctorVisit());
                 DoctorVisitEntity doctorVisitEntity = findDoctorVisitEntity(id);
                 deleteIfPossible(doctorVisitEntity, imageFilesToDelete);
             } else if (event instanceof MedicineTakingEvent) {
                 MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) event;
                 imageFilesToDelete.add(medicineTakingEvent.getImageFileName());
-                Long id = getId(medicineTakingEvent.getMedicineTaking());
+                Long id = getMedicineTakingId(medicineTakingEvent.getMedicineTaking());
                 MedicineTakingEntity medicineTakingEntity = findMedicineTakingEntity(id);
                 deleteIfPossible(medicineTakingEntity, imageFilesToDelete);
             }
             return imageFilesToDelete;
         }));
-    }
-
-    private DoctorVisitEntity findDoctorVisitEntity(Long id) {
-        return blockingEntityStore.findByKey(DoctorVisitEntity.class, id);
-    }
-
-    private MedicineTakingEntity findMedicineTakingEntity(Long id) {
-        return blockingEntityStore.findByKey(MedicineTakingEntity.class, id);
     }
 
     private void delete(DoctorVisitEntity doctorVisitEntity,
@@ -333,18 +296,12 @@ public class CleanUpDbService {
     }
 
     private void deleteDoctorVisitEvents(List<DoctorVisitEventEntity> events) {
-        val masterEvents = Observable.fromIterable(events)
-                .map(event -> blockingEntityStore.findByKey(MasterEventEntity.class,
-                        event.getMasterEvent().getId()))
-                .toList().blockingGet();
+        val masterEvents = getMasterEventsFromDoctorVisitEvents(events);
         delete(masterEvents);
     }
 
     private void deleteMedicineTakingEvents(List<MedicineTakingEventEntity> events) {
-        val masterEvents = Observable.fromIterable(events)
-                .map(event -> blockingEntityStore.findByKey(MasterEventEntity.class,
-                        event.getMasterEvent().getId()))
-                .toList().blockingGet();
+        val masterEvents = getMasterEventsFromMedicineTakingEvents(events);
         delete(masterEvents);
     }
 
@@ -387,51 +344,5 @@ public class CleanUpDbService {
                 .map(MedicineTakingEntity::getImageFileName)
                 .toList()
                 .blockingGet();
-    }
-
-    private List<DoctorVisitEventEntity> getDoctorVisitEvents(Long id) {
-        return selectDoctorVisitEvents(id).get().toList();
-    }
-
-    private List<DoctorVisitEventEntity> getDoctorVisitEvents(Long id, Integer linearGroup) {
-        return selectDoctorVisitEvents(id)
-                .and(MasterEventEntity.LINEAR_GROUP.eq(linearGroup))
-                .get().toList();
-    }
-
-    private List<DoctorVisitEventEntity> getDoctorVisitEvents(Long id, DateTime dateTime) {
-        return selectDoctorVisitEvents(id)
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(dateTime.toDateTime()))
-                .get().toList();
-    }
-
-    private List<MedicineTakingEventEntity> getMedicineTakingEvents(Long id) {
-        return selectMedicineTakingEvents(id).get().toList();
-    }
-
-    private List<MedicineTakingEventEntity> getMedicineTakingEvents(Long id, Integer linearGroup) {
-        return selectMedicineTakingEvents(id)
-                .and(MasterEventEntity.LINEAR_GROUP.eq(linearGroup))
-                .get().toList();
-    }
-
-    private List<MedicineTakingEventEntity> getMedicineTakingEvents(Long id, DateTime dateTime) {
-        return selectMedicineTakingEvents(id)
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(dateTime.toDateTime()))
-                .get().toList();
-    }
-
-    private WhereAndOr<? extends Result<DoctorVisitEventEntity>> selectDoctorVisitEvents(Long id) {
-        return blockingEntityStore
-                .select(DoctorVisitEventEntity.class)
-                .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
-                .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(id));
-    }
-
-    private WhereAndOr<? extends Result<MedicineTakingEventEntity>> selectMedicineTakingEvents(Long id) {
-        return blockingEntityStore
-                .select(MedicineTakingEventEntity.class)
-                .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(MedicineTakingEventEntity.MASTER_EVENT_ID))
-                .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(id));
     }
 }

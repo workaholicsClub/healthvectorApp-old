@@ -33,10 +33,15 @@ import io.reactivex.disposables.Disposable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.core.ContentObject;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupItem;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogArguments;
+import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogFragment;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
@@ -49,8 +54,14 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent> extends BaseMvpActivity implements
-        EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener {
+public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent & ContentObject<T> & LinearGroupItem<T>>
+        extends BaseMvpActivity
+        implements EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
+        TimeDialogFragment.Listener, MoveEventDialogFragment.Listener {
+    private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
+    private static final String TAG_PROGRESS_DIALOG_UPDATING_EVENTS = "TAG_PROGRESS_DIALOG_UPDATING_EVENTS";
+    private static final String TAG_MOVE_EVENT_DIALOG = "TAG_MOVE_EVENT_DIALOG";
+
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
 
@@ -203,6 +214,10 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
+    public void eventMoved(@NonNull MasterEvent event) {
+    }
+
+    @Override
     public void validationFailed() {
     }
 
@@ -243,6 +258,28 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 .setMessage(R.string.need_to_fill_not_or_photo)
                 .setPositiveButton(R.string.ok, null)
                 .show();
+    }
+
+    @Override
+    public void showDeletingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_deleting));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS);
+        }
+    }
+
+    @Override
+    public void showUpdatingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_UPDATING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_updating));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_UPDATING_EVENTS);
+        }
     }
 
     @Override
@@ -331,6 +368,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 getPresenter().done(buildEvent());
                 return true;
             case R.id.menu_move:
+                MoveEventDialogFragment dialogFragment = new MoveEventDialogFragment();
+                dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_MOVE_EVENT_DIALOG,
+                        MoveEventDialogArguments.builder()
+                                .sex(getSex())
+                                .event(event)
+                                .build());
                 return true;
             case R.id.menu_delete:
                 getPresenter().delete(event);
@@ -340,41 +383,102 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
     }
 
+    @Override
+    public void onMoveEventClick(String tag, @NonNull MasterEvent event, int minutes) {
+        getPresenter().moveOneEvent(event, minutes);
+    }
+
+    @Override
+    public void onMoveLinearGroupClick(String tag, @NonNull MasterEvent event, int minutes) {
+        getPresenter().moveLinearGroup(event, minutes);
+    }
+
     private void saveChangesOrExit() {
         T editedEvent = buildEvent();
-        if (event == null && contentEquals(editedEvent, defaultEvent)) {
+        if (event == null && editedEvent.isContentEqual(defaultEvent)) {
             finish();
             return;
         }
-        if (event != null && contentEquals(editedEvent, event)) {
-            if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
-                showNeedToFillNoteOrPhoto();
-            } else if (EventHelper.isDone(editedEvent) == EventHelper.isDone(event)) {
-                finish();
-            } else {
-                getPresenter().updateEvent(editedEvent, true);
-            }
+        if (event != null && editedEvent.isContentEqual(event)) {
+            processContentEquals(editedEvent);
             return;
         }
+        if (event == null) {
+            // вставка
+            processAddEvent(editedEvent);
+        } else {
+            // обновление
+            if (event.getLinearGroup() == null) {
+                // нет линейной группы, обновляем событие
+                processOneEventUpdate(editedEvent);
+            } else {
+                // есть линейная группа
+                List<LinearGroupFieldType> fields = editedEvent.getChangedFields(event);
+                if (fields.isEmpty()) {
+                    // изменены поля, которые не должны влиять на всю линейную группу
+                    processOneEventUpdate(editedEvent);
+                } else {
+                    // изменены поля, которые могут повлиять на всю линейную группу
+                    processLinearGroupUpdate(editedEvent, fields);
+                }
+            }
+        }
+    }
+
+    private void processContentEquals(T editedEvent) {
+        if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+            showNeedToFillNoteOrPhoto();
+        } else if (EventHelper.isDone(editedEvent) == EventHelper.isDone(event)) {
+            finish();
+        } else {
+            getPresenter().updateEvent(editedEvent, true);
+        }
+    }
+
+    private void processAddEvent(T editedEvent) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.save_changes_dialog_title)
+                .setPositiveButton(R.string.save,
+                        (DialogInterface dialog, int which) -> getPresenter().addEvent(editedEvent, true))
+                .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
+                .show();
+    }
+
+    private void processOneEventUpdate(T editedEvent) {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
                 .setPositiveButton(R.string.save,
                         (DialogInterface dialog, int which) -> {
-                            if (event == null) {
-                                getPresenter().addEvent(editedEvent, true);
+                            if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+                                showNeedToFillNoteOrPhoto();
                             } else {
-                                if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
-                                    showNeedToFillNoteOrPhoto();
-                                } else {
-                                    getPresenter().updateEvent(editedEvent, true);
-                                }
+                                getPresenter().updateEvent(editedEvent, true);
                             }
                         })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
                 .show();
     }
 
-    protected abstract boolean contentEquals(T event1, T event2);
+    private void processLinearGroupUpdate(T editedEvent, List<LinearGroupFieldType> fields) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.ask_update_linear_group)
+                .setPositiveButton(R.string.update_one_event,
+                        (DialogInterface dialog, int which) -> {
+                            if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+                                showNeedToFillNoteOrPhoto();
+                            } else {
+                                getPresenter().updateEvent(editedEvent, true);
+                            }
+                        })
+                .setNegativeButton(R.string.update_linear_group, (dialog, which) -> {
+                    if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+                        showNeedToFillNoteOrPhoto();
+                    } else {
+                        getPresenter().updateLinearGroup(editedEvent, fields, true);
+                    }
+                })
+                .show();
+    }
 
     protected final boolean notifyTimeViewVisible() {
         return defaultEvent != null && ObjectUtils.isPositive(defaultEvent.getNotifyTimeInMinutes());

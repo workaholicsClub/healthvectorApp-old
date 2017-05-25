@@ -37,6 +37,8 @@ import ru.android.childdiary.presentation.calendar.adapters.events.EventActionLi
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
+import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogArguments;
+import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogFragment;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
@@ -49,8 +51,15 @@ import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> extends AppPartitionFragment implements BaseCalendarView,
-        AdapterView.OnItemClickListener, CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener {
+public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
+        extends AppPartitionFragment
+        implements BaseCalendarView, AdapterView.OnItemClickListener,
+        CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener,
+        MoveEventDialogFragment.Listener {
+    private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
+    private static final String TAG_PROGRESS_DIALOG_UPDATING_EVENTS = "TAG_PROGRESS_DIALOG_UPDATING_EVENTS";
+    private static final String TAG_MOVE_EVENT_DIALOG = "TAG_MOVE_EVENT_DIALOG";
+
     private static final int REQUEST_UPDATE_EVENT = 1;
 
     @InjectPresenter
@@ -277,14 +286,6 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
-    public void showNeedToFillNoteOrPhoto() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.need_to_fill_not_or_photo)
-                .setPositiveButton(R.string.ok, null)
-                .show();
-    }
-
-    @Override
     public void confirmDeleteOneEvent(@NonNull MasterEvent event) {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_event_confirmation_dialog_title)
@@ -306,6 +307,36 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
     }
 
     @Override
+    public void showNeedToFillNoteOrPhoto() {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.need_to_fill_not_or_photo)
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
+    @Override
+    public void showDeletingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_deleting));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS);
+        }
+    }
+
+    @Override
+    public void showUpdatingEvents(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_UPDATING_EVENTS,
+                    getString(R.string.please_wait),
+                    getString(R.string.events_updating));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_UPDATING_EVENTS);
+        }
+    }
+
+    @Override
     public void delete(MasterEvent event) {
         presenter.delete(event);
     }
@@ -317,6 +348,22 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter> 
 
     @Override
     public void move(MasterEvent event) {
+        MoveEventDialogFragment dialogFragment = new MoveEventDialogFragment();
+        dialogFragment.showAllowingStateLoss(getChildFragmentManager(), TAG_MOVE_EVENT_DIALOG,
+                MoveEventDialogArguments.builder()
+                        .sex(getSex())
+                        .event(event)
+                        .build());
+    }
+
+    @Override
+    public void onMoveEventClick(String tag, @NonNull MasterEvent event, int minutes) {
+        presenter.moveOneEvent(event, minutes);
+    }
+
+    @Override
+    public void onMoveLinearGroupClick(String tag, @NonNull MasterEvent event, int minutes) {
+        presenter.moveLinearGroup(event, minutes);
     }
 
     @Override

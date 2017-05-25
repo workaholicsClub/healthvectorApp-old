@@ -51,4 +51,10 @@ public interface BaseCalendarView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showNeedToFillNoteOrPhoto();
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showDeletingEvents(boolean loading);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showUpdatingEvents(boolean loading);
 }

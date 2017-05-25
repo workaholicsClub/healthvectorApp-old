@@ -7,11 +7,13 @@ import android.text.TextUtils;
 
 import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,6 +31,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
@@ -63,6 +66,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
+import ru.android.childdiary.utils.EventHelper;
 
 public class CalendarInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -301,6 +305,14 @@ public class CalendarInteractor {
                 .flatMap(this::postprocessOnUpdate);
     }
 
+    public <T extends MasterEvent> Observable<T> updateLinearGroup(@NonNull T event, List<LinearGroupFieldType> fields) {
+        return preprocessOnUpdate(event)
+                .flatMap(this::validate)
+                .flatMap(this::createImageFile)
+                .flatMap(processedEvent -> updateLinearGroupInternal(processedEvent, fields))
+                .flatMap(this::postprocessOnUpdate);
+    }
+
     @SuppressWarnings("unchecked")
     private <T extends MasterEvent> Observable<T> updateInternal(@NonNull T event) {
         if (event.getEventType() == EventType.DIAPER) {
@@ -316,12 +328,45 @@ public class CalendarInteractor {
         } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
             return (Observable<T>) calendarRepository.update(UpdateDoctorVisitEventRequest.builder()
                     .doctorVisitEvent((DoctorVisitEvent) event)
+                    .fields(Collections.emptyList())
                     .build())
                     .flatMap(this::deleteImageFiles)
                     .map(UpdateDoctorVisitEventResponse::getDoctorVisitEvent);
         } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
             return (Observable<T>) calendarRepository.update(UpdateMedicineTakingEventRequest.builder()
                     .medicineTakingEvent((MedicineTakingEvent) event)
+                    .fields(Collections.emptyList())
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);
+        }
+        // TODO EXERCISE
+        throw new IllegalStateException("Unsupported event type");
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends MasterEvent> Observable<T> updateLinearGroupInternal(@NonNull T event, List<LinearGroupFieldType> fields) {
+        if (event.getEventType() == EventType.DIAPER) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.FEED) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.OTHER) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.PUMP) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.SLEEP) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
+            return (Observable<T>) calendarRepository.update(UpdateDoctorVisitEventRequest.builder()
+                    .doctorVisitEvent((DoctorVisitEvent) event)
+                    .fields(fields)
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(UpdateDoctorVisitEventResponse::getDoctorVisitEvent);
+        } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
+            return (Observable<T>) calendarRepository.update(UpdateMedicineTakingEventRequest.builder()
+                    .medicineTakingEvent((MedicineTakingEvent) event)
+                    .fields(fields)
                     .build())
                     .flatMap(this::deleteImageFiles)
                     .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);
@@ -333,24 +378,6 @@ public class CalendarInteractor {
     public <T extends MasterEvent> Observable<T> delete(@NonNull T event) {
         return calendarRepository.delete(event)
                 .flatMap(imageFilesToDelete -> deleteImageFiles(event, imageFilesToDelete));
-    }
-
-    private <T extends MasterEvent> Observable<T> deleteImageFiles(@NonNull T event, List<String> imageFilesToDelete) {
-        return Observable.fromCallable(() -> {
-            imagesRepository.deleteImageFiles(imageFilesToDelete);
-            return event;
-        });
-    }
-
-    private <T extends DeleteResponse> Observable<T> deleteImageFiles(@NonNull T response) {
-        return Observable.fromCallable(() -> {
-            imagesRepository.deleteImageFiles(response.getImageFilesToDelete());
-            return response;
-        });
-    }
-
-    public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        return calendarRepository.done(event);
     }
 
     public <T extends MasterEvent> Observable<Integer> deleteLinearGroup(@NonNull T event) {
@@ -384,6 +411,62 @@ public class CalendarInteractor {
                     .build())
                     .flatMap(this::deleteImageFiles)
                     .map(DeleteMedicineTakingEventsResponse::getCount);
+        }
+        // TODO EXERCISE
+        throw new IllegalStateException("Unsupported event type");
+    }
+
+    private <T extends MasterEvent> Observable<T> deleteImageFiles(@NonNull T event, List<String> imageFilesToDelete) {
+        return Observable.fromCallable(() -> {
+            imagesRepository.deleteImageFiles(imageFilesToDelete);
+            return event;
+        });
+    }
+
+    private <T extends DeleteResponse> Observable<T> deleteImageFiles(@NonNull T response) {
+        return Observable.fromCallable(() -> {
+            imagesRepository.deleteImageFiles(response.getImageFilesToDelete());
+            return response;
+        });
+    }
+
+    public Observable<MasterEvent> done(@NonNull MasterEvent event) {
+        boolean isDone = EventHelper.isDone(event);
+        MasterEvent masterEvent = event.toMasterBuilder().isDone(!isDone).build();
+        return calendarRepository.updateMasterEvent(masterEvent);
+    }
+
+    public Observable<MasterEvent> move(@NonNull MasterEvent event, int minutes) {
+        DateTime dateTime = event.getDateTime();
+        MasterEvent masterEvent = event.toMasterBuilder().dateTime(dateTime.plusMinutes(minutes)).build();
+        return calendarRepository.updateMasterEvent(masterEvent);
+    }
+
+    public Observable<MasterEvent> moveLinearGroup(@NonNull MasterEvent event, int minutes) {
+        if (event.getEventType() == EventType.DIAPER) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.FEED) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.OTHER) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.PUMP) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.SLEEP) {
+            return Observable.error(new IllegalArgumentException("Unsupported event type"));
+        } else if (event.getEventType() == EventType.DOCTOR_VISIT) {
+            return calendarRepository.update(UpdateDoctorVisitEventRequest.builder()
+                    .doctorVisitEvent((DoctorVisitEvent) event)
+                    .fields(Collections.singletonList(LinearGroupFieldType.TIME))
+                    .minutes(minutes)
+                    .build())
+                    .map(UpdateDoctorVisitEventResponse::getDoctorVisitEvent);
+        } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
+            return calendarRepository.update(UpdateMedicineTakingEventRequest.builder()
+                    .medicineTakingEvent((MedicineTakingEvent) event)
+                    .fields(Collections.singletonList(LinearGroupFieldType.TIME))
+                    .minutes(minutes)
+                    .build())
+                    .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);
         }
         // TODO EXERCISE
         throw new IllegalStateException("Unsupported event type");

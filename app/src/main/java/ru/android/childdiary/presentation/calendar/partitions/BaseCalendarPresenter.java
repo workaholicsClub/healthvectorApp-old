@@ -104,15 +104,44 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     }
 
     public void deleteLinearGroup(@NonNull MasterEvent event) {
+        getViewState().showDeletingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.deleteLinearGroup(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(count -> logger.debug("deleted " + count + " events"))
+                .doOnNext(response -> getViewState().showDeletingEvents(false))
+                .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> {
                 }, this::onUnexpectedError));
     }
 
-    public void move(@NonNull MasterEvent event) {
+    public void moveOneEvent(@NonNull MasterEvent event, int minutes) {
+        unsubscribeOnDestroy(calendarInteractor.move(event, minutes)
+                .map(masterEvent -> {
+                    calendarInteractor.setSelectedDate(masterEvent.getDateTime().toLocalDate());
+                    return masterEvent;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(movedEvent -> logger.debug("event moved: " + movedEvent))
+                .subscribe(movedEvent -> {
+                }, this::onUnexpectedError));
+    }
+
+    public void moveLinearGroup(@NonNull MasterEvent event, int minutes) {
+        getViewState().showUpdatingEvents(true);
+        unsubscribeOnDestroy(calendarInteractor.moveLinearGroup(event, minutes)
+                .map(masterEvent -> {
+                    calendarInteractor.setSelectedDate(masterEvent.getDateTime().toLocalDate());
+                    return masterEvent;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(movedEvent -> logger.debug("event moved: " + movedEvent))
+                .doOnNext(response -> getViewState().showUpdatingEvents(false))
+                .doOnError(throwable -> getViewState().showUpdatingEvents(false))
+                .subscribe(movedEvent -> {
+                }, this::onUnexpectedError));
     }
 
     public void requestEventDetail(@NonNull MasterEvent event) {

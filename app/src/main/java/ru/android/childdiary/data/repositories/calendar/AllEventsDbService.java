@@ -50,30 +50,52 @@ import ru.android.childdiary.utils.DateUtils;
 
 @Singleton
 public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEvent> {
+    // master event
     private static final String MASTER_EVENT_ENTITY_ID = "MASTER_EVENT_ENTITY_ID";
     private static final String MASTER_EVENT_ENTITY_EVENT_TYPE = "MASTER_EVENT_ENTITY_EVENT_TYPE";
     private static final String MASTER_EVENT_ENTITY_DATE_TIME = "MASTER_EVENT_ENTITY_DATE_TIME";
     private static final String MASTER_EVENT_ENTITY_NOTE = "MASTER_EVENT_ENTITY_NOTE";
     private static final String MASTER_EVENT_ENTITY_DONE = "MASTER_EVENT_ENTITY_DONE";
     private static final String MASTER_EVENT_ENTITY_LINEAR_GROUP = "MASTER_EVENT_ENTITY_LINEAR_GROUP";
+    // child
     private static final String CHILD_ENTITY_ID = "CHILD_ENTITY_ID";
+    // diaper event
+    private static final String DIAPER_EVENT_ENTITY_ID = "DIAPER_EVENT_ENTITY_ID";
     private static final String DIAPER_EVENT_ENTITY_DIAPER_STATE = "DIAPER_EVENT_ENTITY_DIAPER_STATE";
+    // feed event
+    private static final String FEED_EVENT_ENTITY_ID = "FEED_EVENT_ENTITY_ID";
     private static final String FEED_EVENT_ENTITY_FEED_TYPE = "FEED_EVENT_ENTITY_FEED_TYPE";
     private static final String FEED_EVENT_ENTITY_BREAST = "FEED_EVENT_ENTITY_BREAST";
+    // food
     private static final String FOOD_ENTITY_NAME = "FOOD_ENTITY_NAME";
+    // other event
+    private static final String OTHER_EVENT_ENTITY_ID = "OTHER_EVENT_ENTITY_ID";
     private static final String OTHER_EVENT_ENTITY_NAME = "OTHER_EVENT_ENTITY_NAME";
+    // pump event
+    private static final String PUMP_EVENT_ENTITY_ID = "PUMP_EVENT_ENTITY_ID";
     private static final String PUMP_EVENT_ENTITY_BREAST = "PUMP_EVENT_ENTITY_BREAST";
+    // sleep event
+    private static final String SLEEP_EVENT_ENTITY_ID = "SLEEP_EVENT_ENTITY_ID";
     private static final String SLEEP_EVENT_ENTITY_FINISH_DATE_TIME = "SLEEP_EVENT_ENTITY_FINISH_DATE_TIME";
     private static final String SLEEP_EVENT_ENTITY_TIMER_STARTED = "SLEEP_EVENT_ENTITY_TIMER_STARTED";
+    // doctor visit event
+    private static final String DOCTOR_VISIT_EVENT_ENTITY_ID = "DOCTOR_VISIT_EVENT_ENTITY_ID";
     private static final String DOCTOR_VISIT_EVENT_ENTITY_NAME = "DOCTOR_VISIT_EVENT_ENTITY_NAME";
-    private static final String DOCTOR_VISIT_ENTITY_ID = "DOCTOR_VISIT_ENTITY_ID";
-    private static final String DOCTOR_ENTITY_NAME = "DOCTOR_ENTITY_NAME";
     private static final String DOCTOR_VISIT_EVENT_ENTITY_IMAGE_FILE_NAME = "DOCTOR_VISIT_EVENT_ENTITY_IMAGE_FILE_NAME";
-    private static final String MEDICINE_TAKING_ENTITY_ID = "MEDICINE_TAKING_ENTITY_ID";
-    private static final String MEDICINE_ENTITY_NAME = "MEDICINE_ENTITY_NAME";
+    // doctor visit
+    private static final String DOCTOR_VISIT_ENTITY_ID = "DOCTOR_VISIT_ENTITY_ID";
+    // doctor
+    private static final String DOCTOR_ENTITY_NAME = "DOCTOR_ENTITY_NAME";
+    // medicine taking event
+    private static final String MEDICINE_TAKING_EVENT_ENTITY_ID = "MEDICINE_TAKING_EVENT_ENTITY_ID";
     private static final String MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME = "MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME";
+    // medicine taking
+    private static final String MEDICINE_TAKING_ENTITY_ID = "MEDICINE_TAKING_ENTITY_ID";
+    // medicine
+    private static final String MEDICINE_ENTITY_NAME = "MEDICINE_ENTITY_NAME";
 
     private final static Expression[] EXPRESSIONS = new Expression[]{
+            // master event
             MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID),
             MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE),
             MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME),
@@ -83,20 +105,26 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
             // child
             ChildEntity.ID.as(CHILD_ENTITY_ID),
             // diaper event
+            DiaperEventEntity.ID.as(DIAPER_EVENT_ENTITY_ID),
             DiaperEventEntity.DIAPER_STATE.as(DIAPER_EVENT_ENTITY_DIAPER_STATE),
             // feed event
+            FeedEventEntity.ID.as(FEED_EVENT_ENTITY_ID),
             FeedEventEntity.FEED_TYPE.as(FEED_EVENT_ENTITY_FEED_TYPE),
             FeedEventEntity.BREAST.as(FEED_EVENT_ENTITY_BREAST),
             // food
             FoodEntity.NAME.as(FOOD_ENTITY_NAME),
             // other event
+            OtherEventEntity.ID.as(OTHER_EVENT_ENTITY_ID),
             OtherEventEntity.NAME.as(OTHER_EVENT_ENTITY_NAME),
             // pump event
+            PumpEventEntity.ID.as(PUMP_EVENT_ENTITY_ID),
             PumpEventEntity.BREAST.as(PUMP_EVENT_ENTITY_BREAST),
             // sleep event
+            SleepEventEntity.ID.as(SLEEP_EVENT_ENTITY_ID),
             SleepEventEntity.FINISH_DATE_TIME.as(SLEEP_EVENT_ENTITY_FINISH_DATE_TIME),
             SleepEventEntity.TIMER_STARTED.as(SLEEP_EVENT_ENTITY_TIMER_STARTED),
             // doctor visit event
+            DoctorVisitEventEntity.ID.as(DOCTOR_VISIT_EVENT_ENTITY_ID),
             DoctorVisitEventEntity.NAME.as(DOCTOR_VISIT_EVENT_ENTITY_NAME),
             DoctorVisitEventEntity.IMAGE_FILE_NAME.as(DOCTOR_VISIT_EVENT_ENTITY_IMAGE_FILE_NAME),
             // doctor visit
@@ -104,6 +132,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
             // doctor
             DoctorEntity.NAME.as(DOCTOR_ENTITY_NAME),
             // medicine taking event
+            MedicineTakingEventEntity.ID.as(MEDICINE_TAKING_EVENT_ENTITY_ID),
             MedicineTakingEventEntity.IMAGE_FILE_NAME.as(MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME),
             // medicine taking
             MedicineTakingEntity.ID.as(MEDICINE_TAKING_ENTITY_ID),
@@ -126,6 +155,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static DiaperEvent mapToDiaperEvent(@NonNull Tuple data) {
         return DiaperEvent.builder()
+                .id(data.get(DiaperEventEntity.ID.as(DIAPER_EVENT_ENTITY_ID)))
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
@@ -139,6 +169,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static FeedEvent mapToFeedEvent(@NonNull Tuple data) {
         return FeedEvent.builder()
+                .id(data.get(FeedEventEntity.ID.as(FEED_EVENT_ENTITY_ID)))
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
@@ -160,6 +191,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static OtherEvent mapToOtherEvent(@NonNull Tuple data) {
         return OtherEvent.builder()
+                .id(data.get(OtherEventEntity.ID.as(OTHER_EVENT_ENTITY_ID)))
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
@@ -173,6 +205,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static PumpEvent mapToPumpEvent(@NonNull Tuple data) {
         return PumpEvent.builder()
+                .id(data.get(PumpEventEntity.ID.as(PUMP_EVENT_ENTITY_ID)))
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
@@ -186,6 +219,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static SleepEvent mapToSleepEvent(@NonNull Tuple data) {
         return SleepEvent.builder()
+                .id(data.get(SleepEventEntity.ID.as(SLEEP_EVENT_ENTITY_ID)))
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
@@ -200,6 +234,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static DoctorVisitEvent mapToDoctorVisitEvent(@NonNull Tuple data) {
         return DoctorVisitEvent.builder()
+                .id(data.get(DoctorVisitEventEntity.ID.as(DOCTOR_VISIT_EVENT_ENTITY_ID)))
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
@@ -228,6 +263,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static MedicineTakingEvent mapToMedicineTakingEvent(@NonNull Tuple data) {
         return MedicineTakingEvent.builder()
+                .id(data.get(MedicineTakingEventEntity.ID.as(MEDICINE_TAKING_EVENT_ENTITY_ID)))
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))

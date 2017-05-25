@@ -25,6 +25,9 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void eventDone(boolean done);
 
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void eventMoved(@NonNull MasterEvent event);
+
     @StateStrategyType(AddToEndSingleStrategy.class)
     void validationFailed();
 
@@ -42,4 +45,10 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showNeedToFillNoteOrPhoto();
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showDeletingEvents(boolean loading);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showUpdatingEvents(boolean loading);
 }

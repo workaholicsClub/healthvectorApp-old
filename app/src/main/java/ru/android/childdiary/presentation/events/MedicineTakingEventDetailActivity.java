@@ -43,7 +43,6 @@ import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerActivity;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -267,10 +266,5 @@ public class MedicineTakingEventDetailActivity
     @Override
     public void onSetImage(@Nullable String relativeFileName) {
         noteWithPhotoView.setImageFileName(relativeFileName);
-    }
-
-    @Override
-    protected boolean contentEquals(MedicineTakingEvent event1, MedicineTakingEvent event2) {
-        return ObjectUtils.contentEquals(event1, event2);
     }
 }

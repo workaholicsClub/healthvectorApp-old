@@ -4,6 +4,9 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
 
+import java.util.Collections;
+import java.util.List;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,6 +17,8 @@ import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.core.ContentObject;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
+import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupItem;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -21,7 +26,7 @@ import ru.android.childdiary.utils.ObjectUtils;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class FeedEvent extends MasterEvent implements ContentObject<FeedEvent> {
+public class FeedEvent extends MasterEvent implements ContentObject<FeedEvent>, LinearGroupItem<FeedEvent> {
     private static final FeedEvent NULL = FeedEvent.builder().build();
 
     Long id;
@@ -79,7 +84,7 @@ public class FeedEvent extends MasterEvent implements ContentObject<FeedEvent> {
 
     @Override
     public boolean isContentEqual(@NonNull FeedEvent other) {
-        if (!contentEquals(getMasterEvent(), other.getMasterEvent())) {
+        if (!contentEquals(this, other)) {
             return false;
         }
         if (getFeedType() != other.getFeedType()) {
@@ -103,5 +108,10 @@ public class FeedEvent extends MasterEvent implements ContentObject<FeedEvent> {
                         && ObjectUtils.equals(getFoodMeasure(), other.getFoodMeasure());
         }
         return false;
+    }
+
+    @Override
+    public List<LinearGroupFieldType> getChangedFields(FeedEvent other) {
+        return Collections.emptyList();
     }
 }

@@ -52,6 +52,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
     @State
     Uri capturedImageFileUri;
 
+    @Nullable
     private Listener listener;
 
     @Override

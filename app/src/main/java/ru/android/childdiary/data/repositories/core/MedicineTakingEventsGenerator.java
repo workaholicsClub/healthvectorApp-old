@@ -5,21 +5,26 @@ import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
-import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.MedicineTakingEventMapper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 
-public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTaking, MedicineTakingEvent> {
+public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTaking> {
     private final MasterEventMapper masterEventMapper;
     private final MedicineTakingEventMapper medicineTakingEventMapper;
+    private List<MasterEventEntity> masterEvents;
+    private List<MedicineTakingEventEntity> events;
 
     @Inject
     public MedicineTakingEventsGenerator(ReactiveEntityStore<Persistable> dataStore,
@@ -31,10 +36,16 @@ public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTakin
     }
 
     @Override
-    protected MedicineTakingEvent createEvent(@NonNull MedicineTaking medicineTaking,
-                                              @NonNull DateTime dateTime,
-                                              @Nullable Integer linearGroup) {
-        return MedicineTakingEvent.builder()
+    protected void startInsertion() {
+        masterEvents = new ArrayList<>();
+        events = new ArrayList<>();
+    }
+
+    @Override
+    protected void createEvent(@NonNull MedicineTaking medicineTaking,
+                               @NonNull DateTime dateTime,
+                               @Nullable Integer linearGroup) {
+        MedicineTakingEvent event = MedicineTakingEvent.builder()
                 .id(null)
                 .masterEventId(null)
                 .eventType(EventType.MEDICINE_TAKING)
@@ -50,12 +61,16 @@ public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTakin
                 .medicineMeasure(medicineTaking.getMedicineMeasure())
                 .imageFileName(null)
                 .build();
+        MasterEventEntity masterEventEntity = masterEventMapper.mapToEntity(blockingEntityStore, event);
+        MedicineTakingEventEntity eventEntity = medicineTakingEventMapper.mapToEntity(blockingEntityStore, event);
+        eventEntity.setMasterEvent(masterEventEntity);
+        masterEvents.add(masterEventEntity);
+        events.add(eventEntity);
     }
 
     @Override
-    protected MedicineTakingEvent add(@NonNull MedicineTakingEvent event) {
-        MasterEvent masterEvent = DbUtils.insert(blockingEntityStore, event, masterEventMapper);
-        MedicineTakingEvent medicineTakingEvent = event.toBuilder().masterEventId(masterEvent.getMasterEventId()).build();
-        return DbUtils.insert(blockingEntityStore, medicineTakingEvent, medicineTakingEventMapper);
+    protected void finishInsertion() {
+        blockingEntityStore.insert(masterEvents);
+        blockingEntityStore.insert(events);
     }
 }

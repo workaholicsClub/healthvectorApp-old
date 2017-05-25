@@ -192,6 +192,7 @@
     <string name="please_wait">Пожалуйста, подождите&#8230;</string>
     <string name="events_generating">Идет создание событий&#8230;</string>
     <string name="events_deleting">Идет удаление событий&#8230;</string>
+    <string name="events_updating">Идет обновление событий&#8230;</string>
     <string name="default_doctor_name">Педиатр</string>
     <string name="delete_photo_confirmation_dialog_title">Удалить фото?</string>
     <string name="need_to_fill_not_or_photo">Для выполнения события добавьте к событию описание или фотографию</string>
@@ -215,6 +216,16 @@
     <string name="chips_to_date">по %s</string>
     <string name="no_data_to_filter">Нет данных для фильтрации</string>
     <string name="nothing_found">Ничего не найдено</string>
+    <string name="ask_update_linear_group">Обновить линейную группу событий?</string>
+    <string name="update_one_event">Обновить одно событие</string>
+    <string name="update_linear_group">Обновить линейную группу</string>
+    <string name="move_event">Перенести событие</string>
+    <string name="move_one_event">Перенести одно событие</string>
+    <string name="move_linear_group">Перенести линейную группу</string>
+    <!-- %1$s - параметр "Количество минут (часов), на которые переносим событие", например, "5 мин." -->
+    <string name="move_time_format_positive">+ %1$s</string>
+    <!-- %1$s - параметр "Количество минут (часов), на которые переносим событие", например, "5 мин." -->
+    <string name="move_time_format_negative">- %1$s</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
