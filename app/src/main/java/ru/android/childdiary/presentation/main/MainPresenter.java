@@ -99,7 +99,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         childInteractor.getActiveChildOnce(),
-                        calendarInteractor.getSelectedDate(),
+                        calendarInteractor.getSelectedDateOnce(),
                         (child, selectedDate) -> AppPartitionArguments.builder()
                                 .child(child)
                                 .selectedDate(selectedDate)
@@ -113,7 +113,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         childInteractor.getActiveChildOnce(),
-                        calendarInteractor.getSelectedDate(),
+                        calendarInteractor.getSelectedDateOnce(),
                         (child, selectedDate) -> AppPartitionArguments.builder()
                                 .child(child)
                                 .selectedDate(selectedDate)
@@ -127,7 +127,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         childInteractor.getActiveChildOnce(),
-                        calendarInteractor.getSelectedDate(),
+                        calendarInteractor.getSelectedDateOnce(),
                         (child, selectedDate) -> AppPartitionArguments.builder()
                                 .child(child)
                                 .selectedDate(selectedDate)
@@ -141,7 +141,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         childInteractor.getActiveChildOnce(),
-                        calendarInteractor.getSelectedDate(),
+                        calendarInteractor.getSelectedDateOnce(),
                         (child, selectedDate) -> AppPartitionArguments.builder()
                                 .child(child)
                                 .selectedDate(selectedDate)
@@ -155,7 +155,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         childInteractor.getActiveChildOnce(),
-                        calendarInteractor.getSelectedDate(),
+                        calendarInteractor.getSelectedDateOnce(),
                         (child, selectedDate) -> AppPartitionArguments.builder()
                                 .child(child)
                                 .selectedDate(selectedDate)
@@ -169,7 +169,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         childInteractor.getActiveChildOnce(),
-                        calendarInteractor.getSelectedDate(),
+                        calendarInteractor.getSelectedDateOnce(),
                         (child, selectedDate) -> AppPartitionArguments.builder()
                                 .child(child)
                                 .selectedDate(selectedDate)
