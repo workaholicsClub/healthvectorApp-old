@@ -9,6 +9,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import java.util.List;
 
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseView;
 
 public interface MainView extends BaseView {
@@ -28,20 +29,20 @@ public interface MainView extends BaseView {
     void showDeleteChildConfirmation(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToCalendar(@NonNull Child child);
+    void navigateToCalendar(@NonNull AppPartitionArguments arguments);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToDevelopmentDiary(@NonNull Child child);
+    void navigateToDevelopmentDiary(@NonNull AppPartitionArguments arguments);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToExercises(@NonNull Child child);
+    void navigateToExercises(@NonNull AppPartitionArguments arguments);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToMedicalData(@NonNull Child child);
+    void navigateToMedicalData(@NonNull AppPartitionArguments arguments);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToSettings(@NonNull Child child);
+    void navigateToSettings(@NonNull AppPartitionArguments arguments);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToHelp(@NonNull Child child);
+    void navigateToHelp(@NonNull AppPartitionArguments arguments);
 }

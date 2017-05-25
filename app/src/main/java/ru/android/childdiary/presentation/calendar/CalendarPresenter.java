@@ -2,19 +2,13 @@ package ru.android.childdiary.presentation.calendar;
 
 import com.arellomobile.mvp.InjectViewState;
 
-import javax.inject.Inject;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
 @InjectViewState
 public class CalendarPresenter extends AppPartitionPresenter<CalendarView> {
-    @Inject
-    CalendarInteractor calendarInteractor;
-
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);

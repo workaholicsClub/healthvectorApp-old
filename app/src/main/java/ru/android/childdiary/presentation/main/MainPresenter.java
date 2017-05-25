@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -15,6 +16,7 @@ import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
+import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.StringUtils;
 
@@ -94,44 +96,86 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void openCalendar() {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToCalendar, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
+                        calendarInteractor.getSelectedDate(),
+                        (child, selectedDate) -> AppPartitionArguments.builder()
+                                .child(child)
+                                .selectedDate(selectedDate)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::navigateToCalendar, this::onUnexpectedError));
     }
 
     public void openDevelopmentDiary() {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToDevelopmentDiary, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
+                        calendarInteractor.getSelectedDate(),
+                        (child, selectedDate) -> AppPartitionArguments.builder()
+                                .child(child)
+                                .selectedDate(selectedDate)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::navigateToDevelopmentDiary, this::onUnexpectedError));
     }
 
     public void openExercises() {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToExercises, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
+                        calendarInteractor.getSelectedDate(),
+                        (child, selectedDate) -> AppPartitionArguments.builder()
+                                .child(child)
+                                .selectedDate(selectedDate)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::navigateToExercises, this::onUnexpectedError));
     }
 
     public void openMedicalData() {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToMedicalData, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
+                        calendarInteractor.getSelectedDate(),
+                        (child, selectedDate) -> AppPartitionArguments.builder()
+                                .child(child)
+                                .selectedDate(selectedDate)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::navigateToMedicalData, this::onUnexpectedError));
     }
 
     public void openSettings() {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToSettings, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
+                        calendarInteractor.getSelectedDate(),
+                        (child, selectedDate) -> AppPartitionArguments.builder()
+                                .child(child)
+                                .selectedDate(selectedDate)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::navigateToSettings, this::onUnexpectedError));
     }
 
     public void openHelp() {
-        unsubscribeOnDestroy(childInteractor.getActiveChildOnce()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToHelp, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
+                        calendarInteractor.getSelectedDate(),
+                        (child, selectedDate) -> AppPartitionArguments.builder()
+                                .child(child)
+                                .selectedDate(selectedDate)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::navigateToHelp, this::onUnexpectedError));
     }
 }

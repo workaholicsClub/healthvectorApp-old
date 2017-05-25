@@ -109,7 +109,8 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
             eventsHeader.findViewById(R.id.today).setVisibility(View.GONE);
         }
 
-        calendarAdapter = getCalendarViewAdapter();
+        calendarAdapter = createCalendarViewAdapter();
+        calendarAdapter.setSelectedDate(getSelectedDate(), false);
         updateCalendarTitle();
 
         if (gridViewCalendar != null) {
@@ -176,7 +177,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
         fabController = null;
     }
 
-    protected abstract Adapter getCalendarViewAdapter();
+    protected abstract Adapter createCalendarViewAdapter();
 
     protected abstract int getGridViewHeight();
 

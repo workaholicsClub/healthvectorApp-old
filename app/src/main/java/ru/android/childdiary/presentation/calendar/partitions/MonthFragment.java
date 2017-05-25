@@ -15,7 +15,7 @@ public class MonthFragment extends BaseCalendarFragment<MonthViewAdapter> {
     }
 
     @Override
-    protected MonthViewAdapter getCalendarViewAdapter() {
+    protected MonthViewAdapter createCalendarViewAdapter() {
         return new MonthViewAdapter(getContext(), this);
     }
 
