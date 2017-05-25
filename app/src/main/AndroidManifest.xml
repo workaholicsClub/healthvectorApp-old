@@ -141,13 +141,13 @@
         </activity>
         <activity
             android:name=".presentation.medical.pickers.visits.DoctorAddActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
             android:name=".presentation.medical.pickers.visits.DoctorPickerActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".presentation.medical.pickers.medicines.MedicineAddActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
             android:name=".presentation.medical.pickers.medicines.MedicinePickerActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />

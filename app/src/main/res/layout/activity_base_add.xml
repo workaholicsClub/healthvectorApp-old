@@ -46,7 +46,7 @@
                 android:layout_marginRight="@dimen/base_margin"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text_background"
-                android:hint="@string/add_doctor_hint"
+                android:hint="@string/enter_doctor_name"
                 android:imeOptions="actionDone"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="@integer/max_length_other_event_name"
