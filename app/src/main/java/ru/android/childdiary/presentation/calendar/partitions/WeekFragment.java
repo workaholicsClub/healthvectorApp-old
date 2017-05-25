@@ -17,7 +17,7 @@ public class WeekFragment extends BaseCalendarFragment<WeekViewAdapter> {
     }
 
     @Override
-    protected WeekViewAdapter getCalendarViewAdapter() {
+    protected WeekViewAdapter createCalendarViewAdapter() {
         return new WeekViewAdapter(getContext(), this);
     }
 

@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.medical;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,7 +27,6 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
-import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
@@ -104,13 +102,6 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
             public void onPageScrollStateChanged(int state) {
             }
         });
-    }
-
-    private Fragment putArguments(Fragment fragment) {
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, getChild());
-        fragment.setArguments(arguments);
-        return fragment;
     }
 
     private void updateSwipeLayouts(int position) {

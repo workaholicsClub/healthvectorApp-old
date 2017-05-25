@@ -42,6 +42,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
+import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -224,7 +225,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         }
         if (selectedPartition == null) {
             drawer.setSelectionAtPosition(1, false);
-            navigateToCalendar(child);
+            presenter.openCalendar();
         }
     }
 
@@ -252,46 +253,47 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     }
 
     @Override
-    public void navigateToCalendar(@NonNull Child child) {
-        openAppPartition(AppPartition.CALENDAR, child);
+    public void navigateToCalendar(@NonNull AppPartitionArguments arguments) {
+        openAppPartition(AppPartition.CALENDAR, arguments);
     }
 
     @Override
-    public void navigateToDevelopmentDiary(@NonNull Child child) {
-        openAppPartition(AppPartition.DEVELOPMENT_DIARY, child);
+    public void navigateToDevelopmentDiary(@NonNull AppPartitionArguments arguments) {
+        openAppPartition(AppPartition.DEVELOPMENT_DIARY, arguments);
     }
 
     @Override
-    public void navigateToExercises(@NonNull Child child) {
-        openAppPartition(AppPartition.EXERCISES, child);
+    public void navigateToExercises(@NonNull AppPartitionArguments arguments) {
+        openAppPartition(AppPartition.EXERCISES, arguments);
     }
 
     @Override
-    public void navigateToMedicalData(@NonNull Child child) {
-        openAppPartition(AppPartition.MEDICAL_DATA, child);
+    public void navigateToMedicalData(@NonNull AppPartitionArguments arguments) {
+        openAppPartition(AppPartition.MEDICAL_DATA, arguments);
     }
 
     @Override
-    public void navigateToSettings(@NonNull Child child) {
-        openAppPartition(AppPartition.SETTINGS, child);
+    public void navigateToSettings(@NonNull AppPartitionArguments arguments) {
+        openAppPartition(AppPartition.SETTINGS, arguments);
     }
 
     @Override
-    public void navigateToHelp(@NonNull Child child) {
-        openAppPartition(AppPartition.HELP, child);
+    public void navigateToHelp(@NonNull AppPartitionArguments arguments) {
+        openAppPartition(AppPartition.HELP, arguments);
     }
 
-    private void openAppPartition(@NonNull AppPartition appPartition, @NonNull Child child) {
+    private void openAppPartition(@NonNull AppPartition appPartition,
+                                  @NonNull AppPartitionArguments arguments) {
         selectedPartition = appPartition;
 
         String tag = appPartition.toString();
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
         if (fragment == null) {
-            Bundle arguments = new Bundle();
-            arguments.putSerializable(ExtraConstants.EXTRA_CHILD, child);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS, arguments);
             fragment = createAppPartition(appPartition);
-            fragment.setArguments(arguments);
+            fragment.setArguments(bundle);
             logger.debug("fragment cache: create new fragment: " + fragment);
         } else {
             logger.debug("fragment cache: show fragment: " + fragment);

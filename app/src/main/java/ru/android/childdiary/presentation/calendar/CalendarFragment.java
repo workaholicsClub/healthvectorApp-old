@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.calendar;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -30,7 +29,6 @@ import ru.android.childdiary.presentation.calendar.partitions.DayFragment;
 import ru.android.childdiary.presentation.calendar.partitions.MonthFragment;
 import ru.android.childdiary.presentation.calendar.partitions.WeekFragment;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
-import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
@@ -155,13 +153,6 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
                 .setTransition(TRANSIT_UNSET)
                 .replace(FRAGMENT_CONTAINER_ID, fragment, tag)
                 .commit();
-    }
-
-    private Fragment putArguments(Fragment fragment) {
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(ExtraConstants.EXTRA_CHILD, getChild());
-        fragment.setArguments(arguments);
-        return fragment;
     }
 
     private void closeAllItems(int position) {

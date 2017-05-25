@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+
+import org.joda.time.LocalDate;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,6 +15,10 @@ import ru.android.childdiary.domain.interactors.child.Child;
 
 public abstract class AppPartitionFragment extends BaseMvpFragment implements AppPartitionView {
     protected static final String TAG_FILTER = "TAG_FILTER";
+
+    @NonNull
+    @Getter(AccessLevel.PROTECTED)
+    private LocalDate selectedDate;
 
     @NonNull
     @Getter(AccessLevel.PROTECTED)
@@ -24,7 +31,9 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        child = (Child) getArguments().getSerializable(ExtraConstants.EXTRA_CHILD);
+        AppPartitionArguments arguments = (AppPartitionArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
+        selectedDate = arguments.getSelectedDate();
+        child = arguments.getChild();
         sex = child.getSex();
     }
 
@@ -44,6 +53,12 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
 
     @Override
     @CallSuper
+    public void showSelectedDate(@NonNull LocalDate selectedDate) {
+        this.selectedDate = selectedDate;
+    }
+
+    @Override
+    @CallSuper
     public void showChild(@NonNull Child child) {
         this.child = child;
         if (sex != child.getSex()) {
@@ -54,5 +69,16 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
     }
 
     public void showFilter() {
+    }
+
+    protected Fragment putArguments(Fragment fragment) {
+        AppPartitionArguments arguments = AppPartitionArguments.builder()
+                .child(getChild())
+                .selectedDate(getSelectedDate())
+                .build();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS, arguments);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 }
