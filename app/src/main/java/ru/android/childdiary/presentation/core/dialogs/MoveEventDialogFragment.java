@@ -9,8 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.NumberPicker;
 
-import org.joda.time.LocalTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +19,6 @@ import lombok.Value;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
-import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -44,19 +41,15 @@ public class MoveEventDialogFragment extends BaseMvpDialogFragment<MoveEventDial
 
     @Override
     protected void setupUi() {
-        LocalTime time = dialogArguments.getEvent().getDateTime().toLocalTime();
-
         timeShifts.clear();
         for (int i = 0; i < MINUTES.length; ++i) {
             int minutes = MINUTES[i];
             TimeShift timeShift = TimeShift.builder()
                     .minutes(minutes)
-                    .time(time.plusMinutes(minutes))
                     .build();
             timeShifts.add(timeShift);
             timeShift = TimeShift.builder()
                     .minutes(-minutes)
-                    .time(time.minusMinutes(minutes))
                     .build();
             timeShifts.add(0, timeShift);
         }
@@ -143,8 +136,6 @@ public class MoveEventDialogFragment extends BaseMvpDialogFragment<MoveEventDial
     @Builder
     private static class TimeShift {
         int minutes;
-        @lombok.NonNull
-        LocalTime time;
 
         @Nullable
         public String getText(Context context) {
@@ -152,11 +143,10 @@ public class MoveEventDialogFragment extends BaseMvpDialogFragment<MoveEventDial
                 return null;
             }
             String text = TimeUtils.durationShort(context, Math.abs(minutes));
-            String timeStr = DateUtils.time(context, time);
             if (minutes > 0) {
-                return context.getString(R.string.move_time_format_positive, text, timeStr);
+                return context.getString(R.string.move_time_format_positive, text);
             } else {
-                return context.getString(R.string.move_time_format_negative, text, timeStr);
+                return context.getString(R.string.move_time_format_negative, text);
             }
         }
     }

@@ -131,6 +131,10 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     public void moveLinearGroup(@NonNull MasterEvent event, int minutes) {
         getViewState().showUpdatingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.moveLinearGroup(event, minutes)
+                .map(masterEvent -> {
+                    calendarInteractor.setSelectedDate(masterEvent.getDateTime().toLocalDate());
+                    return masterEvent;
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(movedEvent -> logger.debug("event moved: " + movedEvent))

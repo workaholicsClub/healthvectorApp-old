@@ -457,12 +457,14 @@ public class CalendarInteractor {
             return calendarRepository.update(UpdateDoctorVisitEventRequest.builder()
                     .doctorVisitEvent((DoctorVisitEvent) event)
                     .fields(Collections.singletonList(LinearGroupFieldType.TIME))
+                    .minutes(minutes)
                     .build())
                     .map(UpdateDoctorVisitEventResponse::getDoctorVisitEvent);
         } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
             return calendarRepository.update(UpdateMedicineTakingEventRequest.builder()
                     .medicineTakingEvent((MedicineTakingEvent) event)
                     .fields(Collections.singletonList(LinearGroupFieldType.TIME))
+                    .minutes(minutes)
                     .build())
                     .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);
         }

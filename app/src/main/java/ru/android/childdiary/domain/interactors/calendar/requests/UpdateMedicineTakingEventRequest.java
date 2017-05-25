@@ -14,4 +14,5 @@ public class UpdateMedicineTakingEventRequest {
     @NonNull
     MedicineTakingEvent medicineTakingEvent;
     List<LinearGroupFieldType> fields;
+    int minutes;
 }

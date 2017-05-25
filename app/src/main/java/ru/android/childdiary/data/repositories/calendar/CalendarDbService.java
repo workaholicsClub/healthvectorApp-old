@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -342,7 +341,14 @@ public class CalendarDbService extends EventsDbService {
             updateMasterEvent(doctorVisitEvent);
             DoctorVisitEvent result = DbUtils.update(blockingEntityStore, doctorVisitEvent, doctorVisitEventMapper);
 
-            updateLinearGroup(doctorVisitEvent, request.getFields());
+            updateLinearGroup(request);
+
+            DoctorVisitEventEntity doctorVisitEventEntity = blockingEntityStore
+                    .select(DoctorVisitEventEntity.class)
+                    .where(DoctorVisitEventEntity.ID.eq(doctorVisitEvent.getId()))
+                    .get()
+                    .first();
+            result = doctorVisitEventMapper.mapToPlainObject(doctorVisitEventEntity);
 
             return UpdateDoctorVisitEventResponse.builder()
                     .request(request)
@@ -371,7 +377,14 @@ public class CalendarDbService extends EventsDbService {
             updateMasterEvent(medicineTakingEvent);
             MedicineTakingEvent result = DbUtils.update(blockingEntityStore, medicineTakingEvent, medicineTakingEventMapper);
 
-            updateLinearGroup(medicineTakingEvent, request.getFields());
+            updateLinearGroup(request);
+
+            MedicineTakingEventEntity medicineTakingEventEntity = blockingEntityStore
+                    .select(MedicineTakingEventEntity.class)
+                    .where(MedicineTakingEventEntity.ID.eq(medicineTakingEvent.getId()))
+                    .get()
+                    .first();
+            result = medicineTakingEventMapper.mapToPlainObject(medicineTakingEventEntity);
 
             return UpdateMedicineTakingEventResponse.builder()
                     .request(request)
@@ -381,7 +394,11 @@ public class CalendarDbService extends EventsDbService {
         }));
     }
 
-    private void updateLinearGroup(@NonNull DoctorVisitEvent doctorVisitEvent, @NonNull List<LinearGroupFieldType> fields) {
+    private void updateLinearGroup(@NonNull UpdateDoctorVisitEventRequest request) {
+        DoctorVisitEvent doctorVisitEvent = request.getDoctorVisitEvent();
+        List<LinearGroupFieldType> fields = request.getFields();
+        int minutes = request.getMinutes();
+
         if (fields.isEmpty()) {
             logger.debug("changed fields list is empty");
             return;
@@ -416,7 +433,7 @@ public class CalendarDbService extends EventsDbService {
 
             for (MasterEventEntity masterEvent : masterEvents) {
                 for (LinearGroupFieldType field : fields) {
-                    updateEventField(doctorVisitEvent, masterEvent, field);
+                    updateEventField(doctorVisitEvent, masterEvent, field, minutes);
                 }
             }
 
@@ -424,7 +441,11 @@ public class CalendarDbService extends EventsDbService {
         }
     }
 
-    private void updateLinearGroup(@NonNull MedicineTakingEvent medicineTakingEvent, @NonNull List<LinearGroupFieldType> fields) {
+    private void updateLinearGroup(@NonNull UpdateMedicineTakingEventRequest request) {
+        MedicineTakingEvent medicineTakingEvent = request.getMedicineTakingEvent();
+        List<LinearGroupFieldType> fields = request.getFields();
+        int minutes = request.getMinutes();
+
         if (fields.isEmpty()) {
             logger.debug("changed fields list is empty");
             return;
@@ -458,7 +479,7 @@ public class CalendarDbService extends EventsDbService {
 
             for (MasterEventEntity masterEvent : masterEvents) {
                 for (LinearGroupFieldType field : fields) {
-                    updateEventField(medicineTakingEvent, masterEvent, field);
+                    updateEventField(medicineTakingEvent, masterEvent, field, minutes);
                 }
             }
 
@@ -506,15 +527,15 @@ public class CalendarDbService extends EventsDbService {
 
     private void updateEventField(@NonNull MasterEvent from,
                                   @NonNull MasterEventEntity to,
-                                  @NonNull LinearGroupFieldType field) {
+                                  @NonNull LinearGroupFieldType field,
+                                  int minutes) {
         switch (field) {
             case NOTIFY_TIME_IN_MINUTES:
                 Integer notifyTimeInMinutes = from.getNotifyTimeInMinutes();
                 to.setNotifyTimeInMinutes(notifyTimeInMinutes);
                 break;
             case TIME:
-                LocalTime time = from.getDateTime().toLocalTime();
-                DateTime dateTime = to.getDateTime().withTime(time);
+                DateTime dateTime = to.getDateTime().plusMinutes(minutes);
                 to.setDateTime(dateTime);
                 break;
         }
