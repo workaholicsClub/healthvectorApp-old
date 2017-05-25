@@ -1,5 +1,7 @@
 package ru.android.childdiary.presentation.medical.pickers.visits;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -16,6 +18,13 @@ public class DoctorAddActivity extends BaseAddActivity<Doctor, DoctorAddView> im
     @Override
     protected void injectActivity(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        imageView.setImageResource(R.drawable.ic_doctor);
+        textView.setHint(R.string.add_doctor_hint);
     }
 
     @Override
