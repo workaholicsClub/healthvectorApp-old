@@ -15,7 +15,7 @@ import ru.android.childdiary.data.types.Sex;
 
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor
+@AllArgsConstructor(suppressConstructorProperties = true)
 @FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
 @Getter
 @Builder(builderMethodName = "baseBuilder")

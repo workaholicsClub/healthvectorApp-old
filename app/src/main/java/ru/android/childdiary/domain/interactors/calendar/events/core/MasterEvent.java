@@ -21,7 +21,7 @@ import ru.android.childdiary.utils.ObjectUtils;
 
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor
+@AllArgsConstructor(suppressConstructorProperties = true)
 @FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
 @Getter
 @Builder(builderMethodName = "masterBuilder")
