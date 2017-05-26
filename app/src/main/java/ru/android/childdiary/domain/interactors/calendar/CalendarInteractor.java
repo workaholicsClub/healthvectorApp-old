@@ -476,6 +476,7 @@ public class CalendarInteractor {
         return otherEventNameObservable
                 .map(TextViewAfterTextChangeEvent::editable)
                 .map(Editable::toString)
+                .map(String::trim)
                 .map(otherEventName -> !TextUtils.isEmpty(otherEventName))
                 .distinctUntilChanged();
     }
@@ -484,6 +485,7 @@ public class CalendarInteractor {
         return otherEventNameObservable
                 .map(TextViewAfterTextChangeEvent::editable)
                 .map(Editable::toString)
+                .map(String::trim)
                 .map(otherEventName -> OtherEvent.builder().name(otherEventName).build())
                 .map(otherEventValidator::validate);
     }

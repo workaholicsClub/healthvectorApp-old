@@ -226,6 +226,9 @@
     <string name="move_time_format_positive">+ %1$s</string>
     <!-- %1$s - параметр "Количество минут (часов), на которые переносим событие", например, "5 мин." -->
     <string name="move_time_format_negative">- %1$s</string>
+    <string name="enter_doctor_name">Введите специализацию</string>
+    <string name="enter_medicine_name">Введите лекарство</string>
+    <string name="the_value_already_exists">Такое значение уже есть в списке</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

@@ -2,6 +2,7 @@ package ru.android.childdiary.domain.interactors.medical;
 
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.TextUtils;
 
 import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
@@ -46,12 +47,13 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisits
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
+import ru.android.childdiary.domain.interactors.medical.validation.DoctorValidator;
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorVisitValidator;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
-public class DoctorVisitInteractor {
+public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor> {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
     private final SettingsRepository settingsRepository;
@@ -59,6 +61,7 @@ public class DoctorVisitInteractor {
     private final DoctorVisitValidator doctorVisitValidator;
     private final ImagesRepository imagesRepository;
     private final DoctorVisitFilterDataRepository filterRepository;
+    private final DoctorValidator doctorValidator;
 
     @Inject
     public DoctorVisitInteractor(ChildDataRepository childRepository,
@@ -67,7 +70,8 @@ public class DoctorVisitInteractor {
                                  DoctorVisitDataRepository doctorVisitRepository,
                                  DoctorVisitValidator doctorVisitValidator,
                                  ImagesDataRepository imagesRepository,
-                                 DoctorVisitFilterDataRepository filterRepository) {
+                                 DoctorVisitFilterDataRepository filterRepository,
+                                 DoctorValidator doctorValidator) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
@@ -75,6 +79,7 @@ public class DoctorVisitInteractor {
         this.doctorVisitValidator = doctorVisitValidator;
         this.imagesRepository = imagesRepository;
         this.filterRepository = filterRepository;
+        this.doctorValidator = doctorValidator;
     }
 
     public Observable<GetDoctorVisitsFilter> getSelectedFilterValue() {
@@ -98,7 +103,17 @@ public class DoctorVisitInteractor {
     }
 
     public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {
-        return doctorVisitRepository.addDoctor(doctor);
+        return validate(doctor).flatMap(doctorVisitRepository::addDoctor);
+    }
+
+    private Observable<Doctor> validate(@NonNull Doctor doctor) {
+        return Observable.defer(() -> {
+            List<MedicalValidationResult> results = doctorValidator.validate(doctor);
+            if (!doctorValidator.isValid(results)) {
+                return Observable.error(new MedicalValidationException(results));
+            }
+            return Observable.just(doctor);
+        });
     }
 
     public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
@@ -234,7 +249,8 @@ public class DoctorVisitInteractor {
         return Observable.combineLatest(
                 doctorVisitNameObservable
                         .map(TextViewAfterTextChangeEvent::editable)
-                        .map(Editable::toString),
+                        .map(Editable::toString)
+                        .map(String::trim),
                 doctorObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
@@ -262,7 +278,8 @@ public class DoctorVisitInteractor {
         return Observable.combineLatest(
                 doctorVisitNameObservable
                         .map(TextViewAfterTextChangeEvent::editable)
-                        .map(Editable::toString),
+                        .map(Editable::toString)
+                        .map(String::trim),
                 doctorObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
@@ -275,7 +292,26 @@ public class DoctorVisitInteractor {
                                 .periodicity(periodicityTypeEvent.getValue())
                                 .length(lengthValueEvent.getValue())
                                 .build())
-                        .build()
-        ).map(doctorVisitValidator::validate);
+                        .build())
+                .map(doctorVisitValidator::validate);
+    }
+
+    @Override
+    public Observable<Boolean> controlDoneButton(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+        return nameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(name -> !TextUtils.isEmpty(name))
+                .distinctUntilChanged();
+    }
+
+    public Observable<List<MedicalValidationResult>> controlFields(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+        return nameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(name -> Doctor.builder().name(name).build())
+                .map(doctorValidator::validate);
     }
 }

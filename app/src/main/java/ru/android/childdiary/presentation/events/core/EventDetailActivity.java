@@ -477,6 +477,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                         getPresenter().updateLinearGroup(editedEvent, fields, true);
                     }
                 })
+                .setNeutralButton(R.string.cancel, (dialog, which) -> finish())
                 .show();
     }
 

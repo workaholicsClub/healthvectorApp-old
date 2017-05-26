@@ -21,7 +21,7 @@ android {
         applicationId "ru.android.childdiary"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 16
+        versionCode 19
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField "int", "DB_VERSION", "1"
@@ -34,12 +34,14 @@ android {
     }
     buildTypes {
         debug {
-            minifyEnabled false
-            proguardFiles 'proguard-rules.pro'
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles 'proguard.cfg', 'proguard-rules.pro'
         }
         release {
-            minifyEnabled false
-            proguardFiles 'proguard-rules.pro'
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles 'proguard.cfg', 'proguard-rules.pro'
         }
     }
 }

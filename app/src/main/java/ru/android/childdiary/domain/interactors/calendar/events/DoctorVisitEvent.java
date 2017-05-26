@@ -82,6 +82,10 @@ public class DoctorVisitEvent extends MasterEvent implements ContentObject<Docto
         List<LinearGroupFieldType> significantFields = new ArrayList<>(
                 MasterEvent.getChangedFields(this, other));
 
+        if (!ObjectUtils.equals(getDoctor(), other.getDoctor())) {
+            significantFields.add(LinearGroupFieldType.DOCTOR);
+        }
+
         if (!ObjectUtils.contentEquals(getName(), other.getName())) {
             significantFields.add(LinearGroupFieldType.NAME);
         }

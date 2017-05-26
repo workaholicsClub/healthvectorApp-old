@@ -22,9 +22,7 @@ public class MedicineFilteredAdapter extends FilteredArrayAdapter<Medicine> {
     @Override
     protected boolean keepObject(Medicine obj, String mask) {
         mask = mask.toLowerCase();
-        return obj.getName() != null
-                && (obj.getName().toLowerCase().startsWith(mask)
-                || obj.getName().toLowerCase().startsWith(mask));
+        return obj.getName() != null && obj.getName().toLowerCase().startsWith(mask);
     }
 
     @NonNull

@@ -18,21 +18,29 @@ public class CustomDatabaseSource extends DatabaseSource {
     public CustomDatabaseSource(Context context, EntityModel model, int version) {
         super(context, model, version);
         this.context = context;
+        init();
     }
 
     public CustomDatabaseSource(Context context, EntityModel model, @Nullable String name, int version) {
         super(context, model, name, version);
         this.context = context;
+        init();
     }
 
     public CustomDatabaseSource(Context context, EntityModel model, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, model, name, factory, version);
         this.context = context;
+        init();
     }
 
     public CustomDatabaseSource(Context context, EntityModel model, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version, SQLite platform) {
         super(context, model, name, factory, version, platform);
         this.context = context;
+        init();
+    }
+
+    private void init() {
+        //setLoggingEnabled(BuildConfig.DEBUG);
     }
 
     @Override

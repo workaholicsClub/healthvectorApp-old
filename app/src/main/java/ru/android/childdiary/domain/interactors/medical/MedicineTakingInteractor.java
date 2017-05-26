@@ -1,6 +1,10 @@
 package ru.android.childdiary.domain.interactors.medical;
 
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextUtils;
+
+import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -48,9 +52,10 @@ import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineT
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicineTakingValidator;
+import ru.android.childdiary.domain.interactors.medical.validation.MedicineValidator;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
-public class MedicineTakingInteractor {
+public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Medicine> {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
     private final SettingsRepository settingsRepository;
@@ -58,6 +63,7 @@ public class MedicineTakingInteractor {
     private final MedicineTakingValidator medicineTakingValidator;
     private final ImagesRepository imagesRepository;
     private final MedicineTakingFilterDataRepository filterRepository;
+    private final MedicineValidator medicineValidator;
 
     @Inject
     public MedicineTakingInteractor(ChildDataRepository childRepository,
@@ -66,7 +72,8 @@ public class MedicineTakingInteractor {
                                     MedicineTakingDataRepository medicineTakingRepository,
                                     MedicineTakingValidator medicineTakingValidator,
                                     ImagesDataRepository imagesRepository,
-                                    MedicineTakingFilterDataRepository filterRepository) {
+                                    MedicineTakingFilterDataRepository filterRepository,
+                                    MedicineValidator medicineValidator) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
@@ -74,6 +81,7 @@ public class MedicineTakingInteractor {
         this.medicineTakingValidator = medicineTakingValidator;
         this.imagesRepository = imagesRepository;
         this.filterRepository = filterRepository;
+        this.medicineValidator = medicineValidator;
     }
 
     public Observable<GetMedicineTakingListFilter> getSelectedFilterValue() {
@@ -97,7 +105,17 @@ public class MedicineTakingInteractor {
     }
 
     public Observable<Medicine> addMedicine(@NonNull Medicine medicine) {
-        return medicineTakingRepository.addMedicine(medicine);
+        return validate(medicine).flatMap(medicineTakingRepository::addMedicine);
+    }
+
+    private Observable<Medicine> validate(@NonNull Medicine medicine) {
+        return Observable.defer(() -> {
+            List<MedicalValidationResult> results = medicineValidator.validate(medicine);
+            if (!medicineValidator.isValid(results)) {
+                return Observable.error(new MedicalValidationException(results));
+            }
+            return Observable.just(medicine);
+        });
     }
 
     public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
@@ -262,7 +280,26 @@ public class MedicineTakingInteractor {
                                 .periodicity(periodicityTypeEvent.getValue())
                                 .length(lengthValueEvent.getValue())
                                 .build())
-                        .build()
-        ).map(medicineTakingValidator::validate);
+                        .build())
+                .map(medicineTakingValidator::validate);
+    }
+
+    @Override
+    public Observable<Boolean> controlDoneButton(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+        return nameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(name -> !TextUtils.isEmpty(name))
+                .distinctUntilChanged();
+    }
+
+    public Observable<List<MedicalValidationResult>> controlFields(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+        return nameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(name -> Medicine.builder().name(name).build())
+                .map(medicineValidator::validate);
     }
 }
