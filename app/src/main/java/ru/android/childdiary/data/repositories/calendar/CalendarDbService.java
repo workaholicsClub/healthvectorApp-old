@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -325,30 +326,23 @@ public class CalendarDbService extends EventsDbService {
     public Observable<UpdateDoctorVisitEventResponse> update(@NonNull UpdateDoctorVisitEventRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             DoctorVisitEvent doctorVisitEvent = request.getDoctorVisitEvent();
+            List<LinearGroupFieldType> fields = request.getFields();
+            int minutes = request.getMinutes();
 
-            DoctorVisitEventEntity oldDoctorVisitEventEntity = blockingEntityStore
-                    .select(DoctorVisitEventEntity.class)
-                    .where(DoctorVisitEventEntity.ID.eq(doctorVisitEvent.getId()))
-                    .get()
-                    .first();
+            List<String> imageFilesToDelete = Collections.emptyList();
 
-            List<String> imageFilesToDelete = new ArrayList<>();
-            if (!TextUtils.isEmpty(oldDoctorVisitEventEntity.getImageFileName())
-                    && !oldDoctorVisitEventEntity.getImageFileName().equals(doctorVisitEvent.getImageFileName())) {
-                imageFilesToDelete.add(oldDoctorVisitEventEntity.getImageFileName());
+            if (minutes == 0) {
+                imageFilesToDelete = updateDoctorVisitEvent(doctorVisitEvent);
             }
 
-            updateMasterEvent(doctorVisitEvent);
-            DoctorVisitEvent result = DbUtils.update(blockingEntityStore, doctorVisitEvent, doctorVisitEventMapper);
-
-            updateLinearGroup(request);
+            updateLinearGroup(doctorVisitEvent, fields, minutes);
 
             DoctorVisitEventEntity doctorVisitEventEntity = blockingEntityStore
                     .select(DoctorVisitEventEntity.class)
                     .where(DoctorVisitEventEntity.ID.eq(doctorVisitEvent.getId()))
                     .get()
                     .first();
-            result = doctorVisitEventMapper.mapToPlainObject(doctorVisitEventEntity);
+            DoctorVisitEvent result = doctorVisitEventMapper.mapToPlainObject(doctorVisitEventEntity);
 
             return UpdateDoctorVisitEventResponse.builder()
                     .request(request)
@@ -361,30 +355,23 @@ public class CalendarDbService extends EventsDbService {
     public Observable<UpdateMedicineTakingEventResponse> update(@NonNull UpdateMedicineTakingEventRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             MedicineTakingEvent medicineTakingEvent = request.getMedicineTakingEvent();
+            List<LinearGroupFieldType> fields = request.getFields();
+            int minutes = request.getMinutes();
 
-            MedicineTakingEventEntity oldMedicineTakingEventEntity = blockingEntityStore
-                    .select(MedicineTakingEventEntity.class)
-                    .where(MedicineTakingEventEntity.ID.eq(medicineTakingEvent.getId()))
-                    .get()
-                    .first();
+            List<String> imageFilesToDelete = Collections.emptyList();
 
-            List<String> imageFilesToDelete = new ArrayList<>();
-            if (!TextUtils.isEmpty(oldMedicineTakingEventEntity.getImageFileName())
-                    && !oldMedicineTakingEventEntity.getImageFileName().equals(medicineTakingEvent.getImageFileName())) {
-                imageFilesToDelete.add(oldMedicineTakingEventEntity.getImageFileName());
+            if (minutes == 0) {
+                imageFilesToDelete = updateMedicineTakingEvent(medicineTakingEvent);
             }
 
-            updateMasterEvent(medicineTakingEvent);
-            MedicineTakingEvent result = DbUtils.update(blockingEntityStore, medicineTakingEvent, medicineTakingEventMapper);
-
-            updateLinearGroup(request);
+            updateLinearGroup(medicineTakingEvent, fields, minutes);
 
             MedicineTakingEventEntity medicineTakingEventEntity = blockingEntityStore
                     .select(MedicineTakingEventEntity.class)
                     .where(MedicineTakingEventEntity.ID.eq(medicineTakingEvent.getId()))
                     .get()
                     .first();
-            result = medicineTakingEventMapper.mapToPlainObject(medicineTakingEventEntity);
+            MedicineTakingEvent result = medicineTakingEventMapper.mapToPlainObject(medicineTakingEventEntity);
 
             return UpdateMedicineTakingEventResponse.builder()
                     .request(request)
@@ -394,11 +381,47 @@ public class CalendarDbService extends EventsDbService {
         }));
     }
 
-    private void updateLinearGroup(@NonNull UpdateDoctorVisitEventRequest request) {
-        DoctorVisitEvent doctorVisitEvent = request.getDoctorVisitEvent();
-        List<LinearGroupFieldType> fields = request.getFields();
-        int minutes = request.getMinutes();
+    private List<String> updateDoctorVisitEvent(DoctorVisitEvent doctorVisitEvent) {
+        DoctorVisitEventEntity oldDoctorVisitEventEntity = blockingEntityStore
+                .select(DoctorVisitEventEntity.class)
+                .where(DoctorVisitEventEntity.ID.eq(doctorVisitEvent.getId()))
+                .get()
+                .first();
 
+        List<String> imageFilesToDelete = new ArrayList<>();
+        if (!TextUtils.isEmpty(oldDoctorVisitEventEntity.getImageFileName())
+                && !oldDoctorVisitEventEntity.getImageFileName().equals(doctorVisitEvent.getImageFileName())) {
+            imageFilesToDelete.add(oldDoctorVisitEventEntity.getImageFileName());
+        }
+
+        updateMasterEvent(doctorVisitEvent);
+        DoctorVisitEvent result = DbUtils.update(blockingEntityStore, doctorVisitEvent, doctorVisitEventMapper);
+
+        return imageFilesToDelete;
+    }
+
+    private List<String> updateMedicineTakingEvent(MedicineTakingEvent medicineTakingEvent) {
+        MedicineTakingEventEntity oldMedicineTakingEventEntity = blockingEntityStore
+                .select(MedicineTakingEventEntity.class)
+                .where(MedicineTakingEventEntity.ID.eq(medicineTakingEvent.getId()))
+                .get()
+                .first();
+
+        List<String> imageFilesToDelete = new ArrayList<>();
+        if (!TextUtils.isEmpty(oldMedicineTakingEventEntity.getImageFileName())
+                && !oldMedicineTakingEventEntity.getImageFileName().equals(medicineTakingEvent.getImageFileName())) {
+            imageFilesToDelete.add(oldMedicineTakingEventEntity.getImageFileName());
+        }
+
+        updateMasterEvent(medicineTakingEvent);
+        MedicineTakingEvent result = DbUtils.update(blockingEntityStore, medicineTakingEvent, medicineTakingEventMapper);
+
+        return imageFilesToDelete;
+    }
+
+    private void updateLinearGroup(@NonNull DoctorVisitEvent doctorVisitEvent,
+                                   @NonNull List<LinearGroupFieldType> fields,
+                                   int minutes) {
         if (fields.isEmpty()) {
             logger.debug("changed fields list is empty");
             return;
@@ -441,11 +464,9 @@ public class CalendarDbService extends EventsDbService {
         }
     }
 
-    private void updateLinearGroup(@NonNull UpdateMedicineTakingEventRequest request) {
-        MedicineTakingEvent medicineTakingEvent = request.getMedicineTakingEvent();
-        List<LinearGroupFieldType> fields = request.getFields();
-        int minutes = request.getMinutes();
-
+    private void updateLinearGroup(@NonNull MedicineTakingEvent medicineTakingEvent,
+                                   @NonNull List<LinearGroupFieldType> fields,
+                                   int minutes) {
         if (fields.isEmpty()) {
             logger.debug("changed fields list is empty");
             return;
