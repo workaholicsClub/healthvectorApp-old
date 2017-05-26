@@ -45,6 +45,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.dialogs.ProgressDialogArguments;
 import ru.android.childdiary.presentation.core.dialogs.ProgressDialogFragment;
 import ru.android.childdiary.utils.KeyboardUtils;
+import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -251,6 +252,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
 
     @Override
     public void onUnexpectedError(Throwable e) {
+        LogSystem.report(logger, "unexpected error", e);
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
             new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(sex))

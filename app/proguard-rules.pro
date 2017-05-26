@@ -16,33 +16,11 @@
 #   public *;
 #}
 
-## ButterKnife ##
-## https://guides.codepath.com/android/Configuring-ProGuard#butterknife ##
-
--keep class butterknife.** { *; }
--dontwarn butterknife.internal.**
--keep class **$$ViewBinder { *; }
-
--keepclasseswithmembernames class * {
-    @butterknife.* <fields>;
-}
-
--keepclasseswithmembernames class * {
-    @butterknife.* <methods>;
-}
-
 ## Retrolambda ##
 ## https://github.com/evant/gradle-retrolambda#proguard ##
 
 -dontwarn java.lang.invoke.*
-
-## Moxy ##
-
--keep class **$$PresentersBinder
--keep class **$$State
--keep class **$$ParamsHolder
--keep class **$$ViewStateClassNameProvider
--keepnames class * extends com.arellomobile.mvp.*
+-dontwarn **$$Lambda$*
 
 ## Icepick ##
 ## https://github.com/frankiesardo/icepick#proguard ##
@@ -62,6 +40,19 @@
 -keep class ch.qos.** { *; }
 -keep class org.slf4j.** { *; }
 -dontwarn ch.qos.logback.core.net.*
+
+## Crashlytics ##
+## https://docs.fabric.io/android/crashlytics/dex-and-proguard.html#exclude-crashlytics-with-proguard ##
+
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+
+## Ucrop ##
+## https://github.com/Yalantis/uCrop#usage ##
+
+-dontwarn com.yalantis.ucrop**
+-keep class com.yalantis.ucrop** { *; }
+-keep interface com.yalantis.ucrop** { *; }
 
 ## Other ##
 
