@@ -133,33 +133,4 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
                                @DrawableRes int background, @DrawableRes int backgroundError) {
         view.setBackgroundResource(valid ? background : backgroundError);
     }
-// TODO
-    /*@Override
-    public void onBackPressed() {
-        saveChangesOrExit();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            saveChangesOrExit();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void saveChangesOrExit() {
-        if (ObjectUtils.isEmpty(editedChild)) {
-            finish();
-            return;
-        }
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(R.string.save_changes_dialog_title)
-                .setPositiveButton(R.string.save,
-                        (DialogInterface dialog, int which) -> {
-                                presenter.addChild(editedChild);
-                        })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
-                .show();
-    }*/
 }
