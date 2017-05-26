@@ -23,6 +23,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseMvpFragment extends MvpAppCompatFragment implements BaseView {
@@ -81,6 +82,7 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
 
     @Override
     public void onUnexpectedError(Throwable e) {
+        LogSystem.report(logger, "unexpected error", e);
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
             new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))

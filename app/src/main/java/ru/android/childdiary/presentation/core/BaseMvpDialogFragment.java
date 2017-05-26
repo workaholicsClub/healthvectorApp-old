@@ -35,6 +35,7 @@ import icepick.Icepick;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.KeyboardUtils;
+import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> extends MvpAppCompatDialogFragment implements BaseView {
@@ -85,6 +86,7 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
 
     @Override
     public void onUnexpectedError(Throwable e) {
+        LogSystem.report(logger, "unexpected error", e);
         logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
             new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
