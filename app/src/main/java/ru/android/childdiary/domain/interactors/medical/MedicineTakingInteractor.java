@@ -280,8 +280,8 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
                                 .periodicity(periodicityTypeEvent.getValue())
                                 .length(lengthValueEvent.getValue())
                                 .build())
-                        .build()
-        ).map(medicineTakingValidator::validate);
+                        .build())
+                .map(medicineTakingValidator::validate);
     }
 
     @Override

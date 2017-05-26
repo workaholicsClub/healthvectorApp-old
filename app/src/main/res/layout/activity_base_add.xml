@@ -38,7 +38,7 @@
                 android:scaleType="center"
                 android:src="@drawable/ic_doctor" />
 
-            <AutoCompleteTextView
+            <ru.android.childdiary.presentation.core.widgets.CustomAutoCompleteTextView
                 android:id="@+id/autoCompleteTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

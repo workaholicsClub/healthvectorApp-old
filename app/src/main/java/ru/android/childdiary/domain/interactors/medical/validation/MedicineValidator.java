@@ -37,6 +37,9 @@ public class MedicineValidator extends Validator<Medicine, MedicalValidationResu
             result.addMessage(context.getString(R.string.enter_medicine_name));
             results.add(result);
         } else {
+            result = new MedicalValidationResult(MedicalFieldType.MEDICINE_NAME);
+            results.add(result);
+
             long count = Observable.fromIterable(medicineTakingRepository.getMedicines().blockingFirst())
                     .filter(d -> !TextUtils.isEmpty(d.getName()))
                     .map(Medicine::getName)

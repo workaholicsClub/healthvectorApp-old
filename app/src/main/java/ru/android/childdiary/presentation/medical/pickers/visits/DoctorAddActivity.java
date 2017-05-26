@@ -6,18 +6,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.tokenautocomplete.FilteredArrayAdapter;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.medical.adapters.visits.DoctorFilteredAdapter;
+import ru.android.childdiary.presentation.medical.adapters.core.StringFilteredAdapter;
 import ru.android.childdiary.presentation.medical.pickers.core.BaseAddActivity;
 
 public class DoctorAddActivity extends BaseAddActivity<Doctor, DoctorAddView> implements DoctorAddView {
@@ -59,7 +61,11 @@ public class DoctorAddActivity extends BaseAddActivity<Doctor, DoctorAddView> im
     }
 
     @Override
-    protected FilteredArrayAdapter<Doctor> createFilteredAdapter(@NonNull List<Doctor> items) {
-        return new DoctorFilteredAdapter(this, items);
+    protected FilteredArrayAdapter<String> createFilteredAdapter(@NonNull List<Doctor> items) {
+        return new StringFilteredAdapter(this, Observable.fromIterable(items)
+                .filter(item -> !TextUtils.isEmpty(item.getName()))
+                .map(Doctor::getName)
+                .toList()
+                .blockingGet());
     }
 }

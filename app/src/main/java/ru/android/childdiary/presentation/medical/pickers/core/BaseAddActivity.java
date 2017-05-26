@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -22,6 +21,7 @@ import butterknife.OnClick;
 import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
+import ru.android.childdiary.presentation.core.widgets.CustomAutoCompleteTextView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseMvpActivity implements BaseAddView<T> {
@@ -32,7 +32,7 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
     protected ImageView imageView;
 
     @BindView(R.id.autoCompleteTextView)
-    protected AutoCompleteTextView textView;
+    protected CustomAutoCompleteTextView textView;
 
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
@@ -55,7 +55,7 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
                 hideKeyboardAndClearFocus(textView);
             }
         }));
-// TODO        textView.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+        textView.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
 
         unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(RxTextView.afterTextChangeEvents(textView)));
     }
@@ -87,7 +87,7 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
 
     protected abstract T buildItem();
 
-    protected abstract FilteredArrayAdapter<T> createFilteredAdapter(@NonNull List<T> items);
+    protected abstract FilteredArrayAdapter<String> createFilteredAdapter(@NonNull List<T> items);
 
     @Override
     public void itemAdded(@NonNull T item) {
