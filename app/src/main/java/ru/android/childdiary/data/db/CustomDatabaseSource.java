@@ -10,7 +10,6 @@ import io.requery.meta.EntityModel;
 import io.requery.sql.Mapping;
 import io.requery.sql.Platform;
 import io.requery.sql.platform.SQLite;
-import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
 
 public class CustomDatabaseSource extends DatabaseSource {
@@ -41,7 +40,7 @@ public class CustomDatabaseSource extends DatabaseSource {
     }
 
     private void init() {
-        setLoggingEnabled(BuildConfig.DEBUG);
+        //setLoggingEnabled(BuildConfig.DEBUG);
     }
 
     @Override
