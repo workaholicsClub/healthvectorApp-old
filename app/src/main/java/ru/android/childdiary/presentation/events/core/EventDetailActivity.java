@@ -40,8 +40,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogArguments;
-import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogFragment;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
@@ -57,10 +55,9 @@ import static android.view.View.VISIBLE;
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent & ContentObject<T> & LinearGroupItem<T>>
         extends BaseMvpActivity
         implements EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
-        TimeDialogFragment.Listener, MoveEventDialogFragment.Listener {
+        TimeDialogFragment.Listener {
     private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
     private static final String TAG_PROGRESS_DIALOG_UPDATING_EVENTS = "TAG_PROGRESS_DIALOG_UPDATING_EVENTS";
-    private static final String TAG_MOVE_EVENT_DIALOG = "TAG_MOVE_EVENT_DIALOG";
 
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
@@ -214,10 +211,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void eventMoved(@NonNull MasterEvent event) {
-    }
-
-    @Override
     public void validationFailed() {
     }
 
@@ -367,30 +360,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             case R.id.menu_done:
                 getPresenter().done(buildEvent());
                 return true;
-            case R.id.menu_move:
-                MoveEventDialogFragment dialogFragment = new MoveEventDialogFragment();
-                dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_MOVE_EVENT_DIALOG,
-                        MoveEventDialogArguments.builder()
-                                .sex(getSex())
-                                .event(event)
-                                .build());
-                return true;
             case R.id.menu_delete:
                 getPresenter().delete(event);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onMoveEventClick(String tag, @NonNull MasterEvent event, int minutes) {
-        getPresenter().moveOneEvent(event, minutes);
-    }
-
-    @Override
-    public void onMoveLinearGroupClick(String tag, @NonNull MasterEvent event, int minutes) {
-        getPresenter().moveLinearGroup(event, minutes);
     }
 
     private void saveChangesOrExit() {
