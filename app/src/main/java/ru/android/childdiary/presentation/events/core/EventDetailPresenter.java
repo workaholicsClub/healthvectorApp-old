@@ -35,10 +35,9 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
         unsubscribe();
-        subscription = unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
+        subscription = unsubscribeOnDestroy(getEventDetail(masterEvent)
                 .map(event -> {
                     if (event.getChild() != null) {
                         childInteractor.setActiveChild(event.getChild());
@@ -49,7 +48,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(event -> logger.debug("event details: " + event))
-                .subscribe(event -> getViewState().showEventDetail((T) event), this::onUnexpectedError));
+                .subscribe(event -> getViewState().showEventDetail(event), this::onUnexpectedError));
     }
 
     public void addEvent(@NonNull T event, boolean afterButtonPressed) {
@@ -58,10 +57,20 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(addedEvent -> logger.debug("event added: " + addedEvent))
-                .doOnNext(this::requestEventDetails)
+                .doOnNext(this::doOnAddEvent)
                 .doOnNext(addedEvent -> getViewState().setButtonAddEnabled(true))
                 .doOnError(throwable -> getViewState().setButtonAddEnabled(true))
                 .subscribe(addedEvent -> getViewState().eventAdded(addedEvent, afterButtonPressed), this::onUnexpectedError));
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Observable<T> getEventDetail(@NonNull MasterEvent masterEvent) {
+        return (Observable<T>) calendarInteractor.getEventDetail(masterEvent)
+                .firstOrError()
+                .toObservable();
+    }
+
+    protected void doOnAddEvent(@NonNull T event) {
     }
 
     public void updateEvent(@NonNull T event, boolean afterButtonPressed) {

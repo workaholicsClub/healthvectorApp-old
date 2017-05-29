@@ -188,7 +188,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected abstract void setupEventDetail(@NonNull T event);
 
     protected void restoreEventFields(@NonNull T savedEvent, @NonNull T event) {
-        setupEventDetail(savedEvent);
     }
 
     protected abstract T buildEvent(@Nullable T event);

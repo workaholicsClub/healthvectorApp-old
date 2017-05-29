@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -17,8 +16,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-
-import java.io.File;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
@@ -181,19 +178,6 @@ public class DoctorVisitEventDetailActivity
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(event.getNote());
         noteWithPhotoView.setImageFileName(event.getImageFileName());
-    }
-
-    @Override
-    protected void restoreEventFields(@NonNull DoctorVisitEvent savedEvent, @NonNull DoctorVisitEvent event) {
-        String imageFileName = savedEvent.getImageFileName();
-        if (!exists(imageFileName) && exists(event.getImageFileName())) {
-            savedEvent = savedEvent.toBuilder().imageFileName(event.getImageFileName()).build();
-        }
-        super.restoreEventFields(savedEvent, event);
-    }
-
-    private boolean exists(String imageFileName) {
-        return !TextUtils.isEmpty(imageFileName) && new File(imageFileName).exists();
     }
 
     @Override

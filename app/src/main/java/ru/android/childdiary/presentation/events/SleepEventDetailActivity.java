@@ -37,6 +37,7 @@ import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -265,6 +266,12 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
                 }
             } else if (finishDate != null && finishTime == null) {
                 finishDateTime = finishDate.toDateTime(startDateTime.toLocalTime());
+            }
+        }
+
+        if (event != null) {
+            if (ObjectUtils.equalsToMinutes(startDateTime, event.getDateTime())) {
+                startDateTime = event.getDateTime();
             }
         }
 
