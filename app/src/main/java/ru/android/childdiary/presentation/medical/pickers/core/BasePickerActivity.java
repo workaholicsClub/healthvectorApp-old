@@ -36,6 +36,12 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     @BindView(R.id.rootView)
     View rootView;
 
+    @BindView(R.id.progressView)
+    View progressView;
+
+    @BindView(R.id.contentView)
+    View contentView;
+
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -57,6 +63,9 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
         recyclerView.setVisibility(View.GONE);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+
+        progressView.setVisibility(View.VISIBLE);
+        contentView.setVisibility(View.GONE);
     }
 
     @Override
@@ -107,6 +116,9 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     public void showList(@NonNull List<T> list) {
         adapter.setItems(list);
         recyclerView.setVisibility(list.isEmpty() ? View.GONE : View.VISIBLE);
+
+        progressView.setVisibility(View.GONE);
+        contentView.setVisibility(View.VISIBLE);
     }
 
     @Override
