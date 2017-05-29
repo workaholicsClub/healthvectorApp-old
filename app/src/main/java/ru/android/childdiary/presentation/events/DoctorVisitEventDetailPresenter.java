@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,6 +41,7 @@ public class DoctorVisitEventDetailPresenter extends EventDetailPresenter<Doctor
             return;
         }
         unsubscribeOnDestroy(doctorVisitInteractor.getDoctors()
+                .first(Collections.emptyList())
                 .map(doctors -> findDoctor(doctor, doctors))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
