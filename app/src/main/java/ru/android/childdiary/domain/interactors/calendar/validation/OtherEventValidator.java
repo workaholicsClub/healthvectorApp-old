@@ -2,7 +2,6 @@ package ru.android.childdiary.domain.interactors.calendar.validation;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -27,22 +26,20 @@ public class OtherEventValidator extends Validator<OtherEvent, CalendarValidatio
     public List<CalendarValidationResult> validate(@NonNull OtherEvent event) {
         List<CalendarValidationResult> results = new ArrayList<>();
 
-        results.add(validateOtherEventName(event.getName()));
+        CalendarValidationResult result;
+
+        result = new CalendarValidationResult(CalendarFieldType.OTHER_EVENT_NAME);
+        if (TextUtils.isEmpty(event.getName())) {
+            result.addMessage(context.getString(R.string.validate_event_other_title_empty));
+        }
+        results.add(result);
 
         if (TimeUtils.isStartTimeLessThanFinishTime(event.getDateTime(), event.getFinishDateTime())) {
-            CalendarValidationResult result = new CalendarValidationResult();
+            result = new CalendarValidationResult();
             result.addMessage(context.getString(R.string.validate_start_finish_time));
             results.add(result);
         }
 
         return results;
-    }
-
-    private CalendarValidationResult validateOtherEventName(@Nullable String otherEventName) {
-        CalendarValidationResult result = new CalendarValidationResult(CalendarFieldType.OTHER_EVENT_NAME);
-        if (TextUtils.isEmpty(otherEventName)) {
-            result.addMessage(context.getString(R.string.validate_event_other_title_empty));
-        }
-        return result;
     }
 }

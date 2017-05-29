@@ -78,6 +78,8 @@ public class DoctorVisitEventDetailActivity
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
 
+    private boolean isValidationStarted;
+
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull DoctorVisitEvent defaultEvent) {
         Intent intent = new Intent(context, DoctorVisitEventDetailActivity.class);
@@ -205,6 +207,19 @@ public class DoctorVisitEventDetailActivity
                 .isDone(isDone());
 
         return builder.build();
+    }
+
+    @Override
+    public void validationFailed() {
+        if (!isValidationStarted) {
+            isValidationStarted = true;
+            unsubscribeOnDestroy(presenter.listenForFieldsUpdate(doctorVisitNameView.textObservable()));
+        }
+    }
+
+    @Override
+    public void doctorVisitEventNameValidated(boolean valid) {
+        doctorVisitNameView.validated(valid);
     }
 
     @Override

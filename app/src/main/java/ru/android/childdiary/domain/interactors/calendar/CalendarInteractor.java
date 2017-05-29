@@ -490,6 +490,15 @@ public class CalendarInteractor {
                 .map(otherEventValidator::validate);
     }
 
+    public Observable<List<CalendarValidationResult>> controlDoctorVisitEventFields(@NonNull Observable<TextViewAfterTextChangeEvent> doctorVisitEventNameObservable) {
+        return doctorVisitEventNameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(doctorVisitEventName -> DoctorVisitEvent.builder().name(doctorVisitEventName).build())
+                .map(doctorVisitEventValidator::validate);
+    }
+
     private <T extends MasterEvent> Observable<T> validate(@NonNull T item) {
         return Observable.just(item)
                 .flatMap(event -> {
