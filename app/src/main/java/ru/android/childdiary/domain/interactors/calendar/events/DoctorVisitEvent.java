@@ -71,7 +71,7 @@ public class DoctorVisitEvent extends MasterEvent implements ContentObject<Docto
     @Override
     public boolean isContentEqual(@NonNull DoctorVisitEvent other) {
         return contentEquals(this, other)
-                && ObjectUtils.equals(getDoctor(), other.getDoctor())
+                && ObjectUtils.contentEquals(getDoctor(), other.getDoctor())
                 && ObjectUtils.contentEquals(getName(), other.getName())
                 && ObjectUtils.equals(getDurationInMinutes(), other.getDurationInMinutes())
                 && ObjectUtils.contentEquals(getImageFileName(), other.getImageFileName());

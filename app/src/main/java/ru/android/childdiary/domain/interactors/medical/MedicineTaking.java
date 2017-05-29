@@ -55,9 +55,9 @@ public class MedicineTaking implements Serializable, RepeatParametersContainer,
 
     @Override
     public boolean isContentEqual(@NonNull MedicineTaking other) {
-        return ObjectUtils.equals(getMedicine(), other.getMedicine())
+        return ObjectUtils.contentEquals(getMedicine(), other.getMedicine())
                 && ObjectUtils.equals(getAmount(), other.getAmount())
-                && ObjectUtils.equals(getMedicineMeasure(), other.getMedicineMeasure())
+                && ObjectUtils.contentEquals(getMedicineMeasure(), other.getMedicineMeasure())
                 && ObjectUtils.contentEquals(getRepeatParameters(), other.getRepeatParameters())
                 && ObjectUtils.equalsToMinutes(getDateTime(), other.getDateTime())
                 && ObjectUtils.equalsToMinutes(getFinishDateTime(), other.getFinishDateTime())

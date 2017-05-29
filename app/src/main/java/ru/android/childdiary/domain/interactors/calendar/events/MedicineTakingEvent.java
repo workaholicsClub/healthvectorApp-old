@@ -72,9 +72,9 @@ public class MedicineTakingEvent extends MasterEvent implements ContentObject<Me
     @Override
     public boolean isContentEqual(@NonNull MedicineTakingEvent other) {
         return contentEquals(this, other)
-                && ObjectUtils.equals(getMedicine(), other.getMedicine())
+                && ObjectUtils.contentEquals(getMedicine(), other.getMedicine())
                 && ObjectUtils.equals(getAmount(), other.getAmount())
-                && ObjectUtils.equals(getMedicineMeasure(), other.getMedicineMeasure())
+                && ObjectUtils.contentEquals(getMedicineMeasure(), other.getMedicineMeasure())
                 && ObjectUtils.contentEquals(getImageFileName(), other.getImageFileName());
     }
 
