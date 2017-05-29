@@ -119,25 +119,6 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                 .subscribe(count -> getViewState().eventDeleted(event), this::onUnexpectedError));
     }
 
-    public void moveOneEvent(@NonNull MasterEvent event, int minutes) {
-        unsubscribeOnDestroy(calendarInteractor.move(event, minutes)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(movedEvent -> logger.debug("event moved: " + movedEvent))
-                .subscribe(getViewState()::eventMoved, this::onUnexpectedError));
-    }
-
-    public void moveLinearGroup(@NonNull MasterEvent event, int minutes) {
-        getViewState().showUpdatingEvents(true);
-        unsubscribeOnDestroy(calendarInteractor.moveLinearGroup(event, minutes)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(movedEvent -> logger.debug("event moved: " + movedEvent))
-                .doOnNext(response -> getViewState().showUpdatingEvents(false))
-                .doOnError(throwable -> getViewState().showUpdatingEvents(false))
-                .subscribe(getViewState()::eventMoved, this::onUnexpectedError));
-    }
-
     public void done(@NonNull T event) {
         boolean willBeUndone = EventHelper.isDone(event);
         if (willBeUndone) {
