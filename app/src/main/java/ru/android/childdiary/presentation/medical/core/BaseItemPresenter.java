@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,6 +52,7 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
             return;
         }
         unsubscribeOnDestroy(doctorVisitInteractor.getDoctors()
+                .first(Collections.emptyList())
                 .map(doctors -> findDoctor(doctor, doctors))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -70,6 +72,7 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
             return;
         }
         unsubscribeOnDestroy(medicineTakingInteractor.getMedicines()
+                .first(Collections.emptyList())
                 .map(medicines -> findMedicine(medicine, medicines))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
