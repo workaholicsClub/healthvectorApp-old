@@ -243,6 +243,11 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
+    protected void restoreEventFields(@NonNull SleepEvent savedEvent, @NonNull SleepEvent event) {
+        noteView.setText(savedEvent.getNote());
+    }
+
+    @Override
     protected SleepEvent buildEvent(SleepEvent event) {
         SleepEvent.SleepEventBuilder builder = event == null
                 ? SleepEvent.builder()

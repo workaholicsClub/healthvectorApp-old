@@ -161,6 +161,8 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public final void showEventDetail(@NonNull T event) {
+        T savedEvent = buildEvent();
+
         logger.debug("show event: " + event);
         this.event = event;
 
@@ -171,6 +173,11 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
         buttonAdd.setVisibility(GONE);
         buttonAdd.setOnClickListener(null);
+
+        if (ObjectUtils.equals(savedEvent.getMasterEventId(), event.getMasterEventId())
+                && !savedEvent.isContentEqual(event)) {
+            restoreEventFields(savedEvent, event);
+        }
     }
 
     protected abstract EventDetailPresenter<V, T> getPresenter();
@@ -179,6 +186,10 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected abstract int getContentLayoutResourceId();
 
     protected abstract void setupEventDetail(@NonNull T event);
+
+    protected void restoreEventFields(@NonNull T savedEvent, @NonNull T event) {
+        setupEventDetail(savedEvent);
+    }
 
     protected abstract T buildEvent(@Nullable T event);
 
