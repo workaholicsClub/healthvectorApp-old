@@ -3,6 +3,8 @@ package ru.android.childdiary.domain.interactors.calendar.validation;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +20,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.utils.EventHelper;
-import ru.android.childdiary.utils.TimeUtils;
 
 public class SleepEventValidator extends Validator<SleepEvent, CalendarValidationResult> {
     private final Context context;
@@ -53,7 +54,9 @@ public class SleepEventValidator extends Validator<SleepEvent, CalendarValidatio
             }
         }
 
-        if (TimeUtils.isStartTimeLessThanFinishTime(event.getDateTime(), event.getFinishDateTime())) {
+        DateTime start = event.getDateTime();
+        DateTime finish = event.getFinishDateTime();
+        if (start != null && finish != null && finish.isBefore(start)) {
             CalendarValidationResult result = new CalendarValidationResult();
             result.addMessage(context.getString(R.string.validate_start_finish_time));
             results.add(result);

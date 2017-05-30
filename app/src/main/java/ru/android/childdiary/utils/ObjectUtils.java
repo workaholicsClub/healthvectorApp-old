@@ -50,8 +50,8 @@ public class ObjectUtils {
 
     public static <T> boolean contentEquals(@Nullable ContentObject<T> object1, @Nullable ContentObject<T> object2) {
         //noinspection unchecked
-        return object1 == null
-                ? object2 == null
+        return isEmpty(object1)
+                ? isEmpty(object2)
                 : object2 != null && object1.isContentEqual((T) object2);
     }
 }

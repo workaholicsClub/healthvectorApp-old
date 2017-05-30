@@ -53,7 +53,7 @@ public class DoctorVisit implements Serializable, RepeatParametersContainer, Con
 
     @Override
     public boolean isContentEqual(@NonNull DoctorVisit other) {
-        return ObjectUtils.equals(getDoctor(), other.getDoctor())
+        return ObjectUtils.contentEquals(getDoctor(), other.getDoctor())
                 && ObjectUtils.contentEquals(getRepeatParameters(), other.getRepeatParameters())
                 && ObjectUtils.contentEquals(getName(), other.getName())
                 && ObjectUtils.equals(getDurationInMinutes(), other.getDurationInMinutes())

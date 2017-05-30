@@ -160,7 +160,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public final void showEventDetail(@NonNull T event) {
+    public void showEventDetail(@NonNull T event) {
         logger.debug("show event: " + event);
         this.event = event;
 

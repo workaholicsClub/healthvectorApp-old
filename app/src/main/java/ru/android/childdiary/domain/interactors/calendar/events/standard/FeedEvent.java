@@ -104,8 +104,8 @@ public class FeedEvent extends MasterEvent implements ContentObject<FeedEvent>, 
                 return ObjectUtils.equals(getAmountMl(), other.getAmountMl());
             case FOOD:
                 return ObjectUtils.equals(getAmount(), other.getAmount())
-                        && ObjectUtils.equals(getFood(), other.getFood())
-                        && ObjectUtils.equals(getFoodMeasure(), other.getFoodMeasure());
+                        && ObjectUtils.contentEquals(getFood(), other.getFood())
+                        && ObjectUtils.contentEquals(getFoodMeasure(), other.getFoodMeasure());
         }
         return false;
     }

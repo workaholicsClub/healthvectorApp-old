@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.arellomobile.mvp.InjectViewState;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,6 +50,7 @@ public class MedicineTakingEventDetailPresenter extends EventDetailPresenter<Med
             return;
         }
         unsubscribeOnDestroy(medicineTakingInteractor.getMedicines()
+                .first(Collections.emptyList())
                 .map(medicines -> findMedicine(medicine, medicines))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

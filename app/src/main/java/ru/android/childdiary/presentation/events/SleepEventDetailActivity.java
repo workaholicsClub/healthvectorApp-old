@@ -37,6 +37,7 @@ import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -263,13 +264,33 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
             }
         }
 
-        builder.dateTime(startDateTime)
-                .finishDateTime(finishDateTime)
-                .notifyTimeInMinutes(notifyTimeView.getValue())
+        if (!ObjectUtils.equalsToMinutes(builder.build().getDateTime(), startDateTime)) {
+            builder.dateTime(startDateTime);
+        }
+
+        if (!ObjectUtils.equalsToMinutes(builder.build().getFinishDateTime(), finishDateTime)) {
+            builder.finishDateTime(finishDateTime);
+        }
+
+        builder.notifyTimeInMinutes(notifyTimeView.getValue())
                 .note(noteView.getText())
                 .isDone(isDone());
 
         return builder.build();
+    }
+
+    @Override
+    public void showEventDetail(@NonNull SleepEvent event) {
+        // если таймер был остановлен из шторки, а пользователь успел отредактировать Примечание
+        SleepEvent savedEvent = buildEvent();
+        String note = noteView.getText();
+
+        super.showEventDetail(event);
+
+        if (ObjectUtils.equals(savedEvent.getMasterEventId(), event.getMasterEventId())
+                && !ObjectUtils.contentEquals(savedEvent.getNote(), event.getNote())) {
+            noteView.setText(note);
+        }
     }
 
     @Override

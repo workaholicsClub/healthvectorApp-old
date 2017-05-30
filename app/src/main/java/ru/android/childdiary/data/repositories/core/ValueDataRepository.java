@@ -2,6 +2,9 @@ package ru.android.childdiary.data.repositories.core;
 
 import android.support.annotation.NonNull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -11,6 +14,8 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 public abstract class ValueDataRepository<T> implements ValueRepository<T> {
+    private final Logger logger = LoggerFactory.getLogger(toString());
+
     private final List<OnSelectedValueChangedListener<T>> selectedValueChangedListeners = new ArrayList<>();
 
     private T selectedValue = getDefaultValue();
@@ -40,6 +45,7 @@ public abstract class ValueDataRepository<T> implements ValueRepository<T> {
     @Override
     public void setSelectedValue(@NonNull T value) {
         selectedValue = value;
+        logger.debug("setSelectedValue: " + value);
         synchronized (selectedValueChangedListeners) {
             for (OnSelectedValueChangedListener<T> listener : selectedValueChangedListeners) {
                 listener.onSelectedValueChanged(value);

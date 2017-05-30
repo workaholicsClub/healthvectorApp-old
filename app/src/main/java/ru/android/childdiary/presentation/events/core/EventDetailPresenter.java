@@ -29,16 +29,11 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
 
     private Disposable subscription;
 
-    private void unsubscribe() {
-        if (subscription != null && !subscription.isDisposed()) {
-            subscription.dispose();
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
-        unsubscribe();
+        unsubscribe(subscription);
         subscription = unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
+                .distinctUntilChanged(Object::equals)
                 .map(event -> {
                     if (event.getChild() != null) {
                         childInteractor.setActiveChild(event.getChild());
@@ -99,7 +94,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     public void deleteOneEvent(@NonNull MasterEvent event) {
-        unsubscribe();
+        unsubscribe(subscription);
         unsubscribeOnDestroy(calendarInteractor.delete(event)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -108,7 +103,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     public void deleteLinearGroup(@NonNull MasterEvent event) {
-        unsubscribe();
+        unsubscribe(subscription);
         getViewState().showDeletingEvents(true);
         unsubscribeOnDestroy(calendarInteractor.deleteLinearGroup(event)
                 .subscribeOn(Schedulers.io())
