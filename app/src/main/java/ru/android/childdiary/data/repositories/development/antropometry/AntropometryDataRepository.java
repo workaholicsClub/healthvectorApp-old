@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.repositories.child;
+package ru.android.childdiary.data.repositories.development.antropometry;
 
 import android.support.annotation.NonNull;
 
@@ -8,8 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.domain.interactors.child.Antropometry;
-import ru.android.childdiary.domain.interactors.child.AntropometryRepository;
+import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
+import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryRepository;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 @Singleton

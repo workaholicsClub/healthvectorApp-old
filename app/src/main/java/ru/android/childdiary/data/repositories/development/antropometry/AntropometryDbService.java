@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.repositories.child;
+package ru.android.childdiary.data.repositories.development.antropometry;
 
 import android.support.annotation.NonNull;
 
@@ -13,8 +13,8 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.child.AntropometryEntity;
-import ru.android.childdiary.data.repositories.child.mappers.AntropometryMapper;
-import ru.android.childdiary.domain.interactors.child.Antropometry;
+import ru.android.childdiary.data.repositories.development.antropometry.mappers.AntropometryMapper;
+import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 @Singleton

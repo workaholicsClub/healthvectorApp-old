@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.entities.child;
+package ru.android.childdiary.data.entities.development.antropometry;
 
 import org.joda.time.LocalDate;
 
@@ -9,6 +9,7 @@ import io.requery.Key;
 import io.requery.ManyToOne;
 import io.requery.Persistable;
 import io.requery.Table;
+import ru.android.childdiary.data.entities.child.ChildData;
 
 @Table(name = "antropometry")
 @Entity(name = "AntropometryEntity")
