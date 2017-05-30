@@ -39,7 +39,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     public void requestEventDetails(@NonNull MasterEvent masterEvent) {
         unsubscribe();
         subscription = unsubscribeOnDestroy(calendarInteractor.getEventDetail(masterEvent)
-                .distinctUntilChanged()
+                .distinctUntilChanged(Object::equals)
                 .map(event -> {
                     if (event.getChild() != null) {
                         childInteractor.setActiveChild(event.getChild());

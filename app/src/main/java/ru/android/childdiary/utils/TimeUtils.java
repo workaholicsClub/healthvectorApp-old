@@ -208,10 +208,6 @@ public class TimeUtils {
         return minutes.getMinutes();
     }
 
-    public static boolean isStartTimeLessThanFinishTime(@Nullable DateTime start, @Nullable DateTime finish) {
-        return start != null && finish != null && finish.isAfter(start);
-    }
-
     @Value
     @Builder
     public static class Time {
