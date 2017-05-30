@@ -1,35 +1,238 @@
 package ru.android.childdiary.presentation.development;
 
+import android.content.res.ColorStateList;
 import android.support.annotation.LayoutRes;
-import android.view.View;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
+import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
+import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
+import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsFragment;
+import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListFragment;
+import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
+import ru.android.childdiary.presentation.development.partitions.tests.mental.MentalTestResultsFragment;
+import ru.android.childdiary.presentation.development.partitions.tests.physical.PhysicalTestResultsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class DevelopmentDiaryFragment extends AppPartitionFragment implements DevelopmentDiaryView {
+public class DevelopmentDiaryFragment extends AppPartitionFragment implements DevelopmentDiaryView,
+        FabController {
+    private static final String KEY_SELECTED_PAGE = "development_diary.selected_page";
+
+    @Inject
+    RxSharedPreferences preferences;
+
     @InjectPresenter
     DevelopmentDiaryPresenter presenter;
 
-    @BindView(R.id.rootView)
-    View rootView;
+    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    private ViewPagerAdapter viewPagerAdapter;
+
+    @Override
+    protected void injectFragment(ApplicationComponent component) {
+        component.inject(this);
+    }
 
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.fragment_development_diary;
+        return R.layout.fragment_app_partition_with_tabs;
     }
 
     @Override
     protected void setupUi() {
+        setupViewPager();
+        hideFabBar();
+    }
+
+    private void setupViewPager() {
+        Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 0).get();
+        selectedPage = selectedPage == null ? 0 : selectedPage;
+        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+        viewPagerAdapter.addFragment(putArguments(new AchievementsFragment()), getString(R.string.development_tab_title_achievements));
+        viewPagerAdapter.addFragment(putArguments(new PhysicalTestResultsFragment()), getString(R.string.development_tab_title_physical_test_results));
+        viewPagerAdapter.addFragment(putArguments(new MentalTestResultsFragment()), getString(R.string.development_tab_title_mental_test_results));
+        viewPagerAdapter.addFragment(putArguments(new AntropometryListFragment()), getString(R.string.development_tab_title_antropometry_list));
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setCurrentItem(selectedPage, false);
+        viewPager.setOffscreenPageLimit(1);
+        tabLayout.setupWithViewPager(viewPager);
+        WidgetsUtils.setupTabLayoutFont(tabLayout);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                preferences.getInteger(KEY_SELECTED_PAGE).set(position);
+                updateSwipeLayouts(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+
+    private void updateSwipeLayouts(int position) {
+        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        if (adapter != null) {
+            adapter.updateFabState();
+        } else {
+            logger.error("selected page: " + position + "; event adapter is null");
+        }
+    }
+
+    private void closeAllItems(int position) {
+        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        if (adapter != null) {
+            adapter.closeAllItems();
+        } else {
+            logger.error("selected page: " + position + "; adapter is null");
+        }
+    }
+
+    @Nullable
+    private SwipeViewAdapter getSwipeViewAdapter(int position) {
+        BaseDevelopmentDiaryFragment fragment = getSelectedPage(position);
+        return fragment == null ? null : fragment.getAdapter();
+    }
+
+    @Nullable
+    private BaseDevelopmentDiaryFragment getSelectedPage(int position) {
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments == null) {
+            return null;
+        }
+        for (Fragment fragment : fragments) {
+            if (position == 0 && fragment instanceof AchievementsFragment) {
+                return (AchievementsFragment) fragment;
+            } else if (position == 1 && fragment instanceof PhysicalTestResultsFragment) {
+                return (PhysicalTestResultsFragment) fragment;
+            } else if (position == 2 && fragment instanceof MentalTestResultsFragment) {
+                return (MentalTestResultsFragment) fragment;
+            } else if (position == 3 && fragment instanceof AntropometryListFragment) {
+                return (AntropometryListFragment) fragment;
+            }
+        }
+        return null;
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        rootView.setBackgroundResource(ThemeUtils.getColorPrimaryRes(getSex()));
+        tabLayout.setBackgroundColor(ThemeUtils.getColorPrimary(getContext(), getSex()));
+        fab.setBackgroundTintList(ColorStateList.valueOf(ThemeUtils.getColorAccent(getContext(), getSex())));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int position = viewPager.getCurrentItem();
+        closeAllItems(position);
+    }
+
+    @Override
+    public void showChild(@NonNull Child child) {
+        super.showChild(child);
+        if (child.getId() == null) {
+            hideFabBar();
+        }
+    }
+
+    @Override
+    public void showFilter() {
+        int position = viewPager.getCurrentItem();
+        BaseDevelopmentDiaryFragment fragment = getSelectedPage(position);
+        if (fragment != null) {
+            fragment.showFilter();
+        } else {
+            logger.error("selected page: " + position + "; partition is null");
+        }
+    }
+
+    @Override
+    public void navigateToAchievementAdd() {
+        // TODO
+    }
+
+    @Override
+    public void navigateToPhysicalTestResultAdd() {
+        // TODO
+    }
+
+    @Override
+    public void navigateToMentalTestResultAdd() {
+        // TODO
+    }
+
+    @Override
+    public void navigateToAntropometryAdd() {
+        // TODO
+    }
+
+    @OnClick(R.id.fab)
+    void onFabClick() {
+        int selectedPage = viewPager.getCurrentItem();
+        switch (selectedPage) {
+            case 0:
+                presenter.addAchievement();
+                break;
+            case 1:
+                presenter.addPhysicalTestResult();
+                break;
+            case 2:
+                presenter.addMentalTestResult();
+                break;
+            case 3:
+                presenter.addAntropometry();
+                break;
+        }
+    }
+
+    @Override
+    public void showFab() {
+        fab.show();
+    }
+
+    @Override
+    public boolean hideBar() {
+        return false;
+    }
+
+    @Override
+    public void hideBarWithoutAnimation() {
+    }
+
+    @Override
+    public void hideFabBar() {
+        fab.hide();
     }
 }

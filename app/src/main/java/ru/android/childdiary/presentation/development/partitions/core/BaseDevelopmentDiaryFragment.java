@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical.partitions.core;
+package ru.android.childdiary.presentation.development.partitions.core;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -12,13 +12,10 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
-import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
 import ru.android.childdiary.presentation.medical.filter.adapters.ChipsAdapter;
 
-public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> extends AppPartitionFragment
-        implements BaseMedicalDataView, ChipsAdapter.ChipsDeleteClickListener {
-    private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
-
+public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiaryView> extends AppPartitionFragment
+        implements BaseDevelopmentDiaryView {
     @BindView(R.id.textViewIntention)
     protected TextView textViewIntention;
 
@@ -37,7 +34,7 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
 
     public abstract SwipeViewAdapter getAdapter();
 
-    protected abstract BaseMedicalDataPresenter<V> getPresenter();
+    protected abstract BaseDevelopmentDiaryPresenter<V> getPresenter();
 
     @Override
     @LayoutRes
@@ -48,7 +45,7 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        getAdapter().setSex(getSex());
+        // TODO: getAdapter().setSex(getSex());
     }
 
     @Override
@@ -63,34 +60,5 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
     public void onDetach() {
         super.onDetach();
         fabController = null;
-    }
-
-    @Override
-    public void showFilter() {
-        getPresenter().requestFilterDialog();
-    }
-
-    @Override
-    public void showDeletingEvents(boolean loading) {
-        if (loading) {
-            showProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS,
-                    getString(R.string.please_wait),
-                    getString(R.string.events_deleting));
-        } else {
-            hideProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS);
-        }
-    }
-
-    @Override
-    public void showNoDataToFilter() {
-        showToast(getString(R.string.no_data_to_filter));
-    }
-
-    @Override
-    public void onChipsDeleteClick(Chips chips) {
-        boolean result = chipsAdapter.deleteItem(chips);
-        if (result) {
-            getPresenter().setFilter(chipsAdapter.getItems());
-        }
     }
 }
