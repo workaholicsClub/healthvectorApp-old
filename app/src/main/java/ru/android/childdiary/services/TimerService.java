@@ -36,13 +36,22 @@ import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.NotificationUtils;
 
 public class TimerService extends Service {
+    public static final String EXTRA_ACTION = "TimerService.EXTRA_ACTION";
+    public static final String ACTION_STOP_SLEEP_EVENT_TIMER = "TimerService.ACTION_STOP_SLEEP_EVENT_TIMER";
+    public static final String ACTION_RESUBSCRIBE = "TimerService.ACTION_RESUBSCRIBE";
+
     private static final long TIMER_PERIOD = 1000;
+
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private Disposable subscription;
+
     private final TimerServiceBinder binder = new TimerServiceBinder(this);
+
     @Inject
     CalendarInteractor calendarInteractor;
+
     private Map<Long, NotificationCompat.Builder> notificationBuilders = new HashMap<>();
     private List<SleepEvent> events = new ArrayList<>();
     private Handler handler;
@@ -65,16 +74,11 @@ public class TimerService extends Service {
     @Override
     public void onCreate() {
         logger.debug("onCreate");
+
         ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
         component.inject(this);
-        unsubscribeOnDestroy(calendarInteractor.getSleepEvents(GetSleepEventsRequest.builder()
-                .child(null)
-                .withStartedTimer(true)
-                .build())
-                .map(GetSleepEventsResponse::getEvents)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleResult, this::onUnexpectedError));
+
+        subscribeOnUpdates();
     }
 
     @Override
@@ -92,11 +96,40 @@ public class TimerService extends Service {
             return;
         }
 
-        SleepEvent event = (SleepEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
-        if (event == null) {
+        String action = intent.getStringExtra(EXTRA_ACTION);
+
+        if (action == null) {
             return;
         }
 
+        switch (action) {
+            case ACTION_STOP_SLEEP_EVENT_TIMER:
+                SleepEvent event = (SleepEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
+                if (event == null) {
+                    return;
+                }
+
+                stopSleepEventTimer(event);
+                break;
+            case ACTION_RESUBSCRIBE:
+                subscribeOnUpdates();
+                break;
+        }
+    }
+
+    private void subscribeOnUpdates() {
+        unsubscribe(subscription);
+        subscription = unsubscribeOnDestroy(calendarInteractor.getSleepEvents(GetSleepEventsRequest.builder()
+                .child(null)
+                .withStartedTimer(true)
+                .build())
+                .map(GetSleepEventsResponse::getEvents)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleResult, this::onUnexpectedError));
+    }
+
+    private void stopSleepEventTimer(@NonNull SleepEvent event) {
         DateTime now = DateTime.now();
         unsubscribeOnDestroy(calendarInteractor.getEventDetailOnce(event)
                 .map(sleepEvent -> (SleepEvent) sleepEvent)
@@ -110,8 +143,15 @@ public class TimerService extends Service {
                 .subscribe(stoppedEvent -> logger.debug("event stopped: " + stoppedEvent), this::onUnexpectedError));
     }
 
-    private void unsubscribeOnDestroy(@NonNull Disposable disposable) {
+    private void unsubscribe(Disposable subscription) {
+        if (subscription != null && !subscription.isDisposed()) {
+            subscription.dispose();
+        }
+    }
+
+    private Disposable unsubscribeOnDestroy(@NonNull Disposable disposable) {
         compositeDisposable.add(disposable);
+        return disposable;
     }
 
     private void handleResult(@NonNull List<SleepEvent> events) {

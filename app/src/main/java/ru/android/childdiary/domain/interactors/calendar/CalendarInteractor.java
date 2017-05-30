@@ -1,6 +1,7 @@
 package ru.android.childdiary.domain.interactors.calendar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -66,6 +67,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
+import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.utils.EventHelper;
 
 public class CalendarInteractor {
@@ -648,6 +650,9 @@ public class CalendarInteractor {
             } else if (event.getEventType() == EventType.PUMP) {
                 return event;
             } else if (event.getEventType() == EventType.SLEEP) {
+                Intent intent = new Intent(context, TimerService.class);
+                intent.putExtra(TimerService.EXTRA_ACTION, TimerService.ACTION_RESUBSCRIBE);
+                context.startService(intent);
                 return event;
             }
             throw new IllegalStateException("Unsupported event type");

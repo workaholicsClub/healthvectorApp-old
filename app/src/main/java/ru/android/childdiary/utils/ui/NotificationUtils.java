@@ -35,6 +35,7 @@ public class NotificationUtils {
     private static PendingIntent buildActionPendingIntent(Context context, int notificationId, @NonNull SleepEvent event) {
         Intent intent = new Intent(context, TimerService.class);
         intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
+        intent.putExtra(TimerService.EXTRA_ACTION, TimerService.ACTION_STOP_SLEEP_EVENT_TIMER);
         intent.putExtra(ExtraConstants.EXTRA_EVENT, event);
         PendingIntent pendingIntent = PendingIntent.getService(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
