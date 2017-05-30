@@ -244,11 +244,6 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     @Override
-    protected void restoreEventFields(@NonNull SleepEvent savedEvent, @NonNull SleepEvent event) {
-        noteView.setText(savedEvent.getNote());
-    }
-
-    @Override
     protected SleepEvent buildEvent(SleepEvent event) {
         SleepEvent.SleepEventBuilder builder = event == null
                 ? SleepEvent.builder()
@@ -269,19 +264,33 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
             }
         }
 
-        if (event != null) {
-            if (ObjectUtils.equalsToMinutes(startDateTime, event.getDateTime())) {
-                startDateTime = event.getDateTime();
-            }
+        if (!ObjectUtils.equalsToMinutes(builder.build().getDateTime(), startDateTime)) {
+            builder.dateTime(startDateTime);
         }
 
-        builder.dateTime(startDateTime)
-                .finishDateTime(finishDateTime)
-                .notifyTimeInMinutes(notifyTimeView.getValue())
+        if (!ObjectUtils.equalsToMinutes(builder.build().getFinishDateTime(), finishDateTime)) {
+            builder.finishDateTime(finishDateTime);
+        }
+
+        builder.notifyTimeInMinutes(notifyTimeView.getValue())
                 .note(noteView.getText())
                 .isDone(isDone());
 
         return builder.build();
+    }
+
+    @Override
+    public void showEventDetail(@NonNull SleepEvent event) {
+        // если таймер был остановлен из шторки, а пользователь успел отредактировать Примечание
+        SleepEvent savedEvent = buildEvent();
+        String note = noteView.getText();
+
+        super.showEventDetail(event);
+
+        if (ObjectUtils.equals(savedEvent.getMasterEventId(), event.getMasterEventId())
+                && !ObjectUtils.contentEquals(savedEvent.getNote(), event.getNote())) {
+            noteView.setText(note);
+        }
     }
 
     @Override
