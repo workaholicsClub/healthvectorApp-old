@@ -10,7 +10,7 @@ import io.requery.Persistable;
 import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
-import ru.android.childdiary.data.entities.exercises.ExerciseData;
+import ru.android.childdiary.data.entities.exercises.ConcreteExerciseData;
 
 @Table(name = "exercise_event")
 @Entity(name = "ExerciseEventEntity")
@@ -25,7 +25,7 @@ public interface ExerciseEventData extends Persistable {
 
     @ForeignKey(delete = ReferentialAction.SET_NULL)
     @ManyToOne
-    ExerciseData getDoctorVisit(); // TODO repeat parameters
+    ConcreteExerciseData getConcreteExercise();
 
     String getName();
 

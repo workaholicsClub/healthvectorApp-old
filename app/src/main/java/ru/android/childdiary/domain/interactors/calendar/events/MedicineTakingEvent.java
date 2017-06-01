@@ -82,7 +82,7 @@ public class MedicineTakingEvent extends MasterEvent implements ContentObject<Me
         List<LinearGroupFieldType> significantFields = new ArrayList<>(
                 MasterEvent.getChangedFields(this, other));
 
-        if (!ObjectUtils.equals(getMedicine(), other.getMedicine())) {
+        if (!ObjectUtils.contentEquals(getMedicine(), other.getMedicine())) {
             significantFields.add(LinearGroupFieldType.MEDICINE);
         }
 
