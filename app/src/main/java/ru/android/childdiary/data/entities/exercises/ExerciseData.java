@@ -12,8 +12,12 @@ public interface ExerciseData extends Persistable {
     @Key
     @Generated
     Long getId();
-    // Наименование занятия
-    // Тип занятия
-    // Описание
-    // Фотографии
+
+    Long getServerId();
+
+    String getCode();
+
+    String getName();
+
+    String getDescription();
 }

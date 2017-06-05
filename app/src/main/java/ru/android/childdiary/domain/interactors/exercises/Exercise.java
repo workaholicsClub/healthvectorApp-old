@@ -16,7 +16,13 @@ public class Exercise implements Serializable, ContentObject<Exercise> {
 
     Long id;
 
+    Long serverId;
+
+    String code;
+
     String name;
+
+    String description;
 
     @Override
     public boolean isContentEmpty() {
@@ -26,6 +32,9 @@ public class Exercise implements Serializable, ContentObject<Exercise> {
     @Override
     public boolean isContentEqual(@NonNull Exercise other) {
         return ObjectUtils.equals(getId(), other.getId())
-                && ObjectUtils.contentEquals(getName(), other.getName());
+                && ObjectUtils.equals(getServerId(), other.getServerId())
+                && ObjectUtils.contentEquals(getCode(), other.getCode())
+                && ObjectUtils.contentEquals(getName(), other.getName())
+                && ObjectUtils.contentEquals(getDescription(), other.getDescription());
     }
 }
