@@ -49,7 +49,7 @@ public class ExerciseDataRepository implements ExerciseRepository {
     }
 
     private static long nextTryDelay(int retryCount) {
-        return retryCount;// * 10; // TODO
+        return retryCount * 10;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ExerciseDataRepository implements ExerciseRepository {
 
     private Observable<List<Exercise>> saveUpdateTime(@NonNull List<Exercise> exercises) {
         return Observable.fromCallable(() -> {
-            // preferences.getLong(KEY_LAST_UPDATE_TIME).set(System.currentTimeMillis()); // TODO
+            preferences.getLong(KEY_LAST_UPDATE_TIME).set(System.currentTimeMillis());
             return exercises;
         });
     }
