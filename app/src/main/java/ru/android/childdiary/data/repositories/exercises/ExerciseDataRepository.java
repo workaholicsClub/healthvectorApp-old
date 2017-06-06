@@ -1,5 +1,7 @@
 package ru.android.childdiary.data.repositories.exercises;
 
+import android.support.annotation.NonNull;
+
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import org.slf4j.Logger;
@@ -16,8 +18,10 @@ import io.reactivex.Observable;
 import ru.android.childdiary.data.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ProgramsToExercisesMapper;
+import ru.android.childdiary.domain.core.TryCountExceededException;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseRepository;
+import ru.android.childdiary.utils.StringUtils;
 
 @Singleton
 public class ExerciseDataRepository implements ExerciseRepository {
@@ -45,7 +49,7 @@ public class ExerciseDataRepository implements ExerciseRepository {
     }
 
     private static long nextTryDelay(int retryCount) {
-        return (long) Math.pow(2, retryCount);
+        return retryCount;// * 10; // TODO
     }
 
     @Override
@@ -62,7 +66,11 @@ public class ExerciseDataRepository implements ExerciseRepository {
                     if (isDataEmpty(exercises) || isDataExpired()) {
                         logger.debug("need to update data");
                         return loadDataFromNetwork()
-                                .flatMap(exerciseDbService::putExercises);
+                                .doOnNext(receivedExercises -> logger.debug("received data: " + StringUtils.toString(receivedExercises)))
+                                .flatMap(exerciseDbService::putExercises)
+                                .doOnNext(refreshedExercises -> logger.debug("refreshed data: " + StringUtils.toString(refreshedExercises)))
+                                .flatMap(this::saveUpdateTime)
+                                .doOnError(throwable -> logger.error("data not received", throwable));
                     } else {
                         logger.debug("data is actual");
                         return Observable.just(exercises);
@@ -70,11 +78,24 @@ public class ExerciseDataRepository implements ExerciseRepository {
                 });
     }
 
+    private Observable<List<Exercise>> saveUpdateTime(@NonNull List<Exercise> exercises) {
+        return Observable.fromCallable(() -> {
+            // preferences.getLong(KEY_LAST_UPDATE_TIME).set(System.currentTimeMillis()); // TODO
+            return exercises;
+        });
+    }
+
     private Observable<List<Exercise>> loadDataFromNetwork() {
         return exerciseNetworkService.getPrograms()
                 .map(mapper::map)
                 .retryWhen(errors -> errors
-                        .zipWith(Observable.range(1, MAX_TRY_COUNT), (throwable, i) -> i)
+                        .zipWith(Observable.range(1, MAX_TRY_COUNT), (throwable, i) -> {
+                            if (i == MAX_TRY_COUNT) {
+                                throw new TryCountExceededException();
+                            } else {
+                                return i;
+                            }
+                        })
                         .doOnNext(retryCount -> logger.debug("try " + retryCount))
                         .map(ExerciseDataRepository::nextTryDelay)
                         .doOnNext(delay -> logger.debug("next try will start in " + delay + " seconds"))

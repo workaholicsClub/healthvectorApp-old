@@ -140,17 +140,6 @@ public class TimerService extends Service {
                 .subscribe(stoppedEvent -> logger.debug("event stopped: " + stoppedEvent), this::onUnexpectedError));
     }
 
-    private void unsubscribe(Disposable subscription) {
-        if (subscription != null && !subscription.isDisposed()) {
-            subscription.dispose();
-        }
-    }
-
-    private Disposable unsubscribeOnDestroy(@NonNull Disposable disposable) {
-        compositeDisposable.add(disposable);
-        return disposable;
-    }
-
     private void handleResult(@NonNull List<SleepEvent> events) {
         updateNotifications(this, events);
         if (events.isEmpty()) {
@@ -233,5 +222,16 @@ public class TimerService extends Service {
             }
             NotificationUtils.showNotification(context, notificationId, builder);
         }
+    }
+
+    private void unsubscribe(Disposable subscription) {
+        if (subscription != null && !subscription.isDisposed()) {
+            subscription.dispose();
+        }
+    }
+
+    private Disposable unsubscribeOnDestroy(@NonNull Disposable disposable) {
+        compositeDisposable.add(disposable);
+        return disposable;
     }
 }
