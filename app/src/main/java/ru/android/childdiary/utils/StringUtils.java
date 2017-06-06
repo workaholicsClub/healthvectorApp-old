@@ -13,8 +13,6 @@ import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
@@ -42,16 +40,8 @@ public class StringUtils {
         }
     }
 
-    public static String childList(@Nullable List<Child> list) {
-        return list == null
-                ? "null"
-                : Arrays.toString(list.toArray(new Child[list.size()]));
-    }
-
-    public static String eventsList(@Nullable List<MasterEvent> list) {
-        return list == null
-                ? "null"
-                : Arrays.toString(list.toArray(new MasterEvent[list.size()]));
+    public static String toString(@Nullable List list) {
+        return list == null ? "null" : Arrays.toString(list.toArray());
     }
 
     @Nullable

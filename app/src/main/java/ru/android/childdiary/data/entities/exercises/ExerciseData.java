@@ -20,4 +20,6 @@ public interface ExerciseData extends Persistable {
     String getName();
 
     String getDescription();
+
+    Integer getOrderNumber();
 }

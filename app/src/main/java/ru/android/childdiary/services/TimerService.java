@@ -45,13 +45,10 @@ public class TimerService extends Service {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private Disposable subscription;
-
     private final TimerServiceBinder binder = new TimerServiceBinder(this);
-
     @Inject
     CalendarInteractor calendarInteractor;
-
+    private Disposable subscription;
     private Map<Long, NotificationCompat.Builder> notificationBuilders = new HashMap<>();
     private List<SleepEvent> events = new ArrayList<>();
     private Handler handler;

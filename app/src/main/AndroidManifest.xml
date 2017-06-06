@@ -165,6 +165,7 @@
         </provider>
 
         <service android:name=".services.TimerService" />
+        <service android:name=".services.UpdateDataService" />
 
         <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>

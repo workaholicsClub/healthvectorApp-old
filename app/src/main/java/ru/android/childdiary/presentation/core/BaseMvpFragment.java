@@ -83,7 +83,6 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
     @Override
     public void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
-        logger.error("unexpected error", e);
         if (BuildConfig.DEBUG) {
             new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                     .setMessage(e.toString())

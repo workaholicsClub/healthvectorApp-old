@@ -62,6 +62,7 @@ import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
 import ru.android.childdiary.services.TimerService;
+import ru.android.childdiary.services.UpdateDataService;
 
 @Component(modules = {ApplicationModule.class, DbModule.class, NetworkModule.class})
 @Singleton
@@ -185,4 +186,6 @@ public interface ApplicationComponent {
 
     // services
     void inject(TimerService service);
+
+    void inject(UpdateDataService service);
 }

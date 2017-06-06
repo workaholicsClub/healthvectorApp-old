@@ -5,6 +5,7 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +24,10 @@ public class ExerciseDataRepository implements ExerciseRepository {
     private static final String KEY_LAST_UPDATE_TIME = "ExerciseDataRepository.last_update_exercises_time";
     private static final int UPDATE_EXERCISES_INTERVAL = 1000 * 60 * 60 * 24; // 1 day
 
+    private static final int MAX_TRY_COUNT = 5;
+
     private final Logger logger = LoggerFactory.getLogger(toString());
+
     private final RxSharedPreferences preferences;
     private final ExerciseNetworkService exerciseNetworkService;
     private final Mapper<Programs, List<Exercise>> mapper;
@@ -40,6 +44,10 @@ public class ExerciseDataRepository implements ExerciseRepository {
         this.exerciseDbService = exerciseDbService;
     }
 
+    private static long nextTryDelay(int retryCount) {
+        return (long) Math.pow(2, retryCount);
+    }
+
     @Override
     public Observable<List<Exercise>> getExercises() {
         return exerciseDbService.getExercises();
@@ -48,6 +56,8 @@ public class ExerciseDataRepository implements ExerciseRepository {
     @Override
     public Observable<List<Exercise>> updateExercisesIfNeeded() {
         return exerciseDbService.getExercises()
+                .first(Collections.emptyList())
+                .toObservable()
                 .flatMap(exercises -> {
                     if (isDataEmpty(exercises) || isDataExpired()) {
                         logger.debug("need to update data");
@@ -58,6 +68,17 @@ public class ExerciseDataRepository implements ExerciseRepository {
                         return Observable.just(exercises);
                     }
                 });
+    }
+
+    private Observable<List<Exercise>> loadDataFromNetwork() {
+        return exerciseNetworkService.getPrograms()
+                .map(mapper::map)
+                .retryWhen(errors -> errors
+                        .zipWith(Observable.range(1, MAX_TRY_COUNT), (throwable, i) -> i)
+                        .doOnNext(retryCount -> logger.debug("try " + retryCount))
+                        .map(ExerciseDataRepository::nextTryDelay)
+                        .doOnNext(delay -> logger.debug("next try will start in " + delay + " seconds"))
+                        .flatMap(delay -> Observable.timer(delay, TimeUnit.SECONDS)));
     }
 
     private boolean isDataEmpty(List<Exercise> exercises) {
@@ -77,13 +98,5 @@ public class ExerciseDataRepository implements ExerciseRepository {
             return true;
         }
         return false;
-    }
-
-    private Observable<List<Exercise>> loadDataFromNetwork() {
-        return exerciseNetworkService.getPrograms()
-                .map(mapper::map)
-                .retryWhen(errors -> errors
-                        .zipWith(Observable.range(1, 5), (throwable, i) -> i)
-                        .flatMap(retryCount -> Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS)));
     }
 }

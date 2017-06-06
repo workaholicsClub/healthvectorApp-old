@@ -39,11 +39,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                         .doOnNext(zero -> logger.debug("timer finished")),
                 childInteractor.getActiveChildOnce()
                         .doOnNext(child -> logger.debug("active child: " + child)),
-                exerciseInteractor.updateExercisesIfNeeded(),
-                (zero, child, exercises) -> child)
-                .map(Child::getSex)
+                (zero, child) -> child)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(sex -> getViewState().navigateToMain(), this::onUnexpectedError));
+                .subscribe(child -> getViewState().navigateToMain(), this::onUnexpectedError));
     }
 }

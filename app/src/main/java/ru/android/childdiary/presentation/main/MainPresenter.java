@@ -46,7 +46,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     private void onGetChildList(@NonNull List<Child> childList) {
-        logger.debug("onGetChildList: " + StringUtils.childList(childList));
+        logger.debug("onGetChildList: " + StringUtils.toString(childList));
         getViewState().showChildList(childList);
         if (isFirstTime) {
             if (childList.isEmpty()) {

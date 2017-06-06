@@ -181,7 +181,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public void showChildList(@NonNull List<Child> childList) {
-        logger.debug("showChildList: " + StringUtils.childList(childList));
+        logger.debug("showChildList: " + StringUtils.toString(childList));
 
         List<IProfile> profiles = new ArrayList<>();
         if (!childList.isEmpty()) {
