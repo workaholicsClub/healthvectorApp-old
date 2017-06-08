@@ -1,10 +1,11 @@
-package ru.android.childdiary.domain.interactors.child;
+package ru.android.childdiary.domain.interactors.development.antropometry;
 
 import android.support.annotation.NonNull;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 public interface AntropometryRepository {
     Observable<List<Antropometry>> getAll(@NonNull Child child);

@@ -41,9 +41,9 @@ public class ChildDiaryUncaugthExceptionHandler implements Thread.UncaughtExcept
     }
 
     private boolean isOutOfMemory(Throwable throwable) {
-        // TODO: check cause; check exception stack trace contains substring "OutOfMemoryError"
-        return throwable.getClass().equals(OutOfMemoryError.class)
-                || throwable.getClass().equals(RuntimeException.class);
+        // TODO: check exception stack trace contains substring "OutOfMemoryError"
+        return throwable.getClass() == OutOfMemoryError.class
+                || (throwable.getCause() != null && throwable.getCause().getClass() == OutOfMemoryError.class);
     }
 
     private void dumpHprof() {

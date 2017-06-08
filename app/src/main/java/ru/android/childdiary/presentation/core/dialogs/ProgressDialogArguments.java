@@ -1,12 +1,12 @@
 package ru.android.childdiary.presentation.core.dialogs;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.Sex;

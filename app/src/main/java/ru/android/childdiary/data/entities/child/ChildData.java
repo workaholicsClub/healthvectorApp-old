@@ -12,6 +12,8 @@ import io.requery.OneToMany;
 import io.requery.Persistable;
 import io.requery.Table;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
+import ru.android.childdiary.data.entities.development.achievement.ConcreteAchievementData;
+import ru.android.childdiary.data.entities.development.antropometry.AntropometryData;
 import ru.android.childdiary.data.types.Sex;
 
 @Table(name = "child")
@@ -38,8 +40,11 @@ public interface ChildData extends Persistable {
     Double getBirthWeight();
 
     @OneToMany
+    List<MasterEventData> getEvents();
+
+    @OneToMany
     List<AntropometryData> getAntropometryList();
 
     @OneToMany
-    List<MasterEventData> getEvents();
+    List<ConcreteAchievementData> getConcreteAchievements();
 }

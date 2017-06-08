@@ -1,4 +1,4 @@
-package ru.android.childdiary.domain.interactors.child;
+package ru.android.childdiary.domain.interactors.development.antropometry;
 
 import android.support.annotation.NonNull;
 
@@ -7,7 +7,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.data.repositories.child.AntropometryDataRepository;
+import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDataRepository;
+import ru.android.childdiary.domain.interactors.child.Child;
 
 public class AntropometryInteractor {
     private final AntropometryRepository antropometryRepository;

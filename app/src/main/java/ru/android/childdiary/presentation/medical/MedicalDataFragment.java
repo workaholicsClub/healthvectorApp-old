@@ -67,7 +67,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.fragment_medical_data;
+        return R.layout.fragment_app_partition_with_tabs;
     }
 
     @Override
@@ -198,10 +198,13 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     @OnClick(R.id.fab)
     void onFabClick() {
         int selectedPage = viewPager.getCurrentItem();
-        if (selectedPage == 0) {
-            presenter.addDoctorVisit();
-        } else if (selectedPage == 1) {
-            presenter.addMedicineTaking();
+        switch (selectedPage) {
+            case 0:
+                presenter.addDoctorVisit();
+                break;
+            case 1:
+                presenter.addMedicineTaking();
+                break;
         }
     }
 

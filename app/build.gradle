@@ -95,6 +95,17 @@ dependencies {
     compile "io.requery:requery-android:$requeryVersion"
     annotationProcessor "io.requery:requery-processor:$requeryVersion"
 
+    def retrofitVersion = '2.3.0'
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    compile("com.squareup.retrofit2:converter-simplexml:$retrofitVersion") {
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+
+    compile "com.squareup.okhttp3:logging-interceptor:3.8.0"
+
     compile "net.danlew:android.joda:2.9.5.1"
 
     def daggerVersion = '2.9'

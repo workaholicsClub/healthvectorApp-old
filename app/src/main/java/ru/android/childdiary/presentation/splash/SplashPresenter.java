@@ -11,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.interactors.core.InitializationInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
@@ -19,6 +20,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     @Inject
     ChildInteractor childInteractor;
+
+    @Inject
+    InitializationInteractor initializationInteractor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -32,12 +36,12 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         unsubscribeOnDestroy(Observable.combineLatest(
                 Observable.timer(SPLASH_TIME_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
                         .doOnNext(zero -> logger.debug("timer finished")),
+                initializationInteractor.startUpdateDataService(),
                 childInteractor.getActiveChildOnce()
                         .doOnNext(child -> logger.debug("active child: " + child)),
-                (zero, child) -> child)
+                (zero, isUpdateServiceStarted, child) -> child)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(child -> logger.debug("navigateToMain"))
                 .subscribe(child -> getViewState().navigateToMain(), this::onUnexpectedError));
     }
 }

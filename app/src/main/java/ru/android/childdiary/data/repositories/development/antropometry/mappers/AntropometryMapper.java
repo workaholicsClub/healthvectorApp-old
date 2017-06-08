@@ -1,17 +1,18 @@
-package ru.android.childdiary.data.repositories.child.mappers;
+package ru.android.childdiary.data.repositories.development.antropometry.mappers;
 
 import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.entities.child.AntropometryData;
-import ru.android.childdiary.data.entities.child.AntropometryEntity;
 import ru.android.childdiary.data.entities.child.ChildData;
 import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.data.entities.development.antropometry.AntropometryData;
+import ru.android.childdiary.data.entities.development.antropometry.AntropometryEntity;
+import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.child.Antropometry;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 
 public class AntropometryMapper implements EntityMapper<AntropometryData, AntropometryEntity, Antropometry> {
     private final ChildMapper childMapper;

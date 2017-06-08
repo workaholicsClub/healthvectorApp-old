@@ -11,7 +11,7 @@ import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 
 @Module
-public class DataModule {
+public class DbModule {
     @Provides
     @Singleton
     public ReactiveEntityStore<Persistable> provideDataStore(Context appContext) {

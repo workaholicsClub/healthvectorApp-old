@@ -54,6 +54,42 @@
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
 
-## Other ##
+## Retrofit ##
+## http://square.github.io/retrofit/ ##
+
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+# Retain generic type information for use by reflection by converters and adapters.
+-keepattributes Signature
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions
+
+## OkHttp3 ##
+## https://github.com/krschultz/android-proguard-snippets/blob/master/libraries/proguard-square-okhttp3.pro ##
+
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+
+## Okio ##
+## https://github.com/square/okio#proguard ##
 
 -dontwarn okio.**
+
+## Simple Xml ##
+## https://stackoverflow.com/a/44152535 ##
+
+-dontwarn javax.xml.stream.**
+
+-keep public class org.simpleframework.** { *; }
+-keep class org.simpleframework.xml.** { *; }
+-keep class org.simpleframework.xml.core.** { *; }
+-keep class org.simpleframework.xml.util.** { *; }
+
+-keepattributes ElementList, Root
+
+-keepclassmembers class * {
+    @org.simpleframework.xml.* *;
+}

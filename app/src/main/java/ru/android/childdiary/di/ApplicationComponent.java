@@ -4,12 +4,18 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import ru.android.childdiary.di.modules.ApplicationModule;
-import ru.android.childdiary.di.modules.DataModule;
+import ru.android.childdiary.di.modules.DbModule;
+import ru.android.childdiary.di.modules.NetworkModule;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
 import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
+import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
+import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsPresenter;
+import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryPresenter;
+import ru.android.childdiary.presentation.development.partitions.tests.mental.MentalTestResultsPresenter;
+import ru.android.childdiary.presentation.development.partitions.tests.physical.PhysicalTestResultsPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
@@ -56,8 +62,9 @@ import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
 import ru.android.childdiary.services.TimerService;
+import ru.android.childdiary.services.UpdateDataService;
 
-@Component(modules = {ApplicationModule.class, DataModule.class})
+@Component(modules = {ApplicationModule.class, DbModule.class, NetworkModule.class})
 @Singleton
 public interface ApplicationComponent {
     // presenters
@@ -121,6 +128,14 @@ public interface ApplicationComponent {
 
     void inject(MedicineTakingFilterPresenter presenter);
 
+    void inject(AchievementsPresenter presenter);
+
+    void inject(AntropometryPresenter presenter);
+
+    void inject(MentalTestResultsPresenter presenter);
+
+    void inject(PhysicalTestResultsPresenter presenter);
+
     // TODO EXERCISE
 
     // activities
@@ -167,6 +182,10 @@ public interface ApplicationComponent {
 
     void inject(MedicalDataFragment fragment);
 
+    void inject(DevelopmentDiaryFragment fragment);
+
     // services
     void inject(TimerService service);
+
+    void inject(UpdateDataService service);
 }

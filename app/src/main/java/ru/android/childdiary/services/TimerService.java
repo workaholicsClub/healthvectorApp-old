@@ -45,13 +45,10 @@ public class TimerService extends Service {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private Disposable subscription;
-
     private final TimerServiceBinder binder = new TimerServiceBinder(this);
-
     @Inject
     CalendarInteractor calendarInteractor;
-
+    private Disposable subscription;
     private Map<Long, NotificationCompat.Builder> notificationBuilders = new HashMap<>();
     private List<SleepEvent> events = new ArrayList<>();
     private Handler handler;
@@ -143,17 +140,6 @@ public class TimerService extends Service {
                 .subscribe(stoppedEvent -> logger.debug("event stopped: " + stoppedEvent), this::onUnexpectedError));
     }
 
-    private void unsubscribe(Disposable subscription) {
-        if (subscription != null && !subscription.isDisposed()) {
-            subscription.dispose();
-        }
-    }
-
-    private Disposable unsubscribeOnDestroy(@NonNull Disposable disposable) {
-        compositeDisposable.add(disposable);
-        return disposable;
-    }
-
     private void handleResult(@NonNull List<SleepEvent> events) {
         updateNotifications(this, events);
         if (events.isEmpty()) {
@@ -236,5 +222,16 @@ public class TimerService extends Service {
             }
             NotificationUtils.showNotification(context, notificationId, builder);
         }
+    }
+
+    private void unsubscribe(Disposable subscription) {
+        if (subscription != null && !subscription.isDisposed()) {
+            subscription.dispose();
+        }
+    }
+
+    private Disposable unsubscribeOnDestroy(@NonNull Disposable disposable) {
+        compositeDisposable.add(disposable);
+        return disposable;
     }
 }
