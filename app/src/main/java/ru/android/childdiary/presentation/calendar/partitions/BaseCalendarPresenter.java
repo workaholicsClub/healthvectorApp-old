@@ -17,6 +17,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -167,7 +168,9 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
             case MEDICINE_TAKING:
                 navigateToMedicineTaking(event);
                 break;
-            // TODO EXERCISE
+            case EXERCISE:
+                navigateToExercise(event);
+                break;
         }
     }
 
@@ -262,7 +265,18 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                         this::onUnexpectedError));
     }
 
-    // TODO EXERCISE
+    private void navigateToExercise(@NonNull MasterEvent event) {
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getEventDetailOnce(event),
+                calendarInteractor.getDefaultExerciseEvent(),
+                (eventDetail, defaultEvent) -> Arrays.asList(eventDetail, defaultEvent))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        events -> getViewState().navigateToExerciseEvent(
+                                (MasterEvent) events.get(0), (ExerciseEvent) events.get(1)),
+                        this::onUnexpectedError));
+    }
 
     public void done(@NonNull MasterEvent event) {
         boolean willBeUndone = EventHelper.isDone(event);

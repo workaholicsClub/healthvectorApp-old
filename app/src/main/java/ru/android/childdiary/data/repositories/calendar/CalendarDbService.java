@@ -19,6 +19,7 @@ import io.requery.reactivex.ReactiveEntityStore;
 import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.ExerciseEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
@@ -33,6 +34,7 @@ import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.DiaperEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.DoctorVisitEventMapper;
+import ru.android.childdiary.data.repositories.calendar.mappers.ExerciseEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.FeedEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.FoodMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.FoodMeasureMapper;
@@ -44,6 +46,7 @@ import ru.android.childdiary.data.repositories.calendar.mappers.SleepEventMapper
 import ru.android.childdiary.data.repositories.core.EventsDbService;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
@@ -62,6 +65,8 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEvents
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
 
@@ -69,6 +74,7 @@ import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicine
 public class CalendarDbService extends EventsDbService {
     private final DiaperEventMapper diaperEventMapper;
     private final DoctorVisitEventMapper doctorVisitEventMapper;
+    private final ExerciseEventMapper exerciseEventMapper;
     private final FeedEventMapper feedEventMapper;
     private final FoodMapper foodMapper;
     private final FoodMeasureMapper foodMeasureMapper;
@@ -85,6 +91,7 @@ public class CalendarDbService extends EventsDbService {
                              FeedEventMapper feedEventMapper,
                              FoodMapper foodMapper,
                              FoodMeasureMapper foodMeasureMapper,
+                             ExerciseEventMapper exerciseEventMapper,
                              MasterEventMapper masterEventMapper,
                              MedicineTakingEventMapper medicineTakingEventMapper,
                              OtherEventMapper otherEventMapper,
@@ -93,6 +100,7 @@ public class CalendarDbService extends EventsDbService {
         super(dataStore);
         this.diaperEventMapper = diaperEventMapper;
         this.doctorVisitEventMapper = doctorVisitEventMapper;
+        this.exerciseEventMapper = exerciseEventMapper;
         this.feedEventMapper = feedEventMapper;
         this.foodMapper = foodMapper;
         this.foodMeasureMapper = foodMeasureMapper;
@@ -248,6 +256,14 @@ public class CalendarDbService extends EventsDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, medicineTakingEventMapper));
     }
 
+    public Observable<ExerciseEvent> getExerciseEventDetail(@NonNull MasterEvent event) {
+        return dataStore.select(ExerciseEventEntity.class)
+                .where(ExerciseEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, exerciseEventMapper));
+    }
+
     public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             MasterEvent masterEvent = insertMasterEvent(event);
@@ -381,6 +397,35 @@ public class CalendarDbService extends EventsDbService {
         }));
     }
 
+    public Observable<UpdateExerciseEventResponse> update(@NonNull UpdateExerciseEventRequest request) {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
+            ExerciseEvent exerciseEvent = request.getExerciseEvent();
+            List<LinearGroupFieldType> fields = request.getFields();
+            int minutes = request.getMinutes();
+
+            List<String> imageFilesToDelete = Collections.emptyList();
+
+            if (minutes == 0) {
+                imageFilesToDelete = updateExerciseEvent(exerciseEvent);
+            }
+
+            updateLinearGroup(exerciseEvent, fields, minutes);
+
+            ExerciseEventEntity exerciseEventEntity = blockingEntityStore
+                    .select(ExerciseEventEntity.class)
+                    .where(ExerciseEventEntity.ID.eq(exerciseEvent.getId()))
+                    .get()
+                    .first();
+            ExerciseEvent result = exerciseEventMapper.mapToPlainObject(exerciseEventEntity);
+
+            return UpdateExerciseEventResponse.builder()
+                    .request(request)
+                    .exerciseEvent(result)
+                    .imageFilesToDelete(imageFilesToDelete)
+                    .build();
+        }));
+    }
+
     private List<String> updateDoctorVisitEvent(DoctorVisitEvent doctorVisitEvent) {
         DoctorVisitEventEntity oldDoctorVisitEventEntity = blockingEntityStore
                 .select(DoctorVisitEventEntity.class)
@@ -419,6 +464,25 @@ public class CalendarDbService extends EventsDbService {
         return imageFilesToDelete;
     }
 
+    private List<String> updateExerciseEvent(ExerciseEvent exerciseEvent) {
+        ExerciseEventEntity oldExerciseEventEntity = blockingEntityStore
+                .select(ExerciseEventEntity.class)
+                .where(ExerciseEventEntity.ID.eq(exerciseEvent.getId()))
+                .get()
+                .first();
+
+        List<String> imageFilesToDelete = new ArrayList<>();
+        if (!TextUtils.isEmpty(oldExerciseEventEntity.getImageFileName())
+                && !oldExerciseEventEntity.getImageFileName().equals(exerciseEvent.getImageFileName())) {
+            imageFilesToDelete.add(oldExerciseEventEntity.getImageFileName());
+        }
+
+        updateMasterEvent(exerciseEvent);
+        ExerciseEvent result = DbUtils.update(blockingEntityStore, exerciseEvent, exerciseEventMapper);
+
+        return imageFilesToDelete;
+    }
+
     private void updateLinearGroup(@NonNull DoctorVisitEvent doctorVisitEvent,
                                    @NonNull List<LinearGroupFieldType> fields,
                                    int minutes) {
@@ -437,8 +501,8 @@ public class CalendarDbService extends EventsDbService {
         List<DoctorVisitEventEntity> events = getDoctorVisitEvents(doctorVisitId, linearGroup);
 
         if (fields.contains(LinearGroupFieldType.DOCTOR)
-                || fields.contains(LinearGroupFieldType.NAME)
-                || fields.contains(LinearGroupFieldType.DURATION_IN_MINUTES)) {
+                || fields.contains(LinearGroupFieldType.DOCTOR_VISIT_EVENT_NAME)
+                || fields.contains(LinearGroupFieldType.DOCTOR_VISIT_EVENT_DURATION_IN_MINUTES)) {
 
             for (DoctorVisitEventEntity event : events) {
                 for (LinearGroupFieldType field : fields) {
@@ -508,6 +572,50 @@ public class CalendarDbService extends EventsDbService {
         }
     }
 
+    private void updateLinearGroup(@NonNull ExerciseEvent exerciseEvent,
+                                   @NonNull List<LinearGroupFieldType> fields,
+                                   int minutes) {
+        if (fields.isEmpty()) {
+            logger.debug("changed fields list is empty");
+            return;
+        }
+
+        Integer linearGroup = exerciseEvent.getLinearGroup();
+        if (linearGroup == null) {
+            logger.error("no linear group: " + exerciseEvent);
+            return;
+        }
+
+        Long concreteExerciseId = getConcreteExerciseId(exerciseEvent);
+        List<ExerciseEventEntity> events = getExerciseEvents(concreteExerciseId, linearGroup);
+
+        if (fields.contains(LinearGroupFieldType.EXERCISE_EVENT_NAME)
+                || fields.contains(LinearGroupFieldType.EXERCISE_EVENT_DURATION_IN_MINUTES)) {
+
+            for (ExerciseEventEntity event : events) {
+                for (LinearGroupFieldType field : fields) {
+                    updateEventField(exerciseEvent, event, field);
+                }
+            }
+
+            blockingEntityStore.update(events);
+        }
+
+        if (fields.contains(LinearGroupFieldType.NOTIFY_TIME_IN_MINUTES)
+                || fields.contains(LinearGroupFieldType.TIME)) {
+
+            List<MasterEventEntity> masterEvents = getMasterEventsFromExerciseEvents(events);
+
+            for (MasterEventEntity masterEvent : masterEvents) {
+                for (LinearGroupFieldType field : fields) {
+                    updateEventField(exerciseEvent, masterEvent, field, minutes);
+                }
+            }
+
+            blockingEntityStore.update(masterEvents);
+        }
+    }
+
     private void updateEventField(@NonNull DoctorVisitEvent from,
                                   @NonNull DoctorVisitEventEntity to,
                                   @NonNull LinearGroupFieldType field) {
@@ -516,11 +624,11 @@ public class CalendarDbService extends EventsDbService {
                 DoctorEntity doctorEntity = findDoctorEntity(from.getDoctor());
                 to.setDoctor(doctorEntity);
                 break;
-            case NAME:
+            case DOCTOR_VISIT_EVENT_NAME:
                 String name = from.getName();
                 to.setName(name);
                 break;
-            case DURATION_IN_MINUTES:
+            case DOCTOR_VISIT_EVENT_DURATION_IN_MINUTES:
                 Integer durationInMinutes = from.getDurationInMinutes();
                 to.setDurationInMinutes(durationInMinutes);
                 break;
@@ -542,6 +650,21 @@ public class CalendarDbService extends EventsDbService {
             case MEDICINE_MEASURE:
                 MedicineMeasureEntity medicineMeasureEntity = findMedicineMeasureEntity(from.getMedicineMeasure());
                 to.setMedicineMeasure(medicineMeasureEntity);
+                break;
+        }
+    }
+
+    private void updateEventField(@NonNull ExerciseEvent from,
+                                  @NonNull ExerciseEventEntity to,
+                                  @NonNull LinearGroupFieldType field) {
+        switch (field) {
+            case EXERCISE_EVENT_NAME:
+                String name = from.getName();
+                to.setName(name);
+                break;
+            case EXERCISE_EVENT_DURATION_IN_MINUTES:
+                Integer durationInMinutes = from.getDurationInMinutes();
+                to.setDurationInMinutes(durationInMinutes);
                 break;
         }
     }

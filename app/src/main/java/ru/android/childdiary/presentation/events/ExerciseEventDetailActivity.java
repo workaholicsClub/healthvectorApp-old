@@ -20,16 +20,14 @@ import org.joda.time.LocalTime;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldEventNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEventNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
@@ -37,31 +35,25 @@ import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
-import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerActivity;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class DoctorVisitEventDetailActivity
-        extends EventDetailActivity<DoctorVisitEventDetailView, DoctorVisitEvent>
-        implements DoctorVisitEventDetailView, FieldNoteWithPhotoView.PhotoListener,
+public class ExerciseEventDetailActivity
+        extends EventDetailActivity<ExerciseEventDetailView, ExerciseEvent>
+        implements ExerciseEventDetailView, FieldNoteWithPhotoView.PhotoListener,
         ImagePickerDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
-    private static final int REQUEST_DOCTOR = 1;
-
     @InjectPresenter
-    DoctorVisitEventDetailPresenter presenter;
+    ExerciseEventDetailPresenter presenter;
 
-    @BindView(R.id.doctorVisitNameView)
-    FieldEventNameView doctorVisitNameView;
-
-    @BindView(R.id.doctorView)
-    FieldDoctorView doctorView;
+    @BindView(R.id.exerciseNameView)
+    FieldEventNameView exerciseNameView;
 
     @BindView(R.id.dateView)
     FieldDateView dateView;
@@ -81,8 +73,8 @@ public class DoctorVisitEventDetailActivity
     private boolean isValidationStarted;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
-                                   @NonNull DoctorVisitEvent defaultEvent) {
-        Intent intent = new Intent(context, DoctorVisitEventDetailActivity.class);
+                                   @NonNull ExerciseEvent defaultEvent) {
+        Intent intent = new Intent(context, ExerciseEventDetailActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
         intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
         return intent;
@@ -99,7 +91,7 @@ public class DoctorVisitEventDetailActivity
 
         dateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(), null, null));
         timeView.setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
-        setupEditTextView(doctorVisitNameView);
+        setupEditTextView(exerciseNameView);
         notifyTimeView.setFieldDialogListener(v -> {
             TimeDialogFragment dialogFragment = new TimeDialogFragment();
             dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG,
@@ -124,56 +116,37 @@ public class DoctorVisitEventDetailActivity
                             .title(getString(R.string.duration))
                             .build());
         });
-        doctorView.setFieldDialogListener(view -> {
-            startActivityForResult(DoctorPickerActivity.getIntent(this, getSex()),
-                    REQUEST_DOCTOR);
-            hideKeyboardAndClearFocus(rootView.findFocus());
-        });
         setupEditTextView(noteWithPhotoView);
         noteWithPhotoView.setPhotoListener(this);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_DOCTOR) {
-            if (resultCode == RESULT_OK) {
-                Doctor doctor = (Doctor) data.getSerializableExtra(ExtraConstants.EXTRA_ITEM);
-                doctorView.setValue(doctor);
-            } else {
-                getPresenter().checkValue(doctorView.getValue());
-            }
-        }
-    }
-
-    @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getDoctorVisitLogoRes(getSex()));
-        setupToolbarTitle(R.string.event_doctor_visit);
+        setupToolbarLogo(ResourcesUtils.getExerciseLogoRes(getSex()));
+        setupToolbarTitle(R.string.exercise);
     }
 
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        setupToolbarLogo(ResourcesUtils.getDoctorVisitLogoRes(getSex()));
+        setupToolbarLogo(ResourcesUtils.getExerciseLogoRes(getSex()));
     }
 
     @Override
-    public DoctorVisitEventDetailPresenter getPresenter() {
+    public ExerciseEventDetailPresenter getPresenter() {
         return presenter;
     }
 
     @Override
     @LayoutRes
     protected int getContentLayoutResourceId() {
-        return R.layout.activity_event_detail_doctor_visit;
+        return R.layout.activity_event_detail_exercise;
     }
 
     @Override
-    public void setupEventDetail(@NonNull DoctorVisitEvent event) {
-        doctorView.setValue(event.getDoctor());
-        doctorVisitNameView.setText(event.getName());
+    public void setupEventDetail(@NonNull ExerciseEvent event) {
+        exerciseNameView.setText(event.getName());
         durationView.setValue(event.getDurationInMinutes());
         WidgetsUtils.setDateTime(event.getDateTime(), dateView, timeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
@@ -183,13 +156,12 @@ public class DoctorVisitEventDetailActivity
     }
 
     @Override
-    protected DoctorVisitEvent buildEvent(DoctorVisitEvent event) {
-        DoctorVisitEvent.DoctorVisitEventBuilder builder = event == null
-                ? DoctorVisitEvent.builder()
+    protected ExerciseEvent buildEvent(ExerciseEvent event) {
+        ExerciseEvent.ExerciseEventBuilder builder = event == null
+                ? ExerciseEvent.builder()
                 : event.toBuilder();
 
-        Doctor doctor = doctorView.getValue();
-        String doctorVisitName = doctorVisitNameView.getText();
+        String exerciseName = exerciseNameView.getText();
         Integer duration = durationView.getValue();
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
         Integer minutes = notifyTimeView.getValue();
@@ -197,8 +169,7 @@ public class DoctorVisitEventDetailActivity
         String imageFileName = noteWithPhotoView.getImageFileName();
 
         builder.dateTime(dateTime)
-                .doctor(doctor)
-                .name(doctorVisitName)
+                .name(exerciseName)
                 .durationInMinutes(duration)
                 .dateTime(dateTime)
                 .notifyTimeInMinutes(minutes)
@@ -213,13 +184,13 @@ public class DoctorVisitEventDetailActivity
     public void validationFailed() {
         if (!isValidationStarted) {
             isValidationStarted = true;
-            unsubscribeOnDestroy(presenter.listenForFieldsUpdate(doctorVisitNameView.textObservable()));
+            unsubscribeOnDestroy(presenter.listenForFieldsUpdate(exerciseNameView.textObservable()));
         }
     }
 
     @Override
-    public void doctorVisitEventNameValidated(boolean valid) {
-        doctorVisitNameView.validated(valid);
+    public void exerciseEventNameValidated(boolean valid) {
+        exerciseNameView.validated(valid);
     }
 
     @Override
@@ -242,11 +213,6 @@ public class DoctorVisitEventDetailActivity
                 notifyTimeView.setValue(minutes);
                 break;
         }
-    }
-
-    @Override
-    public void setDoctor(@Nullable Doctor doctor) {
-        doctorView.setValue(doctor);
     }
 
     @Override

@@ -20,6 +20,8 @@ import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailPresenter;
+import ru.android.childdiary.presentation.events.ExerciseEventDetailActivity;
+import ru.android.childdiary.presentation.events.ExerciseEventDetailPresenter;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailPresenter;
 import ru.android.childdiary.presentation.events.MedicineTakingEventDetailActivity;
@@ -126,6 +128,8 @@ public interface ApplicationComponent {
 
     void inject(MedicineTakingEventDetailPresenter presenter);
 
+    void inject(ExerciseEventDetailPresenter presenter);
+
     void inject(ImagePickerPresenter presenter);
 
     void inject(DoctorVisitFilterPresenter presenter);
@@ -180,6 +184,8 @@ public interface ApplicationComponent {
     void inject(DoctorVisitEventDetailActivity activity);
 
     void inject(MedicineTakingEventDetailActivity activity);
+
+    void inject(ExerciseEventDetailActivity activity);
 
     void inject(ExerciseDetailActivity activity);
 

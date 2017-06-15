@@ -4,13 +4,18 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import org.joda.time.LocalDate;
 
+import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.DateUtils;
 
 public class FieldDateView extends FieldDialogView<LocalDate> {
+    @BindView(R.id.textViewTitle)
+    TextView textViewTitle;
+
     public FieldDateView(Context context) {
         super(context);
     }
@@ -33,5 +38,9 @@ public class FieldDateView extends FieldDialogView<LocalDate> {
     @Override
     protected String getTextForValue(@Nullable LocalDate value) {
         return DateUtils.date(getContext(), value);
+    }
+
+    public void setTitle(String text) {
+        textViewTitle.setText(text);
     }
 }

@@ -13,7 +13,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -21,23 +21,20 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
+import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEventNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
-import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -46,37 +43,25 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
     @InjectPresenter
     AddConcreteExercisePresenter presenter;
 
-    @BindView(R.id.doctorVisitNameView)
-    FieldDoctorVisitNameView doctorVisitNameView;
-
-    @BindView(R.id.doctorView)
-    FieldDoctorView doctorView;
+    @BindView(R.id.concreteExerciseNameView)
+    FieldEventNameView concreteExerciseNameView;
 
     @BindView(R.id.dateView)
     FieldDateView dateView;
 
-    @BindView(R.id.timeView)
-    FieldTimeView timeView;
-
     @BindView(R.id.durationView)
     FieldDurationView durationView;
-
-    @BindView(R.id.checkBoxView)
-    FieldCheckBoxView checkBoxView;
 
     @BindView(R.id.repeatParametersView)
     FieldRepeatParametersView repeatParametersView;
 
-    @BindView(R.id.noteWithPhotoView)
-    FieldNoteWithPhotoView noteWithPhotoView;
-
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
 
-    public static Intent getIntent(Context context, @NonNull DoctorVisit defaultDoctorVisit,
+    public static Intent getIntent(Context context, @NonNull ConcreteExercise defaultConcreteExercise,
                                    @Nullable LocalTime startTime, @Nullable LocalTime finishTime) {
         Intent intent = new Intent(context, AddConcreteExerciseActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultDoctorVisit);
+        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultConcreteExercise);
         intent.putExtra(ExtraConstants.EXTRA_START_TIME, startTime);
         intent.putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
         return intent;
@@ -91,11 +76,12 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        dateView.setTitle(getString(R.string.start_from));
+
         changeThemeIfNeeded(defaultItem.getChild());
 
         unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(
-                doctorVisitNameView.textObservable(),
-                RxFieldValueView.valueChangeEvents(doctorView),
+                concreteExerciseNameView.textObservable(),
                 repeatParametersView.linearGroupsObservable(),
                 repeatParametersView.periodicityTypeObservable(),
                 repeatParametersView.lengthValueObservable()
@@ -120,53 +106,38 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
 
     @Override
     protected void setup(ConcreteExercise item) {
-        // TODO
-        //doctorView.setValue(item.getDoctor());
         repeatParametersView.setRepeatParameters(item.getRepeatParameters());
-        doctorVisitNameView.setText(item.getName());
         durationView.setValue(item.getDurationInMinutes());
-        WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
-
-        boolean exported = ObjectUtils.isTrue(item.getIsExported());
-        checkBoxView.setChecked(exported);
-
+        WidgetsUtils.setDateTime(item.getDateTime(), dateView, null);
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
-        noteWithPhotoView.setText(item.getNote());
-        noteWithPhotoView.setImageFileName(item.getImageFileName());
     }
 
     @Override
     protected ConcreteExercise build() {
-        Doctor doctor = doctorView.getValue();
         RepeatParameters repeatParameters = repeatParametersView.getRepeatParameters();
-        String doctorVisitName = doctorVisitNameView.getText();
+        String concreteExerciseName = concreteExerciseNameView.getText();
         Integer duration = durationView.getValue();
-        DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
-        boolean exported = checkBoxView.isChecked();
+        DateTime dateTime = WidgetsUtils.getDateTime(dateView, null);
         Integer minutes = notifyTimeView.getValue();
-        String note = noteWithPhotoView.getText();
-        String imageFileName = noteWithPhotoView.getImageFileName();
 
-        // TODO
         return defaultItem.toBuilder()
-                //.doctor(doctor)
                 .repeatParameters(repeatParameters)
-                .name(doctorVisitName)
+                .name(concreteExerciseName)
                 .durationInMinutes(duration)
                 .dateTime(dateTime)
-                .isExported(exported)
+                .isExported(true)
                 .notifyTimeInMinutes(minutes)
-                .note(note)
-                .imageFileName(imageFileName)
                 .build();
     }
 
     @Override
     public void onChecked() {
-        boolean readOnly = !getCheckBoxView().isChecked();
-        repeatParametersView.setReadOnly(readOnly);
+        if (getCheckBoxView() != null) {
+            boolean readOnly = !getCheckBoxView().isChecked();
+            repeatParametersView.setReadOnly(readOnly);
+        }
     }
 
     @Override
@@ -179,9 +150,10 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
         return dateView;
     }
 
+    @Nullable
     @Override
     protected FieldTimeView getTimeView() {
-        return timeView;
+        return null;
     }
 
     @Override
@@ -195,9 +167,10 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
         return durationView;
     }
 
+    @Nullable
     @Override
     protected FieldCheckBoxView getCheckBoxView() {
-        return checkBoxView;
+        return null;
     }
 
     @Override
@@ -207,13 +180,13 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
 
     @Override
     protected List<FieldEditTextView> getEditTextViews() {
-        return Arrays.asList(doctorVisitNameView, noteWithPhotoView);
+        return Collections.singletonList(concreteExerciseNameView);
     }
 
     @Nullable
     @Override
-    public FieldDoctorView getDoctorView() {
-        return doctorView;
+    protected FieldDoctorView getDoctorView() {
+        return null;
     }
 
     @Nullable
@@ -228,21 +201,21 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
         return null;
     }
 
+    @Nullable
     @Override
-    public FieldNoteWithPhotoView getNoteWithPhotoView() {
-        return noteWithPhotoView;
+    protected FieldNoteWithPhotoView getNoteWithPhotoView() {
+        return null;
     }
 
     @Override
     public void concreteExerciseNameValidated(boolean valid) {
-        doctorVisitNameView.validated(valid);
+        concreteExerciseNameView.validated(valid);
     }
 
     @Override
     protected void validationStarted() {
         unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(
-                doctorVisitNameView.textObservable(),
-                RxFieldValueView.valueChangeEvents(doctorView),
+                concreteExerciseNameView.textObservable(),
                 repeatParametersView.linearGroupsObservable(),
                 repeatParametersView.periodicityTypeObservable(),
                 repeatParametersView.lengthValueObservable()

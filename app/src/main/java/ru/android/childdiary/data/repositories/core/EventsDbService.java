@@ -16,15 +16,19 @@ import io.requery.query.Result;
 import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.ExerciseEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.entities.exercises.ConcreteExerciseEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
+import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -73,6 +77,22 @@ public abstract class EventsDbService {
         return getMedicineTakingId(medicineTaking);
     }
 
+    protected Long getConcreteExerciseId(@NonNull ConcreteExercise concreteExercise) {
+        Long id = concreteExercise.getId();
+        if (id == null) {
+            throw new IllegalStateException("Concrete exercise id is null");
+        }
+        return id;
+    }
+
+    protected Long getConcreteExerciseId(@NonNull ExerciseEvent exerciseEvent) {
+        ConcreteExercise concreteExercise = exerciseEvent.getConcreteExercise();
+        if (concreteExercise == null) {
+            throw new IllegalStateException("Concrete exercise is null");
+        }
+        return getConcreteExerciseId(concreteExercise);
+    }
+
     protected DoctorVisitEntity findDoctorVisitEntity(Long id) {
         return blockingEntityStore.findByKey(DoctorVisitEntity.class, id);
     }
@@ -103,6 +123,11 @@ public abstract class EventsDbService {
             return null;
         }
         return blockingEntityStore.findByKey(MedicineMeasureEntity.class, medicineMeasure.getId());
+    }
+
+    @Nullable
+    protected ConcreteExerciseEntity findConcreteExerciseEntity(Long id) {
+        return blockingEntityStore.findByKey(ConcreteExerciseEntity.class, id);
     }
 
     protected MasterEventEntity findMasterEventEntity(@NonNull DoctorVisitEventEntity doctorVisitEventEntity) {
@@ -147,6 +172,22 @@ public abstract class EventsDbService {
                 .get().toList();
     }
 
+    protected List<ExerciseEventEntity> getExerciseEvents(Long id) {
+        return selectExerciseEvents(id).get().toList();
+    }
+
+    protected List<ExerciseEventEntity> getExerciseEvents(Long id, Integer linearGroup) {
+        return selectExerciseEvents(id)
+                .and(MasterEventEntity.LINEAR_GROUP.eq(linearGroup))
+                .get().toList();
+    }
+
+    protected List<ExerciseEventEntity> getExerciseEvents(Long id, DateTime dateTime) {
+        return selectExerciseEvents(id)
+                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(dateTime.toDateTime()))
+                .get().toList();
+    }
+
     private WhereAndOr<? extends Result<DoctorVisitEventEntity>> selectDoctorVisitEvents(Long id) {
         return blockingEntityStore
                 .select(DoctorVisitEventEntity.class)
@@ -161,6 +202,13 @@ public abstract class EventsDbService {
                 .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(id));
     }
 
+    private WhereAndOr<? extends Result<ExerciseEventEntity>> selectExerciseEvents(Long id) {
+        return blockingEntityStore
+                .select(ExerciseEventEntity.class)
+                .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(ExerciseEventEntity.MASTER_EVENT_ID))
+                .where(ExerciseEventEntity.CONCRETE_EXERCISE_ID.eq(id));
+    }
+
     protected List<MasterEventEntity> getMasterEventsFromDoctorVisitEvents(@NonNull List<DoctorVisitEventEntity> events) {
         return Observable.fromIterable(events)
                 .map(event -> blockingEntityStore.findByKey(MasterEventEntity.class,
@@ -169,6 +217,13 @@ public abstract class EventsDbService {
     }
 
     protected List<MasterEventEntity> getMasterEventsFromMedicineTakingEvents(@NonNull List<MedicineTakingEventEntity> events) {
+        return Observable.fromIterable(events)
+                .map(event -> blockingEntityStore.findByKey(MasterEventEntity.class,
+                        event.getMasterEvent().getId()))
+                .toList().blockingGet();
+    }
+
+    protected List<MasterEventEntity> getMasterEventsFromExerciseEvents(@NonNull List<ExerciseEventEntity> events) {
         return Observable.fromIterable(events)
                 .map(event -> blockingEntityStore.findByKey(MasterEventEntity.class,
                         event.getMasterEvent().getId()))

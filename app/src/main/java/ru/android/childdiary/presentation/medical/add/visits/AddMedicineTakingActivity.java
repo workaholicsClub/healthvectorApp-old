@@ -26,6 +26,7 @@ import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
+import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
@@ -37,7 +38,6 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhoto
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
-import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -163,8 +163,10 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
 
     @Override
     public void onChecked() {
-        boolean readOnly = !getCheckBoxView().isChecked();
-        repeatParametersView.setReadOnly(readOnly);
+        if (getCheckBoxView() != null) {
+            boolean readOnly = !getCheckBoxView().isChecked();
+            repeatParametersView.setReadOnly(readOnly);
+        }
     }
 
     @Override
@@ -177,6 +179,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
         return dateView;
     }
 
+    @Nullable
     @Override
     protected FieldTimeView getTimeView() {
         return timeView;
@@ -193,6 +196,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
         return null;
     }
 
+    @Nullable
     @Override
     protected FieldCheckBoxView getCheckBoxView() {
         return checkBoxView;
@@ -210,7 +214,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
 
     @Nullable
     @Override
-    public FieldDoctorView getDoctorView() {
+    protected FieldDoctorView getDoctorView() {
         return null;
     }
 
@@ -221,12 +225,13 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     }
 
     @Override
-    public FieldMedicineMeasureValueView getMedicineMeasureValueView() {
+    protected FieldMedicineMeasureValueView getMedicineMeasureValueView() {
         return medicineMeasureValueView;
     }
 
+    @Nullable
     @Override
-    public FieldNoteWithPhotoView getNoteWithPhotoView() {
+    protected FieldNoteWithPhotoView getNoteWithPhotoView() {
         return noteWithPhotoView;
     }
 

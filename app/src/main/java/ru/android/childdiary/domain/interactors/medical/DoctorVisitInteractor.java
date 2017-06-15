@@ -49,8 +49,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorValidator;
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorVisitValidator;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
+import ru.android.childdiary.domain.core.validation.EventValidationException;
+import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
 public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor> {
@@ -108,9 +108,9 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
 
     private Observable<Doctor> validate(@NonNull Doctor doctor) {
         return Observable.defer(() -> {
-            List<MedicalValidationResult> results = doctorValidator.validate(doctor);
+            List<EventValidationResult> results = doctorValidator.validate(doctor);
             if (!doctorValidator.isValid(results)) {
-                return Observable.error(new MedicalValidationException(results));
+                return Observable.error(new EventValidationException(results));
             }
             return Observable.just(doctor);
         });
@@ -176,9 +176,9 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
 
     private Observable<UpsertDoctorVisitRequest> validate(@NonNull UpsertDoctorVisitRequest request) {
         return Observable.defer(() -> {
-            List<MedicalValidationResult> results = doctorVisitValidator.validate(request.getDoctorVisit());
+            List<EventValidationResult> results = doctorVisitValidator.validate(request.getDoctorVisit());
             if (!doctorVisitValidator.isValid(results)) {
-                return Observable.error(new MedicalValidationException(results));
+                return Observable.error(new EventValidationException(results));
             }
             return Observable.just(request);
         });
@@ -269,7 +269,7 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
                 .distinctUntilChanged();
     }
 
-    public Observable<List<MedicalValidationResult>> controlFields(
+    public Observable<List<EventValidationResult>> controlFields(
             @NonNull Observable<TextViewAfterTextChangeEvent> doctorVisitNameObservable,
             @NonNull FieldValueChangeEventsObservable<Doctor> doctorObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
@@ -306,7 +306,7 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
                 .distinctUntilChanged();
     }
 
-    public Observable<List<MedicalValidationResult>> controlFields(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+    public Observable<List<EventValidationResult>> controlFields(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
         return nameObservable
                 .map(TextViewAfterTextChangeEvent::editable)
                 .map(Editable::toString)

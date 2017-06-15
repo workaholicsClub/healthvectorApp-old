@@ -7,6 +7,7 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -41,7 +42,8 @@ public interface BaseCalendarView extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToMedicineTakingEvent(@NonNull MasterEvent event, @NonNull MedicineTakingEvent defaultEvent);
 
-    // TODO EXERCISE
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToExerciseEvent(@NonNull MasterEvent event, @NonNull ExerciseEvent defaultEvent);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void confirmDeleteOneEvent(@NonNull MasterEvent event);

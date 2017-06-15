@@ -24,19 +24,19 @@ import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
+import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEventNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
-import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -46,7 +46,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     AddDoctorVisitPresenter presenter;
 
     @BindView(R.id.doctorVisitNameView)
-    FieldDoctorVisitNameView doctorVisitNameView;
+    FieldEventNameView doctorVisitNameView;
 
     @BindView(R.id.doctorView)
     FieldDoctorView doctorView;
@@ -162,8 +162,10 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
 
     @Override
     public void onChecked() {
-        boolean readOnly = !getCheckBoxView().isChecked();
-        repeatParametersView.setReadOnly(readOnly);
+        if (getCheckBoxView() != null) {
+            boolean readOnly = !getCheckBoxView().isChecked();
+            repeatParametersView.setReadOnly(readOnly);
+        }
     }
 
     @Override
@@ -176,6 +178,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         return dateView;
     }
 
+    @Nullable
     @Override
     protected FieldTimeView getTimeView() {
         return timeView;
@@ -192,6 +195,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         return durationView;
     }
 
+    @Nullable
     @Override
     protected FieldCheckBoxView getCheckBoxView() {
         return checkBoxView;
@@ -209,7 +213,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
 
     @Nullable
     @Override
-    public FieldDoctorView getDoctorView() {
+    protected FieldDoctorView getDoctorView() {
         return doctorView;
     }
 
@@ -225,8 +229,9 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         return null;
     }
 
+    @Nullable
     @Override
-    public FieldNoteWithPhotoView getNoteWithPhotoView() {
+    protected FieldNoteWithPhotoView getNoteWithPhotoView() {
         return noteWithPhotoView;
     }
 

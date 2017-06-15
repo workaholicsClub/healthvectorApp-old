@@ -19,8 +19,8 @@ import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
+import ru.android.childdiary.domain.core.validation.EventValidationException;
+import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -109,8 +109,8 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
 
     @Override
     public void onUnexpectedError(Throwable e) {
-        if (e instanceof MedicalValidationException) {
-            List<MedicalValidationResult> results = ((MedicalValidationException) e).getValidationResults();
+        if (e instanceof EventValidationException) {
+            List<EventValidationResult> results = ((EventValidationException) e).getValidationResults();
             if (results.isEmpty()) {
                 logger.error("medical validation results empty");
                 return;
@@ -118,8 +118,8 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
 
             getViewState().validationFailed();
             String msg = Observable.fromIterable(results)
-                    .filter(MedicalValidationResult::notValid)
-                    .map(MedicalValidationResult::toString)
+                    .filter(EventValidationResult::notValid)
+                    .map(EventValidationResult::toString)
                     .blockingFirst();
             getViewState().showValidationErrorMessage(msg);
             handleValidationResult(results);
@@ -128,6 +128,6 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
         }
     }
 
-    public void handleValidationResult(List<MedicalValidationResult> results) {
+    public void handleValidationResult(List<EventValidationResult> results) {
     }
 }

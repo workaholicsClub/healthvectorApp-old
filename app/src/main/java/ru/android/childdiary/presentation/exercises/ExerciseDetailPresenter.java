@@ -50,4 +50,24 @@ public class ExerciseDetailPresenter extends BasePresenter<ExerciseDetailView> {
         this.exercise = exercise;
         getViewState().showExercise(exercise);
     }
+
+    public void addConcreteExercise() {
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        exerciseInteractor.getDefaultConcreteExercise(),
+                        exerciseInteractor.getStartTimeOnce(),
+                        exerciseInteractor.getFinishTimeOnce(),
+                        (defaultDoctorVisit, startTime, finishTime) -> ConcreteExerciseParameters.builder()
+                                .defaultConcreteExercise(defaultDoctorVisit)
+                                .startTime(startTime)
+                                .finishTime(finishTime)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(parameters -> getViewState().navigateToConcreteExerciseAdd(
+                                parameters.getDefaultConcreteExercise(),
+                                parameters.getStartTime(),
+                                parameters.getFinishTime()),
+                                this::onUnexpectedError));
+    }
 }

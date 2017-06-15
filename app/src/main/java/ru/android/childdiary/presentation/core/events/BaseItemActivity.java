@@ -103,15 +103,19 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         //noinspection unchecked
         defaultItem = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_ITEM);
 
-        getCheckBoxView().setText(R.string.export_to_calendar);
-        getCheckBoxView().setFieldCheckBoxListener(this);
+        if (getCheckBoxView() != null) {
+            getCheckBoxView().setText(R.string.export_to_calendar);
+            getCheckBoxView().setFieldCheckBoxListener(this);
+        }
 
         for (FieldEditTextView editTextView : getEditTextViews()) {
             setupEditTextView(editTextView);
         }
 
         getDateView().setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER, getDateView().getValue(), null, null));
-        getTimeView().setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER, getTimeView().getValue()));
+        if (getTimeView() != null) {
+            getTimeView().setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER, getTimeView().getValue()));
+        }
         getNotifyTimeView().setFieldDialogListener(v -> {
             TimeDialogFragment dialogFragment = new TimeDialogFragment();
             dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG,
@@ -160,7 +164,9 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         getRepeatParametersView().setTimeLimits(startTime, finishTime);
         getRepeatParametersView().setListener(() -> getPresenter().requestLengthValueDialog());
         getRepeatParametersView().setFieldTimesListener((i, time) -> showTimePicker(String.valueOf(i), time));
-        getNoteWithPhotoView().setPhotoListener(this);
+        if (getNoteWithPhotoView() != null) {
+            getNoteWithPhotoView().setPhotoListener(this);
+        }
     }
 
     @Override
@@ -223,7 +229,9 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        getCheckBoxView().setSex(getSex());
+        if (getCheckBoxView() != null) {
+            getCheckBoxView().setSex(getSex());
+        }
         getRepeatParametersView().setSex(getSex());
     }
 
@@ -367,7 +375,9 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         } catch (NumberFormatException e) {
             switch (tag) {
                 case TAG_TIME_PICKER:
-                    getTimeView().setValue(time);
+                    if (getTimeView() != null) {
+                        getTimeView().setValue(time);
+                    }
                     break;
             }
         }
@@ -412,12 +422,18 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @Override
     public void requestPhotoReview() {
+        if (getNoteWithPhotoView() == null) {
+            return;
+        }
         Intent intent = ImageReviewActivity.getIntent(this, getNoteWithPhotoView().getImageFileName());
         startActivity(intent);
     }
 
     @Override
     public void requestPhotoDelete() {
+        if (getNoteWithPhotoView() == null) {
+            return;
+        }
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.delete_photo_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
@@ -428,7 +444,9 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     @Override
     public void onSetImage(@Nullable String relativeFileName) {
-        getNoteWithPhotoView().setImageFileName(relativeFileName);
+        if (getNoteWithPhotoView() != null) {
+            getNoteWithPhotoView().setImageFileName(relativeFileName);
+        }
     }
 
     @Override
@@ -465,6 +483,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     protected abstract FieldDateView getDateView();
 
+    @Nullable
     protected abstract FieldTimeView getTimeView();
 
     protected abstract FieldNotifyTimeView getNotifyTimeView();
@@ -472,6 +491,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @Nullable
     protected abstract FieldDurationView getDurationView();
 
+    @Nullable
     protected abstract FieldCheckBoxView getCheckBoxView();
 
     protected abstract FieldRepeatParametersView getRepeatParametersView();
@@ -487,5 +507,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @Nullable
     protected abstract FieldMedicineMeasureValueView getMedicineMeasureValueView();
 
+    @Nullable
     protected abstract FieldNoteWithPhotoView getNoteWithPhotoView();
 }

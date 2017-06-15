@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
@@ -41,6 +42,7 @@ import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogArguments;
 import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogFragment;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
+import ru.android.childdiary.presentation.events.ExerciseEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.MedicineTakingEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
@@ -283,6 +285,12 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
     @Override
     public void navigateToMedicineTakingEvent(@NonNull MasterEvent event, @NonNull MedicineTakingEvent defaultEvent) {
         Intent intent = MedicineTakingEventDetailActivity.getIntent(getContext(), event, defaultEvent);
+        startActivityForResult(intent, REQUEST_UPDATE_EVENT);
+    }
+
+    @Override
+    public void navigateToExerciseEvent(@NonNull MasterEvent event, @NonNull ExerciseEvent defaultEvent) {
+        Intent intent = ExerciseEventDetailActivity.getIntent(getContext(), event, defaultEvent);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 

@@ -10,9 +10,13 @@ import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import org.joda.time.LocalTime;
+
 import butterknife.BindView;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -66,9 +70,22 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
         buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
+    @OnClick(R.id.buttonAdd)
+    void onButtonAddClick() {
+        presenter.addConcreteExercise();
+    }
+
     @Override
     public void showExercise(@NonNull Exercise exercise) {
         exerciseNameView.setText(exercise.getName());
         exerciseDescriptionView.setText(exercise.getDescription());
+    }
+
+    @Override
+    public void navigateToConcreteExerciseAdd(@NonNull ConcreteExercise defaultConcreteExercise,
+                                              @Nullable LocalTime startTime,
+                                              @Nullable LocalTime finishTime) {
+        Intent intent = AddConcreteExerciseActivity.getIntent(this, defaultConcreteExercise, startTime, finishTime);
+        startActivity(intent);
     }
 }

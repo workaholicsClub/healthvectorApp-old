@@ -77,11 +77,11 @@ public class ExerciseEvent extends MasterEvent implements ContentObject<Exercise
                 MasterEvent.getChangedFields(this, other));
 
         if (!ObjectUtils.contentEquals(getName(), other.getName())) {
-            significantFields.add(LinearGroupFieldType.NAME);
+            significantFields.add(LinearGroupFieldType.EXERCISE_EVENT_NAME);
         }
 
         if (!ObjectUtils.equals(getDurationInMinutes(), other.getDurationInMinutes())) {
-            significantFields.add(LinearGroupFieldType.DURATION_IN_MINUTES);
+            significantFields.add(LinearGroupFieldType.EXERCISE_EVENT_DURATION_IN_MINUTES);
         }
 
         return significantFields;

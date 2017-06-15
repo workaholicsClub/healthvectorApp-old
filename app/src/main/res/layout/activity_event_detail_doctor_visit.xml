@@ -7,7 +7,7 @@
     android:paddingBottom="@dimen/field_margin_base"
     android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldEventNameView
         android:id="@+id/doctorVisitNameView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

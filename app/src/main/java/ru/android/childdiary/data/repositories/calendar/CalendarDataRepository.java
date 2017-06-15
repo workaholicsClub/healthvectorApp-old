@@ -23,6 +23,7 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
@@ -42,10 +43,14 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEvents
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsRequest;
+import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
@@ -257,6 +262,11 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     @Override
+    public Observable<ExerciseEvent> getExerciseEventDetail(@NonNull MasterEvent event) {
+        return calendarDbService.getExerciseEventDetail(event);
+    }
+
+    @Override
     public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
         return calendarDbService.add(event);
     }
@@ -321,6 +331,11 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
         return calendarDbService.update(request);
     }
 
+    @Override
+    public Observable<UpdateExerciseEventResponse> update(@NonNull UpdateExerciseEventRequest request) {
+        return calendarDbService.update(request);
+    }
+
     public <T extends MasterEvent> Observable<List<String>> delete(@NonNull T event) {
         return cleanUpDbService.deleteEvent(event);
     }
@@ -331,6 +346,11 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
 
     public Observable<DeleteMedicineTakingEventsResponse> deleteLinearGroup(@NonNull DeleteMedicineTakingEventsRequest request) {
         return cleanUpDbService.deleteMedicineTakingEvents(request);
+    }
+
+    @Override
+    public Observable<DeleteConcreteExerciseEventsResponse> deleteLinearGroup(@NonNull DeleteConcreteExerciseEventsRequest request) {
+        return cleanUpDbService.deleteExerciseEvents(request);
     }
 
     @Override
@@ -350,7 +370,8 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
                 return Observable.just(TimeUtils.MINUTES_IN_DAY);
             case MEDICINE_TAKING:
                 return Observable.just(10);
-            // TODO EXERCISE
+            case EXERCISE:
+                return Observable.just(30);
         }
         throw new IllegalStateException("Unsupported event type");
     }

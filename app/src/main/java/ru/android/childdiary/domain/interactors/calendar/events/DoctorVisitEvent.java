@@ -87,11 +87,11 @@ public class DoctorVisitEvent extends MasterEvent implements ContentObject<Docto
         }
 
         if (!ObjectUtils.contentEquals(getName(), other.getName())) {
-            significantFields.add(LinearGroupFieldType.NAME);
+            significantFields.add(LinearGroupFieldType.DOCTOR_VISIT_EVENT_NAME);
         }
 
         if (!ObjectUtils.equals(getDurationInMinutes(), other.getDurationInMinutes())) {
-            significantFields.add(LinearGroupFieldType.DURATION_IN_MINUTES);
+            significantFields.add(LinearGroupFieldType.DOCTOR_VISIT_EVENT_DURATION_IN_MINUTES);
         }
 
         return significantFields;

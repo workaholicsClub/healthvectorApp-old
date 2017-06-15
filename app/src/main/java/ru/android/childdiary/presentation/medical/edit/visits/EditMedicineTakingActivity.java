@@ -27,6 +27,8 @@ import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.events.BaseEditItemActivity;
+import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
@@ -38,8 +40,6 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhoto
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
-import ru.android.childdiary.presentation.core.events.BaseEditItemActivity;
-import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -175,10 +175,12 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
 
     @Override
     public void onChecked() {
-        boolean exported = ObjectUtils.isTrue(item.getIsExported());
-        if (!exported) {
-            boolean readOnly = !getCheckBoxView().isChecked();
-            repeatParametersView.setReadOnly(readOnly);
+        if (getCheckBoxView() != null) {
+            boolean exported = ObjectUtils.isTrue(item.getIsExported());
+            if (!exported) {
+                boolean readOnly = !getCheckBoxView().isChecked();
+                repeatParametersView.setReadOnly(readOnly);
+            }
         }
     }
 
@@ -192,6 +194,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         return dateView;
     }
 
+    @Nullable
     @Override
     protected FieldTimeView getTimeView() {
         return timeView;
@@ -208,6 +211,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         return null;
     }
 
+    @Nullable
     @Override
     protected FieldCheckBoxView getCheckBoxView() {
         return checkBoxView;
@@ -225,7 +229,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
 
     @Nullable
     @Override
-    public FieldDoctorView getDoctorView() {
+    protected FieldDoctorView getDoctorView() {
         return null;
     }
 
@@ -241,6 +245,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         return medicineMeasureView;
     }
 
+    @Nullable
     @Override
     public FieldNoteWithPhotoView getNoteWithPhotoView() {
         return noteWithPhotoView;

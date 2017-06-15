@@ -6,25 +6,25 @@ import android.util.AttributeSet;
 import butterknife.BindInt;
 import ru.android.childdiary.R;
 
-public class FieldDoctorVisitNameView extends FieldExitTextWithImageView {
+public class FieldEventNameView extends FieldExitTextWithImageView {
     @BindInt(R.integer.max_length_doctor_visit_name)
     int MAX_LENGTH;
 
-    public FieldDoctorVisitNameView(Context context) {
+    public FieldEventNameView(Context context) {
         super(context);
     }
 
-    public FieldDoctorVisitNameView(Context context, AttributeSet attrs) {
+    public FieldEventNameView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FieldDoctorVisitNameView(Context context, AttributeSet attrs, int defStyle) {
+    public FieldEventNameView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     @Override
     protected int getIconResId() {
-        return R.drawable.ic_doctor_visit_name;
+        return R.drawable.ic_event_name;
     }
 
     @Override

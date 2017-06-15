@@ -10,23 +10,26 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.core.validation.EventFieldType;
+import ru.android.childdiary.domain.core.validation.EventValidationResult;
+import ru.android.childdiary.domain.core.validation.EventValidator;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.utils.ObjectUtils;
 
-public class DoctorVisitValidator extends MedicalValidator<DoctorVisit> {
+public class DoctorVisitValidator extends EventValidator<DoctorVisit> {
     @Inject
     public DoctorVisitValidator(Context context) {
         super(context);
     }
 
     @Override
-    public List<MedicalValidationResult> validate(@NonNull DoctorVisit doctorVisit) {
-        List<MedicalValidationResult> results = new ArrayList<>();
+    public List<EventValidationResult> validate(@NonNull DoctorVisit doctorVisit) {
+        List<EventValidationResult> results = new ArrayList<>();
 
-        MedicalValidationResult result;
+        EventValidationResult result;
 
-        result = new MedicalValidationResult(MedicalFieldType.DOCTOR_VISIT_NAME);
+        result = new EventValidationResult(EventFieldType.DOCTOR_VISIT_NAME);
         if (TextUtils.isEmpty(doctorVisit.getName())) {
             result.addMessage(context.getString(R.string.validate_doctor_visit_name_empty));
         }
@@ -34,7 +37,7 @@ public class DoctorVisitValidator extends MedicalValidator<DoctorVisit> {
 
         Doctor doctor = doctorVisit.getDoctor();
         if (doctor == null || doctor.getId() == null) {
-            result = new MedicalValidationResult();
+            result = new EventValidationResult();
             result.addMessage(context.getString(R.string.validate_doctor_visit_doctor_empty));
             results.add(result);
         }

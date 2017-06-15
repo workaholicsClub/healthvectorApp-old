@@ -5,14 +5,14 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
 
 @Value
 @Builder
-public class UpdateMedicineTakingEventRequest {
+public class UpdateExerciseEventRequest {
     @NonNull
-    MedicineTakingEvent medicineTakingEvent;
+    ExerciseEvent exerciseEvent;
     @NonNull
     List<LinearGroupFieldType> fields;
     int minutes;
