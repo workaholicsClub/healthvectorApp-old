@@ -22,7 +22,6 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -38,8 +37,8 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhoto
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
-import ru.android.childdiary.presentation.medical.core.BaseEditItemActivity;
-import ru.android.childdiary.presentation.medical.core.BaseEditItemPresenter;
+import ru.android.childdiary.presentation.core.events.BaseEditItemActivity;
+import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -104,11 +103,6 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.edit_doctor_visit_title);
-    }
-
-    @Override
-    protected ImageType getImageType() {
-        return ImageType.DOCTOR_VISIT;
     }
 
     @Override

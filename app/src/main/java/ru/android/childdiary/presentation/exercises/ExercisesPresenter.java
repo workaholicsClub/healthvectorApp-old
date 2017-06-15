@@ -1,5 +1,7 @@
 package ru.android.childdiary.presentation.exercises;
 
+import android.support.annotation.NonNull;
+
 import com.arellomobile.mvp.InjectViewState;
 
 import javax.inject.Inject;
@@ -7,6 +9,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseInteractor;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
@@ -28,5 +31,9 @@ public class ExercisesPresenter extends AppPartitionPresenter<ExercisesView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showExercises, this::onUnexpectedError));
+    }
+
+    public void showExerciseDetails(@NonNull Exercise exercise) {
+        getViewState().navigateToExercise(exercise);
     }
 }

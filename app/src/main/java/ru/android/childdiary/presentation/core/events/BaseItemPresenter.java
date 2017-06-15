@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical.core;
+package ru.android.childdiary.presentation.core.events;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +14,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.exercises.ExerciseInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -29,6 +30,9 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
 
     @Inject
     protected MedicineTakingInteractor medicineTakingInteractor;
+
+    @Inject
+    protected ExerciseInteractor exerciseInteractor;
 
     @Inject
     CalendarInteractor calendarInteractor;

@@ -53,6 +53,11 @@ public class ExerciseDataRepository implements ExerciseRepository {
     }
 
     @Override
+    public Observable<Exercise> getExercise(@NonNull Exercise exercise) {
+        return exerciseDbService.getExercise(exercise);
+    }
+
+    @Override
     public Observable<List<Exercise>> getExercises() {
         return exerciseDbService.getExercises();
     }

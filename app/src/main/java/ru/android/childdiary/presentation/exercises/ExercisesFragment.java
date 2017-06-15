@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.exercises;
 
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
@@ -17,12 +18,10 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.adapters.swipe.ItemActionListener;
 import ru.android.childdiary.presentation.exercises.adapters.ExerciseAdapter;
 
-public class ExercisesFragment extends AppPartitionFragment implements ExercisesView {
-    @InjectPresenter
-    ExercisesPresenter presenter;
-
+public class ExercisesFragment extends AppPartitionFragment implements ExercisesView, ItemActionListener<Exercise> {
     @BindView(R.id.textViewIntention)
     protected TextView textViewIntention;
 
@@ -34,6 +33,9 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
 
     @BindView(R.id.recyclerView)
     protected RecyclerView recyclerView;
+
+    @InjectPresenter
+    ExercisesPresenter presenter;
 
     @Getter
     private ExerciseAdapter adapter;
@@ -48,15 +50,16 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     protected void setupUi() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ExerciseAdapter(getContext());
+        adapter = new ExerciseAdapter(getContext(), this);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
-        textViewIntention.setText(R.string.add_doctor_visit);
+        textViewIntention.setText(R.string.no_exercises);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         recyclerViewChips.setVisibility(View.GONE);
+
         line.setVisibility(View.GONE);
     }
 
@@ -68,25 +71,27 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
 
     @Override
     public void showExercises(@NonNull List<Exercise> exercises) {
-        if (exercises.isEmpty()) {
-            // TODO
-            showToast("error");
-        } else {
-            adapter.setItems(exercises);
-            recyclerView.setVisibility(exercises.isEmpty() ? View.GONE : View.VISIBLE);
+        logger.debug("showExercises: " + exercises);
 
-            textViewIntention.setVisibility(exercises.isEmpty() ? View.VISIBLE : View.GONE); // TODO
-            textViewIntention.setText(exercises.isEmpty() ? R.string.add_doctor_visit : R.string.nothing_found); // TODO
-        }
+        adapter.setItems(exercises);
+        recyclerView.setVisibility(exercises.isEmpty() ? View.GONE : View.VISIBLE);
+
+        line.setVisibility(exercises.isEmpty() ? View.GONE : View.VISIBLE);
+        textViewIntention.setVisibility(exercises.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void navigateToExercise(@NonNull Exercise exercise) {
-        // TODO
+        Intent intent = ExerciseDetailActivity.getIntent(getContext(), exercise);
+        startActivity(intent);
     }
 
     @Override
-    public void navigateToExerciseExport(@NonNull Exercise exercise) {
-        // TODO
+    public void delete(Exercise item) {
+    }
+
+    @Override
+    public void edit(Exercise item) {
+        presenter.showExerciseDetails(item);
     }
 }

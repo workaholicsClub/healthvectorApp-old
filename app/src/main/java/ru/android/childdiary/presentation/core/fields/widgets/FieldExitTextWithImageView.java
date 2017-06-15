@@ -3,6 +3,8 @@ package ru.android.childdiary.presentation.core.fields.widgets;
 import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+import android.text.InputFilter;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
@@ -22,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
-public abstract class FieldNameView extends FieldEditTextView {
+public abstract class FieldExitTextWithImageView extends FieldEditTextView implements FieldReadOnly {
     @BindView(R.id.imageView)
     ImageView imageView;
 
@@ -32,23 +34,23 @@ public abstract class FieldNameView extends FieldEditTextView {
     @BindDimen(R.dimen.name_edit_text_padding_bottom)
     int editTextBottomPadding;
 
-    public FieldNameView(Context context) {
+    public FieldExitTextWithImageView(Context context) {
         super(context);
         init();
     }
 
-    public FieldNameView(Context context, AttributeSet attrs) {
+    public FieldExitTextWithImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public FieldNameView(Context context, AttributeSet attrs, int defStyle) {
+    public FieldExitTextWithImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
     private void init() {
-        inflate(getContext(), R.layout.field_name, this);
+        inflate(getContext(), R.layout.field_edit_text_with_image, this);
     }
 
     @Override
@@ -56,7 +58,10 @@ public abstract class FieldNameView extends FieldEditTextView {
         super.onFinishInflate();
         ButterKnife.bind(this);
         imageView.setImageResource(getIconResId());
-        editText.setHint(getHintResId());
+        if (getHintResId() != 0) {
+            editText.setHint(getHintResId());
+        }
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(getMaxLength())});
     }
 
     public String getText() {
@@ -102,4 +107,16 @@ public abstract class FieldNameView extends FieldEditTextView {
 
     @StringRes
     protected abstract int getHintResId();
+
+    protected abstract int getMaxLength();
+
+    protected boolean hideIfEmpty() {
+        return true;
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        setVisibility(readOnly && TextUtils.isEmpty(getText()) && hideIfEmpty() ? GONE : VISIBLE);
+        editText.setEnabled(!readOnly);
+    }
 }

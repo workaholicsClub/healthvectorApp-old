@@ -20,7 +20,7 @@ import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
-import ru.android.childdiary.presentation.medical.core.BaseAddItemPresenter;
+import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState

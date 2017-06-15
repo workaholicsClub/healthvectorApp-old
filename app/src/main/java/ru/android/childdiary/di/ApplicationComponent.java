@@ -30,6 +30,10 @@ import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailPresenter;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailPresenter;
+import ru.android.childdiary.presentation.exercises.AddConcreteExerciseActivity;
+import ru.android.childdiary.presentation.exercises.AddConcreteExercisePresenter;
+import ru.android.childdiary.presentation.exercises.ExerciseDetailActivity;
+import ru.android.childdiary.presentation.exercises.ExerciseDetailPresenter;
 import ru.android.childdiary.presentation.exercises.ExercisesPresenter;
 import ru.android.childdiary.presentation.help.HelpPresenter;
 import ru.android.childdiary.presentation.main.MainActivity;
@@ -136,7 +140,9 @@ public interface ApplicationComponent {
 
     void inject(PhysicalTestResultsPresenter presenter);
 
-    // TODO EXERCISE
+    void inject(ExerciseDetailPresenter presenter);
+
+    void inject(AddConcreteExercisePresenter presenter);
 
     // activities
     void inject(SplashActivity activity);
@@ -175,7 +181,9 @@ public interface ApplicationComponent {
 
     void inject(MedicineTakingEventDetailActivity activity);
 
-    // TODO EXERCISE
+    void inject(ExerciseDetailActivity activity);
+
+    void inject(AddConcreteExerciseActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

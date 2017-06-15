@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical.core;
+package ru.android.childdiary.presentation.core.events;
 
 import android.support.annotation.NonNull;
 

@@ -1,12 +1,15 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 
+import butterknife.BindInt;
 import ru.android.childdiary.R;
 
-public class FieldDoctorVisitNameView extends FieldNameView implements FieldReadOnly {
+public class FieldDoctorVisitNameView extends FieldExitTextWithImageView {
+    @BindInt(R.integer.max_length_doctor_visit_name)
+    int MAX_LENGTH;
+
     public FieldDoctorVisitNameView(Context context) {
         super(context);
     }
@@ -30,8 +33,7 @@ public class FieldDoctorVisitNameView extends FieldNameView implements FieldRead
     }
 
     @Override
-    public void setReadOnly(boolean readOnly) {
-        setVisibility(TextUtils.isEmpty(getText()) ? GONE : VISIBLE);
-        editText.setEnabled(!readOnly);
+    protected int getMaxLength() {
+        return MAX_LENGTH;
     }
 }

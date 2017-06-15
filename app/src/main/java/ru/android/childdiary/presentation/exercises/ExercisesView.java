@@ -17,7 +17,4 @@ public interface ExercisesView extends AppPartitionView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToExercise(@NonNull Exercise exercise);
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToExerciseExport(@NonNull Exercise exercise);
 }

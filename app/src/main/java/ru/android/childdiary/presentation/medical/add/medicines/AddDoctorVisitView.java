@@ -4,7 +4,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.presentation.medical.core.BaseAddItemView;
+import ru.android.childdiary.presentation.core.events.BaseAddItemView;
 
 public interface AddDoctorVisitView extends BaseAddItemView<DoctorVisit> {
     @StateStrategyType(AddToEndSingleStrategy.class)

@@ -14,7 +14,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorV
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
-import ru.android.childdiary.presentation.medical.core.BaseEditItemPresenter;
+import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState

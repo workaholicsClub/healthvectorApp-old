@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.medical.core;
+package ru.android.childdiary.presentation.core.events;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -33,7 +33,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -450,8 +449,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         }
         return super.onOptionsItemSelected(item);
     }
-
-    protected abstract ImageType getImageType();
 
     protected abstract void saveChangesOrExit();
 

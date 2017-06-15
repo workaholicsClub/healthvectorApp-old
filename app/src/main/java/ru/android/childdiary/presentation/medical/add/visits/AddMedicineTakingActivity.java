@@ -20,7 +20,6 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
@@ -38,7 +37,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhoto
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
-import ru.android.childdiary.presentation.medical.core.BaseAddItemActivity;
+import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -103,11 +102,6 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.add_medicine_taking_title);
-    }
-
-    @Override
-    protected ImageType getImageType() {
-        return ImageType.MEDICINE_TAKING;
     }
 
     @Override

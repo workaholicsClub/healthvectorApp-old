@@ -3,9 +3,13 @@ package ru.android.childdiary.presentation.core.fields.widgets;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import butterknife.BindInt;
 import ru.android.childdiary.R;
 
-public class FieldOtherEventNameView extends FieldNameView {
+public class FieldOtherEventNameView extends FieldExitTextWithImageView {
+    @BindInt(R.integer.max_length_other_event_name)
+    int MAX_LENGTH;
+
     public FieldOtherEventNameView(Context context) {
         super(context);
     }
@@ -26,5 +30,10 @@ public class FieldOtherEventNameView extends FieldNameView {
     @Override
     protected int getHintResId() {
         return R.string.other_event_title_hint;
+    }
+
+    @Override
+    protected int getMaxLength() {
+        return MAX_LENGTH;
     }
 }
