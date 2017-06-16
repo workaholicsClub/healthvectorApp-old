@@ -1,6 +1,7 @@
 package ru.android.childdiary.domain.interactors.calendar.events;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
@@ -18,6 +19,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroup
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
+import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
@@ -85,5 +87,10 @@ public class ExerciseEvent extends MasterEvent implements ContentObject<Exercise
         }
 
         return significantFields;
+    }
+
+    @Nullable
+    public Exercise getExercise() {
+        return concreteExercise == null ? null : concreteExercise.getExercise();
     }
 }

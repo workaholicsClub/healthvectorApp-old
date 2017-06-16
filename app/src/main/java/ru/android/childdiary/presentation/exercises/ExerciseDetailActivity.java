@@ -25,6 +25,8 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseNameV
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseDetailView {
+    private static final int REQUEST_ADD_CONCRETE_EXERCISE = 1;
+
     @BindView(R.id.exerciseNameView)
     FieldExerciseNameView exerciseNameView;
 
@@ -58,6 +60,16 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ADD_CONCRETE_EXERCISE) {
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        }
+    }
+
+    @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
@@ -86,6 +98,6 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
                                               @Nullable LocalTime startTime,
                                               @Nullable LocalTime finishTime) {
         Intent intent = AddConcreteExerciseActivity.getIntent(this, defaultConcreteExercise, startTime, finishTime);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_CONCRETE_EXERCISE);
     }
 }

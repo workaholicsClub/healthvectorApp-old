@@ -44,6 +44,7 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
         if (count > 0) {
             showToast(getResources().getQuantityString(R.plurals.numberOfAddedEvents, count, count));
         }
+        setResult(RESULT_OK);
         finish();
     }
 

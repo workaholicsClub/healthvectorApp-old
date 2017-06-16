@@ -313,7 +313,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static ExerciseEvent mapToExerciseEvent(@NonNull Tuple data) {
         return ExerciseEvent.builder()
-                .id(data.get(DoctorVisitEventEntity.ID.as(DOCTOR_VISIT_EVENT_ENTITY_ID)))
+                .id(data.get(ExerciseEventEntity.ID.as(EXERCISE_EVENT_ENTITY_ID)))
                 .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
@@ -322,8 +322,8 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .child(mapToChild(data))
                 .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP)))
                 .concreteExercise(mapToConcreteExercise(data))
-                .name(data.get(DoctorVisitEventEntity.NAME.as(DOCTOR_VISIT_EVENT_ENTITY_NAME)))
-                .imageFileName(data.get(DoctorVisitEventEntity.IMAGE_FILE_NAME.as(DOCTOR_VISIT_EVENT_ENTITY_IMAGE_FILE_NAME)))
+                .name(data.get(ExerciseEventEntity.NAME.as(EXERCISE_EVENT_ENTITY_NAME)))
+                .imageFileName(data.get(ExerciseEventEntity.IMAGE_FILE_NAME.as(EXERCISE_EVENT_ENTITY_IMAGE_FILE_NAME)))
                 .build();
     }
 

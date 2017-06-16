@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -7,13 +8,22 @@
     android:paddingBottom="@dimen/field_margin_base"
     android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldEventNameView
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView
         android:id="@+id/concreteExerciseNameView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:fieldHideIfEmpty="true"
+        app:fieldHint="@string/exercise_title_hint"
+        app:fieldIcon="@drawable/ic_exercise_name"
+        app:fieldMaxLength="@integer/max_length_exercise_name" />
 
     <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
         android:id="@+id/dateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
+        android:id="@+id/timeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

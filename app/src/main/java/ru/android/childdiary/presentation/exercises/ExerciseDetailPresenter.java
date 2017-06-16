@@ -54,7 +54,7 @@ public class ExerciseDetailPresenter extends BasePresenter<ExerciseDetailView> {
     public void addConcreteExercise() {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
-                        exerciseInteractor.getDefaultConcreteExercise(),
+                        exerciseInteractor.getDefaultConcreteExercise(exercise),
                         exerciseInteractor.getStartTimeOnce(),
                         exerciseInteractor.getFinishTimeOnce(),
                         (defaultDoctorVisit, startTime, finishTime) -> ConcreteExerciseParameters.builder()

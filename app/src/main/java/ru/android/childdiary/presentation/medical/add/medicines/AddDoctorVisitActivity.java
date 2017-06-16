@@ -30,7 +30,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldEventNameView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
@@ -46,7 +46,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     AddDoctorVisitPresenter presenter;
 
     @BindView(R.id.doctorVisitNameView)
-    FieldEventNameView doctorVisitNameView;
+    FieldEditTextWithImageView doctorVisitNameView;
 
     @BindView(R.id.doctorView)
     FieldDoctorView doctorView;

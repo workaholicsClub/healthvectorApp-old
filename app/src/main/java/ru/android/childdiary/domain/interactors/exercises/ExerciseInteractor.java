@@ -67,7 +67,7 @@ public class ExerciseInteractor {
         return exerciseRepository.updateExercisesIfNeeded();
     }
 
-    public Observable<ConcreteExercise> getDefaultConcreteExercise() {
+    public Observable<ConcreteExercise> getDefaultConcreteExercise(@NonNull Exercise exercise) {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getDefaultRepeatParameters(),
@@ -75,8 +75,9 @@ public class ExerciseInteractor {
                 calendarRepository.getDefaultNotifyTimeInMinutes(EventType.EXERCISE),
                 (child, repeatParameters, dateTime, minutes) -> ConcreteExercise.builder()
                         .child(child)
+                        .exercise(exercise)
                         .repeatParameters(repeatParameters)
-                        .name(null)
+                        .name(exercise.getName())
                         .durationInMinutes(15)
                         .dateTime(dateTime)
                         .finishDateTime(null)

@@ -28,7 +28,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldEventNameView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
@@ -44,10 +44,13 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
     AddConcreteExercisePresenter presenter;
 
     @BindView(R.id.concreteExerciseNameView)
-    FieldEventNameView concreteExerciseNameView;
+    FieldEditTextWithImageView concreteExerciseNameView;
 
     @BindView(R.id.dateView)
     FieldDateView dateView;
+
+    @BindView(R.id.timeView)
+    FieldTimeView timeView;
 
     @BindView(R.id.durationView)
     FieldDurationView durationView;
@@ -76,8 +79,6 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dateView.setTitle(getString(R.string.start_from));
-
         changeThemeIfNeeded(defaultItem.getChild());
 
         unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(
@@ -101,14 +102,15 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
 
     @Override
     protected int getContentLayoutResourceId() {
-        return R.layout.activity_item_content_doctor_visit;
+        return R.layout.activity_item_content_exercise;
     }
 
     @Override
     protected void setup(ConcreteExercise item) {
+        concreteExerciseNameView.setText(item.getName());
         repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         durationView.setValue(item.getDurationInMinutes());
-        WidgetsUtils.setDateTime(item.getDateTime(), dateView, null);
+        WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
         boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
@@ -116,10 +118,11 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
 
     @Override
     protected ConcreteExercise build() {
+        String name = concreteExerciseNameView.getText();
         RepeatParameters repeatParameters = repeatParametersView.getRepeatParameters();
         String concreteExerciseName = concreteExerciseNameView.getText();
         Integer duration = durationView.getValue();
-        DateTime dateTime = WidgetsUtils.getDateTime(dateView, null);
+        DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
         Integer minutes = notifyTimeView.getValue();
 
         return defaultItem.toBuilder()

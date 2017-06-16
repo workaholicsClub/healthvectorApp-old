@@ -1,8 +1,9 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -24,7 +25,7 @@ import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 
-public abstract class FieldExitTextWithImageView extends FieldEditTextView implements FieldReadOnly {
+public class FieldEditTextWithImageView extends FieldEditTextView implements FieldReadOnly {
     @BindView(R.id.imageView)
     ImageView imageView;
 
@@ -34,34 +35,48 @@ public abstract class FieldExitTextWithImageView extends FieldEditTextView imple
     @BindDimen(R.dimen.name_edit_text_padding_bottom)
     int editTextBottomPadding;
 
-    public FieldExitTextWithImageView(Context context) {
+    private Drawable icon;
+    private String hint;
+    private int maxLength;
+    private boolean hideIfEmpty;
+
+    public FieldEditTextWithImageView(Context context) {
         super(context);
-        init();
+        init(null);
     }
 
-    public FieldExitTextWithImageView(Context context, AttributeSet attrs) {
+    public FieldEditTextWithImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
 
-    public FieldExitTextWithImageView(Context context, AttributeSet attrs, int defStyle) {
+    public FieldEditTextWithImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(attrs);
     }
 
-    private void init() {
+    private void init(@Nullable AttributeSet attrs) {
         inflate(getContext(), R.layout.field_edit_text_with_image, this);
+        if (attrs != null) {
+            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldEditTextWithImageView, 0, 0);
+            try {
+                icon = ta.getDrawable(R.styleable.FieldEditTextWithImageView_fieldIcon);
+                hint = ta.getString(R.styleable.FieldEditTextWithImageView_fieldHint);
+                maxLength = ta.getInt(R.styleable.FieldEditTextWithImageView_fieldMaxLength, 0);
+                hideIfEmpty = ta.getBoolean(R.styleable.FieldEditTextWithImageView_fieldHideIfEmpty, false);
+            } finally {
+                ta.recycle();
+            }
+        }
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        imageView.setImageResource(getIconResId());
-        if (getHintResId() != 0) {
-            editText.setHint(getHintResId());
-        }
-        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(getMaxLength())});
+        imageView.setImageDrawable(icon);
+        editText.setHint(hint);
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
     }
 
     public String getText() {
@@ -102,21 +117,9 @@ public abstract class FieldExitTextWithImageView extends FieldEditTextView imple
         editText.setPadding(0, 0, 0, editTextBottomPadding);
     }
 
-    @DrawableRes
-    protected abstract int getIconResId();
-
-    @StringRes
-    protected abstract int getHintResId();
-
-    protected abstract int getMaxLength();
-
-    protected boolean hideIfEmpty() {
-        return true;
-    }
-
     @Override
     public void setReadOnly(boolean readOnly) {
-        setVisibility(readOnly && TextUtils.isEmpty(getText()) && hideIfEmpty() ? GONE : VISIBLE);
+        setVisibility(readOnly && TextUtils.isEmpty(getText()) && hideIfEmpty ? GONE : VISIBLE);
         editText.setEnabled(!readOnly);
     }
 }

@@ -27,7 +27,7 @@ import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArgument
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldEventNameView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
@@ -53,7 +53,7 @@ public class ExerciseEventDetailActivity
     ExerciseEventDetailPresenter presenter;
 
     @BindView(R.id.exerciseNameView)
-    FieldEventNameView exerciseNameView;
+    FieldEditTextWithImageView exerciseNameView;
 
     @BindView(R.id.dateView)
     FieldDateView dateView;

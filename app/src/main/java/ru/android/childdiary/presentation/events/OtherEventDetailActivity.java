@@ -25,9 +25,9 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldOtherEventNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView;
 import ru.android.childdiary.presentation.events.core.EventDetailActivity;
@@ -46,7 +46,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     OtherEventDetailPresenter presenter;
 
     @BindView(R.id.otherEventNameView)
-    FieldOtherEventNameView otherEventNameView;
+    FieldEditTextWithImageView otherEventNameView;
 
     @BindView(R.id.startTitleView)
     FieldTitleView startTitleView;
