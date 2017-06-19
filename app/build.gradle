@@ -200,4 +200,6 @@ dependencies {
     compile "com.xiaofeng.android:flowlayoutmanager:1.2.3.2"
 
     compile "uk.co.chrisjenx:calligraphy:2.2.0"
+
+    compile "com.google.android.gms:play-services-drive:11.0.1"
 }
