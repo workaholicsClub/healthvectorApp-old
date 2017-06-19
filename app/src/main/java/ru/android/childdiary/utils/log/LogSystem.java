@@ -26,7 +26,7 @@ public class LogSystem {
             factories.add(new FileCustomAppenderFactory());
         }
         factories.add(new CrashReportSystemCustomAppenderFactory());
-        if (BuildConfig.PRINT_LOGS_TO_LOGCAT && !CrashReportSystem.isWritingToLogCat()) {
+        if (BuildConfig.PRINT_LOGS_TO_LOGCAT) {
             factories.add(new LogcatCustomAppenderFactory());
         }
 
@@ -54,8 +54,10 @@ public class LogSystem {
 
     public static void report(@Nullable Logger logger, @Nullable String msg, @NonNull Throwable throwable) {
         if (logger == null) {
-            Log.e(LogConstants.APPLICATION_LOG_TAG, msg, throwable); // logcat appender
-            CrashReportSystem.log(Log.ERROR, LogConstants.APPLICATION_LOG_TAG, toMessage(msg, throwable)); // crash report system appender
+            if (BuildConfig.PRINT_LOGS_TO_LOGCAT) {
+                Log.e(LogConstants.APPLICATION_LOG_TAG, msg, throwable); // logcat appender
+            }
+            CrashReportSystem.log(toMessage(msg, throwable)); // crash report system appender
         } else {
             logger.error(msg, throwable);
         }
