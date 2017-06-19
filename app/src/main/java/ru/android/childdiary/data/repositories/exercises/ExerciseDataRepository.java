@@ -15,12 +15,15 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.data.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ProgramsToExercisesMapper;
 import ru.android.childdiary.domain.core.TryCountExceededException;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseRepository;
+import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseRequest;
+import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseResponse;
 import ru.android.childdiary.utils.StringUtils;
 
 @Singleton
@@ -50,6 +53,11 @@ public class ExerciseDataRepository implements ExerciseRepository {
 
     private static long nextTryDelay(int retryCount) {
         return retryCount * 10;
+    }
+
+    @Override
+    public Observable<Exercise> getExercise(@NonNull Exercise exercise) {
+        return exerciseDbService.getExercise(exercise);
     }
 
     @Override
@@ -119,5 +127,15 @@ public class ExerciseDataRepository implements ExerciseRepository {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Single<Boolean> hasConnectedEvents(@NonNull Exercise exercise) {
+        return exerciseDbService.hasConnectedEvents(exercise);
+    }
+
+    @Override
+    public Observable<UpsertConcreteExerciseResponse> addConcreteExercise(@NonNull UpsertConcreteExerciseRequest request) {
+        return exerciseDbService.add(request);
     }
 }

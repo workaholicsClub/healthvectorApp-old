@@ -99,6 +99,15 @@
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
+            android:name=".presentation.events.ExerciseEventDetailActivity"
+            android:exported="true"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
             android:name=".presentation.events.MedicineTakingEventDetailActivity"
             android:exported="true"
             android:parentActivityName=".presentation.main.MainActivity"
@@ -153,6 +162,22 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".presentation.core.images.crop.CropActivity" />
         <activity android:name=".presentation.core.images.review.ImageReviewActivity" />
+        <activity
+            android:name=".presentation.exercises.ExerciseDetailActivity"
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.exercises.AddConcreteExerciseActivity"
+            android:parentActivityName=".presentation.exercises.ExerciseDetailActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.exercises.ExerciseDetailActivity" />
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

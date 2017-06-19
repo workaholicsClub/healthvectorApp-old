@@ -22,24 +22,23 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.events.BaseEditItemActivity;
+import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldDoctorVisitNameView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
-import ru.android.childdiary.presentation.medical.core.BaseEditItemActivity;
-import ru.android.childdiary.presentation.medical.core.BaseEditItemPresenter;
 import ru.android.childdiary.utils.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -51,7 +50,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     EditDoctorVisitPresenter presenter;
 
     @BindView(R.id.doctorVisitNameView)
-    FieldDoctorVisitNameView doctorVisitNameView;
+    FieldEditTextWithImageView doctorVisitNameView;
 
     @BindView(R.id.doctorView)
     FieldDoctorView doctorView;
@@ -104,11 +103,6 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.edit_doctor_visit_title);
-    }
-
-    @Override
-    protected ImageType getImageType() {
-        return ImageType.DOCTOR_VISIT;
     }
 
     @Override
@@ -180,10 +174,12 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
 
     @Override
     public void onChecked() {
-        boolean exported = ObjectUtils.isTrue(item.getIsExported());
-        if (!exported) {
-            boolean readOnly = !getCheckBoxView().isChecked();
-            repeatParametersView.setReadOnly(readOnly);
+        if (getCheckBoxView() != null) {
+            boolean exported = ObjectUtils.isTrue(item.getIsExported());
+            if (!exported) {
+                boolean readOnly = !getCheckBoxView().isChecked();
+                repeatParametersView.setReadOnly(readOnly);
+            }
         }
     }
 
@@ -197,6 +193,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         return dateView;
     }
 
+    @Nullable
     @Override
     protected FieldTimeView getTimeView() {
         return timeView;
@@ -213,6 +210,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         return durationView;
     }
 
+    @Nullable
     @Override
     protected FieldCheckBoxView getCheckBoxView() {
         return checkBoxView;
@@ -230,7 +228,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
 
     @Nullable
     @Override
-    public FieldDoctorView getDoctorView() {
+    protected FieldDoctorView getDoctorView() {
         return doctorView;
     }
 
@@ -246,8 +244,9 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         return null;
     }
 
+    @Nullable
     @Override
-    public FieldNoteWithPhotoView getNoteWithPhotoView() {
+    protected FieldNoteWithPhotoView getNoteWithPhotoView() {
         return noteWithPhotoView;
     }
 

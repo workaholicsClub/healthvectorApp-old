@@ -11,6 +11,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
@@ -19,6 +20,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 
@@ -33,16 +35,19 @@ public class EventHelper {
     public static boolean canBeDone(@Nullable EventType eventType) {
         return eventType == EventType.OTHER
                 || eventType == EventType.DOCTOR_VISIT
-                || eventType == EventType.MEDICINE_TAKING;
-        // TODO EXERCISE
+                || eventType == EventType.MEDICINE_TAKING
+                || eventType == EventType.EXERCISE;
     }
 
     public static boolean needToFillNoteOrPhoto(@NonNull MasterEvent event) {
         if (event instanceof DoctorVisitEvent) {
-            // TODO EXERCISE
             DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
             return TextUtils.isEmpty(doctorVisitEvent.getNote())
                     && TextUtils.isEmpty(doctorVisitEvent.getImageFileName());
+        } else if (event instanceof ExerciseEvent) {
+            ExerciseEvent exerciseEvent = (ExerciseEvent) event;
+            return TextUtils.isEmpty(exerciseEvent.getNote())
+                    && TextUtils.isEmpty(exerciseEvent.getImageFileName());
         }
         return false;
     }
@@ -71,8 +76,11 @@ public class EventHelper {
             DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
             String name = doctorVisitEvent.getName();
             return TextUtils.isEmpty(name) ? eventTypeStr : name;
+        } else if (event instanceof ExerciseEvent) {
+            ExerciseEvent exerciseEvent = (ExerciseEvent) event;
+            String name = exerciseEvent.getName();
+            return TextUtils.isEmpty(name) ? eventTypeStr : name;
         }
-        // TODO EXERCISE
         return eventTypeStr;
     }
 
@@ -113,8 +121,9 @@ public class EventHelper {
             MedicineTakingEvent medicineTakingEvent = (MedicineTakingEvent) event;
             Medicine medicine = medicineTakingEvent.getMedicine();
             return medicine == null ? null : medicine.getName();
+        } else if (event instanceof ExerciseEvent) {
+            return null;
         }
-        // TODO EXERCISE
         return null;
     }
 

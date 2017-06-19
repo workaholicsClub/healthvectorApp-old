@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FieldEditTextWithImageView">
+        <attr name="fieldIcon" format="reference" />
+        <attr name="fieldHint" format="string" />
+        <attr name="fieldMaxLength" format="integer" />
+        <attr name="fieldHideIfEmpty" format="boolean" />
+    </declare-styleable>
+</resources>

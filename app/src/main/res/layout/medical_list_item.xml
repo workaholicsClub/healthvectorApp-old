@@ -27,6 +27,7 @@
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/background_clickable"
         android:gravity="center"
         android:orientation="horizontal">
 

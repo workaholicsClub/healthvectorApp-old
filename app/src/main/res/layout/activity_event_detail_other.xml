@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,10 +13,14 @@
         android:paddingBottom="@dimen/field_margin_base"
         android:paddingTop="@dimen/field_margin_base">
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldOtherEventNameView
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView
             android:id="@+id/otherEventNameView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:fieldHideIfEmpty="false"
+            app:fieldHint="@string/other_event_title_hint"
+            app:fieldIcon="@drawable/ic_other_event_name"
+            app:fieldMaxLength="@integer/max_length_other_event_name" />
 
         <ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView
             android:id="@+id/startTitleView"

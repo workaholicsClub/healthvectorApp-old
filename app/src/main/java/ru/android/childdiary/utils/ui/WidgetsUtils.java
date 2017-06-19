@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -56,18 +57,20 @@ public class WidgetsUtils {
     }
 
     @Nullable
-    public static DateTime getDateTime(FieldDateView dateView, FieldTimeView timeView) {
+    public static DateTime getDateTime(@NonNull FieldDateView dateView, @Nullable FieldTimeView timeView) {
         LocalDate date = dateView.getValue();
-        LocalTime time = timeView.getValue(); // подставлять секунды, если время совпадает с текущим?
+        LocalTime time = timeView == null ? LocalTime.MIDNIGHT : timeView.getValue();
         return date == null || time == null
                 ? null
                 : new DateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
                 time.getHourOfDay(), time.getMinuteOfHour());
     }
 
-    public static void setDateTime(@Nullable DateTime dateTime, FieldDateView dateView, FieldTimeView timeView) {
+    public static void setDateTime(@Nullable DateTime dateTime, @NonNull FieldDateView dateView, @Nullable FieldTimeView timeView) {
         dateView.setValue(dateTime == null ? null : dateTime.toLocalDate());
-        timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
+        if (timeView != null) {
+            timeView.setValue(dateTime == null ? null : dateTime.toLocalTime());
+        }
     }
 
     public static void setupSearchView(SearchView searchView) {

@@ -13,6 +13,7 @@
         android:src="@drawable/ic_date" />
 
     <TextView
+        android:id="@+id/textViewTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

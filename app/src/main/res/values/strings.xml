@@ -58,6 +58,7 @@
     <string name="validate_event_other_title_empty">Введите название события</string>
     <string name="validate_start_finish_time">Время окончания не может быть меньше, чем время начала события</string>
     <string name="validate_doctor_visit_name_empty">Введите название визита</string>
+    <string name="validate_concrete_exercise_name_empty">Введите название занятия</string>
     <string name="validate_doctor_visit_doctor_empty">Выберите специализацию врача</string>
     <string name="validate_medicine_taking_medicine_empty">Выберите лекарство</string>
     <string name="validate_repeat_parameters_periodicity_empty">Выберите периодичность</string>
@@ -132,6 +133,7 @@
     <string name="duration_format">00:00:00</string>
     <string name="other_event_title_hint">Введите название события</string>
     <string name="doctor_visit_title_hint">Введите название визита</string>
+    <string name="exercise_title_hint">Введите название занятия</string>
     <string name="menu_title_done">Выполнено</string>
     <string name="menu_title_move">Перенести</string>
     <string name="event_is_done">Выполнено</string>
@@ -233,6 +235,8 @@
     <string name="enter_doctor_name">Введите специализацию</string>
     <string name="enter_medicine_name">Введите лекарство</string>
     <string name="the_value_already_exists">Такое значение уже есть в списке</string>
+    <string name="no_exercises">Не удалось загрузить занятия</string>
+    <string name="exercise">Занятие</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

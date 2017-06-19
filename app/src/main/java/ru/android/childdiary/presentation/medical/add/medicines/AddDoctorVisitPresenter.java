@@ -18,9 +18,9 @@ import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
+import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
-import ru.android.childdiary.presentation.medical.core.BaseAddItemPresenter;
+import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
@@ -59,8 +59,8 @@ public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisit
     }
 
     @Override
-    public void handleValidationResult(List<MedicalValidationResult> results) {
-        for (MedicalValidationResult result : results) {
+    public void handleValidationResult(List<EventValidationResult> results) {
+        for (EventValidationResult result : results) {
             boolean valid = result.isValid();
             if (result.getFieldType() == null) {
                 continue;

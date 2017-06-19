@@ -29,6 +29,7 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
@@ -45,12 +46,15 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEvents
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateDoctorVisitEventResponse;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventRequest;
+import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.validation.DiaperEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.DoctorVisitEventValidator;
+import ru.android.childdiary.domain.interactors.calendar.validation.ExerciseEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.FeedEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.MedicineTakingEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.OtherEventValidator;
@@ -61,6 +65,9 @@ import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
+import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsRequest;
+import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
@@ -83,6 +90,7 @@ public class CalendarInteractor {
     private final SleepEventValidator sleepEventValidator;
     private final DoctorVisitEventValidator doctorVisitEventValidator;
     private final MedicineTakingEventValidator medicineTakingEventValidator;
+    private final ExerciseEventValidator exerciseEventValidator;
     private final ImagesRepository imagesRepository;
 
     @Inject
@@ -96,6 +104,7 @@ public class CalendarInteractor {
                               SleepEventValidator sleepEventValidator,
                               DoctorVisitEventValidator doctorVisitEventValidator,
                               MedicineTakingEventValidator medicineTakingEventValidator,
+                              ExerciseEventValidator exerciseEventValidator,
                               ImagesDataRepository imagesRepository) {
         this.context = context;
         this.childRepository = childRepository;
@@ -107,6 +116,7 @@ public class CalendarInteractor {
         this.sleepEventValidator = sleepEventValidator;
         this.doctorVisitEventValidator = doctorVisitEventValidator;
         this.medicineTakingEventValidator = medicineTakingEventValidator;
+        this.exerciseEventValidator = exerciseEventValidator;
         this.imagesRepository = imagesRepository;
     }
 
@@ -242,6 +252,19 @@ public class CalendarInteractor {
                         .build());
     }
 
+    public Observable<ExerciseEvent> getDefaultExerciseEvent() {
+        return Observable.combineLatest(
+                childRepository.getActiveChildOnce(),
+                getSelectedDateOnce(),
+                Observable.just(LocalTime.now()),
+                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.EXERCISE),
+                (child, date, time, minutes) -> ExerciseEvent.builder()
+                        .child(child)
+                        .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
+                        .notifyTimeInMinutes(minutes)
+                        .build());
+    }
+
     public Observable<GetEventsResponse> getAll(@NonNull GetEventsRequest request) {
         return calendarRepository.getAll(request);
     }
@@ -266,8 +289,9 @@ public class CalendarInteractor {
             return (Observable<T>) calendarRepository.getDoctorVisitEventDetail(event);
         } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
             return (Observable<T>) calendarRepository.getMedicineTakingEventDetail(event);
+        } else if (event.getEventType() == EventType.EXERCISE) {
+            return (Observable<T>) calendarRepository.getExerciseEventDetail(event);
         }
-        // TODO EXERCISE
         throw new IllegalStateException("Unsupported event type");
     }
 
@@ -341,13 +365,19 @@ public class CalendarInteractor {
                     .build())
                     .flatMap(this::deleteImageFiles)
                     .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);
+        } else if (event.getEventType() == EventType.EXERCISE) {
+            return (Observable<T>) calendarRepository.update(UpdateExerciseEventRequest.builder()
+                    .exerciseEvent((ExerciseEvent) event)
+                    .fields(Collections.emptyList())
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(UpdateExerciseEventResponse::getExerciseEvent);
         }
-        // TODO EXERCISE
         throw new IllegalStateException("Unsupported event type");
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends MasterEvent> Observable<T> updateLinearGroupInternal(@NonNull T event, List<LinearGroupFieldType> fields) {
+    private <T extends MasterEvent> Observable<T> updateLinearGroupInternal(@NonNull T event, @NonNull List<LinearGroupFieldType> fields) {
         if (event.getEventType() == EventType.DIAPER) {
             return Observable.error(new IllegalArgumentException("Unsupported event type"));
         } else if (event.getEventType() == EventType.FEED) {
@@ -372,8 +402,14 @@ public class CalendarInteractor {
                     .build())
                     .flatMap(this::deleteImageFiles)
                     .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);
+        } else if (event.getEventType() == EventType.EXERCISE) {
+            return (Observable<T>) calendarRepository.update(UpdateExerciseEventRequest.builder()
+                    .exerciseEvent((ExerciseEvent) event)
+                    .fields(fields)
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(UpdateExerciseEventResponse::getExerciseEvent);
         }
-        // TODO EXERCISE
         throw new IllegalStateException("Unsupported event type");
     }
 
@@ -413,8 +449,17 @@ public class CalendarInteractor {
                     .build())
                     .flatMap(this::deleteImageFiles)
                     .map(DeleteMedicineTakingEventsResponse::getCount);
+        } else if (event.getEventType() == EventType.EXERCISE) {
+            ExerciseEvent exerciseEvent = (ExerciseEvent) event;
+            ConcreteExercise concreteExercise = exerciseEvent.getConcreteExercise();
+            Integer linearGroup = exerciseEvent.getLinearGroup();
+            return calendarRepository.deleteLinearGroup(DeleteConcreteExerciseEventsRequest.builder()
+                    .concreteExercise(concreteExercise)
+                    .linearGroup(linearGroup)
+                    .build())
+                    .flatMap(this::deleteImageFiles)
+                    .map(DeleteConcreteExerciseEventsResponse::getCount);
         }
-        // TODO EXERCISE
         throw new IllegalStateException("Unsupported event type");
     }
 
@@ -469,8 +514,14 @@ public class CalendarInteractor {
                     .minutes(minutes)
                     .build())
                     .map(UpdateMedicineTakingEventResponse::getMedicineTakingEvent);
+        } else if (event.getEventType() == EventType.EXERCISE) {
+            return calendarRepository.update(UpdateExerciseEventRequest.builder()
+                    .exerciseEvent((ExerciseEvent) event)
+                    .fields(Collections.singletonList(LinearGroupFieldType.TIME))
+                    .minutes(minutes)
+                    .build())
+                    .map(UpdateExerciseEventResponse::getExerciseEvent);
         }
-        // TODO EXERCISE
         throw new IllegalStateException("Unsupported event type");
     }
 
@@ -499,6 +550,15 @@ public class CalendarInteractor {
                 .map(String::trim)
                 .map(doctorVisitEventName -> DoctorVisitEvent.builder().name(doctorVisitEventName).build())
                 .map(doctorVisitEventValidator::validate);
+    }
+
+    public Observable<List<CalendarValidationResult>> controlExerciseEventFields(@NonNull Observable<TextViewAfterTextChangeEvent> exerciseEventNameObservable) {
+        return exerciseEventNameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(exerciseEventName -> ExerciseEvent.builder().name(exerciseEventName).build())
+                .map(exerciseEventValidator::validate);
     }
 
     private <T extends MasterEvent> Observable<T> validate(@NonNull T item) {
@@ -552,8 +612,9 @@ public class CalendarInteractor {
             return (Validator<T, CalendarValidationResult>) doctorVisitEventValidator;
         } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
             return (Validator<T, CalendarValidationResult>) medicineTakingEventValidator;
+        } else if (event.getEventType() == EventType.EXERCISE) {
+            return (Validator<T, CalendarValidationResult>) exerciseEventValidator;
         }
-        // TODO EXERCISE
         throw new IllegalStateException("Unsupported event type");
     }
 
@@ -591,8 +652,9 @@ public class CalendarInteractor {
                 return event;
             } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
                 return event;
+            } else if (event.getEventType() == EventType.EXERCISE) {
+                return event;
             }
-            // TODO EXERCISE
             throw new IllegalStateException("Unsupported event type");
         });
     }
@@ -677,8 +739,9 @@ public class CalendarInteractor {
                 return event;
             } else if (event.getEventType() == EventType.MEDICINE_TAKING) {
                 return event;
+            } else if (event.getEventType() == EventType.EXERCISE) {
+                return event;
             }
-            // TODO EXERCISE
             throw new IllegalStateException("Unsupported event type");
         });
     }

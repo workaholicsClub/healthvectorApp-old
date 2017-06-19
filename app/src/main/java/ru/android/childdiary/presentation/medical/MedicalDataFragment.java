@@ -86,6 +86,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
         WidgetsUtils.setupTabLayoutFont(tabLayout);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

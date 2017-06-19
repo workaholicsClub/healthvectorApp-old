@@ -15,7 +15,7 @@ import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
-import ru.android.childdiary.presentation.medical.core.BaseAddItemPresenter;
+import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState

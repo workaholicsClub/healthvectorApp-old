@@ -15,6 +15,7 @@ import io.requery.query.Tuple;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.ExerciseEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.FoodEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
@@ -24,6 +25,8 @@ import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEn
 import ru.android.childdiary.data.entities.calendar.events.standard.PumpEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.standard.SleepEventEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.data.entities.exercises.ConcreteExerciseEntity;
+import ru.android.childdiary.data.entities.exercises.ExerciseEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
@@ -31,6 +34,7 @@ import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
@@ -42,6 +46,8 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
+import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -93,6 +99,14 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     private static final String MEDICINE_TAKING_ENTITY_ID = "MEDICINE_TAKING_ENTITY_ID";
     // medicine
     private static final String MEDICINE_ENTITY_NAME = "MEDICINE_ENTITY_NAME";
+    // exercise event
+    private static final String EXERCISE_EVENT_ENTITY_ID = "EXERCISE_EVENT_ENTITY_ID";
+    private static final String EXERCISE_EVENT_ENTITY_NAME = "EXERCISE_EVENT_ENTITY_NAME";
+    private static final String EXERCISE_EVENT_ENTITY_IMAGE_FILE_NAME = "EXERCISE_EVENT_ENTITY_IMAGE_FILE_NAME";
+    // concrete exercise
+    private static final String CONCRETE_EXERCISE_ENTITY_ID = "CONCRETE_EXERCISE_ENTITY_ID";
+    // exercise
+    private static final String EXERCISE_ENTITY_NAME = "EXERCISE_ENTITY_NAME";
 
     private final static Expression[] EXPRESSIONS = new Expression[]{
             // master event
@@ -137,7 +151,15 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
             // medicine taking
             MedicineTakingEntity.ID.as(MEDICINE_TAKING_ENTITY_ID),
             // medicine
-            MedicineEntity.NAME.as(MEDICINE_ENTITY_NAME)
+            MedicineEntity.NAME.as(MEDICINE_ENTITY_NAME),
+            // exercise event
+            ExerciseEventEntity.ID.as(EXERCISE_EVENT_ENTITY_ID),
+            ExerciseEventEntity.NAME.as(EXERCISE_EVENT_ENTITY_NAME),
+            ExerciseEventEntity.IMAGE_FILE_NAME.as(EXERCISE_EVENT_ENTITY_IMAGE_FILE_NAME),
+            // concrete exercise
+            ConcreteExerciseEntity.ID.as(CONCRETE_EXERCISE_ENTITY_ID),
+            // exercise
+            ExerciseEntity.NAME.as(EXERCISE_ENTITY_NAME)
     };
 
     private final ReactiveEntityStore<Persistable> dataStore;
@@ -289,6 +311,35 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .build();
     }
 
+    private static ExerciseEvent mapToExerciseEvent(@NonNull Tuple data) {
+        return ExerciseEvent.builder()
+                .id(data.get(ExerciseEventEntity.ID.as(EXERCISE_EVENT_ENTITY_ID)))
+                .masterEventId(data.get(MasterEventEntity.ID.as(MASTER_EVENT_ENTITY_ID)))
+                .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
+                .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
+                .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
+                .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
+                .child(mapToChild(data))
+                .linearGroup(data.get(MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP)))
+                .concreteExercise(mapToConcreteExercise(data))
+                .name(data.get(ExerciseEventEntity.NAME.as(EXERCISE_EVENT_ENTITY_NAME)))
+                .imageFileName(data.get(ExerciseEventEntity.IMAGE_FILE_NAME.as(EXERCISE_EVENT_ENTITY_IMAGE_FILE_NAME)))
+                .build();
+    }
+
+    private static ConcreteExercise mapToConcreteExercise(@NonNull Tuple data) {
+        return ConcreteExercise.builder()
+                .id(data.get(ConcreteExerciseEntity.ID.as(CONCRETE_EXERCISE_ENTITY_ID)))
+                .exercise(mapToExercise(data))
+                .build();
+    }
+
+    private static Exercise mapToExercise(@NonNull Tuple data) {
+        return Exercise.builder()
+                .name(data.get(ExerciseEntity.NAME.as(EXERCISE_ENTITY_NAME)))
+                .build();
+    }
+
     public Observable<GetEventsResponse> getAllEvents(@NonNull GetEventsRequest request) {
         Child child = request.getChild();
         LocalDate selectedDate = request.getDate();
@@ -307,6 +358,9 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .leftJoin(MedicineTakingEventEntity.class).on(MedicineTakingEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .leftJoin(MedicineTakingEntity.class).on(MedicineTakingEntity.ID.eq(MedicineTakingEventEntity.MEDICINE_TAKING_ID))
                 .leftJoin(MedicineEntity.class).on(MedicineEntity.ID.eq(MedicineTakingEventEntity.MEDICINE_ID))
+                .leftJoin(ExerciseEventEntity.class).on(ExerciseEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
+                .leftJoin(ConcreteExerciseEntity.class).on(ConcreteExerciseEntity.ID.eq(ExerciseEventEntity.CONCRETE_EXERCISE_ID))
+                .leftJoin(ExerciseEntity.class).on(ExerciseEntity.ID.eq(ConcreteExerciseEntity.EXERCISE_ID))
                 .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
                 .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.midnight(selectedDate)))
                 .and(MasterEventEntity.DATE_TIME.lessThan(DateUtils.nextDayMidnight(selectedDate)))
@@ -339,7 +393,8 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 return mapToDoctorVisitEvent(data);
             case MEDICINE_TAKING:
                 return mapToMedicineTakingEvent(data);
-            // TODO EXERCISE
+            case EXERCISE:
+                return mapToExerciseEvent(data);
         }
         throw new IllegalStateException("Unsupported event type");
     }

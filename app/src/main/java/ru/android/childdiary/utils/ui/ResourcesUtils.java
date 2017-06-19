@@ -139,7 +139,10 @@ public class ResourcesUtils {
                 return sex == null || sex == Sex.MALE
                         ? R.color.event_medicine_taking_row_background_boy
                         : R.color.event_medicine_taking_row_background_girl;
-            // TODO EXERCISE
+            case EXERCISE:
+                return sex == null || sex == Sex.MALE
+                        ? R.color.event_exercise_row_background_boy
+                        : R.color.event_exercise_row_background_girl;
             default:
                 return R.color.white;
         }

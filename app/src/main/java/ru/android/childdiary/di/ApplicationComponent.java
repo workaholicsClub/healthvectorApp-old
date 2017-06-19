@@ -20,6 +20,8 @@ import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailPresenter;
+import ru.android.childdiary.presentation.events.ExerciseEventDetailActivity;
+import ru.android.childdiary.presentation.events.ExerciseEventDetailPresenter;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailPresenter;
 import ru.android.childdiary.presentation.events.MedicineTakingEventDetailActivity;
@@ -30,6 +32,10 @@ import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailPresenter;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailPresenter;
+import ru.android.childdiary.presentation.exercises.AddConcreteExerciseActivity;
+import ru.android.childdiary.presentation.exercises.AddConcreteExercisePresenter;
+import ru.android.childdiary.presentation.exercises.ExerciseDetailActivity;
+import ru.android.childdiary.presentation.exercises.ExerciseDetailPresenter;
 import ru.android.childdiary.presentation.exercises.ExercisesPresenter;
 import ru.android.childdiary.presentation.help.HelpPresenter;
 import ru.android.childdiary.presentation.main.MainActivity;
@@ -122,6 +128,8 @@ public interface ApplicationComponent {
 
     void inject(MedicineTakingEventDetailPresenter presenter);
 
+    void inject(ExerciseEventDetailPresenter presenter);
+
     void inject(ImagePickerPresenter presenter);
 
     void inject(DoctorVisitFilterPresenter presenter);
@@ -136,7 +144,9 @@ public interface ApplicationComponent {
 
     void inject(PhysicalTestResultsPresenter presenter);
 
-    // TODO EXERCISE
+    void inject(ExerciseDetailPresenter presenter);
+
+    void inject(AddConcreteExercisePresenter presenter);
 
     // activities
     void inject(SplashActivity activity);
@@ -175,7 +185,11 @@ public interface ApplicationComponent {
 
     void inject(MedicineTakingEventDetailActivity activity);
 
-    // TODO EXERCISE
+    void inject(ExerciseEventDetailActivity activity);
+
+    void inject(ExerciseDetailActivity activity);
+
+    void inject(AddConcreteExerciseActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

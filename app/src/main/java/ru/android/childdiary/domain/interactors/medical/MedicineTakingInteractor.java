@@ -25,6 +25,8 @@ import ru.android.childdiary.data.repositories.medical.MedicineTakingDataReposit
 import ru.android.childdiary.data.repositories.medical.MedicineTakingFilterDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.DeleteResponse;
+import ru.android.childdiary.domain.core.validation.EventValidationException;
+import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
@@ -49,8 +51,6 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTaki
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicineTakingValidator;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicineValidator;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
@@ -110,9 +110,9 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
 
     private Observable<Medicine> validate(@NonNull Medicine medicine) {
         return Observable.defer(() -> {
-            List<MedicalValidationResult> results = medicineValidator.validate(medicine);
+            List<EventValidationResult> results = medicineValidator.validate(medicine);
             if (!medicineValidator.isValid(results)) {
-                return Observable.error(new MedicalValidationException(results));
+                return Observable.error(new EventValidationException(results));
             }
             return Observable.just(medicine);
         });
@@ -185,9 +185,9 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
 
     private Observable<UpsertMedicineTakingRequest> validate(@NonNull UpsertMedicineTakingRequest request) {
         return Observable.defer(() -> {
-            List<MedicalValidationResult> results = medicineTakingValidator.validate(request.getMedicineTaking());
+            List<EventValidationResult> results = medicineTakingValidator.validate(request.getMedicineTaking());
             if (!medicineTakingValidator.isValid(results)) {
-                return Observable.error(new MedicalValidationException(results));
+                return Observable.error(new EventValidationException(results));
             }
             return Observable.just(request);
         });
@@ -263,7 +263,7 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
                 .distinctUntilChanged();
     }
 
-    public Observable<List<MedicalValidationResult>> controlFields(
+    public Observable<List<EventValidationResult>> controlFields(
             @NonNull FieldValueChangeEventsObservable<Medicine> medicineObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
             @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
@@ -294,7 +294,7 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
                 .distinctUntilChanged();
     }
 
-    public Observable<List<MedicalValidationResult>> controlFields(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+    public Observable<List<EventValidationResult>> controlFields(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
         return nameObservable
                 .map(TextViewAfterTextChangeEvent::editable)
                 .map(Editable::toString)

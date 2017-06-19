@@ -15,9 +15,11 @@ import io.requery.reactivex.ReactiveEntityStore;
 import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.ExerciseEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
 import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
 import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.data.entities.exercises.ConcreteExerciseEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
@@ -28,6 +30,8 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildResponse;
+import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsRequest;
+import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
@@ -137,6 +141,31 @@ public class CleanUpDbService extends EventsDbService {
                 deleteIfPossible(medicineTakingEntity, imageFilesToDelete);
             }
             return DeleteMedicineTakingEventsResponse.builder()
+                    .request(request)
+                    .count(count)
+                    .imageFilesToDelete(imageFilesToDelete)
+                    .build();
+        }));
+    }
+
+    public Observable<DeleteConcreteExerciseEventsResponse> deleteExerciseEvents(
+            @NonNull DeleteConcreteExerciseEventsRequest request) {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
+            Long id = getConcreteExerciseId(request.getConcreteExercise());
+            ConcreteExerciseEntity concreteExerciseEntity = findConcreteExerciseEntity(id);
+            val events = request.getLinearGroup() == null
+                    ? getExerciseEvents(id)
+                    : getExerciseEvents(id, request.getLinearGroup());
+            int count = events.size();
+            List<String> imageFilesToDelete = new ArrayList<>();
+            imageFilesToDelete.addAll(getImageFileNamesExerciseEvents(events));
+            deleteExerciseEvents(events);
+            if (request.getLinearGroup() == null) {
+                delete(concreteExerciseEntity, imageFilesToDelete);
+            } else {
+                deleteIfPossible(concreteExerciseEntity, imageFilesToDelete);
+            }
+            return DeleteConcreteExerciseEventsResponse.builder()
                     .request(request)
                     .count(count)
                     .imageFilesToDelete(imageFilesToDelete)
@@ -295,6 +324,29 @@ public class CleanUpDbService extends EventsDbService {
         }
     }
 
+    private void delete(ConcreteExerciseEntity concreteExerciseEntity,
+                        List<String> imageFilesToDelete) {
+        imageFilesToDelete.add(concreteExerciseEntity.getImageFileName());
+        blockingEntityStore.delete(concreteExerciseEntity);
+        logger.debug("concrete exercise deleted");
+    }
+
+    private void deleteSoftly(ConcreteExerciseEntity concreteExerciseEntity) {
+        concreteExerciseEntity.setDeleted(true);
+        blockingEntityStore.update(concreteExerciseEntity);
+        logger.debug("concrete exercise deleted softly");
+    }
+
+    private void deleteIfPossible(ConcreteExerciseEntity concreteExerciseEntity,
+                                  List<String> imageFilesToDelete) {
+        if (ObjectUtils.isTrue(concreteExerciseEntity.isDeleted())) {
+            val events = getExerciseEvents(concreteExerciseEntity.getId());
+            if (events.isEmpty()) {
+                delete(concreteExerciseEntity, imageFilesToDelete);
+            }
+        }
+    }
+
     private void deleteDoctorVisitEvents(List<DoctorVisitEventEntity> events) {
         val masterEvents = getMasterEventsFromDoctorVisitEvents(events);
         delete(masterEvents);
@@ -302,6 +354,11 @@ public class CleanUpDbService extends EventsDbService {
 
     private void deleteMedicineTakingEvents(List<MedicineTakingEventEntity> events) {
         val masterEvents = getMasterEventsFromMedicineTakingEvents(events);
+        delete(masterEvents);
+    }
+
+    private void deleteExerciseEvents(List<ExerciseEventEntity> events) {
+        val masterEvents = getMasterEventsFromExerciseEvents(events);
         delete(masterEvents);
     }
 
@@ -330,6 +387,14 @@ public class CleanUpDbService extends EventsDbService {
                 .blockingGet();
     }
 
+    private List<String> getImageFileNamesExerciseEvents(List<ExerciseEventEntity> entities) {
+        return Observable.fromIterable(entities)
+                .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
+                .map(ExerciseEventEntity::getImageFileName)
+                .toList()
+                .blockingGet();
+    }
+
     private List<String> getImageFileNamesDoctorVisit(List<DoctorVisitEntity> entities) {
         return Observable.fromIterable(entities)
                 .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
@@ -342,6 +407,14 @@ public class CleanUpDbService extends EventsDbService {
         return Observable.fromIterable(entities)
                 .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
                 .map(MedicineTakingEntity::getImageFileName)
+                .toList()
+                .blockingGet();
+    }
+
+    private List<String> getImageFileNamesConcreteExercise(List<ConcreteExerciseEntity> entities) {
+        return Observable.fromIterable(entities)
+                .filter(event -> !TextUtils.isEmpty(event.getImageFileName()))
+                .map(ConcreteExerciseEntity::getImageFileName)
                 .toList()
                 .blockingGet();
     }

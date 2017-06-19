@@ -12,11 +12,13 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDataRepository;
+import ru.android.childdiary.domain.core.validation.EventFieldType;
+import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 
-public class MedicineValidator extends Validator<Medicine, MedicalValidationResult> {
+public class MedicineValidator extends Validator<Medicine, EventValidationResult> {
     private final Context context;
     private final MedicineTakingRepository medicineTakingRepository;
 
@@ -27,17 +29,17 @@ public class MedicineValidator extends Validator<Medicine, MedicalValidationResu
     }
 
     @Override
-    public List<MedicalValidationResult> validate(@NonNull Medicine medicine) {
-        List<MedicalValidationResult> results = new ArrayList<>();
+    public List<EventValidationResult> validate(@NonNull Medicine medicine) {
+        List<EventValidationResult> results = new ArrayList<>();
 
-        MedicalValidationResult result;
+        EventValidationResult result;
 
         if (TextUtils.isEmpty(medicine.getName())) {
-            result = new MedicalValidationResult(MedicalFieldType.MEDICINE_NAME);
+            result = new EventValidationResult(EventFieldType.MEDICINE_NAME);
             result.addMessage(context.getString(R.string.enter_medicine_name));
             results.add(result);
         } else {
-            result = new MedicalValidationResult(MedicalFieldType.MEDICINE_NAME);
+            result = new EventValidationResult(EventFieldType.MEDICINE_NAME);
             results.add(result);
 
             long count = Observable.fromIterable(medicineTakingRepository.getMedicines().blockingFirst())
@@ -48,7 +50,7 @@ public class MedicineValidator extends Validator<Medicine, MedicalValidationResu
                     .blockingGet();
 
             if (count > 0) {
-                result = new MedicalValidationResult(null);
+                result = new EventValidationResult(null);
                 result.addMessage(context.getString(R.string.the_value_already_exists));
                 results.add(result);
             }

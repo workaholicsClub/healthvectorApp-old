@@ -83,6 +83,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         WidgetsUtils.setupTabLayoutFont(tabLayout);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

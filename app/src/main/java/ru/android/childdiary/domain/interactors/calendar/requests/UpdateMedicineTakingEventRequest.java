@@ -13,6 +13,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroup
 public class UpdateMedicineTakingEventRequest {
     @NonNull
     MedicineTakingEvent medicineTakingEvent;
+    @NonNull
     List<LinearGroupFieldType> fields;
     int minutes;
 }

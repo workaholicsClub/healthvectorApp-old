@@ -11,8 +11,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.domain.interactors.medical.MedicalDictionaryInteractor;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationException;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicalValidationResult;
+import ru.android.childdiary.domain.core.validation.EventValidationException;
+import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class BaseAddPresenter<T, V extends BaseAddView<T>> extends BasePresenter<V> {
@@ -48,8 +48,8 @@ public abstract class BaseAddPresenter<T, V extends BaseAddView<T>> extends Base
 
     @Override
     public void onUnexpectedError(Throwable e) {
-        if (e instanceof MedicalValidationException) {
-            List<MedicalValidationResult> results = ((MedicalValidationException) e).getValidationResults();
+        if (e instanceof EventValidationException) {
+            List<EventValidationResult> results = ((EventValidationException) e).getValidationResults();
             if (results.isEmpty()) {
                 logger.error("medical validation results empty");
                 return;
@@ -57,8 +57,8 @@ public abstract class BaseAddPresenter<T, V extends BaseAddView<T>> extends Base
 
             getViewState().validationFailed();
             String msg = Observable.fromIterable(results)
-                    .filter(MedicalValidationResult::notValid)
-                    .map(MedicalValidationResult::toString)
+                    .filter(EventValidationResult::notValid)
+                    .map(EventValidationResult::toString)
                     .blockingFirst();
             getViewState().showValidationErrorMessage(msg);
             handleValidationResult(results);
@@ -67,8 +67,8 @@ public abstract class BaseAddPresenter<T, V extends BaseAddView<T>> extends Base
         }
     }
 
-    private void handleValidationResult(List<MedicalValidationResult> results) {
-        for (MedicalValidationResult result : results) {
+    private void handleValidationResult(List<EventValidationResult> results) {
+        for (EventValidationResult result : results) {
             boolean valid = result.isValid();
             if (result.getFieldType() == null) {
                 continue;
