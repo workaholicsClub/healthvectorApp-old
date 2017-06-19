@@ -25,7 +25,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField "int", "DB_VERSION", "1"
-        buildConfigField "String", "DB_NAME", "\"diary\""
+        buildConfigField "String", "DB_NAME", "\"diary.db\""
         resValue "string", "file_provider_authorities", "ru.android.childdiary"
         resValue "string", "font_path_regular", "fonts/Roboto-Regular.ttf"
         resValue "string", "font_path_bold", "fonts/Roboto-Bold.ttf"
@@ -34,14 +34,44 @@ android {
     }
     buildTypes {
         debug {
+            shrinkResources false
+            minifyEnabled false
+            proguardFiles 'proguard.cfg', 'proguard-rules.pro'
+            manifestPlaceholders = [fabricApiKey: "9a8fc272c5361d9a35b084ac9b0e810d8a453b93"]
+            buildConfigField "boolean", "DISABLE_CONFIGURATION_CHANGE", "false"
+            buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "true"
+            buildConfigField "boolean", "PRINT_LOGS_TO_LOGCAT", "true"
+            buildConfigField "boolean", "DUMP_OUT_OF_MEMORY", "true"
+            buildConfigField "boolean", "PRINT_HTTP_LOGS", "true"
+            buildConfigField "boolean", "PRINT_DB_LOGS", "true"
+            buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
+        }
+        qa {
+            initWith debug
             shrinkResources true
             minifyEnabled true
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
+            manifestPlaceholders = [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
+            buildConfigField "boolean", "DISABLE_CONFIGURATION_CHANGE", "true"
+            buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "true"
+            buildConfigField "boolean", "PRINT_LOGS_TO_LOGCAT", "true"
+            buildConfigField "boolean", "DUMP_OUT_OF_MEMORY", "true"
+            buildConfigField "boolean", "PRINT_HTTP_LOGS", "true"
+            buildConfigField "boolean", "PRINT_DB_LOGS", "true"
+            buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
         }
         release {
             shrinkResources true
             minifyEnabled true
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
+            manifestPlaceholders = [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
+            buildConfigField "boolean", "DISABLE_CONFIGURATION_CHANGE", "true"
+            buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "false"
+            buildConfigField "boolean", "PRINT_LOGS_TO_LOGCAT", "false"
+            buildConfigField "boolean", "DUMP_OUT_OF_MEMORY", "false"
+            buildConfigField "boolean", "PRINT_HTTP_LOGS", "false"
+            buildConfigField "boolean", "PRINT_DB_LOGS", "false"
+            buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "false"
         }
     }
 }

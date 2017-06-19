@@ -253,7 +253,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
     @Override
     public void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.SHOW_ERROR_DIALOGS) {
             new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(sex))
                     .setMessage(e.toString())
                     .setPositiveButton(R.string.ok, null)

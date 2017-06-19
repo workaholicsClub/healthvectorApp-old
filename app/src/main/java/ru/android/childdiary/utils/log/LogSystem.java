@@ -22,11 +22,11 @@ public class LogSystem {
         CrashReportSystem.init(appContext);
 
         val factories = new ArrayList<AbstractCustomAppenderFactory>();
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.PRINT_LOGS_TO_FILE) {
             factories.add(new FileCustomAppenderFactory());
         }
         factories.add(new CrashReportSystemCustomAppenderFactory());
-        if (BuildConfig.DEBUG && !CrashReportSystem.isWritingToLogCat()) {
+        if (BuildConfig.PRINT_LOGS_TO_LOGCAT && !CrashReportSystem.isWritingToLogCat()) {
             factories.add(new LogcatCustomAppenderFactory());
         }
 

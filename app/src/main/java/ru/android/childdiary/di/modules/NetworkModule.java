@@ -24,7 +24,7 @@ public class NetworkModule {
 
     @Nullable
     private static Interceptor getLoggingInterceptor() {
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.PRINT_HTTP_LOGS) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             return interceptor;
