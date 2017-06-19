@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -315,7 +316,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER,
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
-                        .showDeleteItem(editedChild.getImageFileName() != null)
+                        .showDeleteItem(!TextUtils.isEmpty(editedChild.getImageFileName()))
                         .showCircleFrame(true)
                         .build());
     }
