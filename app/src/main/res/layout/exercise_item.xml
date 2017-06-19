@@ -22,20 +22,20 @@
         tools:ignore="Deprecated" />
 
     <ImageView
-        android:id="@+id/imageViewAdded"
+        android:id="@+id/imageViewExported"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="22dp"
         android:layout_marginRight="22dp"
         android:scaleType="center"
-        android:src="@drawable/ic_today" />
+        android:src="@drawable/ic_exercise_exported_boy" />
 
     <ImageView
-        android:id="@+id/imageViewAdd"
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:scaleType="center"
-        android:src="@drawable/ic_today" />
+        android:src="@drawable/ic_exercise_boy" />
 </LinearLayout>

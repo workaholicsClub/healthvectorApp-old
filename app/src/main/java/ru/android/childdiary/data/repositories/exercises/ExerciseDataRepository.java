@@ -20,6 +20,7 @@ import ru.android.childdiary.data.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ProgramsToExercisesMapper;
 import ru.android.childdiary.domain.core.TryCountExceededException;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseRepository;
 import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseRequest;
@@ -61,8 +62,8 @@ public class ExerciseDataRepository implements ExerciseRepository {
     }
 
     @Override
-    public Observable<List<Exercise>> getExercises() {
-        return exerciseDbService.getExercises();
+    public Observable<List<Exercise>> getExercises(@NonNull Child child) {
+        return exerciseDbService.getExercises(child);
     }
 
     @Override

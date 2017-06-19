@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.exercises.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -12,12 +13,19 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewHolder;
 import ru.android.childdiary.presentation.core.adapters.swipe.ItemActionListener;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class ExerciseViewHolder extends BaseRecyclerViewHolder<Exercise> {
+    private final ItemActionListener<Exercise> itemActionListener;
+
     @BindView(R.id.textView)
     TextView textView;
 
-    private final ItemActionListener<Exercise> itemActionListener;
+    @BindView(R.id.imageViewExported)
+    ImageView imageViewExported;
+
+    @BindView(R.id.imageView)
+    ImageView imageView;
 
     public ExerciseViewHolder(View itemView, @NonNull ItemActionListener<Exercise> itemActionListener) {
         super(itemView);
@@ -28,6 +36,12 @@ public class ExerciseViewHolder extends BaseRecyclerViewHolder<Exercise> {
     public void bind(Context context, Sex sex, Exercise item) {
         super.bind(context, sex, item);
         textView.setText(item.getName());
+        if (item.isExported()) {
+            imageViewExported.setImageResource(ResourcesUtils.getExerciseExportedIcon(sex));
+        } else {
+            imageViewExported.setImageDrawable(null);
+        }
+        imageView.setImageResource(ResourcesUtils.getExerciseIcon(sex));
     }
 
     @OnClick(R.id.contentView)

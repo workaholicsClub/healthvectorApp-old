@@ -10,12 +10,11 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import org.joda.time.LocalTime;
 
 import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
-import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.presentation.core.BaseView;
 
 public interface ExerciseDetailView extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showExercise(@NonNull Exercise exercise);
+    void showExercise(@NonNull ExerciseDetailState state);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToConcreteExerciseAdd(@NonNull ConcreteExercise defaultConcreteExercise,

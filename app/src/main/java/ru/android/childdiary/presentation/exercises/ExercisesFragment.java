@@ -70,6 +70,13 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        presenter.updateData();
+    }
+
+    @Override
     public void showExercises(@NonNull List<Exercise> exercises) {
         logger.debug("showExercises: " + exercises);
 
@@ -81,8 +88,8 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     }
 
     @Override
-    public void navigateToExercise(@NonNull Exercise exercise) {
-        Intent intent = ExerciseDetailActivity.getIntent(getContext(), exercise);
+    public void navigateToExercise(@NonNull ExerciseDetailState state) {
+        Intent intent = ExerciseDetailActivity.getIntent(getContext(), state);
         startActivity(intent);
     }
 

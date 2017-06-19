@@ -24,6 +24,8 @@ public class Exercise implements Serializable, ContentObject<Exercise> {
 
     String description;
 
+    boolean exported;
+
     @Override
     public boolean isContentEmpty() {
         return isContentEqual(NULL);
