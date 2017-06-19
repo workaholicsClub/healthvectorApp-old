@@ -13,6 +13,7 @@ import ru.android.childdiary.domain.core.ContentObject;
 @Value
 @Builder(toBuilder = true)
 public class LinearGroups implements Serializable, ContentObject<LinearGroups> {
+    // TODO make immutable
     @NonNull
     ArrayList<LocalTime> times;
 
