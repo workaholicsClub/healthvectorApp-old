@@ -306,6 +306,18 @@ public class ResourcesUtils {
         }
     }
 
+    @DrawableRes
+    public static int getExerciseIcon(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.drawable.ic_exercise_boy : R.drawable.ic_exercise_girl;
+    }
+
+    @DrawableRes
+    public static int getExerciseExportedIcon(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.drawable.ic_exercise_exported_boy : R.drawable.ic_exercise_exported_girl;
+    }
+
     @StyleRes
     public static int getDialogTitleTextAppearance(@Nullable Sex sex) {
         return sex == null || sex == Sex.MALE

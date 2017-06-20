@@ -27,6 +27,7 @@ import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParameters
 import ru.android.childdiary.data.repositories.core.ExerciseEventsGenerator;
 import ru.android.childdiary.data.repositories.exercises.mappers.ConcreteExerciseMapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ExerciseMapper;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
@@ -72,6 +73,32 @@ public class ExerciseDbService {
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, exerciseMapper));
+    }
+
+    public Observable<List<Exercise>> getExercises(@NonNull Child child) {
+        return dataStore.select(ExerciseEntity.class)
+                .orderBy(ExerciseEntity.ORDER_NUMBER, ExerciseEntity.NAME, ExerciseEntity.ID)
+                .get()
+                .observableResult()
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, exerciseMapper))
+                .map(exercises -> putExported(exercises, child));
+    }
+
+    private List<Exercise> putExported(@NonNull List<Exercise> exercises, @NonNull Child child) {
+        return Observable.fromIterable(exercises)
+                .map(exercise -> putExported(exercise, child))
+                .toList()
+                .blockingGet();
+    }
+
+    private Exercise putExported(@NonNull Exercise exercise, @NonNull Child child) {
+        Integer count = blockingEntityStore.count(ConcreteExerciseEntity.class)
+                .where(ConcreteExerciseEntity.EXERCISE_ID.eq(exercise.getId()))
+                .and(ConcreteExerciseEntity.CHILD_ID.eq(child.getId()))
+                .get()
+                .value();
+        boolean exported = count > 0;
+        return exercise.toBuilder().exported(exported).build();
     }
 
     public Observable<List<Exercise>> putExercises(@NonNull List<Exercise> exercises) {

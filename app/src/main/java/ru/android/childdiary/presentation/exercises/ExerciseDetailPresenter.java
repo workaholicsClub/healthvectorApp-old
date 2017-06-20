@@ -20,18 +20,17 @@ public class ExerciseDetailPresenter extends BasePresenter<ExerciseDetailView> {
     @Inject
     ExerciseInteractor exerciseInteractor;
 
-    private Exercise exercise;
-
     private Disposable exerciseSubscription;
+    private ExerciseDetailState state;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
     }
 
-    public void setExercise(@NonNull Exercise exercise) {
-        this.exercise = exercise;
-        loadExercise(exercise);
+    public void setExerciseDetailState(@NonNull ExerciseDetailState state) {
+        this.state = state;
+        loadExercise(state.getExercise());
     }
 
     private void loadExercise(@NonNull Exercise exercise) {
@@ -47,14 +46,14 @@ public class ExerciseDetailPresenter extends BasePresenter<ExerciseDetailView> {
     }
 
     private void onExerciseLoaded(@NonNull Exercise exercise) {
-        this.exercise = exercise;
-        getViewState().showExercise(exercise);
+        this.state = state.toBuilder().exercise(exercise).build();
+        getViewState().showExercise(state);
     }
 
     public void addConcreteExercise() {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
-                        exerciseInteractor.getDefaultConcreteExercise(exercise),
+                        exerciseInteractor.getDefaultConcreteExercise(state.getChild(), state.getExercise()),
                         exerciseInteractor.getStartTimeOnce(),
                         exerciseInteractor.getFinishTimeOnce(),
                         (defaultDoctorVisit, startTime, finishTime) -> ConcreteExerciseParameters.builder()

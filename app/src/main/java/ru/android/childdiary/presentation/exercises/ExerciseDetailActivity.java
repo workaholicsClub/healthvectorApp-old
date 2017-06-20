@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -16,6 +17,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
@@ -39,9 +41,9 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
     @InjectPresenter
     ExerciseDetailPresenter presenter;
 
-    public static Intent getIntent(Context context, @NonNull Exercise exercise) {
+    public static Intent getIntent(Context context, @NonNull ExerciseDetailState state) {
         return new Intent(context, ExerciseDetailActivity.class)
-                .putExtra(ExtraConstants.EXTRA_EXERCISE, exercise);
+                .putExtra(ExtraConstants.EXTRA_STATE, state);
     }
 
     @Override
@@ -54,9 +56,10 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        Exercise exercise = (Exercise) getIntent().getSerializableExtra(ExtraConstants.EXTRA_EXERCISE);
-        presenter.setExercise(exercise);
-        showExercise(exercise);
+        ExerciseDetailState state = (ExerciseDetailState) getIntent().getSerializableExtra(ExtraConstants.EXTRA_STATE);
+        changeThemeIfNeeded(state.getChild());
+        presenter.setExerciseDetailState(state);
+        showExercise(state);
     }
 
     @Override
@@ -88,7 +91,10 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
     }
 
     @Override
-    public void showExercise(@NonNull Exercise exercise) {
+    public void showExercise(@NonNull ExerciseDetailState state) {
+        Child child = state.getChild();
+        buttonAdd.setVisibility(child.getId() == null ? View.GONE : View.VISIBLE);
+        Exercise exercise = state.getExercise();
         exerciseNameView.setText(exercise.getName());
         exerciseDescriptionView.setText(exercise.getDescription());
     }

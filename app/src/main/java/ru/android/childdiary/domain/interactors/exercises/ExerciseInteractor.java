@@ -24,6 +24,7 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
@@ -59,21 +60,20 @@ public class ExerciseInteractor {
         return exerciseRepository.getExercise(exercise);
     }
 
-    public Observable<List<Exercise>> getExercises() {
-        return exerciseRepository.getExercises();
+    public Observable<List<Exercise>> getExercises(@NonNull Child child) {
+        return exerciseRepository.getExercises(child);
     }
 
     public Observable<List<Exercise>> updateExercisesIfNeeded() {
         return exerciseRepository.updateExercisesIfNeeded();
     }
 
-    public Observable<ConcreteExercise> getDefaultConcreteExercise(@NonNull Exercise exercise) {
+    public Observable<ConcreteExercise> getDefaultConcreteExercise(@NonNull Child child, @NonNull Exercise exercise) {
         return Observable.combineLatest(
-                childRepository.getActiveChildOnce(),
                 getDefaultRepeatParameters(),
                 Observable.just(DateTime.now()),
                 calendarRepository.getDefaultNotifyTimeInMinutes(EventType.EXERCISE),
-                (child, repeatParameters, dateTime, minutes) -> ConcreteExercise.builder()
+                (repeatParameters, dateTime, minutes) -> ConcreteExercise.builder()
                         .child(child)
                         .exercise(exercise)
                         .repeatParameters(repeatParameters)

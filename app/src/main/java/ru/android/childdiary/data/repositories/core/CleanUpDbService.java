@@ -25,6 +25,7 @@ import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -44,7 +45,6 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
-import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class CleanUpDbService extends EventsDbService {
@@ -273,6 +273,12 @@ public class CleanUpDbService extends EventsDbService {
                 Long id = getMedicineTakingId(medicineTakingEvent.getMedicineTaking());
                 MedicineTakingEntity medicineTakingEntity = findMedicineTakingEntity(id);
                 deleteIfPossible(medicineTakingEntity, imageFilesToDelete);
+            } else if (event instanceof ExerciseEvent) {
+                ExerciseEvent exerciseEvent = (ExerciseEvent) event;
+                imageFilesToDelete.add(exerciseEvent.getImageFileName());
+                Long id = getConcreteExerciseId(exerciseEvent.getConcreteExercise());
+                ConcreteExerciseEntity concreteExerciseEntity = findConcreteExerciseEntity(id);
+                deleteIfPossible(concreteExerciseEntity, imageFilesToDelete);
             }
             return imageFilesToDelete;
         }));
@@ -293,11 +299,9 @@ public class CleanUpDbService extends EventsDbService {
 
     private void deleteIfPossible(DoctorVisitEntity doctorVisitEntity,
                                   List<String> imageFilesToDelete) {
-        if (ObjectUtils.isTrue(doctorVisitEntity.isDeleted())) {
-            val events = getDoctorVisitEvents(doctorVisitEntity.getId());
-            if (events.isEmpty()) {
-                delete(doctorVisitEntity, imageFilesToDelete);
-            }
+        val events = getDoctorVisitEvents(doctorVisitEntity.getId());
+        if (events.isEmpty()) {
+            delete(doctorVisitEntity, imageFilesToDelete);
         }
     }
 
@@ -316,11 +320,9 @@ public class CleanUpDbService extends EventsDbService {
 
     private void deleteIfPossible(MedicineTakingEntity medicineTakingEntity,
                                   List<String> imageFilesToDelete) {
-        if (ObjectUtils.isTrue(medicineTakingEntity.isDeleted())) {
-            val events = getMedicineTakingEvents(medicineTakingEntity.getId());
-            if (events.isEmpty()) {
-                delete(medicineTakingEntity, imageFilesToDelete);
-            }
+        val events = getMedicineTakingEvents(medicineTakingEntity.getId());
+        if (events.isEmpty()) {
+            delete(medicineTakingEntity, imageFilesToDelete);
         }
     }
 
@@ -339,11 +341,9 @@ public class CleanUpDbService extends EventsDbService {
 
     private void deleteIfPossible(ConcreteExerciseEntity concreteExerciseEntity,
                                   List<String> imageFilesToDelete) {
-        if (ObjectUtils.isTrue(concreteExerciseEntity.isDeleted())) {
-            val events = getExerciseEvents(concreteExerciseEntity.getId());
-            if (events.isEmpty()) {
-                delete(concreteExerciseEntity, imageFilesToDelete);
-            }
+        val events = getExerciseEvents(concreteExerciseEntity.getId());
+        if (events.isEmpty()) {
+            delete(concreteExerciseEntity, imageFilesToDelete);
         }
     }
 

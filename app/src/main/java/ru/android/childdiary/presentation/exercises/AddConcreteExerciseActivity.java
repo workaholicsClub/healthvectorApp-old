@@ -36,6 +36,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeVie
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcreteExerciseView, ConcreteExercise>
@@ -93,6 +94,12 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.export_to_calendar);
+    }
+
+    @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
     @Override
