@@ -21,7 +21,7 @@ android {
         applicationId "ru.android.childdiary"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 20
+        versionCode 21
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -220,6 +220,4 @@ dependencies {
     compile "com.xiaofeng.android:flowlayoutmanager:1.2.3.2"
 
     compile "uk.co.chrisjenx:calligraphy:2.2.0"
-
-    compile "com.google.android.gms:play-services-drive:11.0.1"
 }
