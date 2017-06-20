@@ -17,18 +17,8 @@ class CrashReportSystem {
         Crashlytics.logException(throwable);
     }
 
-    public static void log(int priority, String tag, String msg) {
+    public static void log(String msg) {
         // log to Crashlytics or Firebase
-        Crashlytics.log(priority, tag, msg);
-    }
-
-    /**
-     * Выводит ли система отчета об ошибках сообщение в logcat.
-     * Чтобы избежать дублирования сообщений в logcat.
-     *
-     * @return {@code true}, если выводит сообщения в logcat, {@code false} -- иначе
-     */
-    public static boolean isWritingToLogCat() {
-        return true;
+        Crashlytics.log(msg);
     }
 }

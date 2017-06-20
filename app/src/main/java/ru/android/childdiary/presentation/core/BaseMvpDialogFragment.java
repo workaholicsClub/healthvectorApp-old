@@ -87,7 +87,7 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
     @Override
     public void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.SHOW_ERROR_DIALOGS) {
             new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                     .setMessage(e.toString())
                     .setPositiveButton(R.string.ok, null)

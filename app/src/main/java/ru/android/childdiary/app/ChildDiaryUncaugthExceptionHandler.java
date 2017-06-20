@@ -19,10 +19,6 @@ public class ChildDiaryUncaugthExceptionHandler implements Thread.UncaughtExcept
     private final Context context;
     private final boolean dumpOutOfMemory;
 
-    public ChildDiaryUncaugthExceptionHandler(Context context) {
-        this(context, false);
-    }
-
     public ChildDiaryUncaugthExceptionHandler(Context context, boolean dumpOutOfMemory) {
         this.context = context;
         this.dumpOutOfMemory = dumpOutOfMemory;
