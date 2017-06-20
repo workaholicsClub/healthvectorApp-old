@@ -1,6 +1,7 @@
 package ru.android.childdiary.domain.interactors.core.settings;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.LocalTime;
 
@@ -19,7 +20,11 @@ public interface SettingsRepository {
 
     Observable<LocalTime> getFinishTimeOnce();
 
-    Observable<LocalTime> setStartTimeObservable(@NonNull LocalTime startTime);
+    Observable<String> getAccountName();
 
-    Observable<LocalTime> setFinishTimeObservable(@NonNull LocalTime finishTime);
+    void setAccountName(@Nullable String accountName);
+
+    Observable<Boolean> getIsCloudShown();
+
+    void setIsCloudShown(boolean value);
 }

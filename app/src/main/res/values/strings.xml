@@ -237,6 +237,10 @@
     <string name="the_value_already_exists">Такое значение уже есть в списке</string>
     <string name="no_exercises">Не удалось загрузить занятия</string>
     <string name="exercise">Занятие</string>
+    <string name="cloud_text">Сохраните свои данные с Google Drive</string>
+    <string name="cloud_login_text">Войдите в аккаунт Google Drive</string>
+    <string name="cloud_backup_text">Настройте синхронизацию</string>
+    <string name="cloud_restore_text">Восстанавливайте данные на любом устройстве</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

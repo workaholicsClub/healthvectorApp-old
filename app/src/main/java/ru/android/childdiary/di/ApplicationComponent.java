@@ -6,6 +6,8 @@ import dagger.Component;
 import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.di.modules.DbModule;
 import ru.android.childdiary.di.modules.NetworkModule;
+import ru.android.childdiary.presentation.cloud.CloudActivity;
+import ru.android.childdiary.presentation.cloud.CloudPresenter;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
@@ -148,6 +150,8 @@ public interface ApplicationComponent {
 
     void inject(AddConcreteExercisePresenter presenter);
 
+    void inject(CloudPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -190,6 +194,8 @@ public interface ApplicationComponent {
     void inject(ExerciseDetailActivity activity);
 
     void inject(AddConcreteExerciseActivity activity);
+
+    void inject(CloudActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

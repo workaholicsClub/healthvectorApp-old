@@ -1,8 +1,7 @@
-package ru.android.childdiary.presentation.core;
-
-import android.support.annotation.NonNull;
+package ru.android.childdiary.presentation.core.permissions;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 
 @Value
@@ -10,7 +9,9 @@ import lombok.Value;
 public class RequestPermissionInfo {
     @NonNull
     String permission;
-    int titleResourceId;
-    int textResourceId;
+    @NonNull
+    String title;
+    @NonNull
+    String text;
     int requestCode;
 }

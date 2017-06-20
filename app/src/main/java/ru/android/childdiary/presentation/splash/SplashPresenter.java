@@ -1,5 +1,7 @@
 package ru.android.childdiary.presentation.splash;
 
+import android.text.TextUtils;
+
 import com.arellomobile.mvp.InjectViewState;
 
 import java.util.concurrent.TimeUnit;
@@ -9,6 +11,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.core.InitializationInteractor;
@@ -23,6 +26,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     @Inject
     InitializationInteractor initializationInteractor;
+
+    @Inject
+    SettingsDataRepository settingsRepository;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -39,9 +45,20 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 initializationInteractor.startUpdateDataService(),
                 childInteractor.getActiveChildOnce()
                         .doOnNext(child -> logger.debug("active child: " + child)),
-                (zero, isUpdateServiceStarted, child) -> child)
+                settingsRepository.getAccountName(),
+                settingsRepository.getIsCloudShown(),
+                (zero, isUpdateServiceStarted, child, accountName, isCloudShown) -> TextUtils.isEmpty(accountName) && !isCloudShown)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(child -> getViewState().navigateToMain(), this::onUnexpectedError));
+                .subscribe(this::onFinished, this::onUnexpectedError));
+    }
+
+    private void onFinished(boolean showCloud) {
+        if (showCloud) {
+            // TODO: set is cloud shown to true
+            getViewState().navigateToCloud();
+        } else {
+            getViewState().navigateToMain();
+        }
     }
 }

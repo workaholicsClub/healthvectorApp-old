@@ -9,6 +9,8 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -33,6 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".presentation.cloud.CloudActivity" />
         <activity
             android:name=".presentation.onboarding.IntroActivity"
             android:parentActivityName=".presentation.main.MainActivity">

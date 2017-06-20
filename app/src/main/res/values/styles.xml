@@ -198,6 +198,18 @@
         <item name="fontPath">@string/font_path_regular</item>
     </style>
 
+    <style name="CloudTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">@dimen/text_size_cloud</item>
+        <item name="fontPath">@string/font_path_regular</item>
+    </style>
+
+    <style name="CloudLargeTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">@dimen/text_size_cloud_large</item>
+        <item name="fontPath">@string/font_path_regular</item>
+    </style>
+
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
     </style>
