@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.di.modules.AvailabilityModule;
+import ru.android.childdiary.di.modules.CloudModule;
 import ru.android.childdiary.di.modules.DbModule;
 import ru.android.childdiary.di.modules.NetworkModule;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
@@ -76,7 +77,8 @@ import ru.android.childdiary.services.UpdateDataService;
 @Component(modules = {ApplicationModule.class,
         DbModule.class,
         NetworkModule.class,
-        AvailabilityModule.class})
+        AvailabilityModule.class,
+        CloudModule.class})
 @Singleton
 public interface ApplicationComponent {
     // presenters

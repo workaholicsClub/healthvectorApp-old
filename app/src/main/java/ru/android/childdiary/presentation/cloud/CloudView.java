@@ -3,7 +3,6 @@ package ru.android.childdiary.presentation.cloud;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 import ru.android.childdiary.presentation.core.BaseView;
 
@@ -12,7 +11,7 @@ public interface CloudView extends BaseView {
     void requestPermission();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void chooseAccount(GoogleAccountCredential credential);
+    void chooseAccount();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void acquireGooglePlayServices();

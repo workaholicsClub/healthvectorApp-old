@@ -1,16 +1,9 @@
 package ru.android.childdiary.presentation.cloud;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.arellomobile.mvp.InjectViewState;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
-
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -21,17 +14,12 @@ import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.data.availability.NetworkAvailability;
 import ru.android.childdiary.data.availability.PlayServicesAvailability;
-import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
 public class CloudPresenter extends BasePresenter<CloudView> {
-    private static final String[] SCOPES = {DriveScopes.DRIVE_APPDATA};
-
-    @Inject
-    Context context;
-
     @Inject
     NetworkAvailability networkAvailability;
 
@@ -39,22 +27,13 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     PlayServicesAvailability playServicesAvailability;
 
     @Inject
-    SettingsDataRepository settingsRepository;
+    CloudInteractor cloudInteractor;
 
-    private GoogleAccountCredential credential;
     private PreConditions preConditions;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
-    }
-
-    @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
-
-        credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
     }
 
     public void later() {
@@ -70,7 +49,7 @@ public class CloudPresenter extends BasePresenter<CloudView> {
                 Observable.combineLatest(
                         playServicesAvailability.isPlayServicesAvailable().toObservable(),
                         networkAvailability.isNetworkAvailable().toObservable(),
-                        settingsRepository.getAccountNameOnce(),
+                        cloudInteractor.getAccountNameOnce(),
                         (isPlayServicesAvailable, isNetworkAvailable, accountName) -> PreConditions.builder()
                                 .isPlayServicesAvailable(isPlayServicesAvailable)
                                 .isNetworkAvailable(isNetworkAvailable).accountName(accountName)
@@ -87,16 +66,16 @@ public class CloudPresenter extends BasePresenter<CloudView> {
         } else if (!preConditions.isNetworkAvailable()) {
             getViewState().connectionUnavailable();
         } else {
-            loadBackup();
+            checkIsBackupAvailable();
         }
     }
 
     public void permissionGranted() {
         String accountName = preConditions.getAccountName();
         if (TextUtils.isEmpty(accountName)) {
-            getViewState().chooseAccount(credential);
+            getViewState().chooseAccount();
         } else {
-            loadBackup();
+            checkPreConditions();
         }
     }
 
@@ -104,14 +83,13 @@ public class CloudPresenter extends BasePresenter<CloudView> {
         getViewState().navigateToMain();
     }
 
-    private void loadBackup() {
-        credential.setSelectedAccountName(preConditions.getAccountName());
+    private void checkIsBackupAvailable() {
         getViewState().showBackupLoading(true);
         unsubscribeOnDestroy(
-                Observable.timer(5, TimeUnit.SECONDS)
+                cloudInteractor.checkIsBackupAvailable()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext(result -> getViewState().showBackupLoading(false))
+                        .doOnSuccess(result -> getViewState().showBackupLoading(false))
                         .doOnError(throwable -> getViewState().showBackupLoading(false))
                         .subscribe(result -> {
                                     getViewState().navigateToMain();
@@ -124,8 +102,8 @@ public class CloudPresenter extends BasePresenter<CloudView> {
         checkPreConditions();
     }
 
-    public void accountChosen(@Nullable String account) {
-        settingsRepository.setAccountName(account);
+    public void accountChosen(@Nullable String accountName) {
+        cloudInteractor.setAccountName(accountName);
         checkPreConditions();
     }
 

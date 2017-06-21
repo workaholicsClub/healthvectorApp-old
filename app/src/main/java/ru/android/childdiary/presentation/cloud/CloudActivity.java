@@ -13,6 +13,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
+import javax.inject.Inject;
+
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -30,6 +32,11 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
 
     @InjectPresenter
     CloudPresenter presenter;
+
+    // используется здесь только для создания диалога выбора аккаунта
+    // TODO: диалог выбора аккаунта переделать на более красивый
+    @Inject
+    GoogleAccountCredential credential;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, CloudActivity.class);
@@ -85,7 +92,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
     }
 
     @Override
-    public void chooseAccount(GoogleAccountCredential credential) {
+    public void chooseAccount() {
         startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 

@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.converters;
+package ru.android.childdiary.data.db.converters;
 
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;

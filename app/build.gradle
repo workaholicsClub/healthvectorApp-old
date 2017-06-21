@@ -67,10 +67,9 @@ android {
             buildConfigField "boolean", "PRINT_HTTP_LOGS", "true"
             buildConfigField "boolean", "PRINT_DB_LOGS", "true"
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
+            buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "true"
         }
         qa {
-            initWith debug
-
             signingConfig signingConfigs.debug
 
             shrinkResources true
@@ -86,6 +85,7 @@ android {
             buildConfigField "boolean", "PRINT_HTTP_LOGS", "true"
             buildConfigField "boolean", "PRINT_DB_LOGS", "true"
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
+            buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
         }
         release {
             //debuggable true
@@ -105,6 +105,7 @@ android {
             buildConfigField "boolean", "PRINT_HTTP_LOGS", "false"
             buildConfigField "boolean", "PRINT_DB_LOGS", "false"
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "false"
+            buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
         }
     }
 }

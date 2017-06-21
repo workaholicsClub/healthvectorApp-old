@@ -11,8 +11,9 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
+import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.core.InitializationInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -28,7 +29,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     InitializationInteractor initializationInteractor;
 
     @Inject
-    SettingsDataRepository settingsRepository;
+    CloudInteractor cloudInteractor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -45,9 +46,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 initializationInteractor.startUpdateDataService(),
                 childInteractor.getActiveChildOnce()
                         .doOnNext(child -> logger.debug("active child: " + child)),
-                settingsRepository.getAccountNameOnce()
+                cloudInteractor.getAccountNameOnce()
                         .doOnNext(accountName -> logger.debug("account name: " + accountName)),
-                settingsRepository.getIsCloudShownOnce()
+                cloudInteractor.getIsCloudShownOnce()
                         .doOnNext(isCloudShown -> logger.debug("is cloud shown: " + isCloudShown)),
                 (zero, isUpdateServiceStarted, child, accountName, isCloudShown) -> TextUtils.isEmpty(accountName) && !isCloudShown)
                 .subscribeOn(Schedulers.io())
@@ -56,8 +57,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void onFinished(boolean showCloud) {
-        if (showCloud) {
-            // TODO: set is cloud shown to true
+        if (showCloud || BuildConfig.SHOW_CLOUD_ON_EACH_START) {
+            cloudInteractor.setIsCloudShown(true);
             getViewState().navigateToCloud();
         } else {
             getViewState().navigateToMain();
