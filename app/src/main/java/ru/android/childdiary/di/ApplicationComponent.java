@@ -4,13 +4,14 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import ru.android.childdiary.di.modules.ApplicationModule;
+import ru.android.childdiary.di.modules.AvailabilityModule;
 import ru.android.childdiary.di.modules.DbModule;
 import ru.android.childdiary.di.modules.NetworkModule;
-import ru.android.childdiary.presentation.cloud.CloudActivity;
-import ru.android.childdiary.presentation.cloud.CloudPresenter;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
+import ru.android.childdiary.presentation.cloud.CloudActivity;
+import ru.android.childdiary.presentation.cloud.CloudPresenter;
 import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
@@ -72,7 +73,10 @@ import ru.android.childdiary.presentation.splash.SplashPresenter;
 import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.services.UpdateDataService;
 
-@Component(modules = {ApplicationModule.class, DbModule.class, NetworkModule.class})
+@Component(modules = {ApplicationModule.class,
+        DbModule.class,
+        NetworkModule.class,
+        AvailabilityModule.class})
 @Singleton
 public interface ApplicationComponent {
     // presenters

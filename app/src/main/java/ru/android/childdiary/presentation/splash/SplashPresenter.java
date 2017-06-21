@@ -45,8 +45,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 initializationInteractor.startUpdateDataService(),
                 childInteractor.getActiveChildOnce()
                         .doOnNext(child -> logger.debug("active child: " + child)),
-                settingsRepository.getAccountName(),
-                settingsRepository.getIsCloudShown(),
+                settingsRepository.getAccountNameOnce()
+                        .doOnNext(accountName -> logger.debug("account name: " + accountName)),
+                settingsRepository.getIsCloudShownOnce()
+                        .doOnNext(isCloudShown -> logger.debug("is cloud shown: " + isCloudShown)),
                 (zero, isUpdateServiceStarted, child, accountName, isCloudShown) -> TextUtils.isEmpty(accountName) && !isCloudShown)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

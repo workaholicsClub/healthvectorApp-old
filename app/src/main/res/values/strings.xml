@@ -30,6 +30,8 @@
     <string name="save">Сохранить</string>
     <string name="request_read_external_storage_permission_title">Запрос на чтение SD-карты</string>
     <string name="request_read_external_storage_permission_text">Необходимо для чтения файлов с SD-карты.</string>
+    <string name="request_get_accounts_permission_title">Запрос на получение аккаунта</string>
+    <string name="request_get_accounts_permission_text">Необходимо для создания бэкапов данных приложения в Google Drive.</string>
     <string name="camera_not_available">Камера не доступна</string>
     <string name="select_image">Выберите изображение</string>
     <string name="failed_to_create_file_for_camera">Не удалось создать файл для фотографии</string>
@@ -241,6 +243,12 @@
     <string name="cloud_login_text">Войдите в аккаунт Google Drive</string>
     <string name="cloud_backup_text">Настройте синхронизацию</string>
     <string name="cloud_restore_text">Восстанавливайте данные на любом устройстве</string>
+    <string name="bind_account">Привязать аккаунт</string>
+    <string name="later">Позже</string>
+    <string name="bind_account_connection_unavailable_dialog_title">Нет подключения к Интернету</string>
+    <string name="bind_account_connection_unavailable_dialog_text">Подключите Интернет или попробуйте позже.</string>
+    <string name="try_again">Попробовать еще раз</string>
+    <string name="backup_loading">Проверка наличия сохраненных бэкапов&#8230;</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

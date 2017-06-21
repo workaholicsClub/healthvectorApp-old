@@ -29,6 +29,7 @@ public class SettingsDataRepository implements SettingsRepository {
 
     private static final LocalTime DEFAULT_START_TIME = new LocalTime(8, 0);
     private static final LocalTime DEFAULT_FINISH_TIME = new LocalTime(22, 0);
+    private static final String DEFAULT_ACCOUNT_NAME = "";
 
     private final RxSharedPreferences preferences;
 
@@ -71,12 +72,17 @@ public class SettingsDataRepository implements SettingsRepository {
 
     @Override
     public Observable<String> getAccountName() {
-        return preferences.getString(KEY_ACCOUNT_NAME, "").asObservable();
+        return preferences.getString(KEY_ACCOUNT_NAME, DEFAULT_ACCOUNT_NAME).asObservable();
     }
 
     @Override
     public void setAccountName(@Nullable String accountName) {
         preferences.getString(KEY_ACCOUNT_NAME).set(accountName);
+    }
+
+    @Override
+    public Observable<String> getAccountNameOnce() {
+        return getAccountName().first(DEFAULT_ACCOUNT_NAME).toObservable();
     }
 
     @Override
@@ -87,6 +93,11 @@ public class SettingsDataRepository implements SettingsRepository {
     @Override
     public void setIsCloudShown(boolean value) {
         preferences.getBoolean(KEY_IS_CLOUD_SHOWN).set(value);
+    }
+
+    @Override
+    public Observable<Boolean> getIsCloudShownOnce() {
+        return getIsCloudShown().first(false).toObservable();
     }
 
     private static class LocalTimeAdapter implements Preference.Adapter<LocalTime> {
