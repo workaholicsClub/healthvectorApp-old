@@ -34,7 +34,7 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
         implements BaseView, PermissionHelper.PermissionListener {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
-    protected final PermissionHelper permissionHelper = new FragmentPermissionHelper(this);
+    protected PermissionHelper permissionHelper;
 
     private Unbinder unbinder;
 
@@ -44,6 +44,7 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
         logger.debug("onCreate");
         ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
         injectFragment(component);
+        permissionHelper = new FragmentPermissionHelper(this);
     }
 
     @Nullable

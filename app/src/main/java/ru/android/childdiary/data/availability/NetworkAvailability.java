@@ -22,7 +22,7 @@ public class NetworkAvailability {
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    public Single<Boolean> isNetworkAvailable() {
+    public Single<Boolean> checkNetworkAvailability() {
         return Single.fromCallable(this::isNetworkConnected);
     }
 }

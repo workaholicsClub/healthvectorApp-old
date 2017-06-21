@@ -2,7 +2,6 @@ package ru.android.childdiary.data.availability;
 
 import android.content.Context;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import javax.inject.Inject;
@@ -17,13 +16,13 @@ public class PlayServicesAvailability {
         this.context = context;
     }
 
-    private boolean isGooglePlayServicesAvailable() {
+    private int getPlayServicesAvailabilityResult() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(context);
-        return connectionStatusCode == ConnectionResult.SUCCESS;
+        return connectionStatusCode;
     }
 
-    public Single<Boolean> isPlayServicesAvailable() {
-        return Single.fromCallable(this::isGooglePlayServicesAvailable);
+    public Single<Integer> checkPlayServicesAvailability() {
+        return Single.fromCallable(this::getPlayServicesAvailabilityResult);
     }
 }

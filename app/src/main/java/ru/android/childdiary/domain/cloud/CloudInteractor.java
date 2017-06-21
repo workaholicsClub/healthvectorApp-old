@@ -35,7 +35,6 @@ public class CloudInteractor {
     }
 
     public void setAccountName(@Nullable String accountName) {
-        credential.setSelectedAccountName(accountName);
         settingsRepository.setAccountName(accountName);
     }
 
@@ -48,7 +47,16 @@ public class CloudInteractor {
     }
 
     public Single<Boolean> checkIsBackupAvailable() {
-        return restoreService.checkIsBackupAvailable();
+        return updateCredential()
+                .flatMap(accountName -> restoreService.checkIsBackupAvailable());
+    }
+
+    private Single<Boolean> updateCredential() {
+        return Single.fromCallable(() -> {
+            String accountName = settingsRepository.getAccountName().blockingFirst();
+            credential.setSelectedAccountName(accountName);
+            return true;
+        });
     }
 
     public void download() {

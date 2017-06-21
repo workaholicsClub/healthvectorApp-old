@@ -56,7 +56,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
 
     @OnClick(R.id.buttonLater)
     void onLaterClick() {
-        presenter.later();
+        presenter.cancel();
     }
 
     @OnClick(R.id.buttonBindAccount)
@@ -119,22 +119,21 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
     }
 
     @Override
-    public void acquireGooglePlayServices() {
+    public void showPlayServicesErrorDialog(int connectionStatusCode) {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
-            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
+            Dialog dialog = apiAvailability.getErrorDialog(
+                    this,
+                    connectionStatusCode,
+                    REQUEST_GOOGLE_PLAY_SERVICES);
+            dialog.show();
+        } else {
+            new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                    .setMessage(R.string.user_unrecoverable_error_dialog_text)
+                    .setPositiveButton(R.string.ok,
+                            (dialog, which) -> presenter.cancel())
+                    .show();
         }
-    }
-
-    private void showGooglePlayServicesAvailabilityErrorDialog(
-            final int connectionStatusCode) {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        Dialog dialog = apiAvailability.getErrorDialog(
-                this,
-                connectionStatusCode,
-                REQUEST_GOOGLE_PLAY_SERVICES);
-        dialog.show();
     }
 
     @Override
@@ -144,8 +143,8 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
                 .setMessage(R.string.bind_account_connection_unavailable_dialog_text)
                 .setPositiveButton(R.string.try_again,
                         (DialogInterface dialog, int which) -> presenter.bindAccount())
-                .setNegativeButton(R.string.later,
-                        (dialog, which) -> presenter.later())
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> presenter.cancel())
                 .show();
     }
 
@@ -158,6 +157,29 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
         } else {
             hideProgress(TAG_PROGRESS_DIALOG_BACKUP_LOADING);
         }
+    }
+
+    @Override
+    public void foundBackup() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.found_backup_dialog_title)
+                .setMessage(R.string.found_backup_dialog_text)
+                .setPositiveButton(R.string.restore,
+                        (DialogInterface dialog, int which) -> presenter.restoreFromBackup())
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> presenter.cancel())
+                .show();
+    }
+
+    @Override
+    public void failedToCheckBackupAvailability() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.google_drive_error_dialog_text)
+                .setPositiveButton(R.string.try_again,
+                        (DialogInterface dialog, int which) -> presenter.bindAccount())
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> presenter.cancel())
+                .show();
     }
 
     @Override

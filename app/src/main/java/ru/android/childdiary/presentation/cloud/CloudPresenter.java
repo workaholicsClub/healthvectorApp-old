@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.google.android.gms.common.ConnectionResult;
 
 import javax.inject.Inject;
 
@@ -21,10 +22,10 @@ import ru.android.childdiary.presentation.core.BasePresenter;
 @InjectViewState
 public class CloudPresenter extends BasePresenter<CloudView> {
     @Inject
-    NetworkAvailability networkAvailability;
+    PlayServicesAvailability playServicesAvailability;
 
     @Inject
-    PlayServicesAvailability playServicesAvailability;
+    NetworkAvailability networkAvailability;
 
     @Inject
     CloudInteractor cloudInteractor;
@@ -36,7 +37,7 @@ public class CloudPresenter extends BasePresenter<CloudView> {
         applicationComponent.inject(this);
     }
 
-    public void later() {
+    public void cancel() {
         getViewState().navigateToMain();
     }
 
@@ -44,15 +45,22 @@ public class CloudPresenter extends BasePresenter<CloudView> {
         checkPreConditions();
     }
 
+    public void restoreFromBackup() {
+// TODO:        cloudInteractor.restore();
+    }
+
     private void checkPreConditions() {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
-                        playServicesAvailability.isPlayServicesAvailable().toObservable(),
-                        networkAvailability.isNetworkAvailable().toObservable(),
+                        playServicesAvailability.checkPlayServicesAvailability().toObservable(),
+                        networkAvailability.checkNetworkAvailability().toObservable(),
                         cloudInteractor.getAccountNameOnce(),
-                        (isPlayServicesAvailable, isNetworkAvailable, accountName) -> PreConditions.builder()
-                                .isPlayServicesAvailable(isPlayServicesAvailable)
-                                .isNetworkAvailable(isNetworkAvailable).accountName(accountName)
+                        (connectionStatusCode, isNetworkAvailable, accountName) -> PreConditions.builder()
+                                .isPlayServicesAvailable(connectionStatusCode == ConnectionResult.SUCCESS)
+                                .connectionStatusCode(connectionStatusCode)
+                                .isNetworkAvailable(isNetworkAvailable)
+                                .isAccountNameAvailable(!TextUtils.isEmpty(accountName))
+                                .accountName(accountName)
                                 .build())
                         .subscribe(this::processPreConditions, this::onUnexpectedError));
     }
@@ -60,8 +68,8 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     private void processPreConditions(PreConditions preConditions) {
         this.preConditions = preConditions;
         if (!preConditions.isPlayServicesAvailable()) {
-            getViewState().acquireGooglePlayServices();
-        } else if (TextUtils.isEmpty(preConditions.getAccountName())) {
+            getViewState().showPlayServicesErrorDialog(preConditions.getConnectionStatusCode());
+        } else if (!preConditions.isAccountNameAvailable()) {
             getViewState().requestPermission();
         } else if (!preConditions.isNetworkAvailable()) {
             getViewState().connectionUnavailable();
@@ -71,8 +79,7 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     }
 
     public void permissionGranted() {
-        String accountName = preConditions.getAccountName();
-        if (TextUtils.isEmpty(accountName)) {
+        if (!preConditions.isAccountNameAvailable()) {
             getViewState().chooseAccount();
         } else {
             checkPreConditions();
@@ -89,13 +96,18 @@ public class CloudPresenter extends BasePresenter<CloudView> {
                 cloudInteractor.checkIsBackupAvailable()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSuccess(result -> getViewState().showBackupLoading(false))
+                        .doOnSuccess(isBackupAvailable -> getViewState().showBackupLoading(false))
                         .doOnError(throwable -> getViewState().showBackupLoading(false))
-                        .subscribe(result -> {
-                                    getViewState().navigateToMain();
-                                    // TODO: диалог о предложении восстановиться или переход в главное окно
+                        .doOnError(throwable -> logger.error("checkIsBackupAvailable", throwable))
+                        .subscribe(isBackupAvailable -> {
+                                    if (isBackupAvailable) {
+                                        getViewState().foundBackup();
+                                    } else {
+                                        getViewState().navigateToMain();
+                                    }
                                 },
-                                this::onUnexpectedError));
+                                throwable ->
+                                        getViewState().failedToCheckBackupAvailability()));
     }
 
     public void playServicesResolved() {
@@ -112,6 +124,8 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     private static class PreConditions {
         boolean isPlayServicesAvailable;
         boolean isNetworkAvailable;
+        boolean isAccountNameAvailable;
+        int connectionStatusCode;
         String accountName;
     }
 }

@@ -14,13 +14,19 @@ public interface CloudView extends BaseView {
     void chooseAccount();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void acquireGooglePlayServices();
+    void showPlayServicesErrorDialog(int connectionStatusCode);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void connectionUnavailable();
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showBackupLoading(boolean loading);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void foundBackup();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void failedToCheckBackupAvailability();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToMain();

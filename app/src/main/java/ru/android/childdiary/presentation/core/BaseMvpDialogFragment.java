@@ -33,13 +33,19 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
         implements BaseView, PermissionHelper.PermissionListener {
     protected final Logger logger = LoggerFactory.getLogger(toString());
 
-    protected final PermissionHelper permissionHelper = new DialogFragmentPermissionHelper(this);
+    protected PermissionHelper permissionHelper;
 
     protected T dialogArguments;
 
     @Nullable
     @BindView(R.id.dummy)
     View dummy;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        permissionHelper = new DialogFragmentPermissionHelper(this);
+    }
 
     public void showAllowingStateLoss(FragmentManager manager, String tag, T dialogArguments) {
         Bundle data = new Bundle();
