@@ -6,13 +6,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 import javax.inject.Inject;
 
@@ -22,12 +22,14 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.presentation.main.MainActivity;
+import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class CloudActivity extends BaseMvpActivity implements CloudView {
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1001;
-    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
+    private static final int REQUEST_AUTHORIZATION = 1002;
+    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     private static final String TAG_PROGRESS_DIALOG_BACKUP_LOADING = "TAG_PROGRESS_DIALOG_BACKUP_LOADING";
     private static final String TAG_PROGRESS_DIALOG_BACKUP_RESTORING = "TAG_PROGRESS_DIALOG_BACKUP_RESTORING";
@@ -35,10 +37,8 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
     @InjectPresenter
     CloudPresenter presenter;
 
-    // используется здесь только для создания диалога выбора аккаунта
-    // TODO: диалог выбора аккаунта переделать на более красивый
     @Inject
-    GoogleAccountCredential credential;
+    AccountChooserPicker accountChooserPicker;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, CloudActivity.class);
@@ -94,8 +94,8 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
     }
 
     @Override
-    public void chooseAccount() {
-        startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+    public void chooseAccount(@Nullable String selectedAccountName) {
+        accountChooserPicker.show(this, REQUEST_ACCOUNT_PICKER, selectedAccountName);
     }
 
     @Override
@@ -103,11 +103,6 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_GOOGLE_PLAY_SERVICES:
-                if (resultCode == RESULT_OK) {
-                    presenter.playServicesResolved();
-                }
-                break;
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK) {
                     String accountName = null;
@@ -115,6 +110,16 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
                         accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     }
                     presenter.accountChosen(accountName);
+                }
+                break;
+            case REQUEST_GOOGLE_PLAY_SERVICES:
+                if (resultCode == RESULT_OK) {
+                    presenter.bindAccount();
+                }
+                break;
+            case REQUEST_AUTHORIZATION:
+                if (resultCode == RESULT_OK) {
+                    presenter.bindAccount();
                 }
                 break;
         }
@@ -139,12 +144,26 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
     }
 
     @Override
-    public void connectionUnavailable() {
+    public void requestAuthorization(Intent intent) {
+        startActivityForResult(intent, REQUEST_AUTHORIZATION);
+    }
+
+    @Override
+    public void connectionUnavailable(@NonNull CloudOperation cloudOperation) {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.bind_account_connection_unavailable_dialog_title)
                 .setMessage(R.string.bind_account_connection_unavailable_dialog_text)
                 .setPositiveButton(R.string.try_again,
-                        (DialogInterface dialog, int which) -> presenter.bindAccount())
+                        (DialogInterface dialog, int which) -> {
+                            switch (cloudOperation) {
+                                case CHECK:
+                                    presenter.checkIsBackupAvailable();
+                                    break;
+                                case RESTORE:
+                                    presenter.restoreFromBackup();
+                                    break;
+                            }
+                        })
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> presenter.moveNext())
                 .show();
@@ -178,7 +197,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.google_drive_error_dialog_text)
                 .setPositiveButton(R.string.try_again,
-                        (DialogInterface dialog, int which) -> presenter.bindAccount())
+                        (DialogInterface dialog, int which) -> presenter.checkIsBackupAvailable())
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> presenter.moveNext())
                 .show();

@@ -18,8 +18,7 @@ public class PlayServicesAvailability {
 
     private int getPlayServicesAvailabilityResult() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(context);
-        return connectionStatusCode;
+        return apiAvailability.isGooglePlayServicesAvailable(context);
     }
 
     public Single<Integer> checkPlayServicesAvailability() {

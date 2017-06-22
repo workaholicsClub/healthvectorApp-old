@@ -17,6 +17,8 @@ import ru.android.childdiary.utils.io.FileUtils;
 import ru.android.childdiary.utils.io.ZipUtils;
 
 public class BackupService extends CloudService {
+    private static final String UPLOAD_FIELDS = "id";
+
     private final Drive drive;
     private final ImagesRepository imagesRepository;
 
@@ -53,10 +55,10 @@ public class BackupService extends CloudService {
             try {
                 File fileMetadata = new File();
                 fileMetadata.setName(zipFile.getName());
-                fileMetadata.setParents(Collections.singletonList("appDataFolder"));
-                FileContent mediaContent = new FileContent("application/zip", zipFile);
+                fileMetadata.setParents(Collections.singletonList(APP_DATA_FOLDER));
+                FileContent mediaContent = new FileContent(CONTENT_TYPE, zipFile);
                 fileMetadata = drive.files().create(fileMetadata, mediaContent)
-                        .setFields("id")
+                        .setFields(UPLOAD_FIELDS)
                         .execute();
 
                 logger.debug("uploaded successfully, file id: " + fileMetadata.getId());

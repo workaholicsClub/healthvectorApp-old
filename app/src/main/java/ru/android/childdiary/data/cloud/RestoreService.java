@@ -23,6 +23,9 @@ import ru.android.childdiary.utils.io.FileUtils;
 import ru.android.childdiary.utils.io.ZipUtils;
 
 public class RestoreService extends CloudService {
+    private static final String SEARCH_QUERY = "name='" + BACKUP_FILE_NAME + "'";
+    private static final String SEARCH_FIELDS = "files(id, name)";
+
     private final Drive drive;
     private final ImagesRepository imagesRepository;
 
@@ -37,9 +40,9 @@ public class RestoreService extends CloudService {
     @Nullable
     private String getBackupFileId() throws IOException {
         FileList response = drive.files().list()
-                .setSpaces("appDataFolder")
-                .setQ("name='backup.zip'")
-                .setFields("files(id, name)")
+                .setSpaces(APP_DATA_FOLDER)
+                .setQ(SEARCH_QUERY)
+                .setFields(SEARCH_FIELDS)
                 .execute();
         List<File> files = response == null ? null : response.getFiles();
         return files == null || files.isEmpty() ? null : files.get(0).getId();

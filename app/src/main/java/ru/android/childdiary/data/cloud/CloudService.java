@@ -16,6 +16,9 @@ abstract class CloudService {
     protected final static String BACKUP_SUFFIX = ".zip";
     protected final static String BACKUP_FILE_NAME = BACKUP_PREFIX + BACKUP_SUFFIX;
 
+    protected final static String APP_DATA_FOLDER = "appDataFolder";
+    protected final static String CONTENT_TYPE = "application/zip";
+
     protected final Logger logger = LoggerFactory.getLogger(toString());
     private final Context context;
 

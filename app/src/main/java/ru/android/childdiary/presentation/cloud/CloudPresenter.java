@@ -1,19 +1,19 @@
 package ru.android.childdiary.presentation.cloud;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import lombok.Builder;
-import lombok.Value;
 import ru.android.childdiary.data.availability.NetworkAvailability;
+import ru.android.childdiary.data.availability.NetworkUnavailableException;
 import ru.android.childdiary.data.availability.PlayServicesAvailability;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
@@ -30,8 +30,6 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     @Inject
     CloudInteractor cloudInteractor;
 
-    private PreConditions preConditions;
-
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
@@ -42,54 +40,48 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     }
 
     public void bindAccount() {
-        checkPreConditions();
-    }
-
-    private void checkPreConditions() {
         unsubscribeOnDestroy(
-                Observable.combineLatest(
-                        playServicesAvailability.checkPlayServicesAvailability().toObservable(),
-                        networkAvailability.checkNetworkAvailability().toObservable(),
-                        cloudInteractor.getAccountNameOnce(),
-                        (connectionStatusCode, isNetworkAvailable, accountName) -> PreConditions.builder()
-                                .isPlayServicesAvailable(connectionStatusCode == ConnectionResult.SUCCESS)
-                                .connectionStatusCode(connectionStatusCode)
-                                .isNetworkAvailable(isNetworkAvailable)
-                                .isAccountNameAvailable(!TextUtils.isEmpty(accountName))
-                                .accountName(accountName)
-                                .build())
-                        .subscribe(this::processPreConditions, this::onUnexpectedError));
-    }
-
-    private void processPreConditions(PreConditions preConditions) {
-        this.preConditions = preConditions;
-        if (!preConditions.isPlayServicesAvailable()) {
-            getViewState().showPlayServicesErrorDialog(preConditions.getConnectionStatusCode());
-        } else if (!preConditions.isAccountNameAvailable()) {
-            getViewState().requestPermission();
-        } else if (!preConditions.isNetworkAvailable()) {
-            getViewState().connectionUnavailable();
-        } else {
-            checkIsBackupAvailable();
-        }
+                playServicesAvailability.checkPlayServicesAvailability()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                connectionStatusCode -> {
+                                    if (connectionStatusCode == ConnectionResult.SUCCESS) {
+                                        getViewState().requestPermission();
+                                    } else {
+                                        getViewState().showPlayServicesErrorDialog(connectionStatusCode);
+                                    }
+                                },
+                                this::onUnexpectedError));
     }
 
     public void permissionGranted() {
-        if (!preConditions.isAccountNameAvailable()) {
-            getViewState().chooseAccount();
-        } else {
-            checkPreConditions();
-        }
+        unsubscribeOnDestroy(
+                cloudInteractor.getAccountNameOnce()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                accountName -> getViewState().chooseAccount(accountName),
+                                this::onUnexpectedError));
     }
 
     public void permissionDenied() {
         getViewState().navigateToMain();
     }
 
-    private void checkIsBackupAvailable() {
+    public void accountChosen(@Nullable String accountName) {
+        cloudInteractor.setAccountName(accountName);
+        checkIsBackupAvailable();
+    }
+
+    public void checkIsBackupAvailable() {
+        // проверяем сперва доступность интернета, т.к. в google drive api установлено большое
+        // количество повторных попыток, что приводит к длительному ожиданию пользователя
+        // ИЛИ надо делать возможность отмены операции пользователем
         getViewState().showBackupLoading(true);
         unsubscribeOnDestroy(
-                cloudInteractor.checkIsBackupAvailable()
+                networkAvailability.checkNetworkAvailability(true)
+                        .flatMap(isNetworkAvailable -> cloudInteractor.checkIsBackupAvailable())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSuccess(isBackupAvailable -> getViewState().showBackupLoading(false))
@@ -103,14 +95,20 @@ public class CloudPresenter extends BasePresenter<CloudView> {
                                         getViewState().navigateToMain();
                                     }
                                 },
-                                throwable -> getViewState().failedToCheckBackupAvailability())
-        );
+                                throwable -> {
+                                    boolean processed = processGoogleDriveError(throwable, CloudOperation.CHECK);
+                                    if (!processed) {
+                                        getViewState().failedToCheckBackupAvailability();
+                                    }
+                                }
+                        ));
     }
 
     public void restoreFromBackup() {
         getViewState().showBackupRestoring(true);
         unsubscribeOnDestroy(
-                cloudInteractor.restore()
+                networkAvailability.checkNetworkAvailability(true)
+                        .flatMap(isNetworkAvailable -> cloudInteractor.restore())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSuccess(isRestored -> getViewState().showBackupRestoring(false))
@@ -118,26 +116,28 @@ public class CloudPresenter extends BasePresenter<CloudView> {
                         .doOnError(throwable -> logger.error("restoreFromBackup", throwable))
                         .subscribe(
                                 isRestored -> getViewState().backupRestored(),
-                                throwable -> getViewState().failedToRestoreBackup()
+                                throwable -> {
+                                    boolean processed = processGoogleDriveError(throwable, CloudOperation.RESTORE);
+                                    if (!processed) {
+                                        getViewState().failedToRestoreBackup();
+                                    }
+                                }
                         ));
     }
 
-    public void playServicesResolved() {
-        checkPreConditions();
-    }
-
-    public void accountChosen(@Nullable String accountName) {
-        cloudInteractor.setAccountName(accountName);
-        checkPreConditions();
-    }
-
-    @Value
-    @Builder
-    private static class PreConditions {
-        boolean isPlayServicesAvailable;
-        boolean isNetworkAvailable;
-        boolean isAccountNameAvailable;
-        int connectionStatusCode;
-        String accountName;
+    private boolean processGoogleDriveError(Throwable throwable, CloudOperation cloudOperation) {
+        if (throwable instanceof GooglePlayServicesAvailabilityIOException) {
+            int connectionStatusCode = ((GooglePlayServicesAvailabilityIOException) throwable).getConnectionStatusCode();
+            getViewState().showPlayServicesErrorDialog(connectionStatusCode);
+            return true;
+        } else if (throwable instanceof UserRecoverableAuthIOException) {
+            Intent intent = ((UserRecoverableAuthIOException) throwable).getIntent();
+            getViewState().requestAuthorization(intent);
+            return true;
+        } else if (throwable instanceof NetworkUnavailableException) {
+            getViewState().connectionUnavailable(cloudOperation);
+            return true;
+        }
+        return false;
     }
 }

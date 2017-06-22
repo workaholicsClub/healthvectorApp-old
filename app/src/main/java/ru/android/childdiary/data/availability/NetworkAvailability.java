@@ -16,13 +16,19 @@ public class NetworkAvailability {
         this.context = context;
     }
 
-    private boolean isNetworkConnected() {
+    private boolean getNetworkAvailabilityResult() {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    public Single<Boolean> checkNetworkAvailability() {
-        return Single.fromCallable(this::isNetworkConnected);
+    public Single<Boolean> checkNetworkAvailability(boolean failFast) {
+        return Single.fromCallable(() -> {
+            boolean result = getNetworkAvailabilityResult();
+            if (!result && failFast) {
+                throw new NetworkUnavailableException("No network connection on the device");
+            }
+            return result;
+        });
     }
 }
