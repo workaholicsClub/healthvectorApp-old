@@ -1,67 +1,70 @@
 package ru.android.childdiary.data.cloud;
 
+import android.content.Context;
+
+import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+
+import java.util.Collections;
 
 import javax.inject.Inject;
 
 import io.reactivex.Single;
+import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
+import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+import ru.android.childdiary.utils.io.FileUtils;
+import ru.android.childdiary.utils.io.ZipUtils;
 
-public class BackupService {
+public class BackupService extends CloudService {
     private final Drive drive;
+    private final ImagesRepository imagesRepository;
 
     @Inject
-    public BackupService(Drive drive) {
+    public BackupService(Context context, Drive drive,
+                         ImagesDataRepository imagesRepository) {
+        super(context);
         this.drive = drive;
+        this.imagesRepository = imagesRepository;
     }
 
     public Single<java.io.File> prepare() {
-        return Single.fromCallable(() -> null);
+        return Single.fromCallable(() -> {
+            // get images directory
+            java.io.File imagesDir = imagesRepository.getImagesDir();
+            // create images directory if there's no images in it, to zip at least one item
+            FileUtils.mkdirs(imagesDir);
+
+            // get db file
+            java.io.File db = getDbFile();
+
+            // create backup
+            java.io.File zipFile = getNewBackupFile();
+            ZipUtils.zipDirectory(new java.io.File[]{imagesDir, db}, zipFile);
+
+            logger.debug("created backup: " + zipFile);
+
+            return zipFile;
+        });
     }
 
-    public Single<Boolean> upload() {
-        return Single.fromCallable(() -> true);
-    }
+    public Single<Boolean> upload(java.io.File zipFile) {
+        return Single.fromCallable(() -> {
+            try {
+                File fileMetadata = new File();
+                fileMetadata.setName(zipFile.getName());
+                fileMetadata.setParents(Collections.singletonList("appDataFolder"));
+                FileContent mediaContent = new FileContent("application/zip", zipFile);
+                fileMetadata = drive.files().create(fileMetadata, mediaContent)
+                        .setFields("id")
+                        .execute();
 
-    /*
-    @Override
-    protected List<String> doInBackground(Void... params) {
-        try {
-            File fileMetadata = new File();
-            fileMetadata.setName("config.json");
-            fileMetadata.setParents(Collections.singletonList("appDataFolder"));
-            java.io.File filePath = new java.io.File(getFilesDir(), "config.json");
-            filePath.createNewFile();
-            FileContent mediaContent = new FileContent("application/json", filePath);
-            File file = mService.files().create(fileMetadata, mediaContent)
-                    .setFields("id")
-                    .execute();
-            System.out.println("File ID: " + file.getId());
-            return new ArrayList<>(Collections.singletonList(file.getId()));
-        } catch (Exception e) {
-            mLastError = e;
-            cancel(true);
-            return null;
-        }
-    }
+                logger.debug("uploaded successfully, file id: " + fileMetadata.getId());
 
-    @Override
-    protected void onCancelled() {
-        mProgress.hide();
-        if (mLastError != null) {
-            if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
-                showPlayServicesErrorDialog(
-                        ((GooglePlayServicesAvailabilityIOException) mLastError)
-                                .getConnectionStatusCode());
-            } else if (mLastError instanceof UserRecoverableAuthIOException) {
-                startActivityForResult(
-                        ((UserRecoverableAuthIOException) mLastError).getIntent(),
-                        REQUEST_AUTHORIZATION);
-            } else {
-                mOutputText.setText("The following error occurred:\n"
-                        + mLastError.getMessage());
+                return true;
+            } finally {
+                cleanBackups();
             }
-        } else {
-            mOutputText.setText("Request cancelled.");
-        }
-    }*/
+        });
+    }
 }

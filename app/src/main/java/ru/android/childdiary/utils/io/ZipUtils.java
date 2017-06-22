@@ -1,4 +1,4 @@
-package ru.android.childdiary.data.cloud;
+package ru.android.childdiary.utils.io;
 
 import android.support.annotation.Nullable;
 
@@ -12,6 +12,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import lombok.Cleanup;
+import ru.android.childdiary.utils.io.FileUtils;
 
 public final class ZipUtils {
     private static final int BUFFER_SIZE = 4096;

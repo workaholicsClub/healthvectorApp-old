@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
@@ -29,6 +30,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
     private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
 
     private static final String TAG_PROGRESS_DIALOG_BACKUP_LOADING = "TAG_PROGRESS_DIALOG_BACKUP_LOADING";
+    private static final String TAG_PROGRESS_DIALOG_BACKUP_RESTORING = "TAG_PROGRESS_DIALOG_BACKUP_RESTORING";
 
     @InjectPresenter
     CloudPresenter presenter;
@@ -56,7 +58,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
 
     @OnClick(R.id.buttonLater)
     void onLaterClick() {
-        presenter.cancel();
+        presenter.moveNext();
     }
 
     @OnClick(R.id.buttonBindAccount)
@@ -131,7 +133,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
             new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                     .setMessage(R.string.user_unrecoverable_error_dialog_text)
                     .setPositiveButton(R.string.ok,
-                            (dialog, which) -> presenter.cancel())
+                            (dialog, which) -> presenter.moveNext())
                     .show();
         }
     }
@@ -144,7 +146,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
                 .setPositiveButton(R.string.try_again,
                         (DialogInterface dialog, int which) -> presenter.bindAccount())
                 .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> presenter.cancel())
+                        (dialog, which) -> presenter.moveNext())
                 .show();
     }
 
@@ -167,7 +169,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
                 .setPositiveButton(R.string.restore,
                         (DialogInterface dialog, int which) -> presenter.restoreFromBackup())
                 .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> presenter.cancel())
+                        (dialog, which) -> presenter.moveNext())
                 .show();
     }
 
@@ -178,7 +180,36 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
                 .setPositiveButton(R.string.try_again,
                         (DialogInterface dialog, int which) -> presenter.bindAccount())
                 .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> presenter.cancel())
+                        (dialog, which) -> presenter.moveNext())
+                .show();
+    }
+
+    @Override
+    public void showBackupRestoring(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_BACKUP_RESTORING,
+                    getString(R.string.please_wait),
+                    getString(R.string.backup_restoring));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_BACKUP_RESTORING);
+        }
+    }
+
+    @Override
+    public void backupRestored() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.backup_restoring_success_dialog_text)
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
+    }
+
+    @Override
+    public void failedToRestoreBackup() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.backup_restoring_error_dialog_text)
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
                 .show();
     }
 

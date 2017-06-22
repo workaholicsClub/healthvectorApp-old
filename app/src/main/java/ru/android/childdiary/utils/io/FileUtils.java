@@ -1,9 +1,10 @@
-package ru.android.childdiary.data.cloud;
+package ru.android.childdiary.utils.io;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 public class FileUtils {
@@ -39,6 +40,16 @@ public class FileUtils {
     private static void deleteFile(File file) {
         boolean result = file.delete();
         logger.debug(file.getAbsolutePath() + " was" + (result ? "" : "n't") + " deleted");
+    }
+
+    public static void deleteFiles(File dir, FilenameFilter filter) {
+        File[] files = dir.listFiles(filter);
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            FileUtils.delete(file);
+        }
     }
 
     public static void mkdirs(File file) {

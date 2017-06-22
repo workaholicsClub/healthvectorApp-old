@@ -37,16 +37,12 @@ public class CloudPresenter extends BasePresenter<CloudView> {
         applicationComponent.inject(this);
     }
 
-    public void cancel() {
+    public void moveNext() {
         getViewState().navigateToMain();
     }
 
     public void bindAccount() {
         checkPreConditions();
-    }
-
-    public void restoreFromBackup() {
-// TODO:        cloudInteractor.restore();
     }
 
     private void checkPreConditions() {
@@ -99,15 +95,31 @@ public class CloudPresenter extends BasePresenter<CloudView> {
                         .doOnSuccess(isBackupAvailable -> getViewState().showBackupLoading(false))
                         .doOnError(throwable -> getViewState().showBackupLoading(false))
                         .doOnError(throwable -> logger.error("checkIsBackupAvailable", throwable))
-                        .subscribe(isBackupAvailable -> {
+                        .subscribe(
+                                isBackupAvailable -> {
                                     if (isBackupAvailable) {
                                         getViewState().foundBackup();
                                     } else {
                                         getViewState().navigateToMain();
                                     }
                                 },
-                                throwable ->
-                                        getViewState().failedToCheckBackupAvailability()));
+                                throwable -> getViewState().failedToCheckBackupAvailability())
+        );
+    }
+
+    public void restoreFromBackup() {
+        getViewState().showBackupRestoring(true);
+        unsubscribeOnDestroy(
+                cloudInteractor.restore()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSuccess(isRestored -> getViewState().showBackupRestoring(false))
+                        .doOnError(throwable -> getViewState().showBackupRestoring(false))
+                        .doOnError(throwable -> logger.error("restoreFromBackup", throwable))
+                        .subscribe(
+                                isRestored -> getViewState().backupRestored(),
+                                throwable -> getViewState().failedToRestoreBackup()
+                        ));
     }
 
     public void playServicesResolved() {

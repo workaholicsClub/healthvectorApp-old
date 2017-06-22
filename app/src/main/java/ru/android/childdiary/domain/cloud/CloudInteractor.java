@@ -59,19 +59,13 @@ public class CloudInteractor {
         });
     }
 
-    public void download() {
-
+    public Single<Boolean> backup() {
+        return backupService.prepare()
+                .flatMap(backupService::upload);
     }
 
-    public void restore() {
-
-    }
-
-    public void prepare() {
-
-    }
-
-    public void upload() {
-
+    public Single<Boolean> restore() {
+        return restoreService.download()
+                .flatMap(restoreService::restore);
     }
 }
