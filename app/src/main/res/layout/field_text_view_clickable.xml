@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="@dimen/arrow_icon_size"
-        android:layout_height="@dimen/arrow_icon_size"
+        android:layout_width="@dimen/base_icon_size"
+        android:layout_height="@dimen/base_icon_size"
         android:layout_marginEnd="@dimen/field_margin_base"
         android:layout_marginRight="@dimen/field_margin_base"
         android:scaleType="center"

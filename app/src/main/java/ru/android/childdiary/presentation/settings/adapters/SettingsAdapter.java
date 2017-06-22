@@ -31,7 +31,7 @@ public class SettingsAdapter extends BaseRecyclerViewAdapter<BaseSettingsItem, B
         SettingsItemType type = SettingsItemType.values()[viewType];
         switch (type) {
             case DELIMITER:
-                v = inflater.inflate(R.layout.delimiter, parent, false);
+                v = inflater.inflate(R.layout.settings_item_delimiter, parent, false);
                 return new DelimiterSettingsViewHolder(v);
             case GROUP:
                 v = inflater.inflate(R.layout.settings_item_group, parent, false);

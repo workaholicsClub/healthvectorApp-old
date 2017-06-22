@@ -18,7 +18,7 @@
     <color name="secondary_text">#90000000</color>
     <color name="placeholder_text">#60000000</color>
     <color name="intention_text">#30000000</color>
-    <color name="token_item_text">#8A000000</color>
+    <color name="gray_text">#8A000000</color>
     <color name="event_diaper_row_background_boy">#80DB9628</color>
     <color name="event_sleep_row_background_boy">#8028A0AE</color>
     <color name="event_feed_row_background_boy">#80B3673E</color>
