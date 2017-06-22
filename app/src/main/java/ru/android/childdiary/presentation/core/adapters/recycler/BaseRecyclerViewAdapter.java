@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,12 +63,6 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
     }
 
     @Override
-    public final VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        VH viewHolder = createViewHolder(parent);
-        return viewHolder;
-    }
-
-    @Override
     public void onBindViewHolder(VH viewHolder, int position) {
         viewHolder.bind(context, sex, items.get(position));
     }
@@ -87,8 +80,6 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
     public final int getItemCount() {
         return items.size();
     }
-
-    protected abstract VH createViewHolder(ViewGroup parent);
 
     @Override
     public boolean areContentsTheSame(T oldItem, T newItem) {

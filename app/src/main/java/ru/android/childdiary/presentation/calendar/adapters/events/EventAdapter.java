@@ -23,7 +23,7 @@ public class EventAdapter extends SwipeViewAdapter<
     }
 
     @Override
-    protected EventViewHolder createViewHolder(ViewGroup parent) {
+    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.event_item, parent, false);
         return new EventViewHolder(v, itemActionListener, this);
     }

@@ -23,7 +23,7 @@ public class ChipsAdapter extends BaseRecyclerViewAdapter<Chips, ChipsAdapter.Ch
     }
 
     @Override
-    protected ChipsViewHolder createViewHolder(ViewGroup parent) {
+    public ChipsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.chips_item, parent, false);
         return new ChipsViewHolder(v, chipsDeleteClickListener);
     }
@@ -33,12 +33,15 @@ public class ChipsAdapter extends BaseRecyclerViewAdapter<Chips, ChipsAdapter.Ch
         return oldItem.sameAs(newItem);
     }
 
-    static class ChipsViewHolder extends BaseRecyclerViewHolder<Chips> {
-        @BindView(R.id.textView)
-        TextView textView;
+    public interface ChipsDeleteClickListener {
+        void onChipsDeleteClick(Chips chips);
+    }
 
+    static class ChipsViewHolder extends BaseRecyclerViewHolder<Chips> {
         @Nullable
         private final ChipsDeleteClickListener chipsDeleteClickListener;
+        @BindView(R.id.textView)
+        TextView textView;
 
         public ChipsViewHolder(View itemView, @Nullable ChipsDeleteClickListener chipsDeleteClickListener) {
             super(itemView);
@@ -57,9 +60,5 @@ public class ChipsAdapter extends BaseRecyclerViewAdapter<Chips, ChipsAdapter.Ch
                 chipsDeleteClickListener.onChipsDeleteClick(item);
             }
         }
-    }
-
-    public interface ChipsDeleteClickListener {
-        void onChipsDeleteClick(Chips chips);
     }
 }

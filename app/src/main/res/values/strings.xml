@@ -257,6 +257,10 @@
     <string name="backup_restoring">Восстановление данных из бэкапа&#8230;</string>
     <string name="backup_restoring_success_dialog_text">Данные восстановлены</string>
     <string name="backup_restoring_error_dialog_text">При восстановлении данных произошла ошибка</string>
+    <string name="settings_data_control">Управление данными</string>
+    <string name="settings_account">Аккаунт Google Drive</string>
+    <string name="settings_backup_data">Сохранить данные</string>
+    <string name="settings_restore_data">Восстановить данные</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
