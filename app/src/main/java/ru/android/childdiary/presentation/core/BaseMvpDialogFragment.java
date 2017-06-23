@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -128,5 +129,17 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
 
     @Override
     public void permissionDenied(RequestPermissionInfo permissionInfo) {
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        getActivity().overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        getActivity().overridePendingTransition(0, 0);
     }
 }
