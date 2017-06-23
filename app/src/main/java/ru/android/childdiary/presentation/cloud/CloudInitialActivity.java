@@ -174,15 +174,19 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     }
 
     @Override
-    public void foundBackup() {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(R.string.found_backup_dialog_title)
-                .setMessage(R.string.found_backup_dialog_text)
-                .setPositiveButton(R.string.restore,
-                        (DialogInterface dialog, int which) -> presenter.restore())
-                .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+    public void checkBackupAvailabilitySucceeded(boolean isBackupAvailable) {
+        if (isBackupAvailable) {
+            new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                    .setTitle(R.string.found_backup_dialog_title)
+                    .setMessage(R.string.found_backup_dialog_text)
+                    .setPositiveButton(R.string.restore,
+                            (DialogInterface dialog, int which) -> presenter.restore())
+                    .setNegativeButton(R.string.cancel,
+                            (dialog, which) -> presenter.moveNext())
+                    .show();
+        } else {
+            presenter.moveNext();
+        }
     }
 
     @Override

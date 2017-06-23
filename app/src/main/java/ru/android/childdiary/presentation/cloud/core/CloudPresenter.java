@@ -101,13 +101,7 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
                         .doOnError(throwable -> getViewState().showCheckBackupAvailabilityLoading(false))
                         .doOnError(throwable -> logger.error("checkIsBackupAvailable", throwable))
                         .subscribe(
-                                isBackupAvailable -> {
-                                    if (isBackupAvailable) {
-                                        getViewState().foundBackup();
-                                    } else {
-                                        moveNext();
-                                    }
-                                },
+                                isBackupAvailable -> getViewState().checkBackupAvailabilitySucceeded(isBackupAvailable),
                                 throwable -> {
                                     boolean processed = processGoogleDriveError(throwable);
                                     if (!processed) {

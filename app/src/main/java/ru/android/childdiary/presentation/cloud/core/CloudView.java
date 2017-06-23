@@ -29,7 +29,7 @@ public interface CloudView extends BaseView {
     void showCheckBackupAvailabilityLoading(boolean loading);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void foundBackup();
+    void checkBackupAvailabilitySucceeded(boolean isBackupAvailable);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void noBackupFound();

@@ -365,7 +365,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     }
 
     @Override
-    public void foundBackup() {
+    public void checkBackupAvailabilitySucceeded(boolean isBackupAvailable) {
     }
 
     @Override
