@@ -20,4 +20,9 @@ public abstract class BaseSettingsViewHolder<T extends BaseSettingsItem> extends
     }
 
     protected abstract void bindT(Context context, Sex sex, T item);
+
+    protected T getItemT() {
+        //noinspection unchecked
+        return (T) item;
+    }
 }

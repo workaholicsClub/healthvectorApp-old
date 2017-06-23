@@ -15,6 +15,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Single;
+import io.requery.Persistable;
+import io.requery.reactivex.ReactiveEntityStore;
 import lombok.Cleanup;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
@@ -28,13 +30,16 @@ public class RestoreService extends CloudService {
 
     private final Drive drive;
     private final ImagesRepository imagesRepository;
+    private final ReactiveEntityStore<Persistable> dataStore;
 
     @Inject
     public RestoreService(Context context, Drive drive,
-                          ImagesDataRepository imagesRepository) {
+                          ImagesDataRepository imagesRepository,
+                          ReactiveEntityStore<Persistable> dataStore) {
         super(context);
         this.drive = drive;
         this.imagesRepository = imagesRepository;
+        this.dataStore = dataStore;
     }
 
     @Nullable
@@ -59,7 +64,7 @@ public class RestoreService extends CloudService {
         return Single.fromCallable(() -> {
             String backupFileId = getBackupFileId();
             if (TextUtils.isEmpty(backupFileId)) {
-                throw new EmptyResponseException("No backup file found");
+                throw new BackupUnavailableException("No backup file found");
             }
 
             java.io.File file = getNewBackupFile();
@@ -87,6 +92,7 @@ public class RestoreService extends CloudService {
                 java.io.File newDb = new java.io.File(imagesParentDir, BuildConfig.DB_NAME);
 
                 // replace database
+                dataStore.close();
                 java.io.File db = getDbFile();
                 FileUtils.move(newDb, db);
 

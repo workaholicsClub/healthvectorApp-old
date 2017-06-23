@@ -1,0 +1,11 @@
+package ru.android.childdiary.presentation.cloud;
+
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
+
+import ru.android.childdiary.presentation.cloud.core.CloudView;
+
+public interface CloudInitialView extends CloudView {
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToMain();
+}

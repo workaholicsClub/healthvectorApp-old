@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.cloud;
+package ru.android.childdiary.presentation.cloud.core;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -32,6 +32,9 @@ public interface CloudView extends BaseView {
     void foundBackup();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void noBackupFound();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void failedToCheckBackupAvailability();
 
     @StateStrategyType(AddToEndSingleStrategy.class)
@@ -51,7 +54,4 @@ public interface CloudView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void failedToBackup();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToMain();
 }

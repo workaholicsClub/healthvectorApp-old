@@ -1,6 +1,7 @@
 package ru.android.childdiary.domain.cloud;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
@@ -54,18 +55,23 @@ public class CloudInteractor {
     private Single<Boolean> updateCredential() {
         return Single.fromCallable(() -> {
             String accountName = settingsRepository.getAccountName().blockingFirst();
+            if (TextUtils.isEmpty(accountName)) {
+                throw new AccountNameNotSpecifiedException("Specify account name");
+            }
             credential.setSelectedAccountName(accountName);
             return true;
         });
     }
 
     public Single<Boolean> backup() {
-        return backupService.prepare()
+        return updateCredential()
+                .flatMap(accountName -> backupService.prepare())
                 .flatMap(backupService::upload);
     }
 
     public Single<Boolean> restore() {
-        return restoreService.download()
+        return updateCredential()
+                .flatMap(accountName -> restoreService.download())
                 .flatMap(restoreService::restore);
     }
 }

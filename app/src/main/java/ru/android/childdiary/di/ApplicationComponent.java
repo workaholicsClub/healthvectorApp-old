@@ -12,7 +12,7 @@ import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
 import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
-import ru.android.childdiary.presentation.cloud.CloudPresenter;
+import ru.android.childdiary.presentation.cloud.CloudInitialPresenter;
 import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
@@ -68,6 +68,7 @@ import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerAct
 import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerPresenter;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditPresenter;
+import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
@@ -156,7 +157,7 @@ public interface ApplicationComponent {
 
     void inject(AddConcreteExercisePresenter presenter);
 
-    void inject(CloudPresenter presenter);
+    void inject(CloudInitialPresenter presenter);
 
     // activities
     void inject(SplashActivity activity);
@@ -209,6 +210,8 @@ public interface ApplicationComponent {
     void inject(MedicalDataFragment fragment);
 
     void inject(DevelopmentDiaryFragment fragment);
+
+    void inject(SettingsFragment fragment);
 
     // services
     void inject(TimerService service);

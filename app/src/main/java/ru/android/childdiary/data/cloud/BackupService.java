@@ -54,7 +54,7 @@ public class BackupService extends CloudService {
         return Single.fromCallable(() -> {
             try {
                 File fileMetadata = new File();
-                fileMetadata.setName(zipFile.getName());
+                fileMetadata.setName(BACKUP_FILE_NAME);
                 fileMetadata.setParents(Collections.singletonList(APP_DATA_FOLDER));
                 FileContent mediaContent = new FileContent(CONTENT_TYPE, zipFile);
                 fileMetadata = drive.files().create(fileMetadata, mediaContent)

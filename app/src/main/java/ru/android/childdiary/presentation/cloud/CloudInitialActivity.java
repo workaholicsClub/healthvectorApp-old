@@ -24,20 +24,20 @@ import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class CloudInitialActivity extends BaseMvpActivity implements CloudView {
+public class CloudInitialActivity extends BaseMvpActivity implements CloudInitialView {
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1001;
     private static final int REQUEST_AUTHORIZATION = 1002;
     private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private static final String TAG_PROGRESS_DIALOG_BACKUP_LOADING = "TAG_PROGRESS_DIALOG_BACKUP_LOADING";
-    private static final String TAG_PROGRESS_DIALOG_BACKUP_RESTORING = "TAG_PROGRESS_DIALOG_BACKUP_RESTORING";
-
-    @InjectPresenter
-    CloudPresenter presenter;
+    private static final String TAG_PROGRESS_DIALOG_AUTHORIZE = "TAG_PROGRESS_DIALOG_AUTHORIZE";
+    private static final String TAG_PROGRESS_DIALOG_RESTORE = "TAG_PROGRESS_DIALOG_RESTORE";
 
     @Inject
     AccountChooserPicker accountChooserPicker;
+
+    @InjectPresenter
+    CloudInitialPresenter presenter;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, CloudInitialActivity.class);
@@ -98,8 +98,7 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudView {
     }
 
     @Override
-    protected void onActivityResult(
-            int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_ACCOUNT_PICKER:
@@ -162,11 +161,11 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudView {
     @Override
     public void showCheckBackupAvailabilityLoading(boolean loading) {
         if (loading) {
-            showProgress(TAG_PROGRESS_DIALOG_BACKUP_LOADING,
+            showProgress(TAG_PROGRESS_DIALOG_AUTHORIZE,
                     getString(R.string.please_wait),
-                    getString(R.string.backup_loading));
+                    getString(R.string.check_is_backup_available_loading));
         } else {
-            hideProgress(TAG_PROGRESS_DIALOG_BACKUP_LOADING);
+            hideProgress(TAG_PROGRESS_DIALOG_AUTHORIZE);
         }
     }
 
@@ -178,6 +177,15 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudView {
                 .setPositiveButton(R.string.restore,
                         (DialogInterface dialog, int which) -> presenter.restore())
                 .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
+    }
+
+    @Override
+    public void noBackupFound() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.no_backup_found)
+                .setPositiveButton(R.string.ok,
                         (dialog, which) -> presenter.moveNext())
                 .show();
     }
@@ -196,11 +204,11 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudView {
     @Override
     public void showRestoreLoading(boolean loading) {
         if (loading) {
-            showProgress(TAG_PROGRESS_DIALOG_BACKUP_RESTORING,
+            showProgress(TAG_PROGRESS_DIALOG_RESTORE,
                     getString(R.string.please_wait),
                     getString(R.string.restore_loading));
         } else {
-            hideProgress(TAG_PROGRESS_DIALOG_BACKUP_RESTORING);
+            hideProgress(TAG_PROGRESS_DIALOG_RESTORE);
         }
     }
 

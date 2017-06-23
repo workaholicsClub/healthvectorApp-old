@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.settings.adapters.items;
 
-import android.content.Intent;
 import android.support.annotation.DrawableRes;
 
 import lombok.Builder;
@@ -14,7 +13,7 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class IntentSettingsItem extends BaseSettingsItem {
     @NonNull
-    Intent intent;
+    Listener listener;
     @DrawableRes
     int iconRes;
     @NonNull
@@ -22,11 +21,11 @@ public class IntentSettingsItem extends BaseSettingsItem {
 
     @Builder
     private IntentSettingsItem(int id,
-                               @NonNull Intent intent,
+                               @NonNull Listener listener,
                                @DrawableRes int iconRes,
                                @NonNull String title) {
         super(id);
-        this.intent = intent;
+        this.listener = listener;
         this.iconRes = iconRes;
         this.title = title;
     }
@@ -34,5 +33,9 @@ public class IntentSettingsItem extends BaseSettingsItem {
     @Override
     public SettingsItemType getType() {
         return SettingsItemType.INTENT;
+    }
+
+    public interface Listener {
+        void onClick(IntentSettingsItem item);
     }
 }

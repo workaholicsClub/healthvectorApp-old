@@ -1,9 +1,8 @@
-package ru.android.childdiary.presentation.cloud;
+package ru.android.childdiary.presentation.cloud.core;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
-import com.arellomobile.mvp.InjectViewState;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -15,12 +14,12 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.availability.NetworkAvailability;
 import ru.android.childdiary.data.availability.NetworkUnavailableException;
 import ru.android.childdiary.data.availability.PlayServicesAvailability;
-import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.data.cloud.BackupUnavailableException;
+import ru.android.childdiary.domain.cloud.AccountNameNotSpecifiedException;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
-@InjectViewState
-public class CloudPresenter extends BasePresenter<CloudView> {
+public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<T> {
     @Inject
     PlayServicesAvailability playServicesAvailability;
 
@@ -32,21 +31,14 @@ public class CloudPresenter extends BasePresenter<CloudView> {
 
     private State state = State.BIND_ACCOUNT;
 
-    @Override
-    protected void injectPresenter(ApplicationComponent applicationComponent) {
-        applicationComponent.inject(this);
-    }
-
-    public void moveNext() {
-        getViewState().navigateToMain();
-    }
+    public abstract void moveNext();
 
     public void continueAfterErrorResolved() {
         switch (state) {
             case BIND_ACCOUNT:
                 bindAccount();
                 break;
-            case CHECK:
+            case AUTHORIZE:
                 checkIsBackupAvailable();
                 break;
             case RESTORE:
@@ -86,7 +78,7 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     }
 
     public void permissionDenied() {
-        getViewState().navigateToMain();
+        moveNext();
     }
 
     public void accountChosen(@Nullable String accountName) {
@@ -95,7 +87,7 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     }
 
     public void checkIsBackupAvailable() {
-        state = State.CHECK;
+        state = State.AUTHORIZE;
         // проверяем сперва доступность интернета, т.к. в google drive api установлено большое
         // количество повторных попыток, что приводит к длительному ожиданию пользователя
         // ИЛИ надо делать возможность отмены операции пользователем
@@ -113,7 +105,7 @@ public class CloudPresenter extends BasePresenter<CloudView> {
                                     if (isBackupAvailable) {
                                         getViewState().foundBackup();
                                     } else {
-                                        getViewState().navigateToMain();
+                                        moveNext();
                                     }
                                 },
                                 throwable -> {
@@ -181,9 +173,15 @@ public class CloudPresenter extends BasePresenter<CloudView> {
         } else if (throwable instanceof NetworkUnavailableException) {
             getViewState().connectionUnavailable();
             return true;
+        } else if (throwable instanceof AccountNameNotSpecifiedException) {
+            bindAccount();
+            return true;
+        } else if (throwable instanceof BackupUnavailableException) {
+            getViewState().noBackupFound();
+            return true;
         }
         return false;
     }
 
-    private enum State {BIND_ACCOUNT, CHECK, RESTORE, BACKUP}
+    private enum State {BIND_ACCOUNT, AUTHORIZE, RESTORE, BACKUP}
 }
