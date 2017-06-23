@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:gravity="center"
+            android:text="@string/cloud_text"
+            android:textAppearance="@style/CloudLargeTextAppearance" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginTop="64dp"
+            android:drawableLeft="@drawable/ic_cloud_login"
+            android:drawablePadding="22dp"
+            android:drawableStart="@drawable/ic_cloud_login"
+            android:gravity="center_vertical"
+            android:text="@string/cloud_login_text"
+            android:textAppearance="@style/CloudTextAppearance" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginTop="48dp"
+            android:drawableLeft="@drawable/ic_cloud_backup"
+            android:drawablePadding="22dp"
+            android:drawableStart="@drawable/ic_cloud_backup"
+            android:gravity="center_vertical"
+            android:text="@string/cloud_backup_text"
+            android:textAppearance="@style/CloudTextAppearance" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginTop="48dp"
+            android:drawableLeft="@drawable/ic_cloud_restore"
+            android:drawablePadding="22dp"
+            android:drawableStart="@drawable/ic_cloud_restore"
+            android:gravity="center_vertical"
+            android:text="@string/cloud_restore_text"
+            android:textAppearance="@style/CloudTextAppearance" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonLater"
+            style="@style/BorderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/later" />
+
+        <Button
+            android:id="@+id/buttonBindAccount"
+            style="@style/BorderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/bind_account" />
+    </LinearLayout>
+</LinearLayout>

@@ -4,11 +4,15 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import ru.android.childdiary.di.modules.ApplicationModule;
+import ru.android.childdiary.di.modules.AvailabilityModule;
+import ru.android.childdiary.di.modules.CloudModule;
 import ru.android.childdiary.di.modules.DbModule;
 import ru.android.childdiary.di.modules.NetworkModule;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
+import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
+import ru.android.childdiary.presentation.cloud.CloudInitialPresenter;
 import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
@@ -64,13 +68,18 @@ import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerAct
 import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerPresenter;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditPresenter;
+import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
 import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.services.UpdateDataService;
 
-@Component(modules = {ApplicationModule.class, DbModule.class, NetworkModule.class})
+@Component(modules = {ApplicationModule.class,
+        DbModule.class,
+        NetworkModule.class,
+        AvailabilityModule.class,
+        CloudModule.class})
 @Singleton
 public interface ApplicationComponent {
     // presenters
@@ -148,6 +157,8 @@ public interface ApplicationComponent {
 
     void inject(AddConcreteExercisePresenter presenter);
 
+    void inject(CloudInitialPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -191,12 +202,16 @@ public interface ApplicationComponent {
 
     void inject(AddConcreteExerciseActivity activity);
 
+    void inject(CloudInitialActivity activity);
+
     // fragments
     void inject(CalendarFragment fragment);
 
     void inject(MedicalDataFragment fragment);
 
     void inject(DevelopmentDiaryFragment fragment);
+
+    void inject(SettingsFragment fragment);
 
     // services
     void inject(TimerService service);

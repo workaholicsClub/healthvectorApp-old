@@ -24,22 +24,23 @@ import java.util.Random;
 import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
+import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
-import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDbService;
 import ru.android.childdiary.data.repositories.child.ChildDbService;
-import ru.android.childdiary.data.repositories.development.antropometry.mappers.AntropometryMapper;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.CleanUpDbService;
+import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDbService;
+import ru.android.childdiary.data.repositories.development.antropometry.mappers.AntropometryMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineMeasureMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
+import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 
@@ -78,7 +79,8 @@ public class DbTest {
 
         JodaTimeAndroid.init(context);
 
-        dataStore = DbUtils.getDataStore(context, DB_NAME, DB_VERSION);
+        val source = DbUtils.getDatabaseSource(context, DB_NAME, DB_VERSION);
+        dataStore = DbUtils.getDataStore(source);
 
         ChildMapper childMapper = new ChildMapper();
         AntropometryMapper antropometryMapper = new AntropometryMapper(childMapper);

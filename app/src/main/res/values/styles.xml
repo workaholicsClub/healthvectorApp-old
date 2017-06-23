@@ -193,9 +193,32 @@
     </style>
 
     <style name="TokenItemTextAppearance" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/token_item_text</item>
+        <item name="android:textColor">@color/gray_text</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="fontPath">@string/font_path_regular</item>
+    </style>
+
+    <style name="CloudTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">@dimen/text_size_cloud</item>
+        <item name="fontPath">@string/font_path_regular</item>
+    </style>
+
+    <style name="CloudLargeTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">@dimen/text_size_cloud_large</item>
+        <item name="fontPath">@string/font_path_regular</item>
+    </style>
+
+    <style name="SettingsGroupTitleTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/gray_text</item>
+        <item name="android:textSize">@dimen/text_size_settings_group_title</item>
+        <item name="fontPath">@string/font_path_medium</item>
+    </style>
+
+    <style name="BorderlessButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/primary_boy</item>
+        <item name="fontPath">@string/font_path_medium</item>
     </style>
 
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">

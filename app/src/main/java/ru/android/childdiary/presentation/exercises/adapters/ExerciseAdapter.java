@@ -25,7 +25,7 @@ public class ExerciseAdapter extends BaseRecyclerViewAdapter<Exercise, ExerciseV
     }
 
     @Override
-    protected ExerciseViewHolder createViewHolder(ViewGroup parent) {
+    public ExerciseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.exercise_item, parent, false);
         return new ExerciseViewHolder(v, itemActionListener);
     }

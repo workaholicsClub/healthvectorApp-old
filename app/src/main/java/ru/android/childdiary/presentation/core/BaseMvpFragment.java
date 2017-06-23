@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.core;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -23,11 +24,17 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.presentation.core.permissions.FragmentPermissionHelper;
+import ru.android.childdiary.presentation.core.permissions.PermissionHelper;
+import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public abstract class BaseMvpFragment extends MvpAppCompatFragment implements BaseView {
+public abstract class BaseMvpFragment extends MvpAppCompatFragment
+        implements BaseView, PermissionHelper.PermissionListener {
     protected final Logger logger = LoggerFactory.getLogger(toString());
+
+    protected PermissionHelper permissionHelper;
 
     private Unbinder unbinder;
 
@@ -37,6 +44,7 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
         logger.debug("onCreate");
         ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
         injectFragment(component);
+        permissionHelper = new FragmentPermissionHelper(this);
     }
 
     @Nullable
@@ -107,5 +115,19 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment implements Ba
 
     public void hideProgress(String tag) {
         ((BaseMvpActivity) getActivity()).hideProgress(tag);
+    }
+
+    @Override
+    public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void permissionGranted(RequestPermissionInfo permissionInfo) {
+    }
+
+    @Override
+    public void permissionDenied(RequestPermissionInfo permissionInfo) {
     }
 }

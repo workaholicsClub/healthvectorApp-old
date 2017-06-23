@@ -91,3 +91,10 @@
 -keepclassmembers class * {
     @org.simpleframework.xml.* *;
 }
+
+## Google Drive Api ##
+## https://stackoverflow.com/a/14504602 ##
+
+-keep class com.google.** { *;}
+-keep interface com.google.** { *;}
+-dontwarn com.google.**

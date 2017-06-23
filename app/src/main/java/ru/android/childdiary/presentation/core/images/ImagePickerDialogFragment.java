@@ -29,18 +29,18 @@ import java.util.List;
 import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
-import ru.android.childdiary.presentation.core.RequestPermissionInfo;
 import ru.android.childdiary.presentation.core.images.adapters.ImagePickerAction;
 import ru.android.childdiary.presentation.core.images.adapters.ImagePickerActionAdapter;
 import ru.android.childdiary.presentation.core.images.adapters.ImagePickerActionType;
 import ru.android.childdiary.presentation.core.images.crop.CropActivity;
+import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePickerDialogArguments>
         implements AdapterView.OnItemClickListener, ImagePickerView {
-    private static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
+    private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 101;
 
     private static final int REQUEST_PICK_IMAGE = 1;
     private static final int REQUEST_CAPTURE_IMAGE = 2;
@@ -124,19 +124,20 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             RequestPermissionInfo permissionInfo = RequestPermissionInfo.builder()
                     .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    .requestCode(REQUEST_STORAGE_READ_ACCESS_PERMISSION)
-                    .titleResourceId(R.string.request_read_external_storage_permission_title)
-                    .textResourceId(R.string.request_read_external_storage_permission_text)
+                    .requestCode(REQUEST_PERMISSION_READ_EXTERNAL_STORAGE)
+                    .title(getString(R.string.request_read_external_storage_permission_title))
+                    .text(getString(R.string.request_read_external_storage_permission_text))
                     .build();
-            requestPermission(permissionInfo);
+            permissionHelper.requestPermission(permissionInfo, dialogArguments.getSex());
         } else {
             pickImage();
         }
     }
 
     @Override
-    protected void permissionGranted(RequestPermissionInfo permissionInfo) {
-        if (permissionInfo.getRequestCode() == REQUEST_STORAGE_READ_ACCESS_PERMISSION) {
+    public void permissionGranted(RequestPermissionInfo permissionInfo) {
+        super.permissionGranted(permissionInfo);
+        if (permissionInfo.getRequestCode() == REQUEST_PERMISSION_READ_EXTERNAL_STORAGE) {
             pickImage();
         }
     }
@@ -162,7 +163,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
                 presenter.startCrop(selectedImageFileUri);
             }
         } else if (requestCode == REQUEST_CAPTURE_IMAGE) {
-            revokePermissions(capturedImageFileUri);
+            permissionHelper.revokePermissions(capturedImageFileUri);
 
             if (resultCode == RESULT_OK) {
                 presenter.startCrop(capturedImageFileUri);
@@ -250,7 +251,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
                     getString(R.string.file_provider_authorities), file);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageFileUri);
 
-            grantPermissionToApps(intent, capturedImageFileUri);
+            permissionHelper.grantPermissionToApps(intent, capturedImageFileUri);
 
             startActivityForResult(intent, REQUEST_CAPTURE_IMAGE);
         } else {

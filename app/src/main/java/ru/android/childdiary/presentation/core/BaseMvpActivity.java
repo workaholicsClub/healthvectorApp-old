@@ -44,6 +44,9 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.dialogs.ProgressDialogArguments;
 import ru.android.childdiary.presentation.core.dialogs.ProgressDialogFragment;
+import ru.android.childdiary.presentation.core.permissions.ActivityPermissionHelper;
+import ru.android.childdiary.presentation.core.permissions.PermissionHelper;
+import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.ConfigUtils;
@@ -51,8 +54,11 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 @SuppressLint("Registered")
-public abstract class BaseMvpActivity extends MvpAppCompatActivity implements BaseView {
+public abstract class BaseMvpActivity extends MvpAppCompatActivity
+        implements BaseView, PermissionHelper.PermissionListener {
     protected final Logger logger = LoggerFactory.getLogger(toString());
+
+    protected final PermissionHelper permissionHelper = new ActivityPermissionHelper(this);
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -298,5 +304,19 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity implements Ba
 
     private ProgressDialogFragment findProgressDialog(String tag) {
         return (ProgressDialogFragment) getSupportFragmentManager().findFragmentByTag(tag);
+    }
+
+    @Override
+    public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void permissionGranted(RequestPermissionInfo permissionInfo) {
+    }
+
+    @Override
+    public void permissionDenied(RequestPermissionInfo permissionInfo) {
     }
 }

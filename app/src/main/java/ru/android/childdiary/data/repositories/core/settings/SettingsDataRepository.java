@@ -2,6 +2,7 @@ package ru.android.childdiary.data.repositories.core.settings;
 
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -23,9 +24,12 @@ import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository
 public class SettingsDataRepository implements SettingsRepository {
     private static final String KEY_START_TIME = "start_time";
     private static final String KEY_FINISH_TIME = "finish_time";
+    private static final String KEY_ACCOUNT_NAME = "account_name";
+    private static final String KEY_IS_CLOUD_SHOWN = "is_cloud_shown";
 
     private static final LocalTime DEFAULT_START_TIME = new LocalTime(8, 0);
     private static final LocalTime DEFAULT_FINISH_TIME = new LocalTime(22, 0);
+    private static final String DEFAULT_ACCOUNT_NAME = "";
 
     private final RxSharedPreferences preferences;
 
@@ -67,15 +71,33 @@ public class SettingsDataRepository implements SettingsRepository {
     }
 
     @Override
-    public Observable<LocalTime> setStartTimeObservable(@NonNull LocalTime startTime) {
-        // TODO Настройки
-        return null;
+    public Observable<String> getAccountName() {
+        return preferences.getString(KEY_ACCOUNT_NAME, DEFAULT_ACCOUNT_NAME).asObservable();
     }
 
     @Override
-    public Observable<LocalTime> setFinishTimeObservable(@NonNull LocalTime finishTime) {
-        // TODO Настройки
-        return null;
+    public void setAccountName(@Nullable String accountName) {
+        preferences.getString(KEY_ACCOUNT_NAME).set(accountName);
+    }
+
+    @Override
+    public Observable<String> getAccountNameOnce() {
+        return getAccountName().first(DEFAULT_ACCOUNT_NAME).toObservable();
+    }
+
+    @Override
+    public Observable<Boolean> getIsCloudShown() {
+        return preferences.getBoolean(KEY_IS_CLOUD_SHOWN).asObservable();
+    }
+
+    @Override
+    public void setIsCloudShown(boolean value) {
+        preferences.getBoolean(KEY_IS_CLOUD_SHOWN).set(value);
+    }
+
+    @Override
+    public Observable<Boolean> getIsCloudShownOnce() {
+        return getIsCloudShown().first(false).toObservable();
     }
 
     private static class LocalTimeAdapter implements Preference.Adapter<LocalTime> {

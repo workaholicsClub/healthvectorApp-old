@@ -64,7 +64,6 @@
     <dimen name="field_text_view_min_width">100dp</dimen>
     <dimen name="field_margin_base">8dp</dimen>
     <dimen name="field_note_corner_radius">4dp</dimen>
-    <dimen name="arrow_icon_size">24dp</dimen>
     <!-- timer -->
     <dimen name="timer_stroke_width">2dp</dimen>
     <dimen name="timer_corner_radius">8dp</dimen>
@@ -79,8 +78,13 @@
     <dimen name="text_size_base">16sp</dimen>
     <dimen name="text_size_medium">14sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_cloud">18sp</dimen>
+    <dimen name="text_size_cloud_large">24sp</dimen>
+    <dimen name="text_size_settings_group_title">13sp</dimen>
     <!-- base -->
     <dimen name="base_margin">16dp</dimen>
+    <dimen name="base_margin_half">8dp</dimen>
+    <dimen name="base_icon_size">24dp</dimen>
     <!-- dialogs -->
     <dimen name="time_dialog_header_width">50dp</dimen>
     <dimen name="time_dialog_column_space">6dp</dimen>

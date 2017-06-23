@@ -8,4 +8,7 @@ import ru.android.childdiary.presentation.core.BaseView;
 public interface SplashView extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToMain();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToCloud();
 }

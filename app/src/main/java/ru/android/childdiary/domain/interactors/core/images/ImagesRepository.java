@@ -9,6 +9,10 @@ import java.util.List;
 import io.reactivex.Single;
 
 public interface ImagesRepository {
+    File getImagesDir();
+
+    File getImagesParentDir();
+
     boolean isTemporaryImageFile(@Nullable String imageFileName);
 
     String createUniqueImageFileRelativePath(@NonNull ImageType imageType, @NonNull String fromPath);

@@ -100,7 +100,7 @@ public class ExerciseDataRepository implements ExerciseRepository {
                 .retryWhen(errors -> errors
                         .zipWith(Observable.range(1, MAX_TRY_COUNT), (throwable, i) -> {
                             if (i == MAX_TRY_COUNT) {
-                                throw new TryCountExceededException();
+                                throw new TryCountExceededException("Failed on " + MAX_TRY_COUNT + " try");
                             } else {
                                 return i;
                             }

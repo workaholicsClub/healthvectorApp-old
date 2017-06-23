@@ -14,8 +14,6 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class ProgressDialogFragment extends BaseMvpDialogFragment<ProgressDialogArguments> {
-    private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
-
     @BindView(R.id.title)
     TextView title;
 
@@ -32,6 +30,7 @@ public class ProgressDialogFragment extends BaseMvpDialogFragment<ProgressDialog
 
     @Override
     protected void setupUi() {
+        Typeface typeface = FontUtils.getTypefaceRegular(getContext());
         title.setText(dialogArguments.getTitle());
         message.setText(dialogArguments.getMessage());
         //noinspection deprecation

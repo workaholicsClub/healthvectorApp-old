@@ -1,7 +1,6 @@
 package ru.android.childdiary.data.db;
 
 import android.content.Context;
-import android.support.annotation.VisibleForTesting;
 
 import java.util.List;
 
@@ -13,21 +12,18 @@ import io.requery.reactivex.ReactiveResult;
 import io.requery.reactivex.ReactiveSupport;
 import io.requery.sql.EntityDataStore;
 import lombok.val;
-import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.data.entities.Models;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 
 public class DbUtils {
-    public static ReactiveEntityStore<Persistable> getDataStore(Context appContext) {
-        return getDataStore(appContext, BuildConfig.DB_NAME, BuildConfig.DB_VERSION);
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public static ReactiveEntityStore<Persistable> getDataStore(Context appContext, String dbName, int dbVersion) {
-        val source = new CustomDatabaseSource(appContext, Models.DEFAULT, dbName, dbVersion);
+    public static ReactiveEntityStore<Persistable> getDataStore(CustomDatabaseSource source) {
         val configuration = source.getConfiguration();
         val dataStore = ReactiveSupport.toReactiveStore(new EntityDataStore<Persistable>(configuration));
         return dataStore;
+    }
+
+    public static CustomDatabaseSource getDatabaseSource(Context appContext, String dbName, int dbVersion) {
+        return new CustomDatabaseSource(appContext, Models.DEFAULT, dbName, dbVersion);
     }
 
     public static <T, E extends Persistable> Observable<T> deleteObservable(BlockingEntityStore<Persistable> blockingEntityStore,
