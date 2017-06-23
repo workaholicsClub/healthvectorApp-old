@@ -190,15 +190,6 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     }
 
     @Override
-    public void noBackupFound() {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.no_backup_found)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
-    }
-
-    @Override
     public void failedToCheckBackupAvailability() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.google_drive_error_dialog_text)
@@ -233,6 +224,15 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     public void failedToRestore() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.restore_error_dialog_text)
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
+    }
+
+    @Override
+    public void noBackupFound() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.no_backup_found)
                 .setPositiveButton(R.string.ok,
                         (dialog, which) -> presenter.moveNext())
                 .show();

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -80,6 +81,7 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     TextView getTextViewOperationInProcess;
 
     private CloudOperationType operationType;
+    private CloudOperationState operationState;
 
     public static Intent getIntent(Context context,
                                    @NonNull CloudOperationType operationType,
@@ -101,6 +103,10 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cloud_operation);
+
+        authorizeView.setVisibility(View.GONE);
+        operationView.setVisibility(View.GONE);
+        operationInProcessView.setVisibility(View.GONE);
 
         switch (operationType) {
             case BACKUP:
@@ -266,15 +272,7 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void checkBackupAvailabilitySucceeded(boolean isBackupAvailable) {
-    }
-
-    @Override
-    public void noBackupFound() {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.no_backup_found)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+        showState(CloudOperationState.AUTHORIZED);
     }
 
     @Override
@@ -290,10 +288,12 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void showRestoreLoading(boolean loading) {
+        showState(CloudOperationState.IN_PROCESS);
     }
 
     @Override
     public void restoreSucceeded() {
+        showState(CloudOperationState.FINISHED);
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.restore_success_dialog_text)
                 .setPositiveButton(R.string.ok,
@@ -303,6 +303,7 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void failedToRestore() {
+        showState(CloudOperationState.FINISHED);
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.restore_error_dialog_text)
                 .setPositiveButton(R.string.ok,
@@ -311,11 +312,23 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     }
 
     @Override
+    public void noBackupFound() {
+        showState(CloudOperationState.FINISHED);
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.no_backup_found)
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
+    }
+
+    @Override
     public void showBackupLoading(boolean loading) {
+        showState(CloudOperationState.IN_PROCESS);
     }
 
     @Override
     public void backupSucceeded() {
+        showState(CloudOperationState.FINISHED);
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.backup_success_dialog_text)
                 .setPositiveButton(R.string.ok,
@@ -325,6 +338,7 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void failedToBackup() {
+        showState(CloudOperationState.FINISHED);
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.backup_error_dialog_text)
                 .setPositiveButton(R.string.ok,
@@ -340,16 +354,55 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     }
 
     @Override
+    public void showState(@NonNull CloudOperationState state) {
+        this.operationState = state;
+        switch (state) {
+            case NOT_AUTHORIZED:
+                authorizeView.setVisibility(View.VISIBLE);
+                operationView.setVisibility(View.GONE);
+                operationInProcessView.setVisibility(View.GONE);
+                break;
+            case AUTHORIZED:
+                authorizeView.setVisibility(View.GONE);
+                operationView.setVisibility(View.VISIBLE);
+                operationInProcessView.setVisibility(View.GONE);
+                break;
+            case IN_PROCESS:
+                authorizeView.setVisibility(View.GONE);
+                operationView.setVisibility(View.GONE);
+                operationInProcessView.setVisibility(View.VISIBLE);
+                break;
+            case FINISHED:
+                authorizeView.setVisibility(View.GONE);
+                operationView.setVisibility(View.GONE);
+                operationInProcessView.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    @Override
     public void onBackPressed() {
-        presenter.moveNext();
+        if (operationState == CloudOperationState.IN_PROCESS) {
+            pleaseWait();
+        } else {
+            presenter.moveNext();
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            presenter.moveNext();
+            if (operationState == CloudOperationState.IN_PROCESS) {
+                pleaseWait();
+            } else {
+                presenter.moveNext();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void pleaseWait() {
+        Toast.makeText(this, R.string.please_wait_til_the_end, Toast.LENGTH_LONG).show();
     }
 }

@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.cloud.core.CloudPresenter;
@@ -19,9 +18,6 @@ public class SettingsPresenter extends CloudPresenter<SettingsView> {
 
     @Inject
     CalendarInteractor calendarInteractor;
-
-    @Inject
-    CloudInteractor cloudInteractor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -48,7 +44,7 @@ public class SettingsPresenter extends CloudPresenter<SettingsView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(accountName -> logger.debug("showSelectedAccount: " + accountName))
-                .subscribe(getViewState()::showSelectedAccount));
+                .subscribe(getViewState()::showSelectedAccount, this::onUnexpectedError));
     }
 
     @Override

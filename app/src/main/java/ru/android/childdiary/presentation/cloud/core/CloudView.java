@@ -32,9 +32,6 @@ public interface CloudView extends BaseView {
     void checkBackupAvailabilitySucceeded(boolean isBackupAvailable);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void noBackupFound();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
     void failedToCheckBackupAvailability();
 
     @StateStrategyType(AddToEndSingleStrategy.class)
@@ -45,6 +42,9 @@ public interface CloudView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void failedToRestore();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void noBackupFound();
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showBackupLoading(boolean loading);

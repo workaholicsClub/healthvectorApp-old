@@ -129,7 +129,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .title(getString(R.string.settings_restore_data))
                 .iconRes(R.drawable.ic_settings_restore_data)
                 .listener(this)
-                .enabled(false)
+                .enabled(true)
                 .build();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -164,10 +164,8 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         accountItem = accountItem.toBuilder().subtitle(accountName).build();
         boolean enabled = !TextUtils.isEmpty(accountName);
         backupItem = backupItem.toBuilder().enabled(enabled).build();
-        restoreItem = restoreItem.toBuilder().enabled(enabled).build();
         settingsAdapter.updateItem(accountItem);
         settingsAdapter.updateItem(backupItem);
-        settingsAdapter.updateItem(restoreItem);
     }
 
     private List<BaseSettingsItem> generateItems() {
@@ -369,15 +367,6 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     }
 
     @Override
-    public void noBackupFound() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.no_backup_found)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
-    }
-
-    @Override
     public void failedToCheckBackupAvailability() {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.google_drive_error_dialog_text)
@@ -400,6 +389,11 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void failedToRestore() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public void noBackupFound() {
         throw new UnsupportedOperationException("Not implemented");
     }
 

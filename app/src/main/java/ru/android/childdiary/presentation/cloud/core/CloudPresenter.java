@@ -21,13 +21,13 @@ import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<T> {
     @Inject
+    protected CloudInteractor cloudInteractor;
+
+    @Inject
     PlayServicesAvailability playServicesAvailability;
 
     @Inject
     NetworkAvailability networkAvailability;
-
-    @Inject
-    CloudInteractor cloudInteractor;
 
     private State state = State.BIND_ACCOUNT;
 
