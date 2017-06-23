@@ -20,7 +20,7 @@ public interface MainView extends BaseView {
     void showChild(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToProfileAdd();
+    void navigateToProfileAdd(boolean firstTime);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToProfileEdit(@NonNull Child child);

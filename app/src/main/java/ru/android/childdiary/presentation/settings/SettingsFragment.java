@@ -32,7 +32,8 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
+import ru.android.childdiary.presentation.cloud.CloudOperationActivity;
+import ru.android.childdiary.presentation.cloud.CloudOperationType;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -234,15 +235,20 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
             case ACCOUNT:
                 presenter.bindAccount();
                 break;
-            case BACKUP:
-                presenter.backup();
-                break;
-            case RESTORE:
-                // TODO
-                Intent intent = new Intent(getContext(), CloudInitialActivity.class);
+            case BACKUP: {
+                Intent intent = CloudOperationActivity.getIntent(getContext(),
+                        CloudOperationType.BACKUP, getSex());
                 startActivity(intent);
                 getActivity().finish();
                 break;
+            }
+            case RESTORE: {
+                Intent intent = CloudOperationActivity.getIntent(getContext(),
+                        CloudOperationType.RESTORE, getSex());
+                startActivity(intent);
+                getActivity().finish();
+                break;
+            }
             case DAY_LENGTH:
                 break;
             case FOOD_MEASURE:
@@ -382,63 +388,34 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .show();
     }
 
-
     @Override
     public void showRestoreLoading(boolean loading) {
-        if (loading) {
-            showProgress(TAG_PROGRESS_DIALOG_RESTORE,
-                    getString(R.string.please_wait),
-                    getString(R.string.restore_loading));
-        } else {
-            hideProgress(TAG_PROGRESS_DIALOG_RESTORE);
-        }
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void restoreSucceeded() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restore_success_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void failedToRestore() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restore_error_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void showBackupLoading(boolean loading) {
-        if (loading) {
-            showProgress(TAG_PROGRESS_DIALOG_BACKUP,
-                    getString(R.string.please_wait),
-                    getString(R.string.backup_loading));
-        } else {
-            hideProgress(TAG_PROGRESS_DIALOG_BACKUP);
-        }
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void backupSucceeded() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.backup_success_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void failedToBackup() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.backup_error_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     private enum Intention {

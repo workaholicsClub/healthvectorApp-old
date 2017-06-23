@@ -36,6 +36,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.cloud.CloudInitialActivity" />
+        <activity android:name=".presentation.cloud.CloudOperationActivity" />
         <activity
             android:name=".presentation.onboarding.IntroActivity"
             android:parentActivityName=".presentation.main.MainActivity">

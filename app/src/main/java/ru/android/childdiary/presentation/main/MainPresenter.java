@@ -50,7 +50,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         getViewState().showChildList(childList);
         if (isFirstTime) {
             if (childList.isEmpty()) {
-                getViewState().navigateToProfileAdd();
+                getViewState().navigateToProfileAdd(true);
             }
             unsubscribeOnDestroy(childInteractor.getActiveChild()
                     .subscribeOn(Schedulers.io())
@@ -71,7 +71,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void addChild() {
-        getViewState().navigateToProfileAdd();
+        getViewState().navigateToProfileAdd(false);
     }
 
     public void editChild() {

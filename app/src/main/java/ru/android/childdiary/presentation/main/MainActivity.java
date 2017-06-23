@@ -39,6 +39,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
@@ -120,8 +121,12 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     private AppPartition selectedPartition;
     private Runnable navigationCommand;
 
-    public static Intent getIntent(Context context) {
-        return new Intent(context, MainActivity.class);
+    public static Intent getIntent(Context context,
+                                   @NonNull AppPartition appPartition,
+                                   @Nullable Sex sex) {
+        return new Intent(context, MainActivity.class)
+                .putExtra(ExtraConstants.EXTRA_APP_PARTITION, appPartition)
+                .putExtra(ExtraConstants.EXTRA_SEX, sex);
     }
 
     private static IProfile mapToProfile(Context context, @NonNull Child child) {
@@ -224,15 +229,18 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             }
         }
         if (selectedPartition == null) {
-            drawer.setSelectionAtPosition(1, false);
-            presenter.openCalendar();
+            AppPartition appPartition = (AppPartition) getIntent().getSerializableExtra(ExtraConstants.EXTRA_APP_PARTITION);
+            openAppPartition(appPartition);
         }
     }
 
     @Override
-    public void navigateToProfileAdd() {
-        Intent intent = ProfileEditActivity.getIntent(this, null);
-        startActivity(intent);
+    public void navigateToProfileAdd(boolean firstTime) {
+        AppPartition appPartition = (AppPartition) getIntent().getSerializableExtra(ExtraConstants.EXTRA_APP_PARTITION);
+        if (!firstTime || appPartition == AppPartition.CALENDAR) {
+            Intent intent = ProfileEditActivity.getIntent(this, null);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -307,17 +315,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .commit();
 
         invalidateOptionsMenu();
-    }
-
-    private void hidePreviousPartition() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(FRAGMENT_CONTAINER_ID);
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setTransition(TRANSIT_UNSET)
-                    .remove(fragment)
-                    .commit();
-        }
     }
 
     private Fragment createAppPartition(@NonNull AppPartition appPartition) {
@@ -415,13 +412,12 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-        AppPartition tag = (AppPartition) drawerItem.getTag();
-        if (selectedPartition == tag) {
+        AppPartition appPartition = (AppPartition) drawerItem.getTag();
+        if (selectedPartition == appPartition) {
             return false;
         }
-        switch (tag) {
+        switch (appPartition) {
             case CALENDAR:
-                hidePreviousPartition();
                 navigationCommand = () -> presenter.openCalendar();
                 return false;
             case DEVELOPMENT_DIARY:
@@ -441,6 +437,34 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 return false;
             default:
                 return false;
+        }
+    }
+
+    private void openAppPartition(@NonNull AppPartition appPartition) {
+        if (selectedPartition == appPartition) {
+            return;
+        }
+        int position = appPartition.ordinal() + 1;
+        drawer.setSelectionAtPosition(position, false);
+        switch (appPartition) {
+            case CALENDAR:
+                presenter.openCalendar();
+                break;
+            case DEVELOPMENT_DIARY:
+                presenter.openDevelopmentDiary();
+                break;
+            case EXERCISES:
+                presenter.openExercises();
+                break;
+            case MEDICAL_DATA:
+                presenter.openMedicalData();
+                break;
+            case SETTINGS:
+                presenter.openSettings();
+                break;
+            case HELP:
+                presenter.openHelp();
+                break;
         }
     }
 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="24dp"
+        android:paddingLeft="@dimen/base_margin"
+        android:paddingRight="@dimen/base_margin"
+        android:paddingTop="24dp">
+
+        <TextView
+            android:id="@+id/textViewOperationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/restore_data"
+            android:textAppearance="@style/CloudOperationTitleTextAppearance" />
+
+        <TextView
+            android:id="@+id/textViewOperation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/restore_data_placeholder"
+            android:textAppearance="@style/CloudOperationPlaceholderTextAppearance" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonDone"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/button_margin_vertical"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginTop="@dimen/button_margin_vertical"
+        android:text="@string/restore"
+        android:textAllCaps="false" />
+</RelativeLayout>

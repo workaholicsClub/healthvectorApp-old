@@ -7,14 +7,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -25,25 +32,60 @@ import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo
 import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class CloudInitialActivity extends BaseMvpActivity implements CloudInitialView {
+public class CloudOperationActivity extends BaseMvpActivity implements CloudOperationView {
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1001;
     private static final int REQUEST_AUTHORIZATION = 1002;
     private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     private static final String TAG_PROGRESS_DIALOG_AUTHORIZE = "TAG_PROGRESS_DIALOG_AUTHORIZE";
-    private static final String TAG_PROGRESS_DIALOG_RESTORE = "TAG_PROGRESS_DIALOG_RESTORE";
 
     @Inject
     AccountChooserPicker accountChooserPicker;
 
     @InjectPresenter
-    CloudInitialPresenter presenter;
+    CloudOperationPresenter presenter;
 
-    public static Intent getIntent(Context context, @Nullable Sex sex) {
-        Intent intent = new Intent(context, CloudInitialActivity.class);
+    @BindView(R.id.authorizeView)
+    View authorizeView;
+
+    @BindView(R.id.operationView)
+    View operationView;
+
+    @BindView(R.id.operationInProcessView)
+    View operationInProcessView;
+
+    @BindView(R.id.textViewAuthorizationCause)
+    TextView textViewAuthorizationCause;
+
+    @BindView(R.id.buttonAuthorize)
+    Button buttonAuthorize;
+
+    @BindView(R.id.textViewOperationTitle)
+    TextView textViewOperationTitle;
+
+    @BindView(R.id.textViewOperation)
+    TextView textViewOperation;
+
+    @BindView(R.id.buttonDone)
+    Button buttonDone;
+
+    @BindView(R.id.textViewOperationInProcessTitle)
+    TextView textViewOperationInProcessTitle;
+
+    @BindView(R.id.textViewOperationInProcess)
+    TextView getTextViewOperationInProcess;
+
+    private CloudOperationType operationType;
+
+    public static Intent getIntent(Context context,
+                                   @NonNull CloudOperationType operationType,
+                                   @Nullable Sex sex) {
+        Intent intent = new Intent(context, CloudOperationActivity.class);
+        intent.putExtra(ExtraConstants.EXTRA_TYPE, operationType);
         intent.putExtra(ExtraConstants.EXTRA_SEX, sex);
         return intent;
     }
@@ -55,18 +97,67 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        operationType = (CloudOperationType) getIntent().getSerializableExtra(ExtraConstants.EXTRA_TYPE);
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cloud);
+        setContentView(R.layout.activity_cloud_operation);
+
+        switch (operationType) {
+            case BACKUP:
+                textViewAuthorizationCause.setText(R.string.authorize_account_to_backup_data);
+                textViewOperationTitle.setText(R.string.backup_data);
+                textViewOperation.setText(R.string.backup_data_placeholder);
+                buttonDone.setText(R.string.backup);
+                textViewOperationInProcessTitle.setText(R.string.backup_data_in_process);
+                getTextViewOperationInProcess.setText(R.string.backup_data_placeholder);
+                break;
+            case RESTORE:
+                textViewAuthorizationCause.setText(R.string.authorize_account_to_restore_data);
+                textViewOperationTitle.setText(R.string.restore_data);
+                textViewOperation.setText(R.string.restore_data_placeholder);
+                buttonDone.setText(R.string.restore);
+                textViewOperationInProcessTitle.setText(R.string.restore_data_in_process);
+                getTextViewOperationInProcess.setText(R.string.restore_data_placeholder);
+                break;
+        }
     }
 
-    @OnClick(R.id.buttonLater)
-    void onLaterClick() {
-        presenter.moveNext();
+    @Override
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
+        switch (operationType) {
+            case BACKUP:
+                setupToolbarTitle(R.string.backup_data);
+                break;
+            case RESTORE:
+                setupToolbarTitle(R.string.restore_data);
+                break;
+        }
     }
 
-    @OnClick(R.id.buttonBindAccount)
-    void bindAccount() {
+    @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        buttonAuthorize.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
+        buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
+    }
+
+    @OnClick(R.id.buttonAuthorize)
+    void onAuthorizeClick() {
         presenter.bindAccount();
+    }
+
+    @OnClick(R.id.buttonDone)
+    void onDoneClick() {
+        switch (operationType) {
+            case BACKUP:
+                presenter.backup();
+                break;
+            case RESTORE:
+                presenter.restore();
+                break;
+        }
     }
 
     @Override
@@ -175,14 +266,6 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
 
     @Override
     public void foundBackup() {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(R.string.found_backup_dialog_title)
-                .setMessage(R.string.found_backup_dialog_text)
-                .setPositiveButton(R.string.restore,
-                        (DialogInterface dialog, int which) -> presenter.restore())
-                .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
     }
 
     @Override
@@ -207,13 +290,6 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
 
     @Override
     public void showRestoreLoading(boolean loading) {
-        if (loading) {
-            showProgress(TAG_PROGRESS_DIALOG_RESTORE,
-                    getString(R.string.please_wait),
-                    getString(R.string.restore_data_in_process));
-        } else {
-            hideProgress(TAG_PROGRESS_DIALOG_RESTORE);
-        }
     }
 
     @Override
@@ -236,22 +312,29 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
 
     @Override
     public void showBackupLoading(boolean loading) {
-        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void backupSucceeded() {
-        throw new UnsupportedOperationException("Not implemented");
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.backup_success_dialog_text)
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
     }
 
     @Override
     public void failedToBackup() {
-        throw new UnsupportedOperationException("Not implemented");
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.backup_error_dialog_text)
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
     }
 
     @Override
     public void navigateToMain() {
-        Intent intent = MainActivity.getIntent(this, AppPartition.CALENDAR, getSex());
+        Intent intent = MainActivity.getIntent(this, AppPartition.SETTINGS, getSex());
         startActivity(intent);
         finish();
     }
@@ -259,5 +342,14 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     @Override
     public void onBackPressed() {
         presenter.moveNext();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            presenter.moveNext();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

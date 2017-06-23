@@ -252,13 +252,10 @@
     <string name="check_is_backup_available_loading">Авторизация&#8230;</string>
     <string name="found_backup_dialog_title">Найден бэкап</string>
     <string name="found_backup_dialog_text">Восстановить данные из бэкапа?</string>
-    <string name="restore">Восстановить</string>
     <string name="no_backup_found">Бэкап не найден</string>
     <string name="google_drive_error_dialog_text">Не удалось подключиться к Google Drive</string>
-    <string name="restore_loading">Восстановление данных из бэкапа&#8230;</string>
     <string name="restore_success_dialog_text">Данные восстановлены</string>
     <string name="restore_error_dialog_text">При восстановлении данных произошла ошибка</string>
-    <string name="backup_loading">Сохранение данных&#8230;</string>
     <string name="backup_success_dialog_text">Данные сохранены</string>
     <string name="backup_error_dialog_text">При сохранении данных произошла ошибка</string>
     <string name="settings_notifications">Уведомления</string>
@@ -271,6 +268,18 @@
     <string name="settings_day_length">Продолжительность дня</string>
     <string name="settings_food_measure">Единицы измерения</string>
     <string name="settings_food">Прикорм</string>
+    <string name="authorize">Войти</string>
+    <string name="authorize_account">Войти в аккаунт</string>
+    <string name="restore">Восстановить</string>
+    <string name="backup">Сохранить</string>
+    <string name="restore_data">Восстановить данные</string>
+    <string name="backup_data">Сохранить данные</string>
+    <string name="authorize_account_to_restore_data">Для восстановления данных необходимо авторизоваться в Google Drive</string>
+    <string name="authorize_account_to_backup_data">Для сохранения данных необходимо авторизоваться в Google Drive</string>
+    <string name="restore_data_placeholder">Данные будут восстанавливаться в течение некоторого времени, далее можно продолжить работу</string>
+    <string name="backup_data_placeholder">Данные будут сохраняться в течение некоторого времени, далее можно продолжить работу</string>
+    <string name="restore_data_in_process">Идет восстановление данных</string>
+    <string name="backup_data_in_process">Идет сохранение данных</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
