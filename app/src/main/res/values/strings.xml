@@ -254,9 +254,9 @@
     <string name="found_backup_dialog_text">Восстановить данные из бэкапа?</string>
     <string name="restore">Восстановить</string>
     <string name="google_drive_error_dialog_text">Не удалось подключиться к Google Drive</string>
-    <string name="backup_restoring">Восстановление данных из бэкапа&#8230;</string>
-    <string name="backup_restoring_success_dialog_text">Данные восстановлены</string>
-    <string name="backup_restoring_error_dialog_text">При восстановлении данных произошла ошибка</string>
+    <string name="restore_loading">Восстановление данных из бэкапа&#8230;</string>
+    <string name="restore_success_dialog_text">Данные восстановлены</string>
+    <string name="restore_error_dialog_text">При восстановлении данных произошла ошибка</string>
     <string name="settings_notifications">Уведомления</string>
     <string name="settings_setup_notifications">Настройка оповещений</string>
     <string name="settings_data_control">Управление данными</string>

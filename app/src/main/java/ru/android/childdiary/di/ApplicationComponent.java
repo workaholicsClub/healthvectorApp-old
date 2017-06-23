@@ -11,7 +11,7 @@ import ru.android.childdiary.di.modules.NetworkModule;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
-import ru.android.childdiary.presentation.cloud.CloudActivity;
+import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
 import ru.android.childdiary.presentation.cloud.CloudPresenter;
 import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
@@ -201,7 +201,7 @@ public interface ApplicationComponent {
 
     void inject(AddConcreteExerciseActivity activity);
 
-    void inject(CloudActivity activity);
+    void inject(CloudInitialActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

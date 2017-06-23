@@ -8,7 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.presentation.cloud.CloudActivity;
+import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.main.MainActivity;
 
@@ -36,7 +36,7 @@ public class SplashActivity extends BaseMvpActivity implements SplashView {
 
     @Override
     public void navigateToCloud() {
-        Intent intent = CloudActivity.getIntent(this);
+        Intent intent = CloudInitialActivity.getIntent(this);
         startActivity(intent);
         finish();
     }

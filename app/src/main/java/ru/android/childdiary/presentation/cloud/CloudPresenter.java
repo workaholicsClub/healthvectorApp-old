@@ -30,6 +30,8 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     @Inject
     CloudInteractor cloudInteractor;
 
+    private State state = State.BIND_ACCOUNT;
+
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
@@ -39,7 +41,25 @@ public class CloudPresenter extends BasePresenter<CloudView> {
         getViewState().navigateToMain();
     }
 
+    public void continueAfterErrorResolved() {
+        switch (state) {
+            case BIND_ACCOUNT:
+                bindAccount();
+                break;
+            case CHECK:
+                checkIsBackupAvailable();
+                break;
+            case RESTORE:
+                restore();
+                break;
+            case BACKUP:
+                backup();
+                break;
+        }
+    }
+
     public void bindAccount() {
+        state = State.BIND_ACCOUNT;
         unsubscribeOnDestroy(
                 playServicesAvailability.checkPlayServicesAvailability()
                         .subscribeOn(Schedulers.io())
@@ -75,17 +95,18 @@ public class CloudPresenter extends BasePresenter<CloudView> {
     }
 
     public void checkIsBackupAvailable() {
+        state = State.CHECK;
         // проверяем сперва доступность интернета, т.к. в google drive api установлено большое
         // количество повторных попыток, что приводит к длительному ожиданию пользователя
         // ИЛИ надо делать возможность отмены операции пользователем
-        getViewState().showBackupLoading(true);
+        getViewState().showCheckBackupAvailabilityLoading(true);
         unsubscribeOnDestroy(
                 networkAvailability.checkNetworkAvailability(true)
                         .flatMap(isNetworkAvailable -> cloudInteractor.checkIsBackupAvailable())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSuccess(isBackupAvailable -> getViewState().showBackupLoading(false))
-                        .doOnError(throwable -> getViewState().showBackupLoading(false))
+                        .doOnSuccess(isBackupAvailable -> getViewState().showCheckBackupAvailabilityLoading(false))
+                        .doOnError(throwable -> getViewState().showCheckBackupAvailabilityLoading(false))
                         .doOnError(throwable -> logger.error("checkIsBackupAvailable", throwable))
                         .subscribe(
                                 isBackupAvailable -> {
@@ -96,7 +117,7 @@ public class CloudPresenter extends BasePresenter<CloudView> {
                                     }
                                 },
                                 throwable -> {
-                                    boolean processed = processGoogleDriveError(throwable, CloudOperation.CHECK);
+                                    boolean processed = processGoogleDriveError(throwable);
                                     if (!processed) {
                                         getViewState().failedToCheckBackupAvailability();
                                     }
@@ -104,28 +125,51 @@ public class CloudPresenter extends BasePresenter<CloudView> {
                         ));
     }
 
-    public void restoreFromBackup() {
-        getViewState().showBackupRestoring(true);
+    public void restore() {
+        state = State.RESTORE;
+        getViewState().showRestoreLoading(true);
         unsubscribeOnDestroy(
                 networkAvailability.checkNetworkAvailability(true)
                         .flatMap(isNetworkAvailable -> cloudInteractor.restore())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSuccess(isRestored -> getViewState().showBackupRestoring(false))
-                        .doOnError(throwable -> getViewState().showBackupRestoring(false))
-                        .doOnError(throwable -> logger.error("restoreFromBackup", throwable))
+                        .doOnSuccess(isRestored -> getViewState().showRestoreLoading(false))
+                        .doOnError(throwable -> getViewState().showRestoreLoading(false))
+                        .doOnError(throwable -> logger.error("restore", throwable))
                         .subscribe(
-                                isRestored -> getViewState().backupRestored(),
+                                isRestored -> getViewState().restoreSucceeded(),
                                 throwable -> {
-                                    boolean processed = processGoogleDriveError(throwable, CloudOperation.RESTORE);
+                                    boolean processed = processGoogleDriveError(throwable);
                                     if (!processed) {
-                                        getViewState().failedToRestoreBackup();
+                                        getViewState().failedToRestore();
                                     }
                                 }
                         ));
     }
 
-    private boolean processGoogleDriveError(Throwable throwable, CloudOperation cloudOperation) {
+    public void backup() {
+        state = State.BACKUP;
+        getViewState().showBackupLoading(true);
+        unsubscribeOnDestroy(
+                networkAvailability.checkNetworkAvailability(true)
+                        .flatMap(isNetworkAvailable -> cloudInteractor.backup())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSuccess(isRestored -> getViewState().showBackupLoading(false))
+                        .doOnError(throwable -> getViewState().showBackupLoading(false))
+                        .doOnError(throwable -> logger.error("backup", throwable))
+                        .subscribe(
+                                isRestored -> getViewState().backupSucceeded(),
+                                throwable -> {
+                                    boolean processed = processGoogleDriveError(throwable);
+                                    if (!processed) {
+                                        getViewState().failedToBackup();
+                                    }
+                                }
+                        ));
+    }
+
+    private boolean processGoogleDriveError(Throwable throwable) {
         if (throwable instanceof GooglePlayServicesAvailabilityIOException) {
             int connectionStatusCode = ((GooglePlayServicesAvailabilityIOException) throwable).getConnectionStatusCode();
             getViewState().showPlayServicesErrorDialog(connectionStatusCode);
@@ -135,9 +179,11 @@ public class CloudPresenter extends BasePresenter<CloudView> {
             getViewState().requestAuthorization(intent);
             return true;
         } else if (throwable instanceof NetworkUnavailableException) {
-            getViewState().connectionUnavailable(cloudOperation);
+            getViewState().connectionUnavailable();
             return true;
         }
         return false;
     }
+
+    private enum State {BIND_ACCOUNT, CHECK, RESTORE, BACKUP}
 }

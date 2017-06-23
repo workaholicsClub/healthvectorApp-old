@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 
@@ -25,7 +24,7 @@ import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class CloudActivity extends BaseMvpActivity implements CloudView {
+public class CloudInitialActivity extends BaseMvpActivity implements CloudView {
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1001;
     private static final int REQUEST_AUTHORIZATION = 1002;
@@ -41,7 +40,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
     AccountChooserPicker accountChooserPicker;
 
     public static Intent getIntent(Context context) {
-        Intent intent = new Intent(context, CloudActivity.class);
+        Intent intent = new Intent(context, CloudInitialActivity.class);
         return intent;
     }
 
@@ -114,12 +113,12 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
                 break;
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode == RESULT_OK) {
-                    presenter.bindAccount();
+                    presenter.continueAfterErrorResolved();
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
-                    presenter.bindAccount();
+                    presenter.continueAfterErrorResolved();
                 }
                 break;
         }
@@ -149,28 +148,19 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
     }
 
     @Override
-    public void connectionUnavailable(@NonNull CloudOperation cloudOperation) {
+    public void connectionUnavailable() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.bind_account_connection_unavailable_dialog_title)
                 .setMessage(R.string.bind_account_connection_unavailable_dialog_text)
                 .setPositiveButton(R.string.try_again,
-                        (DialogInterface dialog, int which) -> {
-                            switch (cloudOperation) {
-                                case CHECK:
-                                    presenter.checkIsBackupAvailable();
-                                    break;
-                                case RESTORE:
-                                    presenter.restoreFromBackup();
-                                    break;
-                            }
-                        })
+                        (DialogInterface dialog, int which) -> presenter.continueAfterErrorResolved())
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> presenter.moveNext())
                 .show();
     }
 
     @Override
-    public void showBackupLoading(boolean loading) {
+    public void showCheckBackupAvailabilityLoading(boolean loading) {
         if (loading) {
             showProgress(TAG_PROGRESS_DIALOG_BACKUP_LOADING,
                     getString(R.string.please_wait),
@@ -186,7 +176,7 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
                 .setTitle(R.string.found_backup_dialog_title)
                 .setMessage(R.string.found_backup_dialog_text)
                 .setPositiveButton(R.string.restore,
-                        (DialogInterface dialog, int which) -> presenter.restoreFromBackup())
+                        (DialogInterface dialog, int which) -> presenter.restore())
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> presenter.moveNext())
                 .show();
@@ -204,32 +194,47 @@ public class CloudActivity extends BaseMvpActivity implements CloudView {
     }
 
     @Override
-    public void showBackupRestoring(boolean loading) {
+    public void showRestoreLoading(boolean loading) {
         if (loading) {
             showProgress(TAG_PROGRESS_DIALOG_BACKUP_RESTORING,
                     getString(R.string.please_wait),
-                    getString(R.string.backup_restoring));
+                    getString(R.string.restore_loading));
         } else {
             hideProgress(TAG_PROGRESS_DIALOG_BACKUP_RESTORING);
         }
     }
 
     @Override
-    public void backupRestored() {
+    public void restoreSucceeded() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.backup_restoring_success_dialog_text)
+                .setMessage(R.string.restore_success_dialog_text)
                 .setPositiveButton(R.string.ok,
                         (dialog, which) -> presenter.moveNext())
                 .show();
     }
 
     @Override
-    public void failedToRestoreBackup() {
+    public void failedToRestore() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.backup_restoring_error_dialog_text)
+                .setMessage(R.string.restore_error_dialog_text)
                 .setPositiveButton(R.string.ok,
                         (dialog, which) -> presenter.moveNext())
                 .show();
+    }
+
+    @Override
+    public void showBackupLoading(boolean loading) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public void backupSucceeded() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public void failedToBackup() {
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
