@@ -13,6 +13,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -78,6 +79,8 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Getter(AccessLevel.PROTECTED)
     private Sex sex;
 
+    private IntentSettingsItem accountItem, backupItem, restoreItem;
+
     @Override
     protected void injectFragment(ApplicationComponent component) {
         component.inject(this);
@@ -106,6 +109,27 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     }
 
     private void setupUi() {
+        accountItem = IntentSettingsItem.builder()
+                .id(Intention.ACCOUNT.ordinal())
+                .title(getString(R.string.settings_account))
+                .iconRes(R.drawable.ic_settings_account)
+                .listener(this)
+                .enabled(true)
+                .build();
+        backupItem = IntentSettingsItem.builder()
+                .id(Intention.BACKUP.ordinal())
+                .title(getString(R.string.settings_backup_data))
+                .iconRes(R.drawable.ic_settings_backup_data)
+                .listener(this)
+                .enabled(false)
+                .build();
+        restoreItem = IntentSettingsItem.builder()
+                .id(Intention.RESTORE.ordinal())
+                .title(getString(R.string.settings_restore_data))
+                .iconRes(R.drawable.ic_settings_restore_data)
+                .listener(this)
+                .enabled(false)
+                .build();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         settingsAdapter = new SettingsAdapter(getContext());
@@ -134,6 +158,17 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         }
     }
 
+    @Override
+    public void showSelectedAccount(@NonNull String accountName) {
+        accountItem = accountItem.toBuilder().subtitle(accountName).build();
+        boolean enabled = !TextUtils.isEmpty(accountName);
+        backupItem = backupItem.toBuilder().enabled(enabled).build();
+        restoreItem = restoreItem.toBuilder().enabled(enabled).build();
+        settingsAdapter.updateItem(accountItem);
+        settingsAdapter.updateItem(backupItem);
+        settingsAdapter.updateItem(restoreItem);
+    }
+
     private List<BaseSettingsItem> generateItems() {
         List<BaseSettingsItem> items = new ArrayList<>();
         int id = 1000;
@@ -147,6 +182,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .title(getString(R.string.settings_setup_notifications))
                 .iconRes(R.drawable.ic_notify_time)
                 .listener(this)
+                .enabled(true)
                 .build());
         items.add(DelimiterSettingsItem.builder()
                 .id(++id)
@@ -155,24 +191,9 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .id(++id)
                 .title(getString(R.string.settings_data_control))
                 .build());
-        items.add(IntentSettingsItem.builder()
-                .id(Intention.ACCOUNT.ordinal())
-                .title(getString(R.string.settings_account))
-                .iconRes(R.drawable.ic_settings_account)
-                .listener(this)
-                .build());
-        items.add(IntentSettingsItem.builder()
-                .id(Intention.BACKUP.ordinal())
-                .title(getString(R.string.settings_backup_data))
-                .iconRes(R.drawable.ic_settings_backup_data)
-                .listener(this)
-                .build());
-        items.add(IntentSettingsItem.builder()
-                .id(Intention.RESTORE.ordinal())
-                .title(getString(R.string.settings_restore_data))
-                .iconRes(R.drawable.ic_settings_restore_data)
-                .listener(this)
-                .build());
+        items.add(accountItem);
+        items.add(backupItem);
+        items.add(restoreItem);
         items.add(DelimiterSettingsItem.builder()
                 .id(++id)
                 .build());
@@ -185,18 +206,21 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .title(getString(R.string.settings_day_length))
                 .iconRes(R.drawable.ic_length)
                 .listener(this)
+                .enabled(true)
                 .build());
         items.add(IntentSettingsItem.builder()
                 .id(Intention.FOOD_MEASURE.ordinal())
                 .title(getString(R.string.settings_food_measure))
                 .iconRes(R.drawable.ic_food_measure)
                 .listener(this)
+                .enabled(true)
                 .build());
         items.add(IntentSettingsItem.builder()
                 .id(Intention.FOOD.ordinal())
                 .title(getString(R.string.settings_food))
                 .iconRes(R.drawable.ic_food)
                 .listener(this)
+                .enabled(true)
                 .build());
         return items;
     }
