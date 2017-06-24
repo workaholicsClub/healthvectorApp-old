@@ -47,6 +47,7 @@ public class ExerciseEventMapper implements EntityMapper<ExerciseEventData, Exer
                 .isDone(masterEventData.isDone())
                 .child(child)
                 .linearGroup(masterEventData.getLinearGroup())
+                .concreteExercise(concreteExercise)
                 .name(exerciseEventData.getName())
                 .durationInMinutes(exerciseEventData.getDurationInMinutes())
                 .imageFileName(exerciseEventData.getImageFileName())

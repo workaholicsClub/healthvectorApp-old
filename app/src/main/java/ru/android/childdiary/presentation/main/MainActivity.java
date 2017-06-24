@@ -1,9 +1,12 @@
 package ru.android.childdiary.presentation.main;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -128,8 +131,26 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                                    @NonNull AppPartition appPartition,
                                    @Nullable Sex sex) {
         return new Intent(context, MainActivity.class)
-                .putExtra(ExtraConstants.EXTRA_APP_PARTITION, appPartition)
+                .putExtra(ExtraConstants.EXTRA_APP_PARTITION, appPartition.ordinal())
                 .putExtra(ExtraConstants.EXTRA_SEX, sex);
+    }
+
+    private static AppPartition readAppPartition(@NonNull Intent intent) {
+        int index = intent.getIntExtra(ExtraConstants.EXTRA_APP_PARTITION, 0);
+        return AppPartition.values()[index];
+    }
+
+    public static void scheduleAppStartAndExit(Context context,
+                                               @NonNull AppPartition appPartition) {
+        Intent intent = MainActivity.getIntent(context, appPartition, null);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 200, pendingIntent);
+
+        System.exit(0);
     }
 
     private static IProfile mapToProfile(Context context, @NonNull Child child) {
@@ -231,19 +252,22 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 accountHeader.setActiveProfile(mapToProfileId(child));
             }
         }
-        AppPartition appPartition = selectedPartition == null
-                ? (AppPartition) getIntent().getSerializableExtra(ExtraConstants.EXTRA_APP_PARTITION)
-                : selectedPartition;
+        AppPartition appPartition = selectedPartition == null ? readAppPartition(getIntent()) : selectedPartition;
         openAppPartition(appPartition);
     }
 
     @Override
-    public void navigateToProfileAdd(boolean firstTime) {
-        AppPartition appPartition = (AppPartition) getIntent().getSerializableExtra(ExtraConstants.EXTRA_APP_PARTITION);
-        if (firstTime && appPartition == AppPartition.CALENDAR) {
-            Intent intent = ProfileEditActivity.getIntent(this, null);
-            startActivity(intent);
+    public void navigateToProfileAddFirstTime() {
+        AppPartition appPartition = readAppPartition(getIntent());
+        if (appPartition == AppPartition.CALENDAR) {
+            navigateToProfileAdd();
         }
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(this, null);
+        startActivity(intent);
     }
 
     @Override

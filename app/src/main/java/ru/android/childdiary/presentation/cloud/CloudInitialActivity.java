@@ -9,12 +9,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -42,6 +44,12 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     @InjectPresenter
     CloudInitialPresenter presenter;
 
+    @BindView(R.id.buttonLater)
+    Button buttonLater;
+
+    @BindView(R.id.buttonBindAccount)
+    Button buttonBindAccount;
+
     public static Intent getIntent(Context context, @Nullable Sex sex) {
         Intent intent = new Intent(context, CloudInitialActivity.class);
         intent.putExtra(ExtraConstants.EXTRA_SEX, sex);
@@ -56,7 +64,14 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cloud);
+        setContentView(R.layout.activity_cloud_initial);
+    }
+
+    @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        buttonLater.setTextColor(ThemeUtils.getColorAccent(this, getSex()));
+        buttonBindAccount.setTextColor(ThemeUtils.getColorAccent(this, getSex()));
     }
 
     @OnClick(R.id.buttonLater)
@@ -258,6 +273,12 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
         Intent intent = MainActivity.getIntent(this, AppPartition.CALENDAR, getSex());
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void restartApp() {
+        finish();
+        MainActivity.scheduleAppStartAndExit(this, AppPartition.CALENDAR);
     }
 
     @Override

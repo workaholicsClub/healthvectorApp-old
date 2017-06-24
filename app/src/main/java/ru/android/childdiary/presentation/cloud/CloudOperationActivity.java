@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -50,6 +52,9 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     @InjectPresenter
     CloudOperationPresenter presenter;
 
+    @BindView(R.id.initView)
+    View initView;
+
     @BindView(R.id.authorizeView)
     View authorizeView;
 
@@ -59,8 +64,11 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     @BindView(R.id.operationInProcessView)
     View operationInProcessView;
 
-    @BindView(R.id.textViewAuthorizationCause)
-    TextView textViewAuthorizationCause;
+    @BindView(R.id.operationDoneView)
+    View operationDoneView;
+
+    @BindView(R.id.textViewAuthorizeText)
+    TextView textViewAuthorizeText;
 
     @BindView(R.id.buttonAuthorize)
     Button buttonAuthorize;
@@ -68,20 +76,34 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     @BindView(R.id.textViewOperationTitle)
     TextView textViewOperationTitle;
 
-    @BindView(R.id.textViewOperation)
-    TextView textViewOperation;
+    @BindView(R.id.textViewOperationText)
+    TextView textViewOperationText;
 
-    @BindView(R.id.buttonDone)
-    Button buttonDone;
+    @BindView(R.id.buttonDo)
+    Button buttonDo;
 
     @BindView(R.id.textViewOperationInProcessTitle)
     TextView textViewOperationInProcessTitle;
 
-    @BindView(R.id.textViewOperationInProcess)
-    TextView getTextViewOperationInProcess;
+    @BindView(R.id.textViewOperationInProcessText)
+    TextView getTextViewOperationInProcessText;
+
+    @BindView(R.id.textViewOperationDoneTitle)
+    TextView textViewOperationDoneTitle;
+
+    @BindView(R.id.textViewOperationDoneText)
+    TextView textViewOperationDoneText;
+
+    @BindView(R.id.buttonDone)
+    Button buttonDone;
+
+    @State
+    CloudOperationState operationState = CloudOperationState.INIT;
+
+    @State
+    boolean isAuthorized;
 
     private CloudOperationType operationType;
-    private CloudOperationState operationState;
 
     public static Intent getIntent(Context context,
                                    @NonNull CloudOperationType operationType,
@@ -104,28 +126,26 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cloud_operation);
 
-        authorizeView.setVisibility(View.GONE);
-        operationView.setVisibility(View.GONE);
-        operationInProcessView.setVisibility(View.GONE);
-
         switch (operationType) {
             case BACKUP:
-                textViewAuthorizationCause.setText(R.string.authorize_account_to_backup_data);
+                textViewAuthorizeText.setText(R.string.authorize_account_to_backup_data);
                 textViewOperationTitle.setText(R.string.backup_data);
-                textViewOperation.setText(R.string.backup_data_placeholder);
-                buttonDone.setText(R.string.backup);
+                textViewOperationText.setText(R.string.backup_data_placeholder);
+                buttonDo.setText(R.string.backup);
                 textViewOperationInProcessTitle.setText(R.string.backup_data_in_process);
-                getTextViewOperationInProcess.setText(R.string.backup_data_placeholder);
+                getTextViewOperationInProcessText.setText(R.string.backup_data_placeholder);
                 break;
             case RESTORE:
-                textViewAuthorizationCause.setText(R.string.authorize_account_to_restore_data);
+                textViewAuthorizeText.setText(R.string.authorize_account_to_restore_data);
                 textViewOperationTitle.setText(R.string.restore_data);
-                textViewOperation.setText(R.string.restore_data_placeholder);
-                buttonDone.setText(R.string.restore);
+                textViewOperationText.setText(R.string.restore_data_placeholder);
+                buttonDo.setText(R.string.restore);
                 textViewOperationInProcessTitle.setText(R.string.restore_data_in_process);
-                getTextViewOperationInProcess.setText(R.string.restore_data_placeholder);
+                getTextViewOperationInProcessText.setText(R.string.restore_data_placeholder);
                 break;
         }
+
+        showState(operationState);
     }
 
     @Override
@@ -146,6 +166,7 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     protected void themeChanged() {
         super.themeChanged();
         buttonAuthorize.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
+        buttonDo.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
         buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
@@ -154,8 +175,8 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
         presenter.bindAccount();
     }
 
-    @OnClick(R.id.buttonDone)
-    void onDoneClick() {
+    @OnClick(R.id.buttonDo)
+    void onDoClick() {
         switch (operationType) {
             case BACKUP:
                 presenter.backup();
@@ -164,6 +185,11 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
                 presenter.restore();
                 break;
         }
+    }
+
+    @OnClick(R.id.buttonDone)
+    void onDoneClick() {
+        presenter.moveNext();
     }
 
     @Override
@@ -226,6 +252,7 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void showPlayServicesErrorDialog(int connectionStatusCode) {
+        showState(isAuthorized ? CloudOperationState.AUTHORIZED : CloudOperationState.NOT_AUTHORIZED);
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
             Dialog dialog = apiAvailability.getErrorDialog(
@@ -244,11 +271,13 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void requestAuthorization(Intent intent) {
+        showState(isAuthorized ? CloudOperationState.AUTHORIZED : CloudOperationState.NOT_AUTHORIZED);
         startActivityForResult(intent, REQUEST_AUTHORIZATION);
     }
 
     @Override
     public void connectionUnavailable() {
+        showState(isAuthorized ? CloudOperationState.AUTHORIZED : CloudOperationState.NOT_AUTHORIZED);
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.bind_account_connection_unavailable_dialog_title)
                 .setMessage(R.string.bind_account_connection_unavailable_dialog_text)
@@ -293,32 +322,20 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void restoreSucceeded() {
+        updateOperationDoneView(getString(R.string.restore_success_dialog_text), null);
         showState(CloudOperationState.FINISHED);
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restore_success_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
     }
 
     @Override
     public void failedToRestore() {
+        updateOperationDoneView(getString(R.string.restore_error_dialog_text), null);
         showState(CloudOperationState.FINISHED);
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restore_error_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
     }
 
     @Override
     public void noBackupFound() {
+        updateOperationDoneView(getString(R.string.no_backup_found), null);
         showState(CloudOperationState.FINISHED);
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.no_backup_found)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
     }
 
     @Override
@@ -328,22 +345,19 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void backupSucceeded() {
+        updateOperationDoneView(getString(R.string.backup_success_dialog_text), null);
         showState(CloudOperationState.FINISHED);
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.backup_success_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
     }
 
     @Override
     public void failedToBackup() {
+        updateOperationDoneView(getString(R.string.backup_error_dialog_text), null);
         showState(CloudOperationState.FINISHED);
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.backup_error_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+    }
+
+    @Override
+    public void setIsAuthorized(boolean isAuthorized) {
+        showState(isAuthorized ? CloudOperationState.AUTHORIZED : CloudOperationState.NOT_AUTHORIZED);
     }
 
     @Override
@@ -354,30 +368,59 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     }
 
     @Override
-    public void showState(@NonNull CloudOperationState state) {
+    public void restartApp() {
+        finish();
+        MainActivity.scheduleAppStartAndExit(this, AppPartition.SETTINGS);
+    }
+
+    private void showState(@NonNull CloudOperationState state) {
+        if (state == CloudOperationState.AUTHORIZED) {
+            isAuthorized = true;
+        }
         this.operationState = state;
         switch (state) {
+            case INIT:
+                initView.setVisibility(View.VISIBLE);
+                authorizeView.setVisibility(View.GONE);
+                operationView.setVisibility(View.GONE);
+                operationInProcessView.setVisibility(View.GONE);
+                operationDoneView.setVisibility(View.GONE);
+                break;
             case NOT_AUTHORIZED:
+                initView.setVisibility(View.GONE);
                 authorizeView.setVisibility(View.VISIBLE);
                 operationView.setVisibility(View.GONE);
                 operationInProcessView.setVisibility(View.GONE);
+                operationDoneView.setVisibility(View.GONE);
                 break;
             case AUTHORIZED:
+                initView.setVisibility(View.GONE);
                 authorizeView.setVisibility(View.GONE);
                 operationView.setVisibility(View.VISIBLE);
                 operationInProcessView.setVisibility(View.GONE);
+                operationDoneView.setVisibility(View.GONE);
                 break;
             case IN_PROCESS:
+                initView.setVisibility(View.GONE);
                 authorizeView.setVisibility(View.GONE);
                 operationView.setVisibility(View.GONE);
                 operationInProcessView.setVisibility(View.VISIBLE);
+                operationDoneView.setVisibility(View.GONE);
                 break;
             case FINISHED:
+                initView.setVisibility(View.GONE);
                 authorizeView.setVisibility(View.GONE);
                 operationView.setVisibility(View.GONE);
                 operationInProcessView.setVisibility(View.GONE);
+                operationDoneView.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    private void updateOperationDoneView(@NonNull String title, @Nullable String text) {
+        textViewOperationDoneTitle.setText(title);
+        textViewOperationDoneText.setText(text);
+        textViewOperationDoneText.setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -404,5 +447,9 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     private void pleaseWait() {
         Toast.makeText(this, R.string.please_wait_til_the_end, Toast.LENGTH_LONG).show();
+    }
+
+    enum CloudOperationState {
+        INIT, NOT_AUTHORIZED, AUTHORIZED, IN_PROCESS, FINISHED
     }
 }

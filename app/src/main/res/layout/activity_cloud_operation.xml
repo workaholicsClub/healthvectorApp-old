@@ -13,14 +13,28 @@
 
         <include
             android:id="@+id/authorizeView"
-            layout="@layout/view_cloud_authorize" />
+            layout="@layout/view_cloud_authorize"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/operationView"
-            layout="@layout/view_cloud_operation" />
+            layout="@layout/view_cloud_operation"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/operationInProcessView"
-            layout="@layout/view_cloud_operation_in_process" />
+            layout="@layout/view_cloud_operation_in_process"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/operationDoneView"
+            layout="@layout/view_cloud_operation_done"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/initView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
     </FrameLayout>
 </LinearLayout>

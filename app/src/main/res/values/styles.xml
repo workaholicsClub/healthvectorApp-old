@@ -229,7 +229,6 @@
     </style>
 
     <style name="BorderlessButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/primary_boy</item>
         <item name="fontPath">@string/font_path_medium</item>
     </style>
 

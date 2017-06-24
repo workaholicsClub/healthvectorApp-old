@@ -13,7 +13,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -80,7 +79,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Getter(AccessLevel.PROTECTED)
     private Sex sex;
 
-    private IntentSettingsItem accountItem, backupItem, restoreItem;
+    private IntentSettingsItem accountItem;
 
     @Override
     protected void injectFragment(ApplicationComponent component) {
@@ -117,20 +116,6 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .listener(this)
                 .enabled(true)
                 .build();
-        backupItem = IntentSettingsItem.builder()
-                .id(Intention.BACKUP.ordinal())
-                .title(getString(R.string.settings_backup_data))
-                .iconRes(R.drawable.ic_settings_backup_data)
-                .listener(this)
-                .enabled(false)
-                .build();
-        restoreItem = IntentSettingsItem.builder()
-                .id(Intention.RESTORE.ordinal())
-                .title(getString(R.string.settings_restore_data))
-                .iconRes(R.drawable.ic_settings_restore_data)
-                .listener(this)
-                .enabled(true)
-                .build();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         settingsAdapter = new SettingsAdapter(getContext());
@@ -162,10 +147,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Override
     public void showSelectedAccount(@NonNull String accountName) {
         accountItem = accountItem.toBuilder().subtitle(accountName).build();
-        boolean enabled = !TextUtils.isEmpty(accountName);
-        backupItem = backupItem.toBuilder().enabled(enabled).build();
         settingsAdapter.updateItem(accountItem);
-        settingsAdapter.updateItem(backupItem);
     }
 
     private List<BaseSettingsItem> generateItems() {
@@ -191,8 +173,20 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .title(getString(R.string.settings_data_control))
                 .build());
         items.add(accountItem);
-        items.add(backupItem);
-        items.add(restoreItem);
+        items.add(IntentSettingsItem.builder()
+                .id(Intention.BACKUP.ordinal())
+                .title(getString(R.string.settings_backup_data))
+                .iconRes(R.drawable.ic_settings_backup_data)
+                .listener(this)
+                .enabled(true)
+                .build());
+        items.add(IntentSettingsItem.builder()
+                .id(Intention.RESTORE.ordinal())
+                .title(getString(R.string.settings_restore_data))
+                .iconRes(R.drawable.ic_settings_restore_data)
+                .listener(this)
+                .enabled(true)
+                .build());
         items.add(DelimiterSettingsItem.builder()
                 .id(++id)
                 .build());

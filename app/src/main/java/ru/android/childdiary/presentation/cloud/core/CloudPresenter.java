@@ -22,6 +22,7 @@ import ru.android.childdiary.presentation.core.BasePresenter;
 public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<T> {
     @Inject
     protected CloudInteractor cloudInteractor;
+    protected boolean needAppRestart;
 
     @Inject
     PlayServicesAvailability playServicesAvailability;
@@ -123,7 +124,10 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
                         .doOnError(throwable -> getViewState().showRestoreLoading(false))
                         .doOnError(throwable -> logger.error("restore", throwable))
                         .subscribe(
-                                isRestored -> getViewState().restoreSucceeded(),
+                                isRestored -> {
+                                    getViewState().restoreSucceeded();
+                                    needAppRestart = true;
+                                },
                                 throwable -> {
                                     boolean processed = processGoogleDriveError(throwable);
                                     if (!processed) {

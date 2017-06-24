@@ -143,7 +143,7 @@
     <string name="save_changes_dialog_title">Сохранить изменения?</string>
     <string name="start_timer">СТАРТ</string>
     <string name="stop_timer">СТОП</string>
-    <string name="menu_close">Закрыть</string>
+    <string name="close">Закрыть</string>
     <string name="menu_filter">Фильтр</string>
     <string name="menu_rotate">Повернуть</string>
     <string name="menu_save">Сохранить</string>

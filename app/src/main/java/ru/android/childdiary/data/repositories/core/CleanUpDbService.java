@@ -75,6 +75,11 @@ public class CleanUpDbService extends EventsDbService {
                     .get().toList();
             imageFilesToDelete.addAll(getImageFileNamesMedicineTaking(medicineTakingEntities));
 
+            List<ConcreteExerciseEntity> concreteExerciseEntities = blockingEntityStore.select(ConcreteExerciseEntity.class)
+                    .where(ConcreteExerciseEntity.CHILD_ID.eq(child.getId()))
+                    .get().toList();
+            imageFilesToDelete.addAll(getImageFileNamesConcreteExercise(concreteExerciseEntities));
+
             List<DoctorVisitEventEntity> doctorVisitEventEntities = blockingEntityStore.select(DoctorVisitEventEntity.class)
                     .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
                     .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
@@ -86,6 +91,12 @@ public class CleanUpDbService extends EventsDbService {
                     .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
                     .get().toList();
             imageFilesToDelete.addAll(getImageFileNamesMedicineTakingEvents(medicineTakingEventEntities));
+
+            List<ExerciseEventEntity> exerciseEventEntities = blockingEntityStore.select(ExerciseEventEntity.class)
+                    .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(ExerciseEventEntity.MASTER_EVENT_ID))
+                    .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
+                    .get().toList();
+            imageFilesToDelete.addAll(getImageFileNamesExerciseEvents(exerciseEventEntities));
 
             ChildEntity childEntity = blockingEntityStore.findByKey(ChildEntity.class, child.getId());
             imageFilesToDelete.add(childEntity.getImageFileName());

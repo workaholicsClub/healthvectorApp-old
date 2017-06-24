@@ -21,20 +21,18 @@ public class CloudOperationPresenter extends CloudPresenter<CloudOperationView> 
         super.onFirstViewAttach();
 
         unsubscribeOnDestroy(cloudInteractor.getAccountName()
-                .map(TextUtils::isEmpty)
+                .map(accountName -> !TextUtils.isEmpty(accountName))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(firstTime -> {
-                    if (firstTime) {
-                        getViewState().showState(CloudOperationState.NOT_AUTHORIZED);
-                    } else {
-                        getViewState().showState(CloudOperationState.AUTHORIZED);
-                    }
-                }, this::onUnexpectedError));
+                .subscribe(getViewState()::setIsAuthorized, this::onUnexpectedError));
     }
 
     @Override
     public void moveNext() {
-        getViewState().navigateToMain();
+        if (needAppRestart) {
+            getViewState().restartApp();
+        } else {
+            getViewState().navigateToMain();
+        }
     }
 }

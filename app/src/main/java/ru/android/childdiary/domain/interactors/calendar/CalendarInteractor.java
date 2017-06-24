@@ -591,6 +591,14 @@ public class CalendarInteractor {
                     //noinspection unchecked
                     return (T) medicineTakingEvent.toBuilder().imageFileName(uniqueImageFileName).build();
                 }
+            } else if (item.getEventType() == EventType.EXERCISE) {
+                ExerciseEvent exerciseEvent = (ExerciseEvent) item;
+                if (imagesRepository.isTemporaryImageFile(exerciseEvent.getImageFileName())) {
+                    String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(
+                            ImageType.EXERCISE_EVENT, exerciseEvent.getImageFileName());
+                    //noinspection unchecked
+                    return (T) exerciseEvent.toBuilder().imageFileName(uniqueImageFileName).build();
+                }
             }
             return item;
         });
