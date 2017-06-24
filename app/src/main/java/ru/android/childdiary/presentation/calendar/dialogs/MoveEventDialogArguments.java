@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.core.dialogs;
+package ru.android.childdiary.presentation.calendar.dialogs;
 
 import android.support.annotation.Nullable;
 
