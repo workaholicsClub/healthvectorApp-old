@@ -88,10 +88,7 @@ public class MoveEventDialogFragment extends BaseMvpDialogFragment<MoveEventDial
             builder.setNegativeButton(R.string.move_linear_group, (dialog, which) -> moveLinearGroupClick());
         }
 
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-        return dialog;
+        return builder.create();
     }
 
     private void moveEventClick() {

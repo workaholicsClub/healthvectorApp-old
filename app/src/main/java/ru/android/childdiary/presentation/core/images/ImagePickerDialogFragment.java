@@ -96,8 +96,6 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
         listView.setOnItemClickListener(this);
 
         dialog.setContentView(listView);
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
         return dialog;
     }
 
