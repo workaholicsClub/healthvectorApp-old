@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import icepick.State;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -113,12 +114,14 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @InjectPresenter
     MainPresenter presenter;
 
+    @State
+    AppPartition selectedPartition;
+
     private AccountHeader accountHeader;
     private Drawer drawer;
     private DrawerBuilder drawerBuilder;
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
-    private AppPartition selectedPartition;
     private Runnable navigationCommand;
 
     public static Intent getIntent(Context context,
@@ -228,16 +231,16 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 accountHeader.setActiveProfile(mapToProfileId(child));
             }
         }
-        if (selectedPartition == null) {
-            AppPartition appPartition = (AppPartition) getIntent().getSerializableExtra(ExtraConstants.EXTRA_APP_PARTITION);
-            openAppPartition(appPartition);
-        }
+        AppPartition appPartition = selectedPartition == null
+                ? (AppPartition) getIntent().getSerializableExtra(ExtraConstants.EXTRA_APP_PARTITION)
+                : selectedPartition;
+        openAppPartition(appPartition);
     }
 
     @Override
     public void navigateToProfileAdd(boolean firstTime) {
         AppPartition appPartition = (AppPartition) getIntent().getSerializableExtra(ExtraConstants.EXTRA_APP_PARTITION);
-        if (!firstTime || appPartition == AppPartition.CALENDAR) {
+        if (firstTime && appPartition == AppPartition.CALENDAR) {
             Intent intent = ProfileEditActivity.getIntent(this, null);
             startActivity(intent);
         }
@@ -410,6 +413,34 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         return false;
     }
 
+    private void openAppPartition(@NonNull AppPartition appPartition) {
+        if (selectedPartition == appPartition) {
+            return;
+        }
+        int position = appPartition.ordinal() + 1;
+        drawer.setSelectionAtPosition(position, false);
+        switch (appPartition) {
+            case CALENDAR:
+                presenter.openCalendar();
+                break;
+            case DEVELOPMENT_DIARY:
+                presenter.openDevelopmentDiary();
+                break;
+            case EXERCISES:
+                presenter.openExercises();
+                break;
+            case MEDICAL_DATA:
+                presenter.openMedicalData();
+                break;
+            case SETTINGS:
+                presenter.openSettings();
+                break;
+            case HELP:
+                presenter.openHelp();
+                break;
+        }
+    }
+
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
         AppPartition appPartition = (AppPartition) drawerItem.getTag();
@@ -437,34 +468,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 return false;
             default:
                 return false;
-        }
-    }
-
-    private void openAppPartition(@NonNull AppPartition appPartition) {
-        if (selectedPartition == appPartition) {
-            return;
-        }
-        int position = appPartition.ordinal() + 1;
-        drawer.setSelectionAtPosition(position, false);
-        switch (appPartition) {
-            case CALENDAR:
-                presenter.openCalendar();
-                break;
-            case DEVELOPMENT_DIARY:
-                presenter.openDevelopmentDiary();
-                break;
-            case EXERCISES:
-                presenter.openExercises();
-                break;
-            case MEDICAL_DATA:
-                presenter.openMedicalData();
-                break;
-            case SETTINGS:
-                presenter.openSettings();
-                break;
-            case HELP:
-                presenter.openHelp();
-                break;
         }
     }
 
