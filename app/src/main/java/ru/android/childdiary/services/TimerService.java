@@ -25,6 +25,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.app.ChildDiaryApplication;
+import ru.android.childdiary.data.db.DowngradeDatabaseException;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
@@ -84,8 +85,7 @@ public class TimerService extends Service {
 
         compositeDisposable.dispose();
 
-        updateNotifications(this, Collections.emptyList());
-        stopTimer();
+        clear();
     }
 
     private void handleIntent(Intent intent) {
@@ -116,14 +116,18 @@ public class TimerService extends Service {
 
     private void subscribeOnUpdates() {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(calendarInteractor.getSleepEvents(GetSleepEventsRequest.builder()
-                .child(null)
-                .withStartedTimer(true)
-                .build())
-                .map(GetSleepEventsResponse::getEvents)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleResult, this::onUnexpectedError));
+        try {
+            subscription = unsubscribeOnDestroy(calendarInteractor.getSleepEvents(GetSleepEventsRequest.builder()
+                    .child(null)
+                    .withStartedTimer(true)
+                    .build())
+                    .map(GetSleepEventsResponse::getEvents)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::handleResult, this::onUnexpectedError));
+        } catch (DowngradeDatabaseException e) {
+            logger.error("Can't subscribe to updates", e);
+        }
     }
 
     private void stopSleepEventTimer(@NonNull SleepEvent event) {
@@ -152,6 +156,10 @@ public class TimerService extends Service {
     private void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
 
+        clear();
+    }
+
+    private void clear() {
         updateNotifications(this, Collections.emptyList());
         stopTimer();
     }

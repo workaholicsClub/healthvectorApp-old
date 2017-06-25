@@ -148,7 +148,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 200, pendingIntent);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 500, pendingIntent);
 
         System.exit(0);
     }
