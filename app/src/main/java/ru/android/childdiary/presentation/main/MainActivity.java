@@ -150,6 +150,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 500, pendingIntent);
 
+        // the better way to close all connections to data base
+        // перед вызовом этого метода все активити уже закрыты
         System.exit(0);
     }
 

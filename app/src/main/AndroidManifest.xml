@@ -176,12 +176,7 @@
         </activity>
         <activity
             android:name=".presentation.exercises.AddConcreteExerciseActivity"
-            android:parentActivityName=".presentation.exercises.ExerciseDetailActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.exercises.ExerciseDetailActivity" />
-        </activity>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

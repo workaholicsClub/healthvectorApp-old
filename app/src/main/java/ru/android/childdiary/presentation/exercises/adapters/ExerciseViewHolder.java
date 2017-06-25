@@ -12,11 +12,10 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewHolder;
-import ru.android.childdiary.presentation.core.adapters.swipe.ItemActionListener;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class ExerciseViewHolder extends BaseRecyclerViewHolder<Exercise> {
-    private final ItemActionListener<Exercise> itemActionListener;
+    private final ExerciseClickListener listener;
 
     @BindView(R.id.textView)
     TextView textView;
@@ -24,28 +23,30 @@ public class ExerciseViewHolder extends BaseRecyclerViewHolder<Exercise> {
     @BindView(R.id.imageViewExported)
     ImageView imageViewExported;
 
-    @BindView(R.id.imageView)
-    ImageView imageView;
+    @BindView(R.id.imageViewExport)
+    ImageView imageViewExport;
 
-    public ExerciseViewHolder(View itemView, @NonNull ItemActionListener<Exercise> itemActionListener) {
+    public ExerciseViewHolder(View itemView, @NonNull ExerciseClickListener listener) {
         super(itemView);
-        this.itemActionListener = itemActionListener;
+        this.listener = listener;
     }
 
     @Override
     public void bind(Context context, Sex sex, Exercise item) {
         super.bind(context, sex, item);
         textView.setText(item.getName());
-        if (item.isExported()) {
-            imageViewExported.setImageResource(ResourcesUtils.getExerciseExportedIcon(sex));
-        } else {
-            imageViewExported.setImageDrawable(null);
-        }
-        imageView.setImageResource(ResourcesUtils.getExerciseIcon(sex));
+        imageViewExported.setVisibility(item.isExported() ? View.VISIBLE : View.GONE);
+        imageViewExported.setImageResource(ResourcesUtils.getExerciseExportedIcon(sex));
+        imageViewExport.setImageResource(ResourcesUtils.getExerciseIcon(sex));
     }
 
     @OnClick(R.id.contentView)
     void onContentViewClick() {
-        itemActionListener.edit(item);
+        listener.showExerciseDetails(item);
+    }
+
+    @OnClick(R.id.imageViewExport)
+    void onExportClick() {
+        listener.addConcreteExercise(item);
     }
 }
