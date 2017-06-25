@@ -6,7 +6,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +28,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import icepick.State;
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -87,6 +90,9 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @BindView(R.id.textViewOperationInProcessText)
     TextView getTextViewOperationInProcessText;
+
+    @BindView(R.id.progressBar)
+    MaterialProgressBar materialProgressBar;
 
     @BindView(R.id.textViewOperationDoneTitle)
     TextView textViewOperationDoneTitle;
@@ -168,6 +174,8 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
         buttonAuthorize.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
         buttonDo.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
         buttonDone.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
+        @ColorInt int color = ThemeUtils.getColorPrimary(this, getSex());
+        materialProgressBar.setIndeterminateTintList(ColorStateList.valueOf(color));
     }
 
     @OnClick(R.id.buttonAuthorize)

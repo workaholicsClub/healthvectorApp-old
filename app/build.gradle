@@ -221,6 +221,8 @@ dependencies {
     compile "com.splitwise:tokenautocomplete:2.0.8@aar"
     compile "com.xiaofeng.android:flowlayoutmanager:1.2.3.2"
 
+    compile "me.zhanghai.android.materialprogressbar:library:1.4.1"
+
     compile "uk.co.chrisjenx:calligraphy:2.2.0"
 
     compile "com.google.android.gms:play-services-drive:11.0.1"
