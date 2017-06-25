@@ -281,6 +281,8 @@
     <string name="restore_data_in_process">Идет восстановление данных</string>
     <string name="backup_data_in_process">Идет сохранение данных</string>
     <string name="please_wait_til_the_end">Пожалуйста, дождитесь окончания операции</string>
+    <string name="security_error_dialog_title">Ошибка авторизации</string>
+    <string name="security_error_dialog_text">Попробуйте позже или воспользуйтесь другим аккаунтом.</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

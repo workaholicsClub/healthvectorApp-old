@@ -289,6 +289,19 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     }
 
     @Override
+    public void securityError() {
+        showState(isAuthorized ? CloudOperationState.AUTHORIZED : CloudOperationState.NOT_AUTHORIZED);
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.security_error_dialog_title)
+                .setMessage(R.string.security_error_dialog_text)
+                .setPositiveButton(R.string.try_again,
+                        (DialogInterface dialog, int which) -> presenter.continueAfterErrorResolved())
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
+    }
+
+    @Override
     public void showCheckBackupAvailabilityLoading(boolean loading) {
         if (loading) {
             showProgress(TAG_PROGRESS_DIALOG_AUTHORIZE,

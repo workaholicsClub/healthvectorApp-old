@@ -177,6 +177,9 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
         } else if (throwable instanceof BackupUnavailableException) {
             getViewState().noBackupFound();
             return true;
+        } else if (throwable instanceof SecurityException) {
+            getViewState().securityError();
+            return true;
         }
         return false;
     }

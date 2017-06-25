@@ -25,6 +25,9 @@ public interface CloudView extends BaseView {
     void connectionUnavailable();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void securityError();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showCheckBackupAvailabilityLoading(boolean loading);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
