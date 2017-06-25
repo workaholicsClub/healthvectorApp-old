@@ -8,10 +8,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import org.joda.time.DateTime;
+
+import javax.inject.Inject;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
@@ -20,9 +23,19 @@ import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.utils.TimeUtils;
 
-public class NotificationUtils {
-    private static PendingIntent buildPendingIntent(Context context, int notificationId,
-                                                    @NonNull SleepEvent event, @NonNull SleepEvent defaultEvent) {
+public class NotificationHelper {
+    private final Context context;
+    private final NotificationManager notificationManager;
+
+    @Inject
+    public NotificationHelper(Context context) {
+        this.context = context;
+        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+
+    private PendingIntent buildSleepPendingIntent(int notificationId,
+                                                  @NonNull SleepEvent event,
+                                                  @NonNull SleepEvent defaultEvent) {
         Intent intent = SleepEventDetailActivity.getIntent(context, event, defaultEvent);
         intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -32,7 +45,8 @@ public class NotificationUtils {
         return pendingIntent;
     }
 
-    private static PendingIntent buildActionPendingIntent(Context context, int notificationId, @NonNull SleepEvent event) {
+    private PendingIntent buildSleepActionPendingIntent(int notificationId,
+                                                        @NonNull SleepEvent event) {
         Intent intent = new Intent(context, TimerService.class);
         intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
         intent.putExtra(TimerService.EXTRA_ACTION, TimerService.ACTION_STOP_SLEEP_EVENT_TIMER);
@@ -41,18 +55,20 @@ public class NotificationUtils {
         return pendingIntent;
     }
 
-    public static NotificationCompat.Builder buildNotification(Context context, int notificationId,
-                                                               @NonNull SleepEvent event, @NonNull SleepEvent defaultEvent) {
+    public NotificationCompat.Builder buildSleepNotification(int notificationId,
+                                                             @NonNull SleepEvent event,
+                                                             @NonNull SleepEvent defaultEvent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentIntent(buildPendingIntent(context, notificationId, event, defaultEvent))
+        builder.setContentIntent(buildSleepPendingIntent(notificationId, event, defaultEvent))
                 .addAction(R.drawable.ic_action_stop_sleep_timer,
                         context.getString(R.string.stop_sleep_timer),
-                        buildActionPendingIntent(context, notificationId, event));
-        updateNotification(context, builder, event);
+                        buildSleepActionPendingIntent(notificationId, event));
+        updateSleepNotification(builder, event);
         return builder;
     }
 
-    public static void updateNotification(Context context, NotificationCompat.Builder builder, @NonNull SleepEvent event) {
+    public void updateSleepNotification(NotificationCompat.Builder builder,
+                                        @NonNull SleepEvent event) {
         String contentTitle, contentText;
         DateTime now = DateTime.now();
         DateTime start = event.getDateTime();
@@ -67,22 +83,51 @@ public class NotificationUtils {
         }
         builder.setSmallIcon(ResourcesUtils.getNotificationSleepRes(event.getChild()))
                 .setContentTitle(contentTitle)
-                .setWhen(event.getDateTime().toDate().getTime())
-                .setContentText(contentText);
+                .setContentText(contentText)
+                .setWhen(event.getDateTime().toDate().getTime());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setColor(ThemeUtils.getColorPrimary(context, event.getChild().getSex()));
         }
     }
 
-    public static void showNotification(Context context, int notificationId, NotificationCompat.Builder builder) {
+    public void showSleepNotification(int notificationId, NotificationCompat.Builder builder) {
         Notification notification = builder.build();
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(notificationId, notification);
     }
 
-    public static void hideNotification(Context context, int notificationId) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    public void hideNotification(int notificationId) {
         notificationManager.cancel(notificationId);
+    }
+
+    public void showBackupErrorNotification(int notificationId,
+                                            String title,
+                                            String text,
+                                            @Nullable PendingIntent pendingIntent) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        if (pendingIntent != null) {
+            builder.setContentIntent(pendingIntent);
+        }
+        builder.setSmallIcon(R.drawable.ic_stat_autobackup_error)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+        Notification notification = builder.build();
+        notificationManager.notify(notificationId, notification);
+    }
+
+    public void showBackupProgressNotification(int notificationId) {
+        String title = context.getString(R.string.app_name);
+        String text = context.getString(R.string.notification_text_backup);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setSmallIcon(R.drawable.ic_stat_autobackup)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setWhen(System.currentTimeMillis())
+                .setProgress(0, 0, true);
+        Notification notification = builder.build();
+        notificationManager.notify(notificationId, notification);
     }
 }

@@ -38,7 +38,7 @@ public class UpdateDataService extends Service {
 
         handleIntent(intent);
 
-        return START_REDELIVER_INTENT;
+        return START_STICKY;
     }
 
     @Override

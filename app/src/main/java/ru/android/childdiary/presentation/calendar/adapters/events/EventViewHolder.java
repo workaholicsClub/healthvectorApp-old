@@ -21,7 +21,7 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.DateUtils;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.EventUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -75,18 +75,18 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
                 getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
 
         textViewTime.setText(DateUtils.time(context, event.getDateTime()));
-        textViewTitle.setText(EventHelper.getTitle(context, event));
-        textViewDescription.setText(EventHelper.getDescription(context, event));
+        textViewTitle.setText(EventUtils.getTitle(context, event));
+        textViewDescription.setText(EventUtils.getDescription(context, event));
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
 
-        boolean showActionDone = EventHelper.canBeDone(event);
+        boolean showActionDone = EventUtils.canBeDone(event);
         actionDoneView.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
         delimiter1.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
 
-        boolean isDone = EventHelper.isDone(event);
-        boolean isExpired = EventHelper.isExpired(event);
+        boolean isDone = EventUtils.isDone(event);
+        boolean isExpired = EventUtils.isExpired(event);
         int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
         textViewTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
     }
@@ -95,7 +95,7 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     public void updatePartially(Context context, MasterEvent event) {
         EventType eventType = event.getEventType();
         if (eventType != EventType.OTHER) {
-            textViewDescription.setText(EventHelper.getDescription(context, event));
+            textViewDescription.setText(EventUtils.getDescription(context, event));
         }
     }
 

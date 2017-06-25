@@ -74,6 +74,7 @@ import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
+import ru.android.childdiary.services.CloudService;
 import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.services.UpdateDataService;
 
@@ -223,4 +224,6 @@ public interface ApplicationComponent {
     void inject(TimerService service);
 
     void inject(UpdateDataService service);
+
+    void inject(CloudService service);
 }

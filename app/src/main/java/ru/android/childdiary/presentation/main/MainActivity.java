@@ -144,7 +144,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                                                @NonNull AppPartition appPartition) {
         Intent intent = MainActivity.getIntent(context, appPartition, null);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

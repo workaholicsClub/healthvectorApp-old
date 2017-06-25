@@ -283,6 +283,14 @@
     <string name="please_wait_til_the_end">Пожалуйста, дождитесь окончания операции</string>
     <string name="security_error_dialog_title">Ошибка авторизации</string>
     <string name="security_error_dialog_text">Попробуйте позже или воспользуйтесь другим аккаунтом.</string>
+    <string name="notification_title_play_services">Не доступны Google Play Services</string>
+    <string name="notification_text_play_services">Установите Google Play Services для создания бэкапа данных</string>
+    <string name="notification_title_authorization">Ошибка авторизации</string>
+    <string name="notification_text_authorization_recoverable">Авторизуйте приложение в Google Drive для создания бэкапа данных</string>
+    <string name="notification_text_authorization_unrecoverable">Попробуйте позже</string>
+    <string name="notification_title_network">Отсутствует Интернет</string>
+    <string name="notification_text_network">Подключите Интернет для создания бэкапа данных</string>
+    <string name="notification_text_backup">Загрузка данных на Google Drive</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

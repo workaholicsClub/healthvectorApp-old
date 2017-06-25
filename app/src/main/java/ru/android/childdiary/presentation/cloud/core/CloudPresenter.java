@@ -145,11 +145,11 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
                         .flatMap(isNetworkAvailable -> cloudInteractor.backup())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSuccess(isRestored -> getViewState().showBackupLoading(false))
+                        .doOnSuccess(isUploaded -> getViewState().showBackupLoading(false))
                         .doOnError(throwable -> getViewState().showBackupLoading(false))
                         .doOnError(throwable -> logger.error("backup", throwable))
                         .subscribe(
-                                isRestored -> getViewState().backupSucceeded(),
+                                isUploaded -> getViewState().backupSucceeded(),
                                 throwable -> {
                                     boolean processed = processGoogleDriveError(throwable);
                                     if (!processed) {

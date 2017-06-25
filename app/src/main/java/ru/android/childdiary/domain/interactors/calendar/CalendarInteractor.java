@@ -75,7 +75,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
 import ru.android.childdiary.services.TimerService;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.EventUtils;
 
 public class CalendarInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -478,7 +478,7 @@ public class CalendarInteractor {
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        boolean isDone = EventHelper.isDone(event);
+        boolean isDone = EventUtils.isDone(event);
         MasterEvent masterEvent = event.toMasterBuilder().isDone(!isDone).build();
         return calendarRepository.updateMasterEvent(masterEvent);
     }

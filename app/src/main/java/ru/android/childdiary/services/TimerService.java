@@ -32,9 +32,9 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.EventUtils;
 import ru.android.childdiary.utils.log.LogSystem;
-import ru.android.childdiary.utils.ui.NotificationUtils;
+import ru.android.childdiary.utils.ui.NotificationHelper;
 
 public class TimerService extends Service {
     public static final String EXTRA_ACTION = "TimerService.EXTRA_ACTION";
@@ -46,9 +46,15 @@ public class TimerService extends Service {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     private final TimerServiceBinder binder = new TimerServiceBinder(this);
+
     @Inject
     CalendarInteractor calendarInteractor;
+
+    @Inject
+    NotificationHelper notificationHelper;
+
     private Disposable subscription;
     private Map<Long, NotificationCompat.Builder> notificationBuilders = new HashMap<>();
     private List<SleepEvent> events = new ArrayList<>();
@@ -196,7 +202,7 @@ public class TimerService extends Service {
         removeAll(events, newEvents);
         for (SleepEvent event : events) {
             Long masterEventId = event.getMasterEventId();
-            NotificationUtils.hideNotification(context, (int) (masterEventId % Integer.MAX_VALUE));
+            notificationHelper.hideNotification((int) (masterEventId % Integer.MAX_VALUE));
         }
         events = new ArrayList<>(newEvents);
     }
@@ -205,7 +211,7 @@ public class TimerService extends Service {
         for (SleepEvent whatEvent : what) {
             SleepEvent found = null;
             for (SleepEvent fromEvent : from) {
-                if (EventHelper.sameEvent(whatEvent, fromEvent)) {
+                if (EventUtils.sameEvent(whatEvent, fromEvent)) {
                     found = fromEvent;
                     break;
                 }
@@ -223,12 +229,12 @@ public class TimerService extends Service {
             NotificationCompat.Builder builder = notificationBuilders.get(masterEventId);
             if (builder == null) {
                 SleepEvent defaultEvent = calendarInteractor.getDefaultSleepEvent().blockingFirst();
-                builder = NotificationUtils.buildNotification(context, notificationId, event, defaultEvent);
+                builder = notificationHelper.buildSleepNotification(notificationId, event, defaultEvent);
                 notificationBuilders.put(masterEventId, builder);
             } else {
-                NotificationUtils.updateNotification(context, builder, event);
+                notificationHelper.updateSleepNotification(builder, event);
             }
-            NotificationUtils.showNotification(context, notificationId, builder);
+            notificationHelper.showSleepNotification(notificationId, builder);
         }
     }
 

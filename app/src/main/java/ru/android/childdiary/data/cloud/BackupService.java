@@ -65,7 +65,7 @@ public class BackupService extends CloudService {
 
                 return true;
             } finally {
-                cleanBackups();
+                FileUtils.delete(zipFile);
             }
         });
     }

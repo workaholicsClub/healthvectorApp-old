@@ -94,7 +94,7 @@ public class RestoreService extends CloudService {
 
                 return true;
             } finally {
-                cleanBackups();
+                FileUtils.delete(zipFile);
             }
         });
     }
