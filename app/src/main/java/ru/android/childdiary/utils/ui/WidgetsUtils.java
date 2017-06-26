@@ -1,6 +1,7 @@
 package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
@@ -31,6 +32,14 @@ public class WidgetsUtils {
         @ColorRes int colorRes = enabled ? R.color.primary_text : R.color.placeholder_text;
         @ColorInt int color = ContextCompat.getColor(textView.getContext(), colorRes);
         textView.setTextColor(color);
+    }
+
+    public static void strikeTextView(TextView textView, boolean strike) {
+        if (strike) {
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+        }
     }
 
     public static void setupEditText(TextView textView, boolean readOnly) {

@@ -76,6 +76,12 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.updateData();
+    }
+
+    @Override
     public void showFilterDialog(@NonNull MedicineTakingFilterDialogArguments dialogArguments) {
         MedicineTakingFilterDialogFragment fragment = new MedicineTakingFilterDialogFragment();
         fragment.showAllowingStateLoss(getChildFragmentManager(), TAG_FILTER,

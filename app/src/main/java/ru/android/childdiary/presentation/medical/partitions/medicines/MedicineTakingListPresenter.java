@@ -35,6 +35,7 @@ public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<Medici
     MedicineTakingInteractor medicineTakingInteractor;
 
     private Disposable subscription;
+    private GetMedicineTakingListRequest request;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -58,7 +59,16 @@ public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<Medici
                 .subscribe(this::requestData, this::onUnexpectedError));
     }
 
+    public void updateData() {
+        if (request == null) {
+            logger.error("request is null");
+            return;
+        }
+        requestData(request);
+    }
+
     private void requestData(@NonNull GetMedicineTakingListRequest request) {
+        this.request = request;
         unsubscribe(subscription);
         subscription = unsubscribeOnDestroy(medicineTakingInteractor.getMedicineTakingList(request)
                 .doOnNext(response -> logger.debug("onGetData: " + response))

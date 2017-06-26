@@ -76,6 +76,12 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.updateData();
+    }
+
+    @Override
     public void showFilterDialog(@NonNull DoctorVisitFilterDialogArguments dialogArguments) {
         DoctorVisitFilterDialogFragment fragment = new DoctorVisitFilterDialogFragment();
         fragment.showAllowingStateLoss(getChildFragmentManager(), TAG_FILTER,

@@ -24,6 +24,7 @@ import io.requery.reactivex.ReactiveEntityStore;
 import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.DoctorVisitEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
 import ru.android.childdiary.data.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
@@ -114,7 +115,31 @@ public class DoctorVisitDbService {
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, doctorVisitMapper))
+                .map(doctorVisits -> putDone(doctorVisits, child))
                 .map(doctorVisits -> GetDoctorVisitsResponse.builder().request(request).doctorVisits(doctorVisits).build());
+    }
+
+    private List<DoctorVisit> putDone(@NonNull List<DoctorVisit> doctorVisits, @NonNull Child child) {
+        return Observable.fromIterable(doctorVisits)
+                .map(doctorVisit -> putDone(doctorVisit, child))
+                .toList()
+                .blockingGet();
+    }
+
+    private DoctorVisit putDone(@NonNull DoctorVisit doctorVisit, @NonNull Child child) {
+        List<DoctorVisitEventEntity> events = blockingEntityStore.select(DoctorVisitEventEntity.class)
+                .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
+                .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisit.getId()))
+                .and(MasterEventEntity.CHILD_ID.eq(child.getId()))
+                .get()
+                .toList();
+        boolean isEmpty = events.isEmpty();
+        long count = Observable.fromIterable(events)
+                .filter(event -> !ObjectUtils.isTrue(event.getMasterEvent().isDone()))
+                .count()
+                .blockingGet();
+        boolean allDone = count == 0;
+        return doctorVisit.toBuilder().isDone(!isEmpty && allDone).build();
     }
 
     public Single<Boolean> hasConnectedEvents(@NonNull DoctorVisit doctorVisit) {

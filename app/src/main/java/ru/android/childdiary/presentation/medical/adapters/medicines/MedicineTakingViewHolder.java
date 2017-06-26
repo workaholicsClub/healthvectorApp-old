@@ -47,4 +47,9 @@ class MedicineTakingViewHolder extends BaseMedicalItemViewHolder<MedicineTaking,
     void onDeleteClick() {
         swipeActionListener.delete(this);
     }
+
+    @Override
+    protected boolean isDone(MedicineTaking item) {
+        return item.isDone() || item.getFinishDateTime() != null;
+    }
 }

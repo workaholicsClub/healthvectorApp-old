@@ -48,6 +48,8 @@ public class MedicineTaking implements Serializable, RepeatParametersContainer,
 
     Boolean isDeleted;
 
+    boolean isDone;
+
     @Override
     public boolean isContentEmpty() {
         return isContentEqual(NULL);

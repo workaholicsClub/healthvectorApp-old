@@ -46,6 +46,8 @@ public class DoctorVisit implements Serializable, RepeatParametersContainer, Con
 
     Boolean isDeleted;
 
+    boolean isDone;
+
     @Override
     public boolean isContentEmpty() {
         return isContentEqual(NULL);
