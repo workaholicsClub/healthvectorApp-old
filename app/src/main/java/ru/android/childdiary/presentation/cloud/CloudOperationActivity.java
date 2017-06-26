@@ -446,24 +446,24 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void onBackPressed() {
-        if (operationState == CloudOperationState.IN_PROCESS) {
-            pleaseWait();
-        } else {
-            presenter.moveNext();
-        }
+        exit();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if (operationState == CloudOperationState.IN_PROCESS) {
-                pleaseWait();
-            } else {
-                presenter.moveNext();
-            }
+            exit();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void exit() {
+        if (operationState == CloudOperationState.IN_PROCESS) {
+            pleaseWait();
+        } else {
+            presenter.moveNext();
+        }
     }
 
     private void pleaseWait() {
