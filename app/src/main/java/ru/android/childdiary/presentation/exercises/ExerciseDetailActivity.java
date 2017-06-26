@@ -26,7 +26,8 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseDescr
 import ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseNameView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseDetailView {
+public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseDetailView,
+        FieldExerciseDescriptionView.OnLinkClickListener {
     private static final int REQUEST_ADD_CONCRETE_EXERCISE = 1;
 
     @BindView(R.id.exerciseNameView)
@@ -60,6 +61,8 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
         changeThemeIfNeeded(state.getChild());
         presenter.setExerciseDetailState(state);
         showExercise(state);
+
+        exerciseDescriptionView.setOnLinkClickListener(this);
     }
 
     @Override
@@ -91,6 +94,11 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
     }
 
     @Override
+    public void onLinkClick(String url) {
+        presenter.openUrl(url);
+    }
+
+    @Override
     public void showExercise(@NonNull ExerciseDetailState state) {
         Child child = state.getChild();
         buttonAdd.setVisibility(child.getId() == null ? View.GONE : View.VISIBLE);
@@ -105,5 +113,11 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
                                               @Nullable LocalTime finishTime) {
         Intent intent = AddConcreteExerciseActivity.getIntent(this, defaultConcreteExercise, startTime, finishTime);
         startActivityForResult(intent, REQUEST_ADD_CONCRETE_EXERCISE);
+    }
+
+    @Override
+    public void navigateToWebBrowser(@NonNull String title, @NonNull String url) {
+        Intent intent = WebBrowserActivity.getIntent(this, title, url);
+        startActivity(intent);
     }
 }
