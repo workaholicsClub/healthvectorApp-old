@@ -48,7 +48,7 @@ public class LengthValue implements Serializable, ContentObject<LengthValue> {
             case WEEK:
                 return length * TimeUtils.MINUTES_IN_DAY * 7;
             default:
-                throw new IllegalStateException("Unsupported time unit");
+                throw new IllegalArgumentException("Unsupported time unit");
         }
     }
 }

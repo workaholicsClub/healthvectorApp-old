@@ -376,7 +376,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     public MasterEvent mapToPlainObject(@NonNull Tuple data) {
         EventType eventType = data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE));
         if (eventType == null) {
-            throw new IllegalStateException("Invalid event type");
+            throw new IllegalArgumentException("Event type is null");
         }
         switch (eventType) {
             case DIAPER:
@@ -396,7 +396,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
             case EXERCISE:
                 return mapToExerciseEvent(data);
         }
-        throw new IllegalStateException("Unsupported event type");
+        throw new IllegalArgumentException("Unsupported event type");
     }
 
     @Override

@@ -294,7 +294,7 @@ public class CalendarInteractor {
         } else if (event.getEventType() == EventType.EXERCISE) {
             return (Observable<T>) calendarRepository.getExerciseEventDetail(event);
         }
-        throw new IllegalStateException("Unsupported event type");
+        throw new IllegalArgumentException("Unsupported event type");
     }
 
     @SuppressWarnings("unchecked")
@@ -322,7 +322,7 @@ public class CalendarInteractor {
         } else if (event.getEventType() == EventType.SLEEP) {
             return (Observable<T>) calendarRepository.add((SleepEvent) event);
         }
-        throw new IllegalStateException("Unsupported event type");
+        throw new IllegalArgumentException("Unsupported event type");
     }
 
     public <T extends MasterEvent> Observable<T> update(@NonNull T event) {
@@ -375,7 +375,7 @@ public class CalendarInteractor {
                     .flatMap(this::deleteImageFiles)
                     .map(UpdateExerciseEventResponse::getExerciseEvent);
         }
-        throw new IllegalStateException("Unsupported event type");
+        throw new IllegalArgumentException("Unsupported event type");
     }
 
     @SuppressWarnings("unchecked")
@@ -412,7 +412,7 @@ public class CalendarInteractor {
                     .flatMap(this::deleteImageFiles)
                     .map(UpdateExerciseEventResponse::getExerciseEvent);
         }
-        throw new IllegalStateException("Unsupported event type");
+        throw new IllegalArgumentException("Unsupported event type");
     }
 
     public <T extends MasterEvent> Observable<T> delete(@NonNull T event) {
@@ -462,7 +462,7 @@ public class CalendarInteractor {
                     .flatMap(this::deleteImageFiles)
                     .map(DeleteConcreteExerciseEventsResponse::getCount);
         }
-        throw new IllegalStateException("Unsupported event type");
+        throw new IllegalArgumentException("Unsupported event type");
     }
 
     private <T extends MasterEvent> Observable<T> deleteImageFiles(@NonNull T event, List<String> imageFilesToDelete) {
@@ -524,7 +524,7 @@ public class CalendarInteractor {
                     .build())
                     .map(UpdateExerciseEventResponse::getExerciseEvent);
         }
-        throw new IllegalStateException("Unsupported event type");
+        throw new IllegalArgumentException("Unsupported event type");
     }
 
     public Observable<Boolean> controlOtherEventDoneButton(@NonNull Observable<TextViewAfterTextChangeEvent> otherEventNameObservable) {
@@ -625,7 +625,7 @@ public class CalendarInteractor {
         } else if (event.getEventType() == EventType.EXERCISE) {
             return (Validator<T, CalendarValidationResult>) exerciseEventValidator;
         }
-        throw new IllegalStateException("Unsupported event type");
+        throw new IllegalArgumentException("Unsupported event type");
     }
 
     @SuppressWarnings("unchecked")
@@ -642,7 +642,7 @@ public class CalendarInteractor {
             } else if (event instanceof SleepEvent) {
                 return (T) preprocessSleepEventOnInsert((SleepEvent) event);
             }
-            throw new IllegalStateException("Unsupported event type");
+            throw new IllegalArgumentException("Unsupported event type");
         });
     }
 
@@ -665,7 +665,7 @@ public class CalendarInteractor {
             } else if (event.getEventType() == EventType.EXERCISE) {
                 return event;
             }
-            throw new IllegalStateException("Unsupported event type");
+            throw new IllegalArgumentException("Unsupported event type");
         });
     }
 
@@ -727,7 +727,7 @@ public class CalendarInteractor {
                 context.startService(intent);
                 return event;
             }
-            throw new IllegalStateException("Unsupported event type");
+            throw new IllegalArgumentException("Unsupported event type");
         });
     }
 
@@ -752,7 +752,7 @@ public class CalendarInteractor {
             } else if (event.getEventType() == EventType.EXERCISE) {
                 return event;
             }
-            throw new IllegalStateException("Unsupported event type");
+            throw new IllegalArgumentException("Unsupported event type");
         });
     }
 

@@ -187,7 +187,7 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
         int startIndex;
     }
 
-    private static class EventsGeneratorException extends IllegalStateException {
+    private static class EventsGeneratorException extends IllegalArgumentException {
         public EventsGeneratorException(String message) {
             super(message);
         }
