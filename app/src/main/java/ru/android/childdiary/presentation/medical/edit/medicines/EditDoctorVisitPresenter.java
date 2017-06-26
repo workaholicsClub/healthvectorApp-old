@@ -97,7 +97,7 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
 
     @Override
     public void complete(@NonNull DoctorVisit item) {
-        if (item.getFinishDateTime() == null) {
+        if (!item.isDone()) {
             getViewState().askCompleteFromDate(item, DateTime.now());
         } else {
             logger.error("already completed: " + item);

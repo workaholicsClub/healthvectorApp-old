@@ -70,6 +70,7 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
     @Override
     public void completed(@NonNull T item) {
         buttonAdd.setVisibility(View.GONE);
+        finish();
     }
 
     @Override

@@ -125,11 +125,12 @@ public class MedicineTakingDbService {
             select = select.and(MedicineTakingEntity.MEDICINE_ID.in(ids));
         }
 
-        return select.orderBy(MedicineTakingEntity.DATE_TIME, MedicineTakingEntity.MEDICINE_ID, MedicineTakingEntity.ID)
+        return select.orderBy(MedicineTakingEntity.DATE_TIME.desc(), MedicineTakingEntity.MEDICINE_ID, MedicineTakingEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineTakingMapper))
                 .map(medicineTakingList -> putDone(medicineTakingList, child))
+                .map(this::sort)
                 .map(medicineTakingList -> GetMedicineTakingListResponse.builder().request(request).medicineTakingList(medicineTakingList).build());
     }
 
@@ -141,6 +142,9 @@ public class MedicineTakingDbService {
     }
 
     private MedicineTaking putDone(@NonNull MedicineTaking medicineTaking, @NonNull Child child) {
+        if (medicineTaking.getFinishDateTime() != null) {
+            return medicineTaking.toBuilder().isDone(true).build();
+        }
         List<MedicineTakingEventEntity> events = blockingEntityStore.select(MedicineTakingEventEntity.class)
                 .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(MedicineTakingEventEntity.MASTER_EVENT_ID))
                 .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTaking.getId()))
@@ -155,6 +159,11 @@ public class MedicineTakingDbService {
                 .blockingGet();
         boolean allDone = count == 0;
         return medicineTaking.toBuilder().isDone(!isEmpty && allDone).build();
+    }
+
+    private List<MedicineTaking> sort(List<MedicineTaking> medicineTakingList) {
+        Collections.sort(medicineTakingList, new MedicineTaking.DoneComparator());
+        return medicineTakingList;
     }
 
     public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {

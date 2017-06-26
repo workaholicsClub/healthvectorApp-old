@@ -49,6 +49,6 @@ class DoctorVisitViewHolder extends BaseMedicalItemViewHolder<DoctorVisit, Docto
 
     @Override
     protected boolean isDone(DoctorVisit item) {
-        return item.isDone() || item.getFinishDateTime() != null;
+        return item.isDone();
     }
 }

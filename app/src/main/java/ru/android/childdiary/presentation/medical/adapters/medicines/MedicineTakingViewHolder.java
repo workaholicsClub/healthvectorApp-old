@@ -50,6 +50,6 @@ class MedicineTakingViewHolder extends BaseMedicalItemViewHolder<MedicineTaking,
 
     @Override
     protected boolean isDone(MedicineTaking item) {
-        return item.isDone() || item.getFinishDateTime() != null;
+        return item.isDone();
     }
 }
