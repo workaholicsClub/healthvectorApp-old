@@ -377,11 +377,6 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     }
 
     @Override
-    public void setIsAuthorized(boolean isAuthorized) {
-        showState(isAuthorized ? CloudOperationState.AUTHORIZED : CloudOperationState.NOT_AUTHORIZED);
-    }
-
-    @Override
     public void navigateToMain() {
         Intent intent = MainActivity.getIntent(this, AppPartition.SETTINGS, getSex());
         startActivity(intent);
@@ -392,6 +387,11 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     public void restartApp() {
         finish();
         MainActivity.scheduleAppStartAndExit(this, AppPartition.SETTINGS);
+    }
+
+    @Override
+    public void setIsAuthorized(boolean isAuthorized) {
+        showState(isAuthorized ? CloudOperationState.AUTHORIZED : CloudOperationState.NOT_AUTHORIZED);
     }
 
     private void showState(@NonNull CloudOperationState state) {

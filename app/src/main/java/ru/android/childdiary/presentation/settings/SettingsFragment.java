@@ -37,6 +37,8 @@ import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
+import ru.android.childdiary.presentation.main.AppPartition;
+import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.settings.adapters.SettingsAdapter;
 import ru.android.childdiary.presentation.settings.adapters.items.BaseSettingsItem;
 import ru.android.childdiary.presentation.settings.adapters.items.DelimiterSettingsItem;
@@ -370,6 +372,18 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void checkBackupAvailabilitySucceeded(boolean isBackupAvailable) {
+        if (isBackupAvailable) {
+            new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                    .setTitle(R.string.found_backup_dialog_title)
+                    .setMessage(R.string.found_backup_dialog_text)
+                    .setPositiveButton(R.string.restore,
+                            (DialogInterface dialog, int which) -> presenter.restore())
+                    .setNegativeButton(R.string.cancel,
+                            (dialog, which) -> presenter.moveNext())
+                    .show();
+        } else {
+            presenter.moveNext();
+        }
     }
 
     @Override
@@ -383,24 +397,44 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .show();
     }
 
+
     @Override
     public void showRestoreLoading(boolean loading) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_RESTORE,
+                    getString(R.string.please_wait),
+                    getString(R.string.restore_data_in_process));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_RESTORE);
+        }
     }
 
     @Override
     public void restoreSucceeded() {
-        throw new UnsupportedOperationException("Not implemented");
+        // TODO: переделать на AlertDialogFragment, чтобы при смене конфигурации диалог не терялся
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.restore_success_dialog_text)
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.moveNext())
+                .setCancelable(false)
+                .show();
     }
 
     @Override
     public void failedToRestore() {
-        throw new UnsupportedOperationException("Not implemented");
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.restore_error_dialog_text)
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
     }
 
     @Override
     public void noBackupFound() {
-        throw new UnsupportedOperationException("Not implemented");
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.no_backup_found)
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
     }
 
     @Override
@@ -416,6 +450,16 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Override
     public void failedToBackup() {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public void navigateToMain() {
+    }
+
+    @Override
+    public void restartApp() {
+        getActivity().finish();
+        MainActivity.scheduleAppStartAndExit(getContext(), AppPartition.CALENDAR);
     }
 
     private enum Intention {

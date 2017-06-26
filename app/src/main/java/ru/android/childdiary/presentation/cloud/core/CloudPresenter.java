@@ -22,7 +22,6 @@ import ru.android.childdiary.presentation.core.BasePresenter;
 public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<T> {
     @Inject
     protected CloudInteractor cloudInteractor;
-    protected boolean needAppRestart;
 
     @Inject
     PlayServicesAvailability playServicesAvailability;
@@ -30,9 +29,16 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
     @Inject
     NetworkAvailability networkAvailability;
 
+    private boolean needAppRestart;
     private State state = State.BIND_ACCOUNT;
 
-    public abstract void moveNext();
+    public void moveNext() {
+        if (needAppRestart) {
+            getViewState().restartApp();
+        } else {
+            getViewState().navigateToMain();
+        }
+    }
 
     public void continueAfterErrorResolved() {
         switch (state) {

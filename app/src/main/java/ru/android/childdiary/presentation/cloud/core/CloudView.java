@@ -56,4 +56,10 @@ public interface CloudView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void failedToBackup();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToMain();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void restartApp();
 }
