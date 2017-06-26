@@ -43,7 +43,7 @@ public class FieldExerciseDescriptionView extends FieldTextViewWithImageView {
         setTextViewHtml(textView, text);
     }
 
-    protected void setTextViewHtml(TextView textView, String html) {
+    private void setTextViewHtml(TextView textView, String html) {
         CharSequence sequence = HtmlUtils.fromHtml(html);
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(sequence);
         URLSpan[] urlSpans = stringBuilder.getSpans(0, sequence.length(), URLSpan.class);
@@ -53,7 +53,7 @@ public class FieldExerciseDescriptionView extends FieldTextViewWithImageView {
         textView.setText(stringBuilder);
     }
 
-    protected void makeLinkClickable(SpannableStringBuilder stringBuilder, final URLSpan urlSpan) {
+    private void makeLinkClickable(SpannableStringBuilder stringBuilder, final URLSpan urlSpan) {
         int start = stringBuilder.getSpanStart(urlSpan);
         int end = stringBuilder.getSpanEnd(urlSpan);
         int flags = stringBuilder.getSpanFlags(urlSpan);
