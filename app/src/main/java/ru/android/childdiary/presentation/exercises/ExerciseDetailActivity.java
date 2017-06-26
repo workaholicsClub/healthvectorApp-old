@@ -117,7 +117,7 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
 
     @Override
     public void navigateToWebBrowser(@NonNull String title, @NonNull String url) {
-        Intent intent = WebBrowserActivity.getIntent(this, title, url);
+        Intent intent = WebBrowserActivity.getIntent(this, title, url, getSex());
         startActivity(intent);
     }
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.webkit.WebViewClient;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -62,10 +64,12 @@ public class WebBrowserActivity extends BaseMvpActivity {
 
     private String title, url;
 
-    public static Intent getIntent(Context context, @NonNull String title, @NonNull String url) {
+    public static Intent getIntent(Context context, @NonNull String title, @NonNull String url,
+                                   @Nullable Sex sex) {
         return new Intent(context, WebBrowserActivity.class)
                 .putExtra(ExtraConstants.EXTRA_TITLE, title)
-                .putExtra(ExtraConstants.EXTRA_URL, url);
+                .putExtra(ExtraConstants.EXTRA_URL, url)
+                .putExtra(ExtraConstants.EXTRA_SEX, sex);
     }
 
     @Override
