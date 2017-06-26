@@ -70,6 +70,8 @@ android {
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "true"
         }
         qa {
+            debuggable true
+
             signingConfig signingConfigs.debug
 
             shrinkResources true

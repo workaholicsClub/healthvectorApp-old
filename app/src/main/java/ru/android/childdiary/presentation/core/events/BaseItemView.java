@@ -9,6 +9,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
@@ -35,7 +36,7 @@ public interface BaseItemView<T extends Serializable> extends BaseView {
     void showMedicineMeasureValueDialog(@NonNull ArrayList<MedicineMeasure> medicineMeasureList);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showLengthValueDialog(@NonNull ArrayList<TimeUnit> timeUnits);
+    void showLengthValueDialog(@NonNull HashMap<TimeUnit, ArrayList<Integer>> timeUnitValues);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showGeneratingEvents(boolean loading);

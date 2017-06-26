@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -139,5 +141,5 @@ public interface CalendarRepository {
 
     Observable<List<PeriodicityType>> getPeriodicityList();
 
-    Observable<List<TimeUnit>> getTimeUnits();
+    Observable<HashMap<TimeUnit, ArrayList<Integer>>> getTimeUnitValues();
 }

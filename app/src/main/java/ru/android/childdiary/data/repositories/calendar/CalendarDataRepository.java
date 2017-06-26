@@ -7,8 +7,10 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -387,7 +389,13 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     @Override
-    public Observable<List<TimeUnit>> getTimeUnits() {
-        return Observable.just(Arrays.asList(TimeUnit.values()));
+    public Observable<HashMap<TimeUnit, ArrayList<Integer>>> getTimeUnitValues() {
+        return Observable.fromCallable(() -> {
+            HashMap<TimeUnit, ArrayList<Integer>> map = new HashMap<>();
+            map.put(TimeUnit.DAY, new ArrayList<>(Observable.range(1, 30).toList().blockingGet()));
+            map.put(TimeUnit.WEEK, new ArrayList<>(Observable.range(1, 52).toList().blockingGet()));
+            map.put(TimeUnit.MONTH, new ArrayList<>(Observable.range(1, 12).toList().blockingGet()));
+            return map;
+        });
     }
 }

@@ -482,6 +482,20 @@
         <item quantity="many">дней</item>
         <item quantity="zero">дней</item>
     </plurals>
+    <plurals name="timeUnitNumberOfHours">
+        <item quantity="one">час</item>
+        <item quantity="few">часа</item>
+        <item quantity="other">часов</item>
+        <item quantity="many">часов</item>
+        <item quantity="zero">часов</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfMinutes">
+        <item quantity="one">минута</item>
+        <item quantity="few">минуты</item>
+        <item quantity="other">минут</item>
+        <item quantity="many">минут</item>
+        <item quantity="zero">минут</item>
+    </plurals>
     <plurals name="numberOfHours">
         <item quantity="one">%d час</item>
         <item quantity="few">%d часа</item>

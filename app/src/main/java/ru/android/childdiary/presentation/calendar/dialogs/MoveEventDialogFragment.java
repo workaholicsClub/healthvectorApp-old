@@ -2,76 +2,20 @@ package ru.android.childdiary.presentation.calendar.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.NumberPicker;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import io.reactivex.Observable;
-import lombok.Builder;
-import lombok.Value;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.domain.interactors.core.LengthValue;
+import ru.android.childdiary.presentation.core.dialogs.BaseLengthValueDialogFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class MoveEventDialogFragment extends BaseMvpDialogFragment<MoveEventDialogArguments> {
-    private static final int[] MINUTES = new int[]{5, 10, 15, 30, 45, 60, 90, 120};
-
-    @BindView(R.id.numberPicker)
-    NumberPicker numberPicker;
-
+public class MoveEventDialogFragment extends BaseLengthValueDialogFragment<MoveEventDialogArguments> {
     @Nullable
     private Listener listener;
-
-    private List<TimeShift> timeShifts = new ArrayList<>();
-
-    @Override
-    @LayoutRes
-    protected int getLayoutResourceId() {
-        return R.layout.dialog_move_event;
-    }
-
-    @Override
-    protected void setupUi() {
-        timeShifts.clear();
-        for (int i = 0; i < MINUTES.length; ++i) {
-            int minutes = MINUTES[i];
-            TimeShift timeShift = TimeShift.builder()
-                    .minutes(minutes)
-                    .build();
-            timeShifts.add(timeShift);
-            timeShift = TimeShift.builder()
-                    .minutes(-minutes)
-                    .build();
-            timeShifts.add(0, timeShift);
-        }
-
-        String[] names = Observable.fromIterable(timeShifts)
-                .map(timeShift -> timeShift.getText(getContext()))
-                .toList()
-                .map(strings -> strings.toArray(new String[strings.size()]))
-                .blockingGet();
-        int index = names.length / 2;
-
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(names.length - 1);
-        numberPicker.setDisplayedValues(names);
-
-        numberPicker.setValue(index);
-    }
-
-    private TimeShift readTimeShift() {
-        int index = numberPicker.getValue();
-        return timeShifts.get(index);
-    }
 
     @NonNull
     @Override
@@ -82,28 +26,31 @@ public class MoveEventDialogFragment extends BaseMvpDialogFragment<MoveEventDial
 
         if (dialogArguments.getEvent().getLinearGroup() == null) {
             builder.setPositiveButton(R.string.ok, (dialog, which) -> moveEventClick());
-            builder.setNegativeButton(R.string.cancel, null);
+            builder.setNegativeButton(R.string.cancel, (dialog, which) -> hideKeyboardAndClearFocus());
         } else {
             builder.setPositiveButton(R.string.move_one_event, (dialog, which) -> moveEventClick());
             builder.setNegativeButton(R.string.move_linear_group, (dialog, which) -> moveLinearGroupClick());
         }
 
-        return builder.create();
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
     }
 
     private void moveEventClick() {
-        MasterEvent event = dialogArguments.getEvent();
-        TimeShift timeShift = readTimeShift();
+        hideKeyboardAndClearFocus();
         if (listener != null) {
-            listener.onMoveEventClick(getTag(), event, timeShift.getMinutes());
+            LengthValue lengthValue = readLengthValue();
+            listener.onMoveEventClick(getTag(), dialogArguments.getEvent(), lengthValue.getMinutes());
         }
     }
 
     private void moveLinearGroupClick() {
-        MasterEvent event = dialogArguments.getEvent();
-        TimeShift timeShift = readTimeShift();
+        hideKeyboardAndClearFocus();
         if (listener != null) {
-            listener.onMoveLinearGroupClick(getTag(), event, timeShift.getMinutes());
+            LengthValue lengthValue = readLengthValue();
+            listener.onMoveLinearGroupClick(getTag(), dialogArguments.getEvent(), lengthValue.getMinutes());
         }
     }
 
@@ -127,24 +74,5 @@ public class MoveEventDialogFragment extends BaseMvpDialogFragment<MoveEventDial
         void onMoveEventClick(String tag, @NonNull MasterEvent event, int minutes);
 
         void onMoveLinearGroupClick(String tag, @NonNull MasterEvent event, int minutes);
-    }
-
-    @Value
-    @Builder
-    private static class TimeShift {
-        int minutes;
-
-        @Nullable
-        public String getText(Context context) {
-            if (minutes == 0) {
-                return null;
-            }
-            String text = TimeUtils.durationShort(context, Math.abs(minutes));
-            if (minutes > 0) {
-                return context.getString(R.string.move_time_format_positive, text);
-            } else {
-                return context.getString(R.string.move_time_format_negative, text);
-            }
-        }
     }
 }

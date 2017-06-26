@@ -215,6 +215,10 @@ public class StringUtils {
             return null;
         }
         switch (timeUnit) {
+            case MINUTE:
+                return context.getResources().getQuantityString(R.plurals.timeUnitNumberOfMinutes, length);
+            case HOUR:
+                return context.getResources().getQuantityString(R.plurals.timeUnitNumberOfHours, length);
             case DAY:
                 return context.getResources().getQuantityString(R.plurals.timeUnitNumberOfDays, length);
             case WEEK:
