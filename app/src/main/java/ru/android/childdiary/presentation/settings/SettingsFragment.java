@@ -31,7 +31,8 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
+import ru.android.childdiary.presentation.cloud.CloudOperationActivity;
+import ru.android.childdiary.presentation.cloud.CloudOperationType;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -78,6 +79,8 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Getter(AccessLevel.PROTECTED)
     private Sex sex;
 
+    private IntentSettingsItem accountItem;
+
     @Override
     protected void injectFragment(ApplicationComponent component) {
         component.inject(this);
@@ -106,6 +109,13 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     }
 
     private void setupUi() {
+        accountItem = IntentSettingsItem.builder()
+                .id(Intention.ACCOUNT.ordinal())
+                .title(getString(R.string.settings_account))
+                .iconRes(R.drawable.ic_settings_account)
+                .listener(this)
+                .enabled(true)
+                .build();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         settingsAdapter = new SettingsAdapter(getContext());
@@ -134,6 +144,12 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         }
     }
 
+    @Override
+    public void showSelectedAccount(@NonNull String accountName) {
+        accountItem = accountItem.toBuilder().subtitle(accountName).build();
+        settingsAdapter.updateItem(accountItem);
+    }
+
     private List<BaseSettingsItem> generateItems() {
         List<BaseSettingsItem> items = new ArrayList<>();
         int id = 1000;
@@ -147,6 +163,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .title(getString(R.string.settings_setup_notifications))
                 .iconRes(R.drawable.ic_notify_time)
                 .listener(this)
+                .enabled(true)
                 .build());
         items.add(DelimiterSettingsItem.builder()
                 .id(++id)
@@ -155,23 +172,20 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .id(++id)
                 .title(getString(R.string.settings_data_control))
                 .build());
-        items.add(IntentSettingsItem.builder()
-                .id(Intention.ACCOUNT.ordinal())
-                .title(getString(R.string.settings_account))
-                .iconRes(R.drawable.ic_settings_account)
-                .listener(this)
-                .build());
+        items.add(accountItem);
         items.add(IntentSettingsItem.builder()
                 .id(Intention.BACKUP.ordinal())
                 .title(getString(R.string.settings_backup_data))
                 .iconRes(R.drawable.ic_settings_backup_data)
                 .listener(this)
+                .enabled(true)
                 .build());
         items.add(IntentSettingsItem.builder()
                 .id(Intention.RESTORE.ordinal())
                 .title(getString(R.string.settings_restore_data))
                 .iconRes(R.drawable.ic_settings_restore_data)
                 .listener(this)
+                .enabled(true)
                 .build());
         items.add(DelimiterSettingsItem.builder()
                 .id(++id)
@@ -185,18 +199,21 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .title(getString(R.string.settings_day_length))
                 .iconRes(R.drawable.ic_length)
                 .listener(this)
+                .enabled(true)
                 .build());
         items.add(IntentSettingsItem.builder()
                 .id(Intention.FOOD_MEASURE.ordinal())
                 .title(getString(R.string.settings_food_measure))
                 .iconRes(R.drawable.ic_food_measure)
                 .listener(this)
+                .enabled(true)
                 .build());
         items.add(IntentSettingsItem.builder()
                 .id(Intention.FOOD.ordinal())
                 .title(getString(R.string.settings_food))
                 .iconRes(R.drawable.ic_food)
                 .listener(this)
+                .enabled(true)
                 .build());
         return items;
     }
@@ -210,15 +227,20 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
             case ACCOUNT:
                 presenter.bindAccount();
                 break;
-            case BACKUP:
-                presenter.backup();
-                break;
-            case RESTORE:
-                // TODO
-                Intent intent = new Intent(getContext(), CloudInitialActivity.class);
+            case BACKUP: {
+                Intent intent = CloudOperationActivity.getIntent(getContext(),
+                        CloudOperationType.BACKUP, getSex());
                 startActivity(intent);
                 getActivity().finish();
                 break;
+            }
+            case RESTORE: {
+                Intent intent = CloudOperationActivity.getIntent(getContext(),
+                        CloudOperationType.RESTORE, getSex());
+                startActivity(intent);
+                getActivity().finish();
+                break;
+            }
             case DAY_LENGTH:
                 break;
             case FOOD_MEASURE:
@@ -324,6 +346,18 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     }
 
     @Override
+    public void securityError() {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.security_error_dialog_title)
+                .setMessage(R.string.security_error_dialog_text)
+                .setPositiveButton(R.string.try_again,
+                        (DialogInterface dialog, int which) -> presenter.continueAfterErrorResolved())
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
+    }
+
+    @Override
     public void showCheckBackupAvailabilityLoading(boolean loading) {
         if (loading) {
             showProgress(TAG_PROGRESS_DIALOG_AUTHORIZE,
@@ -335,16 +369,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     }
 
     @Override
-    public void foundBackup() {
-    }
-
-    @Override
-    public void noBackupFound() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.no_backup_found)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+    public void checkBackupAvailabilitySucceeded(boolean isBackupAvailable) {
     }
 
     @Override
@@ -358,63 +383,39 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .show();
     }
 
-
     @Override
     public void showRestoreLoading(boolean loading) {
-        if (loading) {
-            showProgress(TAG_PROGRESS_DIALOG_RESTORE,
-                    getString(R.string.please_wait),
-                    getString(R.string.restore_loading));
-        } else {
-            hideProgress(TAG_PROGRESS_DIALOG_RESTORE);
-        }
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void restoreSucceeded() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restore_success_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void failedToRestore() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restore_error_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public void noBackupFound() {
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void showBackupLoading(boolean loading) {
-        if (loading) {
-            showProgress(TAG_PROGRESS_DIALOG_BACKUP,
-                    getString(R.string.please_wait),
-                    getString(R.string.backup_loading));
-        } else {
-            hideProgress(TAG_PROGRESS_DIALOG_BACKUP);
-        }
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void backupSucceeded() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.backup_success_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void failedToBackup() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.backup_error_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     private enum Intention {

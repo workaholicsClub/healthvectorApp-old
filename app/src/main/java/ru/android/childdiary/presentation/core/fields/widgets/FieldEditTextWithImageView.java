@@ -24,6 +24,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class FieldEditTextWithImageView extends FieldEditTextView implements FieldReadOnly {
     @BindView(R.id.imageView)
@@ -121,5 +122,6 @@ public class FieldEditTextWithImageView extends FieldEditTextView implements Fie
     public void setReadOnly(boolean readOnly) {
         setVisibility(readOnly && TextUtils.isEmpty(getText()) && hideIfEmpty ? GONE : VISIBLE);
         editText.setEnabled(!readOnly);
+        WidgetsUtils.setupEditText(editText, readOnly);
     }
 }

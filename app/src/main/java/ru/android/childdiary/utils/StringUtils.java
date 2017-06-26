@@ -98,6 +98,8 @@ public class StringUtils {
                 return context.getString(R.string.event_doctor_visit);
             case MEDICINE_TAKING:
                 return context.getString(R.string.event_medicine_taking);
+            case EXERCISE:
+                return context.getString(R.string.exercise);
             default:
                 return null;
         }
@@ -213,6 +215,10 @@ public class StringUtils {
             return null;
         }
         switch (timeUnit) {
+            case MINUTE:
+                return context.getResources().getQuantityString(R.plurals.timeUnitNumberOfMinutes, length);
+            case HOUR:
+                return context.getResources().getQuantityString(R.plurals.timeUnitNumberOfHours, length);
             case DAY:
                 return context.getResources().getQuantityString(R.plurals.timeUnitNumberOfDays, length);
             case WEEK:

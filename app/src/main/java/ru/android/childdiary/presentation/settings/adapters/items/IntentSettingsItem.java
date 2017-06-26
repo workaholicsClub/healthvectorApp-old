@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.settings.adapters.items;
 
 import android.support.annotation.DrawableRes;
+import android.support.annotation.Nullable;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,16 +19,23 @@ public class IntentSettingsItem extends BaseSettingsItem {
     int iconRes;
     @NonNull
     String title;
+    @Nullable
+    String subtitle;
+    boolean enabled;
 
-    @Builder
+    @Builder(toBuilder = true)
     private IntentSettingsItem(int id,
                                @NonNull Listener listener,
                                @DrawableRes int iconRes,
-                               @NonNull String title) {
+                               @NonNull String title,
+                               @Nullable String subtitle,
+                               boolean enabled) {
         super(id);
         this.listener = listener;
         this.iconRes = iconRes;
         this.title = title;
+        this.subtitle = subtitle;
+        this.enabled = enabled;
     }
 
     @Override

@@ -36,6 +36,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.cloud.CloudInitialActivity" />
+        <activity android:name=".presentation.cloud.CloudOperationActivity" />
         <activity
             android:name=".presentation.onboarding.IntroActivity"
             android:parentActivityName=".presentation.main.MainActivity">
@@ -175,12 +176,7 @@
         </activity>
         <activity
             android:name=".presentation.exercises.AddConcreteExerciseActivity"
-            android:parentActivityName=".presentation.exercises.ExerciseDetailActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.exercises.ExerciseDetailActivity" />
-        </activity>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -194,10 +190,19 @@
 
         <service android:name=".services.TimerService" />
         <service android:name=".services.UpdateDataService" />
+        <service android:name=".services.CloudService" />
 
         <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receivers.TimeChangedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_CHANGED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
 

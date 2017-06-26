@@ -48,7 +48,7 @@ public class AccountChooserPicker {
         } else {
             //noinspection deprecation
             intent = AccountManager.newChooseAccountIntent(
-                    selectedAccount, null, new String[]{ACCOUNT_TYPE}, false, null, null, null, null);
+                    selectedAccount, null, new String[]{ACCOUNT_TYPE}, true, null, null, null, null);
         }
         return intent;
     }

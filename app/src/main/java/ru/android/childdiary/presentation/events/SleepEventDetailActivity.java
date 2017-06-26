@@ -36,7 +36,7 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.EventUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -173,7 +173,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     void onTimerClick() {
         DateTime now = DateTime.now();
         SleepEvent event = buildEvent();
-        boolean timerWasStarted = EventHelper.isTimerStarted(event);
+        boolean timerWasStarted = EventUtils.isTimerStarted(event);
         if (timerWasStarted) {
             // выключаем таймер
             event = event.toBuilder()
@@ -236,7 +236,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         WidgetsUtils.setDateTime(event.getDateTime(), startDateView, startTimeView);
         WidgetsUtils.setDateTime(event.getFinishDateTime(), finishDateView, finishTimeView);
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
-        int visibility = EventHelper.isTimerStarted(event) ? View.GONE : View.VISIBLE;
+        int visibility = EventUtils.isTimerStarted(event) ? View.GONE : View.VISIBLE;
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? visibility : View.GONE);
         noteView.setText(event.getNote());
         updateDuration();
@@ -352,7 +352,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
     }
 
     private void updateTimer(@NonNull SleepEvent event) {
-        boolean isTimerStarted = EventHelper.isTimerStarted(event);
+        boolean isTimerStarted = EventUtils.isTimerStarted(event);
         timerView.setOn(isTimerStarted);
         if (isTimerStarted) {
             String text = TimeUtils.timerString(this, event.getDateTime(), DateTime.now());

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_background"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/authorizeView"
+            layout="@layout/view_cloud_authorize"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/operationView"
+            layout="@layout/view_cloud_operation"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/operationInProcessView"
+            layout="@layout/view_cloud_operation_in_process"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/operationDoneView"
+            layout="@layout/view_cloud_operation_done"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/initView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</LinearLayout>

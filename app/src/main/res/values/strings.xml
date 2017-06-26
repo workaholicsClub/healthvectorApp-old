@@ -31,7 +31,7 @@
     <string name="request_read_external_storage_permission_title">Запрос на чтение SD-карты</string>
     <string name="request_read_external_storage_permission_text">Необходимо для чтения файлов с SD-карты.</string>
     <string name="request_get_accounts_permission_title">Запрос на получение аккаунта</string>
-    <string name="request_get_accounts_permission_text">Необходимо для создания бэкапов данных приложения в Google Drive.</string>
+    <string name="request_get_accounts_permission_text">Необходимо для создания резервной копии данных приложения в Google Drive.</string>
     <string name="camera_not_available">Камера не доступна</string>
     <string name="select_image">Выберите изображение</string>
     <string name="failed_to_create_file_for_camera">Не удалось создать файл для фотографии</string>
@@ -143,7 +143,7 @@
     <string name="save_changes_dialog_title">Сохранить изменения?</string>
     <string name="start_timer">СТАРТ</string>
     <string name="stop_timer">СТОП</string>
-    <string name="menu_close">Закрыть</string>
+    <string name="close">Закрыть</string>
     <string name="menu_filter">Фильтр</string>
     <string name="menu_rotate">Повернуть</string>
     <string name="menu_save">Сохранить</string>
@@ -250,15 +250,12 @@
     <string name="bind_account_connection_unavailable_dialog_text">Подключите Интернет или попробуйте позже.</string>
     <string name="try_again">Попробовать еще раз</string>
     <string name="check_is_backup_available_loading">Авторизация&#8230;</string>
-    <string name="found_backup_dialog_title">Найден бэкап</string>
-    <string name="found_backup_dialog_text">Восстановить данные из бэкапа?</string>
-    <string name="restore">Восстановить</string>
-    <string name="no_backup_found">Бэкап не найден</string>
+    <string name="found_backup_dialog_title">Найдена резервная копия</string>
+    <string name="found_backup_dialog_text">Восстановить данные?</string>
+    <string name="no_backup_found">Резервная копия не найдена</string>
     <string name="google_drive_error_dialog_text">Не удалось подключиться к Google Drive</string>
-    <string name="restore_loading">Восстановление данных из бэкапа&#8230;</string>
     <string name="restore_success_dialog_text">Данные восстановлены</string>
     <string name="restore_error_dialog_text">При восстановлении данных произошла ошибка</string>
-    <string name="backup_loading">Сохранение данных&#8230;</string>
     <string name="backup_success_dialog_text">Данные сохранены</string>
     <string name="backup_error_dialog_text">При сохранении данных произошла ошибка</string>
     <string name="settings_notifications">Уведомления</string>
@@ -271,6 +268,29 @@
     <string name="settings_day_length">Продолжительность дня</string>
     <string name="settings_food_measure">Единицы измерения</string>
     <string name="settings_food">Прикорм</string>
+    <string name="authorize">Войти</string>
+    <string name="authorize_account">Войти в аккаунт</string>
+    <string name="restore">Восстановить</string>
+    <string name="backup">Сохранить</string>
+    <string name="restore_data">Восстановить данные</string>
+    <string name="backup_data">Сохранить данные</string>
+    <string name="authorize_account_to_restore_data">Для восстановления данных необходимо авторизоваться в Google Drive</string>
+    <string name="authorize_account_to_backup_data">Для сохранения данных необходимо авторизоваться в Google Drive</string>
+    <string name="restore_data_placeholder">Данные будут восстанавливаться в течение некоторого времени, далее можно продолжить работу</string>
+    <string name="backup_data_placeholder">Данные будут сохраняться в течение некоторого времени, далее можно продолжить работу</string>
+    <string name="restore_data_in_process">Идет восстановление данных</string>
+    <string name="backup_data_in_process">Идет сохранение данных</string>
+    <string name="please_wait_til_the_end">Пожалуйста, дождитесь окончания операции</string>
+    <string name="security_error_dialog_title">Ошибка авторизации</string>
+    <string name="security_error_dialog_text">Попробуйте позже или воспользуйтесь другим аккаунтом.</string>
+    <string name="notification_title_play_services">Не доступны Google Play Services</string>
+    <string name="notification_text_play_services">Установите Google Play Services для создания резервной копии данных</string>
+    <string name="notification_title_authorization">Ошибка авторизации</string>
+    <string name="notification_text_authorization_recoverable">Авторизуйте приложение в Google Drive для создания резервной копии данных</string>
+    <string name="notification_text_authorization_unrecoverable">Попробуйте позже</string>
+    <string name="notification_title_network">Отсутствует Интернет</string>
+    <string name="notification_text_network">Подключите Интернет для создания резервной копии данных</string>
+    <string name="notification_text_backup">Загрузка данных на Google Drive</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
@@ -461,6 +481,20 @@
         <item quantity="other">дней</item>
         <item quantity="many">дней</item>
         <item quantity="zero">дней</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfHours">
+        <item quantity="one">час</item>
+        <item quantity="few">часа</item>
+        <item quantity="other">часов</item>
+        <item quantity="many">часов</item>
+        <item quantity="zero">часов</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfMinutes">
+        <item quantity="one">минута</item>
+        <item quantity="few">минуты</item>
+        <item quantity="other">минут</item>
+        <item quantity="many">минут</item>
+        <item quantity="zero">минут</item>
     </plurals>
     <plurals name="numberOfHours">
         <item quantity="one">%d час</item>

@@ -1,5 +1,7 @@
 package ru.android.childdiary.presentation.splash;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.arellomobile.mvp.InjectViewState;
@@ -11,7 +13,11 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import lombok.Builder;
+import lombok.Value;
 import ru.android.childdiary.BuildConfig;
+import ru.android.childdiary.data.db.DowngradeDatabaseException;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
@@ -40,28 +46,47 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(Observable.combineLatest(
-                Observable.timer(SPLASH_TIME_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
-                        .doOnNext(zero -> logger.debug("timer finished")),
-                initializationInteractor.startUpdateDataService(),
-                childInteractor.getActiveChildOnce()
-                        .doOnNext(child -> logger.debug("active child: " + child)),
-                cloudInteractor.getAccountNameOnce()
-                        .doOnNext(accountName -> logger.debug("account name: " + accountName)),
-                cloudInteractor.getIsCloudShownOnce()
-                        .doOnNext(isCloudShown -> logger.debug("is cloud shown: " + isCloudShown)),
-                (zero, isUpdateServiceStarted, child, accountName, isCloudShown) -> TextUtils.isEmpty(accountName) && !isCloudShown)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onFinished, this::onUnexpectedError));
+        try {
+            unsubscribeOnDestroy(Observable.combineLatest(
+                    Observable.timer(SPLASH_TIME_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
+                            .doOnNext(zero -> logger.debug("timer finished")),
+                    initializationInteractor.startUpdateDataService(),
+                    childInteractor.getActiveChildOnce()
+                            .doOnNext(child -> logger.debug("active child: " + child)),
+                    cloudInteractor.getAccountNameOnce()
+                            .doOnNext(accountName -> logger.debug("account name: " + accountName)),
+                    cloudInteractor.getIsCloudShownOnce()
+                            .doOnNext(isCloudShown -> logger.debug("is cloud shown: " + isCloudShown)),
+                    (zero, isUpdateServiceStarted, child, accountName, isCloudShown) -> Parameters.builder()
+                            .sex(child.getSex())
+                            .showCloud(TextUtils.isEmpty(accountName) && !isCloudShown)
+                            .build())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::onFinished, this::onUnexpectedError));
+        } catch (DowngradeDatabaseException e) {
+            onUnexpectedError(e);
+            // TODO: при появлении новых версий БД необходимо обрабатывать исключение из onDowngrade,
+            // показывая пользователю сообщение о необходимости обновления приложения из Google Play Market;
+            // ситуация с onDowngrade становится возможной, т.к. пользователь может загрузить бэкап
+            // из облачного хранилища с более новой версией БД из приложения старой версии
+        }
     }
 
-    private void onFinished(boolean showCloud) {
-        if (showCloud || BuildConfig.SHOW_CLOUD_ON_EACH_START) {
+    private void onFinished(@NonNull Parameters parameters) {
+        if (parameters.isShowCloud() || BuildConfig.SHOW_CLOUD_ON_EACH_START) {
             cloudInteractor.setIsCloudShown(true);
-            getViewState().navigateToCloud();
+            getViewState().navigateToCloud(parameters.getSex());
         } else {
-            getViewState().navigateToMain();
+            getViewState().navigateToMain(parameters.getSex());
         }
+    }
+
+    @Value
+    @Builder
+    private static class Parameters {
+        @Nullable
+        Sex sex;
+        boolean showCloud;
     }
 }

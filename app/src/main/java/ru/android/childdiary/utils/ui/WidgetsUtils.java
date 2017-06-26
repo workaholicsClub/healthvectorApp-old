@@ -33,6 +33,12 @@ public class WidgetsUtils {
         textView.setTextColor(color);
     }
 
+    public static void setupEditText(TextView textView, boolean readOnly) {
+        @ColorRes int colorRes = readOnly ? R.color.secondary_text : R.color.primary_text;
+        @ColorInt int color = ContextCompat.getColor(textView.getContext(), colorRes);
+        textView.setTextColor(color);
+    }
+
     public static void hideIfEmpty(TextView textView) {
         textView.setVisibility(TextUtils.isEmpty(textView.getText()) ? View.GONE : View.VISIBLE);
     }

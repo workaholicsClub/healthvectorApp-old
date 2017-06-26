@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:src="@drawable/ic_account" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/authorize_account"
+            android:textAppearance="@style/CloudOperationTitleTextAppearance" />
+
+        <TextView
+            android:id="@+id/textViewAuthorizeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/authorize_account_to_restore_data"
+            android:textAppearance="@style/CloudOperationPlaceholderTextAppearance" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonAuthorize"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/button_margin_vertical"
+        android:layout_marginLeft="@dimen/profile_margin_horizontal"
+        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginTop="@dimen/button_margin_vertical"
+        android:text="@string/authorize"
+        android:textAllCaps="false" />
+</RelativeLayout>

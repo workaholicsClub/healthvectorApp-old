@@ -8,15 +8,14 @@ import android.view.ViewGroup;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewAdapter;
-import ru.android.childdiary.presentation.core.adapters.swipe.ItemActionListener;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public class ExerciseAdapter extends BaseRecyclerViewAdapter<Exercise, ExerciseViewHolder> {
-    private final ItemActionListener<Exercise> itemActionListener;
+    private final ExerciseClickListener listener;
 
-    public ExerciseAdapter(Context context, @NonNull ItemActionListener<Exercise> itemActionListener) {
+    public ExerciseAdapter(Context context, @NonNull ExerciseClickListener listener) {
         super(context);
-        this.itemActionListener = itemActionListener;
+        this.listener = listener;
     }
 
     @Override
@@ -27,6 +26,6 @@ public class ExerciseAdapter extends BaseRecyclerViewAdapter<Exercise, ExerciseV
     @Override
     public ExerciseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.exercise_item, parent, false);
-        return new ExerciseViewHolder(v, itemActionListener);
+        return new ExerciseViewHolder(v, listener);
     }
 }

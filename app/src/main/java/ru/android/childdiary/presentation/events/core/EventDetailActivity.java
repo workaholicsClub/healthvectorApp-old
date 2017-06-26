@@ -44,7 +44,7 @@ import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.EventUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -97,7 +97,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             }
             buttonAdd.setVisibility(GONE);
             if (savedInstanceState == null) {
-                done = EventHelper.isDone(masterEvent);
+                done = EventUtils.isDone(masterEvent);
                 getPresenter().requestEventDetails(masterEvent);
             }
         }
@@ -342,7 +342,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             return super.onPrepareOptionsMenu(menu);
         }
         MenuItem item = menu.findItem(R.id.menu_done);
-        item.setVisible(EventHelper.canBeDone(getPresenter().getEventType()));
+        item.setVisible(EventUtils.canBeDone(getPresenter().getEventType()));
         item.setChecked(done);
         return true;
     }
@@ -401,9 +401,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     private void processContentEquals(T editedEvent) {
-        if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+        if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
             showNeedToFillNoteOrPhoto();
-        } else if (EventHelper.isDone(editedEvent) == EventHelper.isDone(event)) {
+        } else if (EventUtils.isDone(editedEvent) == EventUtils.isDone(event)) {
             finish();
         } else {
             getPresenter().updateEvent(editedEvent, true);
@@ -424,7 +424,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 .setTitle(R.string.save_changes_dialog_title)
                 .setPositiveButton(R.string.save,
                         (DialogInterface dialog, int which) -> {
-                            if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+                            if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
                                 showNeedToFillNoteOrPhoto();
                             } else {
                                 getPresenter().updateEvent(editedEvent, true);
@@ -439,14 +439,14 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
                 .setTitle(R.string.ask_update_linear_group)
                 .setPositiveButton(R.string.update_one_event,
                         (DialogInterface dialog, int which) -> {
-                            if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+                            if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
                                 showNeedToFillNoteOrPhoto();
                             } else {
                                 getPresenter().updateEvent(editedEvent, true);
                             }
                         })
                 .setNegativeButton(R.string.update_linear_group, (dialog, which) -> {
-                    if (EventHelper.isDone(editedEvent) && EventHelper.needToFillNoteOrPhoto(editedEvent)) {
+                    if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
                         showNeedToFillNoteOrPhoto();
                     } else {
                         getPresenter().updateLinearGroup(editedEvent, fields, true);
@@ -471,10 +471,10 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected final boolean sameEvent(@NonNull SleepEvent event) {
-        return EventHelper.sameEvent(this.event, event);
+        return EventUtils.sameEvent(this.event, event);
     }
 
     protected final boolean isTimerStarted() {
-        return event instanceof SleepEvent && EventHelper.isTimerStarted((SleepEvent) event);
+        return event instanceof SleepEvent && EventUtils.isTimerStarted((SleepEvent) event);
     }
 }

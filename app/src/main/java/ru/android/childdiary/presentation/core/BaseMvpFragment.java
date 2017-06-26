@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.core;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
@@ -129,5 +130,17 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
 
     @Override
     public void permissionDenied(RequestPermissionInfo permissionInfo) {
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        getActivity().overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        getActivity().overridePendingTransition(0, 0);
     }
 }

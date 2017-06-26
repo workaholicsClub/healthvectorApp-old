@@ -319,4 +319,22 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
     @Override
     public void permissionDenied(RequestPermissionInfo permissionInfo) {
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        overridePendingTransition(0, 0);
+    }
 }

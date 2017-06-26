@@ -21,13 +21,14 @@ import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<T> {
     @Inject
+    protected CloudInteractor cloudInteractor;
+    protected boolean needAppRestart;
+
+    @Inject
     PlayServicesAvailability playServicesAvailability;
 
     @Inject
     NetworkAvailability networkAvailability;
-
-    @Inject
-    CloudInteractor cloudInteractor;
 
     private State state = State.BIND_ACCOUNT;
 
@@ -101,13 +102,7 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
                         .doOnError(throwable -> getViewState().showCheckBackupAvailabilityLoading(false))
                         .doOnError(throwable -> logger.error("checkIsBackupAvailable", throwable))
                         .subscribe(
-                                isBackupAvailable -> {
-                                    if (isBackupAvailable) {
-                                        getViewState().foundBackup();
-                                    } else {
-                                        moveNext();
-                                    }
-                                },
+                                isBackupAvailable -> getViewState().checkBackupAvailabilitySucceeded(isBackupAvailable),
                                 throwable -> {
                                     boolean processed = processGoogleDriveError(throwable);
                                     if (!processed) {
@@ -129,7 +124,10 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
                         .doOnError(throwable -> getViewState().showRestoreLoading(false))
                         .doOnError(throwable -> logger.error("restore", throwable))
                         .subscribe(
-                                isRestored -> getViewState().restoreSucceeded(),
+                                isRestored -> {
+                                    getViewState().restoreSucceeded();
+                                    needAppRestart = true;
+                                },
                                 throwable -> {
                                     boolean processed = processGoogleDriveError(throwable);
                                     if (!processed) {
@@ -147,11 +145,11 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
                         .flatMap(isNetworkAvailable -> cloudInteractor.backup())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSuccess(isRestored -> getViewState().showBackupLoading(false))
+                        .doOnSuccess(isUploaded -> getViewState().showBackupLoading(false))
                         .doOnError(throwable -> getViewState().showBackupLoading(false))
                         .doOnError(throwable -> logger.error("backup", throwable))
                         .subscribe(
-                                isRestored -> getViewState().backupSucceeded(),
+                                isUploaded -> getViewState().backupSucceeded(),
                                 throwable -> {
                                     boolean processed = processGoogleDriveError(throwable);
                                     if (!processed) {
@@ -178,6 +176,9 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
             return true;
         } else if (throwable instanceof BackupUnavailableException) {
             getViewState().noBackupFound();
+            return true;
+        } else if (throwable instanceof SecurityException) {
+            getViewState().securityError();
             return true;
         }
         return false;

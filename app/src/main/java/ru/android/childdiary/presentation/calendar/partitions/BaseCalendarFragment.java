@@ -38,8 +38,8 @@ import ru.android.childdiary.presentation.calendar.adapters.events.EventActionLi
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
-import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogArguments;
-import ru.android.childdiary.presentation.core.dialogs.MoveEventDialogFragment;
+import ru.android.childdiary.presentation.calendar.dialogs.MoveEventDialogArguments;
+import ru.android.childdiary.presentation.calendar.dialogs.MoveEventDialogFragment;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
 import ru.android.childdiary.presentation.events.ExerciseEventDetailActivity;

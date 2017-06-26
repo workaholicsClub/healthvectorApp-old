@@ -3,7 +3,6 @@ package ru.android.childdiary.data.repositories.core.images;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -18,9 +17,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Single;
-import ru.android.childdiary.utils.io.FileUtils;
 import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+import ru.android.childdiary.utils.io.FileUtils;
 
 @Singleton
 public class ImagesDataRepository implements ImagesRepository {
@@ -73,13 +72,7 @@ public class ImagesDataRepository implements ImagesRepository {
 
     @Override
     public boolean isTemporaryImageFile(@Nullable String imageFileName) {
-        try {
-            return !TextUtils.isEmpty(imageFileName) && new File(getImagesParentDir(), imageFileName)
-                    .getName()
-                    .contains(CROPPED_IMAGE_FILE_NAME);
-        } catch (Exception e) {
-            throw new ImagesException("failed to check file is temporary", e);
-        }
+        return imageFileName != null && imageFileName.contains(CROPPED_IMAGE_FILE_NAME);
     }
 
     @Override

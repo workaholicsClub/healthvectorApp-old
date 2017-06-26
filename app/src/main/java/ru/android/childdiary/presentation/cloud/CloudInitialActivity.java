@@ -9,17 +9,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
+import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
+import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -39,8 +44,15 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     @InjectPresenter
     CloudInitialPresenter presenter;
 
-    public static Intent getIntent(Context context) {
+    @BindView(R.id.buttonLater)
+    Button buttonLater;
+
+    @BindView(R.id.buttonBindAccount)
+    Button buttonBindAccount;
+
+    public static Intent getIntent(Context context, @Nullable Sex sex) {
         Intent intent = new Intent(context, CloudInitialActivity.class);
+        intent.putExtra(ExtraConstants.EXTRA_SEX, sex);
         return intent;
     }
 
@@ -52,7 +64,14 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cloud);
+        setContentView(R.layout.activity_cloud_initial);
+    }
+
+    @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        buttonLater.setTextColor(ThemeUtils.getColorAccent(this, getSex()));
+        buttonBindAccount.setTextColor(ThemeUtils.getColorAccent(this, getSex()));
     }
 
     @OnClick(R.id.buttonLater)
@@ -159,6 +178,18 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     }
 
     @Override
+    public void securityError() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.security_error_dialog_title)
+                .setMessage(R.string.security_error_dialog_text)
+                .setPositiveButton(R.string.try_again,
+                        (DialogInterface dialog, int which) -> presenter.continueAfterErrorResolved())
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
+    }
+
+    @Override
     public void showCheckBackupAvailabilityLoading(boolean loading) {
         if (loading) {
             showProgress(TAG_PROGRESS_DIALOG_AUTHORIZE,
@@ -170,24 +201,19 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     }
 
     @Override
-    public void foundBackup() {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(R.string.found_backup_dialog_title)
-                .setMessage(R.string.found_backup_dialog_text)
-                .setPositiveButton(R.string.restore,
-                        (DialogInterface dialog, int which) -> presenter.restore())
-                .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
-    }
-
-    @Override
-    public void noBackupFound() {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.no_backup_found)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .show();
+    public void checkBackupAvailabilitySucceeded(boolean isBackupAvailable) {
+        if (isBackupAvailable) {
+            new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                    .setTitle(R.string.found_backup_dialog_title)
+                    .setMessage(R.string.found_backup_dialog_text)
+                    .setPositiveButton(R.string.restore,
+                            (DialogInterface dialog, int which) -> presenter.restore())
+                    .setNegativeButton(R.string.cancel,
+                            (dialog, which) -> presenter.moveNext())
+                    .show();
+        } else {
+            presenter.moveNext();
+        }
     }
 
     @Override
@@ -206,7 +232,7 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
         if (loading) {
             showProgress(TAG_PROGRESS_DIALOG_RESTORE,
                     getString(R.string.please_wait),
-                    getString(R.string.restore_loading));
+                    getString(R.string.restore_data_in_process));
         } else {
             hideProgress(TAG_PROGRESS_DIALOG_RESTORE);
         }
@@ -231,6 +257,15 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     }
 
     @Override
+    public void noBackupFound() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.no_backup_found)
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
+                .show();
+    }
+
+    @Override
     public void showBackupLoading(boolean loading) {
         throw new UnsupportedOperationException("Not implemented");
     }
@@ -247,8 +282,19 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
 
     @Override
     public void navigateToMain() {
-        Intent intent = MainActivity.getIntent(this);
+        Intent intent = MainActivity.getIntent(this, AppPartition.CALENDAR, getSex());
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void restartApp() {
+        finish();
+        MainActivity.scheduleAppStartAndExit(this, AppPartition.CALENDAR);
+    }
+
+    @Override
+    public void onBackPressed() {
+        presenter.moveNext();
     }
 }

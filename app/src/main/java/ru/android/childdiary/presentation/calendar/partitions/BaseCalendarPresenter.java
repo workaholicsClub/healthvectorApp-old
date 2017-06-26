@@ -29,7 +29,7 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsReque
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.EventUtils;
 
 @InjectViewState
 public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
@@ -279,13 +279,13 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     }
 
     public void done(@NonNull MasterEvent event) {
-        boolean willBeUndone = EventHelper.isDone(event);
+        boolean willBeUndone = EventUtils.isDone(event);
         if (willBeUndone) {
             // можно развыполнить, не делаем проверок
             switchDone(event);
         } else {
             // проверяем, можно ли выполнить событие
-            if (EventHelper.needToFillNoteOrPhoto(event)) {
+            if (EventUtils.needToFillNoteOrPhoto(event)) {
                 getViewState().showNeedToFillNoteOrPhoto();
             } else {
                 switchDone(event);

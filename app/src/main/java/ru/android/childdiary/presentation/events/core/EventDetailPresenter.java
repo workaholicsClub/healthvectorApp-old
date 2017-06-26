@@ -18,7 +18,7 @@ import ru.android.childdiary.domain.interactors.calendar.validation.CalendarVali
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.EventUtils;
 
 public abstract class EventDetailPresenter<V extends EventDetailView<T>, T extends MasterEvent> extends BasePresenter<V> {
     @Inject
@@ -115,13 +115,13 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     public void done(@NonNull T event) {
-        boolean willBeUndone = EventHelper.isDone(event);
+        boolean willBeUndone = EventUtils.isDone(event);
         if (willBeUndone) {
             // можно развыполнить, не делаем проверок
             switchDone(false);
         } else {
             // проверяем, можно ли выполнить событие
-            if (EventHelper.needToFillNoteOrPhoto(event)) {
+            if (EventUtils.needToFillNoteOrPhoto(event)) {
                 getViewState().showNeedToFillNoteOrPhoto();
             } else {
                 switchDone(true);

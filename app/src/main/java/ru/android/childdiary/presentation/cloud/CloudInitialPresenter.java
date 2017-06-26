@@ -14,6 +14,10 @@ public class CloudInitialPresenter extends CloudPresenter<CloudInitialView> {
 
     @Override
     public void moveNext() {
-        getViewState().navigateToMain();
+        if (needAppRestart) {
+            getViewState().restartApp();
+        } else {
+            getViewState().navigateToMain();
+        }
     }
 }

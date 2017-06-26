@@ -20,14 +20,13 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 
 import static ru.android.childdiary.data.types.FeedType.BREAST_MILK;
 import static ru.android.childdiary.data.types.FeedType.FOOD;
 
-public class EventHelper {
+public class EventUtils {
     public static boolean canBeDone(@NonNull MasterEvent event) {
         return canBeDone(event.getEventType());
     }
@@ -108,7 +107,7 @@ public class EventHelper {
             return StringUtils.breast(context, pumpEvent.getBreast());
         } else if (event instanceof SleepEvent) {
             SleepEvent sleepEvent = (SleepEvent) event;
-            if (EventHelper.isTimerStarted(sleepEvent)) {
+            if (EventUtils.isTimerStarted(sleepEvent)) {
                 return TimeUtils.timerString(context, event.getDateTime(), DateTime.now());
             } else {
                 return TimeUtils.durationShort(context, sleepEvent.getDateTime(), sleepEvent.getFinishDateTime());

@@ -1,9 +1,12 @@
 package ru.android.childdiary.presentation.main;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,8 +40,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import icepick.State;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
@@ -112,16 +117,41 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @InjectPresenter
     MainPresenter presenter;
 
+    @State
+    AppPartition selectedPartition;
+
     private AccountHeader accountHeader;
     private Drawer drawer;
     private DrawerBuilder drawerBuilder;
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
-    private AppPartition selectedPartition;
     private Runnable navigationCommand;
 
-    public static Intent getIntent(Context context) {
-        return new Intent(context, MainActivity.class);
+    public static Intent getIntent(Context context,
+                                   @NonNull AppPartition appPartition,
+                                   @Nullable Sex sex) {
+        return new Intent(context, MainActivity.class)
+                .putExtra(ExtraConstants.EXTRA_APP_PARTITION, appPartition.ordinal())
+                .putExtra(ExtraConstants.EXTRA_SEX, sex);
+    }
+
+    private static AppPartition readAppPartition(@NonNull Intent intent) {
+        int index = intent.getIntExtra(ExtraConstants.EXTRA_APP_PARTITION, 0);
+        return AppPartition.values()[index];
+    }
+
+    public static void scheduleAppStartAndExit(Context context,
+                                               @NonNull AppPartition appPartition) {
+        Intent intent = MainActivity.getIntent(context, appPartition, null);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 500, pendingIntent);
+
+        // the better way to close all database connections
+        // перед вызовом этого метода все активити уже закрыты
+        System.exit(0);
     }
 
     private static IProfile mapToProfile(Context context, @NonNull Child child) {
@@ -223,9 +253,15 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 accountHeader.setActiveProfile(mapToProfileId(child));
             }
         }
-        if (selectedPartition == null) {
-            drawer.setSelectionAtPosition(1, false);
-            presenter.openCalendar();
+        AppPartition appPartition = selectedPartition == null ? readAppPartition(getIntent()) : selectedPartition;
+        openAppPartition(appPartition);
+    }
+
+    @Override
+    public void navigateToProfileAddFirstTime() {
+        AppPartition appPartition = readAppPartition(getIntent());
+        if (appPartition == AppPartition.CALENDAR) {
+            navigateToProfileAdd();
         }
     }
 
@@ -307,17 +343,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .commit();
 
         invalidateOptionsMenu();
-    }
-
-    private void hidePreviousPartition() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(FRAGMENT_CONTAINER_ID);
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setTransition(TRANSIT_UNSET)
-                    .remove(fragment)
-                    .commit();
-        }
     }
 
     private Fragment createAppPartition(@NonNull AppPartition appPartition) {
@@ -413,15 +438,42 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         return false;
     }
 
+    private void openAppPartition(@NonNull AppPartition appPartition) {
+        if (selectedPartition == appPartition) {
+            return;
+        }
+        int position = appPartition.ordinal() + 1;
+        drawer.setSelectionAtPosition(position, false);
+        switch (appPartition) {
+            case CALENDAR:
+                presenter.openCalendar();
+                break;
+            case DEVELOPMENT_DIARY:
+                presenter.openDevelopmentDiary();
+                break;
+            case EXERCISES:
+                presenter.openExercises();
+                break;
+            case MEDICAL_DATA:
+                presenter.openMedicalData();
+                break;
+            case SETTINGS:
+                presenter.openSettings();
+                break;
+            case HELP:
+                presenter.openHelp();
+                break;
+        }
+    }
+
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-        AppPartition tag = (AppPartition) drawerItem.getTag();
-        if (selectedPartition == tag) {
+        AppPartition appPartition = (AppPartition) drawerItem.getTag();
+        if (selectedPartition == appPartition) {
             return false;
         }
-        switch (tag) {
+        switch (appPartition) {
             case CALENDAR:
-                hidePreviousPartition();
                 navigationCommand = () -> presenter.openCalendar();
                 return false;
             case DEVELOPMENT_DIARY:

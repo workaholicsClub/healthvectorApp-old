@@ -6,6 +6,7 @@ import com.arellomobile.mvp.InjectViewState;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -67,5 +68,25 @@ public class ExercisesPresenter extends AppPartitionPresenter<ExercisesView> {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(getViewState()::navigateToExercise, this::onUnexpectedError));
+    }
+
+    public void addConcreteExercise(@NonNull Child child, @NonNull Exercise exercise) {
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        exerciseInteractor.getDefaultConcreteExercise(child, exercise),
+                        exerciseInteractor.getStartTimeOnce(),
+                        exerciseInteractor.getFinishTimeOnce(),
+                        (defaultDoctorVisit, startTime, finishTime) -> ConcreteExerciseParameters.builder()
+                                .defaultConcreteExercise(defaultDoctorVisit)
+                                .startTime(startTime)
+                                .finishTime(finishTime)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(parameters -> getViewState().navigateToConcreteExerciseAdd(
+                                parameters.getDefaultConcreteExercise(),
+                                parameters.getStartTime(),
+                                parameters.getFinishTime()),
+                                this::onUnexpectedError));
     }
 }

@@ -31,12 +31,16 @@ public class CloudInteractor {
         this.restoreService = restoreService;
     }
 
-    public Observable<String> getAccountNameOnce() {
-        return settingsRepository.getAccountNameOnce();
+    public Observable<String> getAccountName() {
+        return settingsRepository.getAccountName();
     }
 
     public void setAccountName(@Nullable String accountName) {
         settingsRepository.setAccountName(accountName);
+    }
+
+    public Observable<String> getAccountNameOnce() {
+        return settingsRepository.getAccountNameOnce();
     }
 
     public Observable<Boolean> getIsCloudShownOnce() {

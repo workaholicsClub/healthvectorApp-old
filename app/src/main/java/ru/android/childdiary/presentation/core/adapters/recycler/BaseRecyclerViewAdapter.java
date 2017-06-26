@@ -62,6 +62,15 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
         }
     }
 
+    public void updateItem(@NonNull T item) {
+        for (int i = 0; i < items.size(); ++i) {
+            if (areItemsTheSame(items.get(i), item)) {
+                items.set(i, item);
+                notifyItemChanged(i);
+            }
+        }
+    }
+
     @Override
     public void onBindViewHolder(VH viewHolder, int position) {
         viewHolder.bind(context, sex, items.get(position));

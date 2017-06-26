@@ -16,4 +16,7 @@ public interface SettingsView extends CloudView {
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showChild(@NonNull Child child);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showSelectedAccount(@NonNull String accountName);
 }

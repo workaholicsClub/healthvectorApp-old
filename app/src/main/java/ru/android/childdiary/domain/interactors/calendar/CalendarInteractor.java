@@ -14,7 +14,9 @@ import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -75,7 +77,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
 import ru.android.childdiary.services.TimerService;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.EventUtils;
 
 public class CalendarInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -478,7 +480,7 @@ public class CalendarInteractor {
     }
 
     public Observable<MasterEvent> done(@NonNull MasterEvent event) {
-        boolean isDone = EventHelper.isDone(event);
+        boolean isDone = EventUtils.isDone(event);
         MasterEvent masterEvent = event.toMasterBuilder().isDone(!isDone).build();
         return calendarRepository.updateMasterEvent(masterEvent);
     }
@@ -590,6 +592,14 @@ public class CalendarInteractor {
                             ImageType.MEDICINE_TAKING_EVENT, medicineTakingEvent.getImageFileName());
                     //noinspection unchecked
                     return (T) medicineTakingEvent.toBuilder().imageFileName(uniqueImageFileName).build();
+                }
+            } else if (item.getEventType() == EventType.EXERCISE) {
+                ExerciseEvent exerciseEvent = (ExerciseEvent) item;
+                if (imagesRepository.isTemporaryImageFile(exerciseEvent.getImageFileName())) {
+                    String uniqueImageFileName = imagesRepository.createUniqueImageFileRelativePath(
+                            ImageType.EXERCISE_EVENT, exerciseEvent.getImageFileName());
+                    //noinspection unchecked
+                    return (T) exerciseEvent.toBuilder().imageFileName(uniqueImageFileName).build();
                 }
             }
             return item;
@@ -761,7 +771,7 @@ public class CalendarInteractor {
         return calendarRepository.getPeriodicityList();
     }
 
-    public Observable<List<TimeUnit>> getTimeUnits() {
-        return calendarRepository.getTimeUnits();
+    public Observable<HashMap<TimeUnit, ArrayList<Integer>>> getTimeUnitValues() {
+        return calendarRepository.getTimeUnitValues();
     }
 }

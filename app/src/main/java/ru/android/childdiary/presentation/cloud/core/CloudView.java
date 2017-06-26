@@ -3,7 +3,6 @@ package ru.android.childdiary.presentation.cloud.core;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
@@ -25,19 +24,19 @@ public interface CloudView extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void connectionUnavailable();
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void securityError();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showCheckBackupAvailabilityLoading(boolean loading);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void foundBackup();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void noBackupFound();
+    void checkBackupAvailabilitySucceeded(boolean isBackupAvailable);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void failedToCheckBackupAvailability();
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showRestoreLoading(boolean loading);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
@@ -46,7 +45,10 @@ public interface CloudView extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void failedToRestore();
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void noBackupFound();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showBackupLoading(boolean loading);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

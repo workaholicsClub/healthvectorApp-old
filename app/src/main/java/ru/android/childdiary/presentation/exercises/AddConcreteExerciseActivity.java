@@ -163,7 +163,7 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
     @Nullable
     @Override
     protected FieldTimeView getTimeView() {
-        return null;
+        return timeView;
     }
 
     @Override

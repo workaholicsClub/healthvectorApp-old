@@ -10,7 +10,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
-import ru.android.childdiary.utils.EventHelper;
+import ru.android.childdiary.utils.EventUtils;
 
 public class EventAdapter extends SwipeViewAdapter<
         MasterEvent,
@@ -30,7 +30,7 @@ public class EventAdapter extends SwipeViewAdapter<
 
     @Override
     public boolean areItemsTheSame(MasterEvent oldItem, MasterEvent newItem) {
-        return EventHelper.sameEvent(oldItem, newItem);
+        return EventUtils.sameEvent(oldItem, newItem);
     }
 
     @Override

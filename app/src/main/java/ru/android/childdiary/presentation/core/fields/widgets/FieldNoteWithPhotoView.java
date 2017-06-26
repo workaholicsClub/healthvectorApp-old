@@ -28,6 +28,7 @@ import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldReadOnly, View.OnTouchListener {
     private static final int DRAWABLE_RIGHT = 2;
@@ -165,6 +166,7 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
             editText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, right, 0);
         }
         editText.setEnabled(!readOnly);
+        WidgetsUtils.setupEditText(editText, readOnly);
         buttonDeletePhoto.setVisibility(readOnly ? GONE : VISIBLE);
     }
 

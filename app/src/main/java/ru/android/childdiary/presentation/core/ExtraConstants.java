@@ -15,4 +15,6 @@ public class ExtraConstants {
     public static final String EXTRA_RELATIVE_PATH = PACKAGE_NAME + ".relative_path";
     public static final String EXTRA_APP_PARTITION_ARGUMENTS = PACKAGE_NAME + ".app_partition_arguments";
     public static final String EXTRA_STATE = PACKAGE_NAME + ".state";
+    public static final String EXTRA_TYPE = PACKAGE_NAME + ".type";
+    public static final String EXTRA_APP_PARTITION = PACKAGE_NAME + ".app_partition";
 }

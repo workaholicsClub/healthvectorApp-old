@@ -13,6 +13,8 @@ import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
 import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
 import ru.android.childdiary.presentation.cloud.CloudInitialPresenter;
+import ru.android.childdiary.presentation.cloud.CloudOperationActivity;
+import ru.android.childdiary.presentation.cloud.CloudOperationPresenter;
 import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
@@ -72,6 +74,7 @@ import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
+import ru.android.childdiary.services.CloudService;
 import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.services.UpdateDataService;
 
@@ -159,6 +162,8 @@ public interface ApplicationComponent {
 
     void inject(CloudInitialPresenter presenter);
 
+    void inject(CloudOperationPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -204,6 +209,8 @@ public interface ApplicationComponent {
 
     void inject(CloudInitialActivity activity);
 
+    void inject(CloudOperationActivity activity);
+
     // fragments
     void inject(CalendarFragment fragment);
 
@@ -217,4 +224,6 @@ public interface ApplicationComponent {
     void inject(TimerService service);
 
     void inject(UpdateDataService service);
+
+    void inject(CloudService service);
 }
