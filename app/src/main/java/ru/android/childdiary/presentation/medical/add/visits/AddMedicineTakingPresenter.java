@@ -7,6 +7,7 @@ import com.arellomobile.mvp.InjectViewState;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
@@ -77,5 +78,10 @@ public class AddMedicineTakingPresenter extends BaseAddItemPresenter<AddMedicine
                 periodicityTypeObservable,
                 lengthValueObservable)
                 .subscribe(this::handleValidationResult, this::onUnexpectedError);
+    }
+
+    @Override
+    protected EventType getEventType() {
+        return EventType.MEDICINE_TAKING;
     }
 }

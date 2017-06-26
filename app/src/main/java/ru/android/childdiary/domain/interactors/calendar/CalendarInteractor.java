@@ -763,8 +763,8 @@ public class CalendarInteractor {
         return feedEvent;
     }
 
-    public Observable<List<Integer>> getFrequencyList() {
-        return calendarRepository.getFrequencyList();
+    public Observable<List<Integer>> getFrequencyList(@NonNull EventType eventType) {
+        return calendarRepository.getFrequencyList(eventType);
     }
 
     public Observable<List<PeriodicityType>> getPeriodicityList() {

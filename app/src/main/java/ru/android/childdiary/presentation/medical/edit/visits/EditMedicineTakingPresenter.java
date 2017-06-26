@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
@@ -128,5 +129,10 @@ public class EditMedicineTakingPresenter extends BaseEditItemPresenter<EditMedic
                 .doOnNext(count -> getViewState().showDeletingEvents(false))
                 .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> getViewState().completed(medicineTaking), this::onUnexpectedError));
+    }
+
+    @Override
+    protected EventType getEventType() {
+        return EventType.MEDICINE_TAKING;
     }
 }

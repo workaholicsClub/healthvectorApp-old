@@ -379,7 +379,10 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     @Override
-    public Observable<List<Integer>> getFrequencyList() {
+    public Observable<List<Integer>> getFrequencyList(@NonNull EventType eventType) {
+        if (eventType == EventType.DOCTOR_VISIT) {
+            return Observable.just(Arrays.asList(0, 1));
+        }
         return Observable.just(Arrays.asList(0, 1, 2, 3, 4, 5));
     }
 

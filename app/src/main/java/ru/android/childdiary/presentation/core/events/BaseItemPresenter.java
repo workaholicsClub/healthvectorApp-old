@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
@@ -41,7 +42,7 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(calendarInteractor.getFrequencyList()
+        unsubscribeOnDestroy(calendarInteractor.getFrequencyList(getEventType())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showFrequencyList));
@@ -129,4 +130,6 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
 
     public void handleValidationResult(List<EventValidationResult> results) {
     }
+
+    protected abstract EventType getEventType();
 }
