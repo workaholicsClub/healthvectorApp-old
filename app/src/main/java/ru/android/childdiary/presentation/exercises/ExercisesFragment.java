@@ -1,9 +1,11 @@
 package ru.android.childdiary.presentation.exercises;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +18,14 @@ import org.joda.time.LocalTime;
 
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.exercises.adapters.ExerciseAdapter;
 import ru.android.childdiary.presentation.exercises.adapters.ExerciseClickListener;
 
@@ -37,6 +41,9 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
 
     @BindView(R.id.recyclerView)
     protected RecyclerView recyclerView;
+
+    @BindDimen(R.dimen.divider_padding)
+    int DIVIDER_PADDING;
 
     @InjectPresenter
     ExercisesPresenter presenter;
@@ -54,6 +61,11 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     protected void setupUi() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+
+        Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(divider, DIVIDER_PADDING);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
         adapter = new ExerciseAdapter(getContext(), this);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);

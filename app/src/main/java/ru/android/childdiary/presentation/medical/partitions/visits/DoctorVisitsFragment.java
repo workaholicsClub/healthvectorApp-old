@@ -2,11 +2,14 @@ package ru.android.childdiary.presentation.medical.partitions.visits;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -16,10 +19,12 @@ import org.joda.time.LocalTime;
 
 import java.util.List;
 
+import butterknife.BindDimen;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitActionListener;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitAdapter;
 import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitActivity;
@@ -32,6 +37,9 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class DoctorVisitsFragment extends BaseMedicalDataFragment
         implements DoctorVisitsView, DoctorVisitActionListener {
+    @BindDimen(R.dimen.divider_padding)
+    int DIVIDER_PADDING;
+
     @Getter
     @InjectPresenter
     DoctorVisitsPresenter presenter;
@@ -43,6 +51,11 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
     protected void setupUi() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+
+        Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(divider, DIVIDER_PADDING);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
         adapter = new DoctorVisitAdapter(getContext(), this, fabController);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
