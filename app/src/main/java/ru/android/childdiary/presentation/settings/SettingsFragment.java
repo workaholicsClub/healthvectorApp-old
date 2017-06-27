@@ -459,7 +459,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Override
     public void restartApp() {
         getActivity().finish();
-        MainActivity.scheduleAppStartAndExit(getContext(), AppPartition.CALENDAR);
+        MainActivity.scheduleAppStartAndExit(getContext(), AppPartition.SETTINGS);
     }
 
     private enum Intention {
