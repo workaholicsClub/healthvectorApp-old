@@ -77,11 +77,13 @@ public class AddMedicineTakingPresenter extends BaseAddItemPresenter<AddMedicine
 
     public Disposable listenForDoneButtonUpdate(
             @NonNull FieldValueChangeEventsObservable<Medicine> medicineObservable,
+            @NonNull FieldValueChangeEventsObservable<Boolean> exportedObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
             @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
             @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
         return medicineTakingInteractor.controlDoneButton(
                 medicineObservable,
+                exportedObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
                 lengthValueObservable)
@@ -90,11 +92,13 @@ public class AddMedicineTakingPresenter extends BaseAddItemPresenter<AddMedicine
 
     public Disposable listenForFieldsUpdate(
             @NonNull FieldValueChangeEventsObservable<Medicine> medicineObservable,
+            @NonNull FieldValueChangeEventsObservable<Boolean> exportedObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
             @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
             @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
         return medicineTakingInteractor.controlFields(
                 medicineObservable,
+                exportedObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
                 lengthValueObservable)

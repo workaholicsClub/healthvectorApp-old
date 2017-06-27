@@ -7,19 +7,18 @@ import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class FieldCheckBoxView extends LinearLayout implements View.OnClickListener {
+public class FieldCheckBoxView extends FieldValueView<Boolean> implements View.OnClickListener,
+        FieldValueView.ValueChangeListener<Boolean> {
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
 
     @BindView(R.id.imageView)
@@ -31,46 +30,56 @@ public class FieldCheckBoxView extends LinearLayout implements View.OnClickListe
     @Nullable
     private Sex sex;
 
-    @Getter
-    private boolean checked;
-
     @Nullable
     @Setter
     private FieldCheckBoxListener fieldCheckBoxListener;
 
     public FieldCheckBoxView(Context context) {
         super(context);
-        init();
     }
 
     public FieldCheckBoxView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public FieldCheckBoxView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
-    }
-
-    private void init() {
-        inflate(getContext(), R.layout.field_check_box, this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ButterKnife.bind(this);
         setOnClickListener(this);
+        addValueChangeListener(this);
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.field_check_box;
+    }
+
+    @Override
+    protected void valueChanged() {
         update();
     }
 
-    public void setChecked(boolean value) {
-        checked = value;
-        update();
+    @Override
+    public void setReadOnly(boolean readOnly) {
+    }
+
+    @Override
+    public void onValueChange(@Nullable Boolean value) {
         if (fieldCheckBoxListener != null) {
             fieldCheckBoxListener.onChecked();
         }
+    }
+
+    public boolean isChecked() {
+        return ObjectUtils.isTrue(getValue());
+    }
+
+    public void setChecked(boolean value) {
+        setValue(value);
     }
 
     public void setText(String value) {
@@ -89,15 +98,15 @@ public class FieldCheckBoxView extends LinearLayout implements View.OnClickListe
     }
 
     private void update() {
-        imageView.setImageResource(ResourcesUtils.getCheckBoxRes(sex, checked));
+        imageView.setImageResource(ResourcesUtils.getCheckBoxRes(sex, isChecked()));
         //noinspection deprecation
-        textView.setTextAppearance(getContext(), checked ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
+        textView.setTextAppearance(getContext(), isChecked() ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
         textView.setTypeface(typeface);
     }
 
     @Override
     public void onClick(View v) {
-        setChecked(!checked);
+        setValue(!isChecked());
     }
 
     public interface FieldCheckBoxListener {

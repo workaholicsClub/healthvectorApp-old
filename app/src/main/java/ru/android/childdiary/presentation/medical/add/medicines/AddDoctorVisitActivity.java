@@ -95,6 +95,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(
                 doctorVisitNameView.textObservable(),
                 RxFieldValueView.valueChangeEvents(doctorView),
+                RxFieldValueView.valueChangeEvents(checkBoxView),
                 repeatParametersView.linearGroupsObservable(),
                 repeatParametersView.periodicityTypeObservable(),
                 repeatParametersView.lengthValueObservable()
@@ -245,6 +246,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(
                 doctorVisitNameView.textObservable(),
                 RxFieldValueView.valueChangeEvents(doctorView),
+                RxFieldValueView.valueChangeEvents(checkBoxView),
                 repeatParametersView.linearGroupsObservable(),
                 repeatParametersView.periodicityTypeObservable(),
                 repeatParametersView.lengthValueObservable()

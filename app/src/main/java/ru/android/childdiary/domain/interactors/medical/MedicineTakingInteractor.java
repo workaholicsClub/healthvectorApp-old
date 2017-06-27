@@ -242,16 +242,19 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
 
     public Observable<Boolean> controlDoneButton(
             @NonNull FieldValueChangeEventsObservable<Medicine> medicineObservable,
+            @NonNull FieldValueChangeEventsObservable<Boolean> exportedObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
             @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
             @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
         return Observable.combineLatest(
                 medicineObservable,
+                exportedObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
                 lengthValueObservable,
-                (medicineEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> MedicineTaking.builder()
+                (medicineEvent, exportedEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> MedicineTaking.builder()
                         .medicine(medicineEvent.getValue())
+                        .isExported(exportedEvent.getValue())
                         .repeatParameters(RepeatParameters.builder()
                                 .frequency(linearGroupsEvent.getValue())
                                 .periodicity(periodicityTypeEvent.getValue())
@@ -265,16 +268,19 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
 
     public Observable<List<EventValidationResult>> controlFields(
             @NonNull FieldValueChangeEventsObservable<Medicine> medicineObservable,
+            @NonNull FieldValueChangeEventsObservable<Boolean> exportedObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
             @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
             @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
         return Observable.combineLatest(
                 medicineObservable,
+                exportedObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
                 lengthValueObservable,
-                (medicineEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> MedicineTaking.builder()
+                (medicineEvent, exportedEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> MedicineTaking.builder()
                         .medicine(medicineEvent.getValue())
+                        .isExported(exportedEvent.getValue())
                         .repeatParameters(RepeatParameters.builder()
                                 .frequency(linearGroupsEvent.getValue())
                                 .periodicity(periodicityTypeEvent.getValue())

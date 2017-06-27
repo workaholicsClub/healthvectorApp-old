@@ -98,12 +98,14 @@ public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisit
     public Disposable listenForDoneButtonUpdate(
             @NonNull Observable<TextViewAfterTextChangeEvent> doctorVisitNameObservable,
             @NonNull FieldValueChangeEventsObservable<Doctor> doctorObservable,
+            @NonNull FieldValueChangeEventsObservable<Boolean> exportedObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
             @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
             @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
         return doctorVisitInteractor.controlDoneButton(
                 doctorVisitNameObservable,
                 doctorObservable,
+                exportedObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
                 lengthValueObservable)
@@ -113,12 +115,14 @@ public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisit
     public Disposable listenForFieldsUpdate(
             @NonNull Observable<TextViewAfterTextChangeEvent> doctorVisitNameObservable,
             @NonNull FieldValueChangeEventsObservable<Doctor> doctorObservable,
+            @NonNull FieldValueChangeEventsObservable<Boolean> exportedObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
             @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
             @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
         return doctorVisitInteractor.controlFields(
                 doctorVisitNameObservable,
                 doctorObservable,
+                exportedObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
                 lengthValueObservable)

@@ -142,6 +142,7 @@ public class ExerciseInteractor {
                 lengthValueObservable,
                 (concreteExerciseName, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> ConcreteExercise.builder()
                         .name(concreteExerciseName)
+                        .isExported(true)
                         .repeatParameters(RepeatParameters.builder()
                                 .frequency(linearGroupsEvent.getValue())
                                 .periodicity(periodicityTypeEvent.getValue())
@@ -168,6 +169,7 @@ public class ExerciseInteractor {
                 lengthValueObservable,
                 (concreteExerciseName, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> ConcreteExercise.builder()
                         .name(concreteExerciseName)
+                        .isExported(true)
                         .repeatParameters(RepeatParameters.builder()
                                 .frequency(linearGroupsEvent.getValue())
                                 .periodicity(periodicityTypeEvent.getValue())
