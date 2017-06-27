@@ -17,6 +17,7 @@ import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
@@ -32,7 +33,8 @@ public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisit
     }
 
     @Override
-    public void add(@NonNull DoctorVisit doctorVisit) {
+    public void add(@NonNull DoctorVisit doctorVisitToAdd) {
+        DoctorVisit doctorVisit = preprocess(doctorVisitToAdd);
         showProgressAdd(doctorVisit);
         unsubscribeOnDestroy(
                 doctorVisitInteractor.addDoctorVisit(UpsertDoctorVisitRequest.builder()
@@ -45,6 +47,25 @@ public class AddDoctorVisitPresenter extends BaseAddItemPresenter<AddDoctorVisit
                         .doOnError(throwable -> hideProgressAdd(doctorVisit))
                         .subscribe(response -> getViewState().added(response.getDoctorVisit(), response.getAddedEventsCount()),
                                 this::onUnexpectedError));
+    }
+
+    private DoctorVisit preprocess(@NonNull DoctorVisit doctorVisit) {
+        RepeatParameters repeatParameters = doctorVisit.getRepeatParameters();
+        if (repeatParameters == null) {
+            return doctorVisit;
+        }
+        LinearGroups linearGroups = repeatParameters.getFrequency();
+        if (linearGroups == null || linearGroups.getTimes().size() != 1) {
+            return doctorVisit;
+        }
+        // Особым образом обрабатываем ситуацию, когда количество повторений в день равно 1:
+        // подменяем время в нулевой линейной группе
+        linearGroups = linearGroups.withTime(0, doctorVisit.getDateTime().toLocalTime());
+        return doctorVisit.toBuilder()
+                .repeatParameters(repeatParameters.toBuilder()
+                        .frequency(linearGroups)
+                        .build())
+                .build();
     }
 
     private void showProgressAdd(@NonNull DoctorVisit doctorVisit) {
