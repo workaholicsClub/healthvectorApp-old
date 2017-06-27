@@ -45,6 +45,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class CleanUpDbService extends EventsDbService {
@@ -310,9 +311,11 @@ public class CleanUpDbService extends EventsDbService {
 
     private void deleteIfPossible(DoctorVisitEntity doctorVisitEntity,
                                   List<String> imageFilesToDelete) {
-        val events = getDoctorVisitEvents(doctorVisitEntity.getId());
-        if (events.isEmpty()) {
-            delete(doctorVisitEntity, imageFilesToDelete);
+        if (ObjectUtils.isTrue(doctorVisitEntity.isDeleted())) {
+            val events = getDoctorVisitEvents(doctorVisitEntity.getId());
+            if (events.isEmpty()) {
+                delete(doctorVisitEntity, imageFilesToDelete);
+            }
         }
     }
 
@@ -331,9 +334,11 @@ public class CleanUpDbService extends EventsDbService {
 
     private void deleteIfPossible(MedicineTakingEntity medicineTakingEntity,
                                   List<String> imageFilesToDelete) {
-        val events = getMedicineTakingEvents(medicineTakingEntity.getId());
-        if (events.isEmpty()) {
-            delete(medicineTakingEntity, imageFilesToDelete);
+        if (ObjectUtils.isTrue(medicineTakingEntity.isDeleted())) {
+            val events = getMedicineTakingEvents(medicineTakingEntity.getId());
+            if (events.isEmpty()) {
+                delete(medicineTakingEntity, imageFilesToDelete);
+            }
         }
     }
 
@@ -352,6 +357,8 @@ public class CleanUpDbService extends EventsDbService {
 
     private void deleteIfPossible(ConcreteExerciseEntity concreteExerciseEntity,
                                   List<String> imageFilesToDelete) {
+        // Поскольку пользователь не может редактировать ConcreteExercise через интерфейс,
+        // можем удалить этот объект сразу, как только не останется привязанных к нему событий
         val events = getExerciseEvents(concreteExerciseEntity.getId());
         if (events.isEmpty()) {
             delete(concreteExerciseEntity, imageFilesToDelete);
