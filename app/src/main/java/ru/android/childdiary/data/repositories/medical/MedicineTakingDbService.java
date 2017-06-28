@@ -149,7 +149,6 @@ public class MedicineTakingDbService {
                 .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(MedicineTakingEventEntity.MASTER_EVENT_ID))
                 .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTaking.getId()))
                 .and(MasterEventEntity.CHILD_ID.eq(child.getId()))
-                .and(MasterEventEntity.DONE.isNull().or(MasterEventEntity.DONE.eq(false)))
                 .get()
                 .toList();
         boolean isEmpty = events.isEmpty();
