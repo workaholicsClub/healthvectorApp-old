@@ -47,7 +47,7 @@ public abstract class FieldValueView<T> extends LinearLayout implements FieldRea
         valueChanged();
     }
 
-    public void setValue(T value) {
+    public void setValue(@Nullable T value) {
         if (!ObjectUtils.equals(value, this.value)) {
             this.value = value;
             valueChanged();

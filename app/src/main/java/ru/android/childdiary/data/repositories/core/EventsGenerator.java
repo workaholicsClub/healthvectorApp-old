@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,6 +131,16 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
     }
 
     private Parameters getStartDateTime(@NonNull DateTime dateTime, List<LocalTime> times) {
+        // Доработка логики: если дата не сегодня, то надо генерировать события "с утра",
+        // а не с указанного времени
+        boolean today = dateTime.toLocalDate().isEqual(LocalDate.now());
+        if (!today) {
+            return Parameters.builder()
+                    .startDateTime(dateTime.withTime(times.get(0)))
+                    .startIndex(0)
+                    .build();
+        }
+
         DateTime startDateTime = null;
         boolean isFinished = false;
         int startIndex = 0;
@@ -144,7 +155,10 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
                 }
             }
         }
-        return Parameters.builder().startDateTime(startDateTime).startIndex(startIndex).build();
+        return Parameters.builder()
+                .startDateTime(startDateTime)
+                .startIndex(startIndex)
+                .build();
     }
 
     private DateTime getFinishDateTime(@NonNull DateTime startDateTime, @NonNull LengthValue lengthValue) {
@@ -187,7 +201,7 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
         int startIndex;
     }
 
-    private static class EventsGeneratorException extends IllegalStateException {
+    private static class EventsGeneratorException extends IllegalArgumentException {
         public EventsGeneratorException(String message) {
             super(message);
         }

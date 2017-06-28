@@ -375,11 +375,14 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
             case EXERCISE:
                 return Observable.just(30);
         }
-        throw new IllegalStateException("Unsupported event type");
+        throw new IllegalArgumentException("Unsupported event type");
     }
 
     @Override
-    public Observable<List<Integer>> getFrequencyList() {
+    public Observable<List<Integer>> getFrequencyList(@NonNull EventType eventType) {
+        if (eventType == EventType.DOCTOR_VISIT) {
+            return Observable.just(Arrays.asList(0, 1));
+        }
         return Observable.just(Arrays.asList(0, 1, 2, 3, 4, 5));
     }
 

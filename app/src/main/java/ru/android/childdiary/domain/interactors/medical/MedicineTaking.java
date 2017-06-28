@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import lombok.Builder;
 import lombok.Value;
@@ -48,6 +49,8 @@ public class MedicineTaking implements Serializable, RepeatParametersContainer,
 
     Boolean isDeleted;
 
+    boolean isDone;
+
     @Override
     public boolean isContentEmpty() {
         return isContentEqual(NULL);
@@ -65,5 +68,16 @@ public class MedicineTaking implements Serializable, RepeatParametersContainer,
                 && ObjectUtils.equals(getNotifyTimeInMinutes(), other.getNotifyTimeInMinutes())
                 && ObjectUtils.contentEquals(getNote(), other.getNote())
                 && ObjectUtils.contentEquals(getImageFileName(), other.getImageFileName());
+    }
+
+    /**
+     * Компаратор для использования на уже отсортированном списке, который получаем из БД.
+     * Воспользуемся тем фактом, что сортировка стабильная.
+     */
+    public static class DoneComparator implements Comparator<MedicineTaking> {
+        @Override
+        public int compare(MedicineTaking o1, MedicineTaking o2) {
+            return o1.isDone == o2.isDone() ? 0 : (o1.isDone ? 1 : -1);
+        }
     }
 }

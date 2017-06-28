@@ -124,4 +124,5 @@
     <dimen name="auto_complete_text_view_margin_right">24dp</dimen>
     <dimen name="delimiter_height">1dp</dimen>
     <dimen name="delimiter_margin">6dp</dimen>
+    <dimen name="divider_padding">6dp</dimen>
 </resources>

@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
@@ -96,7 +97,7 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
 
     @Override
     public void complete(@NonNull DoctorVisit item) {
-        if (item.getFinishDateTime() == null) {
+        if (!item.isDone()) {
             getViewState().askCompleteFromDate(item, DateTime.now());
         } else {
             logger.error("already completed: " + item);
@@ -128,5 +129,10 @@ public class EditDoctorVisitPresenter extends BaseEditItemPresenter<EditDoctorVi
                 .doOnNext(count -> getViewState().showDeletingEvents(false))
                 .doOnError(throwable -> getViewState().showDeletingEvents(false))
                 .subscribe(count -> getViewState().completed(doctorVisit), this::onUnexpectedError));
+    }
+
+    @Override
+    protected EventType getEventType() {
+        return EventType.DOCTOR_VISIT;
     }
 }

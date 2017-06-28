@@ -8,6 +8,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.ColorUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -56,6 +57,12 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     @BindView(R.id.delimiter1)
     View delimiter1;
 
+    @BindView(R.id.imageViewDoneOrExpired)
+    ImageView imageViewDoneOrExpired;
+
+    @BindView(R.id.imageViewRepeating)
+    ImageView imageViewRepeating;
+
     @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
 
@@ -87,8 +94,10 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
 
         boolean isDone = EventUtils.isDone(event);
         boolean isExpired = EventUtils.isExpired(event);
-        int left = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
-        textViewTitle.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0);
+        int resId = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
+        imageViewDoneOrExpired.setImageResource(resId);
+        imageViewDoneOrExpired.setVisibility(resId == 0 ? View.GONE : View.VISIBLE);
+        imageViewRepeating.setVisibility(event.getLinearGroup() == null ? View.GONE : View.VISIBLE);
     }
 
     @Override

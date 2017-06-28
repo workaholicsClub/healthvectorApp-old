@@ -114,9 +114,7 @@ public class FieldRepeatParametersView extends LinearLayout
     public void onSpinnerItemClick(FieldSpinnerView view, Object item) {
         if (view == frequencyView) {
             Integer number = (Integer) item;
-            frequencyView.setValue(number);
-            timesTitle.setVisibility(number != null && number > 0 ? VISIBLE : GONE);
-            timesView.setNumber(number);
+            setupFrequency(number);
 
             boolean once = number != null && number == 0;
             if (once) {
@@ -166,9 +164,7 @@ public class FieldRepeatParametersView extends LinearLayout
         LengthValue length = repeatParameters == null ? null : repeatParameters.getLength();
 
         Integer number = linearGroups == null ? null : linearGroups.getTimes().size();
-        frequencyView.setValue(number);
-        timesTitle.setVisibility(number != null && number > 0 ? VISIBLE : GONE);
-        timesView.setNumber(number);
+        setupFrequency(number);
 
         timesView.setValue(linearGroups);
         periodicityView.setValue(periodicity);
@@ -178,6 +174,14 @@ public class FieldRepeatParametersView extends LinearLayout
         lastSelectedLengthValue = lengthView.getValue();
 
         setupReadOnly();
+    }
+
+    private void setupFrequency(@Nullable Integer number) {
+        frequencyView.setValue(number);
+        int timesViewVisibility = number != null && number > 1 ? VISIBLE : GONE;
+        timesTitle.setVisibility(timesViewVisibility);
+        timesView.setVisibility(timesViewVisibility);
+        timesView.setNumber(number);
     }
 
     @Nullable

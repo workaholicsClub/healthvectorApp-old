@@ -17,4 +17,6 @@ public class ExtraConstants {
     public static final String EXTRA_STATE = PACKAGE_NAME + ".state";
     public static final String EXTRA_TYPE = PACKAGE_NAME + ".type";
     public static final String EXTRA_APP_PARTITION = PACKAGE_NAME + ".app_partition";
+    public static final String EXTRA_TITLE = PACKAGE_NAME + ".title";
+    public static final String EXTRA_URL = PACKAGE_NAME + ".url";
 }

@@ -26,13 +26,4 @@ public class CloudOperationPresenter extends CloudPresenter<CloudOperationView> 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::setIsAuthorized, this::onUnexpectedError));
     }
-
-    @Override
-    public void moveNext() {
-        if (needAppRestart) {
-            getViewState().restartApp();
-        } else {
-            getViewState().navigateToMain();
-        }
-    }
 }

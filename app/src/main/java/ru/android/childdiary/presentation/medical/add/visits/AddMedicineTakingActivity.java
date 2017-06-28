@@ -92,6 +92,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
 
         unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(
                 RxFieldValueView.valueChangeEvents(medicineView),
+                RxFieldValueView.valueChangeEvents(checkBoxView),
                 repeatParametersView.linearGroupsObservable(),
                 repeatParametersView.periodicityTypeObservable(),
                 repeatParametersView.lengthValueObservable()
@@ -239,6 +240,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     protected void validationStarted() {
         unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(
                 RxFieldValueView.valueChangeEvents(medicineView),
+                RxFieldValueView.valueChangeEvents(checkBoxView),
                 repeatParametersView.linearGroupsObservable(),
                 repeatParametersView.periodicityTypeObservable(),
                 repeatParametersView.lengthValueObservable()

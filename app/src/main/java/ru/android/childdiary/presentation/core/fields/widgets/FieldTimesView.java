@@ -13,7 +13,6 @@ import android.widget.TextView;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindDimen;
@@ -132,10 +131,9 @@ public class FieldTimesView extends FieldValueView<LinearGroups> implements View
         if (getValue() == null) {
             return;
         }
-        ArrayList<LocalTime> times = new ArrayList<>(getValue().getTimes());
-        times.set(i, time);
-        Collections.sort(times);
-        setValue(LinearGroups.builder().times(times).build());
+        LinearGroups linearGroups = getValue();
+        linearGroups = linearGroups.withTime(i, time);
+        setValue(linearGroups);
     }
 
     @Override

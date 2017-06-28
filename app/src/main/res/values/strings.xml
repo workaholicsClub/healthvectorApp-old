@@ -291,6 +291,7 @@
     <string name="notification_title_network">Отсутствует Интернет</string>
     <string name="notification_text_network">Подключите Интернет для создания резервной копии данных</string>
     <string name="notification_text_backup">Загрузка данных на Google Drive</string>
+    <string name="open_in_web_browser">Открыть в браузере</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>

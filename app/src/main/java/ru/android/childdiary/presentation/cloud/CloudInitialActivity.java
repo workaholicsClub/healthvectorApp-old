@@ -240,10 +240,11 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
 
     @Override
     public void restoreSucceeded() {
+        // TODO: переделать на AlertDialogFragment, чтобы при смене конфигурации диалог не терялся
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.restore_success_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.moveNext())
+                .setCancelable(false)
                 .show();
     }
 

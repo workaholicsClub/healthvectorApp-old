@@ -137,7 +137,7 @@ public interface CalendarRepository {
 
     Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType);
 
-    Observable<List<Integer>> getFrequencyList();
+    Observable<List<Integer>> getFrequencyList(@NonNull EventType eventType);
 
     Observable<List<PeriodicityType>> getPeriodicityList();
 

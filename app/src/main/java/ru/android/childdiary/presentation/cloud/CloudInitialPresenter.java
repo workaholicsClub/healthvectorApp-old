@@ -11,13 +11,4 @@ public class CloudInitialPresenter extends CloudPresenter<CloudInitialView> {
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
     }
-
-    @Override
-    public void moveNext() {
-        if (needAppRestart) {
-            getViewState().restartApp();
-        } else {
-            getViewState().navigateToMain();
-        }
-    }
 }

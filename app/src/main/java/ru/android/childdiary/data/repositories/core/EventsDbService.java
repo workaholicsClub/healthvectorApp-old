@@ -48,7 +48,7 @@ public abstract class EventsDbService {
     protected Long getDoctorVisitId(@NonNull DoctorVisit doctorVisit) {
         Long id = doctorVisit.getId();
         if (id == null) {
-            throw new IllegalStateException("Doctor visit id is null");
+            throw new IllegalArgumentException("Doctor visit id is null");
         }
         return id;
     }
@@ -56,7 +56,7 @@ public abstract class EventsDbService {
     protected Long getDoctorVisitId(@NonNull DoctorVisitEvent doctorVisitEvent) {
         DoctorVisit doctorVisit = doctorVisitEvent.getDoctorVisit();
         if (doctorVisit == null) {
-            throw new IllegalStateException("Doctor visit is null");
+            throw new IllegalArgumentException("Doctor visit is null");
         }
         return getDoctorVisitId(doctorVisit);
     }
@@ -64,7 +64,7 @@ public abstract class EventsDbService {
     protected Long getMedicineTakingId(@NonNull MedicineTaking medicineTaking) {
         Long id = medicineTaking.getId();
         if (id == null) {
-            throw new IllegalStateException("Medicine taking id is null");
+            throw new IllegalArgumentException("Medicine taking id is null");
         }
         return id;
     }
@@ -72,7 +72,7 @@ public abstract class EventsDbService {
     protected Long getMedicineTakingId(@NonNull MedicineTakingEvent medicineTakingEvent) {
         MedicineTaking medicineTaking = medicineTakingEvent.getMedicineTaking();
         if (medicineTaking == null) {
-            throw new IllegalStateException("Medicine taking is null");
+            throw new IllegalArgumentException("Medicine taking is null");
         }
         return getMedicineTakingId(medicineTaking);
     }
@@ -80,7 +80,7 @@ public abstract class EventsDbService {
     protected Long getConcreteExerciseId(@NonNull ConcreteExercise concreteExercise) {
         Long id = concreteExercise.getId();
         if (id == null) {
-            throw new IllegalStateException("Concrete exercise id is null");
+            throw new IllegalArgumentException("Concrete exercise id is null");
         }
         return id;
     }
@@ -88,7 +88,7 @@ public abstract class EventsDbService {
     protected Long getConcreteExerciseId(@NonNull ExerciseEvent exerciseEvent) {
         ConcreteExercise concreteExercise = exerciseEvent.getConcreteExercise();
         if (concreteExercise == null) {
-            throw new IllegalStateException("Concrete exercise is null");
+            throw new IllegalArgumentException("Concrete exercise is null");
         }
         return getConcreteExerciseId(concreteExercise);
     }

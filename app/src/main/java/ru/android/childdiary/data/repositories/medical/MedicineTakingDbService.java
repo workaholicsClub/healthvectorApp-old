@@ -24,6 +24,7 @@ import io.requery.reactivex.ReactiveEntityStore;
 import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.entities.calendar.events.MedicineTakingEventEntity;
+import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
 import ru.android.childdiary.data.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineEntity;
 import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
@@ -124,11 +125,45 @@ public class MedicineTakingDbService {
             select = select.and(MedicineTakingEntity.MEDICINE_ID.in(ids));
         }
 
-        return select.orderBy(MedicineTakingEntity.DATE_TIME, MedicineTakingEntity.MEDICINE_ID, MedicineTakingEntity.ID)
+        return select.orderBy(MedicineTakingEntity.DATE_TIME.desc(), MedicineTakingEntity.MEDICINE_ID, MedicineTakingEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineTakingMapper))
+                .map(medicineTakingList -> putDone(medicineTakingList, child))
+                .map(this::sort)
                 .map(medicineTakingList -> GetMedicineTakingListResponse.builder().request(request).medicineTakingList(medicineTakingList).build());
+    }
+
+    private List<MedicineTaking> putDone(@NonNull List<MedicineTaking> medicineTakingList, @NonNull Child child) {
+        return Observable.fromIterable(medicineTakingList)
+                .map(exercise -> putDone(exercise, child))
+                .toList()
+                .blockingGet();
+    }
+
+    private MedicineTaking putDone(@NonNull MedicineTaking medicineTaking, @NonNull Child child) {
+        if (medicineTaking.getFinishDateTime() != null) {
+            return medicineTaking.toBuilder().isDone(true).build();
+        }
+        List<MedicineTakingEventEntity> events = blockingEntityStore.select(MedicineTakingEventEntity.class)
+                .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(MedicineTakingEventEntity.MASTER_EVENT_ID))
+                .where(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTaking.getId()))
+                .and(MasterEventEntity.CHILD_ID.eq(child.getId()))
+                .and(MasterEventEntity.DONE.isNull().or(MasterEventEntity.DONE.eq(false)))
+                .get()
+                .toList();
+        boolean isEmpty = events.isEmpty();
+        long count = Observable.fromIterable(events)
+                .filter(event -> !ObjectUtils.isTrue(event.getMasterEvent().isDone()))
+                .count()
+                .blockingGet();
+        boolean allDone = count == 0;
+        return medicineTaking.toBuilder().isDone(!isEmpty && allDone).build();
+    }
+
+    private List<MedicineTaking> sort(List<MedicineTaking> medicineTakingList) {
+        Collections.sort(medicineTakingList, new MedicineTaking.DoneComparator());
+        return medicineTakingList;
     }
 
     public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {

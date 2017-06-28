@@ -20,4 +20,7 @@ public interface ExerciseDetailView extends BaseView {
     void navigateToConcreteExerciseAdd(@NonNull ConcreteExercise defaultConcreteExercise,
                                        @Nullable LocalTime startTime,
                                        @Nullable LocalTime finishTime);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToWebBrowser(@NonNull String title, @NonNull String url);
 }

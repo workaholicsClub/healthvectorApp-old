@@ -74,21 +74,37 @@
             android:id="@+id/textViewTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/event_row_padding_horizontal"
+            android:layout_marginStart="@dimen/event_row_padding_horizontal"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/event_row_padding_horizontal"
-            android:paddingRight="@dimen/event_row_padding_horizontal"
             android:textAppearance="@style/EventRowTextAppearance" />
+
+        <ImageView
+            android:id="@+id/imageViewDoneOrExpired"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="@dimen/event_row_padding_horizontal"
+            android:layout_marginStart="@dimen/event_row_padding_horizontal"
+            android:scaleType="center" />
+
+        <ImageView
+            android:id="@+id/imageViewRepeating"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="@dimen/event_row_padding_horizontal"
+            android:layout_marginStart="@dimen/event_row_padding_horizontal"
+            android:scaleType="center"
+            android:src="@drawable/ic_event_repeating" />
 
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/event_row_padding_horizontal"
+            android:layout_marginLeft="@dimen/event_row_padding_horizontal"
+            android:layout_marginRight="@dimen/event_row_padding_horizontal"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:paddingLeft="@dimen/event_row_padding_horizontal"
-            android:paddingRight="@dimen/event_row_padding_horizontal"
             android:singleLine="true"
             android:textAppearance="@style/EventRowTextAppearance"
             tools:ignore="Deprecated" />
@@ -97,12 +113,12 @@
             android:id="@+id/textViewDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/event_row_padding_horizontal"
+            android:layout_marginRight="@dimen/event_row_padding_horizontal"
             android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="center_vertical|end"
             android:maxLines="1"
-            android:paddingLeft="@dimen/event_row_padding_horizontal"
-            android:paddingRight="@dimen/event_row_padding_horizontal"
             android:singleLine="true"
             android:textAppearance="@style/EventRowDescriptionTextAppearance"
             tools:ignore="Deprecated" />

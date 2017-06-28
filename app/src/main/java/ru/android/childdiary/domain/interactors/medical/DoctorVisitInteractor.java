@@ -25,6 +25,8 @@ import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository
 import ru.android.childdiary.data.repositories.medical.DoctorVisitFilterDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.DeleteResponse;
+import ru.android.childdiary.domain.core.validation.EventValidationException;
+import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
@@ -49,8 +51,6 @@ import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorValidator;
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorVisitValidator;
-import ru.android.childdiary.domain.core.validation.EventValidationException;
-import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
 public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor> {
@@ -243,6 +243,7 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
     public Observable<Boolean> controlDoneButton(
             @NonNull Observable<TextViewAfterTextChangeEvent> doctorVisitNameObservable,
             @NonNull FieldValueChangeEventsObservable<Doctor> doctorObservable,
+            @NonNull FieldValueChangeEventsObservable<Boolean> exportedObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
             @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
             @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
@@ -252,11 +253,13 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
                         .map(Editable::toString)
                         .map(String::trim),
                 doctorObservable,
+                exportedObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
                 lengthValueObservable,
-                (doctorVisitName, doctorEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> DoctorVisit.builder()
+                (doctorVisitName, doctorEvent, exportedEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> DoctorVisit.builder()
                         .name(doctorVisitName)
+                        .isExported(exportedEvent.getValue())
                         .doctor(doctorEvent.getValue())
                         .repeatParameters(RepeatParameters.builder()
                                 .frequency(linearGroupsEvent.getValue())
@@ -272,6 +275,7 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
     public Observable<List<EventValidationResult>> controlFields(
             @NonNull Observable<TextViewAfterTextChangeEvent> doctorVisitNameObservable,
             @NonNull FieldValueChangeEventsObservable<Doctor> doctorObservable,
+            @NonNull FieldValueChangeEventsObservable<Boolean> exportedObservable,
             @NonNull FieldValueChangeEventsObservable<LinearGroups> linearGroupsObservable,
             @NonNull FieldValueChangeEventsObservable<PeriodicityType> periodicityTypeObservable,
             @NonNull FieldValueChangeEventsObservable<LengthValue> lengthValueObservable) {
@@ -281,12 +285,14 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
                         .map(Editable::toString)
                         .map(String::trim),
                 doctorObservable,
+                exportedObservable,
                 linearGroupsObservable,
                 periodicityTypeObservable,
                 lengthValueObservable,
-                (doctorVisitName, doctorEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> DoctorVisit.builder()
+                (doctorVisitName, doctorEvent, exportedEvent, linearGroupsEvent, periodicityTypeEvent, lengthValueEvent) -> DoctorVisit.builder()
                         .name(doctorVisitName)
                         .doctor(doctorEvent.getValue())
+                        .isExported(exportedEvent.getValue())
                         .repeatParameters(RepeatParameters.builder()
                                 .frequency(linearGroupsEvent.getValue())
                                 .periodicity(periodicityTypeEvent.getValue())

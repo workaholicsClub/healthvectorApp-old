@@ -38,6 +38,11 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
     }
 
     public void setItems(@NonNull List<T> items) {
+        if (this.items.isEmpty()) {
+            this.items = new ArrayList<>(items);
+            notifyDataSetChanged();
+            return;
+        }
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListDiff<>(this.items, items, this), false);
         diffResult.dispatchUpdatesTo(this);
         this.items = new ArrayList<>(items);

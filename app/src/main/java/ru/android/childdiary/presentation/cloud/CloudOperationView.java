@@ -8,10 +8,4 @@ import ru.android.childdiary.presentation.cloud.core.CloudView;
 public interface CloudOperationView extends CloudView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void setIsAuthorized(boolean isAuthorized);
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToMain();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void restartApp();
 }

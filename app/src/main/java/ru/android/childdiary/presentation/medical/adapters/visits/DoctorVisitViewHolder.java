@@ -46,4 +46,9 @@ class DoctorVisitViewHolder extends BaseMedicalItemViewHolder<DoctorVisit, Docto
     void onDeleteClick() {
         swipeActionListener.delete(this);
     }
+
+    @Override
+    protected boolean isDone(DoctorVisit item) {
+        return item.isDone();
+    }
 }

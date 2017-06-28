@@ -11,6 +11,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
@@ -96,5 +97,10 @@ public class AddConcreteExercisePresenter extends BaseAddItemPresenter<AddConcre
                 periodicityTypeObservable,
                 lengthValueObservable)
                 .subscribe(this::handleValidationResult, this::onUnexpectedError);
+    }
+
+    @Override
+    protected EventType getEventType() {
+        return EventType.EXERCISE;
     }
 }

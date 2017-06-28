@@ -69,4 +69,9 @@ public class ExerciseDetailPresenter extends BasePresenter<ExerciseDetailView> {
                                 parameters.getFinishTime()),
                                 this::onUnexpectedError));
     }
+
+    public void openUrl(@NonNull String url) {
+        String title = state.getExercise().getName();
+        getViewState().navigateToWebBrowser(title, url);
+    }
 }

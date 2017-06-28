@@ -46,8 +46,4 @@ public class SettingsPresenter extends CloudPresenter<SettingsView> {
                 .doOnNext(accountName -> logger.debug("showSelectedAccount: " + accountName))
                 .subscribe(getViewState()::showSelectedAccount, this::onUnexpectedError));
     }
-
-    @Override
-    public void moveNext() {
-    }
 }

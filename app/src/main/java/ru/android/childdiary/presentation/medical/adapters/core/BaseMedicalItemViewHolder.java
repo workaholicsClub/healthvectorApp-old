@@ -59,11 +59,25 @@ public abstract class BaseMedicalItemViewHolder<T,
     public void bind(Context context, Sex sex, T item) {
         super.bind(context, sex, item);
 
+        boolean isDone = isDone(item);
+        boolean enabled = !isDone;
+
         textViewDate.setText(getDateText(context, item));
         textViewTime.setText(getTimeText(context, item));
         WidgetsUtils.hideIfEmpty(textViewTime);
+
+        WidgetsUtils.setupTextView(textViewDate, enabled);
+        WidgetsUtils.setupTextView(textViewTime, enabled);
+
         textViewTitle.setText(getTitleText(context, item));
         textViewDescription.setText(getDescriptionText(context, item));
+
+        WidgetsUtils.setupTextView(textViewTitle, enabled);
+        WidgetsUtils.setupTextView(textViewDescription, enabled);
+
+        WidgetsUtils.strikeTextView(textViewTitle, isDone);
+        WidgetsUtils.strikeTextView(textViewDescription, isDone);
+
         //noinspection deprecation
         imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
 
@@ -92,4 +106,6 @@ public abstract class BaseMedicalItemViewHolder<T,
     void onContentViewClick() {
         itemActionListener.edit(item);
     }
+
+    protected abstract boolean isDone(T item);
 }

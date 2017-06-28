@@ -39,6 +39,7 @@ public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisits
     DoctorVisitInteractor doctorVisitInteractor;
 
     private Disposable subscription;
+    private GetDoctorVisitsRequest request;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -62,7 +63,16 @@ public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisits
                 .subscribe(this::requestData, this::onUnexpectedError));
     }
 
+    public void updateData() {
+        if (request == null) {
+            logger.error("request is null");
+            return;
+        }
+        requestData(request);
+    }
+
     private void requestData(@NonNull GetDoctorVisitsRequest request) {
+        this.request = request;
         unsubscribe(subscription);
         subscription = unsubscribeOnDestroy(doctorVisitInteractor.getDoctorVisits(request)
                 .doOnNext(response -> logger.debug("onGetData: " + response))
