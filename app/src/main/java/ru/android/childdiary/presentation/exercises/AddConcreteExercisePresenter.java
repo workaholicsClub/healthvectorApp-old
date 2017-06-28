@@ -17,6 +17,7 @@ import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
 import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseRequest;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
@@ -31,7 +32,8 @@ public class AddConcreteExercisePresenter extends BaseAddItemPresenter<AddConcre
     }
 
     @Override
-    public void add(@NonNull ConcreteExercise concreteExercise) {
+    public void add(@NonNull ConcreteExercise concreteExerciseToAdd) {
+        ConcreteExercise concreteExercise = preprocess(concreteExerciseToAdd);
         showProgressAdd(concreteExercise);
         unsubscribeOnDestroy(
                 exerciseInteractor.addConcreteExercise(UpsertConcreteExerciseRequest.builder()
@@ -44,6 +46,25 @@ public class AddConcreteExercisePresenter extends BaseAddItemPresenter<AddConcre
                         .doOnError(throwable -> hideProgressAdd(concreteExercise))
                         .subscribe(response -> getViewState().added(response.getConcreteExercise(), response.getAddedEventsCount()),
                                 this::onUnexpectedError));
+    }
+
+    private ConcreteExercise preprocess(@NonNull ConcreteExercise concreteExercise) {
+        RepeatParameters repeatParameters = concreteExercise.getRepeatParameters();
+        if (repeatParameters == null) {
+            return concreteExercise;
+        }
+        LinearGroups linearGroups = repeatParameters.getFrequency();
+        if (linearGroups == null || linearGroups.getTimes().size() != 1) {
+            return concreteExercise;
+        }
+        // Особым образом обрабатываем ситуацию, когда количество повторений в день равно 1:
+        // подменяем время в нулевой линейной группе
+        linearGroups = linearGroups.withTime(0, concreteExercise.getDateTime().toLocalTime());
+        return concreteExercise.toBuilder()
+                .repeatParameters(repeatParameters.toBuilder()
+                        .frequency(linearGroups)
+                        .build())
+                .build();
     }
 
     private void showProgressAdd(@NonNull ConcreteExercise concreteExercise) {
