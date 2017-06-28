@@ -27,17 +27,17 @@ public interface MedicineTakingData extends Persistable {
     @ManyToOne
     ChildData getChild();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     MedicineData getMedicine();
 
     Double getAmount();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     MedicineMeasureData getMedicineMeasure();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @OneToOne
     RepeatParametersData getRepeatParameters();
 

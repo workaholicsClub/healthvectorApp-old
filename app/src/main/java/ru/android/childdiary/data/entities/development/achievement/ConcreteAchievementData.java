@@ -23,7 +23,7 @@ public interface ConcreteAchievementData extends Persistable {
     @ManyToOne
     ChildData getChild();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     AchievementData getAchievement();
 

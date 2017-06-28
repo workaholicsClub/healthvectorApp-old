@@ -38,11 +38,11 @@ public interface FeedEventData extends Persistable {
 
     Double getAmountMl();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     FoodMeasureData getFoodMeasure();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     FoodData getFood();
 }

@@ -20,4 +20,7 @@ public interface BasePickerView<T> extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void itemDeleted(@NonNull T item);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void deletionRestricted();
 }

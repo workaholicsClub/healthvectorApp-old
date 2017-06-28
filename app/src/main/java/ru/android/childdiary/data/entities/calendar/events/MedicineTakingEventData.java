@@ -25,17 +25,17 @@ public interface MedicineTakingEventData extends Persistable {
     @OneToOne
     MasterEventData getMasterEvent();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     MedicineTakingData getMedicineTaking();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     MedicineData getMedicine();
 
     Double getAmount();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     MedicineMeasureData getMedicineMeasure();
 

@@ -25,11 +25,11 @@ public interface ConcreteExerciseData extends Persistable {
     @ManyToOne
     ChildData getChild();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     ExerciseData getExercise();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @OneToOne
     RepeatParametersData getRepeatParameters();
 

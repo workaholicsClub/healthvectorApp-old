@@ -277,6 +277,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         Sex sex = ((SexAdapter) parent.getAdapter()).getItem(position);
         updateChild(editedChild.toBuilder().sex(sex).build());
         setupSex();
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     @Override
