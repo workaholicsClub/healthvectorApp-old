@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -28,8 +29,12 @@ import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.exercises.adapters.ExerciseAdapter;
 import ru.android.childdiary.presentation.exercises.adapters.ExerciseClickListener;
+import ru.android.childdiary.utils.HtmlUtils;
 
-public class ExercisesFragment extends AppPartitionFragment implements ExercisesView, ExerciseClickListener {
+public class ExercisesFragment extends AppPartitionFragment implements ExercisesView,
+        ExerciseClickListener, HtmlUtils.OnLinkClickListener {
+    private static final String LINK_TRY_AGAIN = "try_again";
+
     @BindView(R.id.textViewIntention)
     protected TextView textViewIntention;
 
@@ -70,7 +75,9 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
-        textViewIntention.setText(R.string.no_exercises);
+        String tryAgain = getString(R.string.try_again);
+        String text = getString(R.string.no_exercises_format, getString(R.string.no_exercises), tryAgain);
+        HtmlUtils.setTextViewClickableText(textViewIntention, text, tryAgain, LINK_TRY_AGAIN, this);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
@@ -125,5 +132,12 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     @Override
     public void addConcreteExercise(@NonNull Exercise exercise) {
         presenter.addConcreteExercise(getChild(), exercise);
+    }
+
+    @Override
+    public void onLinkClick(String url) {
+        if (LINK_TRY_AGAIN.equals(url)) {
+            Toast.makeText(getContext(), R.string.try_again, Toast.LENGTH_SHORT).show();
+        }
     }
 }

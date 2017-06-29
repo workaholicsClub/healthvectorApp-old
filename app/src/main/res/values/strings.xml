@@ -237,6 +237,7 @@
     <string name="enter_doctor_name">Введите специализацию</string>
     <string name="enter_medicine_name">Введите лекарство</string>
     <string name="the_value_already_exists">Такое значение уже есть в списке</string>
+    <string name="no_exercises_format">%1$s%2$s</string>
     <string name="no_exercises">Не удалось загрузить занятия</string>
     <string name="exercise">Занятие</string>
     <string name="cloud_text">Сохраните свои данные с Google Drive</string>
