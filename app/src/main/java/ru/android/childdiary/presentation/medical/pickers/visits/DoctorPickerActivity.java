@@ -55,6 +55,14 @@ public class DoctorPickerActivity extends BasePickerActivity<Doctor, DoctorPicke
     }
 
     @Override
+    public void deletionRestricted() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.deletion_restricted_doctor)
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
+    @Override
     public DoctorPickerPresenter getPresenter() {
         return presenter;
     }

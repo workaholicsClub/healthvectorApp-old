@@ -23,7 +23,7 @@ public interface ExerciseEventData extends Persistable {
     @OneToOne
     MasterEventData getMasterEvent();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     ConcreteExerciseData getConcreteExercise();
 

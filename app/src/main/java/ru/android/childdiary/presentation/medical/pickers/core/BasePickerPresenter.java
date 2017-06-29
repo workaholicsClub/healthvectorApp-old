@@ -60,9 +60,10 @@ public abstract class BasePickerPresenter<T, V extends BasePickerView<T>> extend
 
     public void deleteItem(@NonNull T item) {
         unsubscribeOnDestroy(deleteItemLoader(item)
+                .doOnError(throwable -> logger.error("failed to delete", throwable))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::itemDeleted, this::onUnexpectedError));
+                .subscribe(getViewState()::itemDeleted, throwable -> getViewState().deletionRestricted()));
     }
 
     protected abstract Observable<T> deleteItemLoader(@NonNull T item);

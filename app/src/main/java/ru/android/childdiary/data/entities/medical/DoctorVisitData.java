@@ -26,11 +26,11 @@ public interface DoctorVisitData extends Persistable {
     @ManyToOne
     ChildData getChild();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     DoctorData getDoctor();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @OneToOne
     RepeatParametersData getRepeatParameters();
 

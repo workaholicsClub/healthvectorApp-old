@@ -24,11 +24,11 @@ public interface DoctorVisitEventData extends Persistable {
     @OneToOne
     MasterEventData getMasterEvent();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     DoctorVisitData getDoctorVisit();
 
-    @ForeignKey(delete = ReferentialAction.SET_NULL)
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
     @ManyToOne
     DoctorData getDoctor();
 

@@ -292,6 +292,8 @@
     <string name="notification_text_network">Подключите Интернет для создания резервной копии данных</string>
     <string name="notification_text_backup">Загрузка данных на Google Drive</string>
     <string name="open_in_web_browser">Открыть в браузере</string>
+    <string name="deletion_restricted_medicine">Данное лекарство привязано к событиям или рецептам</string>
+    <string name="deletion_restricted_doctor">Данная специализация привязана к событиям или визитам</string>
     <string-array name="nominative_month_names">
         <item>Январь</item>
         <item>Февраль</item>
