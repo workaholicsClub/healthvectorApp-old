@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.functions.Function;
 import ru.android.childdiary.data.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ProgramsToExercisesMapper;
@@ -52,7 +53,11 @@ public class ExerciseDataRepository implements ExerciseRepository {
         this.exerciseDbService = exerciseDbService;
     }
 
-    private static long nextTryDelay(int retryCount) {
+    private static long nextTryDelayConst(int retryCount) {
+        return 3;
+    }
+
+    private static long nextTryDelayLinear(int retryCount) {
         return retryCount * 10;
     }
 
@@ -67,6 +72,17 @@ public class ExerciseDataRepository implements ExerciseRepository {
     }
 
     @Override
+    public Observable<List<Exercise>> updateExercises() {
+        logger.debug("force update data");
+        return loadDataFromNetwork(MAX_TRY_COUNT, ExerciseDataRepository::nextTryDelayConst)
+                .doOnNext(receivedExercises -> logger.debug("received data: " + StringUtils.toString(receivedExercises)))
+                .flatMap(exerciseDbService::putExercises)
+                .doOnNext(refreshedExercises -> logger.debug("refreshed data: " + StringUtils.toString(refreshedExercises)))
+                .flatMap(this::saveUpdateTime)
+                .doOnError(throwable -> logger.error("data not received", throwable));
+    }
+
+    @Override
     public Observable<List<Exercise>> updateExercisesIfNeeded() {
         return exerciseDbService.getExercises()
                 .first(Collections.emptyList())
@@ -74,7 +90,7 @@ public class ExerciseDataRepository implements ExerciseRepository {
                 .flatMap(exercises -> {
                     if (isDataEmpty(exercises) || isDataExpired()) {
                         logger.debug("need to update data");
-                        return loadDataFromNetwork()
+                        return loadDataFromNetwork(MAX_TRY_COUNT, ExerciseDataRepository::nextTryDelayLinear)
                                 .doOnNext(receivedExercises -> logger.debug("received data: " + StringUtils.toString(receivedExercises)))
                                 .flatMap(exerciseDbService::putExercises)
                                 .doOnNext(refreshedExercises -> logger.debug("refreshed data: " + StringUtils.toString(refreshedExercises)))
@@ -94,19 +110,20 @@ public class ExerciseDataRepository implements ExerciseRepository {
         });
     }
 
-    private Observable<List<Exercise>> loadDataFromNetwork() {
+    private Observable<List<Exercise>> loadDataFromNetwork(int maxTryCount,
+                                                           @NonNull Function<? super Integer, ? extends Long> tryToDelayMapper) {
         return exerciseNetworkService.getPrograms()
                 .map(mapper::map)
                 .retryWhen(errors -> errors
-                        .zipWith(Observable.range(1, MAX_TRY_COUNT), (throwable, i) -> {
-                            if (i == MAX_TRY_COUNT) {
-                                throw new TryCountExceededException("Failed on " + MAX_TRY_COUNT + " try");
+                        .zipWith(Observable.range(1, maxTryCount), (throwable, i) -> {
+                            if (i == maxTryCount) {
+                                throw new TryCountExceededException("Failed on " + maxTryCount + " try");
                             } else {
                                 return i;
                             }
                         })
                         .doOnNext(retryCount -> logger.debug("try " + retryCount))
-                        .map(ExerciseDataRepository::nextTryDelay)
+                        .map(tryToDelayMapper)
                         .doOnNext(delay -> logger.debug("next try will start in " + delay + " seconds"))
                         .flatMap(delay -> Observable.timer(delay, TimeUnit.SECONDS)));
     }

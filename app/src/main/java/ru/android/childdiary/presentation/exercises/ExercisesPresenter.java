@@ -11,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.core.TryCountExceededException;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseInteractor;
@@ -88,5 +89,27 @@ public class ExercisesPresenter extends AppPartitionPresenter<ExercisesView> {
                                 parameters.getStartTime(),
                                 parameters.getFinishTime()),
                                 this::onUnexpectedError));
+    }
+
+    public void tryToLoadDataFromNetwork() {
+        getViewState().startLoading();
+        unsubscribeOnDestroy(
+                exerciseInteractor.updateExercises()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                exercises -> {
+                                    getViewState().stopLoading();
+                                    updateData();
+                                },
+                                throwable -> {
+                                    getViewState().stopLoading();
+                                    updateData();
+                                    if (throwable instanceof TryCountExceededException) {
+                                        return;
+                                    }
+                                    onUnexpectedError(throwable);
+                                })
+        );
     }
 }
