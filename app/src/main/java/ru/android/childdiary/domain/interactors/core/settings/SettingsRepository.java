@@ -29,6 +29,8 @@ public interface SettingsRepository {
 
     Observable<String> getAccountNameOnce();
 
+    void removeAccount();
+
     // is cloud shown
     Observable<Boolean> getIsCloudShown();
 

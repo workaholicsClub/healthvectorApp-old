@@ -192,6 +192,7 @@
         <service android:name=".services.TimerService" />
         <service android:name=".services.UpdateDataService" />
         <service android:name=".services.CloudService" />
+        <service android:name=".services.AccountService" />
 
         <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>
