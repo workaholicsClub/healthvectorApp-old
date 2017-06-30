@@ -28,7 +28,7 @@ public class FieldExerciseDescriptionView extends FieldTextViewWithImageView {
 
     @Override
     public void setText(String text) {
-        HtmlUtils.setTextViewClickableLinks(textView, text, onLinkClickListener);
+        HtmlUtils.setupClickableLinks(textView, text, onLinkClickListener);
     }
 
     @LayoutRes

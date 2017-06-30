@@ -1,8 +1,7 @@
 package ru.android.childdiary.utils;
 
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.text.Html;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -23,9 +22,9 @@ public class HtmlUtils {
         return result;
     }
 
-    public static void setTextViewClickableLinks(TextView textView,
-                                                 String html,
-                                                 @Nullable OnLinkClickListener onLinkClickListener) {
+    public static void setupClickableLinks(TextView textView,
+                                           String html,
+                                           @NonNull OnLinkClickListener onLinkClickListener) {
         CharSequence sequence = fromHtml(html);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(sequence);
         URLSpan[] urlSpans = spannableStringBuilder.getSpans(0, sequence.length(), URLSpan.class);
@@ -38,48 +37,18 @@ public class HtmlUtils {
 
     private static void makeLinkClickable(SpannableStringBuilder spannableStringBuilder,
                                           URLSpan urlSpan,
-                                          @Nullable OnLinkClickListener onLinkClickListener) {
+                                          @NonNull OnLinkClickListener onLinkClickListener) {
         int start = spannableStringBuilder.getSpanStart(urlSpan);
         int end = spannableStringBuilder.getSpanEnd(urlSpan);
         int flags = spannableStringBuilder.getSpanFlags(urlSpan);
-
         ClickableSpan clickable = new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                if (onLinkClickListener != null) {
-                    onLinkClickListener.onLinkClick(urlSpan.getURL());
-                }
+                onLinkClickListener.onLinkClick(urlSpan.getURL());
             }
         };
-
         spannableStringBuilder.setSpan(clickable, start, end, flags);
         spannableStringBuilder.removeSpan(urlSpan);
-    }
-
-    public static void setTextViewClickableText(TextView textView,
-                                                String completeString,
-                                                String partToClick,
-                                                String linkId,
-                                                @Nullable OnLinkClickListener onLinkClickListener) {
-        SpannableString spannableString = new SpannableString(completeString);
-
-        int start = completeString.indexOf(partToClick);
-        int end = start + partToClick.length();
-        int flags = Spanned.SPAN_INCLUSIVE_EXCLUSIVE;
-
-        ClickableSpan clickable = new ClickableSpan() {
-            @Override
-            public void onClick(View view) {
-                if (onLinkClickListener != null) {
-                    onLinkClickListener.onLinkClick(linkId);
-                }
-            }
-        };
-
-        spannableString.setSpan(clickable, start, end, flags);
-
-        textView.setText(spannableString);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public interface OnLinkClickListener {

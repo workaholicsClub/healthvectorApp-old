@@ -75,9 +75,12 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
+        String noExercises = getString(R.string.no_exercises);
+        String checkNetworkConnection = getString(R.string.check_network_connection);
         String tryAgain = getString(R.string.try_again);
-        String text = getString(R.string.no_exercises_format, getString(R.string.no_exercises), tryAgain);
-        HtmlUtils.setTextViewClickableText(textViewIntention, text, tryAgain, LINK_TRY_AGAIN, this);
+        String text = getString(R.string.no_exercises_format,
+                noExercises, checkNetworkConnection, LINK_TRY_AGAIN, tryAgain);
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 

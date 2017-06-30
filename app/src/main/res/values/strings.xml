@@ -237,7 +237,7 @@
     <string name="enter_doctor_name">Введите специализацию</string>
     <string name="enter_medicine_name">Введите лекарство</string>
     <string name="the_value_already_exists">Такое значение уже есть в списке</string>
-    <string name="no_exercises_format">%1$s%2$s</string>
+    <string name="no_exercises_format">%1$s&lt;br />&lt;br />%2$s&lt;br />&lt;br />&lt;a href=\"%3$s\">%4$s&lt;/a></string>
     <string name="no_exercises">Не удалось загрузить занятия</string>
     <string name="exercise">Занятие</string>
     <string name="cloud_text">Сохраните свои данные с Google Drive</string>
@@ -250,6 +250,7 @@
     <string name="bind_account_connection_unavailable_dialog_title">Нет подключения к Интернету</string>
     <string name="bind_account_connection_unavailable_dialog_text">Подключите Интернет или попробуйте позже.</string>
     <string name="try_again">Попробовать еще раз</string>
+    <string name="check_network_connection">Проверьте подключение к Интернету</string>
     <string name="check_is_backup_available_loading">Авторизация&#8230;</string>
     <string name="found_backup_dialog_title">Найдена резервная копия</string>
     <string name="found_backup_dialog_text">Восстановить данные?</string>
