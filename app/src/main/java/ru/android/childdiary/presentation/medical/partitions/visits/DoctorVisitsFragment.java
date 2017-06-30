@@ -94,6 +94,8 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
     public void showDoctorVisitsState(@NonNull DoctorVisitsState doctorVisitsState) {
         logger.debug("showDoctorVisitsState: " + doctorVisitsState);
 
+        progressBar.setVisibility(View.GONE);
+
         Child child = doctorVisitsState.getChild();
         showChild(child);
 
