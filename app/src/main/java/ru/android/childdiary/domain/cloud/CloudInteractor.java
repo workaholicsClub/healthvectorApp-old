@@ -43,6 +43,10 @@ public class CloudInteractor {
         return settingsRepository.getAccountNameOnce();
     }
 
+    public void removeAccount() {
+        settingsRepository.removeAccount();
+    }
+
     public Observable<Boolean> getIsCloudShownOnce() {
         return settingsRepository.getIsCloudShownOnce();
     }

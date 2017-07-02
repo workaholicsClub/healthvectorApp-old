@@ -5,6 +5,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -27,6 +28,9 @@ public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiar
 
     @BindView(R.id.recyclerView)
     protected RecyclerView recyclerView;
+
+    @BindView(R.id.progressBar)
+    protected ProgressBar progressBar;
 
     protected ChipsAdapter chipsAdapter;
     @Nullable

@@ -15,6 +15,8 @@ public interface ExerciseRepository {
 
     Observable<List<Exercise>> getExercises(@NonNull Child child);
 
+    Observable<List<Exercise>> updateExercises();
+
     Observable<List<Exercise>> updateExercisesIfNeeded();
 
     Single<Boolean> hasConnectedEvents(@NonNull Exercise exercise);

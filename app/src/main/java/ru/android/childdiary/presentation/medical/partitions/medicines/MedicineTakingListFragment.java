@@ -94,6 +94,8 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
     public void showMedicineTakingListState(@NonNull MedicineTakingListState medicineTakingListState) {
         logger.debug("showMedicineTakingListState: " + medicineTakingListState);
 
+        progressBar.setVisibility(View.GONE);
+
         Child child = medicineTakingListState.getChild();
         showChild(child);
 

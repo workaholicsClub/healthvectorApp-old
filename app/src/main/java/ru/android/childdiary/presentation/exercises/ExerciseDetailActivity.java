@@ -24,10 +24,11 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseDescriptionView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseNameView;
+import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseDetailView,
-        FieldExerciseDescriptionView.OnLinkClickListener {
+        HtmlUtils.OnLinkClickListener {
     private static final int REQUEST_ADD_CONCRETE_EXERCISE = 1;
 
     @BindView(R.id.exerciseNameView)

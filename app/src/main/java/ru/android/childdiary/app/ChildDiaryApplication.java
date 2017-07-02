@@ -14,6 +14,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.di.DaggerApplicationComponent;
 import ru.android.childdiary.di.modules.ApplicationModule;
+import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.CloudService;
 import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.utils.log.LogSystem;
@@ -49,6 +50,7 @@ public class ChildDiaryApplication extends MultiDexApplication {
                 .build());
 
         startService(new Intent(this, TimerService.class));
+        startService(new Intent(this, AccountService.class));
         CloudService.installAlarm(this);
     }
 }

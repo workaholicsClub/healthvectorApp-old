@@ -64,6 +64,10 @@ public class ExerciseInteractor {
         return exerciseRepository.getExercises(child);
     }
 
+    public Observable<List<Exercise>> updateExercises() {
+        return exerciseRepository.updateExercises();
+    }
+
     public Observable<List<Exercise>> updateExercisesIfNeeded() {
         return exerciseRepository.updateExercisesIfNeeded();
     }

@@ -81,6 +81,11 @@ public class SettingsDataRepository implements SettingsRepository {
     }
 
     @Override
+    public void removeAccount() {
+        preferences.getString(KEY_ACCOUNT_NAME).delete();
+    }
+
+    @Override
     public Observable<String> getAccountNameOnce() {
         return getAccountName().first(DEFAULT_ACCOUNT_NAME).toObservable();
     }

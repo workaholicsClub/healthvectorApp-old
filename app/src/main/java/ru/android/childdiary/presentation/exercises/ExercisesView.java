@@ -26,4 +26,10 @@ public interface ExercisesView extends AppPartitionView {
     void navigateToConcreteExerciseAdd(@NonNull ConcreteExercise defaultConcreteExercise,
                                        @Nullable LocalTime startTime,
                                        @Nullable LocalTime finishTime);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void startLoading();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void stopLoading();
 }
