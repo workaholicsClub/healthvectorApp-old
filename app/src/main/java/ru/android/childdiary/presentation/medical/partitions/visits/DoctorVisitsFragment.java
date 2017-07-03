@@ -59,6 +59,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         adapter = new DoctorVisitAdapter(getContext(), this, fabController);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
+        imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         textViewIntention.setText(R.string.add_doctor_visit);
 

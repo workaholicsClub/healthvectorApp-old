@@ -59,6 +59,7 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         adapter = new MedicineTakingAdapter(getContext(), this, fabController);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
+        imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         textViewIntention.setText(R.string.add_medicine_taking);
 

@@ -5,6 +5,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,6 +20,9 @@ import ru.android.childdiary.presentation.medical.filter.adapters.ChipsAdapter;
 public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> extends AppPartitionFragment
         implements BaseMedicalDataView, ChipsAdapter.ChipsDeleteClickListener {
     private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
+
+    @BindView(R.id.imageView)
+    protected ImageView imageView;
 
     @BindView(R.id.textViewIntention)
     protected TextView textViewIntention;

@@ -10,6 +10,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -36,17 +37,20 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         ExerciseClickListener, HtmlUtils.OnLinkClickListener {
     private static final String LINK_TRY_AGAIN = "try_again";
 
+    @BindView(R.id.imageView)
+    ImageView imageView;
+
     @BindView(R.id.textViewIntention)
-    protected TextView textViewIntention;
+    TextView textViewIntention;
 
     @BindView(R.id.recyclerViewChips)
-    protected RecyclerView recyclerViewChips;
+    RecyclerView recyclerViewChips;
 
     @BindView(R.id.line)
-    protected View line;
+    View line;
 
     @BindView(R.id.recyclerView)
-    protected RecyclerView recyclerView;
+    RecyclerView recyclerView;
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
@@ -92,6 +96,7 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         recyclerViewChips.setVisibility(View.GONE);
 
         // setup intention
+        imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         String noExercises = getString(R.string.no_exercises);
         String checkNetworkConnection = getString(R.string.check_network_connection);
@@ -135,6 +140,7 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         // no chips
 
         // setup intention
+        imageView.setVisibility(exercises.isEmpty() ? View.VISIBLE : View.GONE);
         textViewIntention.setVisibility(exercises.isEmpty() ? View.VISIBLE : View.GONE);
 
         // setup progress
@@ -164,6 +170,7 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         loading = true;
         recyclerView.setVisibility(View.GONE);
         line.setVisibility(View.GONE);
+        imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
     }
