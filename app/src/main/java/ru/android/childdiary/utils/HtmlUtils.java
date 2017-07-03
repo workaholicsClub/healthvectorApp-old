@@ -1,6 +1,6 @@
 package ru.android.childdiary.utils;
 
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -24,10 +24,10 @@ public class HtmlUtils {
 
     public static void setupClickableLinks(TextView textView,
                                            String html,
-                                           @NonNull OnLinkClickListener onLinkClickListener) {
-        CharSequence sequence = fromHtml(html);
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(sequence);
-        URLSpan[] urlSpans = spannableStringBuilder.getSpans(0, sequence.length(), URLSpan.class);
+                                           @Nullable OnLinkClickListener onLinkClickListener) {
+        CharSequence text = fromHtml(html);
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
+        URLSpan[] urlSpans = spannableStringBuilder.getSpans(0, text.length(), URLSpan.class);
         for (URLSpan urlSpan : urlSpans) {
             makeLinkClickable(spannableStringBuilder, urlSpan, onLinkClickListener);
         }
@@ -37,14 +37,16 @@ public class HtmlUtils {
 
     private static void makeLinkClickable(SpannableStringBuilder spannableStringBuilder,
                                           URLSpan urlSpan,
-                                          @NonNull OnLinkClickListener onLinkClickListener) {
+                                          @Nullable OnLinkClickListener onLinkClickListener) {
         int start = spannableStringBuilder.getSpanStart(urlSpan);
         int end = spannableStringBuilder.getSpanEnd(urlSpan);
         int flags = spannableStringBuilder.getSpanFlags(urlSpan);
         ClickableSpan clickable = new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                onLinkClickListener.onLinkClick(urlSpan.getURL());
+                if (onLinkClickListener != null) {
+                    onLinkClickListener.onLinkClick(urlSpan.getURL());
+                }
             }
         };
         spannableStringBuilder.setSpan(clickable, start, end, flags);
