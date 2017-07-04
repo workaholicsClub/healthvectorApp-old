@@ -22,7 +22,7 @@ public class FieldExerciseNameView extends FieldTextViewWithImageView {
     @LayoutRes
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.field_exercise;
+        return R.layout.field_exercise_name;
     }
 
     @Override

@@ -8,30 +8,25 @@
 
     <include layout="@layout/toolbar" />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/field_margin_base"
+        android:paddingTop="@dimen/field_margin_base">
 
-        <LinearLayout
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseNameView
+            android:id="@+id/exerciseNameView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/field_margin_base"
-            android:paddingTop="@dimen/field_margin_base">
+            android:layout_height="wrap_content" />
 
-            <ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseNameView
-                android:id="@+id/exerciseNameView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseDescriptionView
-                android:id="@+id/exerciseDescriptionView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </ScrollView>
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseDescriptionView
+            android:id="@+id/exerciseDescriptionView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/buttonAdd"

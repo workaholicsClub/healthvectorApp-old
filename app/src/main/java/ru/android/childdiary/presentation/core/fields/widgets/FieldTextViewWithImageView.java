@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.core.fields.widgets;
 import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +17,7 @@ public abstract class FieldTextViewWithImageView extends LinearLayout {
     @BindView(R.id.imageView)
     ImageView imageView;
 
+    @Nullable
     @BindView(R.id.textView)
     TextView textView;
 
@@ -46,6 +48,9 @@ public abstract class FieldTextViewWithImageView extends LinearLayout {
     }
 
     public void setText(String text) {
+        if (textView == null) {
+            return;
+        }
         textView.setText(text);
     }
 
