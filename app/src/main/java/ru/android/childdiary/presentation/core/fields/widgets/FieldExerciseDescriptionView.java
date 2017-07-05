@@ -15,7 +15,7 @@ import butterknife.BindView;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.HtmlUtils;
-import ru.android.childdiary.utils.ui.ExerciseDescriptionHelper;
+import ru.android.childdiary.utils.ui.JustifiedTextHelper;
 
 public class FieldExerciseDescriptionView extends FieldTextViewWithImageView {
     @BindView(R.id.webView)
@@ -76,7 +76,7 @@ public class FieldExerciseDescriptionView extends FieldTextViewWithImageView {
 
     @Override
     public void setText(String text) {
-        ExerciseDescriptionHelper.showInWebView(webView, text);
+        JustifiedTextHelper.showInWebView(webView, text);
     }
 
     @LayoutRes
