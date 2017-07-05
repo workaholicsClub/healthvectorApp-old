@@ -15,4 +15,6 @@ public class ExerciseDetailState implements Serializable {
     Child child;
     @NonNull
     Exercise exercise;
+    @NonNull
+    String exerciseDescription;
 }

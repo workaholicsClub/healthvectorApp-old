@@ -16,11 +16,15 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseInteractor;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
+import ru.android.childdiary.utils.ui.ExerciseDescriptionHelper;
 
 @InjectViewState
 public class ExercisesPresenter extends AppPartitionPresenter<ExercisesView> {
     @Inject
     ExerciseInteractor exerciseInteractor;
+
+    @Inject
+    ExerciseDescriptionHelper exerciseDescriptionHelper;
 
     private Disposable exercisesSubscription;
 
@@ -65,6 +69,7 @@ public class ExercisesPresenter extends AppPartitionPresenter<ExercisesView> {
                         .map(child -> ExerciseDetailState.builder()
                                 .child(child)
                                 .exercise(exercise)
+                                .exerciseDescription(exerciseDescriptionHelper.map(exercise))
                                 .build())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

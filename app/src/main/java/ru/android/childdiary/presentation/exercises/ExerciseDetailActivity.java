@@ -105,7 +105,7 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
         buttonAdd.setVisibility(child.getId() == null ? View.GONE : View.VISIBLE);
         Exercise exercise = state.getExercise();
         exerciseNameView.setText(exercise.getName());
-        exerciseDescriptionView.setText(exercise.getDescription());
+        exerciseDescriptionView.setText(state.getExerciseDescription());
     }
 
     @Override
