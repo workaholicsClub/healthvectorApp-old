@@ -1,5 +1,7 @@
 package ru.android.childdiary.presentation.exercises;
 
+import android.support.annotation.Nullable;
+
 import java.io.Serializable;
 
 import lombok.Builder;
@@ -15,4 +17,6 @@ public class ExerciseDetailState implements Serializable {
     Child child;
     @NonNull
     Exercise exercise;
+    @Nullable
+    String exerciseDescription;
 }
