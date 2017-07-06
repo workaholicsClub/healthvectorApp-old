@@ -17,7 +17,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
-import ru.android.childdiary.data.dto.Programs;
+import ru.android.childdiary.data.network.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ProgramsToExercisesMapper;
 import ru.android.childdiary.domain.core.TryCountExceededException;

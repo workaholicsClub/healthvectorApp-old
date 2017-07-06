@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureData;
-import ru.android.childdiary.data.entities.calendar.events.core.FoodMeasureEntity;
+import ru.android.childdiary.data.db.entities.calendar.events.core.FoodMeasureData;
+import ru.android.childdiary.data.db.entities.calendar.events.core.FoodMeasureEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
 

@@ -12,7 +12,7 @@ import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
-import ru.android.childdiary.data.entities.child.ChildEntity;
+import ru.android.childdiary.data.db.entities.child.ChildEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.domain.interactors.child.Child;
 

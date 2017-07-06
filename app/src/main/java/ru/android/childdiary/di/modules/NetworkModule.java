@@ -15,6 +15,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import ru.android.childdiary.BuildConfig;
+import ru.android.childdiary.data.network.interceptors.FakeInterceptor;
 import ru.android.childdiary.data.repositories.exercises.ExerciseNetworkService;
 
 @Module
@@ -32,6 +33,14 @@ public class NetworkModule {
         return null;
     }
 
+    @Nullable
+    private static Interceptor getFakeInterceptor() {
+        if (BuildConfig.USE_FAKE_INTERCEPTOR) {
+            return new FakeInterceptor();
+        }
+        return null;
+    }
+
     @Provides
     @Singleton
     public OkHttpClient provideOkHttpClient() {
@@ -39,6 +48,10 @@ public class NetworkModule {
         Interceptor loggingInterceptor = getLoggingInterceptor();
         if (loggingInterceptor != null) {
             builder.addInterceptor(loggingInterceptor);
+        }
+        Interceptor fakeInterceptor = getFakeInterceptor();
+        if (fakeInterceptor != null) {
+            builder.addInterceptor(fakeInterceptor);
         }
         builder.connectTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
         builder.writeTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);

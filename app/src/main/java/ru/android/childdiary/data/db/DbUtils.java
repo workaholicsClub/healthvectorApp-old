@@ -12,7 +12,7 @@ import io.requery.reactivex.ReactiveResult;
 import io.requery.reactivex.ReactiveSupport;
 import io.requery.sql.EntityDataStore;
 import lombok.val;
-import ru.android.childdiary.data.entities.Models;
+import ru.android.childdiary.data.db.entities.Models;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 
 public class DbUtils {

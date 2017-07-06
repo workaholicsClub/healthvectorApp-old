@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.entities.exercises.ExerciseData;
-import ru.android.childdiary.data.entities.exercises.ExerciseEntity;
+import ru.android.childdiary.data.db.entities.exercises.ExerciseData;
+import ru.android.childdiary.data.db.entities.exercises.ExerciseEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 

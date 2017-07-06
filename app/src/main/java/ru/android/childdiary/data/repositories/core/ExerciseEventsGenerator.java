@@ -12,8 +12,8 @@ import javax.inject.Inject;
 
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
-import ru.android.childdiary.data.entities.calendar.events.ExerciseEventEntity;
-import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.events.ExerciseEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.ExerciseEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
 import ru.android.childdiary.data.types.EventType;

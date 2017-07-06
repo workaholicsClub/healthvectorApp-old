@@ -72,6 +72,7 @@ android {
             buildConfigField "boolean", "PRINT_DB_LOGS", "true"
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "true"
+            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "true"
         }
         qa {
             debuggable true
@@ -92,6 +93,7 @@ android {
             buildConfigField "boolean", "PRINT_DB_LOGS", "true"
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
+            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
         }
         release {
             //debuggable true
@@ -112,6 +114,7 @@ android {
             buildConfigField "boolean", "PRINT_DB_LOGS", "false"
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "false"
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
+            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
         }
     }
 }

@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.entities.medical.core.MedicineMeasureData;
-import ru.android.childdiary.data.entities.medical.core.MedicineMeasureEntity;
+import ru.android.childdiary.data.db.entities.medical.core.MedicineMeasureData;
+import ru.android.childdiary.data.db.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 

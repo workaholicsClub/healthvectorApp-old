@@ -7,8 +7,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.data.dto.Program;
-import ru.android.childdiary.data.dto.Programs;
+import ru.android.childdiary.data.network.dto.Program;
+import ru.android.childdiary.data.network.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
 import ru.android.childdiary.domain.interactors.exercises.Exercise;
 

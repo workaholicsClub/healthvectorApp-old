@@ -5,11 +5,11 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.entities.calendar.events.core.MasterEventData;
-import ru.android.childdiary.data.entities.calendar.events.core.MasterEventEntity;
-import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventData;
-import ru.android.childdiary.data.entities.calendar.events.standard.OtherEventEntity;
-import ru.android.childdiary.data.entities.child.ChildData;
+import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventData;
+import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.events.standard.OtherEventData;
+import ru.android.childdiary.data.db.entities.calendar.events.standard.OtherEventEntity;
+import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;

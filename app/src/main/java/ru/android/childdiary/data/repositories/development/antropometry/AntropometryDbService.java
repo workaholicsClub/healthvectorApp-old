@@ -12,7 +12,7 @@ import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
-import ru.android.childdiary.data.entities.development.antropometry.AntropometryEntity;
+import ru.android.childdiary.data.db.entities.development.antropometry.AntropometryEntity;
 import ru.android.childdiary.data.repositories.development.antropometry.mappers.AntropometryMapper;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
