@@ -127,14 +127,13 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
     protected ConcreteExercise build() {
         String name = concreteExerciseNameView.getText();
         RepeatParameters repeatParameters = repeatParametersView.getRepeatParameters();
-        String concreteExerciseName = concreteExerciseNameView.getText();
         Integer duration = durationView.getValue();
         DateTime dateTime = WidgetsUtils.getDateTime(dateView, timeView);
         Integer minutes = notifyTimeView.getValue();
 
         return defaultItem.toBuilder()
                 .repeatParameters(repeatParameters)
-                .name(concreteExerciseName)
+                .name(name)
                 .durationInMinutes(duration)
                 .dateTime(dateTime)
                 .isExported(true)

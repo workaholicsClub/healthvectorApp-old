@@ -30,27 +30,20 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
         extends BaseMvpDialogFragment<A> implements DatePickerDialog.OnDateSetListener {
     private static final String TAG_DIALOG_FROM_DATE = "TAG_DIALOG_FROM_DATE";
     private static final String TAG_DIALOG_TO_DATE = "TAG_DIALOG_TO_DATE";
-
-    @BindView(R.id.rootView)
-    View rootView;
-
-    @BindView(R.id.dateFromView)
-    FieldDateFilterView dateFromView;
-
-    @BindView(R.id.dateToView)
-    FieldDateFilterView dateToView;
-
     @BindView(R.id.textViewByDoctor)
     protected TextView textViewByDoctor;
-
     @BindView(R.id.textViewByMedicine)
     protected TextView textViewByMedicine;
-
     @BindView(R.id.doctorAutoCompleteTextView)
     protected DoctorTokenCompleteTextView doctorTokenCompleteTextView;
-
     @BindView(R.id.medicineAutoCompleteTextView)
     protected MedicineTokenCompleteTextView medicineTokenCompleteTextView;
+    @BindView(R.id.rootView)
+    View rootView;
+    @BindView(R.id.dateFromView)
+    FieldDateFilterView dateFromView;
+    @BindView(R.id.dateToView)
+    FieldDateFilterView dateToView;
 
     @Override
     protected int getLayoutResourceId() {
@@ -101,7 +94,9 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
                 })
                 .setNegativeButton(R.string.cancel, null);
         AlertDialog dialog = builder.create();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         return dialog;

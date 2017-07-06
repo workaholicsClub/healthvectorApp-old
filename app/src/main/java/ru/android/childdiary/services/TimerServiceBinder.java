@@ -16,8 +16,8 @@ class TimerServiceBinder extends Binder implements TimerServiceListener {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     @Getter
-    private TimerService service;
-    private List<TimerServiceListener> listeners = new ArrayList<>();
+    private final TimerService service;
+    private final List<TimerServiceListener> listeners = new ArrayList<>();
 
     public TimerServiceBinder(TimerService service) {
         this.service = service;

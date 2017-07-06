@@ -109,6 +109,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
             getCheckBoxView().setFieldCheckBoxListener(this);
         }
 
+        //noinspection Convert2streamapi
         for (FieldEditTextView editTextView : getEditTextViews()) {
             setupEditTextView(editTextView);
         }
@@ -211,11 +212,12 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
         detailsView = ButterKnife.findById(this, R.id.detailsView);
-        View contentView = inflater.inflate(getContentLayoutResourceId(), detailsView);
+        inflater.inflate(getContentLayoutResourceId(), detailsView);
     }
 
     protected void setupEditTextView(FieldEditTextView view) {
         List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
+        //noinspection Convert2streamapi
         for (Disposable disposable : disposables) {
             unsubscribeOnDestroy(disposable);
         }

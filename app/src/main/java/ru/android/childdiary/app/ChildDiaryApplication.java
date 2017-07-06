@@ -32,7 +32,7 @@ public class ChildDiaryApplication extends MultiDexApplication {
 
         // install uncaught exception handler before initializing crash report system
         Thread.setDefaultUncaughtExceptionHandler(
-                new ChildDiaryUncaugthExceptionHandler(this, BuildConfig.DUMP_OUT_OF_MEMORY));
+                new ChildDiaryUncaughtExceptionHandler(this, BuildConfig.DUMP_OUT_OF_MEMORY));
 
         LogSystem.initLogger(this);
         logger = LoggerFactory.getLogger(toString());

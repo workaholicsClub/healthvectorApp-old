@@ -254,12 +254,12 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         if (finishDateTime == null) {
             LocalDate finishDate = finishDateView.getValue();
             LocalTime finishTime = finishTimeView.getValue();
-            if (finishDate == null && finishTime != null) {
+            if (finishDate == null && finishTime != null && startDateTime != null) {
                 finishDateTime = startDateTime.withTime(finishTime);
                 if (finishDateTime.isBefore(startDateTime)) {
                     finishDateTime = finishDateTime.plusDays(1);
                 }
-            } else if (finishDate != null && finishTime == null) {
+            } else if (finishDate != null && finishTime == null && startDateTime != null) {
                 finishDateTime = finishDate.toDateTime(startDateTime.toLocalTime());
             }
         }
@@ -328,7 +328,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         switch (tag) {
             case TAG_DURATION_DIALOG:
                 DateTime start = WidgetsUtils.getDateTime(startDateView, startTimeView);
-                DateTime finish = start.plusMinutes(minutes);
+                DateTime finish = start == null ? null : start.plusMinutes(minutes);
                 WidgetsUtils.setDateTime(finish, finishDateView, finishTimeView);
                 durationView.setValue(minutes);
                 break;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/buttonTimer"
     android:layout_width="match_parent"
     android:layout_height="@dimen/timer_height"
@@ -18,7 +19,8 @@
         android:layout_marginLeft="@dimen/timer_margin_horizontal"
         android:layout_marginStart="@dimen/timer_margin_horizontal"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/imageViewTimer"
@@ -47,5 +49,6 @@
         android:layout_marginRight="@dimen/timer_margin_horizontal"
         android:text="@string/duration_format"
         android:textColor="@color/timer_off"
-        android:textSize="@dimen/timer_text_size" />
+        android:textSize="@dimen/timer_text_size"
+        tools:ignore="RelativeOverlap" />
 </RelativeLayout>

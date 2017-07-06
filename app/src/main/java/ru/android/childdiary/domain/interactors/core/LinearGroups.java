@@ -15,6 +15,7 @@ import ru.android.childdiary.domain.core.ContentObject;
 @Builder(toBuilder = true)
 public class LinearGroups implements Serializable, ContentObject<LinearGroups> {
     // TODO make immutable
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @NonNull
     ArrayList<LocalTime> times;
 
@@ -34,7 +35,7 @@ public class LinearGroups implements Serializable, ContentObject<LinearGroups> {
     }
 
     @Override
-    public boolean isContentEqual(@NonNull LinearGroups other) {
+    public boolean isContentEqual(@android.support.annotation.NonNull LinearGroups other) {
         return times.equals(other.times);
     }
 }

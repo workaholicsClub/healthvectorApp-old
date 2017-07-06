@@ -439,7 +439,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     }
 
     private void openAppPartition(@NonNull AppPartition appPartition) {
-        if (selectedPartition == appPartition) {
+        if (selectedPartition == appPartition || drawer == null) {
             return;
         }
         int position = appPartition.ordinal() + 1;
@@ -513,8 +513,12 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     }
 
     private void buildUi() {
+        if (getToolbar() == null) {
+            return;
+        }
+
         buildHeader();
-        buildDrawer();
+        buildDrawer(getToolbar());
 
         setupToolbar(getToolbar());
 
@@ -544,14 +548,14 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .build();
     }
 
-    private void buildDrawer() {
+    private void buildDrawer(@NonNull Toolbar toolbar) {
         updateDrawerItems(false);
         drawerBuilder = new CustomDrawerBuilder()
                 .withActivity(this)
                 .withOnDrawerListener(this)
-                .withToolbar(getToolbar())
+                .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
-                .addDrawerItems(drawerItems);
+                .addDrawerItems((IDrawerItem[]) drawerItems);
         drawer = drawerBuilder.build();
     }
 

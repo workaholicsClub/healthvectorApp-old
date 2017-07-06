@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.core.permissions;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 public abstract class PermissionHelper {
     private final Context context;
     private final PermissionListener listener;
+    @SuppressLint("UseSparseArrays")
     private final Map<Integer, RequestPermissionInfo> permissionInfoMap = new HashMap<>();
 
     protected PermissionHelper(Context context, @NonNull PermissionListener listener) {

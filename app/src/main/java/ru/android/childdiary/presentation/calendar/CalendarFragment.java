@@ -85,7 +85,12 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
         tabLayout.addTab(tabLayout.newTab().setText(R.string.day));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.week));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.month));
-        tabLayout.getTabAt(selectedPage).select();
+        TabLayout.Tab selectedTab = tabLayout.getTabAt(selectedPage);
+        if (selectedTab != null) {
+            selectedTab.select();
+        } else {
+            logger.error("selected tab is null");
+        }
         showPage(selectedPage);
         WidgetsUtils.setupTabLayoutFont(tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

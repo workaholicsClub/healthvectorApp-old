@@ -111,8 +111,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         super.onRestoreInstanceState(savedInstanceState);
         //noinspection unchecked
         T event = (T) savedInstanceState.getSerializable(ExtraConstants.EXTRA_EVENT);
-        setupEventDetail(event); // в таймере сна дергается время
-        logger.debug("restore event: " + event);
+        if (event != null) {
+            setupEventDetail(event); // в таймере сна дергается время
+            logger.debug("restore event: " + event);
+        } else {
+            logger.error("event is null");
+        }
     }
 
     @Override
@@ -127,11 +131,12 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
         detailsView = ButterKnife.findById(this, R.id.detailsView);
-        View contentView = inflater.inflate(getContentLayoutResourceId(), detailsView);
+        inflater.inflate(getContentLayoutResourceId(), detailsView);
     }
 
     protected void setupEditTextView(FieldEditTextView view) {
         List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
+        //noinspection Convert2streamapi
         for (Disposable disposable : disposables) {
             unsubscribeOnDestroy(disposable);
         }
@@ -168,7 +173,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         setupEventDetail(event);
 
         invalidateOptionsMenu();
-        getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
+        if (getToolbar() != null) {
+            getToolbar().setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.toolbar_action_overflow));
+        }
         buttonAdd.setVisibility(GONE);
         buttonAdd.setOnClickListener(null);
     }
@@ -375,7 +382,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             return;
         }
         if (event != null && editedEvent.isContentEqual(event)) {
-            processContentEquals(editedEvent);
+            processContentEquals(event, editedEvent);
             return;
         }
         if (event == null) {
@@ -400,7 +407,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
     }
 
-    private void processContentEquals(T editedEvent) {
+    private void processContentEquals(@NonNull T event, @NonNull T editedEvent) {
         if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
             showNeedToFillNoteOrPhoto();
         } else if (EventUtils.isDone(editedEvent) == EventUtils.isDone(event)) {

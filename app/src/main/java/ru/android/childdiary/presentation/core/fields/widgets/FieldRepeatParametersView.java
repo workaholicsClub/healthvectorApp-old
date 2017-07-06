@@ -83,7 +83,9 @@ public class FieldRepeatParametersView extends LinearLayout
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        //noinspection unchecked
         frequencyView.setFieldSpinnerListener(this);
+        //noinspection unchecked
         periodicityView.setFieldSpinnerListener(this);
         lengthView.setFieldDialogListener(this);
     }

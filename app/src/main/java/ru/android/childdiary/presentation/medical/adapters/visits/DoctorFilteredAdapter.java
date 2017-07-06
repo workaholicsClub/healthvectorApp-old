@@ -33,7 +33,7 @@ public class DoctorFilteredAdapter extends FilteredArrayAdapter<Doctor> {
         Doctor doctor = getItem(position);
 
         TextView textView = ButterKnife.findById(view, android.R.id.text1);
-        textView.setText(doctor.getName());
+        textView.setText(doctor == null ? null : doctor.getName());
 
         return view;
     }

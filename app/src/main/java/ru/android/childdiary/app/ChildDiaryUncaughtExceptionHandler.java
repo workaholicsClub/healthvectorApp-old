@@ -10,7 +10,7 @@ import java.io.File;
 
 import ru.android.childdiary.utils.DeviceUtils;
 
-public class ChildDiaryUncaugthExceptionHandler implements Thread.UncaughtExceptionHandler {
+public class ChildDiaryUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private static final String DUMP_FILE_PREFIX = "cev_dump_";
     private static final String DUMP_FILE_SUFFIX = ".hprof";
 
@@ -19,7 +19,7 @@ public class ChildDiaryUncaugthExceptionHandler implements Thread.UncaughtExcept
     private final Context context;
     private final boolean dumpOutOfMemory;
 
-    public ChildDiaryUncaugthExceptionHandler(Context context, boolean dumpOutOfMemory) {
+    public ChildDiaryUncaughtExceptionHandler(Context context, boolean dumpOutOfMemory) {
         this.context = context;
         this.dumpOutOfMemory = dumpOutOfMemory;
     }

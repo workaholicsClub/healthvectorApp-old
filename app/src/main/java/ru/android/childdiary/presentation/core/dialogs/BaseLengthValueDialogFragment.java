@@ -44,13 +44,13 @@ public abstract class BaseLengthValueDialogFragment<T extends BaseLengthValueDia
         numberPickerTimeUnit.setMinValue(0);
         numberPickerTimeUnit.setMaxValue(dialogArguments.getTimeUnits().size() - 1);
 
-        int defaultLength = lengthValue.getLength();
+        @SuppressWarnings("ConstantConditions") int defaultLength = lengthValue.getLength();
         TimeUnit defaultTimeUnit = lengthValue.getTimeUnit();
 
-        setLengths(defaultTimeUnit, dialogArguments.getTimeUnitValues().get(defaultTimeUnit));
+        setLengths(dialogArguments.getTimeUnitValues().get(defaultTimeUnit));
         setTimeUnits(defaultLength, dialogArguments.getTimeUnits());
 
-        int lengthIndex = dialogArguments.getTimeUnits().indexOf(defaultLength);
+        int lengthIndex = dialogArguments.getTimeUnitValues().get(defaultTimeUnit).indexOf(defaultLength);
         lengthIndex = lengthIndex < 0 ? 0 : lengthIndex;
 
         int timeUnitIndex = dialogArguments.getTimeUnits().indexOf(defaultTimeUnit);
@@ -65,7 +65,7 @@ public abstract class BaseLengthValueDialogFragment<T extends BaseLengthValueDia
         });
         numberPickerTimeUnit.setOnValueChangedListener((picker, oldVal, newVal) -> {
             TimeUnit timeUnit = readTimeUnit();
-            setLengths(timeUnit, dialogArguments.getTimeUnitValues().get(timeUnit));
+            setLengths(dialogArguments.getTimeUnitValues().get(timeUnit));
             setTimeUnits(readLength(timeUnit), dialogArguments.getTimeUnits());
         });
     }
@@ -90,7 +90,7 @@ public abstract class BaseLengthValueDialogFragment<T extends BaseLengthValueDia
         return lengthValue;
     }
 
-    private void setLengths(TimeUnit timeUnit, List<Integer> values) {
+    private void setLengths(List<Integer> values) {
         String[] names = Observable.fromIterable(values)
                 .map(String::valueOf)
                 .toList()

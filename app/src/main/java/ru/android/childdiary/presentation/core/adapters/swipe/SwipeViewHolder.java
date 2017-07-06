@@ -11,8 +11,8 @@ public abstract class SwipeViewHolder<T,
         SL extends SwipeActionListener<? extends SwipeViewHolder<T, SL, IL>>,
         IL extends ItemActionListener<T>>
         extends BaseRecyclerViewHolder<T> {
-    protected IL itemActionListener;
-    protected SL swipeActionListener;
+    protected final IL itemActionListener;
+    protected final SL swipeActionListener;
 
     public SwipeViewHolder(View itemView, @NonNull IL itemActionListener, @NonNull SL swipeActionListener) {
         super(itemView);

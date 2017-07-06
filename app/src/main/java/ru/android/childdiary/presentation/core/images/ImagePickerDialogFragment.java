@@ -69,7 +69,9 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
     @Override
     protected Dialog createDialog(View view) {
         Dialog dialog = new Dialog(getContext(), getTheme());
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        }
 
         List<ImagePickerAction> actions = new ArrayList<>();
         actions.add(ImagePickerAction.builder()
@@ -102,6 +104,9 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ImagePickerAction action = ((ImagePickerActionAdapter) parent.getAdapter()).getItem(position);
+        if (action == null) {
+            return;
+        }
         switch (action.getType()) {
             case CAPTURE:
                 presenter.startCamera();

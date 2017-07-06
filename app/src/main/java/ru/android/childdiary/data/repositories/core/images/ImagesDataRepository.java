@@ -176,6 +176,7 @@ public class ImagesDataRepository implements ImagesRepository {
 
     @Override
     public void deleteImageFiles(@NonNull List<String> relativePaths) {
+        //noinspection Convert2streamapi
         for (String relativePath : relativePaths) {
             deleteImageFile(relativePath);
         }

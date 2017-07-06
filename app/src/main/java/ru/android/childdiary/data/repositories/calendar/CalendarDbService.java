@@ -440,7 +440,7 @@ public class CalendarDbService extends EventsDbService {
         }
 
         updateMasterEvent(doctorVisitEvent);
-        DoctorVisitEvent result = DbUtils.update(blockingEntityStore, doctorVisitEvent, doctorVisitEventMapper);
+        DbUtils.update(blockingEntityStore, doctorVisitEvent, doctorVisitEventMapper);
 
         return imageFilesToDelete;
     }
@@ -459,7 +459,7 @@ public class CalendarDbService extends EventsDbService {
         }
 
         updateMasterEvent(medicineTakingEvent);
-        MedicineTakingEvent result = DbUtils.update(blockingEntityStore, medicineTakingEvent, medicineTakingEventMapper);
+        DbUtils.update(blockingEntityStore, medicineTakingEvent, medicineTakingEventMapper);
 
         return imageFilesToDelete;
     }
@@ -478,7 +478,7 @@ public class CalendarDbService extends EventsDbService {
         }
 
         updateMasterEvent(exerciseEvent);
-        ExerciseEvent result = DbUtils.update(blockingEntityStore, exerciseEvent, exerciseEventMapper);
+        DbUtils.update(blockingEntityStore, exerciseEvent, exerciseEventMapper);
 
         return imageFilesToDelete;
     }

@@ -1,5 +1,6 @@
 package ru.android.childdiary.services;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -44,10 +45,10 @@ public class TimerService extends Service {
     private static final long TIMER_PERIOD = 1000;
 
     private final Logger logger = LoggerFactory.getLogger(toString());
-
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-
     private final TimerServiceBinder binder = new TimerServiceBinder(this);
+    @SuppressLint("UseSparseArrays")
+    private final Map<Long, NotificationCompat.Builder> notificationBuilders = new HashMap<>();
 
     @Inject
     CalendarInteractor calendarInteractor;
@@ -56,9 +57,8 @@ public class TimerService extends Service {
     NotificationHelper notificationHelper;
 
     private Disposable subscription;
-    private Map<Long, NotificationCompat.Builder> notificationBuilders = new HashMap<>();
-    private List<SleepEvent> events = new ArrayList<>();
     private Handler handler;
+    private List<SleepEvent> events = new ArrayList<>();
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
@@ -183,6 +183,7 @@ public class TimerService extends Service {
             return;
         }
         updateNotifications(this);
+        //noinspection Convert2streamapi
         for (SleepEvent event : events) {
             binder.onTimerTick(event);
         }

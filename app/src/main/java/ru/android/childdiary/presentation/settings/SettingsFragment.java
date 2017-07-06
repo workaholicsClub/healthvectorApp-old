@@ -98,6 +98,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
         AppPartitionArguments arguments = (AppPartitionArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
+        if (arguments == null) {
+            logger.error("no arguments provided");
+            return;
+        }
         selectedDate = arguments.getSelectedDate();
         child = arguments.getChild();
         sex = child.getSex();

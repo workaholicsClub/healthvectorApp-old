@@ -36,6 +36,9 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
     }
 
     private void validateField(@NonNull ChildValidationResult result, @NonNull Child child) {
+        if (result.getFieldType() == null) {
+            return;
+        }
         switch (result.getFieldType()) {
             case IMAGE:
                 // необязательное поле
@@ -68,7 +71,6 @@ public class ChildValidator extends Validator<Child, ChildValidationResult> {
                     result.addMessage(context.getString(R.string.validate_child_birth_weight_empty));
                 }
                 break;
-
         }
     }
 }

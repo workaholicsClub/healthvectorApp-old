@@ -17,6 +17,7 @@ public class ChipsUtils {
         LocalDate[] dates = mapChipsToDateInterval(chips);
 
         List<Medicine> medicines = new ArrayList<>();
+        //noinspection Convert2streamapi
         for (Chips chipsItem : chips) {
             if (chipsItem instanceof MedicineChips) {
                 MedicineChips medicineChips = (MedicineChips) chipsItem;
@@ -35,6 +36,7 @@ public class ChipsUtils {
         LocalDate[] dates = mapChipsToDateInterval(chips);
 
         List<Doctor> doctors = new ArrayList<>();
+        //noinspection Convert2streamapi
         for (Chips chipsItem : chips) {
             if (chipsItem instanceof DoctorChips) {
                 DoctorChips doctorChips = (DoctorChips) chipsItem;
@@ -70,6 +72,7 @@ public class ChipsUtils {
             result.add(dateIntervalChips);
         }
 
+        //noinspection Convert2streamapi
         for (Medicine medicine : filter.getSelectedItems()) {
             result.add(MedicineChips.builder().medicine(medicine).build());
         }
@@ -85,6 +88,7 @@ public class ChipsUtils {
             result.add(dateIntervalChips);
         }
 
+        //noinspection Convert2streamapi
         for (Doctor doctor : filter.getSelectedItems()) {
             result.add(DoctorChips.builder().doctor(doctor).build());
         }

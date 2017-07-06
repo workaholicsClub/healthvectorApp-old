@@ -17,8 +17,8 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 public class FieldFeedTypeView extends FieldSpinnerView<FeedType> {
     private final FeedTypeAdapter adapter = new FeedTypeAdapter(getContext());
 
-    @BindView(R.id.imageView)
-    ImageView imageView;
+    @BindView(R.id.imageViewFeedType)
+    ImageView imageViewFeedType;
 
     public FieldFeedTypeView(Context context) {
         super(context);
@@ -35,7 +35,7 @@ public class FieldFeedTypeView extends FieldSpinnerView<FeedType> {
     @Override
     protected void valueChanged() {
         super.valueChanged();
-        imageView.setImageResource(ResourcesUtils.getFeedTypeIcon(getValue()));
+        imageViewFeedType.setImageResource(ResourcesUtils.getFeedTypeIcon(getValue()));
     }
 
     @Override

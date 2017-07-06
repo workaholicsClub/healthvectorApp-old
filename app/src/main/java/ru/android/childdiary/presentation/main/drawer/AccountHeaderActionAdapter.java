@@ -19,7 +19,7 @@ import ru.android.childdiary.presentation.core.adapters.BaseArrayAdapter;
 import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
 
 public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, AccountHeaderActionAdapter.ViewHolder> {
-    private CloseMenuButtonClickListener listener;
+    private final CloseMenuButtonClickListener listener;
 
     public AccountHeaderActionAdapter(Context context, List<IProfile> profiles, CloseMenuButtonClickListener listener) {
         super(context, profiles);
@@ -39,7 +39,8 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).getIdentifier();
+        IProfile profile = getItem(position);
+        return profile == null ? 0 : profile.getIdentifier();
     }
 
     @Override
@@ -48,6 +49,7 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
     }
 
     static class ViewHolder extends BaseViewHolder<IProfile> implements View.OnClickListener {
+        private final CloseMenuButtonClickListener listener;
         @BindView(R.id.imageViewPhoto)
         ImageView imageViewPhoto;
         @BindView(android.R.id.text1)
@@ -56,8 +58,6 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
         View imageViewDropdown;
         @BindDimen(R.dimen.base_margin)
         int baseMarginHorizontal;
-
-        private CloseMenuButtonClickListener listener;
 
         public ViewHolder(View view, CloseMenuButtonClickListener listener) {
             super(view);

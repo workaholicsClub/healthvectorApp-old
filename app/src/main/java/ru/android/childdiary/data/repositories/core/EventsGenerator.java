@@ -162,8 +162,11 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
     }
 
     private DateTime getFinishDateTime(@NonNull DateTime startDateTime, @NonNull LengthValue lengthValue) {
-        int length = lengthValue.getLength();
+        int length = lengthValue.getLength() == null ? 0 : lengthValue.getLength();
         TimeUnit timeUnit = lengthValue.getTimeUnit();
+        if (timeUnit == null) {
+            throw new EventsGeneratorException("Time unit is null");
+        }
         switch (timeUnit) {
             case DAY:
                 return startDateTime.plusDays(length);

@@ -24,6 +24,7 @@ public final class FieldValueChangeEventsObservable<T>
             return;
         }
         Listener listener = new Listener<>(view, observer);
+        //noinspection unchecked
         view.addValueChangeListener(listener);
         observer.onSubscribe(listener);
     }

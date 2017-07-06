@@ -114,8 +114,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
         dateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(), null, null));
         timeView.setFieldDialogListener(v -> showTimePicker(TAG_TIME_PICKER, timeView.getValue()));
+        //noinspection unchecked
         feedTypeView.setFieldSpinnerListener(this);
+        //noinspection unchecked
         foodMeasureView.setFieldSpinnerListener(this);
+        //noinspection unchecked
         foodView.setFieldSpinnerListener(this);
         setupEditTextView(amountMlView);
         setupEditTextView(amountView);

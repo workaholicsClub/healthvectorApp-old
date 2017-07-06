@@ -61,6 +61,9 @@ public class CustomDatePickerDialog extends DatePickerDialog {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        if (view == null) {
+            return null;
+        }
 
         View viewOk = view.findViewById(R.id.ok);
         if (viewOk != null && viewOk instanceof Button) {

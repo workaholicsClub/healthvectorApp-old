@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 
 @Value
 @Builder

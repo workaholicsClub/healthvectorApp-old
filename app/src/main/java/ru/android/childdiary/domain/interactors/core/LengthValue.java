@@ -32,7 +32,7 @@ public class LengthValue implements Serializable, ContentObject<LengthValue> {
     }
 
     public int getMinutes() {
-        if (isContentEmpty()) {
+        if (isContentEmpty() || timeUnit == null || length == null) {
             return 0;
         }
 
