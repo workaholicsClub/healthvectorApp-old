@@ -65,11 +65,11 @@ public class CustomDatePickerDialog extends DatePickerDialog {
             return null;
         }
 
-        View viewOk = view.findViewById(R.id.ok);
+        View viewOk = view.findViewById(R.id.mdtp_ok);
         if (viewOk != null && viewOk instanceof Button) {
             ((Button) viewOk).setTypeface(FontUtils.getTypefaceRegular(getActivity()));
         }
-        View viewCancel = view.findViewById(R.id.cancel);
+        View viewCancel = view.findViewById(R.id.mdtp_cancel);
         if (viewCancel != null && viewCancel instanceof Button) {
             ((Button) viewCancel).setTypeface(FontUtils.getTypefaceRegular(getActivity()));
         }

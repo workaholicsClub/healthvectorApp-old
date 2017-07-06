@@ -66,7 +66,7 @@ public class AccountHeaderActionAdapter extends BaseArrayAdapter<IProfile, Accou
 
         @Override
         public void bind(Context context, int position, IProfile profile) {
-            String text = profile.getName().getText();
+            CharSequence text = profile.getName().getText();
             Drawable icon = profile.getIcon() == null ? null : profile.getIcon().getIcon();
             imageViewPhoto.setVisibility(icon == null ? View.GONE : View.VISIBLE);
             imageViewPhoto.setImageDrawable(icon);
