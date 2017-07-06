@@ -149,8 +149,7 @@
     <string name="medical_tab_title_doctor_visits">Визиты к врачу</string>
     <string name="medical_tab_title_medicine_taking_list">Лекарства</string>
     <string name="development_tab_title_achievements">Достижения</string>
-    <string name="development_tab_title_physical_test_results">Физическое</string>
-    <string name="development_tab_title_mental_test_results">Ментальное</string>
+    <string name="development_tab_title_testing">Тестирование</string>
     <string name="development_tab_title_antropometry_list">Рост/Вес</string>
     <string name="medicine">Лекарство</string>
     <string name="doctor">Специализация</string>

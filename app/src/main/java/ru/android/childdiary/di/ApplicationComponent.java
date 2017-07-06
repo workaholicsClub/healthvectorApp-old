@@ -20,8 +20,7 @@ import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsPresenter;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryPresenter;
-import ru.android.childdiary.presentation.development.partitions.tests.mental.MentalTestResultsPresenter;
-import ru.android.childdiary.presentation.development.partitions.tests.physical.PhysicalTestResultsPresenter;
+import ru.android.childdiary.presentation.development.partitions.tests.TestingPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
@@ -153,9 +152,7 @@ public interface ApplicationComponent {
 
     void inject(AntropometryPresenter presenter);
 
-    void inject(MentalTestResultsPresenter presenter);
-
-    void inject(PhysicalTestResultsPresenter presenter);
+    void inject(TestingPresenter presenter);
 
     void inject(ExerciseDetailPresenter presenter);
 

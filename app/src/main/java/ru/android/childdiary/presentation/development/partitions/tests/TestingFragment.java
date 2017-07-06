@@ -1,13 +1,13 @@
-package ru.android.childdiary.presentation.development.partitions.tests.physical;
+package ru.android.childdiary.presentation.development.partitions.tests;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 
-public class PhysicalTestResultsFragment extends BaseDevelopmentDiaryFragment<PhysicalTestResultsView> implements PhysicalTestResultsView {
+public class TestingFragment extends BaseDevelopmentDiaryFragment<TestingView> implements TestingView {
     @InjectPresenter
-    PhysicalTestResultsPresenter presenter;
+    TestingPresenter presenter;
 
     @Override
     protected void setupUi() {
@@ -19,7 +19,7 @@ public class PhysicalTestResultsFragment extends BaseDevelopmentDiaryFragment<Ph
     }
 
     @Override
-    public PhysicalTestResultsPresenter getPresenter() {
+    public TestingPresenter getPresenter() {
         return presenter;
     }
 }

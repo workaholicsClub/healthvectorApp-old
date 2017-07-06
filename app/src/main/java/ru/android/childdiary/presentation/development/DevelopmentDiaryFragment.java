@@ -28,8 +28,7 @@ import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsFragment;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListFragment;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
-import ru.android.childdiary.presentation.development.partitions.tests.mental.MentalTestResultsFragment;
-import ru.android.childdiary.presentation.development.partitions.tests.physical.PhysicalTestResultsFragment;
+import ru.android.childdiary.presentation.development.partitions.tests.TestingFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -76,8 +75,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         selectedPage = selectedPage == null ? 0 : selectedPage;
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(putArguments(new AchievementsFragment()), getString(R.string.development_tab_title_achievements));
-        viewPagerAdapter.addFragment(putArguments(new PhysicalTestResultsFragment()), getString(R.string.development_tab_title_physical_test_results));
-        viewPagerAdapter.addFragment(putArguments(new MentalTestResultsFragment()), getString(R.string.development_tab_title_mental_test_results));
+        viewPagerAdapter.addFragment(putArguments(new TestingFragment()), getString(R.string.development_tab_title_testing));
         viewPagerAdapter.addFragment(putArguments(new AntropometryListFragment()), getString(R.string.development_tab_title_antropometry_list));
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setCurrentItem(selectedPage, false);
@@ -135,11 +133,9 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         for (Fragment fragment : fragments) {
             if (position == 0 && fragment instanceof AchievementsFragment) {
                 return (AchievementsFragment) fragment;
-            } else if (position == 1 && fragment instanceof PhysicalTestResultsFragment) {
-                return (PhysicalTestResultsFragment) fragment;
-            } else if (position == 2 && fragment instanceof MentalTestResultsFragment) {
-                return (MentalTestResultsFragment) fragment;
-            } else if (position == 3 && fragment instanceof AntropometryListFragment) {
+            } else if (position == 1 && fragment instanceof TestingFragment) {
+                return (TestingFragment) fragment;
+            } else if (position == 2 && fragment instanceof AntropometryListFragment) {
                 return (AntropometryListFragment) fragment;
             }
         }
@@ -185,12 +181,12 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     }
 
     @Override
-    public void navigateToPhysicalTestResultAdd() {
+    public void navigateToTestResult() {
         // TODO
     }
 
     @Override
-    public void navigateToMentalTestResultAdd() {
+    public void navigateToTest() {
         // TODO
     }
 
@@ -206,13 +202,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
             case 0:
                 presenter.addAchievement();
                 break;
-            case 1:
-                presenter.addPhysicalTestResult();
-                break;
             case 2:
-                presenter.addMentalTestResult();
-                break;
-            case 3:
                 presenter.addAntropometry();
                 break;
         }

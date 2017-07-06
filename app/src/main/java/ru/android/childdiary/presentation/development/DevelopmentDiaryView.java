@@ -10,10 +10,10 @@ public interface DevelopmentDiaryView extends AppPartitionView {
     void navigateToAchievementAdd();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToPhysicalTestResultAdd();
+    void navigateToTestResult();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToMentalTestResultAdd();
+    void navigateToTest();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToAntropometryAdd();

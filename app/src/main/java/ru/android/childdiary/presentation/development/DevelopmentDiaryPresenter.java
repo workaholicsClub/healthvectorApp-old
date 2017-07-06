@@ -18,12 +18,12 @@ public class DevelopmentDiaryPresenter extends AppPartitionPresenter<Development
         // TODO add achievement
     }
 
-    public void addPhysicalTestResult() {
-        // TODO add physical test
+    public void openTestResult() {
+        // TODO
     }
 
-    public void addMentalTestResult() {
-        // TODO add mental test
+    public void openTest() {
+        // TODO
     }
 
     public void addAntropometry() {

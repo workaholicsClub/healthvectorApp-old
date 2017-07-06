@@ -52,9 +52,9 @@ android {
     }
     buildTypes {
         debug {
-            resValue "string", "font_path_regular", "fonts/OpenSansCondensed-LightItalic.ttf"
-            resValue "string", "font_path_bold", "fonts/OpenSansCondensed-Light.ttf"
-            resValue "string", "font_path_medium", "fonts/OpenSansCondensed-Bold.ttf"
+            //resValue "string", "font_path_regular", "fonts/OpenSansCondensed-LightItalic.ttf"
+            //resValue "string", "font_path_bold", "fonts/OpenSansCondensed-Light.ttf"
+            //resValue "string", "font_path_medium", "fonts/OpenSansCondensed-Bold.ttf"
 
             signingConfig signingConfigs.debug
 
