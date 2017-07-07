@@ -287,4 +287,6 @@
     <string name="open_in_web_browser">Открыть в браузере</string>
     <string name="deletion_restricted_medicine">Данное лекарство привязано к событиям или рецептам</string>
     <string name="deletion_restricted_doctor">Данная специализация привязана к событиям или визитам</string>
+    <string name="tests">Список тестов</string>
+    <string name="test_results">Результаты тестирования</string>
 </resources>

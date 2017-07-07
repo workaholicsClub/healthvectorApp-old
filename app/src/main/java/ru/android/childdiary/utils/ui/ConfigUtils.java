@@ -7,8 +7,9 @@ import ru.android.childdiary.BuildConfig;
 
 public class ConfigUtils {
     public static void setupOrientation(Activity activity) {
-        if (BuildConfig.DISABLE_CONFIGURATION_CHANGE) {
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (BuildConfig.ENABLE_CONFIGURATION_CHANGE) {
+            return;
         }
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

@@ -179,6 +179,13 @@
             android:name=".presentation.exercises.AddConcreteExerciseActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".presentation.exercises.WebBrowserActivity" />
+        <activity
+            android:name=".presentation.testing.TestingActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

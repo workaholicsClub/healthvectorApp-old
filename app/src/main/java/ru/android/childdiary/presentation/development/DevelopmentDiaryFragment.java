@@ -28,7 +28,7 @@ import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsFragment;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListFragment;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
-import ru.android.childdiary.presentation.development.partitions.tests.TestingFragment;
+import ru.android.childdiary.presentation.development.partitions.testing.TestResultFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -75,7 +75,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         selectedPage = selectedPage == null ? 0 : selectedPage;
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(putArguments(new AchievementsFragment()), getString(R.string.development_tab_title_achievements));
-        viewPagerAdapter.addFragment(putArguments(new TestingFragment()), getString(R.string.development_tab_title_testing));
+        viewPagerAdapter.addFragment(putArguments(new TestResultFragment()), getString(R.string.development_tab_title_testing));
         viewPagerAdapter.addFragment(putArguments(new AntropometryListFragment()), getString(R.string.development_tab_title_antropometry_list));
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setCurrentItem(selectedPage, false);
@@ -105,7 +105,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         if (adapter != null) {
             adapter.updateFabState();
         } else {
-            logger.error("selected page: " + position + "; event adapter is null");
+            hideFabBar();
         }
     }
 
@@ -114,18 +114,20 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         if (adapter != null) {
             adapter.closeAllItems();
         } else {
-            logger.error("selected page: " + position + "; adapter is null");
+            hideFabBar();
         }
     }
 
     @Nullable
     private SwipeViewAdapter getSwipeViewAdapter(int position) {
-        BaseDevelopmentDiaryFragment fragment = getSelectedPage(position);
-        return fragment == null ? null : fragment.getAdapter();
+        AppPartitionFragment fragment = getSelectedPage(position);
+        return fragment instanceof BaseDevelopmentDiaryFragment
+                ? ((BaseDevelopmentDiaryFragment) fragment).getAdapter()
+                : null;
     }
 
     @Nullable
-    private BaseDevelopmentDiaryFragment getSelectedPage(int position) {
+    private AppPartitionFragment getSelectedPage(int position) {
         List<Fragment> fragments = getChildFragmentManager().getFragments();
         if (fragments == null) {
             return null;
@@ -133,8 +135,8 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         for (Fragment fragment : fragments) {
             if (position == 0 && fragment instanceof AchievementsFragment) {
                 return (AchievementsFragment) fragment;
-            } else if (position == 1 && fragment instanceof TestingFragment) {
-                return (TestingFragment) fragment;
+            } else if (position == 1 && fragment instanceof TestResultFragment) {
+                return (TestResultFragment) fragment;
             } else if (position == 2 && fragment instanceof AntropometryListFragment) {
                 return (AntropometryListFragment) fragment;
             }
@@ -167,7 +169,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     @Override
     public void showFilter() {
         int position = viewPager.getCurrentItem();
-        BaseDevelopmentDiaryFragment fragment = getSelectedPage(position);
+        AppPartitionFragment fragment = getSelectedPage(position);
         if (fragment != null) {
             fragment.showFilter();
         } else {

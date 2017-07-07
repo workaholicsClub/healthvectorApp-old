@@ -13,6 +13,7 @@ import ru.android.childdiary.data.db.converters.LengthValueConverter;
 import ru.android.childdiary.data.db.converters.LinearGroupsConverter;
 import ru.android.childdiary.data.db.converters.PeriodicityTypeEnumConverter;
 import ru.android.childdiary.data.db.converters.SexEnumConverter;
+import ru.android.childdiary.data.db.converters.TestTypeEnumConverter;
 import ru.android.childdiary.data.db.converters.TimeUnitEnumConverter;
 
 public class CustomMapping extends DefaultMapping {
@@ -29,6 +30,7 @@ public class CustomMapping extends DefaultMapping {
         addConverter(new LinearGroupsConverter());
         addConverter(new PeriodicityTypeEnumConverter());
         addConverter(new SexEnumConverter());
+        addConverter(new TestTypeEnumConverter());
         addConverter(new TimeUnitEnumConverter());
     }
 }
