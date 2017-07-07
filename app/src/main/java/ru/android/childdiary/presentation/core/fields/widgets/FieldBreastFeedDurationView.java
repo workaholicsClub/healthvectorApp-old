@@ -12,7 +12,7 @@ import butterknife.ButterKnife;
 import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 public class FieldBreastFeedDurationView extends LinearLayout implements View.OnClickListener {
     private TextView textViewDuration;

@@ -64,7 +64,7 @@ import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerActivity;
 import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerActivity;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Serializable>

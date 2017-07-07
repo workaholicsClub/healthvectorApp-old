@@ -16,6 +16,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public abstract class AppPartitionFragment extends BaseMvpFragment implements AppPartitionView {
     protected static final String TAG_FILTER = "TAG_FILTER";
 
+    @Nullable
     @Getter(AccessLevel.PROTECTED)
     private LocalDate selectedDate;
 

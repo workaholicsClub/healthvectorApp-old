@@ -13,7 +13,7 @@ import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.utils.ObjectUtils;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public abstract class BaseLengthValueDialogFragment<T extends BaseLengthValueDialogArguments> extends BaseMvpDialogFragment<T> {
     @BindView(R.id.rootView)

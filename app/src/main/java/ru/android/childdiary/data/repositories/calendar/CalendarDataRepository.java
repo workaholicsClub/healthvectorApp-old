@@ -58,7 +58,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVis
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
 import ru.android.childdiary.utils.ObjectUtils;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 @Singleton
 public class CalendarDataRepository extends ValueDataRepository<LocalDate> implements CalendarRepository {

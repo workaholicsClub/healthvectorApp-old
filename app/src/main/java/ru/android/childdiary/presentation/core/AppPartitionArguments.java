@@ -1,5 +1,7 @@
 package ru.android.childdiary.presentation.core;
 
+import android.support.annotation.Nullable;
+
 import org.joda.time.LocalDate;
 
 import java.io.Serializable;
@@ -14,6 +16,6 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public class AppPartitionArguments implements Serializable {
     @NonNull
     Child child;
-    @NonNull
+    @Nullable
     LocalDate selectedDate;
 }

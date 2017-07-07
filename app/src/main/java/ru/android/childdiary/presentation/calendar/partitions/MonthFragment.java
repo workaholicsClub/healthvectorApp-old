@@ -5,7 +5,7 @@ import android.support.annotation.LayoutRes;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.calendar.adapters.calendar.MonthViewAdapter;
-import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 
 public class MonthFragment extends BaseCalendarFragment<MonthViewAdapter> {
     @Override

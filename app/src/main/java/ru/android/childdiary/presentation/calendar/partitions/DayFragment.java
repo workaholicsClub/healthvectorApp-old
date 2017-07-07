@@ -7,7 +7,7 @@ import org.joda.time.LocalDate;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.calendar.adapters.calendar.DayViewAdapter;
-import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 
 public class DayFragment extends BaseCalendarFragment<DayViewAdapter> {
     @Override

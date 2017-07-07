@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public class FieldLengthView extends FieldDialogView<LengthValue> {
     public FieldLengthView(Context context) {

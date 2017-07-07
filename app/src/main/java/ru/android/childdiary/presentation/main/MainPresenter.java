@@ -18,7 +18,7 @@ import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BasePresenter;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 @InjectViewState
 public class MainPresenter extends BasePresenter<MainView> {

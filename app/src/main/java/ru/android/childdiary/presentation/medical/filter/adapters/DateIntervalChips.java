@@ -8,7 +8,7 @@ import org.joda.time.LocalDate;
 import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class TimeDialogFragment extends BaseMvpDialogFragment<TimeDialogArguments> {

@@ -26,7 +26,7 @@ import ru.android.childdiary.domain.interactors.exercises.Exercise;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseRepository;
 import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseRequest;
 import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseResponse;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 @Singleton
 public class ExerciseDataRepository implements ExerciseRepository {

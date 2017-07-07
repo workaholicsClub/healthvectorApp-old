@@ -6,7 +6,7 @@ import lombok.Value;
 import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class UpsertConcreteExerciseRequest {
     @NonNull
     ConcreteExercise concreteExercise;

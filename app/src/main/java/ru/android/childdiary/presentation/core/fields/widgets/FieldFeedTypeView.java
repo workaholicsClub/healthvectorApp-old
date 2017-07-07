@@ -11,7 +11,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.presentation.core.fields.adapters.FeedTypeAdapter;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FieldFeedTypeView extends FieldSpinnerView<FeedType> {

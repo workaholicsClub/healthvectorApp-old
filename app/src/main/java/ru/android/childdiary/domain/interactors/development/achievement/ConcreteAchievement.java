@@ -6,6 +6,6 @@ import lombok.Builder;
 import lombok.Value;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class ConcreteAchievement implements Serializable {
 }

@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 public class FieldDurationView extends FieldDialogView<Integer> {
     public FieldDurationView(Context context) {

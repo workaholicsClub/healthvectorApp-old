@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 public class TimeUtilsTest {
     private final Logger logger = LoggerFactory.getLogger(toString());

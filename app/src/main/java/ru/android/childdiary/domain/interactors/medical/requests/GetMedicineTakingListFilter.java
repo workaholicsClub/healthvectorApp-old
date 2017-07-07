@@ -12,7 +12,7 @@ import lombok.Value;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class GetMedicineTakingListFilter {
     @NonNull
     List<Medicine> selectedItems;

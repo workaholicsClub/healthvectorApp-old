@@ -1,4 +1,4 @@
-package ru.android.childdiary.utils;
+package ru.android.childdiary.utils.strings;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -18,6 +18,8 @@ import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
+import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.strings.DoubleUtils;
 
 public class StringUtils {
     @Nullable

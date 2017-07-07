@@ -12,7 +12,7 @@ import java.util.List;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.presentation.core.fields.adapters.PeriodicityAdapter;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public class FieldPeriodicityView extends FieldSpinnerView<PeriodicityType> {
     private final PeriodicityAdapter adapter = new PeriodicityAdapter(getContext(), Collections.emptyList());

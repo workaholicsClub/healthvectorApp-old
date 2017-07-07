@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Breast;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public class FieldBreastView extends FieldRadioView<Breast> {
     public FieldBreastView(Context context) {

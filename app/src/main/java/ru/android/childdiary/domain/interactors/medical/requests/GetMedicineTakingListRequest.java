@@ -6,7 +6,7 @@ import lombok.Value;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class GetMedicineTakingListRequest {
     @NonNull
     Child child;

@@ -1,4 +1,4 @@
-package ru.android.childdiary.utils;
+package ru.android.childdiary.utils.strings;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -22,6 +22,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.utils.ObjectUtils;
 
 import static ru.android.childdiary.data.types.FeedType.BREAST_MILK;
 import static ru.android.childdiary.data.types.FeedType.FOOD;

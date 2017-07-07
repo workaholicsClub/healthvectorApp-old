@@ -63,8 +63,8 @@ import ru.android.childdiary.presentation.main.drawer.CustomPrimaryDrawerItem;
 import ru.android.childdiary.presentation.medical.MedicalDataFragment;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
-import ru.android.childdiary.utils.StringUtils;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 

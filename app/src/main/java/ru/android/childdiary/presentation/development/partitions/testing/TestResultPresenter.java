@@ -11,6 +11,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.testing.Test;
 import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
@@ -60,5 +61,15 @@ public class TestResultPresenter extends AppPartitionPresenter<TestResultView> {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(getViewState()::showTestResults, this::onUnexpectedError));
+    }
+
+    public void showTestDetails(@NonNull Test test) {
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                child -> getViewState().navigateToTest(test.getTestType(), child),
+                                this::onUnexpectedError));
     }
 }

@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import org.joda.time.LocalTime;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 
 public class FieldTimeView extends FieldDialogView<LocalTime> {
     public FieldTimeView(Context context) {

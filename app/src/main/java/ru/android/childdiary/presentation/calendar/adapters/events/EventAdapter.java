@@ -10,7 +10,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
-import ru.android.childdiary.utils.EventUtils;
+import ru.android.childdiary.utils.strings.EventUtils;
 
 public class EventAdapter extends SwipeViewAdapter<
         MasterEvent,

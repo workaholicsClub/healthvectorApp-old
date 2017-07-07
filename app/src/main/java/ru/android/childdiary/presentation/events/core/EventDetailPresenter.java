@@ -18,7 +18,7 @@ import ru.android.childdiary.domain.interactors.calendar.validation.CalendarVali
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
-import ru.android.childdiary.utils.EventUtils;
+import ru.android.childdiary.utils.strings.EventUtils;
 
 public abstract class EventDetailPresenter<V extends EventDetailView<T>, T extends MasterEvent> extends BasePresenter<V> {
     @Inject

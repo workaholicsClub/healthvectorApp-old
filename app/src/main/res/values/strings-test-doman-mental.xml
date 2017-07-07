@@ -1,4 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="test_doman_mental_name">Стадии сенсорного развития по Доману</string>
+    <string name="mental_vision">Зрительная компетентность</string>
+    <string name="mental_audition">Слуховая компетентность</string>
+    <string name="mental_sensitivity">Тактильная компетентность</string>
+    <string-array name="mental_vision_stages">
+        <item>Световой рефлекс</item>
+        <item>Контурное восприятие</item>
+        <item>Различение деталей в пределах конфигурации</item>
+        <item>Конвергенция зрения, приводящее к простому пониманию глубины</item>
+        <item>Нахождение различий у похожих, но разных простых визуальных символов</item>
+        <item>Идентификация визуальных символов и букв на основе приобретённого опыта</item>
+        <item>Чтение с полным пониманием</item>
+    </string-array>
+    <string-array name="mental_audition_stages">
+        <item>Рефлекс вздрагивания</item>
+        <item>Защитная реакция на угрожаюцие звуки</item>
+        <item>Оценка значащих звуков</item>
+        <item>Понимание двух слов</item>
+        <item>Понимание 10&#8211;25 слов и двух-трёх фраз</item>
+        <item>Понимание 2000 слов и простых предложений</item>
+        <item>Понимание полного словаря и правильных предложений</item>
+    </string-array>
+    <string-array name="mental_sensitivity_stages">
+        <item>Рефлекс Бабинского</item>
+        <item>Оценка жизненно важных ощущений</item>
+        <item>Оценка гностических ощущений</item>
+        <item>Тактильное понимание объёмности предметов, которые кажутся плоскими</item>
+        <item>Тактильная дифференциация похожих, но разных предметов</item>
+        <item>Способность определять характеристики предметов с помощью тактильности</item>
+        <item>Тактильная идентификация предметов</item>
+    </string-array>
 </resources>

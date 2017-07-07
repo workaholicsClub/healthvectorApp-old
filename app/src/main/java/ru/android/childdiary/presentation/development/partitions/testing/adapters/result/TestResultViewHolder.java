@@ -15,7 +15,8 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
-import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
+import ru.android.childdiary.utils.strings.TestUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -59,8 +60,8 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
         textViewTime.setText(DateUtils.time(context, item.getDateTime()));
         WidgetsUtils.hideIfEmpty(textViewTime);
 
-        textViewTitle.setText("test type"); // TODO
-        textViewDescription.setText("result"); // TODO
+        textViewTitle.setText(TestUtils.toString(context, item.getTestType()));
+        textViewDescription.setText(TestUtils.toString(context, item.getTestParameter()));
 
         //noinspection deprecation
         imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));

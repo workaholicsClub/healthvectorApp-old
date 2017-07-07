@@ -9,10 +9,10 @@ import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.domain.core.ContentObject;
 import ru.android.childdiary.utils.ObjectUtils;
-import ru.android.childdiary.utils.TimeUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class LengthValue implements Serializable, ContentObject<LengthValue> {
     @Nullable
     Integer length;

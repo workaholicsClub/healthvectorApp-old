@@ -20,7 +20,7 @@ public class TestResultAdapter extends SwipeViewAdapter<TestResult, TestResultVi
 
     @Override
     public TestResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = inflater.inflate(R.layout.test_result_list_item, parent, false);
+        View v = inflater.inflate(R.layout.test_result_item, parent, false);
         return new TestResultViewHolder(v, itemActionListener, this);
     }
 

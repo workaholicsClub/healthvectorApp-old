@@ -8,7 +8,7 @@ import android.view.View;
 import java.util.Arrays;
 
 import ru.android.childdiary.data.types.FeedType;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public class FeedTypeAdapter extends SpinnerItemAdapter<FeedType, FeedTypeAdapter.ViewHolder> {
     public FeedTypeAdapter(Context context) {

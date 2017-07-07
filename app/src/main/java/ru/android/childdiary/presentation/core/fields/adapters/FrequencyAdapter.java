@@ -7,7 +7,7 @@ import android.view.View;
 
 import java.util.List;
 
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public class FrequencyAdapter extends SpinnerItemAdapter<Integer, FrequencyAdapter.ViewHolder> {
     public FrequencyAdapter(Context context, List<Integer> frequencyList) {

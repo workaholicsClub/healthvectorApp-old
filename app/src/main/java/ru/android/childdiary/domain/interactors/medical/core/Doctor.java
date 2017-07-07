@@ -10,7 +10,7 @@ import ru.android.childdiary.domain.core.ContentObject;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class Doctor implements Serializable, ContentObject<Doctor> {
     public static final Doctor NULL = Doctor.builder().build();
 

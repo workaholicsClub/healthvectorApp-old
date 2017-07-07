@@ -31,7 +31,7 @@ import ru.android.childdiary.data.availability.NetworkAvailability;
 import ru.android.childdiary.data.availability.NetworkUnavailableException;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
-import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.NotificationHelper;
 

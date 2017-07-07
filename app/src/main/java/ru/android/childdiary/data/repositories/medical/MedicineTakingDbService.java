@@ -43,7 +43,7 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTaki
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
-import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton

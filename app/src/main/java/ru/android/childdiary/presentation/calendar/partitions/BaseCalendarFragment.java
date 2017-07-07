@@ -50,7 +50,7 @@ import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
-import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>

@@ -1,4 +1,4 @@
-package ru.android.childdiary.utils;
+package ru.android.childdiary.utils.strings;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

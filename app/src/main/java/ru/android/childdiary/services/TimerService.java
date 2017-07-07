@@ -33,7 +33,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.utils.EventUtils;
+import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.NotificationHelper;
 

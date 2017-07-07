@@ -44,7 +44,7 @@ import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
-import ru.android.childdiary.utils.EventUtils;
+import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;

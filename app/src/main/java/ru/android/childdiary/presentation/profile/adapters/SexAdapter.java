@@ -12,7 +12,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.adapters.BaseArrayAdapter;
 import ru.android.childdiary.presentation.core.adapters.BaseViewHolder;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public class SexAdapter extends BaseArrayAdapter<Sex, SexAdapter.ViewHolder> {
     public SexAdapter(Context context) {

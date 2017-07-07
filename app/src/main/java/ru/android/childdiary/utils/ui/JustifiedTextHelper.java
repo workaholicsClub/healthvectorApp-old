@@ -13,6 +13,7 @@ import ru.android.childdiary.R;
 public class JustifiedTextHelper {
     private static final String BASE_URL = "file:///android_asset/";
     private static final String APP_FONT_FAMILY = "CevFontFamily";
+    private static final String PARAGRAPH_FORMAT = "<p class=\"tab\" style=\"text-align:justify\">%s</p>";
 
     /**
      * Размер текста описания занятия в пикселях. Подбирается опытным путем.
@@ -20,7 +21,7 @@ public class JustifiedTextHelper {
      */
     private static final int PRIMARY_TEXT_SIZE = 16;
 
-    private final String format;
+    private final String justifiedTextFormat;
 
     @Inject
     public JustifiedTextHelper(Context context) {
@@ -28,7 +29,7 @@ public class JustifiedTextHelper {
         @ColorInt int color = ContextCompat.getColor(context, R.color.primary_text);
         String primaryTextColor = String.format("#%08X", color);
         String primaryTextFont = context.getString(R.string.font_path_regular);
-        format = "<html>\n" +
+        justifiedTextFormat = "<html>\n" +
                 "<style type=\"text/css\">\n" +
                 "@font-face {\n" +
                 "    font-family: " + APP_FONT_FAMILY + ";\n" +
@@ -47,21 +48,20 @@ public class JustifiedTextHelper {
                 "</html>\n";
     }
 
+    public static void showInWebView(WebView webView, String text) {
+        webView.loadDataWithBaseURL(BASE_URL, text, "text/html", "utf-8", "about:blank");
+    }
+
     @Nullable
     public String map(@Nullable String text) {
         if (text == null) {
             return null;
         }
-        // TODO: it's temporary... На сервере должны обновить описание занятий в соответствии с шаблоном
         boolean containsHtml = text.contains("</p>");
         if (!containsHtml) {
-            text = "<p class=\"tab\" style=\"text-align:justify\">\n" + text + "</p>";
+            text = String.format(PARAGRAPH_FORMAT, text);
         }
-        text = String.format(format, text);
+        text = String.format(justifiedTextFormat, text);
         return text;
-    }
-
-    public static void showInWebView(WebView webView, String text) {
-        webView.loadDataWithBaseURL(BASE_URL, text, "text/html", "utf-8", "about:blank");
     }
 }

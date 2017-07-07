@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.development.partitions.testing;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +18,8 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.TestType;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.Test;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
@@ -25,6 +28,7 @@ import ru.android.childdiary.presentation.development.partitions.testing.adapter
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultAdapter;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestAdapter;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestClickListener;
+import ru.android.childdiary.presentation.testing.TestingActivity;
 
 public class TestResultFragment extends AppPartitionFragment implements TestResultView,
         TestClickListener, TestResultActionListener {
@@ -71,9 +75,9 @@ public class TestResultFragment extends AppPartitionFragment implements TestResu
         recyclerViewTestResults.setLayoutManager(layoutManagerTestResults);
 
         Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
-        RecyclerView.ItemDecoration dividerItemDecorationTests = new DividerItemDecoration(divider, DIVIDER_PADDING);
+        RecyclerView.ItemDecoration dividerItemDecorationTests = new DividerItemDecoration(divider, DIVIDER_PADDING, 0);
         recyclerViewTests.addItemDecoration(dividerItemDecorationTests);
-        RecyclerView.ItemDecoration dividerItemDecorationTestResults = new DividerItemDecoration(divider, DIVIDER_PADDING);
+        RecyclerView.ItemDecoration dividerItemDecorationTestResults = new DividerItemDecoration(divider, DIVIDER_PADDING, 0);
         recyclerViewTestResults.addItemDecoration(dividerItemDecorationTestResults);
 
         testAdapter = new TestAdapter(getContext(), this);
@@ -104,8 +108,14 @@ public class TestResultFragment extends AppPartitionFragment implements TestResu
     }
 
     @Override
-    public void showTestDetails(@NonNull Test test) {
+    public void navigateToTest(@NonNull TestType testType, @NonNull Child child) {
+        Intent intent = TestingActivity.getIntent(getContext(), testType, child);
+        startActivity(intent);
+    }
 
+    @Override
+    public void showTestDetails(@NonNull Test test) {
+        presenter.showTestDetails(test);
     }
 
     @Override

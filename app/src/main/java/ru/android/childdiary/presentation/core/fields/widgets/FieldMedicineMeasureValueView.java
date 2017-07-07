@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public class FieldMedicineMeasureValueView extends FieldDialogView<MedicineMeasureValue> {
     public FieldMedicineMeasureValueView(Context context) {

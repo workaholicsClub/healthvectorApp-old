@@ -10,7 +10,7 @@ import org.joda.time.LocalDate;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.DateUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 
 public class FieldDateFilterView extends FieldDialogView<LocalDate> {
     @BindView(R.id.title)

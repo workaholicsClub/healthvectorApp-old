@@ -12,7 +12,7 @@ import lombok.Value;
 import ru.android.childdiary.domain.core.ContentObject;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class LinearGroups implements Serializable, ContentObject<LinearGroups> {
     // TODO make immutable
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")

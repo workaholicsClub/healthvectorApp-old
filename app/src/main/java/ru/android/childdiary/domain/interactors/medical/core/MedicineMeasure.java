@@ -10,7 +10,7 @@ import ru.android.childdiary.domain.core.ContentObject;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class MedicineMeasure implements Serializable, ContentObject<MedicineMeasure> {
     public static final MedicineMeasure NULL = MedicineMeasure.builder().build();
 

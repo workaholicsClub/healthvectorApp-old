@@ -11,7 +11,7 @@ import java.util.List;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.fields.adapters.FrequencyAdapter;
-import ru.android.childdiary.utils.StringUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public class FieldFrequencyView extends FieldSpinnerView<Integer> {
     private final FrequencyAdapter adapter = new FrequencyAdapter(getContext(), Collections.emptyList());

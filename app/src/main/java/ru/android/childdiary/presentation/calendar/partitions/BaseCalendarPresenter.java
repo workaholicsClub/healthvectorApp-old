@@ -29,7 +29,7 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsReque
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
-import ru.android.childdiary.utils.EventUtils;
+import ru.android.childdiary.utils.strings.EventUtils;
 
 @InjectViewState
 public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {

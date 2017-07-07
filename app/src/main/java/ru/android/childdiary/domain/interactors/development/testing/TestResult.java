@@ -11,7 +11,7 @@ import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class TestResult implements Serializable {
     Long id;
 
