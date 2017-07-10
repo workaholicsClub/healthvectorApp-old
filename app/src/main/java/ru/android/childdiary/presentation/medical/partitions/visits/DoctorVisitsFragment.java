@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.medical.partitions.visits;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -133,7 +132,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_doctor_visit_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
-                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisit(doctorVisit))
+                        (dialog, which) -> presenter.deleteDoctorVisit(doctorVisit))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
@@ -143,9 +142,9 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_doctor_visit_connected_events_or_not)
                 .setPositiveButton(R.string.delete_only_doctor_visit,
-                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisit(doctorVisit))
+                        (dialog, which) -> presenter.deleteDoctorVisit(doctorVisit))
                 .setNegativeButton(R.string.delete_doctor_visit_and_events,
-                        (DialogInterface dialog, int which) -> presenter.deleteDoctorVisitWithConnectedEvents(doctorVisit))
+                        (dialog, which) -> presenter.deleteDoctorVisitWithConnectedEvents(doctorVisit))
                 .show();
     }
 

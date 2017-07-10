@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.core.events;
 
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -440,7 +439,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.delete_photo_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
-                        (DialogInterface dialog, int which) -> getNoteWithPhotoView().setImageFileName(null))
+                        (dialog, which) -> getNoteWithPhotoView().setImageFileName(null))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }

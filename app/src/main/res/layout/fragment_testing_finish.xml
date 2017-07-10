@@ -6,8 +6,6 @@
     android:background="@color/gray_background"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -16,19 +14,14 @@
         android:orientation="vertical"
         android:paddingTop="@dimen/field_margin_base">
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseNameView
-            android:id="@+id/exerciseNameView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldExerciseDescriptionView
-            android:id="@+id/exerciseDescriptionView"
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView
+            android:id="@+id/descriptionView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/buttonAdd"
+        android:id="@+id/buttonClose"
         style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
@@ -36,6 +29,6 @@
         android:layout_marginLeft="@dimen/profile_margin_horizontal"
         android:layout_marginRight="@dimen/profile_margin_horizontal"
         android:layout_marginTop="@dimen/button_margin_vertical"
-        android:text="@string/export_to_calendar"
+        android:text="@string/close"
         android:textAllCaps="false" />
 </LinearLayout>

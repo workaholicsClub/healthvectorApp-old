@@ -25,11 +25,15 @@ public class MoveEventDialogFragment extends BaseLengthValueDialogFragment<MoveE
                 .setTitle(R.string.move_event);
 
         if (dialogArguments.getEvent().getLinearGroup() == null) {
-            builder.setPositiveButton(R.string.ok, (dialog, which) -> moveEventClick());
-            builder.setNegativeButton(R.string.cancel, (dialog, which) -> hideKeyboardAndClearFocus());
+            builder.setPositiveButton(R.string.ok,
+                    (dialog, which) -> moveEventClick());
+            builder.setNegativeButton(R.string.cancel,
+                    (dialog, which) -> hideKeyboardAndClearFocus());
         } else {
-            builder.setPositiveButton(R.string.move_one_event, (dialog, which) -> moveEventClick());
-            builder.setNegativeButton(R.string.move_linear_group, (dialog, which) -> moveLinearGroupClick());
+            builder.setPositiveButton(R.string.move_one_event,
+                    (dialog, which) -> moveEventClick());
+            builder.setNegativeButton(R.string.move_linear_group,
+                    (dialog, which) -> moveLinearGroupClick());
         }
 
         AlertDialog dialog = builder.create();

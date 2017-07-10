@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.calendar.partitions;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,10 +35,10 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.presentation.calendar.adapters.calendar.CalendarViewAdapter;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
-import ru.android.childdiary.presentation.core.AppPartitionFragment;
-import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.calendar.dialogs.MoveEventDialogArguments;
 import ru.android.childdiary.presentation.calendar.dialogs.MoveEventDialogFragment;
+import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
 import ru.android.childdiary.presentation.events.ExerciseEventDetailActivity;
@@ -299,7 +298,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_event_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
-                        (DialogInterface dialog, int which) -> presenter.deleteOneEvent(event))
+                        (dialog, which) -> presenter.deleteOneEvent(event))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
@@ -309,9 +308,9 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_one_event_or_linear_group)
                 .setPositiveButton(R.string.delete_one_event,
-                        (DialogInterface dialog, int which) -> presenter.deleteOneEvent(event))
+                        (dialog, which) -> presenter.deleteOneEvent(event))
                 .setNegativeButton(R.string.delete_linear_group,
-                        (DialogInterface dialog, int which) -> presenter.deleteLinearGroup(event))
+                        (dialog, which) -> presenter.deleteLinearGroup(event))
                 .show();
     }
 

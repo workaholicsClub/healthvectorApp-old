@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.testing;
 
 import android.support.annotation.NonNull;
 
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
@@ -17,4 +18,10 @@ public interface TestingView extends BaseView {
 
     @StateStrategyType(SingleStateStrategy.class)
     void showFinish(@NonNull AppPartitionArguments arguments);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showCloseConfirmation();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void close();
 }

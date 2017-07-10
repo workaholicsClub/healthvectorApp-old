@@ -55,15 +55,17 @@ public abstract class AddValueDialogFragment<T extends AddValueDialogArguments> 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(getTitle())
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    hideKeyboardAndClearFocus(rootView.findFocus());
-                    String text = editText.getText().toString().trim();
-                    if (TextUtils.isEmpty(text)) {
-                        return;
-                    }
-                    addValue(text);
-                })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> {
+                            hideKeyboardAndClearFocus(rootView.findFocus());
+                            String text = editText.getText().toString().trim();
+                            if (TextUtils.isEmpty(text)) {
+                                return;
+                            }
+                            addValue(text);
+                        })
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
 
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false);

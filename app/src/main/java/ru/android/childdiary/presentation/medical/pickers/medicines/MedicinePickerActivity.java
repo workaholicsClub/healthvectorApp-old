@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.medical.pickers.medicines;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -49,7 +48,7 @@ public class MedicinePickerActivity extends BasePickerActivity<Medicine, Medicin
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_medicine_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
-                        (DialogInterface dialog, int which) -> getPresenter().deleteItem(medicine))
+                        (dialog, which) -> getPresenter().deleteItem(medicine))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }

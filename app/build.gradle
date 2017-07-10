@@ -74,7 +74,7 @@ android {
             // other
             buildConfigField "boolean", "ENABLE_CONFIGURATION_CHANGE", "true"
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
-            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
+            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "true"
         }
         qa {
             debuggable true

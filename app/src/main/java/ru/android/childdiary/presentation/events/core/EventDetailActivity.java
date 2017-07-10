@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.events.core;
 
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -44,8 +43,8 @@ import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
-import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -236,7 +235,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_event_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
-                        (DialogInterface dialog, int which) -> getPresenter().deleteOneEvent(event))
+                        (dialog, which) -> getPresenter().deleteOneEvent(event))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
@@ -246,9 +245,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_one_event_or_linear_group)
                 .setPositiveButton(R.string.delete_one_event,
-                        (DialogInterface dialog, int which) -> getPresenter().deleteOneEvent(event))
+                        (dialog, which) -> getPresenter().deleteOneEvent(event))
                 .setNegativeButton(R.string.delete_linear_group,
-                        (DialogInterface dialog, int which) -> getPresenter().deleteLinearGroup(event))
+                        (dialog, which) -> getPresenter().deleteLinearGroup(event))
                 .show();
     }
 
@@ -421,8 +420,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
                 .setPositiveButton(R.string.save,
-                        (DialogInterface dialog, int which) -> getPresenter().addEvent(editedEvent, true))
-                .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
+                        (dialog, which) -> getPresenter().addEvent(editedEvent, true))
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> finish())
                 .show();
     }
 
@@ -430,14 +430,15 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
                 .setPositiveButton(R.string.save,
-                        (DialogInterface dialog, int which) -> {
+                        (dialog, which) -> {
                             if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
                                 showNeedToFillNoteOrPhoto();
                             } else {
                                 getPresenter().updateEvent(editedEvent, true);
                             }
                         })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> finish())
                 .show();
     }
 
@@ -445,21 +446,23 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.ask_update_linear_group)
                 .setPositiveButton(R.string.update_one_event,
-                        (DialogInterface dialog, int which) -> {
+                        (dialog, which) -> {
                             if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
                                 showNeedToFillNoteOrPhoto();
                             } else {
                                 getPresenter().updateEvent(editedEvent, true);
                             }
                         })
-                .setNegativeButton(R.string.update_linear_group, (dialog, which) -> {
-                    if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
-                        showNeedToFillNoteOrPhoto();
-                    } else {
-                        getPresenter().updateLinearGroup(editedEvent, fields, true);
-                    }
-                })
-                .setNeutralButton(R.string.cancel, (dialog, which) -> finish())
+                .setNegativeButton(R.string.update_linear_group,
+                        (dialog, which) -> {
+                            if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
+                                showNeedToFillNoteOrPhoto();
+                            } else {
+                                getPresenter().updateLinearGroup(editedEvent, fields, true);
+                            }
+                        })
+                .setNeutralButton(R.string.cancel,
+                        (dialog, which) -> finish())
                 .show();
     }
 

@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.events;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -271,7 +270,7 @@ public class DoctorVisitEventDetailActivity
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.delete_photo_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
-                        (DialogInterface dialog, int which) -> noteWithPhotoView.setImageFileName(null))
+                        (dialog, which) -> noteWithPhotoView.setImageFileName(null))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }

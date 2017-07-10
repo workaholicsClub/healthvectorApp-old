@@ -7,7 +7,10 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -18,11 +21,14 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.testing.fragments.TestingFinishFragment;
+import ru.android.childdiary.presentation.testing.fragments.TestingQuestionFragment;
 import ru.android.childdiary.presentation.testing.fragments.TestingStartFragment;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
-public class TestingActivity extends BaseMvpActivity implements TestingView {
+public class TestingActivity extends BaseMvpActivity implements TestingView, TestingController {
     @IdRes
     private static final int FRAGMENT_CONTAINER_ID = R.id.mainContent;
 
@@ -60,34 +66,82 @@ public class TestingActivity extends BaseMvpActivity implements TestingView {
 
     @Override
     public void showStart(@NonNull AppPartitionArguments arguments) {
-        String tag = "Test";
-
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if (fragment == null) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS, arguments);
-            fragment = new TestingStartFragment();
-            fragment.setArguments(bundle);
-            logger.debug("fragment cache: create new fragment: " + fragment);
-        } else {
-            logger.debug("fragment cache: show fragment: " + fragment);
-        }
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setTransition(TRANSIT_UNSET)
-                .replace(FRAGMENT_CONTAINER_ID, fragment, tag)
-                .addToBackStack(null)
-                .commit();
+        showAppPartition(new TestingStartFragment(), arguments, false);
     }
 
     @Override
     public void showQuestion(@NonNull AppPartitionArguments arguments) {
-
+        showAppPartition(new TestingQuestionFragment(), arguments, true);
     }
 
     @Override
     public void showFinish(@NonNull AppPartitionArguments arguments) {
+        showAppPartition(new TestingFinishFragment(), arguments, true);
+    }
 
+    private void showAppPartition(@NonNull Fragment fragment,
+                                  @NonNull AppPartitionArguments arguments,
+                                  boolean animate) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS, arguments);
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction();
+        if (animate) {
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+        } else {
+            transaction.setTransition(TRANSIT_UNSET);
+        }
+        transaction.replace(FRAGMENT_CONTAINER_ID, fragment)
+                .commit();
+    }
+
+    @Override
+    public void showCloseConfirmation() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.stop_testing_confirm_dialog_title)
+                .setPositiveButton(R.string.yes,
+                        (dialog, which) -> presenter.confirmClose())
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    @Override
+    public void close() {
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        stopTesting();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            stopTesting();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void startTesting() {
+        presenter.startTesting();
+    }
+
+    @Override
+    public void stopTesting() {
+        presenter.stopTesting();
+    }
+
+    @Override
+    public void answerYes() {
+        presenter.answerYes();
+    }
+
+    @Override
+    public void answerNo() {
+        presenter.answerNo();
     }
 }

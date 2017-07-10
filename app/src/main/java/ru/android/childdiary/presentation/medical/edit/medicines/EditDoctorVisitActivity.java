@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.medical.edit.medicines;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,8 +38,8 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhoto
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
-import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -255,7 +254,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_doctor_visit_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
-                        (DialogInterface dialog, int which) -> getPresenter().deleteOneItem(doctorVisit))
+                        (dialog, which) -> getPresenter().deleteOneItem(doctorVisit))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
@@ -265,9 +264,9 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_doctor_visit_connected_events_or_not)
                 .setPositiveButton(R.string.delete_only_doctor_visit,
-                        (DialogInterface dialog, int which) -> getPresenter().deleteOneItem(doctorVisit))
+                        (dialog, which) -> getPresenter().deleteOneItem(doctorVisit))
                 .setNegativeButton(R.string.delete_doctor_visit_and_events,
-                        (DialogInterface dialog, int which) -> getPresenter().deleteWithConnectedEvents(doctorVisit))
+                        (dialog, which) -> getPresenter().deleteWithConnectedEvents(doctorVisit))
                 .show();
     }
 
@@ -278,9 +277,9 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(getString(R.string.ask_complete_doctor_visit, timeStr, dateStr))
                 .setPositiveButton(R.string.complete_without_deletion,
-                        (DialogInterface dialog, int which) -> getPresenter().completeWithoutDeletion(doctorVisit, dateTime))
+                        (dialog, which) -> getPresenter().completeWithoutDeletion(doctorVisit, dateTime))
                 .setNegativeButton(R.string.complete_and_delete_events,
-                        (DialogInterface dialog, int which) -> getPresenter().completeAndDeleteFromDate(doctorVisit, dateTime))
+                        (dialog, which) -> getPresenter().completeAndDeleteFromDate(doctorVisit, dateTime))
                 .show();
     }
 }
