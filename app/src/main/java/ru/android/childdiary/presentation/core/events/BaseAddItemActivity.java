@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.core.events;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -64,8 +63,9 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
                 .setPositiveButton(R.string.save,
-                        (DialogInterface dialog, int which) -> getPresenter().add(item))
-                .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
+                        (dialog, which) -> getPresenter().add(item))
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> finish())
                 .show();
     }
 

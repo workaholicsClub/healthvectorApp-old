@@ -84,19 +84,21 @@ public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<Me
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(R.string.medicine_measure_value_dialog_title)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    hideKeyboardAndClearFocus(rootView.findFocus());
-                    Double amount = readAmount();
-                    MedicineMeasure medicineMeasure = readMedicineMeasure();
-                    if (listener != null) {
-                        MedicineMeasureValue medicineMeasureValue = MedicineMeasureValue.builder()
-                                .amount(amount)
-                                .medicineMeasure(medicineMeasure)
-                                .build();
-                        listener.onSetMedicineMeasureValue(getTag(), medicineMeasureValue);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> {
+                            hideKeyboardAndClearFocus(rootView.findFocus());
+                            Double amount = readAmount();
+                            MedicineMeasure medicineMeasure = readMedicineMeasure();
+                            if (listener != null) {
+                                MedicineMeasureValue medicineMeasureValue = MedicineMeasureValue.builder()
+                                        .amount(amount)
+                                        .medicineMeasure(medicineMeasure)
+                                        .build();
+                                listener.onSetMedicineMeasureValue(getTag(), medicineMeasureValue);
+                            }
+                        })
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
 
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false);

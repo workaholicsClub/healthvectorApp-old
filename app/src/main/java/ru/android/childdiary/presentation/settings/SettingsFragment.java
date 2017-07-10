@@ -3,7 +3,6 @@ package ru.android.childdiary.presentation.settings;
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -345,7 +344,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .setTitle(R.string.bind_account_connection_unavailable_dialog_title)
                 .setMessage(R.string.bind_account_connection_unavailable_dialog_text)
                 .setPositiveButton(R.string.try_again,
-                        (DialogInterface dialog, int which) -> presenter.continueAfterErrorResolved())
+                        (dialog, which) -> presenter.continueAfterErrorResolved())
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> presenter.moveNext())
                 .show();
@@ -357,7 +356,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .setTitle(R.string.security_error_dialog_title)
                 .setMessage(R.string.security_error_dialog_text)
                 .setPositiveButton(R.string.try_again,
-                        (DialogInterface dialog, int which) -> presenter.continueAfterErrorResolved())
+                        (dialog, which) -> presenter.continueAfterErrorResolved())
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> presenter.moveNext())
                 .show();
@@ -381,7 +380,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                     .setTitle(R.string.found_backup_dialog_title)
                     .setMessage(R.string.found_backup_dialog_text)
                     .setPositiveButton(R.string.restore,
-                            (DialogInterface dialog, int which) -> presenter.restore())
+                            (dialog, which) -> presenter.restore())
                     .setNegativeButton(R.string.cancel,
                             (dialog, which) -> presenter.moveNext())
                     .show();
@@ -395,7 +394,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.google_drive_error_dialog_text)
                 .setPositiveButton(R.string.try_again,
-                        (DialogInterface dialog, int which) -> presenter.checkIsBackupAvailable())
+                        (dialog, which) -> presenter.checkIsBackupAvailable())
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> presenter.moveNext())
                 .show();
@@ -418,7 +417,8 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         // TODO: переделать на AlertDialogFragment, чтобы при смене конфигурации диалог не терялся
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.restore_success_dialog_text)
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.moveNext())
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> presenter.moveNext())
                 .setCancelable(false)
                 .show();
     }

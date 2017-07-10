@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.medical.partitions.medicines;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -133,7 +132,7 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_medicine_taking_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
-                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTaking(medicineTaking))
+                        (dialog, which) -> presenter.deleteMedicineTaking(medicineTaking))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
@@ -143,9 +142,9 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_medicine_taking_connected_events_or_not)
                 .setPositiveButton(R.string.delete_only_medicine_taking,
-                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTaking(medicineTaking))
+                        (dialog, which) -> presenter.deleteMedicineTaking(medicineTaking))
                 .setNegativeButton(R.string.delete_medicine_taking_and_events,
-                        (DialogInterface dialog, int which) -> presenter.deleteMedicineTakingWithConnectedEvents(medicineTaking))
+                        (dialog, which) -> presenter.deleteMedicineTakingWithConnectedEvents(medicineTaking))
                 .show();
     }
 

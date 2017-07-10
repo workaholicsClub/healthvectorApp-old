@@ -100,7 +100,8 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     public void showCloseConfirmation() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.stop_testing_confirm_dialog_title)
-                .setPositiveButton(R.string.yes, (dialog, which) -> presenter.confirmClose())
+                .setPositiveButton(R.string.yes,
+                        (dialog, which) -> presenter.confirmClose())
                 .setNegativeButton(R.string.no, null)
                 .show();
     }

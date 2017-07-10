@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.profile;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -56,9 +55,9 @@ import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.presentation.profile.adapters.SexAdapter;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.strings.DoubleUtils;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -476,14 +475,15 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
                 .setPositiveButton(R.string.save,
-                        (DialogInterface dialog, int which) -> {
+                        (dialog, which) -> {
                             if (child == null) {
                                 presenter.addChild(editedChild);
                             } else {
                                 presenter.updateChild(editedChild);
                             }
                         })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> finish())
                 .show();
     }
 }

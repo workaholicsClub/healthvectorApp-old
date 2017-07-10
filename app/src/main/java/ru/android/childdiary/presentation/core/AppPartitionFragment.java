@@ -45,7 +45,9 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
         super.onActivityCreated(savedInstanceState);
         setupUi();
         themeChanged();
-        showSelectedDate(selectedDate);
+        if (selectedDate != null) {
+            showSelectedDate(selectedDate);
+        }
         showChild(child);
     }
 

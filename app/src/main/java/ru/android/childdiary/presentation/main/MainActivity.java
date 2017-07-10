@@ -3,7 +3,6 @@ package ru.android.childdiary.presentation.main;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -283,7 +282,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .setTitle(getString(R.string.delete_child_confirmation_dialog_title, child.getName()))
                 .setMessage(R.string.delete_child_confirmation_dialog_text)
                 .setPositiveButton(R.string.delete,
-                        (DialogInterface dialog, int which) -> presenter.deleteChild(child))
+                        (dialog, which) -> presenter.deleteChild(child))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }

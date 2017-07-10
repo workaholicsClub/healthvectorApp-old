@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.core.permissions;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -55,17 +54,18 @@ public abstract class PermissionHelper {
                 .setTitle(permissionInfo.getTitle())
                 .setMessage(permissionInfo.getText())
                 .setPositiveButton(R.string.ok,
-                        (DialogInterface dialog, int which) -> requestPermissions(new String[]{permission}, permissionInfo.getRequestCode()))
+                        (dialog, which) -> requestPermissions(new String[]{permission}, permissionInfo.getRequestCode()))
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> listener.permissionDenied(permissionInfo))
-                .setOnKeyListener((DialogInterface dialog, int keyCode, KeyEvent event) -> {
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        listener.permissionDenied(permissionInfo);
-                        dialog.dismiss();
-                        return true;
-                    }
-                    return false;
-                })
+                .setOnKeyListener(
+                        (dialog, keyCode, event) -> {
+                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                listener.permissionDenied(permissionInfo);
+                                dialog.dismiss();
+                                return true;
+                            }
+                            return false;
+                        })
                 .setCancelable(false)
                 .show();
     }

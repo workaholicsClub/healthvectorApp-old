@@ -86,12 +86,13 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(R.string.menu_filter)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    List<T> selectedItems = getAutoCompleteTextView().getObjects();
-                    LocalDate fromDate = dateFromView.getValue();
-                    LocalDate toDate = dateToView.getValue();
-                    buildFilter(selectedItems, fromDate, toDate);
-                })
+                .setPositiveButton(R.string.ok,
+                        (dialog, which) -> {
+                            List<T> selectedItems = getAutoCompleteTextView().getObjects();
+                            LocalDate fromDate = dateFromView.getValue();
+                            LocalDate toDate = dateToView.getValue();
+                            buildFilter(selectedItems, fromDate, toDate);
+                        })
                 .setNegativeButton(R.string.cancel, null);
         AlertDialog dialog = builder.create();
         if (dialog.getWindow() != null) {
