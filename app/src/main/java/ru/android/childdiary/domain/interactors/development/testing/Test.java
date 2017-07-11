@@ -14,4 +14,6 @@ public class Test implements Serializable {
     TestType testType;
     @NonNull
     String name;
+    @NonNull
+    String description;
 }

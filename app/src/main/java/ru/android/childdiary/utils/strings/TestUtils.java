@@ -9,7 +9,7 @@ import ru.android.childdiary.data.types.TestType;
 
 public class TestUtils {
     @Nullable
-    public static String toString(Context context, @Nullable TestType testType) {
+    public static String getTestName(Context context, @Nullable TestType testType) {
         if (testType == null) {
             return null;
         }
@@ -22,6 +22,24 @@ public class TestUtils {
                 return context.getString(R.string.test_autism_name);
             case NEWBORN:
                 return context.getString(R.string.test_newborn_name);
+        }
+        return null;
+    }
+
+    @Nullable
+    public static String getTestDescription(Context context, @Nullable TestType testType) {
+        if (testType == null) {
+            return null;
+        }
+        switch (testType) {
+            case DOMAN_PHYSICAL:
+                return context.getString(R.string.test_doman_mental_description);
+            case DOMAN_MENTAL:
+                return context.getString(R.string.test_doman_physical_description);
+            case AUTISM:
+                return context.getString(R.string.test_autism_description);
+            case NEWBORN:
+                return context.getString(R.string.test_autism_description);
         }
         return null;
     }

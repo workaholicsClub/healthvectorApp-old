@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.core;
 public class ExtraConstants {
     public static final String PACKAGE_NAME = "ru.android.childdiary";
     public static final String EXTRA_CHILD = PACKAGE_NAME + ".child";
+    public static final String EXTRA_DATE = PACKAGE_NAME + ".date";
     public static final String EXTRA_SEX = PACKAGE_NAME + ".sex";
     public static final String EXTRA_MASTER_EVENT = PACKAGE_NAME + ".master_event";
     public static final String EXTRA_EVENT = PACKAGE_NAME + ".event";
@@ -19,4 +20,5 @@ public class ExtraConstants {
     public static final String EXTRA_APP_PARTITION = PACKAGE_NAME + ".app_partition";
     public static final String EXTRA_TITLE = PACKAGE_NAME + ".title";
     public static final String EXTRA_URL = PACKAGE_NAME + ".url";
+    public static final String EXTRA_TEST = PACKAGE_NAME + ".test";
 }

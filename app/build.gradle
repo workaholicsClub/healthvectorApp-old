@@ -13,6 +13,9 @@ android {
 
     applicationVariants.all { variant -> renameArtifact(variant, defaultConfig) }
 
+    retrolambda {
+        defaultMethods true
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -74,7 +77,7 @@ android {
             // other
             buildConfigField "boolean", "ENABLE_CONFIGURATION_CHANGE", "true"
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
-            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "true"
+            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
         }
         qa {
             debuggable true

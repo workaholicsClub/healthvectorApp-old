@@ -14,15 +14,20 @@ import android.view.MenuItem;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import org.joda.time.LocalDate;
+
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.testing.Test;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishFragment;
+import ru.android.childdiary.presentation.testing.fragments.TestingQuestionArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingQuestionFragment;
+import ru.android.childdiary.presentation.testing.fragments.TestingStartArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingStartFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -35,10 +40,14 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     @InjectPresenter
     TestingPresenter presenter;
 
-    public static Intent getIntent(Context context, @NonNull TestType testType, @NonNull Child child) {
+    public static Intent getIntent(Context context,
+                                   @NonNull Test test,
+                                   @NonNull Child child,
+                                   @NonNull LocalDate date) {
         return new Intent(context, TestingActivity.class)
-                .putExtra(ExtraConstants.EXTRA_TYPE, testType)
-                .putExtra(ExtraConstants.EXTRA_CHILD, child);
+                .putExtra(ExtraConstants.EXTRA_TEST, test)
+                .putExtra(ExtraConstants.EXTRA_CHILD, child)
+                .putExtra(ExtraConstants.EXTRA_DATE, date);
     }
 
     @Override
@@ -52,9 +61,10 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
         setContentView(R.layout.activity_testing);
 
         if (savedInstanceState == null) {
-            TestType testType = (TestType) getIntent().getSerializableExtra(ExtraConstants.EXTRA_TYPE);
+            Test test = (Test) getIntent().getSerializableExtra(ExtraConstants.EXTRA_TEST);
             Child child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
-            presenter.initTest(testType, child);
+            LocalDate date = (LocalDate) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DATE);
+            presenter.initTest(test, child, date);
         }
     }
 
@@ -65,17 +75,17 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     }
 
     @Override
-    public void showStart(@NonNull AppPartitionArguments arguments) {
+    public void showStart(@NonNull TestingStartArguments arguments) {
         showAppPartition(new TestingStartFragment(), arguments, false);
     }
 
     @Override
-    public void showQuestion(@NonNull AppPartitionArguments arguments) {
+    public void showQuestion(@NonNull TestingQuestionArguments arguments) {
         showAppPartition(new TestingQuestionFragment(), arguments, true);
     }
 
     @Override
-    public void showFinish(@NonNull AppPartitionArguments arguments) {
+    public void showFinish(@NonNull TestingFinishArguments arguments) {
         showAppPartition(new TestingFinishFragment(), arguments, true);
     }
 
@@ -101,7 +111,7 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.stop_testing_confirm_dialog_title)
                 .setPositiveButton(R.string.yes,
-                        (dialog, which) -> presenter.confirmClose())
+                        (dialog, which) -> presenter.close())
                 .setNegativeButton(R.string.no, null)
                 .show();
     }

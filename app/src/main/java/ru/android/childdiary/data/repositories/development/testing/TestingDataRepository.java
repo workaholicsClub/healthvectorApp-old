@@ -34,7 +34,8 @@ public class TestingDataRepository implements TestingRepository {
         for (TestType testType : TestType.values()) {
             Test test = Test.builder()
                     .testType(testType)
-                    .name(TestUtils.toString(context, testType))
+                    .name(TestUtils.getTestName(context, testType))
+                    .description(TestUtils.getTestDescription(context, testType))
                     .build();
             tests.add(test);
         }

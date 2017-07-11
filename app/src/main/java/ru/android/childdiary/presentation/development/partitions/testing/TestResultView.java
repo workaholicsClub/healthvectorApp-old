@@ -6,9 +6,10 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
-import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.Test;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
@@ -22,5 +23,5 @@ public interface TestResultView extends AppPartitionView {
     void showTestResults(@NonNull List<TestResult> testResults);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToTest(@NonNull TestType testType, @NonNull Child child);
+    void navigateToTest(@NonNull Test test, @NonNull Child child, @NonNull LocalDate date);
 }

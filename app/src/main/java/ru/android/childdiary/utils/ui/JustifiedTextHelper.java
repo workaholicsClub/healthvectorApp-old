@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.webkit.WebView;
 
-import javax.inject.Inject;
-
 import ru.android.childdiary.R;
 
 public class JustifiedTextHelper {
@@ -23,8 +21,7 @@ public class JustifiedTextHelper {
 
     private final String justifiedTextFormat;
 
-    @Inject
-    public JustifiedTextHelper(Context context) {
+    private JustifiedTextHelper(Context context) {
         int indent = context.getResources().getDimensionPixelSize(R.dimen.base_margin);
         @ColorInt int color = ContextCompat.getColor(context, R.color.primary_text);
         String primaryTextColor = String.format("#%08X", color);
@@ -48,12 +45,17 @@ public class JustifiedTextHelper {
                 "</html>\n";
     }
 
-    public static void showInWebView(WebView webView, String text) {
+    public static void showInWebView(WebView webView, @Nullable String text) {
+        JustifiedTextHelper helper = new JustifiedTextHelper(webView.getContext());
+        text = helper.map(text);
+        if (text == null) {
+            return;
+        }
         webView.loadDataWithBaseURL(BASE_URL, text, "text/html", "utf-8", "about:blank");
     }
 
     @Nullable
-    public String map(@Nullable String text) {
+    private String map(@Nullable String text) {
         if (text == null) {
             return null;
         }

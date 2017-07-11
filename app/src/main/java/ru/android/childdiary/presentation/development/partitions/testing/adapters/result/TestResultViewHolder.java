@@ -60,7 +60,7 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
         textViewTime.setText(DateUtils.time(context, item.getDateTime()));
         WidgetsUtils.hideIfEmpty(textViewTime);
 
-        textViewTitle.setText(TestUtils.toString(context, item.getTestType()));
+        textViewTitle.setText(TestUtils.getTestName(context, item.getTestType()));
         textViewDescription.setText(TestUtils.toString(context, item.getTestParameter()));
 
         //noinspection deprecation

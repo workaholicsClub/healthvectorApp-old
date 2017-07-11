@@ -4,71 +4,123 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import org.joda.time.LocalDate;
+
 import javax.inject.Inject;
 
-import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.interactors.development.testing.Test;
 import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
-import ru.android.childdiary.presentation.core.AppPartitionArguments;
+import ru.android.childdiary.domain.interactors.development.testing.processors.TestProcessor;
 import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
+import ru.android.childdiary.presentation.testing.fragments.TestingQuestionArguments;
+import ru.android.childdiary.presentation.testing.fragments.TestingStartArguments;
 
 @InjectViewState
 public class TestingPresenter extends BasePresenter<TestingView> implements TestingController {
     @Inject
-    ChildInteractor childInteractor;
-
-    @Inject
     TestingInteractor testingInteractor;
 
-    private TestType testType;
+    private Test test;
     private Child child;
+    private LocalDate date;
+    private TestProcessor testProcessor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
     }
 
-    public void initTest(@NonNull TestType testType, @NonNull Child child) {
-        this.testType = testType;
+    public void initTest(@NonNull Test test,
+                         @NonNull Child child,
+                         @NonNull LocalDate date) {
+        this.test = test;
         this.child = child;
-        getViewState().showStart(AppPartitionArguments.builder()
+        this.date = date;
+        getViewState().showStart(TestingStartArguments.testingStartBuilder()
                 .child(child)
-                .selectedDate(null)
+                .selectedDate(date)
+                .test(test)
                 .build());
     }
 
-    public void confirmClose() {
-        getViewState().close();
+    private void checkParameters(boolean checkTestProcessor) {
+        if (test == null) {
+            throw new IllegalStateException("Testing mode not initialized: test is null");
+        }
+        if (child == null) {
+            throw new IllegalStateException("Testing mode not initialized: child is null");
+        }
+        if (date == null) {
+            throw new IllegalStateException("Testing mode not initialized: date is null");
+        }
+        if (checkTestProcessor && testProcessor == null) {
+            throw new IllegalStateException("Testing mode not initialized: test processor is null");
+        }
     }
 
     @Override
     public void startTesting() {
-        getViewState().showQuestion(AppPartitionArguments.builder()
+        checkParameters(false);
+        testProcessor = TestProcessor.create(test.getTestType());
+        getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                 .child(child)
-                .selectedDate(null)
+                .selectedDate(date)
+                .test(test)
                 .build());
     }
 
     @Override
     public void stopTesting() {
-        getViewState().showCloseConfirmation();
+        if (testProcessor == null || testProcessor.isFinished()) {
+            close();
+        } else {
+            getViewState().showCloseConfirmation();
+        }
+    }
+
+    public void close() {
+        if (testProcessor != null) {
+            if (testProcessor.isFinished()) {
+                // TODO: save test result
+            }
+            testProcessor = null;
+        }
+        getViewState().close();
     }
 
     @Override
     public void answerYes() {
-        getViewState().showFinish(AppPartitionArguments.builder()
-                .child(child)
-                .selectedDate(null)
-                .build());
+        checkParameters(true);
+        // TODO: answer
+        goToNextQuestion();
     }
 
     @Override
     public void answerNo() {
-        getViewState().showFinish(AppPartitionArguments.builder()
-                .child(child)
-                .selectedDate(null)
-                .build());
+        checkParameters(true);
+        // TODO: answer
+        goToNextQuestion();
+    }
+
+    private void goToNextQuestion() {
+        if (testProcessor.isFinished()) {
+            // TODO: get result
+            getViewState().showFinish(TestingFinishArguments.testingFinishBuilder()
+                    .child(child)
+                    .selectedDate(date)
+                    .test(test)
+                    .build());
+        } else {
+            testProcessor.goToNextQuestion();
+            // TODO: show question
+            getViewState().showFinish(TestingFinishArguments.testingFinishBuilder()
+                    .child(child)
+                    .selectedDate(date)
+                    .test(test)
+                    .build());
+        }
     }
 }

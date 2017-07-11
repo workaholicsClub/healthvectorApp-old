@@ -12,13 +12,14 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.Test;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
@@ -108,8 +109,8 @@ public class TestResultFragment extends AppPartitionFragment implements TestResu
     }
 
     @Override
-    public void navigateToTest(@NonNull TestType testType, @NonNull Child child) {
-        Intent intent = TestingActivity.getIntent(getContext(), testType, child);
+    public void navigateToTest(@NonNull Test test, @NonNull Child child, @NonNull LocalDate date) {
+        Intent intent = TestingActivity.getIntent(getContext(), test, child, date);
         startActivity(intent);
     }
 

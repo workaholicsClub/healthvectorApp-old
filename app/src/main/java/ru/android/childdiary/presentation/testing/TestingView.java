@@ -6,18 +6,20 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseView;
+import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
+import ru.android.childdiary.presentation.testing.fragments.TestingQuestionArguments;
+import ru.android.childdiary.presentation.testing.fragments.TestingStartArguments;
 
 public interface TestingView extends BaseView {
     @StateStrategyType(SingleStateStrategy.class)
-    void showStart(@NonNull AppPartitionArguments arguments);
+    void showStart(@NonNull TestingStartArguments arguments);
 
     @StateStrategyType(SingleStateStrategy.class)
-    void showQuestion(@NonNull AppPartitionArguments arguments);
+    void showQuestion(@NonNull TestingQuestionArguments arguments);
 
     @StateStrategyType(SingleStateStrategy.class)
-    void showFinish(@NonNull AppPartitionArguments arguments);
+    void showFinish(@NonNull TestingFinishArguments arguments);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showCloseConfirmation();

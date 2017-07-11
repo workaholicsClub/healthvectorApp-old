@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="test_doman_mental_name">Стадии сенсорного развития по Доману</string>
+    <string name="test_doman_mental_description">
+        <![CDATA[
+            <p class="tab" style="text-align:justify;">
+            Тест на соответствие календарного возраста ребенка соответствующей стадии моторного и сенсорного развития, с определенными временными рамками по методике Гленна Домана.
+            </p>
+            <p class="tab" style="text-align:justify;">
+            Тест состоит из двух разделов: моторное развитие и сенсорное развитие.
+            Каждый из разделов состоит из 7 стадий развития, с определенными временными рамками и 3 параметров в каждой стадии.
+            </p>
+        ]]>
+    </string>
     <string name="mental_vision">Зрительная компетентность</string>
     <string name="mental_audition">Слуховая компетентность</string>
     <string name="mental_sensitivity">Тактильная компетентность</string>

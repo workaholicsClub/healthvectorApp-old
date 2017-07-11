@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="test_autism_name">Тест на аутизм</string>
-    <string name="test_autism_start">
+    <string name="test_autism_description">
         <![CDATA[
             <p class="tab" style="text-align:justify;">
             M-CHAT-R выявляет настолько большое количество случаев расстройств аутического спектра (РАС), насколько это возможно. Существует высокая доля ложноположительных результатов.

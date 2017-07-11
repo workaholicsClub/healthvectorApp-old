@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import org.joda.time.LocalDate;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -69,7 +71,7 @@ public class TestResultPresenter extends AppPartitionPresenter<TestResultView> {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                child -> getViewState().navigateToTest(test.getTestType(), child),
+                                child -> getViewState().navigateToTest(test, child, LocalDate.now()),
                                 this::onUnexpectedError));
     }
 }
