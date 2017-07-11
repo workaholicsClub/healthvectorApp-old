@@ -10,7 +10,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.Test;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

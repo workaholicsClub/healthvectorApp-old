@@ -1,8 +1,8 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.LayoutRes;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -13,52 +13,50 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 
-public abstract class FieldTextViewWithImageView extends LinearLayout {
+public class FieldTextViewWithImageView extends LinearLayout {
     @BindView(R.id.imageView)
     ImageView imageView;
 
-    @Nullable
     @BindView(R.id.textView)
     TextView textView;
 
+    private Drawable icon;
+
     public FieldTextViewWithImageView(Context context) {
         super(context);
-        init();
+        init(null);
     }
 
     public FieldTextViewWithImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
 
     public FieldTextViewWithImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(attrs);
     }
 
-    private void init() {
-        inflate(getContext(), getLayoutResourceId(), this);
+    private void init(@Nullable AttributeSet attrs) {
+        inflate(getContext(), R.layout.field_text_view_with_image_view, this);
+        if (attrs != null) {
+            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldTextViewWithImageView, 0, 0);
+            try {
+                icon = ta.getDrawable(R.styleable.FieldTextViewWithImageView_fieldIcon);
+            } finally {
+                ta.recycle();
+            }
+        }
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        imageView.setImageResource(getIconResId());
+        imageView.setImageDrawable(icon);
     }
 
     public void setText(String text) {
-        if (textView == null) {
-            return;
-        }
         textView.setText(text);
     }
-
-    @LayoutRes
-    protected int getLayoutResourceId() {
-        return R.layout.field_text_view_with_image_view;
-    }
-
-    @DrawableRes
-    protected abstract int getIconResId();
 }

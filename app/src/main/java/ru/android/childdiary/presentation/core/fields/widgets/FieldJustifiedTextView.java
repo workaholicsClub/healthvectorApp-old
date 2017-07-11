@@ -1,16 +1,21 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lombok.Setter;
@@ -21,8 +26,17 @@ import ru.android.childdiary.utils.ui.JustifiedTextHelper;
 public class FieldJustifiedTextView extends LinearLayout {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
+    @BindView(R.id.imageView)
+    ImageView imageView;
+
     @BindView(R.id.webView)
     WebView webView;
+
+    @BindDimen(R.dimen.base_margin)
+    int MARGIN;
+
+    private boolean showIcon;
+    private Drawable icon;
 
     @Nullable
     @Setter
@@ -50,27 +64,47 @@ public class FieldJustifiedTextView extends LinearLayout {
 
     public FieldJustifiedTextView(Context context) {
         super(context);
-        init();
+        init(null);
     }
 
     public FieldJustifiedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
 
     public FieldJustifiedTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(attrs);
     }
 
-    private void init() {
+    private void init(@Nullable AttributeSet attrs) {
         inflate(getContext(), R.layout.field_justified_text, this);
+        if (attrs != null) {
+            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldJustifiedTextView, 0, 0);
+            try {
+                showIcon = ta.getBoolean(R.styleable.FieldJustifiedTextView_fieldShowIcon, false);
+                icon = ta.getDrawable(R.styleable.FieldJustifiedTextView_fieldIcon);
+            } finally {
+                ta.recycle();
+            }
+        }
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        if (showIcon) {
+            imageView.setImageDrawable(icon);
+        } else {
+            imageView.setVisibility(GONE);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) webView.getLayoutParams();
+            layoutParams.leftMargin = MARGIN;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                layoutParams.setMarginStart(MARGIN);
+            }
+            webView.setLayoutParams(layoutParams);
+        }
 
         webView.getSettings().setJavaScriptEnabled(false);
         webView.getSettings().setAppCacheEnabled(true);

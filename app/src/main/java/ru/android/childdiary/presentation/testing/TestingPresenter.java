@@ -10,9 +10,10 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.Test;
 import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
-import ru.android.childdiary.domain.interactors.development.testing.processors.TestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
+import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingQuestionArguments;
@@ -64,7 +65,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     @Override
     public void startTesting() {
         checkParameters(false);
-        testProcessor = TestProcessor.create(test.getTestType());
+        testProcessor = TestFactory.createTestProcessor(test);
         getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                 .child(child)
                 .selectedDate(date)

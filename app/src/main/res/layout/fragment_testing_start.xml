@@ -11,8 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/field_margin_base">
+        android:orientation="vertical">
 
         <ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView
             android:id="@+id/descriptionView"

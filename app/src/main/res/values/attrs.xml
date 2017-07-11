@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="FieldEditTextWithImageView">
+    <declare-styleable name="CustomAttributes">
         <attr name="fieldIcon" format="reference" />
         <attr name="fieldHint" format="string" />
         <attr name="fieldMaxLength" format="integer" />
         <attr name="fieldHideIfEmpty" format="boolean" />
+        <attr name="fieldShowIcon" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="FieldEditTextWithImageView">
+        <attr name="fieldIcon" />
+        <attr name="fieldHint" />
+        <attr name="fieldMaxLength" />
+        <attr name="fieldHideIfEmpty" />
+    </declare-styleable>
+    <declare-styleable name="FieldTextViewWithImageView">
+        <attr name="fieldIcon" />
+    </declare-styleable>
+    <declare-styleable name="FieldJustifiedTextView">
+        <attr name="fieldShowIcon" />
+        <attr name="fieldIcon" />
     </declare-styleable>
 </resources>

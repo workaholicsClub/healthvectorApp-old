@@ -11,7 +11,7 @@ import org.joda.time.LocalDate;
 import java.util.List;
 
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.Test;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.presentation.core.AppPartitionView;
 

@@ -9,7 +9,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.development.testing.Test;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewHolder;
 
 public class TestViewHolder extends BaseRecyclerViewHolder<Test> {
