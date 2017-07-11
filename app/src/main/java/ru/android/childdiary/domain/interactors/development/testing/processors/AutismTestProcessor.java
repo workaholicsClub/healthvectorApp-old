@@ -1,5 +1,7 @@
 package ru.android.childdiary.domain.interactors.development.testing.processors;
 
+import android.support.annotation.Nullable;
+
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
@@ -11,5 +13,35 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.Autism
 public class AutismTestProcessor extends SimpleTestProcessor<AutismTest> {
     public AutismTestProcessor(@NonNull AutismTest test) {
         super(test);
+    }
+
+    @Nullable
+    @Override
+    public String getResultText() {
+        int count = 0;
+        for (int i = 0; i < answers.size(); ++i) {
+            Boolean answer = answers.get(i);
+            if (answer == null) {
+                continue;
+            }
+            boolean yes = answers.get(i);
+            boolean no = !yes;
+            if (i == 1 || i == 5 || i == 11) {
+                if (yes) {
+                    ++count;
+                }
+            } else {
+                if (no) {
+                    ++count;
+                }
+            }
+        }
+        if (count <= 2) {
+            return test.getFinishTextLow();
+        } else if (count <= 7) {
+            return test.getFinishTextMedium();
+        } else {
+            return test.getFinishTextHigh();
+        }
     }
 }

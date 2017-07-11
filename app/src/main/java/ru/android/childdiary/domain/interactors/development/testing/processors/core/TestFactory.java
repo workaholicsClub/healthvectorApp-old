@@ -15,7 +15,7 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.T
 
 public class TestFactory {
     @Nullable
-    public static TestProcessor createTestProcessor(@Nullable Test test) {
+    public static BiTestProcessor createTestProcessor(@Nullable Test test) {
         TestType testType = test == null ? null : test.getTestType();
         if (testType == null) {
             return null;

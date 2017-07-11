@@ -2,6 +2,8 @@ package ru.android.childdiary.domain.interactors.development.testing.processors.
 
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
@@ -13,12 +15,16 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.S
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class SimpleTestProcessor<T extends SimpleTest> extends BaseTestProcessor<T> {
+    protected final List<Boolean> answers = new ArrayList<>();
     private final List<Question> questions;
     private int index;
 
     public SimpleTestProcessor(@NonNull T test) {
         super(test);
-        questions = test.getQuestions();
+        questions = Collections.unmodifiableList(test.getQuestions());
+        for (int i = 0; i < questions.size(); ++i) {
+            answers.add(null);
+        }
     }
 
     @Override
@@ -35,5 +41,12 @@ public abstract class SimpleTestProcessor<T extends SimpleTest> extends BaseTest
     @Override
     public Question getCurrentQuestion() {
         return isFinished() ? null : questions.get(index);
+    }
+
+    @Override
+    public void answer(boolean value) {
+        if (!isFinished()) {
+            answers.set(index, value);
+        }
     }
 }

@@ -31,4 +31,15 @@ public class DomanPhysicalTestProcessor extends BaseTestProcessor<DomanPhysicalT
     public Question getCurrentQuestion() {
         return null;
     }
+
+    @Override
+    public void answer(boolean value) {
+
+    }
+
+    @Nullable
+    @Override
+    public String getResultText() {
+        return null;
+    }
 }

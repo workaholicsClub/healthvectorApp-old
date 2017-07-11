@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="test_newborn_name">Тест новрожденного на риск ДЦП</string>
-    <string name="test_newborn_description">Каждый ответ «Да» означает риск церебрального паралича</string>
+    <string name="test_newborn_description">
+        <![CDATA[
+            <p class="tab" style="text-align:justify;">
+            Каждый ответ «Да» означает риск церебрального паралича
+            </p>
+        ]]>
+    </string>
+    <string name="test_newborn_result_good">
+        <![CDATA[
+            <p class="tab" style="text-align:center;">
+            Риск церебрального паралича не обнаружен
+            </p>
+        ]]>
+    </string>
+    <string name="test_newborn_result_bad">
+        <![CDATA[
+            <p class="tab" style="text-align:center;">
+            Риск церебрального паралича
+            </p>
+            <p class="tab" style="text-align:center;">
+            Обратитесь за консультацией к врачу
+            </p>
+        ]]>
+    </string>
     <string-array name="test_newborn">
         <item>Лежа на спине ребенок скован? Есть повышение мышечного тонуса?</item>
         <item>Лежа на спине ребенок удерживает позу эмбриона?</item>

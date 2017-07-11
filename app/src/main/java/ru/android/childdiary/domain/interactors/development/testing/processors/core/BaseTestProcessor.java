@@ -9,7 +9,7 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.T
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor(suppressConstructorProperties = true)
-public abstract class BaseTestProcessor<T extends Test> implements TestProcessor {
+public abstract class BaseTestProcessor<T extends Test> implements BiTestProcessor {
     @NonNull
-    private final T test;
+    protected final T test;
 }

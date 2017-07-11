@@ -15,10 +15,23 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.S
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class AutismTest extends SimpleTest {
+    @NonNull
+    String finishTextHigh;
+    @NonNull
+    String finishTextMedium;
+    @NonNull
+    String finishTextLow;
+
     @Builder
     public AutismTest(@NonNull String name,
                       @NonNull String description,
-                      @NonNull List<Question> questions) {
+                      @NonNull List<Question> questions,
+                      @NonNull String finishTextHigh,
+                      @NonNull String finishTextMedium,
+                      @NonNull String finishTextLow) {
         super(TestType.AUTISM, name, description, questions);
+        this.finishTextHigh = finishTextHigh;
+        this.finishTextMedium = finishTextMedium;
+        this.finishTextLow = finishTextLow;
     }
 }

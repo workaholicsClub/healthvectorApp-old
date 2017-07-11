@@ -17,9 +17,14 @@ import ru.android.childdiary.presentation.core.AppPartitionArguments;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
 public class TestingFinishArguments extends AppPartitionArguments {
+    @NonNull
+    String text;
+
     @Builder(builderMethodName = "testingFinishBuilder")
     public TestingFinishArguments(@NonNull Child child,
-                                  @NonNull LocalDate selectedDate) {
+                                  @NonNull LocalDate selectedDate,
+                                  @NonNull String text) {
         super(child, selectedDate);
+        this.text = text;
     }
 }

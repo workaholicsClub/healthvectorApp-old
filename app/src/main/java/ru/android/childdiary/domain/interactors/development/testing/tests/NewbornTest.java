@@ -15,10 +15,19 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.S
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class NewbornTest extends SimpleTest {
+    @NonNull
+    String resultBad;
+    @NonNull
+    String resultGood;
+
     @Builder
     public NewbornTest(@NonNull String name,
                        @NonNull String description,
-                       @NonNull List<Question> questions) {
+                       @NonNull List<Question> questions,
+                       @NonNull String resultBad,
+                       @NonNull String resultGood) {
         super(TestType.NEWBORN, name, description, questions);
+        this.resultBad = resultBad;
+        this.resultGood = resultGood;
     }
 }

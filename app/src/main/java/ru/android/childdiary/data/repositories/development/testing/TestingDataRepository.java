@@ -62,16 +62,22 @@ public class TestingDataRepository implements TestingRepository {
                         .description(TestUtils.getTestDescription(context, testType))
                         .build();
             case AUTISM:
+                String finishText = context.getString(R.string.test_autism_finish_text);
                 return AutismTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
                         .questions(getQuestions(R.array.test_autism))
+                        .finishTextHigh(context.getString(R.string.test_autism_finish_text_high) + finishText)
+                        .finishTextMedium(context.getString(R.string.test_autism_finish_text_medium) + finishText)
+                        .finishTextLow(context.getString(R.string.test_autism_finish_text_low) + finishText)
                         .build();
             case NEWBORN:
                 return NewbornTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
                         .questions(getQuestions(R.array.test_newborn))
+                        .resultBad(context.getString(R.string.test_newborn_result_bad))
+                        .resultGood(context.getString(R.string.test_newborn_result_good))
                         .build();
         }
         return null;

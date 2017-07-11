@@ -11,8 +11,8 @@ import javax.inject.Inject;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
+import ru.android.childdiary.domain.interactors.development.testing.processors.core.BiTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
-import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
@@ -27,7 +27,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     private Test test;
     private Child child;
     private LocalDate date;
-    private TestProcessor testProcessor;
+    private BiTestProcessor testProcessor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -78,23 +78,24 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
 
     @Override
     public void answerYes() {
-        // TODO: answer
+        testProcessor.answer(true);
         goToNextQuestion();
     }
 
     @Override
     public void answerNo() {
-        // TODO: answer
+        testProcessor.answer(false);
         goToNextQuestion();
     }
 
     private void goToNextQuestion() {
         testProcessor.goToNextQuestion();
         if (testProcessor.isFinished()) {
-            // TODO: get result
+            String text = testProcessor.getResultText();
             getViewState().showFinish(TestingFinishArguments.testingFinishBuilder()
                     .child(child)
                     .selectedDate(date)
+                    .text(text)
                     .build());
         } else {
             getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
