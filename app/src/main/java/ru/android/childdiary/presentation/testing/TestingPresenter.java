@@ -47,29 +47,13 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                 .build());
     }
 
-    private void checkParameters(boolean checkTestProcessor) {
-        if (test == null) {
-            throw new IllegalStateException("Testing mode not initialized: test is null");
-        }
-        if (child == null) {
-            throw new IllegalStateException("Testing mode not initialized: child is null");
-        }
-        if (date == null) {
-            throw new IllegalStateException("Testing mode not initialized: date is null");
-        }
-        if (checkTestProcessor && testProcessor == null) {
-            throw new IllegalStateException("Testing mode not initialized: test processor is null");
-        }
-    }
-
     @Override
     public void startTesting() {
-        checkParameters(false);
         testProcessor = TestFactory.createTestProcessor(test);
         getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                 .child(child)
                 .selectedDate(date)
-                .test(test)
+                .question(testProcessor.getCurrentQuestion())
                 .build());
     }
 
@@ -94,33 +78,29 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
 
     @Override
     public void answerYes() {
-        checkParameters(true);
         // TODO: answer
         goToNextQuestion();
     }
 
     @Override
     public void answerNo() {
-        checkParameters(true);
         // TODO: answer
         goToNextQuestion();
     }
 
     private void goToNextQuestion() {
+        testProcessor.goToNextQuestion();
         if (testProcessor.isFinished()) {
             // TODO: get result
             getViewState().showFinish(TestingFinishArguments.testingFinishBuilder()
                     .child(child)
                     .selectedDate(date)
-                    .test(test)
                     .build());
         } else {
-            testProcessor.goToNextQuestion();
-            // TODO: show question
-            getViewState().showFinish(TestingFinishArguments.testingFinishBuilder()
+            getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                     .child(child)
                     .selectedDate(date)
-                    .test(test)
+                    .question(testProcessor.getCurrentQuestion())
                     .build());
         }
     }

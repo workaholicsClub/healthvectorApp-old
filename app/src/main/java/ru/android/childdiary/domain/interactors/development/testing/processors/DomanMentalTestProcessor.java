@@ -5,14 +5,12 @@ import android.support.annotation.Nullable;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.Value;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.BaseTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.tests.DomanMentalTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Question;
 
-@Value
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class DomanMentalTestProcessor extends BaseTestProcessor<DomanMentalTest> {
     public DomanMentalTestProcessor(@NonNull DomanMentalTest test) {
         super(test);

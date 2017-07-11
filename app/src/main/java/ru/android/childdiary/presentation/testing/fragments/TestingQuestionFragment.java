@@ -1,13 +1,16 @@
 package ru.android.childdiary.presentation.testing.fragments;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Question;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView;
 import ru.android.childdiary.presentation.testing.TestingController;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -24,6 +27,7 @@ public class TestingQuestionFragment extends AppPartitionFragment {
 
     @Nullable
     private TestingController testingController;
+    private Question question;
 
     @Override
     protected int getLayoutResourceId() {
@@ -45,8 +49,19 @@ public class TestingQuestionFragment extends AppPartitionFragment {
     }
 
     @Override
-    protected void setupUi() {
+    protected void init(Bundle savedInstanceState) {
+        super.init(savedInstanceState);
+        TestingQuestionArguments arguments = (TestingQuestionArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
+        if (arguments == null) {
+            logger.error("no arguments provided");
+            return;
+        }
+        question = arguments.getQuestion();
+    }
 
+    @Override
+    protected void setupUi() {
+        justifiedTextView.setText(question.getText());
     }
 
     @Override

@@ -10,17 +10,16 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
+import ru.android.childdiary.presentation.core.AppPartitionArguments;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
-public class TestingFinishArguments extends TestingStartArguments {
+public class TestingFinishArguments extends AppPartitionArguments {
     @Builder(builderMethodName = "testingFinishBuilder")
     public TestingFinishArguments(@NonNull Child child,
-                                  @NonNull LocalDate selectedDate,
-                                  @NonNull Test test) {
-        super(child, selectedDate, test);
+                                  @NonNull LocalDate selectedDate) {
+        super(child, selectedDate);
     }
 }
