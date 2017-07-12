@@ -6,13 +6,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
@@ -55,11 +58,15 @@ public class TestingDataRepository implements TestingRepository {
                 return DomanPhysicalTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
+                        .questions(getDomanPhysicalQuestions())
+                        .resultTextFormat(context.getString(R.string.doman_stage))
                         .build();
             case DOMAN_MENTAL:
                 return DomanMentalTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
+                        .questions(getDomanMentalQuestions())
+                        .resultTextFormat(context.getString(R.string.doman_stage))
                         .build();
             case AUTISM:
                 String finishText = context.getString(R.string.test_autism_finish_text);
@@ -81,6 +88,30 @@ public class TestingDataRepository implements TestingRepository {
                         .build();
         }
         return null;
+    }
+
+    private Map<DomanTestParameter, List<Question>> getDomanPhysicalQuestions() {
+        Map<DomanTestParameter, List<Question>> map = new HashMap<>();
+        List<Question> list;
+        list = getQuestions(R.array.physical_manual_stages);
+        map.put(DomanTestParameter.PHYSICAL_MANUAL, list);
+        list = getQuestions(R.array.physical_mobility_stages);
+        map.put(DomanTestParameter.PHYSICAL_MOBILITY, list);
+        list = getQuestions(R.array.physical_speech_stages);
+        map.put(DomanTestParameter.PHYSICAL_SPEECH, list);
+        return map;
+    }
+
+    private Map<DomanTestParameter, List<Question>> getDomanMentalQuestions() {
+        Map<DomanTestParameter, List<Question>> map = new HashMap<>();
+        List<Question> list;
+        list = getQuestions(R.array.mental_audition_stages);
+        map.put(DomanTestParameter.MENTAL_AUDITION, list);
+        list = getQuestions(R.array.mental_sensitivity_stages);
+        map.put(DomanTestParameter.MENTAL_SENSITIVITY, list);
+        list = getQuestions(R.array.mental_vision_stages);
+        map.put(DomanTestParameter.MENTAL_VISION, list);
+        return map;
     }
 
     private List<Question> getQuestions(@ArrayRes int id) {

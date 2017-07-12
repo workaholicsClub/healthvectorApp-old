@@ -1,7 +1,9 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -21,9 +23,17 @@ import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public abstract class FieldRadioView<T extends Enum<T>> extends LinearLayout implements View.OnClickListener {
+    private static final boolean DEFAULT_SHOW_ICON = true;
+
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
     private final List<TextView> texts = new ArrayList<>();
     private final List<ImageView> radios = new ArrayList<>();
+    private final int margin;
+
+    private boolean showIcon = DEFAULT_SHOW_ICON;
+
+    @Nullable
+    private T[] values;
 
     @Nullable
     private Sex sex;
@@ -33,34 +43,66 @@ public abstract class FieldRadioView<T extends Enum<T>> extends LinearLayout imp
 
     public FieldRadioView(Context context) {
         super(context);
-        init();
+        margin = getResources().getDimensionPixelSize(R.dimen.base_margin);
+        init(null);
     }
 
     public FieldRadioView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        margin = getResources().getDimensionPixelSize(R.dimen.base_margin);
+        init(attrs);
     }
 
     public FieldRadioView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        margin = getResources().getDimensionPixelSize(R.dimen.base_margin);
+        init(attrs);
     }
 
-    private void init() {
+    private void init(@Nullable AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldRadioView, 0, 0);
+            try {
+                showIcon = ta.getBoolean(R.styleable.FieldRadioView_fieldShowIcon, DEFAULT_SHOW_ICON);
+            } finally {
+                ta.recycle();
+            }
+        }
         setOrientation(LinearLayout.VERTICAL);
-        View child;
-        child = inflate(getContext(), getTitleLayoutResourceId(), null);
+        update();
+    }
+
+    private void update() {
+        texts.clear();
+        radios.clear();
+        removeAllViews();
+        View child = inflate(getContext(), getTitleLayoutResourceId(), null);
         addView(child);
-        for (T value : getEnumType().getEnumConstants()) {
-            child = inflate(getContext(), R.layout.field_radio, null);
-            addView(child);
-            child.setOnClickListener(this);
-            child.setTag(value);
-            TextView textView = ButterKnife.findById(child, R.id.textView);
-            textView.setText(getTextForValue(value));
-            texts.add(textView);
-            ImageView radio = ButterKnife.findById(child, R.id.imageView);
-            radios.add(radio);
+        T[] items = getItems();
+        for (T value : items) {
+            setupRadioItem(value);
+        }
+    }
+
+    private void setupRadioItem(T value) {
+        View child = inflate(getContext(), R.layout.field_radio, null);
+        addView(child);
+        child.setOnClickListener(this);
+        child.setTag(value);
+        TextView textView = ButterKnife.findById(child, R.id.textView);
+        textView.setText(getTextForValue(value));
+        texts.add(textView);
+        ImageView radio = ButterKnife.findById(child, R.id.imageView);
+        radios.add(radio);
+        View marginView = ButterKnife.findById(child, R.id.marginView);
+        marginView.setVisibility(showIcon ? VISIBLE : GONE);
+        if (!showIcon) {
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
+            layoutParams.leftMargin = margin;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                layoutParams.setMarginStart(margin);
+            }
+            textView.setLayoutParams(layoutParams);
         }
     }
 
@@ -90,9 +132,24 @@ public abstract class FieldRadioView<T extends Enum<T>> extends LinearLayout imp
         updateItems();
     }
 
+    public void setValues(@Nullable T[] values) {
+        this.values = values;
+        update();
+    }
+
+    public void selectFirst() {
+        T[] items = getItems();
+        setSelected(items[0]);
+    }
+
+    private T[] getItems() {
+        return values == null ? getEnumType().getEnumConstants() : values;
+    }
+
     private void updateItems() {
         int i = 0;
-        for (T value : getEnumType().getEnumConstants()) {
+        T[] items = getItems();
+        for (T value : items) {
             radios.get(i).setImageResource(ResourcesUtils.getRadioRes(sex, value == selected));
             boolean enabled = value == selected;
             //noinspection deprecation

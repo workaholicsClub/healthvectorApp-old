@@ -33,8 +33,9 @@ public abstract class SimpleTestProcessor<T extends SimpleTest> extends BaseTest
     }
 
     @Override
-    public void goToNextQuestion() {
+    public Boolean goToNextQuestion() {
         ++index;
+        return true;
     }
 
     @Nullable

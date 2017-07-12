@@ -32,4 +32,7 @@ public interface ExercisesView extends AppPartitionView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void stopLoading();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void noChildSpecified();
 }

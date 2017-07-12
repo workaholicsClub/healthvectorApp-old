@@ -45,5 +45,4 @@ public class FoodDialogFragment extends AddValueDialogFragment<FoodDialogArgumen
     public interface Listener {
         void onSetFood(String tag, @NonNull Food food);
     }
-
 }

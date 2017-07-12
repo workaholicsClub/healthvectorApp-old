@@ -19,10 +19,13 @@ import org.joda.time.LocalDate;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestParameters;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.testing.dialogs.TestParametersDialogArguments;
+import ru.android.childdiary.presentation.testing.dialogs.TestParametersDialogFragment;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishFragment;
 import ru.android.childdiary.presentation.testing.fragments.TestingQuestionArguments;
@@ -33,7 +36,10 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
-public class TestingActivity extends BaseMvpActivity implements TestingView, TestingController {
+public class TestingActivity extends BaseMvpActivity implements TestingView, TestingController,
+        TestParametersDialogFragment.Listener {
+    private static final String TAG_DATE_AND_PARAMETER_DIALOG = "TAG_DATE_AND_PARAMETER_DIALOG";
+
     @IdRes
     private static final int FRAGMENT_CONTAINER_ID = R.id.mainContent;
 
@@ -76,12 +82,12 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
 
     @Override
     public void showStart(@NonNull TestingStartArguments arguments) {
-        showAppPartition(new TestingStartFragment(), arguments, false);
+        showAppPartition(new TestingStartFragment(), arguments, null);
     }
 
     @Override
     public void showQuestion(@NonNull TestingQuestionArguments arguments) {
-        showAppPartition(new TestingQuestionFragment(), arguments, true);
+        showAppPartition(new TestingQuestionFragment(), arguments, arguments.isForward());
     }
 
     @Override
@@ -91,16 +97,20 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
 
     private void showAppPartition(@NonNull Fragment fragment,
                                   @NonNull AppPartitionArguments arguments,
-                                  boolean animate) {
+                                  @Nullable Boolean forward) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS, arguments);
         fragment.setArguments(bundle);
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
-        if (animate) {
-            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
-        } else {
+        if (forward == null) {
             transaction.setTransition(TRANSIT_UNSET);
+        } else {
+            if (forward) {
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+            } else {
+                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+            }
         }
         transaction.replace(FRAGMENT_CONTAINER_ID, fragment)
                 .commit();
@@ -119,6 +129,21 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     @Override
     public void close() {
         finish();
+    }
+
+    @Override
+    public void specifyDateAndParameter(@NonNull Test test) {
+        TestParametersDialogFragment fragment = new TestParametersDialogFragment();
+        fragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_AND_PARAMETER_DIALOG,
+                TestParametersDialogArguments.builder()
+                        .sex(getSex())
+                        .test(test)
+                        .build());
+    }
+
+    @Override
+    public void onTestParametersSet(@NonNull TestParameters parameters) {
+        presenter.parameterSpecified(parameters);
     }
 
     @Override

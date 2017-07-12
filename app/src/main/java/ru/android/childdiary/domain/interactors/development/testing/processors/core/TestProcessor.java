@@ -7,7 +7,8 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.Q
 public interface TestProcessor {
     boolean isFinished();
 
-    void goToNextQuestion();
+    @Nullable
+    Boolean goToNextQuestion();
 
     @Nullable
     Question getCurrentQuestion();

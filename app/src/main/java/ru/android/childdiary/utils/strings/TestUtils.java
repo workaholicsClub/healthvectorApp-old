@@ -39,7 +39,7 @@ public class TestUtils {
             case AUTISM:
                 return context.getString(R.string.test_autism_description);
             case NEWBORN:
-                return context.getString(R.string.test_autism_description);
+                return context.getString(R.string.test_newborn_description);
         }
         return null;
     }

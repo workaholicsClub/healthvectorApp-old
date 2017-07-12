@@ -20,12 +20,15 @@ import ru.android.childdiary.presentation.core.AppPartitionArguments;
 public class TestingQuestionArguments extends AppPartitionArguments {
     @NonNull
     Question question;
+    boolean forward;
 
     @Builder(builderMethodName = "testingQuestionBuilder")
     public TestingQuestionArguments(@NonNull Child child,
                                     @NonNull LocalDate selectedDate,
-                                    @NonNull Question question) {
+                                    @NonNull Question question,
+                                    boolean forward) {
         super(child, selectedDate);
         this.question = question;
+        this.forward = forward;
     }
 }

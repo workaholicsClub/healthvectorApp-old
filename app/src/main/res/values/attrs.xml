@@ -20,4 +20,7 @@
         <attr name="fieldShowIcon" />
         <attr name="fieldIcon" />
     </declare-styleable>
+    <declare-styleable name="FieldRadioView">
+        <attr name="fieldShowIcon" />
+    </declare-styleable>
 </resources>

@@ -3,30 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/field_height"
-    android:background="@drawable/background_clickable"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <View
-        android:id="@+id/marginView"
+    <ImageView
         android:layout_width="@dimen/field_icon_size"
-        android:layout_height="@dimen/field_icon_size" />
+        android:layout_height="@dimen/field_icon_size"
+        android:scaleType="center"
+        android:src="@drawable/ic_parameter" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:textAppearance="@style/PrimaryTextAppearance"
+        android:text="@string/parameter"
+        android:textAppearance="@style/SecondaryTextAppearance"
         tools:ignore="Deprecated" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="@dimen/field_height"
-        android:layout_height="@dimen/field_height"
-        android:scaleType="center"
-        android:src="@drawable/radio_off" />
 </LinearLayout>

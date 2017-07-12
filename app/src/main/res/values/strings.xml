@@ -293,4 +293,6 @@
     <string name="test_results">Результаты тестирования</string>
     <string name="start_testing">Начать тестирование</string>
     <string name="stop_testing_confirm_dialog_title">Прервать тестирование?</string>
+    <string name="no_child_specified">Добавьте профиль ребенка</string>
+    <string name="parameter">Параметр</string>
 </resources>

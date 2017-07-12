@@ -1,5 +1,6 @@
 package ru.android.childdiary.domain.interactors.development.testing.processors.core;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import ru.android.childdiary.data.types.TestType;
@@ -15,16 +16,17 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.T
 
 public class TestFactory {
     @Nullable
-    public static BiTestProcessor createTestProcessor(@Nullable Test test) {
+    public static BiTestProcessor createTestProcessor(@Nullable Test test,
+                                                      @NonNull TestParameters parameters) {
         TestType testType = test == null ? null : test.getTestType();
         if (testType == null) {
             return null;
         }
         switch (testType) {
             case DOMAN_PHYSICAL:
-                return new DomanPhysicalTestProcessor((DomanPhysicalTest) test);
+                return new DomanPhysicalTestProcessor((DomanPhysicalTest) test, parameters.getDate(), parameters.getParameter());
             case DOMAN_MENTAL:
-                return new DomanMentalTestProcessor((DomanMentalTest) test);
+                return new DomanMentalTestProcessor((DomanMentalTest) test, parameters.getDate(), parameters.getParameter());
             case AUTISM:
                 return new AutismTestProcessor((AutismTest) test);
             case NEWBORN:

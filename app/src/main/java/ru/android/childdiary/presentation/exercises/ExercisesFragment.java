@@ -182,6 +182,11 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     }
 
     @Override
+    public void noChildSpecified() {
+        showToast(getString(R.string.no_child_specified));
+    }
+
+    @Override
     public void showExerciseDetails(@NonNull Exercise exercise) {
         presenter.showExerciseDetails(exercise);
     }

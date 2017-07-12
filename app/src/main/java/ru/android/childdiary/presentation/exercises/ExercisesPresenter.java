@@ -72,6 +72,10 @@ public class ExercisesPresenter extends AppPartitionPresenter<ExercisesView> {
     }
 
     public void addConcreteExercise(@NonNull Child child, @NonNull Exercise exercise) {
+        if (child.getId() == null) {
+            getViewState().noChildSpecified();
+            return;
+        }
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         exerciseInteractor.getDefaultConcreteExercise(child, exercise),
