@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
+import ru.android.childdiary.utils.strings.StringUtils;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -58,14 +60,20 @@ public class TimeDialogFragment extends BaseMvpDialogFragment<TimeDialogArgument
         numberPickerDays.setMinValue(0);
         numberPickerDays.setMaxValue(Math.max(30, time.getDays()));
         numberPickerDays.setValue(time.getDays());
+        numberPickerDays.setOnValueChangedListener((picker, oldVal, newVal) -> updateDaysHeader());
+        updateDaysHeader();
 
         numberPickerHours.setMinValue(0);
         numberPickerHours.setMaxValue(TimeUtils.HOURS_IN_DAY - 1);
         numberPickerHours.setValue(time.getHours());
+        numberPickerHours.setOnValueChangedListener((picker, oldVal, newVal) -> updateHoursHeader());
+        updateHoursHeader();
 
         numberPickerMinutes.setMinValue(0);
         numberPickerMinutes.setMaxValue(TimeUtils.MINUTES_IN_HOUR - 1);
         numberPickerMinutes.setValue(time.getMinutes());
+        numberPickerMinutes.setOnValueChangedListener((picker, oldVal, newVal) -> updateMinutesHeader());
+        updateMinutesHeader();
 
         numberPickerDays.setVisibility(dialogArguments.isShowDays() ? View.VISIBLE : View.GONE);
         numberPickerHours.setVisibility(dialogArguments.isShowHours() ? View.VISIBLE : View.GONE);
@@ -76,6 +84,18 @@ public class TimeDialogFragment extends BaseMvpDialogFragment<TimeDialogArgument
         hoursHeader.setVisibility(dialogArguments.isShowHours() ? View.VISIBLE : View.GONE);
         durationSeparatorHeader.setVisibility(dialogArguments.isShowHours() && dialogArguments.isShowMinutes() ? View.VISIBLE : View.GONE);
         minutesHeader.setVisibility(dialogArguments.isShowMinutes() ? View.VISIBLE : View.GONE);
+    }
+
+    private void updateDaysHeader() {
+        daysHeader.setText(StringUtils.timeUnit(getContext(), numberPickerDays.getValue(), TimeUnit.DAY));
+    }
+
+    private void updateHoursHeader() {
+        hoursHeader.setText(StringUtils.timeUnit(getContext(), numberPickerHours.getValue(), TimeUnit.HOUR));
+    }
+
+    private void updateMinutesHeader() {
+        minutesHeader.setText(StringUtils.timeUnit(getContext(), numberPickerMinutes.getValue(), TimeUnit.MINUTE));
     }
 
     @NonNull
@@ -120,5 +140,4 @@ public class TimeDialogFragment extends BaseMvpDialogFragment<TimeDialogArgument
     public interface Listener {
         void onSetTime(String tag, int minutes);
     }
-
 }

@@ -82,7 +82,34 @@ public class TimeUtils {
     private static String time(Context context, @NonNull Time time) {
         StringBuilder result = new StringBuilder();
 
+        if (time.getYears() > 0) {
+            if (result.length() > 0) {
+                result.append(' ');
+            }
+            result.append(context.getResources().getQuantityString(R.plurals.numberOfYears,
+                    time.getYears(), time.getYears()));
+        }
+
+        if (time.getMonths() > 0) {
+            if (result.length() > 0) {
+                result.append(' ');
+            }
+            result.append(context.getResources().getQuantityString(R.plurals.numberOfMonths,
+                    time.getMonths(), time.getMonths()));
+        }
+
+        if (time.getWeeks() > 0) {
+            if (result.length() > 0) {
+                result.append(' ');
+            }
+            result.append(context.getResources().getQuantityString(R.plurals.numberOfWeeks,
+                    time.getWeeks(), time.getWeeks()));
+        }
+
         if (time.getDays() > 0) {
+            if (result.length() > 0) {
+                result.append(' ');
+            }
             if (time.isShortDays()) {
                 result.append(context.getString(R.string.days_short, time.getDays()));
             } else {
@@ -211,6 +238,9 @@ public class TimeUtils {
     @Value
     @Builder
     public static class Time {
+        int years;
+        int months;
+        int weeks;
         int days;
         int hours;
         int minutes;

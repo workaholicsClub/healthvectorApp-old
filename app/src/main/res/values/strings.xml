@@ -115,12 +115,9 @@
     <string name="other_event_start">Начало</string>
     <string name="other_event_finish">Конец</string>
     <string name="notify_time_dialog_title">Оповещение за</string>
-    <!-- %s - например, "За 4 дня 2 часа 1 минуту" -->
+    <!-- %s - например, "За 4 д. 2 ч. 1 мин." -->
     <string name="notify_time_text">За %s</string>
     <string name="no_value">Нет</string>
-    <string name="time_dialog_days">Дней</string>
-    <string name="time_dialog_hours">Часов</string>
-    <string name="time_dialog_minutes">Минут</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
     <string name="food_dialog_title">Введите наименование прикорма</string>
     <!-- %s - параметр "Имя ребенка" -->

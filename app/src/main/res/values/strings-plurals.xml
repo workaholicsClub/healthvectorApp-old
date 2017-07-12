@@ -28,6 +28,27 @@
         <item quantity="many">%d дней</item>
         <item quantity="zero">%d дней</item>
     </plurals>
+    <plurals name="numberOfHours">
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="other">%d часов</item>
+        <item quantity="many">%d часов</item>
+        <item quantity="zero">%d часов</item>
+    </plurals>
+    <plurals name="numberOfMinutes">
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="other">%d минут</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="zero">%d минут</item>
+    </plurals>
+    <plurals name="timeUnitNumberOfYears">
+        <item quantity="one">год</item>
+        <item quantity="few">года</item>
+        <item quantity="other">лет</item>
+        <item quantity="many">лет</item>
+        <item quantity="zero">лет</item>
+    </plurals>
     <plurals name="timeUnitNumberOfMonths">
         <item quantity="one">месяц</item>
         <item quantity="few">месяца</item>
@@ -62,20 +83,6 @@
         <item quantity="other">минут</item>
         <item quantity="many">минут</item>
         <item quantity="zero">минут</item>
-    </plurals>
-    <plurals name="numberOfHours">
-        <item quantity="one">%d час</item>
-        <item quantity="few">%d часа</item>
-        <item quantity="other">%d часов</item>
-        <item quantity="many">%d часов</item>
-        <item quantity="zero">%d часов</item>
-    </plurals>
-    <plurals name="numberOfMinutes">
-        <item quantity="one">%d минута</item>
-        <item quantity="few">%d минуты</item>
-        <item quantity="other">%d минут</item>
-        <item quantity="many">%d минут</item>
-        <item quantity="zero">%d минут</item>
     </plurals>
     <plurals name="numberOfTimesInADay">
         <item quantity="one">%d раз в день</item>

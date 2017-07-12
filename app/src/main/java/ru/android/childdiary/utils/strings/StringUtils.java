@@ -19,9 +19,39 @@ import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
 import ru.android.childdiary.utils.ObjectUtils;
-import ru.android.childdiary.utils.strings.DoubleUtils;
 
 public class StringUtils {
+    public static String toString(@Nullable List list) {
+        return list == null ? "null" : Arrays.toString(list.toArray());
+    }
+
+    @Nullable
+    public static String eventType(Context context, @Nullable EventType eventType) {
+        if (eventType == null) {
+            return null;
+        }
+        switch (eventType) {
+            case DIAPER:
+                return context.getString(R.string.event_diaper);
+            case SLEEP:
+                return context.getString(R.string.event_sleep);
+            case FEED:
+                return context.getString(R.string.event_feed);
+            case PUMP:
+                return context.getString(R.string.event_pump);
+            case OTHER:
+                return context.getString(R.string.event_other);
+            case DOCTOR_VISIT:
+                return context.getString(R.string.event_doctor_visit);
+            case MEDICINE_TAKING:
+                return context.getString(R.string.event_medicine_taking);
+            case EXERCISE:
+                return context.getString(R.string.exercise);
+            default:
+                return null;
+        }
+    }
+
     @Nullable
     public static String sex(Context context, Sex sex) {
         return sex(context, sex, null);
@@ -40,10 +70,6 @@ public class StringUtils {
             default:
                 return null;
         }
-    }
-
-    public static String toString(@Nullable List list) {
-        return list == null ? "null" : Arrays.toString(list.toArray());
     }
 
     @Nullable
@@ -75,33 +101,6 @@ public class StringUtils {
                 return context.getString(R.string.diaper_state_mixed);
             case WET:
                 return context.getString(R.string.diaper_state_wet);
-            default:
-                return null;
-        }
-    }
-
-    @Nullable
-    public static String eventType(Context context, @Nullable EventType eventType) {
-        if (eventType == null) {
-            return null;
-        }
-        switch (eventType) {
-            case DIAPER:
-                return context.getString(R.string.event_diaper);
-            case SLEEP:
-                return context.getString(R.string.event_sleep);
-            case FEED:
-                return context.getString(R.string.event_feed);
-            case PUMP:
-                return context.getString(R.string.event_pump);
-            case OTHER:
-                return context.getString(R.string.event_other);
-            case DOCTOR_VISIT:
-                return context.getString(R.string.event_doctor_visit);
-            case MEDICINE_TAKING:
-                return context.getString(R.string.event_medicine_taking);
-            case EXERCISE:
-                return context.getString(R.string.exercise);
             default:
                 return null;
         }
@@ -199,12 +198,18 @@ public class StringUtils {
             return context.getString(R.string.no_value);
         }
         switch (timeUnit) {
+            case MINUTE:
+                return context.getResources().getQuantityString(R.plurals.numberOfMinutes, length, length);
+            case HOUR:
+                return context.getResources().getQuantityString(R.plurals.numberOfHours, length, length);
             case DAY:
                 return context.getResources().getQuantityString(R.plurals.numberOfDays, length, length);
             case WEEK:
                 return context.getResources().getQuantityString(R.plurals.numberOfWeeks, length, length);
             case MONTH:
                 return context.getResources().getQuantityString(R.plurals.numberOfMonths, length, length);
+            case YEAR:
+                return context.getResources().getQuantityString(R.plurals.numberOfYears, length, length);
         }
         return context.getString(R.string.no_value);
     }
@@ -227,6 +232,8 @@ public class StringUtils {
                 return context.getResources().getQuantityString(R.plurals.timeUnitNumberOfWeeks, length);
             case MONTH:
                 return context.getResources().getQuantityString(R.plurals.timeUnitNumberOfMonths, length);
+            case YEAR:
+                return context.getResources().getQuantityString(R.plurals.timeUnitNumberOfYears, length);
         }
         return null;
     }
