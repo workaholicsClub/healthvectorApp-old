@@ -59,14 +59,22 @@ public class TestingDataRepository implements TestingRepository {
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
                         .questions(getDomanPhysicalQuestions())
-                        .resultTextFormat(context.getString(R.string.doman_stage))
+                        .resultTextFormat(context.getString(R.string.doman_result_text_format))
+                        .advanced(context.getString(R.string.doman_stage_advanced))
+                        .normal(context.getString(R.string.doman_stage_normal))
+                        .slow(context.getString(R.string.doman_stage_slow))
+                        .stageDescriptions(getStrings(R.array.stage_descriptions))
                         .build();
             case DOMAN_MENTAL:
                 return DomanMentalTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
                         .questions(getDomanMentalQuestions())
-                        .resultTextFormat(context.getString(R.string.doman_stage))
+                        .resultTextFormat(context.getString(R.string.doman_result_text_format))
+                        .advanced(context.getString(R.string.doman_stage_advanced))
+                        .normal(context.getString(R.string.doman_stage_normal))
+                        .slow(context.getString(R.string.doman_stage_slow))
+                        .stageDescriptions(getStrings(R.array.stage_descriptions))
                         .build();
             case AUTISM:
                 String finishText = context.getString(R.string.test_autism_finish_text);
@@ -117,6 +125,12 @@ public class TestingDataRepository implements TestingRepository {
     private List<Question> getQuestions(@ArrayRes int id) {
         return Observable.fromArray(context.getResources().getStringArray(id))
                 .map(text -> Question.builder().text(text).build())
+                .toList()
+                .blockingGet();
+    }
+
+    private List<String> getStrings(@ArrayRes int id) {
+        return Observable.fromArray(context.getResources().getStringArray(id))
                 .toList()
                 .blockingGet();
     }

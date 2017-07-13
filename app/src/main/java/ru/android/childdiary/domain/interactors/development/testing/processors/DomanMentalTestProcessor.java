@@ -8,13 +8,21 @@ import lombok.ToString;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.tests.DomanMentalTest;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class DomanMentalTestProcessor extends DomanTestProcessor<DomanMentalTest> {
     public DomanMentalTestProcessor(@NonNull DomanMentalTest test,
-                                    @NonNull LocalDate date,
-                                    @NonNull DomanTestParameter parameter) {
-        super(test, date, parameter);
+                                    @NonNull DomanTestParameter parameter,
+                                    @NonNull TimeUtils.Age age) {
+        super(test, parameter, age);
+    }
+
+    public DomanMentalTestProcessor(@NonNull DomanMentalTest test,
+                                    @NonNull DomanTestParameter parameter,
+                                    @NonNull LocalDate birthDate,
+                                    @NonNull LocalDate date) {
+        super(test, parameter, birthDate, date);
     }
 }

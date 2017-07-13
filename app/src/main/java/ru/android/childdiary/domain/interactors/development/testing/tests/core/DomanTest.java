@@ -1,5 +1,7 @@
 package ru.android.childdiary.domain.interactors.development.testing.tests.core;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -26,12 +28,18 @@ public abstract class DomanTest extends Test {
     Map<DomanTestParameter, List<Question>> questions;
     @NonNull
     String resultTextFormat;
+    @NonNull
+    String advanced, normal, slow;
+    @NonNull
+    List<String> stageDescriptions;
 
     public DomanTest(@NonNull TestType testType,
                      @NonNull String name,
                      @NonNull String description,
                      @NonNull Map<DomanTestParameter, List<Question>> questions,
-                     @NonNull String resultTextFormat) {
+                     @NonNull String resultTextFormat,
+                     @NonNull String advanced, @NonNull String normal, @NonNull String slow,
+                     @NonNull List<String> stageDescriptions) {
         super(testType, name, description);
         Map<DomanTestParameter, List<Question>> map = new HashMap<>();
         for (DomanTestParameter parameter : questions.keySet()) {
@@ -40,5 +48,27 @@ public abstract class DomanTest extends Test {
         }
         this.questions = Collections.unmodifiableMap(map);
         this.resultTextFormat = resultTextFormat;
+        this.advanced = advanced;
+        this.normal = normal;
+        this.slow = slow;
+        this.stageDescriptions = Collections.unmodifiableList(stageDescriptions);
+    }
+
+    public String getStageType(int initialStage, int stage) {
+        if (initialStage == stage) {
+            return normal;
+        } else if (initialStage < stage) {
+            return advanced;
+        }
+        return slow;
+    }
+
+    @Nullable
+    public String getStageDescription(int stage) {
+        int index = stage - 1;
+        if (index >= 0 && index < stageDescriptions.size()) {
+            return stageDescriptions.get(index);
+        }
+        return null;
     }
 }

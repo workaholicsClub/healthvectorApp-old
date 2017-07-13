@@ -54,8 +54,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
         if (test.getTestType() == TestType.DOMAN_MENTAL || test.getTestType() == TestType.DOMAN_PHYSICAL) {
             getViewState().specifyDateAndParameter(child, test);
         } else {
-            testProcessor = TestFactory.createTestProcessor(test, TestParameters.builder()
-                    .build());
+            testProcessor = TestFactory.createTestProcessor(test, TestParameters.builder().build());
             getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                     .child(child)
                     .selectedDate(date)

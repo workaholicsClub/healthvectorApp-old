@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="doman_stage">
+    <string name="doman_result_text_format">
         <![CDATA[
             <p class="tab" style="text-align:center;">
-            %d стадия развития
+            %1$d стадия развития (%2$s)
+            </p>
+            <p class="tab" style="text-align:center;">
+            %3$s
             </p>
         ]]>
     </string>
+    <string name="doman_stage_advanced">Опережающее развитие</string>
+    <string name="doman_stage_normal">Нормальное развитие</string>
+    <string name="doman_stage_slow">Замедленное развитие</string>
+    <string-array name="stage_descriptions">
+        <item>Ранний ствол мозга и спинной мозг</item>
+        <item>Ствол мозга и ранние подкорковые области</item>
+        <item>Средний мозг и подкорковые области</item>
+        <item>Начальная кора</item>
+        <item>Ранняя кора</item>
+        <item>Примитивная кора</item>
+        <item>Сложная кора</item>
+    </string-array>
 </resources>

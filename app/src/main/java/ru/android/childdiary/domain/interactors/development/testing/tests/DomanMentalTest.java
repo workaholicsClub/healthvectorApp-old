@@ -21,7 +21,9 @@ public class DomanMentalTest extends DomanTest {
     public DomanMentalTest(@NonNull String name,
                            @NonNull String description,
                            @NonNull Map<DomanTestParameter, List<Question>> questions,
-                           @NonNull String resultTextFormat) {
-        super(TestType.DOMAN_MENTAL, name, description, questions, resultTextFormat);
+                           @NonNull String resultTextFormat,
+                           @NonNull String advanced, @NonNull String normal, @NonNull String slow,
+                           @NonNull List<String> stageDescriptions) {
+        super(TestType.DOMAN_MENTAL, name, description, questions, resultTextFormat, advanced, normal, slow, stageDescriptions);
     }
 }

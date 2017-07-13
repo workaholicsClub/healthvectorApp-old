@@ -163,6 +163,7 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
                 DomanTestParameter parameter = parameterView.getSelected();
                 if (listener != null) {
                     listener.onTestParametersSet(TestParameters.builder()
+                            .birthDate(dialogArguments.getChild().getBirthDate())
                             .date(date)
                             .age(age)
                             .parameter(parameter)

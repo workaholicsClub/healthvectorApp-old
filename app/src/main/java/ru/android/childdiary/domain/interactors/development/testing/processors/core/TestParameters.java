@@ -13,6 +13,8 @@ import ru.android.childdiary.utils.strings.TimeUtils;
 @Builder
 public class TestParameters {
     @Nullable
+    LocalDate birthDate;
+    @Nullable
     LocalDate date;
     @Nullable
     TimeUtils.Age age;

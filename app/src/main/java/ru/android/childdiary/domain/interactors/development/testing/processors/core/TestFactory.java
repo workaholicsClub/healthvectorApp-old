@@ -24,9 +24,31 @@ public class TestFactory {
         }
         switch (testType) {
             case DOMAN_PHYSICAL:
-                return new DomanPhysicalTestProcessor((DomanPhysicalTest) test, parameters.getDate(), parameters.getParameter());
+                if (parameters.getBirthDate() != null && parameters.getDate() != null) {
+                    return new DomanPhysicalTestProcessor((DomanPhysicalTest) test,
+                            parameters.getParameter(),
+                            parameters.getBirthDate(),
+                            parameters.getDate());
+                } else if (parameters.getAge() != null) {
+                    return new DomanPhysicalTestProcessor((DomanPhysicalTest) test,
+                            parameters.getParameter(),
+                            parameters.getAge());
+                } else {
+                    throw new IllegalStateException("Invalid test parameters: " + parameters);
+                }
             case DOMAN_MENTAL:
-                return new DomanMentalTestProcessor((DomanMentalTest) test, parameters.getDate(), parameters.getParameter());
+                if (parameters.getBirthDate() != null && parameters.getDate() != null) {
+                    return new DomanMentalTestProcessor((DomanMentalTest) test,
+                            parameters.getParameter(),
+                            parameters.getBirthDate(),
+                            parameters.getDate());
+                } else if (parameters.getAge() != null) {
+                    return new DomanMentalTestProcessor((DomanMentalTest) test,
+                            parameters.getParameter(),
+                            parameters.getAge());
+                } else {
+                    throw new IllegalStateException("Invalid test parameters: " + parameters);
+                }
             case AUTISM:
                 return new AutismTestProcessor((AutismTest) test);
             case NEWBORN:

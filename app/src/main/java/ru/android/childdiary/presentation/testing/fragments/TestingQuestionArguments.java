@@ -1,5 +1,7 @@
 package ru.android.childdiary.presentation.testing.fragments;
 
+import android.support.annotation.Nullable;
+
 import org.joda.time.LocalDate;
 
 import lombok.AccessLevel;
@@ -20,13 +22,14 @@ import ru.android.childdiary.presentation.core.AppPartitionArguments;
 public class TestingQuestionArguments extends AppPartitionArguments {
     @NonNull
     Question question;
-    boolean forward;
+    @Nullable
+    Boolean forward;
 
     @Builder(builderMethodName = "testingQuestionBuilder")
     public TestingQuestionArguments(@NonNull Child child,
                                     @NonNull LocalDate selectedDate,
                                     @NonNull Question question,
-                                    boolean forward) {
+                                    @Nullable Boolean forward) {
         super(child, selectedDate);
         this.question = question;
         this.forward = forward;

@@ -14,30 +14,42 @@ import lombok.ToString;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Question;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestProcessor<T> {
-    private final LocalDate date;
-    private final DomanTestParameter parameter;
     protected final List<Boolean> answers = new ArrayList<>();
     private final List<Question> questions;
+    private final int initialStage;
     private int index, stage;
     private boolean stopped;
     @Nullable
     private Boolean lastAnswer;
 
-    public DomanTestProcessor(@NonNull T test,
-                              @NonNull LocalDate date,
-                              @NonNull DomanTestParameter parameter) {
+    private DomanTestProcessor(@NonNull T test,
+                               @NonNull DomanTestParameter parameter,
+                               double months) {
         super(test);
-        this.date = date;
-        this.parameter = parameter;
         questions = Collections.unmodifiableList(test.getQuestions().get(parameter));
         for (int i = 0; i < questions.size(); ++i) {
             answers.add(null);
         }
-        // TODO определить индекс по возрасту
+        index = DomanTestProcessorHelper.getIndex(months);
+        initialStage = index + 1;
+    }
+
+    public DomanTestProcessor(@NonNull T test,
+                              @NonNull DomanTestParameter parameter,
+                              @NonNull TimeUtils.Age age) {
+        this(test, parameter, DomanTestProcessorHelper.getMonths(age));
+    }
+
+    public DomanTestProcessor(@NonNull T test,
+                              @NonNull DomanTestParameter parameter,
+                              @NonNull LocalDate birthDate,
+                              @NonNull LocalDate date) {
+        this(test, parameter, DomanTestProcessorHelper.getMonths(birthDate, date));
     }
 
     @Override
@@ -54,21 +66,23 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
         Boolean forward = null;
         if (answer) {
             if (lastAnswer == null || lastAnswer) {
-                // ответили Да, предыдущий ответ был Да ИЛИ не было ответа, фиксируем стадию
+                // ответили Да, предыдущий ответ был Да ИЛИ не было ответа
                 stage = index;
                 ++index;
                 forward = true;
             } else {
-                // ответили Да, предыдущий ответ был Нет, не меняем стадию
+                // ответили Да, предыдущий ответ был Нет
+                stage = index;
                 stopped = true;
             }
         } else {
             if (lastAnswer != null && lastAnswer) {
-                // ответили Нет, предыдущий ответ был Да, не меняем стадию
+                // ответили Нет, предыдущий ответ был Да
+                stage = index - 1;
                 stopped = true;
             } else {
-                // ответили Нет, предыдущий ответ был Нет ИЛИ не было ответа, фиксируем стадию
-                stage = index;
+                // ответили Нет, предыдущий ответ был Нет ИЛИ не было ответа
+                stage = index > 0 ? index - 1 : 0;
                 --index;
                 forward = false;
             }
@@ -94,6 +108,9 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
     @Override
     public String getResultText() {
         int stage = this.stage + 1;
-        return String.format(test.getResultTextFormat(), stage);
+        return String.format(test.getResultTextFormat(),
+                stage,
+                test.getStageType(initialStage, stage),
+                test.getStageDescription(stage));
     }
 }

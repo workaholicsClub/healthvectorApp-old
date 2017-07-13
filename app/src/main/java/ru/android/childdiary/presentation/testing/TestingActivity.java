@@ -87,7 +87,7 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
 
     @Override
     public void showQuestion(@NonNull TestingQuestionArguments arguments) {
-        showAppPartition(new TestingQuestionFragment(), arguments, arguments.isForward());
+        showAppPartition(new TestingQuestionFragment(), arguments, arguments.getForward());
     }
 
     @Override
