@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="@dimen/filter_dialog_width">
+    android:minWidth="@dimen/test_parameters_dialog_width">
 
     <LinearLayout
         android:id="@+id/rootView"
@@ -13,6 +13,11 @@
 
         <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
             android:id="@+id/dateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ru.android.childdiary.presentation.core.fields.widgets.FieldAgeView
+            android:id="@+id/ageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

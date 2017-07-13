@@ -19,12 +19,13 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 
 public class TimeUtils {
+    public static final int MONTHS_IN_YEAR = 12;
     public static final int MINUTES_IN_HOUR = 60;
     public static final int HOURS_IN_DAY = 24;
     public static final int MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR;
 
     @Nullable
-    public static String age(Context context, Child child) {
+    public static String age(Context context, @NonNull Child child) {
         LocalDate birthDate = child.getBirthDate();
 
         if (birthDate == null) {
@@ -37,16 +38,38 @@ public class TimeUtils {
             return null;
         }
 
-        Months period = Months.monthsBetween(birthDate, now);
-        int years = period.getMonths() / 12;
-        int months = period.getMonths() % 12;
+        int months = Months.monthsBetween(birthDate, now).getMonths();
+        return age(context, months, false);
+    }
+
+    @Nullable
+    public static Age getAge(@Nullable LocalDate birthDate, @Nullable LocalDate date) {
+        if (birthDate == null || date == null || birthDate.isAfter(date)) {
+            return null;
+        }
+
+        int months = Months.monthsBetween(birthDate, date).getMonths();
+        return Age.builder().months(months).build();
+    }
+
+    @Nullable
+    public static String age(Context context, @Nullable Age age) {
+        return age == null ? null : age(context, age.getMonths(), true);
+    }
+
+    @Nullable
+    private static String age(Context context, int months, boolean shortMonths) {
+        int years = months / MONTHS_IN_YEAR;
+        months = months % MONTHS_IN_YEAR;
 
         if (years == 0 && months == 0) {
             return context.getString(R.string.newborn);
         }
 
         String yearsString = context.getResources().getQuantityString(R.plurals.numberOfYears, years, years);
-        String monthsString = context.getResources().getQuantityString(R.plurals.numberOfMonths, months, months);
+        String monthsString = shortMonths
+                ? context.getString(R.string.months_short, months)
+                : context.getResources().getQuantityString(R.plurals.numberOfMonths, months, months);
 
         if (years == 0) {
             return monthsString;
@@ -81,30 +104,6 @@ public class TimeUtils {
 
     private static String time(Context context, @NonNull Time time) {
         StringBuilder result = new StringBuilder();
-
-        if (time.getYears() > 0) {
-            if (result.length() > 0) {
-                result.append(' ');
-            }
-            result.append(context.getResources().getQuantityString(R.plurals.numberOfYears,
-                    time.getYears(), time.getYears()));
-        }
-
-        if (time.getMonths() > 0) {
-            if (result.length() > 0) {
-                result.append(' ');
-            }
-            result.append(context.getResources().getQuantityString(R.plurals.numberOfMonths,
-                    time.getMonths(), time.getMonths()));
-        }
-
-        if (time.getWeeks() > 0) {
-            if (result.length() > 0) {
-                result.append(' ');
-            }
-            result.append(context.getResources().getQuantityString(R.plurals.numberOfWeeks,
-                    time.getWeeks(), time.getWeeks()));
-        }
 
         if (time.getDays() > 0) {
             if (result.length() > 0) {
@@ -237,10 +236,21 @@ public class TimeUtils {
 
     @Value
     @Builder
-    public static class Time {
-        int years;
+    public static class Age {
         int months;
-        int weeks;
+
+        public int getYearsPart() {
+            return months / MONTHS_IN_YEAR;
+        }
+
+        public int getMonthsPart() {
+            return months % MONTHS_IN_YEAR;
+        }
+    }
+
+    @Value
+    @Builder
+    public static class Time {
         int days;
         int hours;
         int minutes;

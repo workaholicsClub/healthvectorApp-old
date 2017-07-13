@@ -6,6 +6,7 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.BaseView;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
@@ -29,5 +30,5 @@ public interface TestingView extends BaseView {
     void close();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void specifyDateAndParameter(@NonNull Test test);
+    void specifyDateAndParameter(@NonNull Child child, @NonNull Test test);
 }

@@ -132,11 +132,12 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     }
 
     @Override
-    public void specifyDateAndParameter(@NonNull Test test) {
+    public void specifyDateAndParameter(@NonNull Child child, @NonNull Test test) {
         TestParametersDialogFragment fragment = new TestParametersDialogFragment();
         fragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_AND_PARAMETER_DIALOG,
                 TestParametersDialogArguments.builder()
                         .sex(getSex())
+                        .child(child)
                         .test(test)
                         .build());
     }

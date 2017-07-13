@@ -126,6 +126,7 @@
     <!-- %s - например, "запустится через 00:52" -->
     <string name="will_start">запустится через %s</string>
     <string name="stop_sleep_timer">Остановить таймер сна</string>
+    <string name="months_short">%d мес.</string>
     <string name="days_short">%d д.</string>
     <string name="hours_short">%d ч.</string>
     <string name="minutes_short">%d мин.</string>
@@ -292,4 +293,6 @@
     <string name="stop_testing_confirm_dialog_title">Прервать тестирование?</string>
     <string name="no_child_specified">Добавьте профиль ребенка</string>
     <string name="parameter">Параметр</string>
+    <string name="age">Возраст</string>
+    <string name="doman_age_restriction">Введите возраст. Допустимый возраст от 3 недель до 9 лет.</string>
 </resources>

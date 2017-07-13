@@ -52,7 +52,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     @Override
     public void startTesting() {
         if (test.getTestType() == TestType.DOMAN_MENTAL || test.getTestType() == TestType.DOMAN_PHYSICAL) {
-            getViewState().specifyDateAndParameter(test);
+            getViewState().specifyDateAndParameter(child, test);
         } else {
             testProcessor = TestFactory.createTestProcessor(test, TestParameters.builder()
                     .build());

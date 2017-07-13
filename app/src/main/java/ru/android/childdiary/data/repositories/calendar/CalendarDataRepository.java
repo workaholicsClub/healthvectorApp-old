@@ -397,7 +397,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
             HashMap<TimeUnit, ArrayList<Integer>> map = new HashMap<>();
             map.put(TimeUnit.DAY, new ArrayList<>(Observable.range(1, 30).toList().blockingGet()));
             map.put(TimeUnit.WEEK, new ArrayList<>(Observable.range(1, 52).toList().blockingGet()));
-            map.put(TimeUnit.MONTH, new ArrayList<>(Observable.range(1, 12).toList().blockingGet()));
+            map.put(TimeUnit.MONTH, new ArrayList<>(Observable.range(1, TimeUtils.MONTHS_IN_YEAR).toList().blockingGet()));
             return map;
         });
     }
