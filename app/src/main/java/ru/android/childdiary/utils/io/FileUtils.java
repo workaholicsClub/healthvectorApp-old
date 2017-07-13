@@ -4,8 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
+
+import lombok.Cleanup;
 
 public class FileUtils {
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
@@ -65,5 +70,11 @@ public class FileUtils {
             throw new IOException("Failed to rename file from "
                     + from.getAbsolutePath() + " to " + to.getAbsolutePath());
         }
+    }
+
+    public static void copyFile(File src, File dst) throws IOException {
+        @Cleanup FileChannel inChannel = new FileInputStream(src).getChannel();
+        @Cleanup FileChannel outChannel = new FileOutputStream(dst).getChannel();
+        inChannel.transferTo(0, inChannel.size(), outChannel);
     }
 }

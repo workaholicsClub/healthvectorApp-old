@@ -19,8 +19,6 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestParameters;
-import ru.android.childdiary.domain.interactors.development.testing.tests.DomanMentalTest;
-import ru.android.childdiary.domain.interactors.development.testing.tests.DomanPhysicalTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
@@ -32,13 +30,6 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDomanTestPara
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
-
-import static ru.android.childdiary.data.types.DomanTestParameter.MENTAL_AUDITION;
-import static ru.android.childdiary.data.types.DomanTestParameter.MENTAL_SENSITIVITY;
-import static ru.android.childdiary.data.types.DomanTestParameter.MENTAL_VISION;
-import static ru.android.childdiary.data.types.DomanTestParameter.PHYSICAL_MANUAL;
-import static ru.android.childdiary.data.types.DomanTestParameter.PHYSICAL_MOBILITY;
-import static ru.android.childdiary.data.types.DomanTestParameter.PHYSICAL_SPEECH;
 
 public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestParametersDialogArguments>
         implements DatePickerDialog.OnDateSetListener, AgeDialogFragment.Listener {
@@ -118,21 +109,7 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
     private DomanTestParameter[] getParameters() {
         Test test = dialogArguments.getTest();
         if (test instanceof DomanTest) {
-            if (test instanceof DomanPhysicalTest) {
-                return new DomanTestParameter[]{
-                        PHYSICAL_MOBILITY,
-                        PHYSICAL_SPEECH,
-                        PHYSICAL_MANUAL
-                };
-            } else {
-                if (test instanceof DomanMentalTest) {
-                    return new DomanTestParameter[]{
-                            MENTAL_VISION,
-                            MENTAL_AUDITION,
-                            MENTAL_SENSITIVITY
-                    };
-                }
-            }
+            return ((DomanTest) test).getParameters();
         }
         return null;
     }

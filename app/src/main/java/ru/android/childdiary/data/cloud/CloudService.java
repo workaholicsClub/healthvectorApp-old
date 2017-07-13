@@ -20,7 +20,7 @@ abstract class CloudService {
     protected final static String CONTENT_TYPE = "application/zip";
 
     protected final Logger logger = LoggerFactory.getLogger(toString());
-    private final Context context;
+    protected final Context context;
 
     protected CloudService(Context context) {
         this.context = context;

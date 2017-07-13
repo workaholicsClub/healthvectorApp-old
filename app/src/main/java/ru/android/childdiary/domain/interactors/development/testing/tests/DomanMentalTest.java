@@ -13,6 +13,10 @@ import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Question;
 
+import static ru.android.childdiary.data.types.DomanTestParameter.MENTAL_AUDITION;
+import static ru.android.childdiary.data.types.DomanTestParameter.MENTAL_SENSITIVITY;
+import static ru.android.childdiary.data.types.DomanTestParameter.MENTAL_VISION;
+
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -25,5 +29,14 @@ public class DomanMentalTest extends DomanTest {
                            @NonNull String advanced, @NonNull String normal, @NonNull String slow,
                            @NonNull List<String> stageDescriptions) {
         super(TestType.DOMAN_MENTAL, name, description, questions, resultTextFormat, advanced, normal, slow, stageDescriptions);
+    }
+
+    @Override
+    public DomanTestParameter[] getParameters() {
+        return new DomanTestParameter[]{
+                MENTAL_VISION,
+                MENTAL_AUDITION,
+                MENTAL_SENSITIVITY
+        };
     }
 }

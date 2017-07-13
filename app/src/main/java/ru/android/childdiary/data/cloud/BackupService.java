@@ -11,6 +11,7 @@ import java.util.Collections;
 import javax.inject.Inject;
 
 import io.reactivex.Single;
+import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.utils.io.FileUtils;
@@ -60,6 +61,11 @@ public class BackupService extends CloudService {
                 fileMetadata = drive.files().create(fileMetadata, mediaContent)
                         .setFields(UPLOAD_FIELDS)
                         .execute();
+
+                if (BuildConfig.COPY_BACKUP_TO_EXTERNAL_STORAGE) {
+                    java.io.File externalStorage = context.getExternalFilesDir(null);
+                    FileUtils.copyFile(zipFile, new java.io.File(externalStorage, zipFile.getName()));
+                }
 
                 logger.debug("uploaded successfully, file id: " + fileMetadata.getId());
 

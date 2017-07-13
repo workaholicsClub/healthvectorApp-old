@@ -71,4 +71,6 @@ public abstract class DomanTest extends Test {
         }
         return null;
     }
+
+    public abstract DomanTestParameter[] getParameters();
 }
