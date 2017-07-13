@@ -59,8 +59,6 @@ public abstract class FieldDialogView<T> extends FieldValueView<T> implements Vi
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        //noinspection deprecation
-        textView.setTextAppearance(getContext(), readOnly ? R.style.SecondaryTextAppearance : R.style.PrimaryTextAppearance);
         textView.setTypeface(typeface);
         imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
         textViewWrapper.setOnClickListener(readOnly ? null : this);

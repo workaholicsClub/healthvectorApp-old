@@ -105,8 +105,6 @@ public class FieldTimesView extends FieldValueView<LinearGroups> implements View
             layoutParams.setMargins(margin, 0, margin, 0);
             textView.setLayoutParams(layoutParams);
             textView.setPadding(padding, padding, padding, padding);
-            //noinspection deprecation
-            textView.setTextAppearance(getContext(), readOnly ? R.style.SecondaryTextAppearance : R.style.PrimaryTextAppearance);
             textView.setTypeface(typeface);
             textView.setBackgroundResource(ResourcesUtils.getTimeItemBackgroundRes(sex, !readOnly));
             textView.setOnClickListener(readOnly ? null : this);

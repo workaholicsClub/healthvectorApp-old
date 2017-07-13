@@ -122,6 +122,5 @@ public class FieldEditTextWithImageView extends FieldEditTextView implements Fie
     public void setReadOnly(boolean readOnly) {
         setVisibility(readOnly && TextUtils.isEmpty(getText()) && hideIfEmpty ? GONE : VISIBLE);
         editText.setEnabled(!readOnly);
-        WidgetsUtils.setupEditText(editText, readOnly);
     }
 }

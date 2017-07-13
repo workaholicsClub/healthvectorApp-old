@@ -166,7 +166,6 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
             editText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, right, 0);
         }
         editText.setEnabled(!readOnly);
-        WidgetsUtils.setupEditText(editText, readOnly);
         buttonDeletePhoto.setVisibility(readOnly ? GONE : VISIBLE);
     }
 
