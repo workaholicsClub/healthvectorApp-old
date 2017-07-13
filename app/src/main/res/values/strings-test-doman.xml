@@ -2,10 +2,10 @@
 <resources>
     <string name="doman_result_text_format">
         <![CDATA[
-            <p class="tab" style="text-align:center;">
-            %1$d стадия развития (%2$s)
+            <p style="text-align:center;">
+            %1$d стадия развития<br />(%2$s)
             </p>
-            <p class="tab" style="text-align:center;">
+            <p style="text-align:center;">
             %3$s
             </p>
         ]]>

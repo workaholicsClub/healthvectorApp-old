@@ -110,7 +110,7 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
         int stage = this.stage + 1;
         return String.format(test.getResultTextFormat(),
                 stage,
-                test.getStageType(initialStage, stage),
-                test.getStageDescription(stage));
+                test.getStageDescription(stage),
+                test.getStageType(initialStage, stage));
     }
 }

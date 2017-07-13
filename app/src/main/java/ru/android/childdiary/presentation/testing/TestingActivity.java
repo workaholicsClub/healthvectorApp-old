@@ -46,6 +46,8 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     @InjectPresenter
     TestingPresenter presenter;
 
+    private Test test;
+
     public static Intent getIntent(Context context,
                                    @NonNull Test test,
                                    @NonNull Child child,
@@ -63,11 +65,12 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        test = (Test) getIntent().getSerializableExtra(ExtraConstants.EXTRA_TEST);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testing);
 
         if (savedInstanceState == null) {
-            Test test = (Test) getIntent().getSerializableExtra(ExtraConstants.EXTRA_TEST);
             Child child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
             LocalDate date = (LocalDate) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DATE);
             presenter.initTest(test, child, date);
@@ -77,6 +80,7 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
+        setupToolbarTitle(test.getName());
         toolbar.setNavigationIcon(R.drawable.toolbar_action_close);
     }
 

@@ -10,17 +10,17 @@
     </string>
     <string name="test_newborn_result_good">
         <![CDATA[
-            <p class="tab" style="text-align:center;">
+            <p style="text-align:center;">
             Риск церебрального паралича не обнаружен
             </p>
         ]]>
     </string>
     <string name="test_newborn_result_bad">
         <![CDATA[
-            <p class="tab" style="text-align:center;">
+            <p style="text-align:center;">
             Риск церебрального паралича
             </p>
-            <p class="tab" style="text-align:center;">
+            <p style="text-align:center;">
             Обратитесь за консультацией к врачу
             </p>
         ]]>
