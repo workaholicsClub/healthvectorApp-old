@@ -136,7 +136,7 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     }
 
     @Override
-    public void specifyDateAndParameter(@NonNull Child child, @NonNull Test test) {
+    public void specifyTestParameters(@NonNull Child child, @NonNull Test test) {
         TestParametersDialogFragment fragment = new TestParametersDialogFragment();
         fragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_AND_PARAMETER_DIALOG,
                 TestParametersDialogArguments.builder()
@@ -148,7 +148,7 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
 
     @Override
     public void onTestParametersSet(@NonNull TestParameters parameters) {
-        presenter.parameterSpecified(parameters);
+        presenter.onTestParametersSet(parameters);
     }
 
     @Override

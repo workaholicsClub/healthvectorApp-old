@@ -30,5 +30,5 @@ public interface TestingView extends BaseView {
     void close();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void specifyDateAndParameter(@NonNull Child child, @NonNull Test test);
+    void specifyTestParameters(@NonNull Child child, @NonNull Test test);
 }

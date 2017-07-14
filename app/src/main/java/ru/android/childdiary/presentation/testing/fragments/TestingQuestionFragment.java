@@ -8,11 +8,14 @@ import android.widget.Button;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Question;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView;
 import ru.android.childdiary.presentation.testing.TestingController;
+import ru.android.childdiary.utils.strings.TestUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class TestingQuestionFragment extends AppPartitionFragment {
@@ -28,6 +31,8 @@ public class TestingQuestionFragment extends AppPartitionFragment {
     @Nullable
     private TestingController testingController;
     private Question question;
+    @Nullable
+    private DomanTestParameter parameter;
 
     @Override
     protected int getLayoutResourceId() {
@@ -57,10 +62,14 @@ public class TestingQuestionFragment extends AppPartitionFragment {
             return;
         }
         question = arguments.getQuestion();
+        parameter = arguments.getParameter();
     }
 
     @Override
     protected void setupUi() {
+        if (parameter != null) {
+            ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.toString(getContext(), parameter));
+        }
         justifiedTextView.setText(question.getText());
     }
 

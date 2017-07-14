@@ -158,11 +158,11 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
         toolbarLogo.setImageDrawable(ContextCompat.getDrawable(this, drawableRes));
     }
 
-    protected final void setupToolbarTitle(String text) {
+    public final void setupToolbarTitle(String text) {
         toolbarTitle.setText(text);
     }
 
-    protected final void setupToolbarTitle(@StringRes int titleRes) {
+    public final void setupToolbarTitle(@StringRes int titleRes) {
         toolbarTitle.setText(titleRes);
     }
 

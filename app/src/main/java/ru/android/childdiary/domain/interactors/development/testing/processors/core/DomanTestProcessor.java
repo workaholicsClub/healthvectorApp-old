@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import ru.android.childdiary.data.types.DomanTestParameter;
@@ -19,8 +20,10 @@ import ru.android.childdiary.utils.strings.TimeUtils;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestProcessor<T> {
-    protected final List<Boolean> answers = new ArrayList<>();
+    @Getter
+    private final DomanTestParameter parameter;
     private final List<Question> questions;
+    private final List<Boolean> answers = new ArrayList<>();
     private final int initialStage;
     private int index, stage;
     private boolean stopped;
@@ -31,6 +34,7 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
                                @NonNull DomanTestParameter parameter,
                                double months) {
         super(test);
+        this.parameter = parameter;
         questions = Collections.unmodifiableList(test.getQuestions().get(parameter));
         for (int i = 0; i < questions.size(); ++i) {
             answers.add(null);

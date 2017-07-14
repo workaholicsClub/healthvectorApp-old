@@ -16,7 +16,7 @@
         <ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView
             android:id="@+id/descriptionView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <Button
