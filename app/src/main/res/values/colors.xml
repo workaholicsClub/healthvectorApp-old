@@ -40,4 +40,5 @@
     <color name="current_day_background">#EEF1F3</color>
     <color name="token_item_background">#33999999</color>
     <color name="delimiter_color">#1E000000</color>
+    <color name="chart_line_normal_color">#F7A731</color>
 </resources>

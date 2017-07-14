@@ -23,6 +23,7 @@
     <string name="birth_height_and_weight">Рост и вес при рождении</string>
     <string name="enter_height">Введите рост</string>
     <string name="enter_weight">Введите вес</string>
+    <!-- \n - перенос строки -->
     <string name="add_image_button_title">Добавить\nфото</string>
     <string name="ok">OK</string>
     <string name="yes">Да</string>
@@ -71,7 +72,7 @@
     <string name="weight_review">%s кг</string>
     <string name="amount_review">%s мл</string>
     <string name="newborn">новорождённый</string>
-    <!-- %1$s - параметр "Количество лет", %2$s - параметр "Количество месяцев" -->
+    <!-- %1$s - параметр "Количество лет", %2$s - параметр "Количество месяцев"; например, "2 года 10 месяцев" или "2 года 10 мес." -->
     <string name="years_and_months">%1$s %2$s</string>
     <string name="select_sex">Выберите пол</string>
     <string name="male">Мужской</string>
@@ -295,4 +296,5 @@
     <string name="parameter">Параметр</string>
     <string name="age">Возраст</string>
     <string name="doman_age_restriction">Введите возраст. Допустимый возраст от 3 недель до 9 лет.</string>
+    <string name="percent_format">%.0f%%</string>
 </resources>
