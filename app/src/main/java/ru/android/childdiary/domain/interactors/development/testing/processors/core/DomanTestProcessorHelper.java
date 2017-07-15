@@ -10,8 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import ru.android.childdiary.utils.strings.TimeUtils;
 
-public class DomanTestProcessorHelper {
-    private static final Range[] ADVANCED = new Range[]{
+class DomanTestProcessorHelper {
+    static final Range[] ADVANCED_RANGES = new Range[]{
             new Range(0.25, 0.75),
             new Range(0.625, 1.875),
             new Range(1.75, 5.25),
@@ -20,7 +20,7 @@ public class DomanTestProcessorHelper {
             new Range(9, 27),
             new Range(18, 54)
     };
-    private static final Range[] NORMAL = new Range[]{
+    static final Range[] NORMAL_RANGES = new Range[]{
             new Range(0.75, 1.50),
             new Range(1.875, 3.75),
             new Range(5.25, 10.5),
@@ -29,7 +29,7 @@ public class DomanTestProcessorHelper {
             new Range(27, 54),
             new Range(54, 108)
     };
-    private static final Range[] SLOW = new Range[]{
+    static final Range[] SLOW_RANGES = new Range[]{
             new Range(1.5, 2.5),
             new Range(3.75, 6.25),
             new Range(10.5, 17.5),
@@ -59,13 +59,17 @@ public class DomanTestProcessorHelper {
     }
 
     public static int getIndex(double months) {
-        for (int i = 0; i < NORMAL.length; ++i) {
-            Range range = NORMAL[i];
-            if (range.contains(months)) {
+        int length = NORMAL_RANGES.length;
+        int lastIndex = length - 1;
+        for (int i = 0; i < length; ++i) {
+            Range range = NORMAL_RANGES[i];
+            if (i == 0 && months < range.getTo()
+                    || i == lastIndex && months >= range.getFrom()
+                    || range.contains(months)) {
                 return i;
             }
             // Костыль для разрывных диапазонов
-            Range nextRange = i < NORMAL.length - 1 ? NORMAL[i + 1] : null;
+            Range nextRange = i < lastIndex ? NORMAL_RANGES[i + 1] : null;
             if (nextRange != null && range.getTo() <= months && months < nextRange.getFrom()) {
                 double first = months - range.getTo();
                 double second = nextRange.getFrom() - months;
@@ -76,15 +80,15 @@ public class DomanTestProcessorHelper {
                 }
             }
         }
-        if (months < NORMAL[0].getFrom()) {
+        if (months < NORMAL_RANGES[0].getFrom()) {
             return 0;
         }
-        return NORMAL.length - 1;
+        return lastIndex;
     }
 
     @Value
     @AllArgsConstructor(suppressConstructorProperties = true)
-    private static class Range {
+    static class Range {
         double from, to;
 
         public boolean contains(double value) {

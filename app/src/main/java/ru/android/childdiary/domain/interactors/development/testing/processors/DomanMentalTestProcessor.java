@@ -15,8 +15,9 @@ import ru.android.childdiary.utils.strings.TimeUtils;
 public class DomanMentalTestProcessor extends DomanTestProcessor<DomanMentalTest> {
     public DomanMentalTestProcessor(@NonNull DomanMentalTest test,
                                     @NonNull DomanTestParameter parameter,
-                                    @NonNull TimeUtils.Age age) {
-        super(test, parameter, age);
+                                    @NonNull TimeUtils.Age age,
+                                    @NonNull LocalDate date) {
+        super(test, parameter, age, date);
     }
 
     public DomanMentalTestProcessor(@NonNull DomanMentalTest test,

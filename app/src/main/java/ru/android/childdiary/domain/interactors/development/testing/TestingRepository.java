@@ -12,4 +12,8 @@ public interface TestingRepository {
     Observable<List<Test>> getTests();
 
     Observable<List<TestResult>> getTestResults(@NonNull Child child);
+
+    Observable<TestResult> add(@NonNull TestResult testResult);
+
+    Observable<TestResult> delete(@NonNull TestResult testResult);
 }

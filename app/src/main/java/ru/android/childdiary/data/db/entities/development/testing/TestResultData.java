@@ -1,6 +1,6 @@
 package ru.android.childdiary.data.db.entities.development.testing;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import io.requery.Entity;
 import io.requery.ForeignKey;
@@ -24,9 +24,9 @@ public interface TestResultData extends Persistable {
     @ManyToOne
     ChildData getChild();
 
-    DateTime getDateTime();
-
     TestType getTestType();
+
+    LocalDate getDate();
 
     DomanTestParameter getDomanTestParameter();
 

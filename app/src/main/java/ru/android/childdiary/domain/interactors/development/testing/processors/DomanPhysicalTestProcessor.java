@@ -15,8 +15,9 @@ import ru.android.childdiary.utils.strings.TimeUtils;
 public class DomanPhysicalTestProcessor extends DomanTestProcessor<DomanPhysicalTest> {
     public DomanPhysicalTestProcessor(@NonNull DomanPhysicalTest test,
                                       @NonNull DomanTestParameter parameter,
-                                      @NonNull TimeUtils.Age age) {
-        super(test, parameter, age);
+                                      @NonNull TimeUtils.Age age,
+                                      @NonNull LocalDate date) {
+        super(test, parameter, age, date);
     }
 
     public DomanPhysicalTestProcessor(@NonNull DomanPhysicalTest test,

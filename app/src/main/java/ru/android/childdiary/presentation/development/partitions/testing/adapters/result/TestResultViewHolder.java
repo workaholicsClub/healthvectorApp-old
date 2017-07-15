@@ -56,12 +56,12 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
     public void bind(Context context, Sex sex, TestResult item) {
         super.bind(context, sex, item);
 
-        textViewDate.setText(DateUtils.date(context, item.getDateTime()));
-        textViewTime.setText(DateUtils.time(context, item.getDateTime()));
+        textViewDate.setText(DateUtils.date(context, item.getDate()));
+        // TODO textViewTime.setText(DateUtils.time(context, item.getDateTime()));
         WidgetsUtils.hideIfEmpty(textViewTime);
 
         textViewTitle.setText(TestUtils.getTestName(context, item.getTestType()));
-        textViewDescription.setText(TestUtils.toString(context, item.getTestParameter()));
+        textViewDescription.setText(TestUtils.toString(context, item.getDomanTestParameter()));
 
         //noinspection deprecation
         imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));

@@ -2,4 +2,7 @@
 <resources>
     <string name="duration_separator" translatable="false">:</string>
     <string name="duration_format" translatable="false">00:00:00</string>
+    <string name="percent_double_format">%.0f%%</string>
+    <string name="percent_string_format">%s%%</string>
+    <string name="two_values">%1$s • %2$s</string>
 </resources>

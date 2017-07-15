@@ -29,10 +29,11 @@ public class TestFactory {
                             parameters.getParameter(),
                             parameters.getBirthDate(),
                             parameters.getDate());
-                } else if (parameters.getAge() != null) {
+                } else if (parameters.getAge() != null && parameters.getDate() != null) {
                     return new DomanPhysicalTestProcessor((DomanPhysicalTest) test,
                             parameters.getParameter(),
-                            parameters.getAge());
+                            parameters.getAge(),
+                            parameters.getDate());
                 } else {
                     throw new IllegalStateException("Invalid test parameters: " + parameters);
                 }
@@ -42,10 +43,11 @@ public class TestFactory {
                             parameters.getParameter(),
                             parameters.getBirthDate(),
                             parameters.getDate());
-                } else if (parameters.getAge() != null) {
+                } else if (parameters.getAge() != null && parameters.getDate() != null) {
                     return new DomanMentalTestProcessor((DomanMentalTest) test,
                             parameters.getParameter(),
-                            parameters.getAge());
+                            parameters.getAge(),
+                            parameters.getDate());
                 } else {
                     throw new IllegalStateException("Invalid test parameters: " + parameters);
                 }

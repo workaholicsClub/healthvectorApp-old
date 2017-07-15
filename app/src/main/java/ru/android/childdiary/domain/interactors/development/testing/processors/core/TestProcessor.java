@@ -15,4 +15,6 @@ public interface TestProcessor {
 
     @Nullable
     String getResultText();
+
+    int getResultNumber();
 }

@@ -26,4 +26,12 @@ public class TestingInteractor {
     public Observable<List<TestResult>> getTestResults(@NonNull Child child) {
         return testingRepository.getTestResults(child);
     }
+
+    public Observable<TestResult> add(@NonNull TestResult testResult) {
+        return testingRepository.add(testResult);
+    }
+
+    public Observable<TestResult> delete(@NonNull TestResult testResult) {
+        return testingRepository.delete(testResult);
+    }
 }

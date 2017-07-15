@@ -144,4 +144,14 @@ public class TestingDataRepository implements TestingRepository {
     public Observable<List<TestResult>> getTestResults(@NonNull Child child) {
         return testingDbService.getTestResults(child);
     }
+
+    @Override
+    public Observable<TestResult> add(@NonNull TestResult testResult) {
+        return testingDbService.add(testResult);
+    }
+
+    @Override
+    public Observable<TestResult> delete(@NonNull TestResult testResult) {
+        return testingDbService.delete(testResult);
+    }
 }

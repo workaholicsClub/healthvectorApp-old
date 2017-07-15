@@ -34,7 +34,7 @@ public class TestingDbService {
     public Observable<List<TestResult>> getTestResults(@NonNull Child child) {
         return dataStore.select(TestResultEntity.class)
                 .where(TestResultEntity.CHILD_ID.eq(child.getId()))
-                .orderBy(TestResultEntity.DATE_TIME.desc(), TestResultEntity.TEST_TYPE, TestResultEntity.DOMAN_TEST_PARAMETER, TestResultEntity.ID)
+                .orderBy(TestResultEntity.DATE.desc(), TestResultEntity.TEST_TYPE, TestResultEntity.DOMAN_TEST_PARAMETER, TestResultEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, testResultMapper));

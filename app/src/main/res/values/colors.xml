@@ -41,4 +41,7 @@
     <color name="token_item_background">#33999999</color>
     <color name="delimiter_color">#1E000000</color>
     <color name="chart_line_normal_color">#F7A731</color>
+    <color name="slow_color">#60EB4E38</color>
+    <color name="normal_color">#6092D050</color>
+    <color name="advanced_color">#604288B4</color>
 </resources>

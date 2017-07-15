@@ -1,6 +1,6 @@
 package ru.android.childdiary.domain.interactors.development.testing;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.io.Serializable;
 
@@ -17,11 +17,14 @@ public class TestResult implements Serializable {
 
     Child child;
 
-    DateTime dateTime;
-
     TestType testType;
 
-    DomanTestParameter testParameter;
+    LocalDate date;
 
+    DomanTestParameter domanTestParameter;
+
+    // Доман -- Стадия развития
+    // Аутизм -- Количество баллов (риск)
+    // Новрожденный -- Есть риск (1), Норма (0)
     Integer result;
 }

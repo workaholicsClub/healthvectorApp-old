@@ -132,11 +132,21 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
                 TimeUtils.Age age = ageView.getValue();
 
                 if (age == null) {
-                    showToast(getString(R.string.doman_age_restriction));
+                    showToast(getString(R.string.validation_no_age));
                     return;
                 }
 
                 LocalDate date = dateView.getValue();
+                LocalDate birthDate = dialogArguments.getChild().getBirthDate();
+                if (birthDate != null) {
+                    LocalDate minDate = birthDate.plusWeeks(DomanTest.MIN_WEEKS);
+                    LocalDate maxDate = birthDate.plusYears(DomanTest.MAX_YEARS);
+                    if (date.isBefore(minDate) || date.isAfter(maxDate)) {
+                        showToast(getString(R.string.validation_invalid_age));
+                        return;
+                    }
+                }
+
                 DomanTestParameter parameter = parameterView.getSelected();
                 if (listener != null) {
                     listener.onTestParametersSet(TestParameters.builder()

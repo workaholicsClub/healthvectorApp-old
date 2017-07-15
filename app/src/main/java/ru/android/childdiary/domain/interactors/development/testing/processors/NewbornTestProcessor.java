@@ -18,6 +18,12 @@ public class NewbornTestProcessor extends SimpleTestProcessor<NewbornTest> {
     @Nullable
     @Override
     public String getResultText() {
+        int count = getResultNumber();
+        return count == 0 ? test.getResultGood() : test.getResultBad();
+    }
+
+    @Override
+    public int getResultNumber() {
         for (int i = 0; i < answers.size(); ++i) {
             Boolean answer = answers.get(i);
             if (answer == null) {
@@ -25,9 +31,9 @@ public class NewbornTestProcessor extends SimpleTestProcessor<NewbornTest> {
             }
             boolean yes = answers.get(i);
             if (yes) {
-                return test.getResultBad();
+                return 1;
             }
         }
-        return test.getResultGood();
+        return 0;
     }
 }

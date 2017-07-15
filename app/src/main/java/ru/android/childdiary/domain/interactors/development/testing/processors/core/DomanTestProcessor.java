@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import ru.android.childdiary.data.types.DomanTestParameter;
@@ -20,8 +19,9 @@ import ru.android.childdiary.utils.strings.TimeUtils;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestProcessor<T> {
-    @Getter
     private final DomanTestParameter parameter;
+    private final LocalDate date;
+    private final double months;
     private final List<Question> questions;
     private final List<Boolean> answers = new ArrayList<>();
     private final int initialStage;
@@ -32,9 +32,12 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
 
     private DomanTestProcessor(@NonNull T test,
                                @NonNull DomanTestParameter parameter,
+                               @NonNull LocalDate date,
                                double months) {
         super(test);
         this.parameter = parameter;
+        this.date = date;
+        this.months = months;
         questions = Collections.unmodifiableList(test.getQuestions().get(parameter));
         for (int i = 0; i < questions.size(); ++i) {
             answers.add(null);
@@ -45,15 +48,16 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
 
     public DomanTestProcessor(@NonNull T test,
                               @NonNull DomanTestParameter parameter,
-                              @NonNull TimeUtils.Age age) {
-        this(test, parameter, DomanTestProcessorHelper.getMonths(age));
+                              @NonNull TimeUtils.Age age,
+                              @NonNull LocalDate date) {
+        this(test, parameter, date, DomanTestProcessorHelper.getMonths(age));
     }
 
     public DomanTestProcessor(@NonNull T test,
                               @NonNull DomanTestParameter parameter,
                               @NonNull LocalDate birthDate,
                               @NonNull LocalDate date) {
-        this(test, parameter, DomanTestProcessorHelper.getMonths(birthDate, date));
+        this(test, parameter, date, DomanTestProcessorHelper.getMonths(birthDate, date));
     }
 
     @Override
@@ -111,10 +115,27 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
     @Nullable
     @Override
     public String getResultText() {
-        int stage = this.stage + 1;
+        int stage = getResultNumber();
         return String.format(test.getResultTextFormat(),
                 stage,
                 test.getStageDescription(stage),
                 test.getStageType(initialStage, stage));
+    }
+
+    @Override
+    public int getResultNumber() {
+        return this.stage + 1;
+    }
+
+    public DomanTestParameter getDomanParameter() {
+        return parameter;
+    }
+
+    public DomanResult getDomanResult() {
+        return DomanResult.builder()
+                .date(date)
+                .months(months)
+                .stage(stage)
+                .build();
     }
 }

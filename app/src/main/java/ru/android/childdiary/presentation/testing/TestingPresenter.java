@@ -9,12 +9,16 @@ import org.joda.time.LocalDate;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.BiTestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestParameters;
@@ -63,28 +67,21 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                     .selectedDate(date)
                     .question(testProcessor.getCurrentQuestion())
                     .forward(true)
-                    .parameter(getParameter())
+                    .parameter(getDomanParameter())
                     .build());
         }
     }
 
     public void onTestParametersSet(@NonNull TestParameters parameters) {
+        // TODO check date
         testProcessor = TestFactory.createTestProcessor(test, parameters);
         getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                 .child(child)
                 .selectedDate(date)
                 .question(testProcessor.getCurrentQuestion())
                 .forward(true)
-                .parameter(getParameter())
+                .parameter(getDomanParameter())
                 .build());
-    }
-
-    @Nullable
-    private DomanTestParameter getParameter() {
-        if (testProcessor instanceof DomanTestProcessor) {
-            return ((DomanTestProcessor) testProcessor).getParameter();
-        }
-        return null;
     }
 
     @Override
@@ -99,7 +96,16 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     public void close() {
         if (testProcessor != null) {
             if (testProcessor.isFinished()) {
-                // TODO: save test result
+                unsubscribeOnDestroy(testingInteractor.add(TestResult.builder()
+                        .child(child)
+                        .testType(test.getTestType())
+                        .date(date)
+                        .domanTestParameter(getDomanParameter())
+                        .result(testProcessor.getResultNumber())
+                        .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(added -> getViewState().close(), this::onUnexpectedError));
             }
             testProcessor = null;
         }
@@ -126,7 +132,8 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                     .child(child)
                     .selectedDate(date)
                     .text(text)
-                    .parameter(getParameter())
+                    .parameter(getDomanParameter())
+                    .result(getDomanResult())
                     .build());
         } else {
             getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
@@ -134,8 +141,24 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                     .selectedDate(date)
                     .question(testProcessor.getCurrentQuestion())
                     .forward(forward)
-                    .parameter(getParameter())
+                    .parameter(getDomanParameter())
                     .build());
         }
+    }
+
+    @Nullable
+    private DomanTestParameter getDomanParameter() {
+        if (testProcessor instanceof DomanTestProcessor) {
+            return ((DomanTestProcessor) testProcessor).getDomanParameter();
+        }
+        return null;
+    }
+
+    @Nullable
+    private DomanResult getDomanResult() {
+        if (testProcessor instanceof DomanTestProcessor) {
+            return ((DomanTestProcessor) testProcessor).getDomanResult();
+        }
+        return null;
     }
 }

@@ -29,9 +29,9 @@ public class TestResultMapper implements EntityMapper<TestResultData, TestResult
         return TestResult.builder()
                 .id(testResultData.getId())
                 .child(child)
-                .dateTime(testResultData.getDateTime())
                 .testType(testResultData.getTestType())
-                .testParameter(testResultData.getDomanTestParameter())
+                .date(testResultData.getDate())
+                .domanTestParameter(testResultData.getDomanTestParameter())
                 .result(testResultData.getResult())
                 .build();
     }
@@ -55,9 +55,9 @@ public class TestResultMapper implements EntityMapper<TestResultData, TestResult
 
     @Override
     public void fillNonReferencedFields(@NonNull TestResultEntity to, @NonNull TestResult from) {
-        to.setDateTime(from.getDateTime());
         to.setTestType(from.getTestType());
-        to.setDomanTestParameter(from.getTestParameter());
+        to.setDate(from.getDate());
+        to.setDomanTestParameter(from.getDomanTestParameter());
         to.setResult(from.getResult());
     }
 }
