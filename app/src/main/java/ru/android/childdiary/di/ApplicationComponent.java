@@ -20,7 +20,7 @@ import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsPresenter;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryPresenter;
-import ru.android.childdiary.presentation.development.partitions.testing.TestResultPresenter;
+import ru.android.childdiary.presentation.development.partitions.testing.TestResultsPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
@@ -73,6 +73,8 @@ import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
+import ru.android.childdiary.presentation.testing.TestResultActivity;
+import ru.android.childdiary.presentation.testing.TestResultPresenter;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 import ru.android.childdiary.presentation.testing.TestingPresenter;
 import ru.android.childdiary.services.AccountService;
@@ -154,7 +156,7 @@ public interface ApplicationComponent {
 
     void inject(AntropometryPresenter presenter);
 
-    void inject(TestResultPresenter presenter);
+    void inject(TestResultsPresenter presenter);
 
     void inject(ExerciseDetailPresenter presenter);
 
@@ -165,6 +167,8 @@ public interface ApplicationComponent {
     void inject(CloudOperationPresenter presenter);
 
     void inject(TestingPresenter presenter);
+
+    void inject(TestResultPresenter presenter);
 
     // activities
     void inject(SplashActivity activity);
@@ -214,6 +218,8 @@ public interface ApplicationComponent {
     void inject(CloudOperationActivity activity);
 
     void inject(TestingActivity activity);
+
+    void inject(TestResultActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

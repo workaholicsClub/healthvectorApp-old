@@ -80,7 +80,7 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         recyclerView.setLayoutManager(layoutManager);
 
         Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(divider, DIVIDER_PADDING, 0);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(divider, DIVIDER_PADDING);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter = new ExerciseAdapter(getContext(), this);

@@ -16,33 +16,23 @@
             android:background="@color/white"
             android:orientation="vertical">
 
-            <include
-                android:id="@+id/testsTitle"
-                layout="@layout/settings_item_group"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/base_margin" />
-
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewTests"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/base_margin" />
-
-            <include layout="@layout/delimiter" />
+                android:paddingBottom="@dimen/base_margin"
+                android:paddingTop="@dimen/base_margin" />
 
             <include
-                android:id="@+id/testResultsTitle"
-                layout="@layout/settings_item_group"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/base_margin" />
+                android:id="@+id/line"
+                layout="@layout/delimiter" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewTestResults"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/base_margin" />
+                android:paddingBottom="@dimen/base_margin"
+                android:paddingTop="@dimen/base_margin" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </FrameLayout>

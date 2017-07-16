@@ -11,11 +11,11 @@ import org.joda.time.LocalDate;
 import java.util.List;
 
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionView;
 
-public interface TestResultView extends AppPartitionView {
+public interface TestResultsView extends AppPartitionView {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showTests(@NonNull List<Test> tests);
 
@@ -24,4 +24,7 @@ public interface TestResultView extends AppPartitionView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToTest(@NonNull Test test, @NonNull Child child, @NonNull LocalDate date);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToTestResult(@NonNull TestResult testResult);
 }

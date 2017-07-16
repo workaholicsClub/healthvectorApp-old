@@ -65,22 +65,23 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
             getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                     .child(child)
                     .selectedDate(date)
+                    .parameter(getDomanParameter())
                     .question(testProcessor.getCurrentQuestion())
                     .forward(true)
-                    .parameter(getDomanParameter())
                     .build());
         }
     }
 
     public void onTestParametersSet(@NonNull TestParameters parameters) {
         // TODO check date
+        date = parameters.getDate();
         testProcessor = TestFactory.createTestProcessor(test, parameters);
         getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                 .child(child)
                 .selectedDate(date)
+                .parameter(getDomanParameter())
                 .question(testProcessor.getCurrentQuestion())
                 .forward(true)
-                .parameter(getDomanParameter())
                 .build());
     }
 
@@ -101,11 +102,11 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                         .testType(test.getTestType())
                         .date(date)
                         .domanTestParameter(getDomanParameter())
-                        .result(testProcessor.getResultNumber())
+                        .result(testProcessor.getResult())
                         .build())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(added -> getViewState().close(), this::onUnexpectedError));
+                        .subscribe(addedTestResult -> getViewState().close(), this::onUnexpectedError));
             }
             testProcessor = null;
         }
@@ -127,21 +128,21 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     private void goToNextQuestion() {
         Boolean forward = testProcessor.goToNextQuestion();
         if (testProcessor.isFinished()) {
-            String text = testProcessor.getResultText();
+            String text = testProcessor.interpretResult();
             getViewState().showFinish(TestingFinishArguments.testingFinishBuilder()
                     .child(child)
                     .selectedDate(date)
-                    .text(text)
                     .parameter(getDomanParameter())
+                    .text(text)
                     .result(getDomanResult())
                     .build());
         } else {
             getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                     .child(child)
                     .selectedDate(date)
+                    .parameter(getDomanParameter())
                     .question(testProcessor.getCurrentQuestion())
                     .forward(forward)
-                    .parameter(getDomanParameter())
                     .build());
         }
     }

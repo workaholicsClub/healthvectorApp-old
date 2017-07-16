@@ -11,27 +11,18 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.Autism
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class AutismTestProcessor extends SimpleTestProcessor<AutismTest> {
+    @Nullable
     private Integer result;
 
     public AutismTestProcessor(@NonNull AutismTest test) {
         super(test);
     }
 
-    @Nullable
     @Override
-    public String getResultText() {
-        int count = getResultNumber();
-        if (count <= 2) {
-            return test.getFinishTextLow();
-        } else if (count <= 7) {
-            return test.getFinishTextMedium();
-        } else {
-            return test.getFinishTextHigh();
+    public int getResult() {
+        if (result != null) {
+            return result;
         }
-    }
-
-    @Override
-    public int getResultNumber() {
         int count = 0;
         for (int i = 0; i < answers.size(); ++i) {
             Boolean answer = answers.get(i);
@@ -50,6 +41,24 @@ public class AutismTestProcessor extends SimpleTestProcessor<AutismTest> {
                 }
             }
         }
+        result = count;
         return count;
+    }
+
+    @Override
+    public void setResult(@Nullable Integer result) {
+        this.result = result;
+    }
+
+    @Override
+    public String interpretResult() {
+        int count = getResult();
+        if (count <= 2) {
+            return test.getFinishTextLow();
+        } else if (count <= 7) {
+            return test.getFinishTextMedium();
+        } else {
+            return test.getFinishTextHigh();
+        }
     }
 }

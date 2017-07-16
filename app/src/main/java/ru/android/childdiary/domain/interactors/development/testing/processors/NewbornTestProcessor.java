@@ -11,19 +11,19 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.Newbor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class NewbornTestProcessor extends SimpleTestProcessor<NewbornTest> {
+    @Nullable
+    private Integer result;
+
     public NewbornTestProcessor(@NonNull NewbornTest test) {
         super(test);
     }
 
-    @Nullable
     @Override
-    public String getResultText() {
-        int count = getResultNumber();
-        return count == 0 ? test.getResultGood() : test.getResultBad();
-    }
-
-    @Override
-    public int getResultNumber() {
+    public int getResult() {
+        if (result != null) {
+            return result;
+        }
+        result = 0;
         for (int i = 0; i < answers.size(); ++i) {
             Boolean answer = answers.get(i);
             if (answer == null) {
@@ -31,9 +31,21 @@ public class NewbornTestProcessor extends SimpleTestProcessor<NewbornTest> {
             }
             boolean yes = answers.get(i);
             if (yes) {
-                return 1;
+                result = 1;
+                break;
             }
         }
-        return 0;
+        return result;
+    }
+
+    @Override
+    public void setResult(@Nullable Integer result) {
+        this.result = result;
+    }
+
+    @Override
+    public String interpretResult() {
+        int count = getResult();
+        return count == 0 ? test.getResultGood() : test.getResultBad();
     }
 }

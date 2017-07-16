@@ -179,7 +179,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_with_one_fragment);
         buildUi();
     }
 

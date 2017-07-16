@@ -13,8 +13,9 @@ public interface TestProcessor {
     @Nullable
     Question getCurrentQuestion();
 
-    @Nullable
-    String getResultText();
+    int getResult();
 
-    int getResultNumber();
+    void setResult(@Nullable Integer result);
+
+    String interpretResult();
 }

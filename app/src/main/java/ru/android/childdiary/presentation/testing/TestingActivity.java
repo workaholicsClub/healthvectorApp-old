@@ -68,7 +68,7 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
         test = (Test) getIntent().getSerializableExtra(ExtraConstants.EXTRA_TEST);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_testing);
+        setContentView(R.layout.activity_with_one_fragment);
 
         if (savedInstanceState == null) {
             Child child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);

@@ -8,7 +8,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -18,35 +17,32 @@ import java.util.List;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultActionListener;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultAdapter;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestAdapter;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestClickListener;
+import ru.android.childdiary.presentation.testing.TestResultActivity;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 
-public class TestResultFragment extends AppPartitionFragment implements TestResultView,
+public class TestResultsFragment extends AppPartitionFragment implements TestResultsView,
         TestClickListener, TestResultActionListener {
     @InjectPresenter
-    TestResultPresenter presenter;
+    TestResultsPresenter presenter;
 
     @BindDimen(R.dimen.divider_padding)
     int DIVIDER_PADDING;
 
-    @BindView(R.id.testsTitle)
-    View testsTitle;
-
     @BindView(R.id.recyclerViewTests)
     RecyclerView recyclerViewTests;
 
-    @BindView(R.id.testResultsTitle)
-    View testResultsTitle;
+    @BindView(R.id.line)
+    View line;
 
     @BindView(R.id.recyclerViewTestResults)
     RecyclerView recyclerViewTestResults;
@@ -56,30 +52,19 @@ public class TestResultFragment extends AppPartitionFragment implements TestResu
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.fragment_testing;
+        return R.layout.fragment_test_results;
     }
 
     @Override
     protected void setupUi() {
-        TextView textView;
-
-        textView = ButterKnife.findById(testsTitle, R.id.textView);
-        textView.setText(R.string.tests);
-
-        textView = ButterKnife.findById(testResultsTitle, R.id.textView);
-        textView.setText(R.string.test_results);
-
         LinearLayoutManager layoutManagerTests = new LinearLayoutManager(getContext());
         recyclerViewTests.setLayoutManager(layoutManagerTests);
 
         LinearLayoutManager layoutManagerTestResults = new LinearLayoutManager(getContext());
         recyclerViewTestResults.setLayoutManager(layoutManagerTestResults);
 
-        Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
-        RecyclerView.ItemDecoration dividerItemDecorationTests = new DividerItemDecoration(divider, DIVIDER_PADDING, 0);
-        recyclerViewTests.addItemDecoration(dividerItemDecorationTests);
-        RecyclerView.ItemDecoration dividerItemDecorationTestResults = new DividerItemDecoration(divider, DIVIDER_PADDING, 0);
-        recyclerViewTestResults.addItemDecoration(dividerItemDecorationTestResults);
+        recyclerViewTests.addItemDecoration(getItemDecoration());
+        recyclerViewTestResults.addItemDecoration(getItemDecoration());
 
         testAdapter = new TestAdapter(getContext(), this);
         recyclerViewTests.setAdapter(testAdapter);
@@ -89,6 +74,8 @@ public class TestResultFragment extends AppPartitionFragment implements TestResu
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewTests, false);
         ViewCompat.setNestedScrollingEnabled(recyclerViewTestResults, false);
+
+        line.setVisibility(View.GONE);
     }
 
     @Override
@@ -106,11 +93,20 @@ public class TestResultFragment extends AppPartitionFragment implements TestResu
     @Override
     public void showTestResults(@NonNull List<TestResult> testResults) {
         testResultAdapter.setItems(testResults);
+        int visibility = testResults.isEmpty() ? View.GONE : View.VISIBLE;
+        recyclerViewTestResults.setVisibility(visibility);
+        line.setVisibility(visibility);
     }
 
     @Override
     public void navigateToTest(@NonNull Test test, @NonNull Child child, @NonNull LocalDate date) {
         Intent intent = TestingActivity.getIntent(getContext(), test, child, date);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToTestResult(@NonNull TestResult testResult) {
+        Intent intent = TestResultActivity.getIntent(getContext(), testResult);
         startActivity(intent);
     }
 
@@ -121,11 +117,16 @@ public class TestResultFragment extends AppPartitionFragment implements TestResu
 
     @Override
     public void delete(TestResult item) {
-
+        presenter.deleteTestResult(item);
     }
 
     @Override
     public void edit(TestResult item) {
+        presenter.reviewTestResult(item);
+    }
 
+    private RecyclerView.ItemDecoration getItemDecoration() {
+        Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
+        return new DividerItemDecoration(divider, DIVIDER_PADDING);
     }
 }

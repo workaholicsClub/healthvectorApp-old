@@ -21,22 +21,22 @@ import ru.android.childdiary.presentation.core.AppPartitionArguments;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
 public class TestingQuestionArguments extends AppPartitionArguments {
+    @Nullable
+    DomanTestParameter parameter;
     @NonNull
     Question question;
     @Nullable
     Boolean forward;
-    @Nullable
-    DomanTestParameter parameter;
 
     @Builder(builderMethodName = "testingQuestionBuilder")
     public TestingQuestionArguments(@NonNull Child child,
                                     @NonNull LocalDate selectedDate,
+                                    @Nullable DomanTestParameter parameter,
                                     @NonNull Question question,
-                                    @Nullable Boolean forward,
-                                    @Nullable DomanTestParameter parameter) {
+                                    @Nullable Boolean forward) {
         super(child, selectedDate);
+        this.parameter = parameter;
         this.question = question;
         this.forward = forward;
-        this.parameter = parameter;
     }
 }

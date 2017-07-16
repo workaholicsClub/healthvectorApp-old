@@ -28,7 +28,7 @@ import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsFragment;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListFragment;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
-import ru.android.childdiary.presentation.development.partitions.testing.TestResultFragment;
+import ru.android.childdiary.presentation.development.partitions.testing.TestResultsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -75,7 +75,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         selectedPage = selectedPage == null ? 0 : selectedPage;
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(putArguments(new AchievementsFragment()), getString(R.string.development_tab_title_achievements));
-        viewPagerAdapter.addFragment(putArguments(new TestResultFragment()), getString(R.string.development_tab_title_testing));
+        viewPagerAdapter.addFragment(putArguments(new TestResultsFragment()), getString(R.string.development_tab_title_testing));
         viewPagerAdapter.addFragment(putArguments(new AntropometryListFragment()), getString(R.string.development_tab_title_antropometry_list));
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setCurrentItem(selectedPage, false);
@@ -135,8 +135,8 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         for (Fragment fragment : fragments) {
             if (position == 0 && fragment instanceof AchievementsFragment) {
                 return (AchievementsFragment) fragment;
-            } else if (position == 1 && fragment instanceof TestResultFragment) {
-                return (TestResultFragment) fragment;
+            } else if (position == 1 && fragment instanceof TestResultsFragment) {
+                return (TestResultsFragment) fragment;
             } else if (position == 2 && fragment instanceof AntropometryListFragment) {
                 return (AntropometryListFragment) fragment;
             }

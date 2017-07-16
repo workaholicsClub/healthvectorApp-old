@@ -65,7 +65,7 @@ public abstract class DomanTest extends Test {
 
     @Nullable
     public String getStageDescription(int stage) {
-        int index = stage - 1;
+        int index = stage;
         if (index >= 0 && index < stageDescriptions.size()) {
             return stageDescriptions.get(index);
         }

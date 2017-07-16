@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.development.testing.TestingDataRepository;
+import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 
@@ -17,6 +18,10 @@ public class TestingInteractor {
     @Inject
     public TestingInteractor(TestingDataRepository testingRepository) {
         this.testingRepository = testingRepository;
+    }
+
+    public Observable<Test> getTest(@NonNull TestType testType) {
+        return testingRepository.getTest(testType);
     }
 
     public Observable<List<Test>> getTests() {

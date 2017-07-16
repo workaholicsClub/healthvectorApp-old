@@ -8,26 +8,21 @@ import android.view.View;
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private final Drawable divider;
-    private final int padding, bottomPadding;
+    private final int padding;
 
-    public DividerItemDecoration(Drawable divider, int padding, int bottomPadding) {
+    public DividerItemDecoration(Drawable divider, int padding) {
         this.divider = divider;
         this.padding = padding;
-        this.bottomPadding = bottomPadding;
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         outRect.set(0, 0, 0, 0);
 
-        if (parent.getChildAdapterPosition(view) == state.getItemCount() - 1) {
+        int itemsCount = state.getItemCount();
+        if (itemsCount > 1 && parent.getChildAdapterPosition(view) != 0) {
             outRect.top = divider.getIntrinsicHeight();
-            outRect.bottom = bottomPadding;
-        } else if (parent.getChildAdapterPosition(view) == 0) {
-            return;
         }
-
-        outRect.top = divider.getIntrinsicHeight();
     }
 
     @Override

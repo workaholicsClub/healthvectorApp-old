@@ -25,6 +25,8 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
     private final List<Question> questions;
     private final List<Boolean> answers = new ArrayList<>();
     private final int initialStage;
+    @Nullable
+    private Integer result;
     private int index, stage;
     private boolean stopped;
     @Nullable
@@ -43,7 +45,7 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
             answers.add(null);
         }
         index = DomanTestProcessorHelper.getIndex(months);
-        initialStage = index + 1;
+        initialStage = index;
     }
 
     public DomanTestProcessor(@NonNull T test,
@@ -112,19 +114,26 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
         }
     }
 
-    @Nullable
     @Override
-    public String getResultText() {
-        int stage = getResultNumber();
-        return String.format(test.getResultTextFormat(),
-                stage,
-                test.getStageDescription(stage),
-                test.getStageType(initialStage, stage));
+    public int getResult() {
+        if (result != null) {
+            return result;
+        }
+        return stage;
     }
 
     @Override
-    public int getResultNumber() {
-        return this.stage + 1;
+    public void setResult(@Nullable Integer result) {
+        this.result = result;
+    }
+
+    @Override
+    public String interpretResult() {
+        int stage = getResult();
+        return String.format(test.getResultTextFormat(),
+                stage + 1,
+                test.getStageDescription(stage),
+                test.getStageType(initialStage, stage));
     }
 
     public DomanTestParameter getDomanParameter() {
@@ -135,7 +144,7 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
         return DomanResult.builder()
                 .date(date)
                 .months(months)
-                .stage(stage)
+                .stage(getResult())
                 .build();
     }
 }

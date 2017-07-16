@@ -15,12 +15,11 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.Newbor
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 
 public class TestFactory {
-    @Nullable
     public static BiTestProcessor createTestProcessor(@Nullable Test test,
                                                       @NonNull TestParameters parameters) {
         TestType testType = test == null ? null : test.getTestType();
         if (testType == null) {
-            return null;
+            throw new IllegalStateException("Test type is null");
         }
         switch (testType) {
             case DOMAN_PHYSICAL:
@@ -56,6 +55,6 @@ public class TestFactory {
             case NEWBORN:
                 return new NewbornTestProcessor((NewbornTest) test);
         }
-        return null;
+        throw new IllegalStateException("Unsupported test type");
     }
 }

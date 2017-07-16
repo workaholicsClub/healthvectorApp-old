@@ -136,6 +136,14 @@ public class TestingDataRepository implements TestingRepository {
     }
 
     @Override
+    public Observable<Test> getTest(@NonNull TestType testType) {
+        return Observable.fromIterable(tests)
+                .filter(test -> testType == test.getTestType())
+                .firstOrError()
+                .toObservable();
+    }
+
+    @Override
     public Observable<List<Test>> getTests() {
         return Observable.just(tests);
     }

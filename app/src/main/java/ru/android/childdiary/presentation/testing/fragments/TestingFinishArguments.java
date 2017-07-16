@@ -21,22 +21,22 @@ import ru.android.childdiary.presentation.core.AppPartitionArguments;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
 public class TestingFinishArguments extends AppPartitionArguments {
-    @NonNull
-    String text;
     @Nullable
     DomanTestParameter parameter;
+    @NonNull
+    String text;
     @Nullable
     DomanResult result;
 
     @Builder(builderMethodName = "testingFinishBuilder")
     public TestingFinishArguments(@NonNull Child child,
                                   @NonNull LocalDate selectedDate,
-                                  @NonNull String text,
                                   @Nullable DomanTestParameter parameter,
+                                  @NonNull String text,
                                   @Nullable DomanResult result) {
         super(child, selectedDate);
-        this.text = text;
         this.parameter = parameter;
+        this.text = text;
         this.result = result;
     }
 }
