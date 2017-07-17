@@ -88,4 +88,10 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
         fragment.setArguments(bundle);
         return fragment;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
+    }
 }

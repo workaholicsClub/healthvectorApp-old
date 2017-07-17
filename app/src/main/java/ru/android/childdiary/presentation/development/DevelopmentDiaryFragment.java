@@ -22,6 +22,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
@@ -92,6 +93,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
             public void onPageSelected(int position) {
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
                 updateSwipeLayouts(position);
+                getActivity().invalidateOptionsMenu();
             }
 
             @Override
@@ -142,6 +144,12 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
             }
         }
         return null;
+    }
+
+    @Nullable
+    public AppPartitionFragment getSelectedPage() {
+        int position = viewPager.getCurrentItem();
+        return getSelectedPage(position);
     }
 
     @Override

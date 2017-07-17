@@ -141,6 +141,7 @@
     <string name="start_timer">СТАРТ</string>
     <string name="stop_timer">СТОП</string>
     <string name="close">Закрыть</string>
+    <string name="menu_chart">График</string>
     <string name="menu_filter">Фильтр</string>
     <string name="menu_rotate">Повернуть</string>
     <string name="menu_save">Сохранить</string>
@@ -298,4 +299,6 @@
     <string name="date_already_used_dialog_title">Выберите другую дату</string>
     <!-- %s - параметр "Дата тестирования" -->
     <string name="date_already_used_dialog_text">Вы уже проходили тестирование %s</string>
+    <string name="test_chart_physical_tab">Моторное</string>
+    <string name="test_chart_mental_tab">Сенсорное</string>
 </resources>

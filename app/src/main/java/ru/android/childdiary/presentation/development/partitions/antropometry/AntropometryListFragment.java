@@ -4,8 +4,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
+import ru.android.childdiary.presentation.development.partitions.core.ChartContainer;
 
-public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<AntropometryListView> implements AntropometryListView {
+public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<AntropometryListView>
+        implements AntropometryListView, ChartContainer {
     @InjectPresenter
     AntropometryPresenter presenter;
 
@@ -21,5 +23,10 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     @Override
     public AntropometryPresenter getPresenter() {
         return presenter;
+    }
+
+    @Override
+    public void showChart() {
+        showToast("chart");
     }
 }

@@ -23,15 +23,17 @@ import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
+import ru.android.childdiary.presentation.development.partitions.core.ChartContainer;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultActionListener;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultAdapter;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestAdapter;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestClickListener;
 import ru.android.childdiary.presentation.testing.TestResultActivity;
 import ru.android.childdiary.presentation.testing.TestingActivity;
+import ru.android.childdiary.presentation.testing.chart.TestChartActivity;
 
 public class TestResultsFragment extends AppPartitionFragment implements TestResultsView,
-        TestClickListener, TestResultActionListener {
+        TestClickListener, TestResultActionListener, ChartContainer {
     @InjectPresenter
     TestResultsPresenter presenter;
 
@@ -111,6 +113,12 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
     }
 
     @Override
+    public void navigateToChart(@NonNull Child child) {
+        Intent intent = TestChartActivity.getIntent(getContext(), child);
+        startActivity(intent);
+    }
+
+    @Override
     public void showTestDetails(@NonNull Test test) {
         presenter.showTestDetails(test);
     }
@@ -128,5 +136,10 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
     private RecyclerView.ItemDecoration getItemDecoration() {
         Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
         return new DividerItemDecoration(divider, DIVIDER_PADDING);
+    }
+
+    @Override
+    public void showChart() {
+        presenter.showChart();
     }
 }

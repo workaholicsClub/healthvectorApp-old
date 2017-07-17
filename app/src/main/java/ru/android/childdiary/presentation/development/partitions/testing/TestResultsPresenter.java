@@ -89,4 +89,15 @@ public class TestResultsPresenter extends AppPartitionPresenter<TestResultsView>
     public void reviewTestResult(@NonNull TestResult testResult) {
         getViewState().navigateToTestResult(testResult);
     }
+
+    public void showChart() {
+        // TODO check data availability
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                child -> getViewState().navigateToChart(child),
+                                this::onUnexpectedError));
+    }
 }

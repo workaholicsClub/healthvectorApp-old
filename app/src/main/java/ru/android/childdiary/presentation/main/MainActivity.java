@@ -52,6 +52,7 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
+import ru.android.childdiary.presentation.development.partitions.core.ChartContainer;
 import ru.android.childdiary.presentation.exercises.ExercisesFragment;
 import ru.android.childdiary.presentation.help.HelpFragment;
 import ru.android.childdiary.presentation.main.drawer.AccountHeaderActionAdapter;
@@ -599,6 +600,16 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.main, menu);
             return true;
+        } else if (selectedPartition == AppPartition.DEVELOPMENT_DIARY) {
+            AppPartitionFragment partition = findAppPartition();
+            if (partition instanceof DevelopmentDiaryFragment) {
+                AppPartitionFragment page = ((DevelopmentDiaryFragment) partition).getSelectedPage();
+                if (page instanceof ChartContainer) {
+                    MenuInflater inflater = getMenuInflater();
+                    inflater.inflate(R.menu.chart, menu);
+                    return true;
+                }
+            }
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -616,6 +627,15 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                     } else {
                         logger.error("no partition found");
                     }
+            }
+        } else if (selectedPartition == AppPartition.DEVELOPMENT_DIARY) {
+            AppPartitionFragment partition = findAppPartition();
+            if (partition instanceof DevelopmentDiaryFragment) {
+                AppPartitionFragment page = ((DevelopmentDiaryFragment) partition).getSelectedPage();
+                if (page instanceof ChartContainer) {
+                    ((ChartContainer) page).showChart();
+                    return true;
+                }
             }
         }
         return super.onOptionsItemSelected(item);
