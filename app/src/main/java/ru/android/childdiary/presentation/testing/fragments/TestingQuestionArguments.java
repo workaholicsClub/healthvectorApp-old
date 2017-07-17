@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Question;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 
 @ToString(callSuper = true)
@@ -21,6 +22,8 @@ import ru.android.childdiary.presentation.core.AppPartitionArguments;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
 public class TestingQuestionArguments extends AppPartitionArguments {
+    @NonNull
+    Test test;
     @Nullable
     DomanTestParameter parameter;
     @NonNull
@@ -31,10 +34,12 @@ public class TestingQuestionArguments extends AppPartitionArguments {
     @Builder(builderMethodName = "testingQuestionBuilder")
     public TestingQuestionArguments(@NonNull Child child,
                                     @NonNull LocalDate selectedDate,
+                                    @NonNull Test test,
                                     @Nullable DomanTestParameter parameter,
                                     @NonNull Question question,
                                     @Nullable Boolean forward) {
         super(child, selectedDate);
+        this.test = test;
         this.parameter = parameter;
         this.question = question;
         this.forward = forward;

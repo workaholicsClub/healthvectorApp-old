@@ -34,12 +34,12 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/medical_item_margin_vertical"
+            android:layout_marginBottom="@dimen/base_margin_half"
             android:layout_marginEnd="@dimen/base_margin"
             android:layout_marginLeft="@dimen/base_margin"
             android:layout_marginRight="@dimen/base_margin"
             android:layout_marginStart="@dimen/base_margin"
-            android:layout_marginTop="@dimen/medical_item_margin_vertical"
+            android:layout_marginTop="@dimen/base_margin_half"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="vertical">
@@ -48,7 +48,7 @@
                 android:id="@+id/textViewDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/medical_item_margin_vertical"
+                android:layout_marginBottom="@dimen/base_margin_half"
                 android:gravity="center_vertical"
                 android:textAppearance="@style/ItemDateTextAppearance" />
 

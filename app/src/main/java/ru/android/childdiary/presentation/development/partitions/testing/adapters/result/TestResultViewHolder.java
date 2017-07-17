@@ -17,6 +17,7 @@ import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.strings.TestUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -33,9 +34,6 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
 
     @BindView(R.id.textViewDate)
     TextView textViewDate;
-
-    @BindView(R.id.textViewTime)
-    TextView textViewTime;
 
     @BindView(R.id.textViewTitle)
     TextView textViewTitle;
@@ -56,12 +54,15 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
     public void bind(Context context, Sex sex, TestResult item) {
         super.bind(context, sex, item);
 
-        textViewDate.setText(DateUtils.date(context, item.getDate()));
-        // TODO textViewTime.setText(DateUtils.time(context, item.getDateTime()));
-        WidgetsUtils.hideIfEmpty(textViewTime);
+        String dateStr = DateUtils.date(context, item.getDate());
+        TimeUtils.Age age = TimeUtils.getAge(item.getBirthDate(), item.getDate());
+        String ageStr = TimeUtils.age(context, age);
+        String valueStr = context.getString(R.string.two_values, dateStr, ageStr);
+        textViewDate.setText(valueStr);
 
-        textViewTitle.setText(TestUtils.getTestName(context, item.getTestType()));
-        textViewDescription.setText(TestUtils.toString(context, item.getDomanTestParameter()));
+        textViewTitle.setText(TestUtils.getTestTitle(context, item.getTestType(), item.getDomanTestParameter()));
+        textViewDescription.setText(TestUtils.getTestResult(context, item.getTestType(), item.getResult()));
+        WidgetsUtils.hideIfEmpty(textViewDescription);
 
         //noinspection deprecation
         imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));

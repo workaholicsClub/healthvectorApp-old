@@ -28,34 +28,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_clickable"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/base_margin_half"
+        android:paddingTop="@dimen/base_margin_half">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textViewDate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/medical_item_margin_vertical"
-            android:layout_marginEnd="@dimen/base_margin"
+            android:layout_marginBottom="@dimen/base_margin_half"
             android:layout_marginLeft="@dimen/base_margin"
             android:layout_marginRight="@dimen/base_margin"
-            android:layout_marginStart="@dimen/base_margin"
-            android:layout_marginTop="@dimen/medical_item_margin_vertical"
-            android:layout_weight="1"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:textAppearance="@style/TokenItemTextAppearance" />
 
-            <TextView
-                android:id="@+id/textViewDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/medical_item_margin_vertical"
-                android:gravity="center_vertical"
-                android:textAppearance="@style/ItemDateTextAppearance" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textViewTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/base_margin"
+                android:layout_marginRight="@dimen/base_margin"
+                android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
@@ -67,6 +67,8 @@
                 android:id="@+id/textViewDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/base_margin"
+                android:layout_marginRight="@dimen/base_margin"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
@@ -74,18 +76,5 @@
                 android:textAppearance="@style/ItemDescriptionTextAppearance"
                 tools:ignore="Deprecated" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textViewTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/base_margin"
-            android:layout_marginRight="@dimen/base_margin"
-            android:ellipsize="end"
-            android:gravity="center_vertical|end"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textAppearance="@style/ItemTimeTextAppearance"
-            tools:ignore="Deprecated" />
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

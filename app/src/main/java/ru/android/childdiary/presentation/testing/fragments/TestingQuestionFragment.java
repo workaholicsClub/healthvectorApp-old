@@ -10,6 +10,7 @@ import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Question;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -31,6 +32,7 @@ public class TestingQuestionFragment extends AppPartitionFragment {
     @Nullable
     private TestingController testingController;
     private Question question;
+    private Test test;
     @Nullable
     private DomanTestParameter parameter;
 
@@ -62,14 +64,13 @@ public class TestingQuestionFragment extends AppPartitionFragment {
             return;
         }
         question = arguments.getQuestion();
+        test = arguments.getTest();
         parameter = arguments.getParameter();
     }
 
     @Override
     protected void setupUi() {
-        if (parameter != null) {
-            ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.toString(getContext(), parameter));
-        }
+        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test.getTestType(), parameter));
         justifiedTextView.setText(question.getText());
     }
 

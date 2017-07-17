@@ -65,4 +65,23 @@ public class TestUtils {
         }
         return null;
     }
+
+    @Nullable
+    public static String getTestTitle(Context context, @Nullable TestType testType, @Nullable DomanTestParameter testParameter) {
+        if (testType == TestType.DOMAN_PHYSICAL || testType == TestType.DOMAN_MENTAL) {
+            return toString(context, testParameter);
+        }
+        return getTestName(context, testType);
+    }
+
+    @Nullable
+    public static String getTestResult(Context context, @Nullable TestType testType, @Nullable Integer result) {
+        if (testType == null || result == null) {
+            return null;
+        }
+        if (testType == TestType.DOMAN_PHYSICAL || testType == TestType.DOMAN_MENTAL) {
+            return context.getString(R.string.stage, result);
+        }
+        return null;
+    }
 }

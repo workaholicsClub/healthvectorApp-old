@@ -13,6 +13,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -31,6 +32,7 @@ public class TestingFinishFragment extends AppPartitionFragment {
     private TestingController testingController;
 
     private String text;
+    private Test test;
     @Nullable
     private DomanTestParameter parameter;
     @Nullable
@@ -64,15 +66,14 @@ public class TestingFinishFragment extends AppPartitionFragment {
             return;
         }
         text = arguments.getText();
+        test = arguments.getTest();
         parameter = arguments.getParameter();
         result = arguments.getResult();
     }
 
     @Override
     protected void setupUi() {
-        if (parameter != null) {
-            ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.toString(getContext(), parameter));
-        }
+        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test.getTestType(), parameter));
         justifiedTextView.setText(text);
         chart.setVisibility(result == null ? View.GONE : View.VISIBLE);
         if (result != null) {
