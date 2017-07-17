@@ -13,7 +13,9 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
+import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
+import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.development.testing.TestResultEntity;
 import ru.android.childdiary.data.repositories.development.testing.mappers.TestResultMapper;
@@ -21,6 +23,7 @@ import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 
 @Singleton
 public class TestingDbService {
@@ -36,10 +39,16 @@ public class TestingDbService {
         this.testResultMapper = testResultMapper;
     }
 
-    public Observable<List<TestResult>> getTestResults(@NonNull Child child) {
-        return dataStore.select(TestResultEntity.class)
-                .where(TestResultEntity.CHILD_ID.eq(child.getId()))
-                .orderBy(TestResultEntity.DATE.desc(), TestResultEntity.TEST_TYPE, TestResultEntity.DOMAN_TEST_PARAMETER, TestResultEntity.ID)
+    public Observable<List<TestResult>> getTestResults(@NonNull TestResultsRequest request) {
+        WhereAndOr<ReactiveResult<TestResultEntity>> select = dataStore.select(TestResultEntity.class)
+                .where(TestResultEntity.CHILD_ID.eq(request.getChild().getId()));
+        if (request.getTestType() != null) {
+            select = select.and(TestResultEntity.TEST_TYPE.eq(request.getTestType()));
+        }
+        if (request.getTestParameter() != null) {
+            select = select.and(TestResultEntity.DOMAN_TEST_PARAMETER.eq(request.getTestParameter()));
+        }
+        return select.orderBy(TestResultEntity.DATE.desc(), TestResultEntity.TEST_TYPE, TestResultEntity.DOMAN_TEST_PARAMETER, TestResultEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, testResultMapper));

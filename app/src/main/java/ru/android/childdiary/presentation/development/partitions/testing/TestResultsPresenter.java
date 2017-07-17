@@ -15,6 +15,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
+import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
@@ -60,7 +61,11 @@ public class TestResultsPresenter extends AppPartitionPresenter<TestResultsView>
     private void updateData(@NonNull Child child) {
         unsubscribe(testResultsSubscription);
         testResultsSubscription = unsubscribeOnDestroy(
-                testingInteractor.getTestResults(child)
+                testingInteractor.getTestResults(TestResultsRequest.builder()
+                        .child(child)
+                        .testType(null)
+                        .testParameter(null)
+                        .build())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(getViewState()::showTestResults, this::onUnexpectedError));

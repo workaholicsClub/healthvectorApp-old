@@ -11,6 +11,7 @@ import io.reactivex.Single;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 
 public interface TestingRepository {
@@ -18,7 +19,7 @@ public interface TestingRepository {
 
     Observable<List<Test>> getTests();
 
-    Observable<List<TestResult>> getTestResults(@NonNull Child child);
+    Observable<List<TestResult>> getTestResults(@NonNull TestResultsRequest request);
 
     Observable<TestResult> add(@NonNull TestResult testResult);
 

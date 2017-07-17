@@ -23,6 +23,7 @@ import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.TestingRepository;
+import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.AutismTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.DomanMentalTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.DomanPhysicalTest;
@@ -152,8 +153,8 @@ public class TestingDataRepository implements TestingRepository {
     }
 
     @Override
-    public Observable<List<TestResult>> getTestResults(@NonNull Child child) {
-        return testingDbService.getTestResults(child);
+    public Observable<List<TestResult>> getTestResults(@NonNull TestResultsRequest request) {
+        return testingDbService.getTestResults(request);
     }
 
     @Override

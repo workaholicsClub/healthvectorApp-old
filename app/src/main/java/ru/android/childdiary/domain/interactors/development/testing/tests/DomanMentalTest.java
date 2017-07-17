@@ -21,6 +21,12 @@ import static ru.android.childdiary.data.types.DomanTestParameter.MENTAL_VISION;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class DomanMentalTest extends DomanTest {
+    public static final DomanTestParameter[] PARAMETERS = new DomanTestParameter[]{
+            MENTAL_VISION,
+            MENTAL_AUDITION,
+            MENTAL_SENSITIVITY
+    };
+
     @Builder
     public DomanMentalTest(@NonNull String name,
                            @NonNull String description,
@@ -33,10 +39,6 @@ public class DomanMentalTest extends DomanTest {
 
     @Override
     public DomanTestParameter[] getParameters() {
-        return new DomanTestParameter[]{
-                MENTAL_VISION,
-                MENTAL_AUDITION,
-                MENTAL_SENSITIVITY
-        };
+        return PARAMETERS;
     }
 }

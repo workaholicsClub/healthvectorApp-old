@@ -61,6 +61,10 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
 
     @Override
     public void showResults(@NonNull List<DomanResult> results) {
+        if (results.isEmpty()) {
+            // TODO no data
+            return;
+        }
         ChartPlotter chartPlotter = new ChartPlotter(chart, results);
         chartPlotter.setup();
         progressBar.setVisibility(View.GONE);

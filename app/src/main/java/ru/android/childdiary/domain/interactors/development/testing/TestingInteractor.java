@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,6 +15,7 @@ import ru.android.childdiary.data.repositories.development.testing.TestingDataRe
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 
 public class TestingInteractor {
@@ -32,8 +34,8 @@ public class TestingInteractor {
         return testingRepository.getTests();
     }
 
-    public Observable<List<TestResult>> getTestResults(@NonNull Child child) {
-        return testingRepository.getTestResults(child);
+    public Observable<List<TestResult>> getTestResults(@NonNull TestResultsRequest request) {
+        return testingRepository.getTestResults(request);
     }
 
     public Observable<TestResult> add(@NonNull TestResult testResult) {

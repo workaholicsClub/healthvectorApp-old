@@ -21,6 +21,12 @@ import static ru.android.childdiary.data.types.DomanTestParameter.PHYSICAL_SPEEC
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class DomanPhysicalTest extends DomanTest {
+    public static final DomanTestParameter[] PARAMETERS = new DomanTestParameter[]{
+            PHYSICAL_MOBILITY,
+            PHYSICAL_SPEECH,
+            PHYSICAL_MANUAL
+    };
+
     @Builder
     public DomanPhysicalTest(@NonNull String name,
                              @NonNull String description,
@@ -33,10 +39,6 @@ public class DomanPhysicalTest extends DomanTest {
 
     @Override
     public DomanTestParameter[] getParameters() {
-        return new DomanTestParameter[]{
-                PHYSICAL_MOBILITY,
-                PHYSICAL_SPEECH,
-                PHYSICAL_MANUAL
-        };
+        return PARAMETERS;
     }
 }

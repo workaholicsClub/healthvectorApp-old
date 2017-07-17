@@ -20,6 +20,7 @@ import ru.android.childdiary.domain.interactors.development.testing.processors.c
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestParameters;
+import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
@@ -58,7 +59,11 @@ public class DomanChartPresenter extends BasePresenter<DomanChartView> {
 
     private void testLoaded(@NonNull Test test) {
         unsubscribeOnDestroy(
-                testingInteractor.getTestResults(child) // TODO select only doman and by parameter
+                testingInteractor.getTestResults(TestResultsRequest.builder()
+                        .child(child)
+                        .testType(test.getTestType())
+                        .testParameter(null)
+                        .build()) // TODO select only doman and by parameter
                         .map(results -> map(test, results))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -67,6 +72,8 @@ public class DomanChartPresenter extends BasePresenter<DomanChartView> {
 
     private List<DomanResult> map(@NonNull Test test, @NonNull List<TestResult> results) {
         return Observable.fromIterable(results)
+                .filter(result -> result.getTestType() == test.getTestType()
+                        && result.getDomanTestParameter() != null)
                 .map(result -> map(test, result))
                 .toList()
                 .blockingGet();
