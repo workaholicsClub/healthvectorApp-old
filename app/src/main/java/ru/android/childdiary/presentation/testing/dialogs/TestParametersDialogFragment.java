@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.joda.time.LocalDate;
@@ -18,6 +19,7 @@ import java.util.Calendar;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestParameters;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
@@ -28,11 +30,12 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldAgeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDomanTestParameterView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
+import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestParametersDialogArguments>
-        implements DatePickerDialog.OnDateSetListener, AgeDialogFragment.Listener {
+        implements DatePickerDialog.OnDateSetListener, AgeDialogFragment.Listener, TestParametersView {
     private static final String TAG_DIALOG_DATE = "TAG_DIALOG_DATE";
     private static final String TAG_DIALOG_AGE = "TAG_DIALOG_AGE";
 
@@ -44,6 +47,9 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
 
     @BindView(R.id.domanTestParameterView)
     FieldDomanTestParameterView parameterView;
+
+    @InjectPresenter
+    TestParametersPresenter presenter;
 
     @Nullable
     private Listener listener;
@@ -76,7 +82,7 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
             LocalDate birthDate = dialogArguments.getChild().getBirthDate();
             LocalDate minDate = null, maxDate = null;
             if (birthDate != null) {
-                minDate = birthDate.plusWeeks(DomanTest.MIN_WEEKS);
+                minDate = birthDate;
                 maxDate = birthDate.plusYears(DomanTest.MAX_YEARS);
             }
             DatePickerDialog dpd = CustomDatePickerDialog.create(getContext(), this,
@@ -130,37 +136,41 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             button.setOnClickListener((dialogView) -> {
                 TimeUtils.Age age = ageView.getValue();
-
                 if (age == null) {
                     showToast(getString(R.string.validation_no_age));
                     return;
                 }
-
                 LocalDate date = dateView.getValue();
-                LocalDate birthDate = dialogArguments.getChild().getBirthDate();
-                if (birthDate != null) {
-                    LocalDate minDate = birthDate.plusWeeks(DomanTest.MIN_WEEKS);
-                    LocalDate maxDate = birthDate.plusYears(DomanTest.MAX_YEARS);
-                    if (date.isBefore(minDate) || date.isAfter(maxDate)) {
-                        showToast(getString(R.string.validation_invalid_age));
-                        return;
-                    }
-                }
-
                 DomanTestParameter parameter = parameterView.getSelected();
-                if (listener != null) {
-                    listener.onTestParametersSet(TestParameters.builder()
-                            .birthDate(dialogArguments.getChild().getBirthDate())
-                            .date(date)
-                            .age(age)
-                            .parameter(parameter)
-                            .build());
-                }
-
-                dialog.dismiss();
+                presenter.check(dialogArguments.getChild(), dialogArguments.getTest().getTestType(),
+                        TestParameters.builder()
+                                .birthDate(dialogArguments.getChild().getBirthDate())
+                                .date(date)
+                                .age(age)
+                                .parameter(parameter)
+                                .build());
             });
         });
         return dialog;
+    }
+
+    @Override
+    public void close(@NonNull Child child, @NonNull TestParameters testParameters) {
+        if (listener != null) {
+            listener.onTestParametersSet(testParameters);
+        }
+
+        getDialog().dismiss();
+    }
+
+    @Override
+    public void dateAlreadyUsed(@NonNull LocalDate date) {
+        String dateStr = DateUtils.date(getContext(), date);
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
+                .setTitle(R.string.date_already_used_dialog_title)
+                .setMessage(getString(R.string.date_already_used_dialog_text, dateStr))
+                .setPositiveButton(R.string.ok, null)
+                .show();
     }
 
     @Override

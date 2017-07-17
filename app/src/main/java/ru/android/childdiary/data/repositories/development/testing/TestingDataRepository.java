@@ -5,6 +5,8 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
@@ -161,5 +164,12 @@ public class TestingDataRepository implements TestingRepository {
     @Override
     public Observable<TestResult> delete(@NonNull TestResult testResult) {
         return testingDbService.delete(testResult);
+    }
+
+    public Single<Boolean> checkDate(@NonNull Child child,
+                                     @NonNull TestType testType,
+                                     @NonNull DomanTestParameter testParameter,
+                                     @NonNull LocalDate date) {
+        return testingDbService.checkDate(child, testType, testParameter, date);
     }
 }

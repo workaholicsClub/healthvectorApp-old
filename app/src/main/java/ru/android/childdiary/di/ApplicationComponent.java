@@ -77,6 +77,7 @@ import ru.android.childdiary.presentation.testing.TestResultActivity;
 import ru.android.childdiary.presentation.testing.TestResultPresenter;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 import ru.android.childdiary.presentation.testing.TestingPresenter;
+import ru.android.childdiary.presentation.testing.dialogs.TestParametersPresenter;
 import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.CloudService;
 import ru.android.childdiary.services.TimerService;
@@ -169,6 +170,8 @@ public interface ApplicationComponent {
     void inject(TestingPresenter presenter);
 
     void inject(TestResultPresenter presenter);
+
+    void inject(TestParametersPresenter presenter);
 
     // activities
     void inject(SplashActivity activity);

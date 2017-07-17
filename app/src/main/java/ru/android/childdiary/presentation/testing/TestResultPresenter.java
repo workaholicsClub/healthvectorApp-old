@@ -53,14 +53,15 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
                 .build());
         testProcessor.setResult(testResult.getResult());
 
-        showFinishPage(testResult.getChild(), testResult.getDate());
+        showFinishPage(test, testResult.getChild(), testResult.getDate());
     }
 
-    private void showFinishPage(@NonNull Child child, @NonNull LocalDate date) {
+    private void showFinishPage(@NonNull Test test, @NonNull Child child, @NonNull LocalDate date) {
         String text = testProcessor.interpretResult();
         getViewState().showFinish(TestingFinishArguments.testingFinishBuilder()
                 .child(child)
                 .selectedDate(date)
+                .test(test)
                 .parameter(getDomanParameter())
                 .text(text)
                 .result(getDomanResult())

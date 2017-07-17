@@ -2,18 +2,23 @@ package ru.android.childdiary.data.repositories.development.testing;
 
 import android.support.annotation.NonNull;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.development.testing.TestResultEntity;
 import ru.android.childdiary.data.repositories.development.testing.mappers.TestResultMapper;
+import ru.android.childdiary.data.types.DomanTestParameter;
+import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 
@@ -46,5 +51,19 @@ public class TestingDbService {
 
     public Observable<TestResult> delete(@NonNull TestResult testResult) {
         return DbUtils.deleteObservable(blockingEntityStore, TestResultEntity.class, testResult, testResult.getId());
+    }
+
+    public Single<Boolean> checkDate(@NonNull Child child,
+                                     @NonNull TestType testType,
+                                     @NonNull DomanTestParameter testParameter,
+                                     @NonNull LocalDate date) {
+        return dataStore.count(TestResultEntity.class)
+                .where(TestResultEntity.CHILD_ID.eq(child.getId()))
+                .and(TestResultEntity.TEST_TYPE.eq(testType))
+                .and(TestResultEntity.DOMAN_TEST_PARAMETER.eq(testParameter))
+                .and(TestResultEntity.DATE.eq(date))
+                .get()
+                .single()
+                .map(count -> count == 0);
     }
 }

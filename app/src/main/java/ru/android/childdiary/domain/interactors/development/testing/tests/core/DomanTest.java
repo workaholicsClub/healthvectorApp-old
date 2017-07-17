@@ -21,7 +21,6 @@ import ru.android.childdiary.data.types.TestType;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class DomanTest extends Test {
-    public static final int MIN_WEEKS = 3;
     public static final int MAX_YEARS = 9;
 
     @NonNull

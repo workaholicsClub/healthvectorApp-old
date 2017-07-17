@@ -294,6 +294,8 @@
     <string name="parameter">Параметр</string>
     <string name="age">Возраст</string>
     <string name="validation_no_age">Введите возраст</string>
-    <string name="validation_invalid_age">Допустимый возраст от 3 недель до 9 лет</string>
     <string name="stage">%d стадия развития</string>
+    <string name="date_already_used_dialog_title">Выберите другую дату</string>
+    <!-- %s - параметр "Дата тестирования" -->
+    <string name="date_already_used_dialog_text">Вы уже проходили тестирование %s</string>
 </resources>

@@ -2,9 +2,13 @@ package ru.android.childdiary.domain.interactors.development.testing;
 
 import android.support.annotation.NonNull;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
@@ -19,4 +23,6 @@ public interface TestingRepository {
     Observable<TestResult> add(@NonNull TestResult testResult);
 
     Observable<TestResult> delete(@NonNull TestResult testResult);
+
+    Single<Boolean> checkDate(@NonNull Child child, @NonNull TestType testType, @NonNull DomanTestParameter testParameter, @NonNull LocalDate date);
 }

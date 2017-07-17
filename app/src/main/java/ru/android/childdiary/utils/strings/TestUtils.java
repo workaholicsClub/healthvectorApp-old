@@ -80,7 +80,7 @@ public class TestUtils {
             return null;
         }
         if (testType == TestType.DOMAN_PHYSICAL || testType == TestType.DOMAN_MENTAL) {
-            return context.getString(R.string.stage, result);
+            return context.getString(R.string.stage, result + 1);
         }
         return null;
     }
