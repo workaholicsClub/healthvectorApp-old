@@ -26,6 +26,8 @@ public interface TestResultData extends Persistable {
 
     TestType getTestType();
 
+    LocalDate getBirthDate();
+
     LocalDate getDate();
 
     DomanTestParameter getDomanTestParameter();

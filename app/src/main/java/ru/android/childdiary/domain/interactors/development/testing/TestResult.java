@@ -19,6 +19,8 @@ public class TestResult implements Serializable {
 
     TestType testType;
 
+    LocalDate birthDate;
+
     LocalDate date;
 
     DomanTestParameter domanTestParameter;

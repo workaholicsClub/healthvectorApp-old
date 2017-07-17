@@ -30,6 +30,7 @@ public class TestResultMapper implements EntityMapper<TestResultData, TestResult
                 .id(testResultData.getId())
                 .child(child)
                 .testType(testResultData.getTestType())
+                .birthDate(testResultData.getBirthDate())
                 .date(testResultData.getDate())
                 .domanTestParameter(testResultData.getDomanTestParameter())
                 .result(testResultData.getResult())
@@ -56,6 +57,7 @@ public class TestResultMapper implements EntityMapper<TestResultData, TestResult
     @Override
     public void fillNonReferencedFields(@NonNull TestResultEntity to, @NonNull TestResult from) {
         to.setTestType(from.getTestType());
+        to.setBirthDate(from.getBirthDate());
         to.setDate(from.getDate());
         to.setDomanTestParameter(from.getDomanTestParameter());
         to.setResult(from.getResult());

@@ -47,7 +47,7 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
 
     private void init(@NonNull Test test, @NonNull TestResult testResult) {
         testProcessor = TestFactory.createTestProcessor(test, TestParameters.builder()
-                .birthDate(testResult.getChild().getBirthDate())
+                .birthDate(testResult.getBirthDate())
                 .date(testResult.getDate())
                 .parameter(testResult.getDomanTestParameter())
                 .build());

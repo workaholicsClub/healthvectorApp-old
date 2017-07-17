@@ -97,16 +97,21 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     public void close() {
         if (testProcessor != null) {
             if (testProcessor.isFinished()) {
-                unsubscribeOnDestroy(testingInteractor.add(TestResult.builder()
-                        .child(child)
-                        .testType(test.getTestType())
-                        .date(date)
-                        .domanTestParameter(getDomanParameter())
-                        .result(testProcessor.getResult())
-                        .build())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(addedTestResult -> getViewState().close(), this::onUnexpectedError));
+                if (child.getId() == null) {
+                    getViewState().close();
+                } else {
+                    unsubscribeOnDestroy(testingInteractor.add(TestResult.builder()
+                            .child(child)
+                            .testType(test.getTestType())
+                            .birthDate(child.getBirthDate())
+                            .date(date)
+                            .domanTestParameter(getDomanParameter())
+                            .result(testProcessor.getResult())
+                            .build())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(addedTestResult -> getViewState().close(), this::onUnexpectedError));
+                }
             }
             testProcessor = null;
         }
