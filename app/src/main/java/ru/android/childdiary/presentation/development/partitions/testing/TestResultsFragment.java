@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -31,6 +32,7 @@ import ru.android.childdiary.presentation.development.partitions.testing.adapter
 import ru.android.childdiary.presentation.testing.TestResultActivity;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 import ru.android.childdiary.presentation.testing.chart.TestChartActivity;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class TestResultsFragment extends AppPartitionFragment implements TestResultsView,
         TestClickListener, TestResultActionListener, ChartContainer {
@@ -116,6 +118,20 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
     public void navigateToChart(@NonNull Child child) {
         Intent intent = TestChartActivity.getIntent(getContext(), child);
         startActivity(intent);
+    }
+
+    @Override
+    public void confirmDeletion(@NonNull TestResult testResult) {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.delete_test_result_dialog_title)
+                .setPositiveButton(R.string.delete,
+                        (dialog, which) -> presenter.deletionConfirmed(testResult))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
+    public void deleted(@NonNull TestResult testResult) {
     }
 
     @Override

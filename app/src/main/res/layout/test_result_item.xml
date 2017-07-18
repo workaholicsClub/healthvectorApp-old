@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/actionDelete"
-            android:layout_width="@dimen/medical_item_action_delete_height"
-            android:layout_height="@dimen/medical_item_action_delete_height"
+            android:layout_width="@dimen/field_delete_height"
+            android:layout_height="@dimen/field_delete_height"
             android:layout_marginEnd="@dimen/base_margin"
             android:layout_marginRight="@dimen/base_margin"
             android:background="@color/accent_boy"

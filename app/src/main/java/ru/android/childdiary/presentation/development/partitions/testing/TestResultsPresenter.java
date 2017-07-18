@@ -82,13 +82,16 @@ public class TestResultsPresenter extends AppPartitionPresenter<TestResultsView>
     }
 
     public void deleteTestResult(@NonNull TestResult testResult) {
+        getViewState().confirmDeletion(testResult);
+    }
+
+    public void deletionConfirmed(@NonNull TestResult testResult) {
         unsubscribeOnDestroy(
                 testingInteractor.delete(testResult)
+                        .doOnNext(deletedTestResult -> logger.debug("deleted: " + deletedTestResult))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                deletedTestResult -> logger.debug("deleted: " + deletedTestResult),
-                                this::onUnexpectedError));
+                        .subscribe(getViewState()::deleted, this::onUnexpectedError));
     }
 
     public void reviewTestResult(@NonNull TestResult testResult) {

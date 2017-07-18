@@ -8,7 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -20,6 +24,7 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishFragment;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
@@ -85,5 +90,37 @@ public class TestResultActivity extends BaseMvpActivity implements TestResultVie
         }
         transaction.replace(FRAGMENT_CONTAINER_ID, fragment)
                 .commit();
+    }
+
+    @Override
+    public void confirmDeletion(@NonNull TestResult testResult) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.delete_test_result_dialog_title)
+                .setPositiveButton(R.string.delete,
+                        (dialog, which) -> presenter.deletionConfirmed(testResult))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
+    public void deleted(@NonNull TestResult testResult) {
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.delete_with_icon, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                presenter.deleteTestResult(testResult);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

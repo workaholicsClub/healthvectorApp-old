@@ -9,6 +9,8 @@ import org.joda.time.LocalDate;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -65,5 +67,18 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
             return ((DomanTestProcessor) testProcessor).getDomanResult();
         }
         return null;
+    }
+
+    public void deleteTestResult(@NonNull TestResult testResult) {
+        getViewState().confirmDeletion(testResult);
+    }
+
+    public void deletionConfirmed(@NonNull TestResult testResult) {
+        unsubscribeOnDestroy(
+                testingInteractor.delete(testResult)
+                        .doOnNext(deletedTestResult -> logger.debug("deleted: " + deletedTestResult))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::deleted, this::onUnexpectedError));
     }
 }
