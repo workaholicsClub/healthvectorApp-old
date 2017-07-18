@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.chart;
+package ru.android.childdiary.presentation.testing.dynamic;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,7 +23,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.testing.fragments.ChartPlotter;
+import ru.android.childdiary.presentation.testing.chart.ChartPlotter;
 
 public abstract class DomanChartFragment extends BaseMvpFragment implements DomanChartView {
     @BindView(R.id.chart)

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.fragments;
+package ru.android.childdiary.presentation.testing.chart;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -53,9 +53,9 @@ public class ChartPlotter {
     private final List<LocalDate> dates = new ArrayList<>();
 
     private final int[] stakedBarColors;
-    private final int margin;
+    private final int margin, lineWidth;
 
-    private Entry selectedEntry;
+    private LineEntry selectedEntry;
 
     public ChartPlotter(@NonNull CombinedChart chart, @NonNull LinkedHashMap<DomanTestParameter, List<DomanResult>> results) {
         context = chart.getContext();
@@ -67,6 +67,7 @@ public class ChartPlotter {
                 ContextCompat.getColor(context, R.color.advanced_color)
         };
         margin = context.getResources().getDimensionPixelSize(R.dimen.base_margin);
+        lineWidth = context.getResources().getDimensionPixelSize(R.dimen.line_width);
     }
 
     public void setup() {
@@ -85,7 +86,7 @@ public class ChartPlotter {
         chart.setTouchEnabled(true);
         chart.setScaleEnabled(true);
         chart.setPinchZoom(true);
-        chart.setViewPortOffsets(margin, margin, margin, margin + margin);
+        chart.setViewPortOffsets(margin, margin, margin, margin);
         chart.setDrawOrder(new CombinedChart.DrawOrder[]{
                 CombinedChart.DrawOrder.BAR,
                 CombinedChart.DrawOrder.LINE,
@@ -101,20 +102,23 @@ public class ChartPlotter {
         chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry entry, Highlight highlight) {
+                if (!(entry instanceof LineEntry)) {
+                    return;
+                }
                 if (selectedEntry != null) {
-                    logger.debug("unselect " + selectedEntry);
-                    selectedEntry.setIcon(ContextCompat.getDrawable(context, R.drawable.dot_normal));
+                    logger.debug("deselect " + selectedEntry);
+                    selectedEntry.deselect();
                 }
                 logger.debug("select " + entry);
-                selectedEntry = entry;
-                selectedEntry.setIcon(ContextCompat.getDrawable(context, R.drawable.dot_selected));
+                selectedEntry = (LineEntry) entry;
+                selectedEntry.select();
             }
 
             @Override
             public void onNothingSelected() {
                 if (selectedEntry != null) {
                     logger.debug("deselect " + selectedEntry);
-                    selectedEntry.setIcon(ContextCompat.getDrawable(context, R.drawable.dot_normal));
+                    selectedEntry.deselect();
                     selectedEntry = null;
                 }
             }
@@ -164,9 +168,9 @@ public class ChartPlotter {
         data.setData(generateBarData());
 
         XAxis xAxis = chart.getXAxis();
+        xAxis.setEnabled(false);
         if (dates.size() > 1) {
             xAxis.setAxisMinimum(data.getXMin() - 2);
-            xAxis.setEnabled(false);
         } else {
             xAxis.setAxisMinimum(data.getXMin() - 1);
             xAxis.setAxisMaximum(data.getXMax() + 1);
@@ -191,7 +195,10 @@ public class ChartPlotter {
             for (int i = 0; i < domanResults.size(); ++i) {
                 DomanResult result = domanResults.get(i);
                 float yVal = (float) result.getPercents().doubleValue();
-                Entry lineEntry = new Entry(i, yVal, ContextCompat.getDrawable(context, R.drawable.dot_normal), result);
+                Entry lineEntry = new LineEntry(i, yVal,
+                        LineEntryUtils.getIcon(context, entry.getKey(), false),
+                        LineEntryUtils.getIcon(context, entry.getKey(), true),
+                        entry.getKey(), result);
                 lineEntries.add(lineEntry);
                 if (!dates.contains(result.getDate())) {
                     dates.add(result.getDate());
@@ -199,7 +206,8 @@ public class ChartPlotter {
             }
 
             LineDataSet lineDataSet = new LineDataSet(lineEntries, null);
-            lineDataSet.setColor(ContextCompat.getColor(context, R.color.chart_line_normal_color));
+            lineDataSet.setColor(LineEntryUtils.getLineColor(context, entry.getKey()));
+            lineDataSet.setLineWidth(lineWidth);
             lineDataSet.setDrawValues(false);
             lineDataSet.setDrawHighlightIndicators(false);
             lineDataSet.setHighlightEnabled(true);

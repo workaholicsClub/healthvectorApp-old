@@ -3,30 +3,25 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_background"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
+        android:layout_marginTop="@dimen/base_margin"
+        android:gravity="center"
+        android:textAppearance="@style/PrimaryTextAppearance" />
+
+    <com.github.mikephil.charting.charts.CombinedChart
+        android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/base_margin"
+        android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/base_margin"
-            android:layout_marginRight="@dimen/base_margin"
-            android:layout_marginTop="@dimen/base_margin"
-            android:gravity="center"
-            android:textAppearance="@style/PrimaryTextAppearance" />
-
-        <com.github.mikephil.charting.charts.CombinedChart
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/base_margin" />
-    </LinearLayout>
+    <include layout="@layout/chart_legend" />
 </LinearLayout>

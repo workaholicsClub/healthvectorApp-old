@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.fragments;
+package ru.android.childdiary.presentation.testing.chart;
 
 import android.content.Context;
 import android.widget.TextView;
@@ -14,7 +14,7 @@ import ru.android.childdiary.domain.interactors.development.testing.processors.c
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.strings.DoubleUtils;
 
-public class CevMarkerView extends MarkerView {
+class CevMarkerView extends MarkerView {
     private TextView textView;
 
     public CevMarkerView(Context context) {
@@ -24,7 +24,11 @@ public class CevMarkerView extends MarkerView {
 
     @Override
     public void refreshContent(Entry entry, Highlight highlight) {
-        DomanResult result = (DomanResult) entry.getData();
+        if (!(entry instanceof LineEntry)) {
+            super.refreshContent(entry, highlight);
+            return;
+        }
+        DomanResult result = ((LineEntry) entry).getResult();
         String doubleStr = DoubleUtils.submultipleUnitFormat(result.getPercents());
         String valueStr = getContext().getString(R.string.percent_string_format, doubleStr);
         String dateStr = DateUtils.date(getContext(), result.getDate());

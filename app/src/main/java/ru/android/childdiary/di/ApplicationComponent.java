@@ -77,7 +77,7 @@ import ru.android.childdiary.presentation.testing.TestResultActivity;
 import ru.android.childdiary.presentation.testing.TestResultPresenter;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 import ru.android.childdiary.presentation.testing.TestingPresenter;
-import ru.android.childdiary.presentation.testing.chart.DomanChartPresenter;
+import ru.android.childdiary.presentation.testing.dynamic.DomanChartPresenter;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersPresenter;
 import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.CloudService;

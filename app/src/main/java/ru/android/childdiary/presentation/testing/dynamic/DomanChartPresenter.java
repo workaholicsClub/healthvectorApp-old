@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.chart;
+package ru.android.childdiary.presentation.testing.dynamic;
 
 import android.support.annotation.NonNull;
 

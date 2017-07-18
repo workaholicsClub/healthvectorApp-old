@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.chart;
+package ru.android.childdiary.presentation.testing.dynamic;
 
 import android.content.Context;
 import android.content.Intent;

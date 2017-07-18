@@ -194,7 +194,7 @@
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
-            android:name=".presentation.testing.chart.TestChartActivity"
+            android:name=".presentation.testing.dynamic.TestChartActivity"
             android:parentActivityName=".presentation.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

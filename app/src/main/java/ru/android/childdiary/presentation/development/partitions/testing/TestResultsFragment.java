@@ -31,7 +31,7 @@ import ru.android.childdiary.presentation.development.partitions.testing.adapter
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestClickListener;
 import ru.android.childdiary.presentation.testing.TestResultActivity;
 import ru.android.childdiary.presentation.testing.TestingActivity;
-import ru.android.childdiary.presentation.testing.chart.TestChartActivity;
+import ru.android.childdiary.presentation.testing.dynamic.TestChartActivity;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class TestResultsFragment extends AppPartitionFragment implements TestResultsView,

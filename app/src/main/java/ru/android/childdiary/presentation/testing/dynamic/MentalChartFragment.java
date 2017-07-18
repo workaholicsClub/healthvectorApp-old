@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.chart;
+package ru.android.childdiary.presentation.testing.dynamic;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
