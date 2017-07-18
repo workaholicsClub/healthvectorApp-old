@@ -79,4 +79,9 @@ public class TestChartActivity extends BaseMvpActivity {
         fragment.setArguments(arguments);
         return fragment;
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

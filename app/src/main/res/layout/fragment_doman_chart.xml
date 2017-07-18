@@ -11,6 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
+    <TextView
+        android:id="@+id/textViewIntention"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="@dimen/base_margin"
+        android:text="@string/no_chart_data"
+        android:textAppearance="@style/IntentionTextAppearance" />
+
     <com.github.mikephil.charting.charts.CombinedChart
         android:id="@+id/chart"
         android:layout_width="match_parent"

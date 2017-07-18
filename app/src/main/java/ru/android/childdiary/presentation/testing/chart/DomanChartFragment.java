@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 
@@ -27,6 +28,9 @@ import ru.android.childdiary.presentation.testing.fragments.ChartPlotter;
 public abstract class DomanChartFragment extends BaseMvpFragment implements DomanChartView {
     @BindView(R.id.chart)
     CombinedChart chart;
+
+    @BindView(R.id.textViewIntention)
+    TextView textViewIntention;
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
@@ -58,19 +62,23 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
     public final void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         chart.setVisibility(View.GONE);
+        textViewIntention.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showResults(@NonNull LinkedHashMap<DomanTestParameter, List<DomanResult>> results) {
         if (results.isEmpty()) {
-            // TODO no data
-            return;
+            chart.setVisibility(View.GONE);
+            textViewIntention.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        } else {
+            chart.setVisibility(View.VISIBLE);
+            textViewIntention.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            ChartPlotter plotter = new ChartPlotter(chart, results);
+            plotter.setup();
         }
-        ChartPlotter chartPlotter = new ChartPlotter(chart, results);
-        chartPlotter.setup();
-        progressBar.setVisibility(View.GONE);
-        chart.setVisibility(View.VISIBLE);
     }
 
     protected abstract DomanChartPresenter getPresenter();

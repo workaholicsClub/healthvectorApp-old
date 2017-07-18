@@ -32,6 +32,9 @@ public interface TestResultsView extends AppPartitionView {
     void navigateToChart(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void noChartData();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void confirmDeletion(@NonNull TestResult testResult);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

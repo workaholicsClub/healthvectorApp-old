@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
@@ -38,8 +39,10 @@ public class TestResultActivity extends BaseMvpActivity implements TestResultVie
     private TestResult testResult;
 
     public static Intent getIntent(Context context,
+                                   @Nullable Sex sex,
                                    @NonNull TestResult testResult) {
         return new Intent(context, TestResultActivity.class)
+                .putExtra(ExtraConstants.EXTRA_SEX, sex)
                 .putExtra(ExtraConstants.EXTRA_TEST_RESULT, testResult);
     }
 

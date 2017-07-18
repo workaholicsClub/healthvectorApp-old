@@ -110,7 +110,7 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
 
     @Override
     public void navigateToTestResult(@NonNull TestResult testResult) {
-        Intent intent = TestResultActivity.getIntent(getContext(), testResult);
+        Intent intent = TestResultActivity.getIntent(getContext(), getSex(), testResult);
         startActivity(intent);
     }
 
@@ -118,6 +118,11 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
     public void navigateToChart(@NonNull Child child) {
         Intent intent = TestChartActivity.getIntent(getContext(), child);
         startActivity(intent);
+    }
+
+    @Override
+    public void noChartData() {
+        showToast(getString(R.string.no_chart_data));
     }
 
     @Override

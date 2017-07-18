@@ -310,4 +310,5 @@
     <string name="test_chart_physical_tab">Моторное</string>
     <string name="test_chart_mental_tab">Сенсорное</string>
     <string name="delete_test_result_dialog_title">Удалить результаты тестирования?</string>
+    <string name="no_chart_data">Пройдите тестирование по методу Гленна Домана</string>
 </resources>

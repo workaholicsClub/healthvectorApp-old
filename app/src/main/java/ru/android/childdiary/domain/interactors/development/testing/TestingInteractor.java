@@ -15,6 +15,7 @@ import ru.android.childdiary.data.repositories.development.testing.TestingDataRe
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.testing.requests.HasDomanTestResultsResponse;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
@@ -65,9 +66,30 @@ public class TestingInteractor {
                         .testParameter(testParameter)
                         .build())
                         .blockingFirst();
-                map.put(testParameter, testResults);
+                if (!testResults.isEmpty()) {
+                    map.put(testParameter, testResults);
+                }
             }
             return map;
         });
+    }
+
+    public Observable<HasDomanTestResultsResponse> hasDomanTestResults(@NonNull Child child) {
+        return testingRepository.getTestResults(TestResultsRequest.builder()
+                .child(child)
+                .build())
+                .map(this::hasData)
+                .map(hasData -> HasDomanTestResultsResponse.builder()
+                        .child(child)
+                        .hasData(hasData)
+                        .build());
+    }
+
+    private boolean hasData(@NonNull List<TestResult> testResults) {
+        return Observable.fromIterable(testResults)
+                .filter(testResult -> testResult.getTest() instanceof DomanTest)
+                .count()
+                .map(count -> count > 0)
+                .blockingGet();
     }
 }
