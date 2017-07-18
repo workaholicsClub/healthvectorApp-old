@@ -1,11 +1,17 @@
 package ru.android.childdiary.utils.strings;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
+import ru.android.childdiary.domain.interactors.development.testing.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
+import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 
 public class TestUtils {
     @Nullable
@@ -67,21 +73,21 @@ public class TestUtils {
     }
 
     @Nullable
-    public static String getTestTitle(Context context, @Nullable TestType testType, @Nullable DomanTestParameter testParameter) {
-        if (testType == TestType.DOMAN_PHYSICAL || testType == TestType.DOMAN_MENTAL) {
+    public static String getTestTitle(Context context, @NonNull Test test, @Nullable DomanTestParameter testParameter) {
+        if (test instanceof DomanTest) {
             return toString(context, testParameter);
         }
-        return getTestName(context, testType);
+        return test.getName();
     }
 
     @Nullable
-    public static String getTestResult(Context context, @Nullable TestType testType, @Nullable Integer result) {
-        if (testType == null || result == null) {
-            return null;
-        }
-        if (testType == TestType.DOMAN_PHYSICAL || testType == TestType.DOMAN_MENTAL) {
-            return context.getString(R.string.stage, result + 1);
-        }
-        return null;
+    public static String getTestTitle(Context context, @NonNull TestResult testResult) {
+        return getTestTitle(context, testResult.getTest(), testResult.getDomanTestParameter());
+    }
+
+    @Nullable
+    public static String getTestResultShort(Context context, @NonNull TestResult testResult) {
+        TestProcessor testProcessor = TestFactory.createTestProcessor(testResult);
+        return testProcessor.interpretResultShort();
     }
 }

@@ -24,7 +24,6 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
-import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class FieldEditTextWithImageView extends FieldEditTextView implements FieldReadOnly {
     @BindView(R.id.imageView)

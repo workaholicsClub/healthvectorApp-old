@@ -48,4 +48,10 @@ public class NewbornTestProcessor extends SimpleTestProcessor<NewbornTest> {
         int count = getResult();
         return count == 0 ? test.getResultGood() : test.getResultBad();
     }
+
+    @Override
+    public String interpretResultShort() {
+        // TODO ?
+        return null;
+    }
 }

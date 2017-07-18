@@ -70,7 +70,7 @@ public class TestingQuestionFragment extends AppPartitionFragment {
 
     @Override
     protected void setupUi() {
-        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test.getTestType(), parameter));
+        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test, parameter));
         justifiedTextView.setText(question.getText());
     }
 

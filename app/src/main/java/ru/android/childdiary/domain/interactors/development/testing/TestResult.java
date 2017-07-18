@@ -9,15 +9,18 @@ import lombok.Value;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class TestResult implements Serializable {
     Long id;
 
     Child child;
 
     TestType testType;
+
+    Test test;
 
     LocalDate birthDate;
 

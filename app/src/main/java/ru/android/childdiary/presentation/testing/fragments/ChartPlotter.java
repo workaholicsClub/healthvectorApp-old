@@ -18,14 +18,19 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import lombok.NonNull;
+import lombok.val;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.FontUtils;
@@ -44,14 +49,15 @@ public class ChartPlotter {
     private final Logger logger = LoggerFactory.getLogger(toString());
     private final Context context;
     private final CombinedChart chart;
-    private final List<DomanResult> results;
+    private final LinkedHashMap<DomanTestParameter, List<DomanResult>> results;
+    private final List<LocalDate> dates = new ArrayList<>();
 
     private final int[] stakedBarColors;
     private final int margin;
 
     private Entry selectedEntry;
 
-    public ChartPlotter(@NonNull CombinedChart chart, @NonNull List<DomanResult> results) {
+    public ChartPlotter(@NonNull CombinedChart chart, @NonNull LinkedHashMap<DomanTestParameter, List<DomanResult>> results) {
         context = chart.getContext();
         this.chart = chart;
         this.results = results;
@@ -126,8 +132,8 @@ public class ChartPlotter {
         xAxis.setValueFormatter(
                 (float value, AxisBase axis) -> {
                     int index = (int) value;
-                    return index >= 0 && index < results.size()
-                            ? DateUtils.date(context, results.get(index).getDate())
+                    return index >= 0 && index < dates.size()
+                            ? DateUtils.date(context, dates.get(index))
                             : "";
                 });
         xAxis.setGranularity(1);
@@ -155,54 +161,58 @@ public class ChartPlotter {
         CombinedData data = new CombinedData();
 
         data.setData(generateLineData());
-        data.setData(generateBarData(results.size()));
+        data.setData(generateBarData());
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setAxisMaximum(data.getXMax() + 1);
-        xAxis.setAxisMinimum(data.getXMin() - 1);
+        if (dates.size() > 1) {
+            xAxis.setAxisMinimum(data.getXMin() - 2);
+            xAxis.setEnabled(false);
+        } else {
+            xAxis.setAxisMinimum(data.getXMin() - 1);
+            xAxis.setAxisMaximum(data.getXMax() + 1);
+        }
 
         chart.setData(data);
 
+        chart.resetZoom();
         chart.invalidate();
     }
 
     private LineData generateLineData() {
-        List<Entry> lineEntries1 = new ArrayList<>();
-        for (int i = 0; i < results.size(); ++i) {
-            DomanResult result = results.get(i);
-            float yVal = (float) result.getPercents().doubleValue();
-            Entry entry = new Entry(i, yVal, ContextCompat.getDrawable(context, R.drawable.dot_normal), result);
-            lineEntries1.add(entry);
-        }
-
-        LineDataSet lineDataSet1 = new LineDataSet(lineEntries1, null);
-        lineDataSet1.setColor(ContextCompat.getColor(context, R.color.chart_line_normal_color));
-        lineDataSet1.setDrawValues(false);
-        lineDataSet1.setDrawHighlightIndicators(false);
-        lineDataSet1.setHighlightEnabled(true);
-
-        List<Entry> lineEntries2 = new ArrayList<>();
-        for (int i = 0; i < results.size(); i += 2) {
-            DomanResult result = results.get(i);
-            float yVal = (float) result.getPercents().doubleValue() - 10;
-            Entry entry = new Entry(i, yVal, ContextCompat.getDrawable(context, R.drawable.dot_normal), result);
-            lineEntries2.add(entry);
-        }
-
-        LineDataSet lineDataSet2 = new LineDataSet(lineEntries2, null);
-        lineDataSet2.setColor(ContextCompat.getColor(context, R.color.chart_line_normal_color));
-        lineDataSet2.setDrawValues(false);
-        lineDataSet2.setDrawHighlightIndicators(false);
-        lineDataSet2.setHighlightEnabled(true);
-
+        dates.clear();
         LineData lineData = new LineData();
-        lineData.addDataSet(lineDataSet1);
-        lineData.addDataSet(lineDataSet2);
+        for (val entry : results.entrySet()) {
+            List<DomanResult> domanResults = entry.getValue();
+            if (domanResults.isEmpty()) {
+                continue;
+            }
+
+            List<Entry> lineEntries = new ArrayList<>();
+            for (int i = 0; i < domanResults.size(); ++i) {
+                DomanResult result = domanResults.get(i);
+                float yVal = (float) result.getPercents().doubleValue();
+                Entry lineEntry = new Entry(i, yVal, ContextCompat.getDrawable(context, R.drawable.dot_normal), result);
+                lineEntries.add(lineEntry);
+                if (!dates.contains(result.getDate())) {
+                    dates.add(result.getDate());
+                }
+            }
+
+            LineDataSet lineDataSet = new LineDataSet(lineEntries, null);
+            lineDataSet.setColor(ContextCompat.getColor(context, R.color.chart_line_normal_color));
+            lineDataSet.setDrawValues(false);
+            lineDataSet.setDrawHighlightIndicators(false);
+            lineDataSet.setHighlightEnabled(true);
+
+            lineData.addDataSet(lineDataSet);
+        }
+        Collections.sort(dates);
         return lineData;
     }
 
-    private BarData generateBarData(int count) {
+    private BarData generateBarData() {
         BarData barData = new BarData();
+        int count = dates.size() > 1 ? dates.size() + 1 : 1;
         for (int i = 0; i < count; ++i) {
             List<BarEntry> barEntries = new ArrayList<>();
 
@@ -220,7 +230,7 @@ public class ChartPlotter {
         }
 
         if (count > 1) {
-            barData.groupBars(0, 0, 0);
+            barData.groupBars(-0.5f, 0, 0);
         }
         return barData;
     }

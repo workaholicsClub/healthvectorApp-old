@@ -33,8 +33,12 @@ public class DomanPhysicalTest extends DomanTest {
                              @NonNull Map<DomanTestParameter, List<Question>> questions,
                              @NonNull String resultTextFormat,
                              @NonNull String advanced, @NonNull String normal, @NonNull String slow,
+                             @NonNull List<String> stageTitles,
                              @NonNull List<String> stageDescriptions) {
-        super(TestType.DOMAN_PHYSICAL, name, description, questions, resultTextFormat, advanced, normal, slow, stageDescriptions);
+        super(TestType.DOMAN_PHYSICAL, name, description,
+                questions, resultTextFormat,
+                advanced, normal, slow,
+                stageTitles, stageDescriptions);
     }
 
     @Override

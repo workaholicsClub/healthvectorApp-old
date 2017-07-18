@@ -30,7 +30,7 @@ public abstract class DomanTest extends Test {
     @NonNull
     String advanced, normal, slow;
     @NonNull
-    List<String> stageDescriptions;
+    List<String> stageTitles, stageDescriptions;
 
     public DomanTest(@NonNull TestType testType,
                      @NonNull String name,
@@ -38,6 +38,7 @@ public abstract class DomanTest extends Test {
                      @NonNull Map<DomanTestParameter, List<Question>> questions,
                      @NonNull String resultTextFormat,
                      @NonNull String advanced, @NonNull String normal, @NonNull String slow,
+                     @NonNull List<String> stageTitles,
                      @NonNull List<String> stageDescriptions) {
         super(testType, name, description);
         Map<DomanTestParameter, List<Question>> map = new HashMap<>();
@@ -50,6 +51,7 @@ public abstract class DomanTest extends Test {
         this.advanced = advanced;
         this.normal = normal;
         this.slow = slow;
+        this.stageTitles = Collections.unmodifiableList(stageTitles);
         this.stageDescriptions = Collections.unmodifiableList(stageDescriptions);
     }
 
@@ -60,6 +62,15 @@ public abstract class DomanTest extends Test {
             return advanced;
         }
         return slow;
+    }
+
+    @Nullable
+    public String getStageTitle(int stage) {
+        int index = stage;
+        if (index >= 0 && index < stageTitles.size()) {
+            return stageTitles.get(index);
+        }
+        return null;
     }
 
     @Nullable

@@ -4,27 +4,38 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView;
 import ru.android.childdiary.presentation.testing.TestingController;
+import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.strings.TestUtils;
 
 public class TestingFinishFragment extends AppPartitionFragment {
+    @Nullable
     @BindView(R.id.descriptionView)
     FieldJustifiedTextView justifiedTextView;
 
+    @Nullable
+    @BindView(R.id.textView)
+    TextView textView;
+
+    @Nullable
     @BindView(R.id.chart)
     CombinedChart chart;
 
@@ -40,7 +51,7 @@ public class TestingFinishFragment extends AppPartitionFragment {
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.fragment_testing_finish;
+        return test instanceof DomanTest ? R.layout.fragment_testing_finish_chart : R.layout.fragment_testing_finish;
     }
 
     @Override
@@ -73,12 +84,21 @@ public class TestingFinishFragment extends AppPartitionFragment {
 
     @Override
     protected void setupUi() {
-        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test.getTestType(), parameter));
-        justifiedTextView.setText(text);
-        chart.setVisibility(result == null ? View.GONE : View.VISIBLE);
-        if (result != null) {
-            ChartPlotter plotter = new ChartPlotter(chart, Collections.singletonList(result));
-            plotter.setup();
+        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test, parameter));
+        if (justifiedTextView != null) {
+            justifiedTextView.setText(text);
+        }
+        if (textView != null) {
+            textView.setText(HtmlUtils.fromHtml(text));
+        }
+        if (chart != null) {
+            chart.setVisibility(result == null ? View.GONE : View.VISIBLE);
+            if (result != null) {
+                LinkedHashMap<DomanTestParameter, List<DomanResult>> map = new LinkedHashMap<>();
+                map.put(parameter, Collections.singletonList(result));
+                ChartPlotter plotter = new ChartPlotter(chart, map);
+                plotter.setup();
+            }
         }
     }
 }

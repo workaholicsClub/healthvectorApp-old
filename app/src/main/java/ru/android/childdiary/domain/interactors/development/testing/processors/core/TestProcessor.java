@@ -18,4 +18,6 @@ public interface TestProcessor {
     void setResult(@Nullable Integer result);
 
     String interpretResult();
+
+    String interpretResultShort();
 }

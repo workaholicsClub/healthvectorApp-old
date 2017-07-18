@@ -61,4 +61,10 @@ public class AutismTestProcessor extends SimpleTestProcessor<AutismTest> {
             return test.getFinishTextHigh();
         }
     }
+
+    @Override
+    public String interpretResultShort() {
+        // TODO ?
+        return null;
+    }
 }

@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.DomanTestParameter;
-import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
@@ -22,6 +21,7 @@ import ru.android.childdiary.domain.interactors.development.testing.processors.c
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestParameters;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
@@ -58,7 +58,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
 
     @Override
     public void startTesting() {
-        if (test.getTestType() == TestType.DOMAN_MENTAL || test.getTestType() == TestType.DOMAN_PHYSICAL) {
+        if (test instanceof DomanTest) {
             getViewState().specifyTestParameters(child, test);
         } else {
             testProcessor = TestFactory.createTestProcessor(test, TestParameters.builder().build());

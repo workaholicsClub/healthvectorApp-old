@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="stage">%d стадия развития</string>
     <string name="doman_result_text_format">
         <![CDATA[
-            <p style="text-align:center;">
-            %1$d стадия развития<br />(%2$s)
-            </p>
-            <p style="text-align:center;">
+            %1$s
+            <br />
+            (%2$s)
+            <br /><br />
             %3$s
-            </p>
         ]]>
     </string>
     <string name="doman_stage_advanced">Опережающее развитие</string>

@@ -9,8 +9,6 @@ import org.joda.time.LocalDate;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -19,7 +17,6 @@ import ru.android.childdiary.domain.interactors.development.testing.TestingInter
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
-import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestParameters;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -38,22 +35,8 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
     }
 
     public void initTestResult(@NonNull TestResult testResult) {
-        unsubscribeOnDestroy(
-                testingInteractor.getTest(testResult.getTestType())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(test -> init(test, testResult), this::onUnexpectedError));
-    }
-
-    private void init(@NonNull Test test, @NonNull TestResult testResult) {
-        testProcessor = TestFactory.createTestProcessor(test, TestParameters.builder()
-                .birthDate(testResult.getBirthDate())
-                .date(testResult.getDate())
-                .parameter(testResult.getDomanTestParameter())
-                .build());
-        testProcessor.setResult(testResult.getResult());
-
-        showFinishPage(test, testResult.getChild(), testResult.getDate());
+        testProcessor = TestFactory.createTestProcessor(testResult);
+        showFinishPage(testResult.getTest(), testResult.getChild(), testResult.getDate());
     }
 
     private void showFinishPage(@NonNull Test test, @NonNull Child child, @NonNull LocalDate date) {

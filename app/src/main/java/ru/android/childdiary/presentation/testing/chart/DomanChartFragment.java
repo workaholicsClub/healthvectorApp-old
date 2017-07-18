@@ -8,12 +8,14 @@ import android.widget.ProgressBar;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -60,7 +62,7 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
     }
 
     @Override
-    public void showResults(@NonNull List<DomanResult> results) {
+    public void showResults(@NonNull LinkedHashMap<DomanTestParameter, List<DomanResult>> results) {
         if (results.isEmpty()) {
             // TODO no data
             return;

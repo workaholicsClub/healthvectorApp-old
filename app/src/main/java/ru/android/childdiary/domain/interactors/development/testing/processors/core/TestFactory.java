@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import ru.android.childdiary.data.types.TestType;
+import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.processors.AutismTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.processors.DomanMentalTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.processors.DomanPhysicalTestProcessor;
@@ -56,5 +57,15 @@ public class TestFactory {
                 return new NewbornTestProcessor((NewbornTest) test);
         }
         throw new IllegalStateException("Unsupported test type");
+    }
+
+    public static TestProcessor createTestProcessor(@NonNull TestResult testResult) {
+        TestProcessor testProcessor = TestFactory.createTestProcessor(testResult.getTest(), TestParameters.builder()
+                .birthDate(testResult.getBirthDate())
+                .date(testResult.getDate())
+                .parameter(testResult.getDomanTestParameter())
+                .build());
+        testProcessor.setResult(testResult.getResult());
+        return testProcessor;
     }
 }

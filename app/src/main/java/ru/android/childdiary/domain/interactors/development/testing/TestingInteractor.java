@@ -16,6 +16,7 @@ import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
+import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 
 public class TestingInteractor {
@@ -24,10 +25,6 @@ public class TestingInteractor {
     @Inject
     public TestingInteractor(TestingDataRepository testingRepository) {
         this.testingRepository = testingRepository;
-    }
-
-    public Observable<Test> getTest(@NonNull TestType testType) {
-        return testingRepository.getTest(testType);
     }
 
     public Observable<List<Test>> getTests() {
@@ -51,5 +48,26 @@ public class TestingInteractor {
                                      @NonNull DomanTestParameter testParameter,
                                      @NonNull LocalDate date) {
         return testingRepository.checkDate(child, testType, testParameter, date);
+    }
+
+    public Observable<LinkedHashMap<DomanTestParameter, List<TestResult>>> getDomanTestResults(@NonNull Child child, @NonNull TestType testType) {
+        return Observable.fromCallable(() -> {
+            LinkedHashMap<DomanTestParameter, List<TestResult>> map = new LinkedHashMap<>();
+            Test test = testingRepository.getTest(testType).blockingFirst();
+            if (!(test instanceof DomanTest)) {
+                return map;
+            }
+            DomanTestParameter[] parameters = ((DomanTest) test).getParameters();
+            for (DomanTestParameter testParameter : parameters) {
+                List<TestResult> testResults = getTestResults(TestResultsRequest.builder()
+                        .child(child)
+                        .testType(testType)
+                        .testParameter(testParameter)
+                        .build())
+                        .blockingFirst();
+                map.put(testParameter, testResults);
+            }
+            return map;
+        });
     }
 }

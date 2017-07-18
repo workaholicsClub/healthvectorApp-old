@@ -131,9 +131,15 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
     public String interpretResult() {
         int stage = getResult();
         return String.format(test.getResultTextFormat(),
-                stage + 1,
+                test.getStageTitle(stage),
                 test.getStageDescription(stage),
                 test.getStageType(initialStage, stage));
+    }
+
+    @Override
+    public String interpretResultShort() {
+        int stage = getResult();
+        return test.getStageTitle(stage);
     }
 
     public DomanTestParameter getDomanParameter() {

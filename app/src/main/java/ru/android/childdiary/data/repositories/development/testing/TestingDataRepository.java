@@ -67,6 +67,7 @@ public class TestingDataRepository implements TestingRepository {
                         .advanced(context.getString(R.string.doman_stage_advanced))
                         .normal(context.getString(R.string.doman_stage_normal))
                         .slow(context.getString(R.string.doman_stage_slow))
+                        .stageTitles(getStageTitles())
                         .stageDescriptions(getStrings(R.array.stage_descriptions))
                         .build();
             case DOMAN_MENTAL:
@@ -78,6 +79,7 @@ public class TestingDataRepository implements TestingRepository {
                         .advanced(context.getString(R.string.doman_stage_advanced))
                         .normal(context.getString(R.string.doman_stage_normal))
                         .slow(context.getString(R.string.doman_stage_slow))
+                        .stageTitles(getStageTitles())
                         .stageDescriptions(getStrings(R.array.stage_descriptions))
                         .build();
             case AUTISM:
@@ -100,6 +102,13 @@ public class TestingDataRepository implements TestingRepository {
                         .build();
         }
         return null;
+    }
+
+    private List<String> getStageTitles() {
+        return Observable.range(1, 7)
+                .map(i -> context.getString(R.string.stage, i))
+                .toList()
+                .blockingGet();
     }
 
     private Map<DomanTestParameter, List<Question>> getDomanPhysicalQuestions() {
@@ -141,10 +150,16 @@ public class TestingDataRepository implements TestingRepository {
 
     @Override
     public Observable<Test> getTest(@NonNull TestType testType) {
-        return Observable.fromIterable(tests)
-                .filter(test -> testType == test.getTestType())
-                .firstOrError()
-                .toObservable();
+        return Observable.fromCallable(() -> getTestByType(testType));
+    }
+
+    private Test getTestByType(@NonNull TestType testType) {
+        for (Test test : tests) {
+            if (test.getTestType() == testType) {
+                return test;
+            }
+        }
+        throw new IllegalStateException("Unsupported test type");
     }
 
     @Override
@@ -154,7 +169,15 @@ public class TestingDataRepository implements TestingRepository {
 
     @Override
     public Observable<List<TestResult>> getTestResults(@NonNull TestResultsRequest request) {
-        return testingDbService.getTestResults(request);
+        return testingDbService.getTestResults(request)
+                .map(this::putTest);
+    }
+
+    private List<TestResult> putTest(@NonNull List<TestResult> testResults) {
+        return Observable.fromIterable(testResults)
+                .map(testResult -> testResult.toBuilder().test(getTestByType(testResult.getTestType())).build())
+                .toList()
+                .blockingGet();
     }
 
     @Override
