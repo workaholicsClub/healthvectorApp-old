@@ -36,6 +36,7 @@
     <string name="request_get_accounts_permission_title">Запрос на получение аккаунта</string>
     <string name="request_get_accounts_permission_text">Необходимо для создания резервной копии данных приложения в Google Drive.</string>
     <string name="camera_not_available">Камера не доступна</string>
+    <string name="browser_not_available">Браузер не доступен</string>
     <string name="select_image">Выберите изображение</string>
     <string name="failed_to_create_file_for_camera">Не удалось создать файл для фотографии</string>
     <string name="failed_to_create_file_for_crop">Не удалось создать файл для обработки</string>

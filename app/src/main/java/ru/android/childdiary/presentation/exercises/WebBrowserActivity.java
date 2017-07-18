@@ -38,7 +38,9 @@ public class WebBrowserActivity extends BaseMvpActivity {
 
             // otherwise allow the OS to handle it
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
             return true;
         }
 
@@ -54,7 +56,6 @@ public class WebBrowserActivity extends BaseMvpActivity {
                 String uri = failingUrl.substring(keyName.length());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 if (intent.resolveActivity(getPackageManager()) != null) {
-                    logger.debug("string intent: " + intent);
                     startActivity(intent);
                     webView.goBack();
                 }
@@ -152,13 +153,22 @@ public class WebBrowserActivity extends BaseMvpActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_open_in_web_browser:
-                logger.debug("starting web browser");
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                startActivity(intent);
+                startBrowser(this, url);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void startBrowser(Context context, String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            logger.debug("starting web browser");
+            startActivity(intent);
+        } else {
+            logger.error("not found app to open intent: " + intent);
+            showToast(getString(R.string.browser_not_available));
         }
     }
 }

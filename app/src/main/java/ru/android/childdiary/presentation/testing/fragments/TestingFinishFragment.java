@@ -1,6 +1,8 @@
 package ru.android.childdiary.presentation.testing.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -26,7 +28,7 @@ import ru.android.childdiary.presentation.testing.TestingController;
 import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.strings.TestUtils;
 
-public class TestingFinishFragment extends AppPartitionFragment {
+public class TestingFinishFragment extends AppPartitionFragment implements HtmlUtils.OnLinkClickListener {
     @Nullable
     @BindView(R.id.descriptionView)
     FieldJustifiedTextView justifiedTextView;
@@ -87,6 +89,7 @@ public class TestingFinishFragment extends AppPartitionFragment {
         ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test, parameter));
         if (justifiedTextView != null) {
             justifiedTextView.setText(text);
+            justifiedTextView.setOnLinkClickListener(this);
         }
         if (textView != null) {
             textView.setText(HtmlUtils.fromHtml(text));
@@ -99,6 +102,23 @@ public class TestingFinishFragment extends AppPartitionFragment {
                 ChartPlotter plotter = new ChartPlotter(chart, map);
                 plotter.setup();
             }
+        }
+    }
+
+    @Override
+    public void onLinkClick(String url) {
+        startBrowser(getContext(), url);
+    }
+
+    private void startBrowser(Context context, String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            logger.debug("starting web browser");
+            startActivity(intent);
+        } else {
+            logger.error("not found app to open intent: " + intent);
+            showToast(getString(R.string.browser_not_available));
         }
     }
 }

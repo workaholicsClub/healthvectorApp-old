@@ -72,7 +72,6 @@ public class TestUtils {
         return null;
     }
 
-    @Nullable
     public static String getTestTitle(Context context, @NonNull Test test, @Nullable DomanTestParameter testParameter) {
         if (test instanceof DomanTest) {
             return toString(context, testParameter);
