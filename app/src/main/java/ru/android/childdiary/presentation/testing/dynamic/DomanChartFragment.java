@@ -17,14 +17,11 @@ import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.testing.chart.ChartPlotter;
 import ru.android.childdiary.presentation.testing.dialogs.ParameterDialogArguments;
 import ru.android.childdiary.presentation.testing.dialogs.ParameterDialogFragment;
-import ru.android.childdiary.utils.strings.TestUtils;
-import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public abstract class DomanChartFragment extends BaseMvpFragment implements DomanChartView,
         ParameterDialogFragment.Listener {
@@ -49,6 +46,7 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
     @Getter(AccessLevel.PROTECTED)
     private Sex sex;
     private Child child;
+    private DomanChartState state;
 
     @Override
     protected int getLayoutResourceId() {
@@ -80,21 +78,19 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
 
     @Override
     public void showResults(@NonNull DomanChartState state) {
+        this.state = state;
+        ((TestChartActivity) getActivity()).updateTitle(state.getTestType(), state.getTestParameter());
         if (state.getTestResults().isEmpty()) {
-            ((BaseMvpActivity) getActivity()).setupToolbarLogo(ResourcesUtils.getChildIconForToolbar(getContext(), child));
-            ((BaseMvpActivity) getActivity()).setupToolbarTitle(child.getName());
             chartWrapper.setVisibility(View.GONE);
             legendView.setVisibility(View.GONE);
             textViewIntention.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         } else {
-            ((BaseMvpActivity) getActivity()).hideToolbarLogo();
-            ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.toString(getContext(), state.getTestParameter()));
             chartWrapper.setVisibility(View.VISIBLE);
             legendView.setVisibility(View.VISIBLE);
             textViewIntention.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
-            ChartPlotter plotter = new ChartPlotter(chart, DomanTestParameter.PHYSICAL_MOBILITY, state.getTestResults());
+            ChartPlotter plotter = new ChartPlotter(chart, state.getTestParameter(), state.getTestResults());
             plotter.setup();
         }
     }
@@ -119,5 +115,10 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
 
     protected abstract DomanChartPresenter getPresenter();
 
-    protected abstract TestType getTestType();
+    public abstract TestType getTestType();
+
+    @Nullable
+    public DomanTestParameter getTestParameter() {
+        return state == null ? null : state.getTestParameter();
+    }
 }

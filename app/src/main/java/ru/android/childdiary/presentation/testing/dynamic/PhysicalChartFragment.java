@@ -11,7 +11,7 @@ public class PhysicalChartFragment extends DomanChartFragment {
     DomanChartPresenter presenter;
 
     @Override
-    protected TestType getTestType() {
+    public TestType getTestType() {
         return TestType.DOMAN_PHYSICAL;
     }
 }

@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.testing.dynamic;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -20,12 +21,14 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.DomanTestParameter;
+import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
-import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.strings.TestUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -82,6 +85,12 @@ public class TestChartActivity extends BaseMvpActivity {
             @Override
             public void onPageSelected(int position) {
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
+                DomanChartFragment fragment = getSelectedPage(position);
+                if (fragment != null) {
+                    setupToolbarTitle(TestUtils.toString(TestChartActivity.this, fragment.getTestParameter()));
+                } else {
+                    logger.error("selected page is null");
+                }
             }
 
             @Override
@@ -99,8 +108,7 @@ public class TestChartActivity extends BaseMvpActivity {
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarLogo(ResourcesUtils.getChildIconForToolbar(this, child));
-        setupToolbarTitle(child.getName());
+        setupToolbarTitle(null);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
     }
 
@@ -158,5 +166,16 @@ public class TestChartActivity extends BaseMvpActivity {
     private DomanChartFragment getSelectedPage() {
         int position = viewPager.getCurrentItem();
         return getSelectedPage(position);
+    }
+
+    public void updateTitle(@NonNull TestType testType, @NonNull DomanTestParameter parameter) {
+        DomanChartFragment fragment = getSelectedPage();
+        if (fragment == null) {
+            logger.error("selected page is null");
+            return;
+        }
+        if (fragment.getTestType() == testType) {
+            setupToolbarTitle(TestUtils.toString(this, parameter));
+        }
     }
 }

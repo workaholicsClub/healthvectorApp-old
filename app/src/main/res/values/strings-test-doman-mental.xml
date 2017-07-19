@@ -15,9 +15,9 @@
             </p>
         ]]>
     </string>
-    <string name="mental_vision">Зрительная компетентность</string>
-    <string name="mental_audition">Слуховая компетентность</string>
-    <string name="mental_sensitivity">Тактильная компетентность</string>
+    <string name="mental_vision">Зрение</string>
+    <string name="mental_audition">Слух</string>
+    <string name="mental_sensitivity">Осязание</string>
     <string-array name="mental_vision_stages">
         <item>Световой рефлекс</item>
         <item>Контурное восприятие</item>

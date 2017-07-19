@@ -67,7 +67,6 @@ public class ParameterDialogFragment extends BaseMvpDialogFragment<ParameterDial
     protected Dialog createDialog(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
-                .setTitle(R.string.menu_filter)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     DomanTestParameter parameter = parameterView.getSelected();
                     if (listener != null) {

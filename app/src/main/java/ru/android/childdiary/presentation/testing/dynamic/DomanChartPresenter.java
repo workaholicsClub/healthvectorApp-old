@@ -84,6 +84,7 @@ public class DomanChartPresenter extends BasePresenter<DomanChartView> {
                                         .first(Collections.emptyList())
                                         .map(this::map)
                                         .map(testResults -> DomanChartState.builder()
+                                                .testType(testType)
                                                 .testParameter(testParameter)
                                                 .testResults(testResults)
                                                 .build()))

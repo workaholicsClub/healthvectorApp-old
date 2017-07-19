@@ -143,7 +143,7 @@ public class ChartPlotter {
 
     private void setupYAxis() {
         YAxis yAxisLeft = chart.getAxisLeft();
-        yAxisLeft.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        yAxisLeft.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         yAxisLeft.setTypeface(FontUtils.getTypefaceRegular(context));
         yAxisLeft.setTextSize(LABEL_TEXT_SIZE);
         yAxisLeft.setTextColor(ContextCompat.getColor(context, R.color.placeholder_text));
@@ -164,13 +164,8 @@ public class ChartPlotter {
         data.setData(generateBarData());
 
         XAxis xAxis = chart.getXAxis();
-        if (results.size() > 1) {
-            xAxis.setAxisMinimum(data.getXMin() - 1.5f);
-            xAxis.setAxisMaximum(data.getXMax() + 1);
-        } else {
-            xAxis.setAxisMinimum(data.getXMin() - 1);
-            xAxis.setAxisMaximum(data.getXMax() + 1);
-        }
+        xAxis.setAxisMinimum(data.getXMin() - 1);
+        xAxis.setAxisMaximum(data.getXMax() + 1);
 
         chart.setData(data);
 

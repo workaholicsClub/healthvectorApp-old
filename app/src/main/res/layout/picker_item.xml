@@ -20,7 +20,7 @@
             android:layout_marginRight="@dimen/base_margin"
             android:background="@color/accent_boy"
             android:scaleType="center"
-            android:src="@drawable/event_row_action_delete" />
+            android:src="@drawable/ic_delete" />
     </LinearLayout>
 
     <LinearLayout

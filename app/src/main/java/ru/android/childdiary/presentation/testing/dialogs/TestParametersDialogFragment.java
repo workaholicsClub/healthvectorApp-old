@@ -127,7 +127,6 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
     protected Dialog createDialog(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
-                .setTitle(R.string.menu_filter)
                 .setPositiveButton(R.string.ok, null)
                 .setNegativeButton(R.string.cancel, null);
         AlertDialog dialog = builder.create();

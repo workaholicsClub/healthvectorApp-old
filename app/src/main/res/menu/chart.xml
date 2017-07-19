@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_filter"
-        android:icon="@drawable/toolbar_action_filter"
+        android:icon="@drawable/toolbar_action_chart"
         android:title="@string/menu_chart"
         app:showAsAction="ifRoom" />
 </menu>

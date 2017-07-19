@@ -59,7 +59,7 @@
                 android:layout_height="@dimen/event_row_height"
                 android:background="@drawable/background_clickable"
                 android:scaleType="center"
-                android:src="@drawable/event_row_action_delete" />
+                android:src="@drawable/ic_delete" />
         </LinearLayout>
     </LinearLayout>
 

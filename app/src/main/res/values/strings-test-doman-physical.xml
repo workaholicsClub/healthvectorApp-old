@@ -17,7 +17,7 @@
     </string>
     <string name="physical_mobility">Подвижность</string>
     <string name="physical_speech">Речь</string>
-    <string name="physical_manual">Мануальная компетентность</string>
+    <string name="physical_manual">Подвижность пальцев рук</string>
     <string-array name="physical_mobility_stages">
         <item>Движение рук и ног без перемещения туловища</item>
         <item>Ползание на животе в положении «лицом вниз», выливающееся в перекрёстное ползание на животе</item>

@@ -21,44 +21,7 @@
         android:text="@string/no_chart_data"
         android:textAppearance="@style/IntentionTextAppearance" />
 
-    <RelativeLayout
-        android:id="@+id/chartWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="@dimen/base_margin"
-        android:layout_weight="1">
-
-        <com.github.mikephil.charting.charts.CombinedChart
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/base_margin"
-            android:layout_marginStart="@dimen/base_margin"
-            android:paddingTop="2dp"
-            android:text="@string/chart_y_title"
-            android:textColor="@color/placeholder_text"
-            android:textSize="@dimen/text_size_small" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="@dimen/base_margin"
-            android:layout_marginRight="@dimen/base_margin"
-            android:paddingBottom="2dp"
-            android:text="@string/chart_x_title"
-            android:textColor="@color/placeholder_text"
-            android:textSize="@dimen/text_size_small" />
-    </RelativeLayout>
+    <include layout="@layout/chart" />
 
     <include layout="@layout/chart_legend" />
 </LinearLayout>
