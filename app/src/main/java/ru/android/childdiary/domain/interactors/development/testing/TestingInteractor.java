@@ -74,10 +74,11 @@ public class TestingInteractor {
         });
     }
 
-    public Observable<HasDomanTestResultsResponse> hasDomanTestResults(@NonNull Child child) {
+    public Single<HasDomanTestResultsResponse> hasDomanTestResults(@NonNull Child child) {
         return testingRepository.getTestResults(TestResultsRequest.builder()
                 .child(child)
                 .build())
+                .singleOrError()
                 .map(this::hasData)
                 .map(hasData -> HasDomanTestResultsResponse.builder()
                         .child(child)

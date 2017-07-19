@@ -64,7 +64,13 @@ public class AutismTestProcessor extends SimpleTestProcessor<AutismTest> {
 
     @Override
     public String interpretResultShort() {
-        // TODO ?
-        return null;
+        int count = getResult();
+        if (count <= 2) {
+            return test.getShortTextLow();
+        } else if (count <= 7) {
+            return test.getShortTextMedium();
+        } else {
+            return test.getShortTextHigh();
+        }
     }
 }

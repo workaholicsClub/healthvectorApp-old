@@ -7,6 +7,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import org.joda.time.LocalDate;
 
+import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestParameters;
 import ru.android.childdiary.presentation.core.BaseView;
@@ -16,5 +17,5 @@ public interface TestParametersView extends BaseView {
     void close(@NonNull Child child, @NonNull TestParameters testParameters);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void dateAlreadyUsed(@NonNull LocalDate date);
+    void dateAlreadyUsed(@NonNull LocalDate date, @NonNull TestType testType, @NonNull TestParameters testParameters);
 }

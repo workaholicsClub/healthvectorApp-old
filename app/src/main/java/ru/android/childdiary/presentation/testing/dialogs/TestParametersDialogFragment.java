@@ -19,6 +19,7 @@ import java.util.Calendar;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
+import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestParameters;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
@@ -31,6 +32,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDomanTestParameterView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.utils.strings.DateUtils;
+import ru.android.childdiary.utils.strings.TestUtils;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -164,11 +166,13 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
     }
 
     @Override
-    public void dateAlreadyUsed(@NonNull LocalDate date) {
+    public void dateAlreadyUsed(@NonNull LocalDate date,
+                                @NonNull TestType testType,
+                                @NonNull TestParameters testParameters) {
         String dateStr = DateUtils.date(getContext(), date);
+        String parameterStr = TestUtils.toString(getContext(), testParameters.getParameter());
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
-                .setTitle(R.string.date_already_used_dialog_title)
-                .setMessage(getString(R.string.date_already_used_dialog_text, dateStr))
+                .setMessage(getString(R.string.date_already_used_dialog_text, dateStr, parameterStr))
                 .setPositiveButton(R.string.ok, null)
                 .show();
     }

@@ -11,14 +11,11 @@ import android.widget.TextView;
 import com.github.mikephil.charting.charts.CombinedChart;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
@@ -43,6 +40,10 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
     CombinedChart chart;
 
     @Nullable
+    @BindView(R.id.legendLines)
+    View legendLinesView;
+
+    @Nullable
     private TestingController testingController;
 
     private String text;
@@ -54,7 +55,7 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
 
     @Override
     protected int getLayoutResourceId() {
-        return test instanceof DomanTest ? R.layout.fragment_testing_finish_chart : R.layout.fragment_testing_finish;
+        return parameter != null && result != null ? R.layout.fragment_testing_finish_chart : R.layout.fragment_testing_finish;
     }
 
     @Override
@@ -96,13 +97,11 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
             textView.setText(HtmlUtils.fromHtml(text));
         }
         if (chart != null) {
-            chart.setVisibility(result == null ? View.GONE : View.VISIBLE);
-            if (result != null) {
-                LinkedHashMap<DomanTestParameter, List<DomanResult>> map = new LinkedHashMap<>();
-                map.put(parameter, Collections.singletonList(result));
-                ChartPlotter plotter = new ChartPlotter(chart, map);
-                plotter.setup();
-            }
+            ChartPlotter plotter = new ChartPlotter(chart, parameter, Collections.singletonList(result));
+            plotter.setup();
+        }
+        if (legendLinesView != null) {
+            legendLinesView.setVisibility(View.GONE);
         }
     }
 

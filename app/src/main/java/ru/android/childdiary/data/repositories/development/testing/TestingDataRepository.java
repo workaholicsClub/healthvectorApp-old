@@ -91,6 +91,9 @@ public class TestingDataRepository implements TestingRepository {
                         .finishTextHigh(context.getString(R.string.test_autism_finish_text_high) + finishText)
                         .finishTextMedium(context.getString(R.string.test_autism_finish_text_medium) + finishText)
                         .finishTextLow(context.getString(R.string.test_autism_finish_text_low) + finishText)
+                        .shortTextHigh(context.getString(R.string.test_autism_high))
+                        .shortTextMedium(context.getString(R.string.test_autism_medium))
+                        .shortTextLow(context.getString(R.string.test_autism_low))
                         .build();
             case NEWBORN:
                 return NewbornTest.builder()
@@ -99,6 +102,8 @@ public class TestingDataRepository implements TestingRepository {
                         .questions(getQuestions(R.array.test_newborn))
                         .resultBad(context.getString(R.string.test_newborn_result_bad))
                         .resultGood(context.getString(R.string.test_newborn_result_good))
+                        .shortResultBad(context.getString(R.string.test_newborn_bad))
+                        .shortResultGood(context.getString(R.string.test_newborn_good))
                         .build();
         }
         return null;

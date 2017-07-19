@@ -26,8 +26,14 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.testing.chart.ChartPlotter;
 
 public abstract class DomanChartFragment extends BaseMvpFragment implements DomanChartView {
+    @BindView(R.id.chartWrapper)
+    View chartWrapper;
+
     @BindView(R.id.chart)
     CombinedChart chart;
+
+    @BindView(R.id.legend)
+    View legendView;
 
     @BindView(R.id.textViewIntention)
     TextView textViewIntention;
@@ -61,7 +67,8 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
     @Override
     public final void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        chart.setVisibility(View.GONE);
+        chartWrapper.setVisibility(View.GONE);
+        legendView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -69,14 +76,17 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
     @Override
     public void showResults(@NonNull LinkedHashMap<DomanTestParameter, List<DomanResult>> results) {
         if (results.isEmpty()) {
-            chart.setVisibility(View.GONE);
+            chartWrapper.setVisibility(View.GONE);
+            legendView.setVisibility(View.GONE);
             textViewIntention.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         } else {
-            chart.setVisibility(View.VISIBLE);
+            chartWrapper.setVisibility(View.VISIBLE);
+            legendView.setVisibility(View.VISIBLE);
             textViewIntention.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
-            ChartPlotter plotter = new ChartPlotter(chart, results);
+            // TODO переключение параметров
+            ChartPlotter plotter = new ChartPlotter(chart, DomanTestParameter.PHYSICAL_MOBILITY, results.get(DomanTestParameter.PHYSICAL_MOBILITY));
             plotter.setup();
         }
     }

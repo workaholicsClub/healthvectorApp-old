@@ -42,6 +42,9 @@
             </p>
         ]]>
     </string>
+    <string name="test_autism_high">Высокий риск</string>
+    <string name="test_autism_medium">Средний риск</string>
+    <string name="test_autism_low">Низкий риск</string>
     <string-array name="test_autism">
         <item>Если вы показываете на что-то на другом конце комнаты, ребенок смотрит на это? Пример: если вы показываете на игрушку или животное, ребенок смотрит на них?</item>
         <item>Вы когда-либо предполагали, что ваш ребенок может быть глухим?</item>

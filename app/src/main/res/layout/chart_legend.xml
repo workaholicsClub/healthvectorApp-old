@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/legend"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/base_margin"
+    android:layout_marginLeft="@dimen/base_margin"
+    android:layout_marginRight="@dimen/base_margin"
     android:baselineAligned="false"
     android:orientation="horizontal">
 
@@ -18,9 +22,9 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_margin="2dp"
+                android:layout_width="@dimen/legend_width"
+                android:layout_height="@dimen/legend_width"
+                android:layout_margin="@dimen/legend_margin"
                 android:background="@color/advanced_color" />
 
             <TextView
@@ -38,8 +42,9 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/legend_width"
+                android:layout_height="@dimen/legend_width"
+                android:layout_margin="@dimen/legend_margin"
                 android:background="@color/normal_color" />
 
             <TextView
@@ -57,8 +62,9 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/legend_width"
+                android:layout_height="@dimen/legend_width"
+                android:layout_margin="@dimen/legend_margin"
                 android:background="@color/slow_color" />
 
             <TextView
@@ -71,8 +77,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/legendLines"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginStart="@dimen/base_margin"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -83,8 +92,9 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="20dp"
+                android:layout_width="@dimen/legend_line_width"
                 android:layout_height="@dimen/line_width"
+                android:layout_margin="@dimen/legend_line_margin"
                 android:background="@color/mental_vision" />
 
             <TextView
@@ -102,8 +112,9 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="20dp"
+                android:layout_width="@dimen/legend_line_width"
                 android:layout_height="@dimen/line_width"
+                android:layout_margin="@dimen/legend_line_margin"
                 android:background="@color/mental_audition" />
 
             <TextView
@@ -121,8 +132,9 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="20dp"
+                android:layout_width="@dimen/legend_line_width"
                 android:layout_height="@dimen/line_width"
+                android:layout_margin="@dimen/legend_line_margin"
                 android:background="@color/mental_sensitivity" />
 
             <TextView
@@ -140,8 +152,9 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="20dp"
+                android:layout_width="@dimen/legend_line_width"
                 android:layout_height="@dimen/line_width"
+                android:layout_margin="@dimen/legend_line_margin"
                 android:background="@color/physical_mobility" />
 
             <TextView
@@ -159,8 +172,9 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="20dp"
+                android:layout_width="@dimen/legend_line_width"
                 android:layout_height="@dimen/line_width"
+                android:layout_margin="@dimen/legend_line_margin"
                 android:background="@color/physical_speech" />
 
             <TextView
@@ -178,8 +192,9 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="20dp"
+                android:layout_width="@dimen/legend_line_width"
                 android:layout_height="@dimen/line_width"
+                android:layout_margin="@dimen/legend_line_margin"
                 android:background="@color/physical_manual" />
 
             <TextView

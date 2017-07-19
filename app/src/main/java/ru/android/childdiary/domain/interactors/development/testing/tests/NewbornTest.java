@@ -19,15 +19,23 @@ public class NewbornTest extends SimpleTest {
     String resultBad;
     @NonNull
     String resultGood;
+    @NonNull
+    String shortResultBad;
+    @NonNull
+    String shortResultGood;
 
     @Builder
     public NewbornTest(@NonNull String name,
                        @NonNull String description,
                        @NonNull List<Question> questions,
                        @NonNull String resultBad,
-                       @NonNull String resultGood) {
+                       @NonNull String resultGood,
+                       @NonNull String shortResultBad,
+                       @NonNull String shortResultGood) {
         super(TestType.NEWBORN, name, description, questions);
         this.resultBad = resultBad;
         this.resultGood = resultGood;
+        this.shortResultBad = shortResultBad;
+        this.shortResultGood = shortResultGood;
     }
 }

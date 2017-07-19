@@ -25,6 +25,8 @@
             </p>
         ]]>
     </string>
+    <string name="test_newborn_bad">Есть риск</string>
+    <string name="test_newborn_good">Нет риска</string>
     <string-array name="test_newborn">
         <item>Лежа на спине ребенок скован? Есть повышение мышечного тонуса?</item>
         <item>Лежа на спине ребенок удерживает позу эмбриона?</item>

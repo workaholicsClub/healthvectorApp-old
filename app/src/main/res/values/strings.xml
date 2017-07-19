@@ -304,11 +304,12 @@
     <string name="parameter">Параметр</string>
     <string name="age">Возраст</string>
     <string name="validation_no_age">Введите возраст</string>
-    <string name="date_already_used_dialog_title">Выберите другую дату</string>
-    <!-- %s - параметр "Дата тестирования" -->
-    <string name="date_already_used_dialog_text">Вы уже проходили тестирование %s</string>
+    <!-- %1$s - параметр "Дата тестирования", %2$s - параметр "Параметр тестирования, строка" -->
+    <string name="date_already_used_dialog_text">Вы уже проходили тестирование %1$s по параметру \"%2$s\". Выберите другую дату или другой параметр тестирования.</string>
     <string name="test_chart_physical_tab">Моторное</string>
     <string name="test_chart_mental_tab">Сенсорное</string>
     <string name="delete_test_result_dialog_title">Удалить результаты тестирования?</string>
     <string name="no_chart_data">Пройдите тестирование по методу Гленна Домана</string>
+    <string name="chart_y_title">Уровень</string>
+    <string name="chart_x_title">Стадия</string>
 </resources>

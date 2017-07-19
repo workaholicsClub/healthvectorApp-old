@@ -18,21 +18,16 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
-import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import lombok.NonNull;
-import lombok.val;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
-import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.FontUtils;
 
 public class ChartPlotter {
@@ -49,17 +44,18 @@ public class ChartPlotter {
     private final Logger logger = LoggerFactory.getLogger(toString());
     private final Context context;
     private final CombinedChart chart;
-    private final LinkedHashMap<DomanTestParameter, List<DomanResult>> results;
-    private final List<LocalDate> dates = new ArrayList<>();
+    private final DomanTestParameter testParameter;
+    private final List<DomanResult> results;
 
     private final int[] stakedBarColors;
     private final int margin, lineWidth;
 
     private LineEntry selectedEntry;
 
-    public ChartPlotter(@NonNull CombinedChart chart, @NonNull LinkedHashMap<DomanTestParameter, List<DomanResult>> results) {
+    public ChartPlotter(@NonNull CombinedChart chart, @NonNull DomanTestParameter testParameter, @NonNull List<DomanResult> results) {
         context = chart.getContext();
         this.chart = chart;
+        this.testParameter = testParameter;
         this.results = results;
         stakedBarColors = new int[]{
                 ContextCompat.getColor(context, R.color.slow_color),
@@ -86,7 +82,8 @@ public class ChartPlotter {
         chart.setTouchEnabled(true);
         chart.setScaleEnabled(true);
         chart.setPinchZoom(true);
-        chart.setViewPortOffsets(margin, margin, margin, margin);
+        // TODO если не нужно, убрать: chart.setViewPortOffsets(margin, margin, margin, margin);
+        chart.setExtraOffsets(0, margin, 0, margin);
         chart.setDrawOrder(new CombinedChart.DrawOrder[]{
                 CombinedChart.DrawOrder.BAR,
                 CombinedChart.DrawOrder.LINE,
@@ -130,14 +127,14 @@ public class ChartPlotter {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTypeface(FontUtils.getTypefaceRegular(context));
         xAxis.setTextSize(LABEL_TEXT_SIZE);
-        xAxis.setTextColor(ContextCompat.getColor(context, R.color.black));
+        xAxis.setTextColor(ContextCompat.getColor(context, R.color.placeholder_text));
         xAxis.setDrawAxisLine(false);
         xAxis.setDrawGridLines(false);
         xAxis.setValueFormatter(
                 (float value, AxisBase axis) -> {
                     int index = (int) value;
-                    return index >= 0 && index < dates.size()
-                            ? DateUtils.date(context, dates.get(index))
+                    return index >= 0 && index < results.size()
+                            ? String.valueOf(results.get(index).getStage() + 1)
                             : "";
                 });
         xAxis.setGranularity(1);
@@ -168,8 +165,7 @@ public class ChartPlotter {
         data.setData(generateBarData());
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setEnabled(false);
-        if (dates.size() > 1) {
+        if (results.size() > 1) {
             xAxis.setAxisMinimum(data.getXMin() - 2);
         } else {
             xAxis.setAxisMinimum(data.getXMin() - 1);
@@ -183,44 +179,32 @@ public class ChartPlotter {
     }
 
     private LineData generateLineData() {
-        dates.clear();
-        LineData lineData = new LineData();
-        for (val entry : results.entrySet()) {
-            List<DomanResult> domanResults = entry.getValue();
-            if (domanResults.isEmpty()) {
-                continue;
-            }
-
-            List<Entry> lineEntries = new ArrayList<>();
-            for (int i = 0; i < domanResults.size(); ++i) {
-                DomanResult result = domanResults.get(i);
-                float yVal = (float) result.getPercents().doubleValue();
-                Entry lineEntry = new LineEntry(i, yVal,
-                        LineEntryUtils.getIcon(context, entry.getKey(), false),
-                        LineEntryUtils.getIcon(context, entry.getKey(), true),
-                        entry.getKey(), result);
-                lineEntries.add(lineEntry);
-                if (!dates.contains(result.getDate())) {
-                    dates.add(result.getDate());
-                }
-            }
-
-            LineDataSet lineDataSet = new LineDataSet(lineEntries, null);
-            lineDataSet.setColor(LineEntryUtils.getLineColor(context, entry.getKey()));
-            lineDataSet.setLineWidth(lineWidth);
-            lineDataSet.setDrawValues(false);
-            lineDataSet.setDrawHighlightIndicators(false);
-            lineDataSet.setHighlightEnabled(true);
-
-            lineData.addDataSet(lineDataSet);
+        List<Entry> lineEntries = new ArrayList<>();
+        for (int i = 0; i < results.size(); ++i) {
+            DomanResult result = results.get(i);
+            float yVal = (float) result.getPercents().doubleValue();
+            Entry lineEntry = new LineEntry(i, yVal,
+                    LineEntryUtils.getIcon(context, testParameter, false),
+                    LineEntryUtils.getIcon(context, testParameter, true),
+                    testParameter, result);
+            lineEntries.add(lineEntry);
         }
-        Collections.sort(dates);
+
+        LineDataSet lineDataSet = new LineDataSet(lineEntries, null);
+        lineDataSet.setColor(LineEntryUtils.getLineColor(context, testParameter));
+        lineDataSet.setLineWidth(lineWidth);
+        lineDataSet.setDrawValues(false);
+        lineDataSet.setDrawHighlightIndicators(false);
+        lineDataSet.setHighlightEnabled(true);
+
+        LineData lineData = new LineData();
+        lineData.addDataSet(lineDataSet);
         return lineData;
     }
 
     private BarData generateBarData() {
         BarData barData = new BarData();
-        int count = dates.size() > 1 ? dates.size() + 1 : 1;
+        int count = results.size() > 1 ? results.size() + 1 : 1;
         for (int i = 0; i < count; ++i) {
             List<BarEntry> barEntries = new ArrayList<>();
 

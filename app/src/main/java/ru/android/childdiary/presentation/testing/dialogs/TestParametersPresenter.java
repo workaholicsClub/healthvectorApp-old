@@ -39,7 +39,7 @@ public class TestParametersPresenter extends BasePresenter<TestParametersView> {
                                     if (isOk) {
                                         getViewState().close(child, testParameters);
                                     } else {
-                                        getViewState().dateAlreadyUsed(testParameters.getDate());
+                                        getViewState().dateAlreadyUsed(testParameters.getDate(), testType, testParameters);
                                     }
                                 },
                                 this::onUnexpectedError));

@@ -11,6 +11,10 @@ import lombok.Value;
 import ru.android.childdiary.utils.strings.TimeUtils;
 
 class DomanTestProcessorHelper {
+    private static final double[] AVERAGES = new double[]{
+            1, 2.5, 7, 12, 18, 36, 72
+    };
+
     static final Range[] ADVANCED_RANGES = new Range[]{
             new Range(0.25, 0.75),
             new Range(0.625, 1.875),
@@ -59,31 +63,27 @@ class DomanTestProcessorHelper {
     }
 
     public static int getIndex(double months) {
-        int length = NORMAL_RANGES.length;
-        int lastIndex = length - 1;
-        for (int i = 0; i < length; ++i) {
-            Range range = NORMAL_RANGES[i];
-            if (i == 0 && months < range.getTo()
-                    || i == lastIndex && months >= range.getFrom()
-                    || range.contains(months)) {
-                return i;
-            }
-            // Костыль для разрывных диапазонов
-            Range nextRange = i < lastIndex ? NORMAL_RANGES[i + 1] : null;
-            if (nextRange != null && range.getTo() <= months && months < nextRange.getFrom()) {
-                double first = months - range.getTo();
-                double second = nextRange.getFrom() - months;
-                if (first <= second) {
-                    return i;
-                } else {
-                    return i + 1;
-                }
-            }
-        }
-        if (months < NORMAL_RANGES[0].getFrom()) {
+        int length = AVERAGES.length;
+        int last = length - 1;
+
+        if (months <= AVERAGES[0]) {
             return 0;
         }
-        return lastIndex;
+        if (months >= AVERAGES[last]) {
+            return last;
+        }
+
+        for (int i = 0; i < last; ++i) {
+            double current = AVERAGES[i];
+            double next = AVERAGES[i + 1];
+            if (current <= months && months <= next) {
+                double diff1 = months - current;
+                double diff2 = next - months;
+                return diff1 <= diff2 ? i : i + 1;
+            }
+        }
+
+        throw new IllegalStateException("Invalid index");
     }
 
     @Value
