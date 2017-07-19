@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,12 +22,14 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.T
 
 public class TestingInteractor {
     private final TestingRepository testingRepository;
-    private DomanTestParameter physicalParameter = DomanTestParameter.PHYSICAL_MOBILITY;
-    private DomanTestParameter mentalParameter = DomanTestParameter.MENTAL_VISION;
 
     @Inject
     public TestingInteractor(TestingDataRepository testingRepository) {
         this.testingRepository = testingRepository;
+    }
+
+    public Observable<Test> getTest(@NonNull TestType testType) {
+        return testingRepository.getTest(testType);
     }
 
     public Observable<List<Test>> getTests() {
@@ -56,7 +59,7 @@ public class TestingInteractor {
         return testingRepository.getTestResults(TestResultsRequest.builder()
                 .child(child)
                 .build())
-                .firstOrError()
+                .first(Collections.emptyList())
                 .map(this::hasData)
                 .map(hasData -> HasDomanTestResultsResponse.builder()
                         .child(child)
@@ -73,12 +76,15 @@ public class TestingInteractor {
     }
 
     public Observable<DomanTestParameter> getSelectedParameter(@NonNull TestType testType) {
-        switch (testType) {
-            case DOMAN_PHYSICAL:
-                return Observable.just(physicalParameter);
-            case DOMAN_MENTAL:
-                return Observable.just(mentalParameter);
-        }
-        throw new IllegalStateException("Unsupported test type");
+        return testingRepository.getSelectedParameter(testType);
+    }
+
+    public Observable<DomanTestParameter> getSelectedParameterOnce(@NonNull TestType testType) {
+        return testingRepository.getSelectedParameterOnce(testType);
+    }
+
+    public Observable<DomanTestParameter> setSelectedParameter(@NonNull TestType testType,
+                                                               @NonNull DomanTestParameter testParameter) {
+        return testingRepository.setSelectedParameter(testType, testParameter);
     }
 }

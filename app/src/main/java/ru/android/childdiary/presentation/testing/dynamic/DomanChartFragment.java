@@ -21,10 +21,15 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.testing.chart.ChartPlotter;
+import ru.android.childdiary.presentation.testing.dialogs.ParameterDialogArguments;
+import ru.android.childdiary.presentation.testing.dialogs.ParameterDialogFragment;
 import ru.android.childdiary.utils.strings.TestUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public abstract class DomanChartFragment extends BaseMvpFragment implements DomanChartView {
+public abstract class DomanChartFragment extends BaseMvpFragment implements DomanChartView,
+        ParameterDialogFragment.Listener {
+    private static final String TAG_PARAMETER_DIALOG = "TAG_PARAMETER_DIALOG";
+
     @BindView(R.id.chartWrapper)
     View chartWrapper;
 
@@ -92,6 +97,24 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
             ChartPlotter plotter = new ChartPlotter(chart, DomanTestParameter.PHYSICAL_MOBILITY, state.getTestResults());
             plotter.setup();
         }
+    }
+
+    public void showFilter() {
+        getPresenter().showFilter();
+    }
+
+    @Override
+    public void specifyParameter(@NonNull ParameterDialogArguments arguments) {
+        ParameterDialogFragment fragment = new ParameterDialogFragment();
+        fragment.showAllowingStateLoss(getChildFragmentManager(), TAG_PARAMETER_DIALOG,
+                arguments.toBuilder()
+                        .sex(getSex())
+                        .build());
+    }
+
+    @Override
+    public void onParameterSet(@NonNull DomanTestParameter testParameter) {
+        getPresenter().selectTestParameter(testParameter);
     }
 
     protected abstract DomanChartPresenter getPresenter();

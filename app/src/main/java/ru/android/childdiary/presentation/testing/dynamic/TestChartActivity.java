@@ -8,6 +8,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
@@ -21,6 +30,11 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class TestChartActivity extends BaseMvpActivity {
+    private static final String KEY_SELECTED_PAGE = "chart.selected_page";
+
+    @Inject
+    RxSharedPreferences preferences;
+
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
 
@@ -37,6 +51,7 @@ public class TestChartActivity extends BaseMvpActivity {
 
     @Override
     protected void injectActivity(ApplicationComponent applicationComponent) {
+        applicationComponent.inject(this);
     }
 
     @Override
@@ -48,15 +63,31 @@ public class TestChartActivity extends BaseMvpActivity {
     }
 
     private void setupViewPager() {
+        Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 0).get();
+        selectedPage = selectedPage == null ? 0 : selectedPage;
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(putArguments(new PhysicalChartFragment()), getString(R.string.test_chart_physical_tab));
         viewPagerAdapter.addFragment(putArguments(new MentalChartFragment()), getString(R.string.test_chart_mental_tab));
         viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setCurrentItem(0, false);
+        viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         WidgetsUtils.setupTabLayoutFont(tabLayout);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                preferences.getInteger(KEY_SELECTED_PAGE).set(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     @Override
@@ -83,5 +114,49 @@ public class TestChartActivity extends BaseMvpActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.filter, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_filter:
+                DomanChartFragment fragment = getSelectedPage();
+                if (fragment != null) {
+                    fragment.showFilter();
+                    return true;
+                } else {
+                    logger.error("selected page is null");
+                }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Nullable
+    private DomanChartFragment getSelectedPage(int position) {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments == null) {
+            return null;
+        }
+        for (Fragment fragment : fragments) {
+            if (position == 0 && fragment instanceof PhysicalChartFragment) {
+                return (PhysicalChartFragment) fragment;
+            } else if (position == 1 && fragment instanceof MentalChartFragment) {
+                return (MentalChartFragment) fragment;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private DomanChartFragment getSelectedPage() {
+        int position = viewPager.getCurrentItem();
+        return getSelectedPage(position);
     }
 }

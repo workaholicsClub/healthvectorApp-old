@@ -165,7 +165,7 @@ public class ChartPlotter {
 
         XAxis xAxis = chart.getXAxis();
         if (results.size() > 1) {
-            xAxis.setAxisMinimum(data.getXMin() - 2);
+            xAxis.setAxisMinimum(data.getXMin() - 1.5f);
             xAxis.setAxisMaximum(data.getXMax() + 1);
         } else {
             xAxis.setAxisMinimum(data.getXMin() - 1);
@@ -204,12 +204,10 @@ public class ChartPlotter {
 
     private BarData generateBarData() {
         BarData barData = new BarData();
-        int count = results.size() > 1 ? results.size() + 1 : 1;
-        for (int i = 0; i < count; ++i) {
-            List<BarEntry> barEntries = new ArrayList<>();
-
+        for (int i = 0; i < results.size(); ++i) {
             BarEntry barEntry = new BarEntry(i, STACKED_BAR_PARTS);
 
+            List<BarEntry> barEntries = new ArrayList<>();
             barEntries.add(barEntry);
 
             BarDataSet barDataSet = new BarDataSet(barEntries, null);
@@ -221,9 +219,7 @@ public class ChartPlotter {
             barData.addDataSet(barDataSet);
         }
 
-        if (count > 1) {
-            barData.groupBars(-0.5f, 0, 0);
-        }
+        barData.setBarWidth(1);
         return barData;
     }
 }

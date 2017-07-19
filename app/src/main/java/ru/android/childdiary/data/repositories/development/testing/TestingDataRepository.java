@@ -5,6 +5,8 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
+
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -34,13 +36,20 @@ import ru.android.childdiary.utils.strings.TestUtils;
 
 @Singleton
 public class TestingDataRepository implements TestingRepository {
+    private static final String KEY_PHYSICAL_PARAMETER = "physical_parameter";
+    private static final String KEY_MENTAL_PARAMETER = "mental_parameter";
+
     private final Context context;
+    private final RxSharedPreferences preferences;
     private final TestingDbService testingDbService;
     private final List<Test> tests = new ArrayList<>();
 
     @Inject
-    public TestingDataRepository(Context context, TestingDbService testingDbService) {
+    public TestingDataRepository(Context context,
+                                 RxSharedPreferences preferences,
+                                 TestingDbService testingDbService) {
         this.context = context;
+        this.preferences = preferences;
         this.testingDbService = testingDbService;
         initTests();
     }
@@ -195,10 +204,64 @@ public class TestingDataRepository implements TestingRepository {
         return testingDbService.delete(testResult);
     }
 
+    @Override
     public Single<Boolean> checkDate(@NonNull Child child,
                                      @NonNull TestType testType,
                                      @NonNull DomanTestParameter testParameter,
                                      @NonNull LocalDate date) {
         return testingDbService.checkDate(child, testType, testParameter, date);
+    }
+
+    @Override
+    public Observable<DomanTestParameter> getSelectedParameter(@NonNull TestType testType) {
+        switch (testType) {
+            case DOMAN_PHYSICAL:
+                return preferences.getEnum(KEY_PHYSICAL_PARAMETER,
+                        getDefaultParameter(testType),
+                        DomanTestParameter.class)
+                        .asObservable();
+            case DOMAN_MENTAL:
+                return preferences.getEnum(KEY_MENTAL_PARAMETER,
+                        getDefaultParameter(testType),
+                        DomanTestParameter.class)
+                        .asObservable();
+        }
+        throw new IllegalStateException("Unsupported test type");
+    }
+
+    @Override
+    public Observable<DomanTestParameter> getSelectedParameterOnce(@NonNull TestType testType) {
+        return getSelectedParameter(testType)
+                .first(getDefaultParameter(testType))
+                .toObservable();
+    }
+
+    private DomanTestParameter getDefaultParameter(@NonNull TestType testType) {
+        switch (testType) {
+            case DOMAN_PHYSICAL:
+                return DomanTestParameter.PHYSICAL_MOBILITY;
+            case DOMAN_MENTAL:
+                return DomanTestParameter.MENTAL_VISION;
+        }
+        throw new IllegalStateException("Unsupported test type");
+    }
+
+    @Override
+    public Observable<DomanTestParameter> setSelectedParameter(@NonNull TestType testType,
+                                                               @NonNull DomanTestParameter testParameter) {
+        return Observable.fromCallable(() -> {
+            switch (testType) {
+                case DOMAN_PHYSICAL:
+                    preferences.getEnum(KEY_PHYSICAL_PARAMETER, DomanTestParameter.class)
+                            .set(testParameter);
+                    return testParameter;
+                case DOMAN_MENTAL:
+                    preferences.getEnum(KEY_MENTAL_PARAMETER, DomanTestParameter.class)
+                            .set(testParameter);
+                    return testParameter;
+                default:
+                    throw new IllegalStateException("Unsupported test type");
+            }
+        });
     }
 }

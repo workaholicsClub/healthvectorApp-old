@@ -77,8 +77,9 @@ import ru.android.childdiary.presentation.testing.TestResultActivity;
 import ru.android.childdiary.presentation.testing.TestResultPresenter;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 import ru.android.childdiary.presentation.testing.TestingPresenter;
-import ru.android.childdiary.presentation.testing.dynamic.DomanChartPresenter;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersPresenter;
+import ru.android.childdiary.presentation.testing.dynamic.DomanChartPresenter;
+import ru.android.childdiary.presentation.testing.dynamic.TestChartActivity;
 import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.CloudService;
 import ru.android.childdiary.services.TimerService;
@@ -226,6 +227,8 @@ public interface ApplicationComponent {
     void inject(TestingActivity activity);
 
     void inject(TestResultActivity activity);
+
+    void inject(TestChartActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

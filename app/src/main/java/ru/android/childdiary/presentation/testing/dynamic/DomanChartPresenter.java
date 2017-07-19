@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -21,6 +23,7 @@ import ru.android.childdiary.domain.interactors.development.testing.processors.c
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.presentation.testing.dialogs.ParameterDialogArguments;
 
 @InjectViewState
 public class DomanChartPresenter extends BasePresenter<DomanChartView> {
@@ -47,6 +50,27 @@ public class DomanChartPresenter extends BasePresenter<DomanChartView> {
         this.testType = testType;
     }
 
+    public void showFilter() {
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        testingInteractor.getTest(testType),
+                        testingInteractor.getSelectedParameterOnce(testType),
+                        (test, testParameter) -> ParameterDialogArguments.builder()
+                                .test(test)
+                                .selectedParameter(testParameter)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getViewState()::specifyParameter, this::onUnexpectedError));
+    }
+
+    public void selectTestParameter(@NonNull DomanTestParameter testParameter) {
+        unsubscribeOnDestroy(testingInteractor.setSelectedParameter(testType, testParameter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(parameter -> logger.debug("select " + parameter), this::onUnexpectedError));
+    }
+
     private void loadResults() {
         unsubscribeOnDestroy(
                 testingInteractor.getSelectedParameter(testType)
@@ -57,12 +81,12 @@ public class DomanChartPresenter extends BasePresenter<DomanChartView> {
                                         .testParameter(testParameter)
                                         .ascending(true)
                                         .build())
+                                        .first(Collections.emptyList())
                                         .map(this::map)
                                         .map(testResults -> DomanChartState.builder()
                                                 .testParameter(testParameter)
                                                 .testResults(testResults)
-                                                .build())
-                                        .firstOrError())
+                                                .build()))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(getViewState()::showResults, this::onUnexpectedError));

@@ -26,4 +26,10 @@ public interface TestingRepository {
     Observable<TestResult> delete(@NonNull TestResult testResult);
 
     Single<Boolean> checkDate(@NonNull Child child, @NonNull TestType testType, @NonNull DomanTestParameter testParameter, @NonNull LocalDate date);
+
+    Observable<DomanTestParameter> getSelectedParameter(@NonNull TestType testType);
+
+    Observable<DomanTestParameter> getSelectedParameterOnce(@NonNull TestType testType);
+
+    Observable<DomanTestParameter> setSelectedParameter(@NonNull TestType testType, @NonNull DomanTestParameter testParameter);
 }

@@ -598,7 +598,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         if (selectedPartition == AppPartition.CALENDAR
                 || selectedPartition == AppPartition.MEDICAL_DATA) {
             MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.main, menu);
+            inflater.inflate(R.menu.filter, menu);
             return true;
         } else if (selectedPartition == AppPartition.DEVELOPMENT_DIARY) {
             AppPartitionFragment partition = findAppPartition();
