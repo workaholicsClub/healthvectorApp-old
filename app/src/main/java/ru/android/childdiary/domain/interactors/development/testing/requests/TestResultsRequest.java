@@ -18,4 +18,5 @@ public class TestResultsRequest {
     TestType testType;
     @Nullable
     DomanTestParameter testParameter;
+    boolean ascending;
 }

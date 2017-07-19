@@ -82,7 +82,6 @@ public class ChartPlotter {
         chart.setTouchEnabled(true);
         chart.setScaleEnabled(true);
         chart.setPinchZoom(true);
-        // TODO если не нужно, убрать: chart.setViewPortOffsets(margin, margin, margin, margin);
         chart.setExtraOffsets(0, margin, 0, margin);
         chart.setDrawOrder(new CombinedChart.DrawOrder[]{
                 CombinedChart.DrawOrder.BAR,
@@ -167,6 +166,7 @@ public class ChartPlotter {
         XAxis xAxis = chart.getXAxis();
         if (results.size() > 1) {
             xAxis.setAxisMinimum(data.getXMin() - 2);
+            xAxis.setAxisMaximum(data.getXMax() + 1);
         } else {
             xAxis.setAxisMinimum(data.getXMin() - 1);
             xAxis.setAxisMaximum(data.getXMax() + 1);
@@ -191,7 +191,7 @@ public class ChartPlotter {
         }
 
         LineDataSet lineDataSet = new LineDataSet(lineEntries, null);
-        lineDataSet.setColor(LineEntryUtils.getLineColor(context, testParameter));
+        lineDataSet.setColor(ContextCompat.getColor(context, R.color.line_color));
         lineDataSet.setLineWidth(lineWidth);
         lineDataSet.setDrawValues(false);
         lineDataSet.setDrawHighlightIndicators(false);

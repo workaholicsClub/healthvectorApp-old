@@ -161,6 +161,6 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
 
     @Override
     public void showChart() {
-        //presenter.showChart();
+        presenter.showChart();
     }
 }

@@ -9,9 +9,6 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import butterknife.BindView;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,10 +17,12 @@ import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
+import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.testing.chart.ChartPlotter;
+import ru.android.childdiary.utils.strings.TestUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public abstract class DomanChartFragment extends BaseMvpFragment implements DomanChartView {
     @BindView(R.id.chartWrapper)
@@ -44,6 +43,7 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
     @Nullable
     @Getter(AccessLevel.PROTECTED)
     private Sex sex;
+    private Child child;
 
     @Override
     protected int getLayoutResourceId() {
@@ -53,7 +53,7 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
     @Override
     protected void init(@Nullable Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        Child child = (Child) getArguments().getSerializable(ExtraConstants.EXTRA_CHILD);
+        child = (Child) getArguments().getSerializable(ExtraConstants.EXTRA_CHILD);
         if (child == null) {
             logger.error("no child provided");
             return;
@@ -74,19 +74,22 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
     }
 
     @Override
-    public void showResults(@NonNull LinkedHashMap<DomanTestParameter, List<DomanResult>> results) {
-        if (results.isEmpty()) {
+    public void showResults(@NonNull DomanChartState state) {
+        if (state.getTestResults().isEmpty()) {
+            ((BaseMvpActivity) getActivity()).setupToolbarLogo(ResourcesUtils.getChildIconForToolbar(getContext(), child));
+            ((BaseMvpActivity) getActivity()).setupToolbarTitle(child.getName());
             chartWrapper.setVisibility(View.GONE);
             legendView.setVisibility(View.GONE);
             textViewIntention.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         } else {
+            ((BaseMvpActivity) getActivity()).hideToolbarLogo();
+            ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.toString(getContext(), state.getTestParameter()));
             chartWrapper.setVisibility(View.VISIBLE);
             legendView.setVisibility(View.VISIBLE);
             textViewIntention.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
-            // TODO переключение параметров
-            ChartPlotter plotter = new ChartPlotter(chart, DomanTestParameter.PHYSICAL_MOBILITY, results.get(DomanTestParameter.PHYSICAL_MOBILITY));
+            ChartPlotter plotter = new ChartPlotter(chart, DomanTestParameter.PHYSICAL_MOBILITY, state.getTestResults());
             plotter.setup();
         }
     }

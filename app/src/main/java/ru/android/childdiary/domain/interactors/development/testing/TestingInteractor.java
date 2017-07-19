@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,6 +21,8 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.T
 
 public class TestingInteractor {
     private final TestingRepository testingRepository;
+    private DomanTestParameter physicalParameter = DomanTestParameter.PHYSICAL_MOBILITY;
+    private DomanTestParameter mentalParameter = DomanTestParameter.MENTAL_VISION;
 
     @Inject
     public TestingInteractor(TestingDataRepository testingRepository) {
@@ -51,34 +52,11 @@ public class TestingInteractor {
         return testingRepository.checkDate(child, testType, testParameter, date);
     }
 
-    public Observable<LinkedHashMap<DomanTestParameter, List<TestResult>>> getDomanTestResults(@NonNull Child child, @NonNull TestType testType) {
-        return Observable.fromCallable(() -> {
-            LinkedHashMap<DomanTestParameter, List<TestResult>> map = new LinkedHashMap<>();
-            Test test = testingRepository.getTest(testType).blockingFirst();
-            if (!(test instanceof DomanTest)) {
-                return map;
-            }
-            DomanTestParameter[] parameters = ((DomanTest) test).getParameters();
-            for (DomanTestParameter testParameter : parameters) {
-                List<TestResult> testResults = getTestResults(TestResultsRequest.builder()
-                        .child(child)
-                        .testType(testType)
-                        .testParameter(testParameter)
-                        .build())
-                        .blockingFirst();
-                if (!testResults.isEmpty()) {
-                    map.put(testParameter, testResults);
-                }
-            }
-            return map;
-        });
-    }
-
     public Single<HasDomanTestResultsResponse> hasDomanTestResults(@NonNull Child child) {
         return testingRepository.getTestResults(TestResultsRequest.builder()
                 .child(child)
                 .build())
-                .singleOrError()
+                .firstOrError()
                 .map(this::hasData)
                 .map(hasData -> HasDomanTestResultsResponse.builder()
                         .child(child)
@@ -92,5 +70,15 @@ public class TestingInteractor {
                 .count()
                 .map(count -> count > 0)
                 .blockingGet();
+    }
+
+    public Observable<DomanTestParameter> getSelectedParameter(@NonNull TestType testType) {
+        switch (testType) {
+            case DOMAN_PHYSICAL:
+                return Observable.just(physicalParameter);
+            case DOMAN_MENTAL:
+                return Observable.just(mentalParameter);
+        }
+        throw new IllegalStateException("Unsupported test type");
     }
 }

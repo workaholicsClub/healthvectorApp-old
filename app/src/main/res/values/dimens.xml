@@ -127,6 +127,4 @@
     <dimen name="line_width">2dp</dimen>
     <dimen name="legend_width">12dp</dimen>
     <dimen name="legend_margin">2dp</dimen>
-    <dimen name="legend_line_width">20dp</dimen>
-    <dimen name="legend_line_margin">2dp</dimen>
 </resources>

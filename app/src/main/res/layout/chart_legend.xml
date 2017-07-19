@@ -7,202 +7,65 @@
     android:layout_marginLeft="@dimen/base_margin"
     android:layout_marginRight="@dimen/base_margin"
     android:baselineAligned="false"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <View
+            android:layout_width="@dimen/legend_width"
+            android:layout_height="@dimen/legend_width"
+            android:layout_margin="@dimen/legend_margin"
+            android:background="@color/advanced_color" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="@dimen/legend_width"
-                android:layout_height="@dimen/legend_width"
-                android:layout_margin="@dimen/legend_margin"
-                android:background="@color/advanced_color" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/doman_stage_advanced"
-                android:textAppearance="@style/SecondaryTextAppearance"
-                android:textSize="@dimen/text_size_small" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="@dimen/legend_width"
-                android:layout_height="@dimen/legend_width"
-                android:layout_margin="@dimen/legend_margin"
-                android:background="@color/normal_color" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/doman_stage_normal"
-                android:textAppearance="@style/SecondaryTextAppearance"
-                android:textSize="@dimen/text_size_small" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="@dimen/legend_width"
-                android:layout_height="@dimen/legend_width"
-                android:layout_margin="@dimen/legend_margin"
-                android:background="@color/slow_color" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/doman_stage_slow"
-                android:textAppearance="@style/SecondaryTextAppearance"
-                android:textSize="@dimen/text_size_small" />
-        </LinearLayout>
+            android:text="@string/doman_stage_advanced"
+            android:textAppearance="@style/SecondaryTextAppearance"
+            android:textSize="@dimen/text_size_small" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/legendLines"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/base_margin"
-        android:layout_marginStart="@dimen/base_margin"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <View
+            android:layout_width="@dimen/legend_width"
+            android:layout_height="@dimen/legend_width"
+            android:layout_margin="@dimen/legend_margin"
+            android:background="@color/normal_color" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:text="@string/doman_stage_normal"
+            android:textAppearance="@style/SecondaryTextAppearance"
+            android:textSize="@dimen/text_size_small" />
+    </LinearLayout>
 
-            <View
-                android:layout_width="@dimen/legend_line_width"
-                android:layout_height="@dimen/line_width"
-                android:layout_margin="@dimen/legend_line_margin"
-                android:background="@color/mental_vision" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/mental_vision"
-                android:textAppearance="@style/SecondaryTextAppearance"
-                android:textSize="@dimen/text_size_small" />
-        </LinearLayout>
+        <View
+            android:layout_width="@dimen/legend_width"
+            android:layout_height="@dimen/legend_width"
+            android:layout_margin="@dimen/legend_margin"
+            android:background="@color/slow_color" />
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="@dimen/legend_line_width"
-                android:layout_height="@dimen/line_width"
-                android:layout_margin="@dimen/legend_line_margin"
-                android:background="@color/mental_audition" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/mental_audition"
-                android:textAppearance="@style/SecondaryTextAppearance"
-                android:textSize="@dimen/text_size_small" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="@dimen/legend_line_width"
-                android:layout_height="@dimen/line_width"
-                android:layout_margin="@dimen/legend_line_margin"
-                android:background="@color/mental_sensitivity" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/mental_sensitivity"
-                android:textAppearance="@style/SecondaryTextAppearance"
-                android:textSize="@dimen/text_size_small" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="@dimen/legend_line_width"
-                android:layout_height="@dimen/line_width"
-                android:layout_margin="@dimen/legend_line_margin"
-                android:background="@color/physical_mobility" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/physical_mobility"
-                android:textAppearance="@style/SecondaryTextAppearance"
-                android:textSize="@dimen/text_size_small" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="@dimen/legend_line_width"
-                android:layout_height="@dimen/line_width"
-                android:layout_margin="@dimen/legend_line_margin"
-                android:background="@color/physical_speech" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/physical_speech"
-                android:textAppearance="@style/SecondaryTextAppearance"
-                android:textSize="@dimen/text_size_small" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="@dimen/legend_line_width"
-                android:layout_height="@dimen/line_width"
-                android:layout_margin="@dimen/legend_line_margin"
-                android:background="@color/physical_manual" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/physical_manual"
-                android:textAppearance="@style/SecondaryTextAppearance"
-                android:textSize="@dimen/text_size_small" />
-        </LinearLayout>
+            android:text="@string/doman_stage_slow"
+            android:textAppearance="@style/SecondaryTextAppearance"
+            android:textSize="@dimen/text_size_small" />
     </LinearLayout>
 </LinearLayout>

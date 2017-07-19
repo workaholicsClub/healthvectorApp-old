@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -38,10 +37,6 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
     @Nullable
     @BindView(R.id.chart)
     CombinedChart chart;
-
-    @Nullable
-    @BindView(R.id.legendLines)
-    View legendLinesView;
 
     @Nullable
     private TestingController testingController;
@@ -99,9 +94,6 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
         if (chart != null) {
             ChartPlotter plotter = new ChartPlotter(chart, parameter, Collections.singletonList(result));
             plotter.setup();
-        }
-        if (legendLinesView != null) {
-            legendLinesView.setVisibility(View.GONE);
         }
     }
 

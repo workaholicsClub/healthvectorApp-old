@@ -43,13 +43,5 @@
     <color name="slow_color">#60EB4E38</color>
     <color name="normal_color">#6092D050</color>
     <color name="advanced_color">#604288B4</color>
-    <color name="first_color">#F7A731</color>
-    <color name="second_color">#92D050</color>
-    <color name="third_color">#4288B4</color>
-    <color name="mental_vision">@color/first_color</color>
-    <color name="mental_audition">@color/second_color</color>
-    <color name="mental_sensitivity">@color/third_color</color>
-    <color name="physical_mobility">@color/first_color</color>
-    <color name="physical_speech">@color/second_color</color>
-    <color name="physical_manual">@color/third_color</color>
+    <color name="line_color">#F7A731</color>
 </resources>

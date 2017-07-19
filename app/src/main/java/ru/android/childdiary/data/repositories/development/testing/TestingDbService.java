@@ -16,6 +16,7 @@ import io.requery.Persistable;
 import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
 import io.requery.reactivex.ReactiveResult;
+import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.development.testing.TestResultEntity;
 import ru.android.childdiary.data.repositories.development.testing.mappers.TestResultMapper;
@@ -48,7 +49,8 @@ public class TestingDbService {
         if (request.getTestParameter() != null) {
             select = select.and(TestResultEntity.DOMAN_TEST_PARAMETER.eq(request.getTestParameter()));
         }
-        return select.orderBy(TestResultEntity.DATE.desc(), TestResultEntity.TEST_TYPE, TestResultEntity.DOMAN_TEST_PARAMETER, TestResultEntity.ID)
+        val order = request.isAscending() ? TestResultEntity.DATE.asc() : TestResultEntity.DATE.desc();
+        return select.orderBy(order, TestResultEntity.TEST_TYPE, TestResultEntity.DOMAN_TEST_PARAMETER, TestResultEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, testResultMapper));
