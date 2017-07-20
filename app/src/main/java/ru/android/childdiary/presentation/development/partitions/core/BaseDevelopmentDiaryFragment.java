@@ -14,7 +14,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
-import ru.android.childdiary.presentation.medical.filter.adapters.ChipsAdapter;
 
 public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiaryView> extends AppPartitionFragment
         implements BaseDevelopmentDiaryView {
@@ -36,7 +35,6 @@ public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiar
     @BindView(R.id.progressBar)
     protected ProgressBar progressBar;
 
-    protected ChipsAdapter chipsAdapter;
     @Nullable
     protected FabController fabController;
 
@@ -53,7 +51,10 @@ public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiar
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        // TODO getAdapter().setSex(getSex());
+        // TODO убрать проверку на null после того как будут дописаны Достижения
+        if (getAdapter() != null) {
+            getAdapter().setSex(getSex());
+        }
     }
 
     @Override

@@ -19,7 +19,7 @@ import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsPresenter;
-import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryPresenter;
+import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListPresenter;
 import ru.android.childdiary.presentation.development.partitions.testing.TestResultsPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
@@ -157,7 +157,7 @@ public interface ApplicationComponent {
 
     void inject(AchievementsPresenter presenter);
 
-    void inject(AntropometryPresenter presenter);
+    void inject(AntropometryListPresenter presenter);
 
     void inject(TestResultsPresenter presenter);
 
