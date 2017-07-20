@@ -74,7 +74,6 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     }
 
     public void onTestParametersSet(@NonNull TestParameters parameters) {
-        // TODO check date
         date = parameters.getDate();
         testProcessor = TestFactory.createTestProcessor(test, parameters);
         getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()

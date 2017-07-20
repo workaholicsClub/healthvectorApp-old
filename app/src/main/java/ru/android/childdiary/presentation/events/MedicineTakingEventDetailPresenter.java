@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.InjectViewState;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,7 +38,6 @@ public class MedicineTakingEventDetailPresenter extends EventDetailPresenter<Med
 
     public void requestMedicineMeasureValueDialog() {
         unsubscribeOnDestroy(medicineTakingInteractor.getMedicineMeasureList()
-                .map(ArrayList::new)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showMedicineMeasureValueDialog, this::onUnexpectedError));

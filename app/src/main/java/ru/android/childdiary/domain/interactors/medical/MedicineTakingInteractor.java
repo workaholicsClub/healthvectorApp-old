@@ -9,7 +9,6 @@ import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -149,7 +148,7 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
     private RepeatParameters getDefaultRepeatParameters(@NonNull List<LocalTime> times) {
         return RepeatParameters.builder()
                 .frequency(LinearGroups.builder()
-                        .times(new ArrayList<>(times))
+                        .times(times)
                         .build())
                 .periodicity(PeriodicityType.DAILY)
                 .length(LengthValue.builder()

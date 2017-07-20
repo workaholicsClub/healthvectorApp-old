@@ -2,8 +2,8 @@ package ru.android.childdiary.presentation.core.fields.dialogs;
 
 import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,7 +24,7 @@ import ru.android.childdiary.presentation.core.dialogs.BaseLengthValueDialogArgu
 public class LengthValueDialogArguments extends BaseLengthValueDialogArguments {
     @Builder
     public LengthValueDialogArguments(@Nullable Sex sex,
-                                      @NonNull HashMap<TimeUnit, ArrayList<Integer>> timeUnitValues,
+                                      @NonNull Map<TimeUnit, List<Integer>> timeUnitValues,
                                       @Nullable LengthValue lengthValue) {
         super(sex, timeUnitValues, lengthValue);
     }

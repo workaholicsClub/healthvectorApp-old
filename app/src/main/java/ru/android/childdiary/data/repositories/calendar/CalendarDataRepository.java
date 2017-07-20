@@ -7,11 +7,11 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import org.joda.time.LocalDate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -392,12 +392,12 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     @Override
-    public Observable<HashMap<TimeUnit, ArrayList<Integer>>> getTimeUnitValues() {
+    public Observable<Map<TimeUnit, List<Integer>>> getTimeUnitValues() {
         return Observable.fromCallable(() -> {
-            HashMap<TimeUnit, ArrayList<Integer>> map = new HashMap<>();
-            map.put(TimeUnit.DAY, new ArrayList<>(Observable.range(1, 30).toList().blockingGet()));
-            map.put(TimeUnit.WEEK, new ArrayList<>(Observable.range(1, 52).toList().blockingGet()));
-            map.put(TimeUnit.MONTH, new ArrayList<>(Observable.range(1, TimeUtils.MONTHS_IN_YEAR).toList().blockingGet()));
+            Map<TimeUnit, List<Integer>> map = new HashMap<>();
+            map.put(TimeUnit.DAY, Observable.range(1, 30).toList().blockingGet());
+            map.put(TimeUnit.WEEK, Observable.range(1, 52).toList().blockingGet());
+            map.put(TimeUnit.MONTH, Observable.range(1, TimeUtils.MONTHS_IN_YEAR).toList().blockingGet());
             return map;
         });
     }

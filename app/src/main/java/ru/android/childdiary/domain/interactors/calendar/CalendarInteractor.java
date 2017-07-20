@@ -14,10 +14,9 @@ import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -771,7 +770,7 @@ public class CalendarInteractor {
         return calendarRepository.getPeriodicityList();
     }
 
-    public Observable<HashMap<TimeUnit, ArrayList<Integer>>> getTimeUnitValues() {
+    public Observable<Map<TimeUnit, List<Integer>>> getTimeUnitValues() {
         return calendarRepository.getTimeUnitValues();
     }
 }

@@ -4,7 +4,8 @@ import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
 import ru.android.childdiary.presentation.core.BaseDialogArguments;
+import ru.android.childdiary.utils.CollectionUtils;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -24,21 +26,21 @@ import ru.android.childdiary.presentation.core.BaseDialogArguments;
 @Getter
 public class BaseLengthValueDialogArguments extends BaseDialogArguments {
     @NonNull
-    ArrayList<TimeUnit> timeUnits;
+    List<TimeUnit> timeUnits;
     @NonNull
-    HashMap<TimeUnit, ArrayList<Integer>> timeUnitValues;
+    Map<TimeUnit, List<Integer>> timeUnitValues;
     @Nullable
     LengthValue lengthValue;
 
     @Builder(builderMethodName = "baseLengthValueBuilder")
     public BaseLengthValueDialogArguments(@Nullable Sex sex,
-                                          @NonNull HashMap<TimeUnit, ArrayList<Integer>> timeUnitValues,
+                                          @NonNull Map<TimeUnit, List<Integer>> timeUnitValues,
                                           @Nullable LengthValue lengthValue) {
         super(sex);
-        ArrayList<TimeUnit> timeUnits = new ArrayList<>(timeUnitValues.keySet());
+        List<TimeUnit> timeUnits = new ArrayList<>(timeUnitValues.keySet());
         Collections.sort(timeUnits);
-        this.timeUnits = timeUnits;
-        this.timeUnitValues = timeUnitValues;
+        this.timeUnits = Collections.unmodifiableList(timeUnits);
+        this.timeUnitValues = CollectionUtils.unmodifiableMap(timeUnitValues);
         this.lengthValue = lengthValue;
     }
 }

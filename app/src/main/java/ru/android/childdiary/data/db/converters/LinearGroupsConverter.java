@@ -8,7 +8,6 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,6 +53,6 @@ public class LinearGroupsConverter extends SimpleConverter<LinearGroups> {
                     .toList()
                     .blockingGet();
         }
-        return LinearGroups.builder().times(new ArrayList<>(times)).build();
+        return LinearGroups.builder().times(times).build();
     }
 }

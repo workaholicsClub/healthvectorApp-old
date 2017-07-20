@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -94,7 +93,6 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
 
     public void requestMedicineMeasureValueDialog() {
         unsubscribeOnDestroy(medicineTakingInteractor.getMedicineMeasureList()
-                .map(ArrayList::new)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showMedicineMeasureValueDialog, this::onUnexpectedError));

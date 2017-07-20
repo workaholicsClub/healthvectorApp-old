@@ -53,7 +53,7 @@ public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiar
     @Override
     protected void themeChanged() {
         super.themeChanged();
-        // TODO: getAdapter().setSex(getSex());
+        // TODO getAdapter().setSex(getSex());
     }
 
     @Override

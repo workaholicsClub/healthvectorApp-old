@@ -21,10 +21,9 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -272,7 +271,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     @Override
-    public void showMedicineMeasureValueDialog(@NonNull ArrayList<MedicineMeasure> medicineMeasureList) {
+    public void showMedicineMeasureValueDialog(@NonNull List<MedicineMeasure> medicineMeasureList) {
         if (getMedicineMeasureValueView() == null) {
             return;
         }
@@ -286,7 +285,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     @Override
-    public void showLengthValueDialog(@NonNull HashMap<TimeUnit, ArrayList<Integer>> timeUnitValues) {
+    public void showLengthValueDialog(@NonNull Map<TimeUnit, List<Integer>> timeUnitValues) {
         LengthValue lengthValue = getRepeatParametersView().getLengthValue();
         LengthValueDialogFragment dialogFragment = new LengthValueDialogFragment();
         dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_LENGTH_VALUE_DIALOG,

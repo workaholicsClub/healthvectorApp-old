@@ -8,9 +8,8 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.core.TimeUnit;
@@ -33,10 +32,10 @@ public interface BaseItemView<T extends Serializable> extends BaseView {
     void setMedicine(@Nullable Medicine medicine);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showMedicineMeasureValueDialog(@NonNull ArrayList<MedicineMeasure> medicineMeasureList);
+    void showMedicineMeasureValueDialog(@NonNull List<MedicineMeasure> medicineMeasureList);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showLengthValueDialog(@NonNull HashMap<TimeUnit, ArrayList<Integer>> timeUnitValues);
+    void showLengthValueDialog(@NonNull Map<TimeUnit, List<Integer>> timeUnitValues);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showGeneratingEvents(boolean loading);

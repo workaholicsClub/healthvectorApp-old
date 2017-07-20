@@ -8,7 +8,6 @@ import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -97,7 +96,7 @@ public class ExerciseInteractor {
         return Observable.just(
                 RepeatParameters.builder()
                         .frequency(LinearGroups.builder()
-                                .times(new ArrayList<>(Collections.emptyList()))
+                                .times(Collections.emptyList())
                                 .build())
                         .periodicity(null)
                         .length(null)

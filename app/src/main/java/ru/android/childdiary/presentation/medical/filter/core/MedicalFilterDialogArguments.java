@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import org.joda.time.LocalDate;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -24,9 +24,9 @@ import ru.android.childdiary.presentation.core.BaseDialogArguments;
 @Getter
 public class MedicalFilterDialogArguments<T extends Serializable> extends BaseDialogArguments {
     @NonNull
-    ArrayList<T> items;
+    List<T> items;
     @NonNull
-    ArrayList<T> selectedItems;
+    List<T> selectedItems;
     @Nullable
     LocalDate fromDate;
     @Nullable
@@ -39,8 +39,8 @@ public class MedicalFilterDialogArguments<T extends Serializable> extends BaseDi
                                         @Nullable LocalDate fromDate,
                                         @Nullable LocalDate toDate) {
         super(sex);
-        this.items = new ArrayList<>(items);
-        this.selectedItems = new ArrayList<>(selectedItems);
+        this.items = Collections.unmodifiableList(items);
+        this.selectedItems = Collections.unmodifiableList(selectedItems);
         this.fromDate = fromDate;
         this.toDate = toDate;
     }

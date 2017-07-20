@@ -3,7 +3,6 @@ package ru.android.childdiary.domain.interactors.development.testing.tests.core;
 import android.support.annotation.Nullable;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +14,7 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
+import ru.android.childdiary.utils.CollectionUtils;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
 @Getter
@@ -41,12 +41,7 @@ public abstract class DomanTest extends Test {
                      @NonNull List<String> stageTitles,
                      @NonNull List<String> stageDescriptions) {
         super(testType, name, description);
-        Map<DomanTestParameter, List<Question>> map = new HashMap<>();
-        for (DomanTestParameter parameter : questions.keySet()) {
-            List<Question> list = questions.get(parameter);
-            map.put(parameter, Collections.unmodifiableList(list));
-        }
-        this.questions = Collections.unmodifiableMap(map);
+        this.questions = CollectionUtils.unmodifiableMap(questions);
         this.resultTextFormat = resultTextFormat;
         this.advanced = advanced;
         this.normal = normal;

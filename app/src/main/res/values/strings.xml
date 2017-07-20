@@ -122,7 +122,7 @@
     <string name="no_value">Нет</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
     <string name="food_dialog_title">Введите наименование прикорма</string>
-    <!-- %s - параметр "Имя ребенка" -->
+    <!-- %s - параметр "Имя ребенка", например, "Егор спит" -->
     <string name="child_sleep">%s спит</string>
     <string name="sleep_timer">Таймер сна</string>
     <!-- %s - например, "запустится через 00:52" -->

@@ -16,7 +16,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
@@ -220,7 +220,7 @@ public class MedicineTakingEventDetailActivity
     }
 
     @Override
-    public void showMedicineMeasureValueDialog(@NonNull ArrayList<MedicineMeasure> medicineMeasureList) {
+    public void showMedicineMeasureValueDialog(@NonNull List<MedicineMeasure> medicineMeasureList) {
         MedicineMeasureValueDialogFragment dialogFragment = new MedicineMeasureValueDialogFragment();
         dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_MEDICINE_MEASURE_VALUE_DIALOG,
                 MedicineMeasureValueDialogArguments.builder()

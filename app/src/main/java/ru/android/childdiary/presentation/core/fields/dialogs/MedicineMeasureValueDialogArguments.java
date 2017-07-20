@@ -2,7 +2,8 @@ package ru.android.childdiary.presentation.core.fields.dialogs;
 
 import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,16 +23,16 @@ import ru.android.childdiary.presentation.core.BaseDialogArguments;
 @Getter
 public class MedicineMeasureValueDialogArguments extends BaseDialogArguments {
     @NonNull
-    ArrayList<MedicineMeasure> medicineMeasureList;
+    List<MedicineMeasure> medicineMeasureList;
     @Nullable
     MedicineMeasureValue medicineMeasureValue;
 
     @Builder
     public MedicineMeasureValueDialogArguments(@Nullable Sex sex,
-                                               @NonNull ArrayList<MedicineMeasure> medicineMeasureList,
+                                               @NonNull List<MedicineMeasure> medicineMeasureList,
                                                @Nullable MedicineMeasureValue medicineMeasureValue) {
         super(sex);
-        this.medicineMeasureList = medicineMeasureList;
+        this.medicineMeasureList = Collections.unmodifiableList(medicineMeasureList);
         this.medicineMeasureValue = medicineMeasureValue;
     }
 }
