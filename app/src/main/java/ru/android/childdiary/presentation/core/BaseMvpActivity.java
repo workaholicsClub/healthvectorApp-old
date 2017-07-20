@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,6 +29,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import icepick.Icepick;
@@ -75,6 +77,9 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
     @Nullable
     @BindView(R.id.dummy)
     View dummy;
+
+    @BindDimen(R.dimen.base_margin)
+    int margin;
 
     private ImageView toolbarLogo;
 
@@ -164,6 +169,22 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
 
     public final void setupToolbarTitle(@StringRes int titleRes) {
         toolbarTitle.setText(titleRes);
+    }
+
+    protected final void addToolbarMargin() {
+        Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) toolbarTitle.getLayoutParams();
+        layoutParams.rightMargin = margin;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            layoutParams.setMarginEnd(margin);
+        }
+    }
+
+    protected final void removeToolbarMargin() {
+        Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) toolbarTitle.getLayoutParams();
+        layoutParams.rightMargin = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            layoutParams.setMarginEnd(0);
+        }
     }
 
     @CallSuper
@@ -336,5 +357,11 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        addToolbarMargin();
+        return super.onCreateOptionsMenu(menu);
     }
 }

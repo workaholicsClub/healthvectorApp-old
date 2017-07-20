@@ -341,8 +341,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .replace(FRAGMENT_CONTAINER_ID, fragment, tag)
                 .addToBackStack(null)
                 .commit();
-
-        invalidateOptionsMenu();
     }
 
     private Fragment createAppPartition(@NonNull AppPartition appPartition) {
@@ -597,6 +595,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     public boolean onCreateOptionsMenu(Menu menu) {
         if (selectedPartition == AppPartition.CALENDAR
                 || selectedPartition == AppPartition.MEDICAL_DATA) {
+            removeToolbarMargin();
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.filter, menu);
             return true;
@@ -605,6 +604,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             if (partition instanceof DevelopmentDiaryFragment) {
                 AppPartitionFragment page = ((DevelopmentDiaryFragment) partition).getSelectedPage();
                 if (page instanceof ChartContainer) {
+                    removeToolbarMargin();
                     MenuInflater inflater = getMenuInflater();
                     inflater.inflate(R.menu.chart, menu);
                     return true;

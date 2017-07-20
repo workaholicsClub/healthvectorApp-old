@@ -126,6 +126,7 @@ public class TestChartActivity extends BaseMvpActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.filter, menu);
         return true;

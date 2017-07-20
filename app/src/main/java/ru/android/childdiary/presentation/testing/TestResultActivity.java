@@ -112,6 +112,7 @@ public class TestResultActivity extends BaseMvpActivity implements TestResultVie
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.delete_with_icon, menu);
         return true;

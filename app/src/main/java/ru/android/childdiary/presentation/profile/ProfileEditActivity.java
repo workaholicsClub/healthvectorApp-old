@@ -447,6 +447,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.profile, menu);
         return true;

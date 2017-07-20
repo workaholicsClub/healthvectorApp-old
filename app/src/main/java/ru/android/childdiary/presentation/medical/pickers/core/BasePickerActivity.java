@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import java.io.Serializable;
@@ -98,11 +99,13 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search, menu);
+        removeToolbarMargin();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         WidgetsUtils.setupSearchView(searchView);
         unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(RxSearchView.queryTextChangeEvents(searchView)));
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

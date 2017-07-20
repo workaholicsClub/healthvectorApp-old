@@ -337,6 +337,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         if (event == null) {
             return super.onCreateOptionsMenu(menu);
         }
+        removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.event_detail, menu);
         return true;

@@ -144,6 +144,7 @@ public class WebBrowserActivity extends BaseMvpActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.web, menu);
         return true;
