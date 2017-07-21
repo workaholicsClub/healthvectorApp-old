@@ -21,7 +21,7 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView;
 import ru.android.childdiary.presentation.testing.TestingController;
-import ru.android.childdiary.presentation.testing.chart.ChartPlotter;
+import ru.android.childdiary.presentation.chart.testing.core.ChartPlotter;
 import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.strings.TestUtils;
 

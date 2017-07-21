@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.development.partitions.antropometry;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -18,9 +19,11 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
+import ru.android.childdiary.presentation.chart.antropometry.AntropometryChartActivity;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.development.partitions.antropometry.adapters.AntropometryActionListener;
 import ru.android.childdiary.presentation.development.partitions.antropometry.adapters.AntropometryAdapter;
+import ru.android.childdiary.presentation.development.partitions.antropometry.edit.EditAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.partitions.core.ChartContainer;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -72,12 +75,24 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         recyclerView.setVisibility(antropometryList.isEmpty() ? View.GONE : View.VISIBLE);
 
         textViewIntention.setVisibility(antropometryList.isEmpty() ? View.VISIBLE : View.GONE);
-        textViewIntention.setText(R.string.nothing_found); // TODO message
+        textViewIntention.setText(R.string.no_antropometry_data);
     }
 
     @Override
-    public void navigateToAntropometry(@NonNull Antropometry antropometry) {
-        // TODO
+    public void navigateToAntropometry(@NonNull Child child, @NonNull Antropometry antropometry) {
+        Intent intent = EditAntropometryActivity.getIntent(getContext(), child);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToChart(@NonNull Child child) {
+        Intent intent = AntropometryChartActivity.getIntent(getContext(), child);
+        startActivity(intent);
+    }
+
+    @Override
+    public void noChartData() {
+        showToast(getString(R.string.no_antropometry_data));
     }
 
     @Override
@@ -101,7 +116,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
 
     @Override
     public void showChart() {
-        showToast("chart");
+        presenter.showChart();
     }
 
     @Override

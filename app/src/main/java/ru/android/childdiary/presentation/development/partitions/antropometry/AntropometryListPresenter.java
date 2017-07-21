@@ -55,7 +55,13 @@ public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<Ant
     }
 
     public void edit(@NonNull Antropometry antropometry) {
-        getViewState().navigateToAntropometry(antropometry);
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                child -> getViewState().navigateToAntropometry(child, antropometry),
+                                this::onUnexpectedError));
     }
 
     public void delete(@NonNull Antropometry antropometry) {
@@ -68,5 +74,23 @@ public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<Ant
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(getViewState()::deleted, this::onUnexpectedError));
+    }
+
+    public void showChart() {
+        // TODO check no data
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        //.flatMapSingle(child -> testingInteractor.hasDomanTestResults(child))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                /*response -> {
+                                    if (response.isHasData()) {
+                                        getViewState().navigateToChart(response.getChild());
+                                    } else {
+                                        getViewState().noChartData();
+                                    }
+                                }*/child -> getViewState().navigateToChart(child),
+                                this::onUnexpectedError));
     }
 }

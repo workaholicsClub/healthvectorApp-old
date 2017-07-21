@@ -35,6 +35,13 @@ public abstract class RegExpInputFilter implements InputFilter {
         }
     }
 
+    public static class SimpleWeightInputFilter extends RegExpInputFilter {
+        @Override
+        protected Pattern getPattern() {
+            return Pattern.compile("\\d{0,2}(\\.\\d{0,3})?(\\s\\w+)?");
+        }
+    }
+
     public static class WeightInputFilter extends RegExpInputFilter {
         private static boolean contains(CharSequence s, char ch) {
             for (int i = 0; i < s.length(); ++i) {

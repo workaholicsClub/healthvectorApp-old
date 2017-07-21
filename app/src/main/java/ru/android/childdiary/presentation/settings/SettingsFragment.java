@@ -70,10 +70,9 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     private SettingsAdapter settingsAdapter;
 
-    @Getter(AccessLevel.PROTECTED)
+    @Nullable
+    @Getter
     private LocalDate selectedDate;
-
-    @Getter(AccessLevel.PROTECTED)
     private Child child;
 
     @Nullable

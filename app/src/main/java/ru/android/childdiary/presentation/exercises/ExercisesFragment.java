@@ -193,7 +193,7 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
 
     @Override
     public void addConcreteExercise(@NonNull Exercise exercise) {
-        presenter.addConcreteExercise(getChild(), exercise);
+        presenter.addConcreteExercise(exercise);
     }
 
     @Override

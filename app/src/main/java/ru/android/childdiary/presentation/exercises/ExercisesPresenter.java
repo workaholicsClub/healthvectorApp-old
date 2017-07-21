@@ -71,27 +71,30 @@ public class ExercisesPresenter extends AppPartitionPresenter<ExercisesView> {
                         .subscribe(getViewState()::navigateToExercise, this::onUnexpectedError));
     }
 
-    public void addConcreteExercise(@NonNull Child child, @NonNull Exercise exercise) {
-        if (child.getId() == null) {
-            getViewState().noChildSpecified();
-            return;
-        }
+    public void addConcreteExercise(@NonNull Exercise exercise) {
         unsubscribeOnDestroy(
-                Observable.combineLatest(
-                        exerciseInteractor.getDefaultConcreteExercise(child, exercise),
-                        exerciseInteractor.getStartTimeOnce(),
-                        exerciseInteractor.getFinishTimeOnce(),
-                        (defaultDoctorVisit, startTime, finishTime) -> ConcreteExerciseParameters.builder()
-                                .defaultConcreteExercise(defaultDoctorVisit)
-                                .startTime(startTime)
-                                .finishTime(finishTime)
-                                .build())
+                childInteractor.getActiveChildOnce()
+                        .flatMap(child -> Observable.combineLatest(
+                                exerciseInteractor.getDefaultConcreteExercise(child, exercise),
+                                exerciseInteractor.getStartTimeOnce(),
+                                exerciseInteractor.getFinishTimeOnce(),
+                                (defaultDoctorVisit, startTime, finishTime) -> ConcreteExerciseParameters.builder()
+                                        .defaultConcreteExercise(defaultDoctorVisit)
+                                        .startTime(startTime)
+                                        .finishTime(finishTime)
+                                        .build()))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(parameters -> getViewState().navigateToConcreteExerciseAdd(
-                                parameters.getDefaultConcreteExercise(),
-                                parameters.getStartTime(),
-                                parameters.getFinishTime()),
+                        .subscribe(parameters -> {
+                                    if (parameters.getDefaultConcreteExercise().getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                    } else {
+                                        getViewState().navigateToConcreteExerciseAdd(
+                                                parameters.getDefaultConcreteExercise(),
+                                                parameters.getStartTime(),
+                                                parameters.getFinishTime());
+                                    }
+                                },
                                 this::onUnexpectedError));
     }
 

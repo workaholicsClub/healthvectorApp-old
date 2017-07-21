@@ -1,20 +1,17 @@
 package ru.android.childdiary.presentation.development;
 
+import android.support.annotation.NonNull;
+
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.AppPartitionView;
 
 public interface DevelopmentDiaryView extends AppPartitionView {
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToAchievementAdd();
+    void navigateToAchievementAdd(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToTestResult();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToTest();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToAntropometryAdd();
+    void navigateToAntropometryAdd(@NonNull Child child);
 }

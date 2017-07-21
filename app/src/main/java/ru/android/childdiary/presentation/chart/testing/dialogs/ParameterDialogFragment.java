@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.dialogs;
+package ru.android.childdiary.presentation.chart.testing.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;

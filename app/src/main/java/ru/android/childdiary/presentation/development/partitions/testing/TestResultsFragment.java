@@ -22,6 +22,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
+import ru.android.childdiary.presentation.chart.testing.TestChartActivity;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.development.partitions.core.ChartContainer;
@@ -31,7 +32,6 @@ import ru.android.childdiary.presentation.development.partitions.testing.adapter
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestClickListener;
 import ru.android.childdiary.presentation.testing.TestResultActivity;
 import ru.android.childdiary.presentation.testing.TestingActivity;
-import ru.android.childdiary.presentation.testing.dynamic.TestChartActivity;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class TestResultsFragment extends AppPartitionFragment implements TestResultsView,
@@ -122,7 +122,7 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
 
     @Override
     public void noChartData() {
-        showToast(getString(R.string.no_chart_data));
+        showToast(getString(R.string.no_test_data));
     }
 
     @Override

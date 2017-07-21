@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.dynamic;
+package ru.android.childdiary.presentation.chart.testing.pages.core;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.dynamic;
+package ru.android.childdiary.presentation.chart.testing.pages.core;
 
 import android.support.annotation.NonNull;
 
@@ -7,7 +7,7 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import ru.android.childdiary.presentation.core.BaseView;
-import ru.android.childdiary.presentation.testing.dialogs.ParameterDialogArguments;
+import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogArguments;
 
 public interface DomanChartView extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)

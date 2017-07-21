@@ -18,7 +18,6 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="@dimen/base_margin"
-        android:text="@string/no_chart_data"
         android:textAppearance="@style/IntentionTextAppearance" />
 
     <include layout="@layout/chart" />

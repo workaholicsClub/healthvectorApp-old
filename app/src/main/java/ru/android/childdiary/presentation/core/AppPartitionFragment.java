@@ -16,11 +16,8 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public abstract class AppPartitionFragment extends BaseMvpFragment implements AppPartitionView {
     protected static final String TAG_FILTER = "TAG_FILTER";
 
-    @Nullable
     @Getter(AccessLevel.PROTECTED)
     private LocalDate selectedDate;
-
-    @Getter(AccessLevel.PROTECTED)
     private Child child;
 
     @Nullable
@@ -45,9 +42,7 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
         super.onActivityCreated(savedInstanceState);
         setupUi();
         themeChanged();
-        if (selectedDate != null) {
-            showSelectedDate(selectedDate);
-        }
+        showSelectedDate(selectedDate);
         showChild(child);
     }
 
@@ -80,8 +75,8 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
 
     protected Fragment putArguments(Fragment fragment) {
         AppPartitionArguments arguments = AppPartitionArguments.builder()
-                .child(getChild())
-                .selectedDate(getSelectedDate())
+                .child(child)
+                .selectedDate(selectedDate)
                 .build();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS, arguments);

@@ -1,17 +1,11 @@
-package ru.android.childdiary.presentation.testing.dynamic;
+package ru.android.childdiary.presentation.chart.core;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
@@ -20,11 +14,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import lombok.AccessLevel;
+import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.DomanTestParameter;
-import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.presentation.chart.testing.pages.MentalChartFragment;
+import ru.android.childdiary.presentation.chart.testing.pages.PhysicalChartFragment;
+import ru.android.childdiary.presentation.chart.testing.pages.core.DomanChartFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
@@ -32,9 +28,7 @@ import ru.android.childdiary.utils.strings.TestUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public class TestChartActivity extends BaseMvpActivity {
-    private static final String KEY_SELECTED_PAGE = "chart.selected_page";
-
+public abstract class ChartActivity extends BaseMvpActivity {
     @Inject
     RxSharedPreferences preferences;
 
@@ -45,17 +39,8 @@ public class TestChartActivity extends BaseMvpActivity {
     ViewPager viewPager;
 
     private ViewPagerAdapter viewPagerAdapter;
+    @Getter(AccessLevel.PROTECTED)
     private Child child;
-
-    public static Intent getIntent(Context context, @Nullable Child child) {
-        return new Intent(context, TestChartActivity.class)
-                .putExtra(ExtraConstants.EXTRA_CHILD, child);
-    }
-
-    @Override
-    protected void injectActivity(ApplicationComponent applicationComponent) {
-        applicationComponent.inject(this);
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,9 +51,10 @@ public class TestChartActivity extends BaseMvpActivity {
     }
 
     private void setupViewPager() {
-        Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 0).get();
+        Integer selectedPage = preferences.getInteger(getKeySelectedPage(), 0).get();
         selectedPage = selectedPage == null ? 0 : selectedPage;
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        // TODO обобщить
         viewPagerAdapter.addFragment(putArguments(new PhysicalChartFragment()), getString(R.string.test_chart_physical_tab));
         viewPagerAdapter.addFragment(putArguments(new MentalChartFragment()), getString(R.string.test_chart_mental_tab));
         viewPager.setAdapter(viewPagerAdapter);
@@ -84,10 +70,10 @@ public class TestChartActivity extends BaseMvpActivity {
 
             @Override
             public void onPageSelected(int position) {
-                preferences.getInteger(KEY_SELECTED_PAGE).set(position);
+                preferences.getInteger(getKeySelectedPage()).set(position);
                 DomanChartFragment fragment = getSelectedPage(position);
                 if (fragment != null) {
-                    setupToolbarTitle(TestUtils.toString(TestChartActivity.this, fragment.getTestParameter()));
+                    setupToolbarTitle(TestUtils.toString(ChartActivity.this, fragment.getTestParameter()));
                 } else {
                     logger.error("selected page is null");
                 }
@@ -108,7 +94,6 @@ public class TestChartActivity extends BaseMvpActivity {
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarTitle(null);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
     }
 
@@ -124,31 +109,8 @@ public class TestChartActivity extends BaseMvpActivity {
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        removeToolbarMargin();
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.filter, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_filter:
-                DomanChartFragment fragment = getSelectedPage();
-                if (fragment != null) {
-                    fragment.showFilter();
-                    return true;
-                } else {
-                    logger.error("selected page is null");
-                }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Nullable
-    private DomanChartFragment getSelectedPage(int position) {
+    protected DomanChartFragment getSelectedPage(int position) {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         if (fragments == null) {
             return null;
@@ -164,19 +126,10 @@ public class TestChartActivity extends BaseMvpActivity {
     }
 
     @Nullable
-    private DomanChartFragment getSelectedPage() {
+    protected DomanChartFragment getSelectedPage() {
         int position = viewPager.getCurrentItem();
         return getSelectedPage(position);
     }
 
-    public void updateTitle(@NonNull TestType testType, @NonNull DomanTestParameter parameter) {
-        DomanChartFragment fragment = getSelectedPage();
-        if (fragment == null) {
-            logger.error("selected page is null");
-            return;
-        }
-        if (fragment.getTestType() == testType) {
-            setupToolbarTitle(TestUtils.toString(this, parameter));
-        }
-    }
+    protected abstract String getKeySelectedPage();
 }

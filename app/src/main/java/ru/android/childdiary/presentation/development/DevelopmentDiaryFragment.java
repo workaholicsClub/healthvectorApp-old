@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.development;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsFragment;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListFragment;
+import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.partitions.testing.TestResultsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -185,23 +187,14 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     }
 
     @Override
-    public void navigateToAchievementAdd() {
+    public void navigateToAchievementAdd(@NonNull Child child) {
         // TODO
     }
 
     @Override
-    public void navigateToTestResult() {
-        // TODO
-    }
-
-    @Override
-    public void navigateToTest() {
-        // TODO
-    }
-
-    @Override
-    public void navigateToAntropometryAdd() {
-        // TODO
+    public void navigateToAntropometryAdd(@NonNull Child child) {
+        Intent intent = AddAntropometryActivity.getIntent(getContext(), child);
+        startActivity(intent);
     }
 
     @OnClick(R.id.fab)

@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.chart;
+package ru.android.childdiary.presentation.chart.testing.core;
 
 import android.content.Context;
 import android.widget.TextView;

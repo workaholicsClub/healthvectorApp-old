@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -21,30 +20,30 @@ import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.utils.strings.DoubleUtils;
 
-public class FieldAmountMlView extends FieldEditTextView {
+public class FieldWeightView extends FieldEditTextView {
     @BindView(R.id.editText)
     CustomEditText editText;
 
     @Getter
-    private Double amountMl;
+    private Double value;
 
-    public FieldAmountMlView(Context context) {
+    public FieldWeightView(Context context) {
         super(context);
         init();
     }
 
-    public FieldAmountMlView(Context context, AttributeSet attrs) {
+    public FieldWeightView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public FieldAmountMlView(Context context, AttributeSet attrs, int defStyle) {
+    public FieldWeightView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
     private void init() {
-        inflate(getContext(), R.layout.field_amount_ml, this);
+        inflate(getContext(), R.layout.field_weight, this);
     }
 
     @Override
@@ -52,12 +51,12 @@ public class FieldAmountMlView extends FieldEditTextView {
         super.onFinishInflate();
         ButterKnife.bind(this);
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        editText.setFilters(new InputFilter[]{new RegExpInputFilter.AmountMlInputFilter()});
+        editText.setFilters(new InputFilter[]{new RegExpInputFilter.SimpleWeightInputFilter()});
     }
 
-    public void setAmountMl(Double amount) {
-        amountMl = amount;
-        editText.setText(DoubleUtils.amountMlReview(getContext(), amount));
+    public void setWeight(Double weight) {
+        value = weight;
+        editText.setText(DoubleUtils.weightReview(getContext(), weight));
     }
 
     @Override
@@ -67,16 +66,16 @@ public class FieldAmountMlView extends FieldEditTextView {
         List<Disposable> disposables = new ArrayList<>();
 
         disposables.add(RxTextView.afterTextChangeEvents(editText).subscribe(textViewAfterTextChangeEvent -> {
-            Double amount = DoubleUtils.parse(editText.getText().toString());
-            amountMl = amount;
+            Double weight = DoubleUtils.parse(editText.getText().toString());
+            value = weight;
         }));
 
         disposables.add(RxView.focusChanges(editText).subscribe(hasFocus -> {
             if (hasFocus) {
-                editText.setText(DoubleUtils.amountMlEdit(amountMl));
+                editText.setText(DoubleUtils.weightEdit(value));
                 editText.setSelection(editText.getText().length());
             } else {
-                editText.setText(DoubleUtils.amountMlReview(getContext(), amountMl));
+                editText.setText(DoubleUtils.weightReview(getContext(), value));
             }
         }));
 

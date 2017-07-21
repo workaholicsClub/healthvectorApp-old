@@ -25,9 +25,6 @@ public class FieldAmountView extends FieldEditTextView {
     @BindView(R.id.editText)
     CustomEditText editText;
 
-    @BindView(R.id.imageView)
-    ImageView imageView;
-
     @Getter
     private Double amount;
 

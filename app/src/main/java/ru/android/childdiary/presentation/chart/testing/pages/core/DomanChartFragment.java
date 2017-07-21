@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.dynamic;
+package ru.android.childdiary.presentation.chart.testing.pages.core;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,11 +17,12 @@ import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.presentation.chart.testing.TestChartActivity;
+import ru.android.childdiary.presentation.chart.testing.core.ChartPlotter;
+import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogArguments;
+import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogFragment;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.testing.chart.ChartPlotter;
-import ru.android.childdiary.presentation.testing.dialogs.ParameterDialogArguments;
-import ru.android.childdiary.presentation.testing.dialogs.ParameterDialogFragment;
 
 public abstract class DomanChartFragment extends BaseMvpFragment implements DomanChartView,
         ParameterDialogFragment.Listener {
@@ -74,6 +75,7 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
         legendView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+        textViewIntention.setText(R.string.no_test_data);
     }
 
     @Override

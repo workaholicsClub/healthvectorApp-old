@@ -165,7 +165,7 @@ public class ResourcesUtils {
             case BREAST_MILK:
                 return R.drawable.ic_feed_type_breast_milk;
             case PUMPED_MILK:
-                return R.drawable.ic_feed_type_pumped_milk;
+                return R.drawable.ic_feed_type;
             case MILK_FORMULA:
                 return R.drawable.ic_feed_type_milk_formula;
             case FOOD:

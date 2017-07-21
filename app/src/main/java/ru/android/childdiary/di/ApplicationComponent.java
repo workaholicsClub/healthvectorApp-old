@@ -11,6 +11,9 @@ import ru.android.childdiary.di.modules.NetworkModule;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
+import ru.android.childdiary.presentation.chart.antropometry.AntropometryChartActivity;
+import ru.android.childdiary.presentation.chart.testing.TestChartActivity;
+import ru.android.childdiary.presentation.chart.testing.pages.core.DomanChartPresenter;
 import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
 import ru.android.childdiary.presentation.cloud.CloudInitialPresenter;
 import ru.android.childdiary.presentation.cloud.CloudOperationActivity;
@@ -20,6 +23,10 @@ import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsPresenter;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListPresenter;
+import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryActivity;
+import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryPresenter;
+import ru.android.childdiary.presentation.development.partitions.antropometry.edit.EditAntropometryActivity;
+import ru.android.childdiary.presentation.development.partitions.antropometry.edit.EditAntropometryPresenter;
 import ru.android.childdiary.presentation.development.partitions.testing.TestResultsPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
@@ -78,8 +85,6 @@ import ru.android.childdiary.presentation.testing.TestResultPresenter;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 import ru.android.childdiary.presentation.testing.TestingPresenter;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersPresenter;
-import ru.android.childdiary.presentation.testing.dynamic.DomanChartPresenter;
-import ru.android.childdiary.presentation.testing.dynamic.TestChartActivity;
 import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.CloudService;
 import ru.android.childdiary.services.TimerService;
@@ -177,6 +182,10 @@ public interface ApplicationComponent {
 
     void inject(DomanChartPresenter presenter);
 
+    void inject(AddAntropometryPresenter presenter);
+
+    void inject(EditAntropometryPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -229,6 +238,12 @@ public interface ApplicationComponent {
     void inject(TestResultActivity activity);
 
     void inject(TestChartActivity activity);
+
+    void inject(AntropometryChartActivity activity);
+
+    void inject(AddAntropometryActivity activity);
+
+    void inject(EditAntropometryActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

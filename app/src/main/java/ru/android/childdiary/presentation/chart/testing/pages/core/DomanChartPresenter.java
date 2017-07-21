@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.dynamic;
+package ru.android.childdiary.presentation.chart.testing.pages.core;
 
 import android.support.annotation.NonNull;
 
@@ -23,7 +23,7 @@ import ru.android.childdiary.domain.interactors.development.testing.processors.c
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.presentation.core.BasePresenter;
-import ru.android.childdiary.presentation.testing.dialogs.ParameterDialogArguments;
+import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogArguments;
 
 @InjectViewState
 public class DomanChartPresenter extends BasePresenter<DomanChartView> {

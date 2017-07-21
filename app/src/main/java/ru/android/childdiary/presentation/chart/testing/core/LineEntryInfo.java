@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.chart;
+package ru.android.childdiary.presentation.chart.testing.core;
 
 import lombok.Builder;
 import lombok.NonNull;

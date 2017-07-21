@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.testing.chart;
+package ru.android.childdiary.presentation.chart.testing.core;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;

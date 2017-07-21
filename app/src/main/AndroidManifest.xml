@@ -194,7 +194,28 @@
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
-            android:name=".presentation.testing.dynamic.TestChartActivity"
+            android:name=".presentation.chart.testing.TestChartActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.chart.antropometry.AntropometryChartActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.development.partitions.antropometry.add.AddAntropometryActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.development.partitions.antropometry.edit.EditAntropometryActivity"
             android:parentActivityName=".presentation.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
