@@ -315,4 +315,6 @@
     <string name="chart_x_title">Стадия</string>
     <string name="weight">Вес</string>
     <string name="height">Рост</string>
+    <string name="delete_antropometry_dialog_title">Удалить показатели роста и веса?</string>
+    <string name="validation_antropometry_empty">Ввеидте рост или вес</string>
 </resources>

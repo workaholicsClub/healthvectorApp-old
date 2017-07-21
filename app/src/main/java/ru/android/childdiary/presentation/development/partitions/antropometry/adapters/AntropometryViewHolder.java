@@ -59,7 +59,9 @@ public class AntropometryViewHolder extends SwipeViewHolder<Antropometry, Antrop
 
         String heightStr = DoubleUtils.heightReview(context, item.getHeight());
         String weightStr = DoubleUtils.weightReview(context, item.getWeight());
-        String antropometryStr = context.getString(R.string.two_values, heightStr, weightStr);
+        String antropometryStr = heightStr != null && weightStr != null
+                ? context.getString(R.string.two_values, heightStr, weightStr)
+                : (heightStr != null ? heightStr : weightStr);
         textViewAntropometry.setText(antropometryStr);
 
         TimeUtils.Age age = TimeUtils.getAge(item.getChild().getBirthDate(), item.getDate());

@@ -74,13 +74,14 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         adapter.setFabController(child.getId() == null ? null : fabController);
         recyclerView.setVisibility(antropometryList.isEmpty() ? View.GONE : View.VISIBLE);
 
+        line.setVisibility(antropometryList.isEmpty() ? View.GONE : View.VISIBLE);
         textViewIntention.setVisibility(antropometryList.isEmpty() ? View.VISIBLE : View.GONE);
         textViewIntention.setText(R.string.no_antropometry_data);
     }
 
     @Override
     public void navigateToAntropometry(@NonNull Child child, @NonNull Antropometry antropometry) {
-        Intent intent = EditAntropometryActivity.getIntent(getContext(), child);
+        Intent intent = EditAntropometryActivity.getIntent(getContext(), child, antropometry);
         startActivity(intent);
     }
 
@@ -102,7 +103,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     @Override
     public void confirmDelete(@NonNull Antropometry antropometry) {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(R.string.delete) // TODO message
+                .setTitle(R.string.delete_antropometry_dialog_title)
                 .setPositiveButton(R.string.delete,
                         (dialog, which) -> presenter.forceDelete(antropometry))
                 .setNegativeButton(R.string.cancel, null)

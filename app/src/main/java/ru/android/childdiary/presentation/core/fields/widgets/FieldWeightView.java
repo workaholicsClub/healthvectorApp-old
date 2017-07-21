@@ -54,7 +54,7 @@ public class FieldWeightView extends FieldEditTextView {
         editText.setFilters(new InputFilter[]{new RegExpInputFilter.SimpleWeightInputFilter()});
     }
 
-    public void setWeight(Double weight) {
+    public void setValue(Double weight) {
         value = weight;
         editText.setText(DoubleUtils.weightReview(getContext(), weight));
     }

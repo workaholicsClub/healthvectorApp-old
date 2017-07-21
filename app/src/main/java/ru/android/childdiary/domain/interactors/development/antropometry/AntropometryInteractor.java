@@ -32,6 +32,6 @@ public class AntropometryInteractor {
     }
 
     public Observable<Antropometry> delete(@NonNull Antropometry item) {
-        return antropometryRepository.update(item);
+        return antropometryRepository.delete(item);
     }
 }

@@ -5,16 +5,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import org.joda.time.LocalDate;
+
+import butterknife.OnClick;
 import lombok.Getter;
+import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.development.partitions.antropometry.core.AntropometryActivity;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class AddAntropometryActivity extends AntropometryActivity<AddAntropometryView>
         implements AddAntropometryView, DatePickerDialog.OnDateSetListener {
@@ -36,5 +43,35 @@ public class AddAntropometryActivity extends AntropometryActivity<AddAntropometr
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         buttonAdd.setVisibility(View.VISIBLE);
+
+        if (savedInstanceState == null) {
+            dateView.setValue(LocalDate.now());
+        }
+    }
+
+    @OnClick(R.id.buttonAdd)
+    void onButtonAddClick() {
+        presenter.add(buildAntropometry());
+    }
+
+    @Override
+    public void added(@NonNull Antropometry antropometry) {
+        finish();
+    }
+
+    @Override
+    protected void saveChangesOrExit() {
+        Antropometry newAntropometry = buildAntropometry();
+        if (newAntropometry.isContentEmpty()) {
+            finish();
+            return;
+        }
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.save_changes_dialog_title)
+                .setPositiveButton(R.string.save,
+                        (dialog, which) -> presenter.add(newAntropometry))
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> finish())
+                .show();
     }
 }

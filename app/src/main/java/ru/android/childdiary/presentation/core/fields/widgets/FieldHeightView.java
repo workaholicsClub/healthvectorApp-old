@@ -54,7 +54,7 @@ public class FieldHeightView extends FieldEditTextView {
         editText.setFilters(new InputFilter[]{new RegExpInputFilter.HeightInputFilter()});
     }
 
-    public void setHeight(Double height) {
+    public void setValue(Double height) {
         value = height;
         editText.setText(DoubleUtils.heightReview(getContext(), height));
     }

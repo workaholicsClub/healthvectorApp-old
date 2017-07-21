@@ -34,7 +34,7 @@ public class AntropometryDbService {
     public Observable<List<Antropometry>> getAll(@NonNull Child child) {
         return dataStore.select(AntropometryEntity.class)
                 .where(AntropometryEntity.CHILD_ID.eq(child.getId()))
-                .orderBy(AntropometryEntity.DATE, AntropometryEntity.ID)
+                .orderBy(AntropometryEntity.DATE.desc(), AntropometryEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, antropometryMapper));
