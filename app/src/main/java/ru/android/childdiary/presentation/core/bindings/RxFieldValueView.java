@@ -3,8 +3,6 @@ package ru.android.childdiary.presentation.core.bindings;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
-import ru.android.childdiary.presentation.core.fields.widgets.FieldValueView;
-
 import static com.jakewharton.rxbinding2.internal.Preconditions.checkNotNull;
 
 public final class RxFieldValueView {

@@ -6,7 +6,6 @@ import com.jakewharton.rxbinding2.InitialValueObservable;
 
 import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldValueView;
 
 import static com.jakewharton.rxbinding2.internal.Preconditions.checkMainThread;
 
@@ -34,7 +33,7 @@ public final class FieldValueChangeEventsObservable<T>
         return new FieldValueEvent<>(view, view.getValue());
     }
 
-    private static final class Listener<T> extends MainThreadDisposable implements FieldValueView.ValueChangeListener<T> {
+    private static final class Listener<T> extends MainThreadDisposable implements FieldValueChangeListener<T> {
         private final FieldValueView<T> view;
         private final Observer<? super FieldValueEvent<T>> observer;
 

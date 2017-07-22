@@ -4,10 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDataRepository;
 import ru.android.childdiary.domain.core.validation.Validator;
@@ -29,29 +31,27 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
     public List<AntropometryValidationResult> validate(@NonNull Antropometry antropometry) {
         List<AntropometryValidationResult> results = new ArrayList<>();
 
-        for (AntropometryFieldType field : AntropometryFieldType.values()) {
-            AntropometryValidationResult result = new AntropometryValidationResult(field);
-            validateField(result, antropometry);
-            results.add(result);
+        if (antropometry.getChild() != null && antropometry.getChild().getId() != null) {
+            boolean isUnique = antropometryRepository.getAll(antropometry.getChild())
+                    .first(Collections.emptyList())
+                    .flatMapObservable(Observable::fromIterable)
+                    .filter(a -> ObjectUtils.equals(a.getDate(), antropometry.getDate()))
+                    .count()
+                    .map(count -> count == 0)
+                    .blockingGet();
+            if (!isUnique) {
+                AntropometryValidationResult result = new AntropometryValidationResult(AntropometryFieldType.DATE);
+                results.add(result);
+            }
         }
+
+        AntropometryValidationResult result = new AntropometryValidationResult(AntropometryFieldType.HEIGHT_WEIGHT);
+        if (!ObjectUtils.isPositive(antropometry.getHeight())
+                && !ObjectUtils.isPositive(antropometry.getWeight())) {
+            result.addMessage(context.getString(R.string.validation_antropometry_empty));
+        }
+        results.add(result);
 
         return results;
-    }
-
-    private void validateField(@NonNull AntropometryValidationResult result, @NonNull Antropometry antropometry) {
-        if (result.getFieldType() == null) {
-            return;
-        }
-        switch (result.getFieldType()) {
-            case DATE:
-                // TODO
-                break;
-            case HEIGHT_WEIGHT:
-                if (!ObjectUtils.isPositive(antropometry.getHeight())
-                        || !ObjectUtils.isPositive(antropometry.getWeight())) {
-                    result.addMessage(context.getString(R.string.validation_antropometry_empty));
-                }
-                break;
-        }
     }
 }

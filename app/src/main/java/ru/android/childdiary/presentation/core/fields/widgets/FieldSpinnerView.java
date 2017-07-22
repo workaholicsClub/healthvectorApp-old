@@ -21,7 +21,7 @@ import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.ui.FontUtils;
 
-public abstract class FieldSpinnerView<T> extends FieldValueView<T> implements View.OnClickListener,
+public abstract class FieldSpinnerView<T> extends BaseFieldValueView<T> implements View.OnClickListener,
         AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
 

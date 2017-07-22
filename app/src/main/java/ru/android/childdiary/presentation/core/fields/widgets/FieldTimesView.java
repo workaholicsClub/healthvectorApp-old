@@ -24,7 +24,7 @@ import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class FieldTimesView extends FieldValueView<LinearGroups> implements View.OnClickListener {
+public class FieldTimesView extends BaseFieldValueView<LinearGroups> implements View.OnClickListener {
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
 
     @BindDimen(R.dimen.times_margin)

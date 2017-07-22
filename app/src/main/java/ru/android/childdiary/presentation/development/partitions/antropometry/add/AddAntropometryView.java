@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.development.partitions.antropometry.a
 
 import android.support.annotation.NonNull;
 
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
@@ -11,4 +12,7 @@ import ru.android.childdiary.presentation.development.partitions.antropometry.co
 public interface AddAntropometryView extends AntropometryView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void added(@NonNull Antropometry antropometry);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void setButtonDoneEnabled(boolean enabled);
 }

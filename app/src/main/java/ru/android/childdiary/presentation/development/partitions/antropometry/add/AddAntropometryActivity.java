@@ -14,13 +14,16 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import org.joda.time.LocalDate;
 
 import butterknife.OnClick;
+import icepick.State;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 import ru.android.childdiary.presentation.development.partitions.antropometry.core.AntropometryActivity;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class AddAntropometryActivity extends AntropometryActivity<AddAntropometryView>
@@ -28,6 +31,9 @@ public class AddAntropometryActivity extends AntropometryActivity<AddAntropometr
     @Getter
     @InjectPresenter
     AddAntropometryPresenter presenter;
+
+    @State
+    boolean isButtonDoneEnabled;
 
     public static Intent getIntent(Context context, @NonNull Child child) {
         return new Intent(context, AddAntropometryActivity.class)
@@ -47,6 +53,17 @@ public class AddAntropometryActivity extends AntropometryActivity<AddAntropometr
         if (savedInstanceState == null) {
             dateView.setValue(LocalDate.now());
         }
+
+        unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(
+                RxFieldValueView.valueChangeEvents(heightView),
+                RxFieldValueView.valueChangeEvents(weightView)
+        ));
+    }
+
+    @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @OnClick(R.id.buttonAdd)
@@ -57,6 +74,12 @@ public class AddAntropometryActivity extends AntropometryActivity<AddAntropometr
     @Override
     public void added(@NonNull Antropometry antropometry) {
         finish();
+    }
+
+    @Override
+    public void setButtonDoneEnabled(boolean enabled) {
+        isButtonDoneEnabled = enabled;
+        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), isButtonDoneEnabled));
     }
 
     @Override

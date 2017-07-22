@@ -12,25 +12,28 @@ import java.util.Set;
 
 import butterknife.ButterKnife;
 import lombok.Getter;
+import lombok.val;
+import ru.android.childdiary.presentation.core.bindings.FieldValueChangeListener;
+import ru.android.childdiary.presentation.core.bindings.FieldValueView;
 import ru.android.childdiary.utils.ObjectUtils;
 
-public abstract class FieldValueView<T> extends LinearLayout implements FieldReadOnly {
-    private final Set<ValueChangeListener<T>> valueChangeListeners = new HashSet<>();
+public abstract class BaseFieldValueView<T> extends LinearLayout implements FieldValueView<T>, FieldReadOnly {
+    private final Set<FieldValueChangeListener<T>> valueChangeListeners = new HashSet<>();
 
     @Getter
     private T value;
 
-    public FieldValueView(Context context) {
+    public BaseFieldValueView(Context context) {
         super(context);
         init();
     }
 
-    public FieldValueView(Context context, AttributeSet attrs) {
+    public BaseFieldValueView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public FieldValueView(Context context, AttributeSet attrs, int defStyle) {
+    public BaseFieldValueView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
@@ -51,7 +54,7 @@ public abstract class FieldValueView<T> extends LinearLayout implements FieldRea
         if (!ObjectUtils.equals(value, this.value)) {
             this.value = value;
             valueChanged();
-            for (ValueChangeListener<T> listener : valueChangeListeners) {
+            for (val listener : valueChangeListeners) {
                 listener.onValueChange(value);
             }
         }
@@ -62,15 +65,13 @@ public abstract class FieldValueView<T> extends LinearLayout implements FieldRea
 
     protected abstract void valueChanged();
 
-    public void addValueChangeListener(@NonNull ValueChangeListener<T> listener) {
+    @Override
+    public void addValueChangeListener(@NonNull FieldValueChangeListener<T> listener) {
         valueChangeListeners.add(listener);
     }
 
-    public void removeValueChangeListener(@NonNull ValueChangeListener<T> listener) {
+    @Override
+    public void removeValueChangeListener(@NonNull FieldValueChangeListener<T> listener) {
         valueChangeListeners.remove(listener);
-    }
-
-    public interface ValueChangeListener<T> {
-        void onValueChange(@Nullable T value);
     }
 }

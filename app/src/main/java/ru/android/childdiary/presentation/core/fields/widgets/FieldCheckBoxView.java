@@ -13,12 +13,13 @@ import butterknife.BindView;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.presentation.core.bindings.FieldValueChangeListener;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
-public class FieldCheckBoxView extends FieldValueView<Boolean> implements View.OnClickListener,
-        FieldValueView.ValueChangeListener<Boolean> {
+public class FieldCheckBoxView extends BaseFieldValueView<Boolean> implements View.OnClickListener,
+        FieldValueChangeListener<Boolean> {
     private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
 
     @BindView(R.id.imageView)

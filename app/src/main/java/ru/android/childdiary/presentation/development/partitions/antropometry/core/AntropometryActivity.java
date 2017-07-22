@@ -25,6 +25,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldHeightView;
@@ -49,6 +50,7 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
     protected FieldDateView dateView;
 
     private Child child;
+    private boolean isValidationStarted;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,7 +94,6 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
         super.themeChanged();
         setupToolbarLogo(ResourcesUtils.getChildIconForToolbar(this, child));
         setupToolbarTitle(child.getName());
-        buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
     @Override
@@ -151,6 +152,28 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
                 .height(heightView.getValue())
                 .date(dateView.getValue())
                 .build();
+    }
+
+    @Override
+    public final void validationFailed() {
+        if (!isValidationStarted) {
+            isValidationStarted = true;
+            unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(
+                    RxFieldValueView.valueChangeEvents(heightView),
+                    RxFieldValueView.valueChangeEvents(weightView)
+            ));
+        }
+    }
+
+    @Override
+    public void showValidationErrorMessage(String msg) {
+        showToast(msg);
+    }
+
+    @Override
+    public void heightWeightValidated(boolean valid) {
+        heightView.validated(valid);
+        weightView.validated(valid);
     }
 
     @Override
