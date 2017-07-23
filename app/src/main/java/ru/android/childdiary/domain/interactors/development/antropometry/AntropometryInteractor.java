@@ -13,6 +13,7 @@ import ru.android.childdiary.domain.interactors.development.antropometry.validat
 import ru.android.childdiary.domain.interactors.development.antropometry.validation.AntropometryValidationResult;
 import ru.android.childdiary.domain.interactors.development.antropometry.validation.AntropometryValidator;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
+import ru.android.childdiary.utils.ObjectUtils;
 
 public class AntropometryInteractor {
     private final AntropometryRepository antropometryRepository;
@@ -60,12 +61,8 @@ public class AntropometryInteractor {
         return Observable.combineLatest(
                 heightObservable,
                 weightObservable,
-                (heightEvent, weightEvent) -> Antropometry.builder()
-                        .height(heightEvent.getValue())
-                        .weight(weightEvent.getValue())
-                        .build())
-                .map(antropometryValidator::validate)
-                .map(antropometryValidator::isValid)
+                (heightEvent, weightEvent) -> ObjectUtils.isPositive(heightEvent.getValue())
+                        || ObjectUtils.isPositive(weightEvent.getValue()))
                 .distinctUntilChanged();
     }
 

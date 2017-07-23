@@ -31,6 +31,13 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
     public List<AntropometryValidationResult> validate(@NonNull Antropometry antropometry) {
         List<AntropometryValidationResult> results = new ArrayList<>();
 
+        AntropometryValidationResult result = new AntropometryValidationResult(AntropometryFieldType.HEIGHT_WEIGHT);
+        if (!ObjectUtils.isPositive(antropometry.getHeight())
+                && !ObjectUtils.isPositive(antropometry.getWeight())) {
+            result.addMessage(context.getString(R.string.validation_antropometry_empty));
+        }
+        results.add(result);
+
         if (antropometry.getChild() != null && antropometry.getChild().getId() != null) {
             boolean isUnique = antropometryRepository.getAll(antropometry.getChild())
                     .first(Collections.emptyList())
@@ -40,17 +47,11 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
                     .map(count -> count == 0)
                     .blockingGet();
             if (!isUnique) {
-                AntropometryValidationResult result = new AntropometryValidationResult(AntropometryFieldType.DATE);
+                result = new AntropometryValidationResult(AntropometryFieldType.DATE);
+                result.addMessage(context.getString(R.string.validation_antropometry_date_not_unique));
                 results.add(result);
             }
         }
-
-        AntropometryValidationResult result = new AntropometryValidationResult(AntropometryFieldType.HEIGHT_WEIGHT);
-        if (!ObjectUtils.isPositive(antropometry.getHeight())
-                && !ObjectUtils.isPositive(antropometry.getWeight())) {
-            result.addMessage(context.getString(R.string.validation_antropometry_empty));
-        }
-        results.add(result);
 
         return results;
     }

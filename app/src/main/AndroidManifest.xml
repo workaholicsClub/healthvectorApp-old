@@ -209,7 +209,8 @@
         </activity>
         <activity
             android:name=".presentation.development.partitions.antropometry.add.AddAntropometryActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />

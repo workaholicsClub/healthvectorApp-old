@@ -69,6 +69,9 @@ public class AddAntropometryActivity extends AntropometryActivity<AddAntropometr
     @OnClick(R.id.buttonAdd)
     void onButtonAddClick() {
         presenter.add(buildAntropometry());
+        if (isButtonDoneEnabled) {
+            hideKeyboardAndClearFocus(rootView);
+        }
     }
 
     @Override
