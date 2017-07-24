@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.chart.testing.core;
 
 import android.content.Context;
+import android.support.annotation.Px;
 import android.support.v4.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -49,6 +50,7 @@ public class TestChartPlotter implements ChartPlotter {
     private final List<DomanResult> results;
 
     private final int[] stakedBarColors;
+    @Px
     private final int margin, lineWidth;
 
     private TestLineEntry selectedEntry;
@@ -195,6 +197,8 @@ public class TestChartPlotter implements ChartPlotter {
         lineDataSet.setDrawValues(false);
         lineDataSet.setDrawHighlightIndicators(false);
         lineDataSet.setHighlightEnabled(true);
+        lineDataSet.setDrawCircles(false);
+        lineDataSet.setDrawCircleHole(false);
 
         LineData lineData = new LineData();
         lineData.addDataSet(lineDataSet);

@@ -7,10 +7,10 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
 
 public interface AntropometryRepository {
-    Observable<List<Antropometry>> getAll(@NonNull Child child);
+    Observable<List<Antropometry>> getAntropometryList(@NonNull AntropometryListRequest request);
 
     Observable<Antropometry> add(@NonNull Antropometry antropometry);
 

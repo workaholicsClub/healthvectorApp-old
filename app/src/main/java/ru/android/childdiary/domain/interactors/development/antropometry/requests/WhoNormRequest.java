@@ -1,5 +1,7 @@
 package ru.android.childdiary.domain.interactors.development.antropometry.requests;
 
+import android.support.annotation.Nullable;
+
 import org.joda.time.LocalDate;
 
 import lombok.Builder;
@@ -12,8 +14,8 @@ import ru.android.childdiary.domain.interactors.child.Child;
 public class WhoNormRequest {
     @NonNull
     Child child;
-    @NonNull
+    @Nullable
     LocalDate minDate;
-    @NonNull
+    @Nullable
     LocalDate maxDate;
 }

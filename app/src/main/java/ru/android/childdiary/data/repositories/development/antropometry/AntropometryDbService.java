@@ -2,6 +2,8 @@ package ru.android.childdiary.data.repositories.development.antropometry;
 
 import android.support.annotation.NonNull;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,12 +12,16 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
+import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
+import io.requery.reactivex.ReactiveResult;
+import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.development.antropometry.AntropometryEntity;
 import ru.android.childdiary.data.repositories.development.antropometry.mappers.AntropometryMapper;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
+import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
 
 @Singleton
 public class AntropometryDbService {
@@ -31,13 +37,44 @@ public class AntropometryDbService {
         this.antropometryMapper = antropometryMapper;
     }
 
-    public Observable<List<Antropometry>> getAll(@NonNull Child child) {
-        return dataStore.select(AntropometryEntity.class)
-                .where(AntropometryEntity.CHILD_ID.eq(child.getId()))
-                .orderBy(AntropometryEntity.DATE.desc(), AntropometryEntity.ID)
+    public Observable<List<Antropometry>> getAntropometryList(@NonNull AntropometryListRequest request) {
+        Child child = request.getChild();
+        LocalDate birthday = child.getBirthDate();
+
+        val order = request.isAscending() ? AntropometryEntity.DATE.asc() : AntropometryEntity.DATE.desc();
+        WhereAndOr<ReactiveResult<AntropometryEntity>> select = dataStore.select(AntropometryEntity.class)
+                .where(AntropometryEntity.CHILD_ID.eq(child.getId()));
+
+        if (request.isStartFromBirthday() && birthday != null) {
+            select = select.and(AntropometryEntity.DATE.greaterThan(birthday));
+        }
+
+        return select.orderBy(order, AntropometryEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, antropometryMapper));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, antropometryMapper))
+                .map(antropometryList -> mapAntropometryList(antropometryList, request));
+    }
+
+    private List<Antropometry> mapAntropometryList(@NonNull List<Antropometry> antropometryList,
+                                                   @NonNull AntropometryListRequest request) {
+        Child child = request.getChild();
+        LocalDate birthday = child.getBirthDate();
+
+        if (request.isStartFromBirthday() && birthday != null) {
+            Antropometry birthdayAntropometry = Antropometry.builder()
+                    .child(child)
+                    .date(birthday)
+                    .weight(child.getBirthWeight())
+                    .height(child.getBirthHeight())
+                    .build();
+            if (request.isAscending()) {
+                antropometryList.add(0, birthdayAntropometry);
+            } else {
+                antropometryList.add(birthdayAntropometry);
+            }
+        }
+        return antropometryList;
     }
 
     public Observable<Antropometry> add(@NonNull Antropometry antropometry) {

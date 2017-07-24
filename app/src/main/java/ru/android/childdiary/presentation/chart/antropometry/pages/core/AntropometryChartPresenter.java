@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.chart.antropometry.pages.core;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 
@@ -69,11 +70,13 @@ public abstract class AntropometryChartPresenter extends ChartPresenter<Antropom
 
     protected abstract Observable<List<AntropometryPoint>> getHighValues(@NonNull WhoNormRequest request);
 
+    @Nullable
     private LocalDate extractMinDate(@NonNull AntropometryChartState state) {
-        return state.getValues().get(0).getDate();
+        return state.getValues().isEmpty() ? null : state.getValues().get(0).getDate();
     }
 
+    @Nullable
     private LocalDate extractMaxDate(@NonNull AntropometryChartState state) {
-        return state.getValues().get(state.getValues().size() - 1).getDate();
+        return state.getValues().isEmpty() ? null : state.getValues().get(state.getValues().size() - 1).getDate();
     }
 }

@@ -19,7 +19,9 @@ public class HeightChartFragment extends AntropometryChartFragment {
 
     @Override
     protected ChartPlotter getChartPlotter(@NonNull CombinedChart chart, @NonNull AntropometryChartState state) {
-        return new AntropometryChartPlotter(chart, state.getValues(), state.getLowValues(), state.getHighValues(), new HeightValueFormatter());
+        return new AntropometryChartPlotter(chart, state.getValues(),
+                state.getLowValues(), state.getHighValues(),
+                new HeightValueFormatter(), 0.5f);
     }
 
     @Override

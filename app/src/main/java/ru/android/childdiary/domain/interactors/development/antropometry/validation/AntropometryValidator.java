@@ -15,6 +15,7 @@ import ru.android.childdiary.data.repositories.development.antropometry.Antropom
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryRepository;
+import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public class AntropometryValidator extends Validator<Antropometry, AntropometryValidationResult> {
@@ -38,8 +39,11 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
         }
         results.add(result);
 
-        if (antropometry.getChild() != null && antropometry.getChild().getId() != null) {
-            boolean isUnique = antropometryRepository.getAll(antropometry.getChild())
+        if (antropometry.getChild() != null && antropometry.getChild().getId() != null
+                && antropometry.getId() == null) {
+            boolean isUnique = antropometryRepository.getAntropometryList(AntropometryListRequest.builder()
+                    .child(antropometry.getChild())
+                    .build())
                     .first(Collections.emptyList())
                     .flatMapObservable(Observable::fromIterable)
                     .filter(a -> ObjectUtils.equals(a.getDate(), antropometry.getDate()))

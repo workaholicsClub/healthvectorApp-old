@@ -51,7 +51,10 @@ public class AddAntropometryActivity extends AntropometryActivity<AddAntropometr
         buttonAdd.setVisibility(View.VISIBLE);
 
         if (savedInstanceState == null) {
-            dateView.setValue(LocalDate.now());
+            LocalDate minDate = child.getBirthDate().plusDays(1);
+            LocalDate today = LocalDate.now();
+            minDate = today.isAfter(minDate) ? today : minDate;
+            dateView.setValue(minDate);
         }
 
         unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(

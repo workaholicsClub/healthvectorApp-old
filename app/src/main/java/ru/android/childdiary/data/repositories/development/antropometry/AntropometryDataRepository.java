@@ -12,9 +12,9 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryRepository;
+import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
 
 @Singleton
 public class AntropometryDataRepository implements AntropometryRepository {
@@ -26,8 +26,8 @@ public class AntropometryDataRepository implements AntropometryRepository {
     }
 
     @Override
-    public Observable<List<Antropometry>> getAll(@NonNull Child child) {
-        return antropometryDbService.getAll(child);
+    public Observable<List<Antropometry>> getAntropometryList(@NonNull AntropometryListRequest request) {
+        return antropometryDbService.getAntropometryList(request);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<Ant
 
     private void requestData(@NonNull Child child) {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(antropometryInteractor.getAll(child)
+        subscription = unsubscribeOnDestroy(antropometryInteractor.getAntropometryList(child)
                 .map(antropometryList -> AntropometryListState.builder()
                         .child(child)
                         .antropometryList(antropometryList)

@@ -53,7 +53,7 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
     @BindView(R.id.dateView)
     protected FieldDateView dateView;
 
-    private Child child;
+    protected Child child;
     private boolean isValidationStarted;
 
     @Override
@@ -65,7 +65,7 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
         setupEditTextView(weightView);
         setupEditTextView(heightView);
         dateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(),
-                child.getBirthDate(), null));
+                child.getBirthDate().plusDays(1), null));
 
         if (savedInstanceState == null) {
             getPresenter().init(child);

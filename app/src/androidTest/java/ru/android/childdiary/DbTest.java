@@ -41,6 +41,7 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
+import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 
@@ -151,7 +152,9 @@ public class DbTest {
 
     private List<Antropometry> checkInSelection(Child child, int count, Antropometry... inserted) {
         List<Antropometry> selected = new ArrayList<>();
-        antropometryDbService.getAll(child)
+        antropometryDbService.getAntropometryList(AntropometryListRequest.builder()
+                .child(child)
+                .build())
                 .doOnNext(this::logOnNextSelect)
                 .doOnNext(selected::addAll)
                 .doOnError(this::logOnErrorSelect)
@@ -300,7 +303,9 @@ public class DbTest {
         delete(child);
         checkInSelection(0, child);
         List<Antropometry> selected = new ArrayList<>();
-        antropometryDbService.getAll(child)
+        antropometryDbService.getAntropometryList(AntropometryListRequest.builder()
+                .child(child)
+                .build())
                 .doOnNext(this::logOnNextSelect)
                 .doOnNext(selected::addAll)
                 .doOnError(this::logOnErrorSelect)
