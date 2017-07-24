@@ -101,11 +101,15 @@ public class TestResultsPresenter extends AppPartitionPresenter<TestResultsView>
     public void showChart() {
         unsubscribeOnDestroy(
                 childInteractor.getActiveChildOnce()
-                        .flatMapSingle(child -> testingInteractor.hasDomanTestResults(child))
+                        .flatMapSingle(testingInteractor::hasChartData)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 response -> {
+                                    if (response.getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                        return;
+                                    }
                                     if (response.isHasData()) {
                                         getViewState().navigateToChart(response.getChild());
                                     } else {

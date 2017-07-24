@@ -12,6 +12,7 @@ import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.calendar.CalendarPresenter;
 import ru.android.childdiary.presentation.calendar.partitions.BaseCalendarPresenter;
 import ru.android.childdiary.presentation.chart.antropometry.AntropometryChartActivity;
+import ru.android.childdiary.presentation.chart.antropometry.pages.core.AntropometryChartPresenter;
 import ru.android.childdiary.presentation.chart.testing.TestChartActivity;
 import ru.android.childdiary.presentation.chart.testing.pages.core.DomanChartPresenter;
 import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
@@ -181,6 +182,8 @@ public interface ApplicationComponent {
     void inject(TestParametersPresenter presenter);
 
     void inject(DomanChartPresenter presenter);
+
+    void inject(AntropometryChartPresenter presenter);
 
     void inject(AddAntropometryPresenter presenter);
 

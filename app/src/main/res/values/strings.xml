@@ -309,10 +309,10 @@
     <string name="test_chart_physical_tab">Моторное</string>
     <string name="test_chart_mental_tab">Сенсорное</string>
     <string name="delete_test_result_dialog_title">Удалить результаты тестирования?</string>
-    <string name="no_test_data">Пройдите тестирование по методу Гленна Домана</string>
+    <string name="no_doman_test_data">Пройдите тестирование по методу Гленна Домана</string>
     <string name="no_antropometry_data">Добавьте показатели роста и веса</string>
-    <string name="chart_y_title">Уровень</string>
-    <string name="chart_x_title">Стадия</string>
+    <string name="doman_chart_y_title">Уровень</string>
+    <string name="doman_chart_x_title">Стадия</string>
     <string name="height">Рост</string>
     <string name="weight">Вес</string>
     <string name="height_hint">Введите рост (см)</string>
@@ -320,4 +320,6 @@
     <string name="delete_antropometry_dialog_title">Удалить показатели роста и веса?</string>
     <string name="validation_antropometry_empty">Ввеидте рост или вес</string>
     <string name="validation_antropometry_date_not_unique">Введите другую дату. На эту дату показатели роста и веса уже введены.</string>
+    <string name="low_limit_who">Нижняя граница по ВОЗ</string>
+    <string name="high_limit_who">Верхняя граница по ВОЗ</string>
 </resources>

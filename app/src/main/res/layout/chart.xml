@@ -12,6 +12,7 @@
         android:layout_height="match_parent" />
 
     <TextView
+        android:id="@+id/yTitleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -20,11 +21,11 @@
         android:layout_marginLeft="@dimen/axis_title_padding"
         android:layout_marginStart="@dimen/axis_title_padding"
         android:paddingTop="@dimen/axis_title_padding"
-        android:text="@string/chart_y_title"
         android:textColor="@color/placeholder_text"
         android:textSize="@dimen/text_size_small" />
 
     <TextView
+        android:id="@+id/xTitleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -33,7 +34,6 @@
         android:layout_marginEnd="@dimen/axis_title_padding"
         android:layout_marginRight="@dimen/axis_title_padding"
         android:paddingBottom="@dimen/axis_title_padding"
-        android:text="@string/chart_x_title"
         android:textColor="@color/placeholder_text"
         android:textSize="@dimen/text_size_small" />
 </RelativeLayout>

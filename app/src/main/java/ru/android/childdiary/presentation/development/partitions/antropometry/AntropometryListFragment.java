@@ -92,6 +92,11 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     }
 
     @Override
+    public void noChildSpecified() {
+        showToast(getString(R.string.no_child_specified));
+    }
+
+    @Override
     public void noChartData() {
         showToast(getString(R.string.no_antropometry_data));
     }

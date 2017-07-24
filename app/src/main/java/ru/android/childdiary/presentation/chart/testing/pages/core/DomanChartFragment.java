@@ -3,98 +3,43 @@ package ru.android.childdiary.presentation.chart.testing.pages.core;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 
-import butterknife.BindView;
-import lombok.AccessLevel;
-import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
-import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.presentation.chart.core.ChartFragment;
+import ru.android.childdiary.presentation.chart.core.ChartPlotter;
 import ru.android.childdiary.presentation.chart.testing.TestChartActivity;
-import ru.android.childdiary.presentation.chart.testing.core.ChartPlotter;
+import ru.android.childdiary.presentation.chart.testing.core.TestChartPlotter;
 import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogArguments;
 import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogFragment;
-import ru.android.childdiary.presentation.core.BaseMvpFragment;
-import ru.android.childdiary.presentation.core.ExtraConstants;
 
-public abstract class DomanChartFragment extends BaseMvpFragment implements DomanChartView,
+public abstract class DomanChartFragment extends ChartFragment<DomanChartState, DomanChartPresenter> implements DomanChartView,
         ParameterDialogFragment.Listener {
     private static final String TAG_PARAMETER_DIALOG = "TAG_PARAMETER_DIALOG";
 
-    @BindView(R.id.chartWrapper)
-    View chartWrapper;
-
-    @BindView(R.id.chart)
-    CombinedChart chart;
-
-    @BindView(R.id.legend)
-    View legendView;
-
-    @BindView(R.id.textViewIntention)
-    TextView textViewIntention;
-
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
-
-    @Nullable
-    @Getter(AccessLevel.PROTECTED)
-    private Sex sex;
-    private Child child;
     private DomanChartState state;
 
     @Override
-    protected int getLayoutResourceId() {
+    protected final int getLayoutResourceId() {
         return R.layout.fragment_doman_chart;
     }
 
     @Override
     protected void init(@Nullable Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        child = (Child) getArguments().getSerializable(ExtraConstants.EXTRA_CHILD);
-        if (child == null) {
-            logger.error("no child provided");
-            return;
-        }
-        sex = child.getSex();
         if (savedInstanceState == null) {
-            getPresenter().init(child, getTestType());
+            getPresenter().init(getChild(), getTestType());
         }
-    }
-
-    @Override
-    public final void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        chartWrapper.setVisibility(View.GONE);
-        legendView.setVisibility(View.GONE);
-        textViewIntention.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-        textViewIntention.setText(R.string.no_test_data);
     }
 
     @Override
     public void showResults(@NonNull DomanChartState state) {
         this.state = state;
+        plotResults(state);
         ((TestChartActivity) getActivity()).updateTitle(state.getTestType(), state.getTestParameter());
-        if (state.getTestResults().isEmpty()) {
-            chartWrapper.setVisibility(View.GONE);
-            legendView.setVisibility(View.GONE);
-            textViewIntention.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
-        } else {
-            chartWrapper.setVisibility(View.VISIBLE);
-            legendView.setVisibility(View.VISIBLE);
-            textViewIntention.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
-            ChartPlotter plotter = new ChartPlotter(chart, state.getTestParameter(), state.getTestResults());
-            plotter.setup();
-        }
     }
 
     public void showFilter() {
@@ -115,12 +60,30 @@ public abstract class DomanChartFragment extends BaseMvpFragment implements Doma
         getPresenter().selectTestParameter(testParameter);
     }
 
-    protected abstract DomanChartPresenter getPresenter();
-
-    public abstract TestType getTestType();
-
     @Nullable
     public DomanTestParameter getTestParameter() {
         return state == null ? null : state.getTestParameter();
+    }
+
+    @Override
+    protected String getIntentionText() {
+        return getContext().getString(R.string.no_doman_test_data);
+    }
+
+    @Override
+    protected ChartPlotter getChartPlotter(@NonNull CombinedChart chart, @NonNull DomanChartState state) {
+        return new TestChartPlotter(chart, state.getTestParameter(), state.getTestResults());
+    }
+
+    public abstract TestType getTestType();
+
+    @Override
+    protected String getXTitle() {
+        return getString(R.string.doman_chart_x_title);
+    }
+
+    @Override
+    protected String getYTitle() {
+        return getString(R.string.doman_chart_y_title);
     }
 }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/legend"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/base_margin"
+    android:layout_marginLeft="@dimen/base_margin"
+    android:layout_marginRight="@dimen/base_margin"
+    android:baselineAligned="false"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="@dimen/legend_line_width"
+            android:layout_height="@dimen/line_width"
+            android:layout_margin="@dimen/legend_margin"
+            android:background="@color/line_color" />
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/legend_margin_text"
+            android:layout_marginRight="@dimen/legend_margin_text"
+            android:textAppearance="@style/SecondaryTextAppearance"
+            android:textSize="@dimen/text_size_small" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="@dimen/legend_line_width"
+            android:layout_height="@dimen/line_width"
+            android:layout_margin="@dimen/legend_margin"
+            android:background="@color/line_color_low" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/legend_margin_text"
+            android:layout_marginRight="@dimen/legend_margin_text"
+            android:text="@string/low_limit_who"
+            android:textAppearance="@style/SecondaryTextAppearance"
+            android:textSize="@dimen/text_size_small" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="@dimen/legend_line_width"
+            android:layout_height="@dimen/line_width"
+            android:layout_margin="@dimen/legend_margin"
+            android:background="@color/line_color_high" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/legend_margin_text"
+            android:layout_marginRight="@dimen/legend_margin_text"
+            android:text="@string/high_limit_who"
+            android:textAppearance="@style/SecondaryTextAppearance"
+            android:textSize="@dimen/text_size_small" />
+    </LinearLayout>
+</LinearLayout>

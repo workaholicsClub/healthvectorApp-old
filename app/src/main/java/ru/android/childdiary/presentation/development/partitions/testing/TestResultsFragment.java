@@ -121,8 +121,13 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
     }
 
     @Override
+    public void noChildSpecified() {
+        showToast(getString(R.string.no_child_specified));
+    }
+
+    @Override
     public void noChartData() {
-        showToast(getString(R.string.no_test_data));
+        showToast(getString(R.string.no_doman_test_data));
     }
 
     @Override

@@ -77,20 +77,23 @@ public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<Ant
     }
 
     public void showChart() {
-        // TODO check no data
         unsubscribeOnDestroy(
                 childInteractor.getActiveChildOnce()
-                        //.flatMapSingle(child -> testingInteractor.hasDomanTestResults(child))
+                        .flatMapSingle(antropometryInteractor::hasChartData)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                /*response -> {
+                                response -> {
+                                    if (response.getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                        return;
+                                    }
                                     if (response.isHasData()) {
                                         getViewState().navigateToChart(response.getChild());
                                     } else {
                                         getViewState().noChartData();
                                     }
-                                }*/child -> getViewState().navigateToChart(child),
+                                },
                                 this::onUnexpectedError));
     }
 }

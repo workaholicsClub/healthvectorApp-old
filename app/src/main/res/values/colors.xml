@@ -44,4 +44,6 @@
     <color name="normal_color">#6092D050</color>
     <color name="advanced_color">#604288B4</color>
     <color name="line_color">#F7A731</color>
+    <color name="line_color_low">#EF4C33</color>
+    <color name="line_color_high">#3B86B4</color>
 </resources>

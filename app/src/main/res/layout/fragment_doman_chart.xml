@@ -22,5 +22,5 @@
 
     <include layout="@layout/chart" />
 
-    <include layout="@layout/chart_legend" />
+    <include layout="@layout/chart_doman_legend" />
 </LinearLayout>

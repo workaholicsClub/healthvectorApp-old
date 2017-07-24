@@ -22,11 +22,11 @@ import ru.android.childdiary.domain.interactors.development.testing.processors.c
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
-import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.presentation.chart.core.ChartPresenter;
 import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogArguments;
 
 @InjectViewState
-public class DomanChartPresenter extends BasePresenter<DomanChartView> {
+public class DomanChartPresenter extends ChartPresenter<DomanChartView> {
     @Inject
     TestingInteractor testingInteractor;
 

@@ -16,12 +16,12 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
+import ru.android.childdiary.presentation.chart.testing.core.TestChartPlotter;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView;
 import ru.android.childdiary.presentation.testing.TestingController;
-import ru.android.childdiary.presentation.chart.testing.core.ChartPlotter;
 import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.strings.TestUtils;
 
@@ -37,6 +37,14 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
     @Nullable
     @BindView(R.id.chart)
     CombinedChart chart;
+
+    @Nullable
+    @BindView(R.id.xTitleView)
+    TextView xTitleView;
+
+    @Nullable
+    @BindView(R.id.yTitleView)
+    TextView yTitleView;
 
     @Nullable
     private TestingController testingController;
@@ -92,8 +100,14 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
             textView.setText(HtmlUtils.fromHtml(text));
         }
         if (chart != null) {
-            ChartPlotter plotter = new ChartPlotter(chart, parameter, Collections.singletonList(result));
+            TestChartPlotter plotter = new TestChartPlotter(chart, parameter, Collections.singletonList(result));
             plotter.setup();
+        }
+        if (xTitleView != null) {
+            xTitleView.setText(getString(R.string.doman_chart_x_title));
+        }
+        if (yTitleView != null) {
+            yTitleView.setText(getString(R.string.doman_chart_y_title));
         }
     }
 

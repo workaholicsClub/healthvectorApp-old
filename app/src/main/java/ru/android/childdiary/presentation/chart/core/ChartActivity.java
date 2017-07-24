@@ -54,9 +54,12 @@ public abstract class ChartActivity extends BaseMvpActivity {
         Integer selectedPage = preferences.getInteger(getKeySelectedPage(), 0).get();
         selectedPage = selectedPage == null ? 0 : selectedPage;
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        // TODO обобщить
-        viewPagerAdapter.addFragment(putArguments(new PhysicalChartFragment()), getString(R.string.test_chart_physical_tab));
-        viewPagerAdapter.addFragment(putArguments(new MentalChartFragment()), getString(R.string.test_chart_mental_tab));
+        List<ChartFragment> chartFragments = getChartFragments();
+        List<String> titles = getTitles();
+        for (int i = 0; i < chartFragments.size(); ++i) {
+            String title = i < titles.size() ? titles.get(i) : null;
+            viewPagerAdapter.addFragment(putArguments(chartFragments.get(i)), title);
+        }
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(1);
@@ -132,4 +135,8 @@ public abstract class ChartActivity extends BaseMvpActivity {
     }
 
     protected abstract String getKeySelectedPage();
+
+    protected abstract List<ChartFragment> getChartFragments();
+
+    protected abstract List<String> getTitles();
 }

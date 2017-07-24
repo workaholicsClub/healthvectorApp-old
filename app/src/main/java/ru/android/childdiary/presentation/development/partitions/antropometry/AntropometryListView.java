@@ -21,6 +21,9 @@ public interface AntropometryListView extends BaseDevelopmentDiaryView {
     void navigateToChart(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void noChildSpecified();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void noChartData();
 
     @StateStrategyType(OneExecutionStateStrategy.class)
