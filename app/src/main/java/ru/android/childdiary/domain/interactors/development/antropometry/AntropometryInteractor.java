@@ -159,12 +159,15 @@ public class AntropometryInteractor {
                         values));
     }
 
-    private List<AntropometryPoint> mapToAntropometryPoints(@Nullable LocalDate birthDate,
+    private List<AntropometryPoint> mapToAntropometryPoints(@NonNull LocalDate birthDate,
                                                             @NonNull List<AntropometryPoint> points,
                                                             @NonNull List<Double> values) {
-        if (birthDate == null) {
-            return Collections.emptyList();
-        }
+        return mapToAntropometryPoints2(birthDate, points, values);
+    }
+
+    private List<AntropometryPoint> mapToAntropometryPoints1(@NonNull LocalDate birthDate,
+                                                             @NonNull List<AntropometryPoint> points,
+                                                             @NonNull List<Double> values) {
         List<AntropometryPoint> result = new ArrayList<>();
         for (int i = 0; i < points.size(); ++i) {
             LocalDate date = points.get(i).getDate();
@@ -178,6 +181,40 @@ public class AntropometryInteractor {
             }
         }
         return result;
+    }
+
+    // TODO выкинуть лишнее
+    private List<AntropometryPoint> mapToAntropometryPoints2(@NonNull LocalDate birthDate,
+                                                             @NonNull List<AntropometryPoint> points,
+                                                             @NonNull List<Double> values) {
+        LocalDate minDate = extractMinDate(points);
+        LocalDate maxDate = extractMaxDate(points);
+        if (minDate == null || maxDate == null) {
+            return Collections.emptyList();
+        }
+        List<AntropometryPoint> result = new ArrayList<>();
+        for (int i = 0; i < values.size(); i += 30) {
+            Double value = values.get(i);
+            LocalDate date = birthDate.plusDays(i);
+            if ((date.isAfter(minDate) || date.isEqual(minDate))
+                    && (date.isBefore(maxDate) || date.isEqual(maxDate))) {
+                result.add(AntropometryPoint.builder()
+                        .value(value)
+                        .date(date)
+                        .build());
+            }
+        }
+        return result;
+    }
+
+    @Nullable
+    private LocalDate extractMinDate(@NonNull List<AntropometryPoint> points) {
+        return points.isEmpty() ? null : points.get(0).getDate();
+    }
+
+    @Nullable
+    private LocalDate extractMaxDate(@NonNull List<AntropometryPoint> points) {
+        return points.isEmpty() ? null : points.get(points.size() - 1).getDate();
     }
 
     public Single<HasAntropometryChartDataResponse> hasChartData(@NonNull Child child) {

@@ -17,6 +17,7 @@ public class DomanChartState implements ChartState {
     TestType testType;
     @NonNull
     DomanTestParameter testParameter;
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @NonNull
     List<DomanResult> testResults;
 

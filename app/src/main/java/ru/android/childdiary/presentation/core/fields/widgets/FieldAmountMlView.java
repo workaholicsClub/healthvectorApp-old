@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
