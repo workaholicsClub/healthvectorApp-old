@@ -33,6 +33,8 @@ import ru.android.childdiary.presentation.chart.core.ChartPlotter;
 import ru.android.childdiary.utils.ui.FontUtils;
 
 public class TestChartPlotter implements ChartPlotter {
+    private static final int LINE_WIDTH_IN_DP = 2;
+
     /**
      * Размер текста меток на осях в пикселях.
      * Должен совпадать с R.dimen.text_size_small.
@@ -51,7 +53,7 @@ public class TestChartPlotter implements ChartPlotter {
 
     private final int[] stakedBarColors;
     @Px
-    private final int margin, lineWidth;
+    private final int margin;
 
     private TestLineEntry selectedEntry;
 
@@ -68,7 +70,6 @@ public class TestChartPlotter implements ChartPlotter {
                 ContextCompat.getColor(context, R.color.advanced_color)
         };
         margin = context.getResources().getDimensionPixelSize(R.dimen.base_margin);
-        lineWidth = context.getResources().getDimensionPixelSize(R.dimen.line_width);
     }
 
     @Override
@@ -196,7 +197,7 @@ public class TestChartPlotter implements ChartPlotter {
 
         LineDataSet lineDataSet = new LineDataSet(lineEntries, null);
         lineDataSet.setColor(ContextCompat.getColor(context, R.color.line_color));
-        lineDataSet.setLineWidth(lineWidth);
+        lineDataSet.setLineWidth(LINE_WIDTH_IN_DP);
         lineDataSet.setDrawValues(false);
         lineDataSet.setDrawHighlightIndicators(false);
         lineDataSet.setHighlightEnabled(true);

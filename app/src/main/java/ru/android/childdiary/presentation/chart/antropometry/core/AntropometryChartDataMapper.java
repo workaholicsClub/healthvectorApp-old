@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.chart.antropometry.core;
 
 import android.content.Context;
 import android.support.annotation.ColorInt;
-import android.support.annotation.Px;
 import android.support.v4.content.ContextCompat;
 
 import com.github.mikephil.charting.data.CombinedData;
@@ -25,21 +24,22 @@ import ru.android.childdiary.domain.interactors.development.antropometry.Antropo
 import ru.android.childdiary.presentation.chart.core.LineEntry;
 
 public class AntropometryChartDataMapper {
+    private static final int LINE_WIDTH_IN_DP = 2;
+
     private final Context context;
+
     @Getter
     private final CombinedData data = new CombinedData();
-    private List<AntropometryPoint> values, lowValues, highValues;
-    private LocalDate birthday;
 
     @ColorInt
     private final int lineColor, lineColorLow, lineColorHigh;
-    @Px
-    private final int lineWidth;
+
+    private List<AntropometryPoint> values, lowValues, highValues;
+    private LocalDate birthday;
 
     @Inject
     public AntropometryChartDataMapper(Context context) {
         this.context = context;
-        lineWidth = context.getResources().getDimensionPixelSize(R.dimen.line_width);
         lineColor = ContextCompat.getColor(context, R.color.line_color);
         lineColorLow = ContextCompat.getColor(context, R.color.line_color_low);
         lineColorHigh = ContextCompat.getColor(context, R.color.line_color_high);
@@ -90,7 +90,7 @@ public class AntropometryChartDataMapper {
 
         LineDataSet lineDataSet = new LineDataSet(lineEntries, null);
         lineDataSet.setColor(lineColor);
-        lineDataSet.setLineWidth(lineWidth);
+        lineDataSet.setLineWidth(LINE_WIDTH_IN_DP);
         lineDataSet.setDrawValues(false);
         lineDataSet.setDrawHighlightIndicators(false);
         lineDataSet.setHighlightEnabled(selectionEnabled);

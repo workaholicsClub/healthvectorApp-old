@@ -13,6 +13,9 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.renderer.XAxisRenderer;
+import com.github.mikephil.charting.utils.Transformer;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
@@ -66,9 +69,6 @@ public class AntropometryChartPlotter implements ChartPlotter {
         setupXAxis();
         setupYAxis();
         setupData();
-        // TODO выкинуть лишнее
-        //chart.setVisibleXRange(0, 30);
-        //chart.moveViewToX(0);
     }
 
     private void setupChart() {
@@ -83,12 +83,15 @@ public class AntropometryChartPlotter implements ChartPlotter {
         chart.setHighlightPerDragEnabled(false);
         chart.setMaxHighlightDistance(10);
         chart.setExtraOffsets(0, margin, 0, margin);
-        chart.setDrawOrder(new CombinedChart.DrawOrder[]{
-                CombinedChart.DrawOrder.BAR,
-                CombinedChart.DrawOrder.LINE,
-        });
         chart.getLegend().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
+
+        // custom x axis renderer
+        ViewPortHandler viewPortHandler = chart.getViewPortHandler();
+        XAxis xAxis = chart.getXAxis();
+        Transformer transformer = chart.getTransformer(YAxis.AxisDependency.LEFT);
+        XAxisRenderer xAxisRenderer = new CustomXAxisRenderer(viewPortHandler, xAxis, transformer);
+        chart.setXAxisRenderer(xAxisRenderer);
     }
 
     private void setupMarker() {
@@ -137,8 +140,6 @@ public class AntropometryChartPlotter implements ChartPlotter {
                 });
         xAxis.setGranularity(1);
         xAxis.setGranularityEnabled(true);
-        xAxis.setAvoidFirstLastClipping(true);
-        xAxis.setLabelCount(2);
     }
 
     private void setupYAxis() {
@@ -158,10 +159,6 @@ public class AntropometryChartPlotter implements ChartPlotter {
     }
 
     private void setupData() {
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setAxisMinimum(data.getXMin() - 1);
-        xAxis.setAxisMaximum(data.getXMax() + 1);
-
         chart.setData(data);
 
         chart.resetZoom();

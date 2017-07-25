@@ -3,7 +3,6 @@ package ru.android.childdiary.domain.interactors.development.antropometry;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -162,38 +161,13 @@ public class AntropometryInteractor {
     private List<AntropometryPoint> mapToAntropometryPoints(@NonNull LocalDate birthDate,
                                                             @NonNull List<AntropometryPoint> points,
                                                             @NonNull List<Double> values) {
-        return mapToAntropometryPoints2(birthDate, points, values);
-    }
-
-    private List<AntropometryPoint> mapToAntropometryPoints1(@NonNull LocalDate birthDate,
-                                                             @NonNull List<AntropometryPoint> points,
-                                                             @NonNull List<Double> values) {
-        List<AntropometryPoint> result = new ArrayList<>();
-        for (int i = 0; i < points.size(); ++i) {
-            LocalDate date = points.get(i).getDate();
-            int index = Days.daysBetween(birthDate, date).getDays();
-            if (index >= 0 && index < values.size()) {
-                AntropometryPoint point = AntropometryPoint.builder()
-                        .value(values.get(index))
-                        .date(date)
-                        .build();
-                result.add(point);
-            }
-        }
-        return result;
-    }
-
-    // TODO выкинуть лишнее
-    private List<AntropometryPoint> mapToAntropometryPoints2(@NonNull LocalDate birthDate,
-                                                             @NonNull List<AntropometryPoint> points,
-                                                             @NonNull List<Double> values) {
         LocalDate minDate = extractMinDate(points);
         LocalDate maxDate = extractMaxDate(points);
         if (minDate == null || maxDate == null) {
             return Collections.emptyList();
         }
         List<AntropometryPoint> result = new ArrayList<>();
-        for (int i = 0; i < values.size(); i += 30) {
+        for (int i = 0; i < values.size(); ++i) {
             Double value = values.get(i);
             LocalDate date = birthDate.plusDays(i);
             if ((date.isAfter(minDate) || date.isEqual(minDate))

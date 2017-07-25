@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.chart.antropometry.core;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import ru.android.childdiary.domain.interactors.development.antropometry.Antropo
 import ru.android.childdiary.presentation.chart.core.ValueFormatter;
 import ru.android.childdiary.utils.strings.DateUtils;
 
+@SuppressLint("ViewConstructor")
 class AntropometryMarkerView extends MarkerView {
     private final TextView textView;
     private final ValueFormatter valueFormatter;
