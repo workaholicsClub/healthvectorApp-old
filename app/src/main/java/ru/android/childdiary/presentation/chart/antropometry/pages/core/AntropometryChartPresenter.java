@@ -1,9 +1,6 @@
 package ru.android.childdiary.presentation.chart.antropometry.pages.core;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import org.joda.time.LocalDate;
 
 import java.util.List;
 
@@ -49,14 +46,12 @@ public abstract class AntropometryChartPresenter extends ChartPresenter<Antropom
                                 .build())
                         .flatMap(state -> getLowValues(WhoNormRequest.builder()
                                 .child(child)
-                                .minDate(extractMinDate(state))
-                                .maxDate(extractMaxDate(state))
+                                .points(state.getValues())
                                 .build())
                                 .map(values -> state.toBuilder().lowValues(values).build()))
                         .flatMap(state -> getHighValues(WhoNormRequest.builder()
                                 .child(child)
-                                .minDate(extractMinDate(state))
-                                .maxDate(extractMaxDate(state))
+                                .points(state.getValues())
                                 .build())
                                 .map(values -> state.toBuilder().highValues(values).build()))
                         .subscribeOn(Schedulers.io())
@@ -69,14 +64,4 @@ public abstract class AntropometryChartPresenter extends ChartPresenter<Antropom
     protected abstract Observable<List<AntropometryPoint>> getLowValues(@NonNull WhoNormRequest request);
 
     protected abstract Observable<List<AntropometryPoint>> getHighValues(@NonNull WhoNormRequest request);
-
-    @Nullable
-    private LocalDate extractMinDate(@NonNull AntropometryChartState state) {
-        return state.getValues().isEmpty() ? null : state.getValues().get(0).getDate();
-    }
-
-    @Nullable
-    private LocalDate extractMaxDate(@NonNull AntropometryChartState state) {
-        return state.getValues().isEmpty() ? null : state.getValues().get(state.getValues().size() - 1).getDate();
-    }
 }

@@ -3,6 +3,7 @@ package ru.android.childdiary.domain.interactors.development.antropometry;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -133,55 +134,50 @@ public class AntropometryInteractor {
     public Observable<List<AntropometryPoint>> getWeightLow(@NonNull WhoNormRequest request) {
         return antropometryRepository.getWeightLow(request.getChild().getSex())
                 .map(values -> mapToAntropometryPoints(request.getChild().getBirthDate(),
-                        request.getMinDate(),
-                        request.getMaxDate(),
+                        request.getPoints(),
                         values));
     }
 
     public Observable<List<AntropometryPoint>> getWeightHigh(@NonNull WhoNormRequest request) {
         return antropometryRepository.getWeightHigh(request.getChild().getSex())
                 .map(values -> mapToAntropometryPoints(request.getChild().getBirthDate(),
-                        request.getMinDate(),
-                        request.getMaxDate(),
+                        request.getPoints(),
                         values));
     }
 
     public Observable<List<AntropometryPoint>> getHeightLow(@NonNull WhoNormRequest request) {
         return antropometryRepository.getHeightLow(request.getChild().getSex())
                 .map(values -> mapToAntropometryPoints(request.getChild().getBirthDate(),
-                        request.getMinDate(),
-                        request.getMaxDate(),
+                        request.getPoints(),
                         values));
     }
 
     public Observable<List<AntropometryPoint>> getHeightHigh(@NonNull WhoNormRequest request) {
         return antropometryRepository.getHeightHigh(request.getChild().getSex())
                 .map(values -> mapToAntropometryPoints(request.getChild().getBirthDate(),
-                        request.getMinDate(),
-                        request.getMaxDate(),
+                        request.getPoints(),
                         values));
     }
 
     private List<AntropometryPoint> mapToAntropometryPoints(@Nullable LocalDate birthDate,
-                                                            @Nullable LocalDate minDate,
-                                                            @Nullable LocalDate maxDate,
+                                                            @NonNull List<AntropometryPoint> points,
                                                             @NonNull List<Double> values) {
-        if (birthDate == null || minDate == null || maxDate == null) {
+        if (birthDate == null) {
             return Collections.emptyList();
         }
-        List<AntropometryPoint> antropometryPoints = new ArrayList<>();
-        for (int i = 0; i < values.size(); ++i) {
-            Double value = values.get(i);
-            LocalDate date = birthDate.plusDays(i);
-            if ((date.isAfter(minDate) || date.isEqual(minDate))
-                    && (date.isBefore(maxDate) || date.isEqual(maxDate))) {
-                antropometryPoints.add(AntropometryPoint.builder()
-                        .value(value)
+        List<AntropometryPoint> result = new ArrayList<>();
+        for (int i = 0; i < points.size(); ++i) {
+            LocalDate date = points.get(i).getDate();
+            int index = Days.daysBetween(birthDate, date).getDays();
+            if (index >= 0 && index < values.size()) {
+                AntropometryPoint point = AntropometryPoint.builder()
+                        .value(values.get(index))
                         .date(date)
-                        .build());
+                        .build();
+                result.add(point);
             }
         }
-        return antropometryPoints;
+        return result;
     }
 
     public Single<HasAntropometryChartDataResponse> hasChartData(@NonNull Child child) {

@@ -3,7 +3,6 @@ package ru.android.childdiary.data.repositories.development.antropometry;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,10 +18,13 @@ import ru.android.childdiary.domain.interactors.development.antropometry.request
 @Singleton
 public class AntropometryDataRepository implements AntropometryRepository {
     private final AntropometryDbService antropometryDbService;
+    private final WhoNormsService whoNormsService;
 
     @Inject
-    public AntropometryDataRepository(AntropometryDbService antropometryDbService) {
+    public AntropometryDataRepository(AntropometryDbService antropometryDbService,
+                                      WhoNormsService whoNormsService) {
         this.antropometryDbService = antropometryDbService;
+        this.whoNormsService = whoNormsService;
     }
 
     @Override
@@ -53,9 +55,9 @@ public class AntropometryDataRepository implements AntropometryRepository {
             }
             switch (sex) {
                 case MALE:
-                    return Arrays.asList(WhoNorms.WEIGHT_LOW_BOY);
+                    return whoNormsService.readWeightLowBoy();
                 case FEMALE:
-                    return Arrays.asList(WhoNorms.WEIGHT_LOW_BOY);
+                    return whoNormsService.readWeightLowGirl();
             }
             return Collections.emptyList();
         });
@@ -69,9 +71,9 @@ public class AntropometryDataRepository implements AntropometryRepository {
             }
             switch (sex) {
                 case MALE:
-                    return Arrays.asList(WhoNorms.WEIGHT_HIGH_BOY);
+                    return whoNormsService.readWeightHighBoy();
                 case FEMALE:
-                    return Arrays.asList(WhoNorms.WEIGHT_HIGH_GIRL);
+                    return whoNormsService.readWeightHighGirl();
             }
             return Collections.emptyList();
         });
@@ -85,9 +87,9 @@ public class AntropometryDataRepository implements AntropometryRepository {
             }
             switch (sex) {
                 case MALE:
-                    return Arrays.asList(WhoNorms.HEIGHT_LOW_BOY);
+                    return whoNormsService.readHeightLowBoy();
                 case FEMALE:
-                    return Arrays.asList(WhoNorms.HEIGHT_LOW_GIRL);
+                    return whoNormsService.readHeightLowGirl();
             }
             return Collections.emptyList();
         });
@@ -101,9 +103,9 @@ public class AntropometryDataRepository implements AntropometryRepository {
             }
             switch (sex) {
                 case MALE:
-                    return Arrays.asList(WhoNorms.HEIGHT_HIGH_BOY);
+                    return whoNormsService.readHeightHighBoy();
                 case FEMALE:
-                    return Arrays.asList(WhoNorms.HEIGHT_HIGH_GIRL);
+                    return whoNormsService.readHeightHighGirl();
             }
             return Collections.emptyList();
         });
