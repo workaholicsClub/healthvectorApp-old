@@ -93,6 +93,9 @@ public class AntropometryChartPlotter implements ChartPlotter {
         chart.setTouchEnabled(true);
         chart.setScaleEnabled(true);
         chart.setPinchZoom(true);
+        chart.setHighlightPerTapEnabled(true);
+        chart.setHighlightPerDragEnabled(false);
+        chart.setMaxHighlightDistance(10);
         chart.setExtraOffsets(0, margin, 0, margin);
         chart.setDrawOrder(new CombinedChart.DrawOrder[]{
                 CombinedChart.DrawOrder.BAR,
