@@ -109,7 +109,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                             .date(date)
                             .domanTestParameter(getDomanParameter())
                             .result(testProcessor.getResult())
-                            .domanMonths(getDomanMonths())
+                            .domanDate(getDomanDate())
                             .build())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -124,16 +124,30 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     @Override
     public void answerYes() {
         if (testProcessor instanceof DomanTestProcessor) {
-            TimeUtils.Age age = TimeUtils.getAge(child.getBirthDate(), date);
-            getViewState().askWhenThisHappened(age);
+            DomanTestProcessor domanTestProcessor = ((DomanTestProcessor) testProcessor);
+            LocalDate birthDate = domanTestProcessor.getBirthDate();
+            LocalDate date = domanTestProcessor.getDate();
+            TimeUtils.Age age = TimeUtils.getAge(birthDate, date);
+            if (age != null && age.getMonths() > 1) {
+                getViewState().askWhenThisHappened(age);
+            } else {
+                LocalDate domanDate = domanTestProcessor.getDate();
+                domanTestProcessor.setDomanDate(domanDate);
+                answerYesAndNext();
+            }
         } else {
-            testProcessor.answer(true);
-            goToNextQuestion();
+            answerYesAndNext();
         }
     }
 
     public void specifyAge(@NonNull TimeUtils.Age age) {
-        ((DomanTestProcessor) testProcessor).setDomanAge(age);
+        DomanTestProcessor domanTestProcessor = ((DomanTestProcessor) testProcessor);
+        LocalDate domanDate = domanTestProcessor.getBirthDate().plusMonths(age.getMonths());
+        domanTestProcessor.setDomanDate(domanDate);
+        answerYesAndNext();
+    }
+
+    private void answerYesAndNext() {
         testProcessor.answer(true);
         goToNextQuestion();
     }
@@ -185,9 +199,9 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     }
 
     @Nullable
-    private Integer getDomanMonths() {
+    private LocalDate getDomanDate() {
         if (testProcessor instanceof DomanTestProcessor) {
-            return ((DomanTestProcessor) testProcessor).getDomanMonths();
+            return ((DomanTestProcessor) testProcessor).getDomanDate();
         }
         return null;
     }

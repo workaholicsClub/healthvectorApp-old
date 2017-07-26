@@ -56,7 +56,7 @@ public class TestChartActivity extends ChartActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_filter:
-                DomanChartFragment fragment = getSelectedPage();
+                DomanChartFragment fragment = (DomanChartFragment) getSelectedPage();
                 if (fragment != null) {
                     fragment.showFilter();
                     return true;
@@ -68,7 +68,7 @@ public class TestChartActivity extends ChartActivity {
     }
 
     public void updateTitle(@NonNull TestType testType, @NonNull DomanTestParameter parameter) {
-        DomanChartFragment fragment = getSelectedPage();
+        DomanChartFragment fragment = (DomanChartFragment) getSelectedPage();
         if (fragment == null) {
             logger.error("selected page is null");
             return;
@@ -86,6 +86,11 @@ public class TestChartActivity extends ChartActivity {
     @Override
     protected List<ChartFragment> getChartFragments() {
         return Arrays.asList(new PhysicalChartFragment(), new MentalChartFragment());
+    }
+
+    @Override
+    protected List<Class<? extends ChartFragment>> getChartFragmentClasses() {
+        return Arrays.asList(PhysicalChartFragment.class, MentalChartFragment.class);
     }
 
     @Override

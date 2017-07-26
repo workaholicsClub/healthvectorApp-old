@@ -37,5 +37,5 @@ public interface TestResultData extends Persistable {
     // Новрожденный -- Есть риск (1), Норма (0)
     Integer getResult();
 
-    Integer getDomanMonths();
+    LocalDate getDomanDate();
 }

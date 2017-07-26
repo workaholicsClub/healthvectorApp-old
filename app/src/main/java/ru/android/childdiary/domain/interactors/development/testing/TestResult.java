@@ -34,7 +34,7 @@ public class TestResult implements Serializable {
     // Новрожденный -- Есть риск (1), Норма (0)
     Integer result;
 
-    Integer domanMonths;
+    LocalDate domanDate;
 
     public boolean isInvalid() {
         return !ObjectUtils.equals(child.getBirthDate(), birthDate);

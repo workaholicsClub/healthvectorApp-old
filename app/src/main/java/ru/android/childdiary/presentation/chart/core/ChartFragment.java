@@ -100,4 +100,11 @@ public abstract class ChartFragment<S extends ChartState, P extends ChartPresent
     protected abstract String getXTitle();
 
     protected abstract String getYTitle();
+
+    protected final boolean isSelected() {
+        return ((ChartActivity) getActivity()).getSelectedPage() == this;
+    }
+
+    public void setSelected() {
+    }
 }

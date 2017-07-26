@@ -96,7 +96,7 @@ public class TestUtils {
 
     public static List<DomanResult> filterResults(@NonNull List<DomanResult> results) {
         return Observable.fromIterable(results)
-                .filter(result -> result.getDomanAge() != null)
+                .filter(result -> result.getDomanDate() != null)
                 .toList()
                 .blockingGet();
     }

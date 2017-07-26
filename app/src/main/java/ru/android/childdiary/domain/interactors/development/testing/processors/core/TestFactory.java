@@ -3,6 +3,8 @@ package ru.android.childdiary.domain.interactors.development.testing.processors.
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.joda.time.LocalDate;
+
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.processors.AutismTestProcessor;
@@ -14,7 +16,6 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.DomanM
 import ru.android.childdiary.domain.interactors.development.testing.tests.DomanPhysicalTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.NewbornTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
-import ru.android.childdiary.utils.strings.TimeUtils;
 
 public class TestFactory {
     public static BiTestProcessor createTestProcessor(@Nullable Test test,
@@ -31,9 +32,10 @@ public class TestFactory {
                             parameters.getBirthDate(),
                             parameters.getDate());
                 } else if (parameters.getAge() != null && parameters.getDate() != null) {
+                    LocalDate birthDate = parameters.getDate().minusMonths(parameters.getAge().getMonths());
                     return new DomanPhysicalTestProcessor((DomanPhysicalTest) test,
                             parameters.getParameter(),
-                            parameters.getAge(),
+                            birthDate,
                             parameters.getDate());
                 } else {
                     throw new IllegalStateException("Invalid test parameters: " + parameters);
@@ -45,9 +47,10 @@ public class TestFactory {
                             parameters.getBirthDate(),
                             parameters.getDate());
                 } else if (parameters.getAge() != null && parameters.getDate() != null) {
+                    LocalDate birthDate = parameters.getDate().minusMonths(parameters.getAge().getMonths());
                     return new DomanMentalTestProcessor((DomanMentalTest) test,
                             parameters.getParameter(),
-                            parameters.getAge(),
+                            birthDate,
                             parameters.getDate());
                 } else {
                     throw new IllegalStateException("Invalid test parameters: " + parameters);
@@ -68,11 +71,7 @@ public class TestFactory {
                 .build());
         testProcessor.setResult(testResult.getResult());
         if (testProcessor instanceof DomanTestProcessor) {
-            TimeUtils.Age domanAge = testResult.getDomanMonths() == null ? null
-                    : TimeUtils.Age.builder()
-                    .months(testResult.getDomanMonths())
-                    .build();
-            ((DomanTestProcessor) testProcessor).setDomanAge(domanAge);
+            ((DomanTestProcessor) testProcessor).setDomanDate(testResult.getDomanDate());
         }
         return testProcessor;
     }

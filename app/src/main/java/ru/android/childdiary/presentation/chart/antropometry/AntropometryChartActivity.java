@@ -49,6 +49,11 @@ public class AntropometryChartActivity extends ChartActivity {
     }
 
     @Override
+    protected List<Class<? extends ChartFragment>> getChartFragmentClasses() {
+        return Arrays.asList(WeightChartFragment.class, HeightChartFragment.class);
+    }
+
+    @Override
     protected List<String> getTitles() {
         return Arrays.asList(getString(R.string.weight), getString(R.string.height));
     }

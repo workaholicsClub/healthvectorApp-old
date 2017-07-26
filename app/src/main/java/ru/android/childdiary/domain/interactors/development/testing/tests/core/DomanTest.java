@@ -2,6 +2,8 @@ package ru.android.childdiary.domain.interactors.development.testing.tests.core;
 
 import android.support.annotation.Nullable;
 
+import org.joda.time.LocalDate;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,6 @@ import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.utils.CollectionUtils;
-import ru.android.childdiary.utils.strings.TimeUtils;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
 @Getter
@@ -51,8 +52,8 @@ public abstract class DomanTest extends Test {
         this.stageDescriptions = Collections.unmodifiableList(stageDescriptions);
     }
 
-    public String getStageType(int initialStage, int stage, @Nullable TimeUtils.Age domanAge) {
-        if (domanAge == null) {
+    public String getStageType(int initialStage, int stage, @Nullable LocalDate domanDate) {
+        if (domanDate == null) {
             return slow;
         }
         if (initialStage == stage) {

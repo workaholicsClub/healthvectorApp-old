@@ -18,17 +18,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.presentation.chart.testing.pages.MentalChartFragment;
-import ru.android.childdiary.presentation.chart.testing.pages.PhysicalChartFragment;
-import ru.android.childdiary.presentation.chart.testing.pages.core.DomanChartFragment;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
-import ru.android.childdiary.utils.strings.TestUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
-public abstract class ChartActivity extends BaseMvpActivity {
+public abstract class ChartActivity extends BaseMvpActivity implements ViewPager.OnPageChangeListener {
     @Inject
     RxSharedPreferences preferences;
 
@@ -66,26 +62,7 @@ public abstract class ChartActivity extends BaseMvpActivity {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         WidgetsUtils.setupTabLayoutFont(tabLayout);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                preferences.getInteger(getKeySelectedPage()).set(position);
-                DomanChartFragment fragment = getSelectedPage(position);
-                if (fragment != null) {
-                    setupToolbarTitle(TestUtils.toString(ChartActivity.this, fragment.getTestParameter()));
-                } else {
-                    logger.error("selected page is null");
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+        viewPager.addOnPageChangeListener(this);
     }
 
     @Override
@@ -113,30 +90,56 @@ public abstract class ChartActivity extends BaseMvpActivity {
     }
 
     @Nullable
-    protected DomanChartFragment getSelectedPage(int position) {
+    protected ChartFragment getSelectedPage(int position) {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         if (fragments == null) {
             return null;
         }
+        List<Class<? extends ChartFragment>> chartFragmentClasses = getChartFragmentClasses();
+        Class<? extends ChartFragment> cls = position >= 0 && position < chartFragmentClasses.size()
+                ? chartFragmentClasses.get(position) : null;
+        if (cls == null) {
+            logger.error("chart fragment class is null");
+            return null;
+        }
         for (Fragment fragment : fragments) {
-            if (position == 0 && fragment instanceof PhysicalChartFragment) {
-                return (PhysicalChartFragment) fragment;
-            } else if (position == 1 && fragment instanceof MentalChartFragment) {
-                return (MentalChartFragment) fragment;
+            if (fragment != null && fragment.getClass() == cls) {
+                return (ChartFragment) fragment;
             }
         }
         return null;
     }
 
     @Nullable
-    protected DomanChartFragment getSelectedPage() {
+    public ChartFragment getSelectedPage() {
         int position = viewPager.getCurrentItem();
         return getSelectedPage(position);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        preferences.getInteger(getKeySelectedPage()).set(position);
+        ChartFragment fragment = getSelectedPage(position);
+        if (fragment != null) {
+            fragment.setSelected();
+        } else {
+            logger.error("selected page is null");
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
     }
 
     protected abstract String getKeySelectedPage();
 
     protected abstract List<ChartFragment> getChartFragments();
+
+    protected abstract List<Class<? extends ChartFragment>> getChartFragmentClasses();
 
     protected abstract List<String> getTitles();
 }

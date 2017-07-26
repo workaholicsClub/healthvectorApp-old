@@ -8,13 +8,8 @@ import org.joda.time.Months;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import ru.android.childdiary.utils.strings.TimeUtils;
 
 class DomanTestProcessorHelper {
-    private static final double[] AVERAGES = new double[]{
-            1, 2.5, 7, 12, 18, 36, 72
-    };
-
     static final Range[] ADVANCED_RANGES = new Range[]{
             new Range(0.25, 0.75),
             new Range(0.625, 1.875),
@@ -42,6 +37,9 @@ class DomanTestProcessorHelper {
             new Range(54, 90),
             new Range(108, 180)
     };
+    private static final double[] AVERAGES = new double[]{
+            1, 2.5, 7, 12, 18, 36, 72
+    };
 
     public static double getMonths(@NonNull LocalDate birthDate, @NonNull LocalDate date) {
         if (birthDate.isAfter(date)) {
@@ -56,10 +54,6 @@ class DomanTestProcessorHelper {
             part = 1;
         }
         return months + part;
-    }
-
-    public static double getMonths(@NonNull TimeUtils.Age age) {
-        return age.getMonths();
     }
 
     public static int getIndex(double months) {

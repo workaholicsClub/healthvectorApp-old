@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
@@ -21,6 +22,9 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 public abstract class DomanChartFragment extends ChartFragment<DomanChartState, DomanChartPresenter> implements DomanChartView,
         ParameterDialogFragment.Listener {
     private static final String TAG_PARAMETER_DIALOG = "TAG_PARAMETER_DIALOG";
+
+    @State
+    boolean needToShowWarning;
 
     private DomanChartState state;
 
@@ -41,9 +45,13 @@ public abstract class DomanChartFragment extends ChartFragment<DomanChartState, 
     public void showResults(@NonNull DomanChartState state) {
         this.state = state;
         plotResults(state);
-        ((TestChartActivity) getActivity()).updateTitle(state.getTestType(), state.getTestParameter());
+        updateTitle();
         if (state.isInvalidResults()) {
-            warnAboutInvalidResults();
+            if (isSelected()) {
+                warnAboutInvalidResults();
+            } else {
+                needToShowWarning = true;
+            }
         }
     }
 
@@ -72,11 +80,6 @@ public abstract class DomanChartFragment extends ChartFragment<DomanChartState, 
         getPresenter().selectTestParameter(testParameter);
     }
 
-    @Nullable
-    public DomanTestParameter getTestParameter() {
-        return state == null ? null : state.getTestParameter();
-    }
-
     @Override
     protected String getIntentionText() {
         return getContext().getString(R.string.no_doman_test_data);
@@ -97,5 +100,18 @@ public abstract class DomanChartFragment extends ChartFragment<DomanChartState, 
     @Override
     protected String getYTitle() {
         return getString(R.string.doman_chart_y_title);
+    }
+
+    @Override
+    public void setSelected() {
+        updateTitle();
+        if (needToShowWarning) {
+            warnAboutInvalidResults();
+            needToShowWarning = false;
+        }
+    }
+
+    private void updateTitle() {
+        ((TestChartActivity) getActivity()).updateTitle(state.getTestType(), state.getTestParameter());
     }
 }
