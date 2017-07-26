@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 
-import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
@@ -47,18 +48,25 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
     TextView yTitleView;
 
     @Nullable
+    @BindView(R.id.legend)
+    View legendView;
+
+    @Nullable
+    @BindView(R.id.textViewNoChartData)
+    TextView textViewNoChartData;
+
+    @Nullable
     private TestingController testingController;
 
     private String text;
     private Test test;
     @Nullable
     private DomanTestParameter parameter;
-    @Nullable
-    private DomanResult result;
+    private List<DomanResult> results;
 
     @Override
     protected int getLayoutResourceId() {
-        return parameter != null && result != null ? R.layout.fragment_testing_finish_chart : R.layout.fragment_testing_finish;
+        return parameter != null ? R.layout.fragment_testing_finish_chart : R.layout.fragment_testing_finish;
     }
 
     @Override
@@ -86,7 +94,7 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
         text = arguments.getText();
         test = arguments.getTest();
         parameter = arguments.getParameter();
-        result = arguments.getResult();
+        results = arguments.getResults();
     }
 
     @Override
@@ -100,14 +108,22 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
             textView.setText(HtmlUtils.fromHtml(text));
         }
         if (chart != null) {
-            TestChartPlotter plotter = new TestChartPlotter(chart, parameter, Collections.singletonList(result));
+            TestChartPlotter plotter = new TestChartPlotter(chart, parameter, results);
             plotter.setup();
         }
         if (xTitleView != null) {
             xTitleView.setText(getString(R.string.doman_chart_x_title));
+            xTitleView.setVisibility(results.isEmpty() ? View.GONE : View.VISIBLE);
         }
         if (yTitleView != null) {
             yTitleView.setText(getString(R.string.doman_chart_y_title));
+            yTitleView.setVisibility(results.isEmpty() ? View.GONE : View.VISIBLE);
+        }
+        if (textViewNoChartData != null) {
+            textViewNoChartData.setVisibility(results.isEmpty() ? View.VISIBLE : View.GONE);
+        }
+        if (legendView != null) {
+            legendView.setVisibility(results.isEmpty() ? View.INVISIBLE : View.VISIBLE);
         }
     }
 

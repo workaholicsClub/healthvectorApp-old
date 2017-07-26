@@ -41,4 +41,9 @@ public class AntropometryChartState implements ChartState {
     public boolean isEmpty() {
         return values.isEmpty();
     }
+
+    @Override
+    public boolean noChartData() {
+        return false;
+    }
 }

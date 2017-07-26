@@ -36,4 +36,6 @@ public interface TestResultData extends Persistable {
     // Аутизм -- Количество баллов (риск)
     // Новрожденный -- Есть риск (1), Норма (0)
     Integer getResult();
+
+    Integer getDomanMonths();
 }

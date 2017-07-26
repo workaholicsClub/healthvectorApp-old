@@ -19,18 +19,20 @@
 
             <TextView
                 android:id="@+id/yearsHeader"
-                android:layout_width="@dimen/age_dialog_header_width"
+                android:layout_width="@dimen/age_dialog_header_width_years"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="@dimen/time_dialog_column_space"
                 android:layout_marginRight="@dimen/time_dialog_column_space"
+                android:gravity="center"
                 android:textAppearance="@style/SecondaryTextAppearance" />
 
             <TextView
                 android:id="@+id/monthsHeader"
-                android:layout_width="@dimen/age_dialog_header_width"
+                android:layout_width="@dimen/age_dialog_header_width_months"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textAppearance="@style/SecondaryTextAppearance" />
         </TableRow>
 

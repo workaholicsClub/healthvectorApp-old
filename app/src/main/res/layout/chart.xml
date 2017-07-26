@@ -36,4 +36,14 @@
         android:paddingBottom="@dimen/axis_title_padding"
         android:textColor="@color/placeholder_text"
         android:textSize="@dimen/text_size_small" />
+
+    <TextView
+        android:id="@+id/textViewNoChartData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:padding="@dimen/base_margin"
+        android:text="@string/no_chart_data"
+        android:textAppearance="@style/IntentionTextAppearance" />
 </RelativeLayout>

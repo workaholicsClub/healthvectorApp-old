@@ -79,7 +79,7 @@ class DomanTestProcessorHelper {
             if (current <= months && months <= next) {
                 double diff1 = months - current;
                 double diff2 = next - months;
-                return diff1 <= diff2 ? i : i + 1;
+                return diff1 < diff2 ? i : i + 1;
             }
         }
 

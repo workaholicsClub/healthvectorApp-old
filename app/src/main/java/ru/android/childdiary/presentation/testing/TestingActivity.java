@@ -24,6 +24,8 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.T
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.fields.dialogs.AgeDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.AgeDialogFragment;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersDialogArguments;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersDialogFragment;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
@@ -32,13 +34,15 @@ import ru.android.childdiary.presentation.testing.fragments.TestingQuestionArgum
 import ru.android.childdiary.presentation.testing.fragments.TestingQuestionFragment;
 import ru.android.childdiary.presentation.testing.fragments.TestingStartArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingStartFragment;
+import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
 public class TestingActivity extends BaseMvpActivity implements TestingView, TestingController,
-        TestParametersDialogFragment.Listener {
+        TestParametersDialogFragment.Listener, AgeDialogFragment.Listener {
     private static final String TAG_DATE_AND_PARAMETER_DIALOG = "TAG_DATE_AND_PARAMETER_DIALOG";
+    private static final String TAG_DIALOG_AGE_WHEN_THIS_HAPPENED = "TAG_DIALOG_AGE_WHEN_THIS_HAPPENED";
 
     @IdRes
     private static final int FRAGMENT_CONTAINER_ID = R.id.mainContent;
@@ -147,6 +151,18 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     }
 
     @Override
+    public void askWhenThisHappened(@Nullable TimeUtils.Age age) {
+        AgeDialogFragment dialogFragment = new AgeDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DIALOG_AGE_WHEN_THIS_HAPPENED,
+                AgeDialogArguments.builder()
+                        .sex(getSex())
+                        .title(getString(R.string.specify_age_when_this_happened))
+                        .maxAge(age)
+                        .age(age)
+                        .build());
+    }
+
+    @Override
     public void onTestParametersSet(@NonNull TestParameters parameters) {
         presenter.onTestParametersSet(parameters);
     }
@@ -183,5 +199,12 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     @Override
     public void answerNo() {
         presenter.answerNo();
+    }
+
+    @Override
+    public void onSetAge(String tag, @NonNull TimeUtils.Age age) {
+        if (TAG_DIALOG_AGE_WHEN_THIS_HAPPENED.equals(tag)) {
+            presenter.specifyAge(age);
+        }
     }
 }

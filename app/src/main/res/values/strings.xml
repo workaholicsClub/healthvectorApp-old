@@ -318,8 +318,11 @@
     <string name="height_hint">Введите рост (см)</string>
     <string name="weight_hint">Введите вес (кг)</string>
     <string name="delete_antropometry_dialog_title">Удалить показатели роста и веса?</string>
-    <string name="validation_antropometry_empty">Ввеидте рост или вес</string>
+    <string name="validation_antropometry_empty">Введите рост или вес</string>
     <string name="validation_antropometry_date_not_unique">Введите другую дату. На эту дату показатели роста и веса уже введены.</string>
     <string name="low_limit_who">Нижняя граница по ВОЗ</string>
     <string name="high_limit_who">Верхняя граница по ВОЗ</string>
+    <string name="specify_age_when_this_happened">Укажите возраст, когда это произошло</string>
+    <string name="no_chart_data">Недостаточно данных для построения графика</string>
+    <string name="birthday_changed">Результаты тестирования неактуальны, так как была изменена дата рождения ребенка</string>
 </resources>

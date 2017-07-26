@@ -4,10 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.List;
+
+import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.development.testing.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
@@ -88,5 +92,20 @@ public class TestUtils {
     public static String getTestResultShort(Context context, @NonNull TestResult testResult) {
         TestProcessor testProcessor = TestFactory.createTestProcessor(testResult);
         return testProcessor.interpretResultShort();
+    }
+
+    public static List<DomanResult> filterResults(@NonNull List<DomanResult> results) {
+        return Observable.fromIterable(results)
+                .filter(result -> result.getDomanAge() != null)
+                .toList()
+                .blockingGet();
+    }
+
+    public static boolean invalidResults(@NonNull List<TestResult> results) {
+        return Observable.fromIterable(results)
+                .filter(TestResult::isInvalid)
+                .count()
+                .map(count -> count > 0)
+                .blockingGet();
     }
 }

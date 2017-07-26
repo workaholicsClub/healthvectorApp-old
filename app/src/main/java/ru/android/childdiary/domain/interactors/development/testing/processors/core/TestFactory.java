@@ -14,6 +14,7 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.DomanM
 import ru.android.childdiary.domain.interactors.development.testing.tests.DomanPhysicalTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.NewbornTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 public class TestFactory {
     public static BiTestProcessor createTestProcessor(@Nullable Test test,
@@ -66,6 +67,13 @@ public class TestFactory {
                 .parameter(testResult.getDomanTestParameter())
                 .build());
         testProcessor.setResult(testResult.getResult());
+        if (testProcessor instanceof DomanTestProcessor) {
+            TimeUtils.Age domanAge = testResult.getDomanMonths() == null ? null
+                    : TimeUtils.Age.builder()
+                    .months(testResult.getDomanMonths())
+                    .build();
+            ((DomanTestProcessor) testProcessor).setDomanAge(domanAge);
+        }
         return testProcessor;
     }
 }

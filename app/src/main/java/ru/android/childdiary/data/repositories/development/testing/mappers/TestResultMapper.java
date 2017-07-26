@@ -34,6 +34,7 @@ public class TestResultMapper implements EntityMapper<TestResultData, TestResult
                 .date(testResultData.getDate())
                 .domanTestParameter(testResultData.getDomanTestParameter())
                 .result(testResultData.getResult())
+                .domanMonths(testResultData.getDomanMonths())
                 .build();
     }
 
@@ -61,5 +62,6 @@ public class TestResultMapper implements EntityMapper<TestResultData, TestResult
         to.setDate(from.getDate());
         to.setDomanTestParameter(from.getDomanTestParameter());
         to.setResult(from.getResult());
+        to.setDomanMonths(from.getDomanMonths());
     }
 }

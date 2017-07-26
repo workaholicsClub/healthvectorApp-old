@@ -24,6 +24,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="@dimen/time_dialog_column_space"
                 android:layout_marginRight="@dimen/time_dialog_column_space"
+                android:gravity="center"
                 android:textAppearance="@style/SecondaryTextAppearance" />
 
             <TextView
@@ -31,6 +32,7 @@
                 android:layout_width="@dimen/time_dialog_header_width"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textAppearance="@style/SecondaryTextAppearance" />
 
             <TextView
@@ -38,6 +40,7 @@
                 android:layout_width="@dimen/time_dialog_column_space"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textAppearance="@style/SecondaryTextAppearance" />
 
             <TextView
@@ -45,6 +48,7 @@
                 android:layout_width="@dimen/time_dialog_header_width"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textAppearance="@style/SecondaryTextAppearance" />
         </TableRow>
 

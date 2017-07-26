@@ -101,7 +101,10 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
             dialogFragment.showAllowingStateLoss(getChildFragmentManager(), TAG_DIALOG_AGE,
                     AgeDialogArguments.builder()
                             .sex(dialogArguments.getSex())
-                            .maxYears(DomanTest.MAX_YEARS)
+                            .title(getString(R.string.age))
+                            .maxAge(TimeUtils.Age.builder()
+                                    .months(DomanTest.MAX_YEARS * TimeUtils.MONTHS_IN_YEAR)
+                                    .build())
                             .age(ageView.getValue())
                             .build());
         });
@@ -196,11 +199,13 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
 
     @Override
     public void onSetAge(String tag, @NonNull TimeUtils.Age age) {
-        ageView.setValue(age);
-        LocalDate birthDate = dialogArguments.getChild().getBirthDate();
-        if (birthDate != null) {
-            LocalDate date = birthDate.plusMonths(age.getMonths());
-            dateView.setValue(date);
+        if (TAG_DIALOG_AGE.equals(tag)) {
+            ageView.setValue(age);
+            LocalDate birthDate = dialogArguments.getChild().getBirthDate();
+            if (birthDate != null) {
+                LocalDate date = birthDate.plusMonths(age.getMonths());
+                dateView.setValue(date);
+            }
         }
     }
 

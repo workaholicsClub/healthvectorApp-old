@@ -72,6 +72,16 @@ public class TestResultActivity extends BaseMvpActivity implements TestResultVie
     @Override
     public void showFinish(@NonNull TestingFinishArguments arguments) {
         showAppPartition(new TestingFinishFragment(), arguments, null);
+        if (arguments.isInvalidResults()) {
+            warnAboutInvalidResults();
+        }
+    }
+
+    private void warnAboutInvalidResults() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.birthday_changed)
+                .setPositiveButton(R.string.ok, null)
+                .show();
     }
 
     private void showAppPartition(@NonNull Fragment fragment,

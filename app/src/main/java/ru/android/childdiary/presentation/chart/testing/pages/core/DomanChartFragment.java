@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.chart.testing.pages.core;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 
@@ -15,6 +16,7 @@ import ru.android.childdiary.presentation.chart.testing.TestChartActivity;
 import ru.android.childdiary.presentation.chart.testing.core.TestChartPlotter;
 import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogArguments;
 import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogFragment;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class DomanChartFragment extends ChartFragment<DomanChartState, DomanChartPresenter> implements DomanChartView,
         ParameterDialogFragment.Listener {
@@ -40,6 +42,16 @@ public abstract class DomanChartFragment extends ChartFragment<DomanChartState, 
         this.state = state;
         plotResults(state);
         ((TestChartActivity) getActivity()).updateTitle(state.getTestType(), state.getTestParameter());
+        if (state.isInvalidResults()) {
+            warnAboutInvalidResults();
+        }
+    }
+
+    private void warnAboutInvalidResults() {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.birthday_changed)
+                .setPositiveButton(R.string.ok, null)
+                .show();
     }
 
     public void showFilter() {
@@ -72,7 +84,7 @@ public abstract class DomanChartFragment extends ChartFragment<DomanChartState, 
 
     @Override
     protected ChartPlotter getChartPlotter(@NonNull CombinedChart chart, @NonNull DomanChartState state) {
-        return new TestChartPlotter(chart, state.getTestParameter(), state.getTestResults());
+        return new TestChartPlotter(chart, state.getTestParameter(), state.getFilteredTestResults());
     }
 
     public abstract TestType getTestType();

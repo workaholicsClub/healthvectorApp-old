@@ -31,6 +31,8 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
     private boolean stopped;
     @Nullable
     private Boolean lastAnswer;
+    @Nullable
+    private TimeUtils.Age domanAge;
 
     private DomanTestProcessor(@NonNull T test,
                                @NonNull DomanTestParameter parameter,
@@ -133,13 +135,21 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
         return String.format(test.getResultTextFormat(),
                 test.getStageTitle(stage),
                 test.getStageDescription(stage),
-                test.getStageType(initialStage, stage));
+                test.getStageType(initialStage, stage, domanAge));
     }
 
     @Override
     public String interpretResultShort() {
         int stage = getResult();
         return test.getStageTitle(stage);
+    }
+
+    public Integer getDomanMonths() {
+        return domanAge == null ? null : domanAge.getMonths();
+    }
+
+    public void setDomanAge(@Nullable TimeUtils.Age age) {
+        domanAge = age;
     }
 
     public DomanTestParameter getDomanParameter() {
@@ -151,6 +161,7 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
                 .date(date)
                 .months(months)
                 .stage(getResult())
+                .domanAge(domanAge)
                 .build();
     }
 }

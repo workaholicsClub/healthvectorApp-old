@@ -3,11 +3,13 @@ package ru.android.childdiary.presentation.core.fields.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
@@ -18,6 +20,8 @@ import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments> {
+    private final List<Listener> listeners = new ArrayList<>();
+
     @BindView(R.id.rootView)
     View rootView;
 
@@ -33,9 +37,6 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
     @BindView(R.id.monthsHeader)
     TextView monthsHeader;
 
-    @Nullable
-    private Listener listener;
-
     @Override
     protected int getLayoutResourceId() {
         return R.layout.dialog_age;
@@ -47,7 +48,7 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
         int months = dialogArguments.getAge() == null ? 0 : dialogArguments.getAge().getMonthsPart();
 
         numberPickerYears.setMinValue(0);
-        numberPickerYears.setMaxValue(dialogArguments.getMaxYears());
+        numberPickerYears.setMaxValue(dialogArguments.getMaxAge().getYearsPart());
         numberPickerYears.setValue(years);
         numberPickerYears.setOnValueChangedListener(
                 (picker, oldVal, newVal) -> {
@@ -66,8 +67,9 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
 
     private void setMaxMonths() {
         int years = numberPickerYears.getValue();
-        boolean max = years == dialogArguments.getMaxYears();
-        numberPickerMonths.setMaxValue(max ? 0 : TimeUtils.MONTHS_IN_YEAR - 1);
+        TimeUtils.Age maxAge = dialogArguments.getMaxAge();
+        boolean max = years == maxAge.getYearsPart();
+        numberPickerMonths.setMaxValue(max ? maxAge.getMonthsPart() : TimeUtils.MONTHS_IN_YEAR - 1);
     }
 
     private void updateYearsHeader() {
@@ -83,13 +85,13 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
     protected Dialog createDialog(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
-                .setTitle(getString(R.string.age))
+                .setTitle(dialogArguments.getTitle())
                 .setPositiveButton(R.string.ok,
                         (dialog, which) -> {
                             hideKeyboardAndClearFocus(rootView.findFocus());
                             int months = numberPickerYears.getValue() * TimeUtils.MONTHS_IN_YEAR
                                     + numberPickerMonths.getValue();
-                            if (listener != null) {
+                            for (Listener listener : listeners) {
                                 listener.onSetAge(getTag(), TimeUtils.Age.builder().months(months).build());
                             }
                         })
@@ -106,16 +108,17 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Listener) {
-            listener = (Listener) context;
-        } else if (getParentFragment() instanceof Listener) {
-            listener = (Listener) getParentFragment();
+            listeners.add((Listener) context);
+        }
+        if (getParentFragment() instanceof Listener) {
+            listeners.add((Listener) getParentFragment());
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        listener = null;
+        listeners.clear();
     }
 
     public interface Listener {

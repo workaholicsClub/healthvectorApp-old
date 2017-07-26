@@ -27,6 +27,7 @@ import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingQuestionArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingStartArguments;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 @InjectViewState
 public class TestingPresenter extends BasePresenter<TestingView> implements TestingController {
@@ -108,6 +109,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                             .date(date)
                             .domanTestParameter(getDomanParameter())
                             .result(testProcessor.getResult())
+                            .domanMonths(getDomanMonths())
                             .build())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -121,6 +123,17 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
 
     @Override
     public void answerYes() {
+        if (testProcessor instanceof DomanTestProcessor) {
+            TimeUtils.Age age = TimeUtils.getAge(child.getBirthDate(), date);
+            getViewState().askWhenThisHappened(age);
+        } else {
+            testProcessor.answer(true);
+            goToNextQuestion();
+        }
+    }
+
+    public void specifyAge(@NonNull TimeUtils.Age age) {
+        ((DomanTestProcessor) testProcessor).setDomanAge(age);
         testProcessor.answer(true);
         goToNextQuestion();
     }
@@ -167,6 +180,14 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     private DomanResult getDomanResult() {
         if (testProcessor instanceof DomanTestProcessor) {
             return ((DomanTestProcessor) testProcessor).getDomanResult();
+        }
+        return null;
+    }
+
+    @Nullable
+    private Integer getDomanMonths() {
+        if (testProcessor instanceof DomanTestProcessor) {
+            return ((DomanTestProcessor) testProcessor).getDomanMonths();
         }
         return null;
     }

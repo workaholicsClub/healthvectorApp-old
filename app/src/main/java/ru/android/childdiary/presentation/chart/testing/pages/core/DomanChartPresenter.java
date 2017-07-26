@@ -24,6 +24,7 @@ import ru.android.childdiary.domain.interactors.development.testing.processors.c
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.presentation.chart.core.ChartPresenter;
 import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogArguments;
+import ru.android.childdiary.utils.strings.TestUtils;
 
 @InjectViewState
 public class DomanChartPresenter extends ChartPresenter<DomanChartView> {
@@ -82,11 +83,11 @@ public class DomanChartPresenter extends ChartPresenter<DomanChartView> {
                                         .ascending(true)
                                         .build())
                                         .first(Collections.emptyList())
-                                        .map(this::map)
                                         .map(testResults -> DomanChartState.builder()
                                                 .testType(testType)
                                                 .testParameter(testParameter)
-                                                .testResults(testResults)
+                                                .testResults(map(testResults))
+                                                .invalidResults(TestUtils.invalidResults(testResults))
                                                 .build()))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

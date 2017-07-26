@@ -34,6 +34,9 @@ public abstract class ChartFragment<S extends ChartState, P extends ChartPresent
     @BindView(R.id.legend)
     View legendView;
 
+    @BindView(R.id.textViewNoChartData)
+    TextView textViewNoChartData;
+
     @BindView(R.id.textViewIntention)
     TextView textViewIntention;
 
@@ -77,7 +80,10 @@ public abstract class ChartFragment<S extends ChartState, P extends ChartPresent
             progressBar.setVisibility(View.GONE);
         } else {
             chartWrapper.setVisibility(View.VISIBLE);
-            legendView.setVisibility(View.VISIBLE);
+            xTitleView.setVisibility(state.noChartData() ? View.GONE : View.VISIBLE);
+            yTitleView.setVisibility(state.noChartData() ? View.GONE : View.VISIBLE);
+            textViewNoChartData.setVisibility(state.noChartData() ? View.VISIBLE : View.GONE);
+            legendView.setVisibility(state.noChartData() ? View.INVISIBLE : View.VISIBLE);
             textViewIntention.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             ChartPlotter plotter = getChartPlotter(chart, state);

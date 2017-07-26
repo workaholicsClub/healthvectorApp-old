@@ -29,6 +29,7 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
     @Inject
     TestingInteractor testingInteractor;
 
+    private TestResult testResult;
     private TestProcessor testProcessor;
 
     @Override
@@ -37,6 +38,7 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
     }
 
     public void initTestResult(@NonNull TestResult testResult) {
+        this.testResult = testResult;
         testProcessor = TestFactory.createTestProcessor(testResult);
         showFinishPage(testResult.getTest(), testResult.getChild(), testResult.getDate());
     }
@@ -50,6 +52,7 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
                 .parameter(getDomanParameter())
                 .text(text)
                 .result(getDomanResult())
+                .invalidResults(testResult.isInvalid())
                 .build());
     }
 

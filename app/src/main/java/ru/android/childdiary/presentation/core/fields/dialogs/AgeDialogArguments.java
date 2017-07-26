@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.core.fields.dialogs;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import lombok.AccessLevel;
@@ -17,17 +18,21 @@ import ru.android.childdiary.utils.strings.TimeUtils;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
 public class AgeDialogArguments extends BaseDialogArguments {
+    @NonNull
+    String title;
     @Nullable
     TimeUtils.Age age;
-    int maxYears;
+    @NonNull
+    TimeUtils.Age maxAge;
 
     @Builder
-    public AgeDialogArguments(@Nullable Sex sex, @Nullable TimeUtils.Age age, int maxYears) {
+    public AgeDialogArguments(@Nullable Sex sex,
+                              @NonNull String title,
+                              @Nullable TimeUtils.Age age,
+                              @NonNull TimeUtils.Age maxAge) {
         super(sex);
+        this.title = title;
         this.age = age;
-        if (maxYears < 0) {
-            maxYears = 0;
-        }
-        this.maxYears = maxYears;
+        this.maxAge = maxAge;
     }
 }

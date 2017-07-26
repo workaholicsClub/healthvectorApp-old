@@ -4,6 +4,9 @@ import android.support.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 
+import java.util.Collections;
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -16,6 +19,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
+import ru.android.childdiary.utils.strings.TestUtils;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -28,8 +32,9 @@ public class TestingFinishArguments extends AppPartitionArguments {
     DomanTestParameter parameter;
     @NonNull
     String text;
-    @Nullable
-    DomanResult result;
+    @NonNull
+    List<DomanResult> results;
+    boolean invalidResults;
 
     @Builder(builderMethodName = "testingFinishBuilder")
     public TestingFinishArguments(@NonNull Child child,
@@ -37,11 +42,15 @@ public class TestingFinishArguments extends AppPartitionArguments {
                                   @NonNull Test test,
                                   @Nullable DomanTestParameter parameter,
                                   @NonNull String text,
-                                  @Nullable DomanResult result) {
+                                  @Nullable DomanResult result,
+                                  boolean invalidResults) {
         super(child, selectedDate);
         this.test = test;
         this.parameter = parameter;
         this.text = text;
-        this.result = result;
+        this.results = result == null
+                ? Collections.emptyList()
+                : TestUtils.filterResults(Collections.singletonList(result));
+        this.invalidResults = invalidResults;
     }
 }

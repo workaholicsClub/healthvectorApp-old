@@ -16,7 +16,7 @@ public class CustomXAxisRenderer extends XAxisRenderer {
 
     @Override
     protected void drawLabels(Canvas c, float pos, MPPointF anchor) {
-        final int LABELS_COUNT = 3;
+        final int LABELS_COUNT = 2;
 
         float positions[] = new float[LABELS_COUNT * 2];
 

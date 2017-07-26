@@ -99,6 +99,7 @@ public class TestChartPlotter implements ChartPlotter {
         });
         chart.getLegend().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
+        chart.setNoDataText("");
     }
 
     private void setupMarker() {
@@ -168,16 +169,20 @@ public class TestChartPlotter implements ChartPlotter {
     }
 
     private void setupData() {
-        CombinedData data = new CombinedData();
+        if (results.isEmpty()) {
+            chart.clear();
+        } else {
+            CombinedData data = new CombinedData();
 
-        data.setData(generateLineData());
-        data.setData(generateBarData());
+            data.setData(generateLineData());
+            data.setData(generateBarData());
 
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setAxisMinimum(data.getXMin() - 1);
-        xAxis.setAxisMaximum(data.getXMax() + 1);
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setAxisMinimum(data.getXMin() - 1);
+            xAxis.setAxisMaximum(data.getXMax() + 1);
 
-        chart.setData(data);
+            chart.setData(data);
+        }
 
         chart.resetZoom();
         chart.invalidate();

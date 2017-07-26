@@ -15,13 +15,14 @@ import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.utils.CollectionUtils;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class DomanTest extends Test {
-    public static final int MAX_YEARS = 9;
+    public static final int MAX_YEARS = 18;
 
     @NonNull
     Map<DomanTestParameter, List<Question>> questions;
@@ -50,7 +51,10 @@ public abstract class DomanTest extends Test {
         this.stageDescriptions = Collections.unmodifiableList(stageDescriptions);
     }
 
-    public String getStageType(int initialStage, int stage) {
+    public String getStageType(int initialStage, int stage, @Nullable TimeUtils.Age domanAge) {
+        if (domanAge == null) {
+            return slow;
+        }
         if (initialStage == stage) {
             return normal;
         } else if (initialStage < stage) {
