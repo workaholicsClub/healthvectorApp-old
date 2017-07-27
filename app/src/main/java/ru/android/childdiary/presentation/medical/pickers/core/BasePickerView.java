@@ -16,7 +16,7 @@ public interface BasePickerView<T> extends BaseView {
     void processSearchEvent(@NonNull SearchViewQueryTextEvent event);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void showList(@NonNull List<T> list);
+    void showList(@NonNull List<T> list, boolean isFiltering);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void itemDeleted(@NonNull T item);

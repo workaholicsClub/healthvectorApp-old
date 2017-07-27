@@ -75,4 +75,10 @@ public class DoctorPickerActivity extends BasePickerActivity<Doctor, DoctorPicke
     protected BaseRecyclerViewAdapter<Doctor, ? extends BaseRecyclerViewHolder<Doctor>> createAdapter() {
         return new DoctorAdapter(this, this, this);
     }
+
+    @Override
+    protected String getIntentionText(boolean isFiltering) {
+        return (isFiltering ? getString(R.string.nothing_found) + "\n\n" : "")
+                + getString(R.string.add_doctor_intention);
+    }
 }

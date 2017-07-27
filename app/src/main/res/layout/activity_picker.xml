@@ -8,39 +8,44 @@
     <include layout="@layout/toolbar" />
 
     <FrameLayout
-        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/textViewIntention"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="@dimen/base_margin"
+            android:text="@string/nothing_found"
+            android:textAppearance="@style/IntentionTextAppearance" />
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/gray_background"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <include layout="@layout/request_focus_view_white" />
-
-            <android.support.v4.widget.NestedScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/footer_height"
-                        android:background="@color/white"
-                        android:paddingBottom="@dimen/events_padding_vertical"
-                        android:paddingTop="@dimen/events_padding_vertical" />
-                </LinearLayout>
-            </android.support.v4.widget.NestedScrollView>
-        </LinearLayout>
+                    android:layout_marginBottom="@dimen/footer_height"
+                    android:background="@color/white"
+                    android:paddingBottom="@dimen/events_padding_vertical"
+                    android:paddingTop="@dimen/events_padding_vertical" />
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
@@ -49,16 +54,5 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_add_white_24dp" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/progressView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
     </FrameLayout>
 </LinearLayout>

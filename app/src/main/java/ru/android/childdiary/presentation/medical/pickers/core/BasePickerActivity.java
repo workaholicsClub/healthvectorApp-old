@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.List;
@@ -37,17 +39,17 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     @BindView(R.id.rootView)
     View rootView;
 
-    @BindView(R.id.progressView)
-    View progressView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
-    @BindView(R.id.contentView)
-    View contentView;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+    @BindView(R.id.textViewIntention)
+    TextView textViewIntention;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     private BaseRecyclerViewAdapter<T, ? extends BaseRecyclerViewHolder<T>> adapter;
 
@@ -61,12 +63,12 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
         adapter = createAdapter();
         adapter.setSex(getSex());
         recyclerView.setAdapter(adapter);
-        recyclerView.setVisibility(View.GONE);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
-        progressView.setVisibility(View.VISIBLE);
-        contentView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        textViewIntention.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
     }
 
     @Override
@@ -116,12 +118,13 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     }
 
     @Override
-    public void showList(@NonNull List<T> list) {
+    public void showList(@NonNull List<T> list, boolean isFiltering) {
         adapter.setItems(list);
-        recyclerView.setVisibility(list.isEmpty() ? View.GONE : View.VISIBLE);
 
-        progressView.setVisibility(View.GONE);
-        contentView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+        textViewIntention.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
+        textViewIntention.setText(getIntentionText(isFiltering));
+        recyclerView.setVisibility(list.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -159,4 +162,6 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     protected abstract Class<? extends BaseAddActivity<T, ? extends BaseAddView<T>>> getAddActivityClass();
 
     protected abstract BaseRecyclerViewAdapter<T, ? extends BaseRecyclerViewHolder<T>> createAdapter();
+
+    protected abstract String getIntentionText(boolean isFiltering);
 }

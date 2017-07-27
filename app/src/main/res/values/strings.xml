@@ -328,4 +328,6 @@
     <string name="no_child_specified_for_testing_dialog_title">Результаты тестирования не будут сохранены</string>
     <string name="no_child_specified_for_testing_dialog_text">Чтобы сохранить результаты тестирования, добавьте профиль ребенка.</string>
     <string name="continue_without_profile">Продолжить без профиля</string>
+    <string name="add_doctor_intention">Добавьте специализацию</string>
+    <string name="add_medicine_intention">Добавьте лекарство</string>
 </resources>
