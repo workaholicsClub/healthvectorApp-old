@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.chart.antropometry.core;
+package ru.android.childdiary.presentation.chart.core;
 
 import android.graphics.Canvas;
 

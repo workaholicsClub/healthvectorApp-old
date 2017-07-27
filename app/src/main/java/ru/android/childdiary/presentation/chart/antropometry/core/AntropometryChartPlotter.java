@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Px;
 import android.support.v4.content.ContextCompat;
 
+import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.MarkerView;
@@ -13,6 +14,7 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.renderer.DataRenderer;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.ViewPortHandler;
@@ -24,6 +26,8 @@ import org.slf4j.LoggerFactory;
 import lombok.NonNull;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.chart.core.ChartPlotter;
+import ru.android.childdiary.presentation.chart.core.CustomCombinedChartRenderer;
+import ru.android.childdiary.presentation.chart.core.CustomXAxisRenderer;
 import ru.android.childdiary.presentation.chart.core.ValueFormatter;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.FontUtils;
@@ -85,13 +89,20 @@ public class AntropometryChartPlotter implements ChartPlotter {
         chart.setExtraOffsets(0, margin, 0, margin);
         chart.getLegend().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
+        chart.setNoDataText("");
 
-        // custom x axis renderer
         ViewPortHandler viewPortHandler = chart.getViewPortHandler();
         XAxis xAxis = chart.getXAxis();
         Transformer transformer = chart.getTransformer(YAxis.AxisDependency.LEFT);
+        ChartAnimator animator = chart.getAnimator();
+
+        // custom x axis renderer
         XAxisRenderer xAxisRenderer = new CustomXAxisRenderer(viewPortHandler, xAxis, transformer);
         chart.setXAxisRenderer(xAxisRenderer);
+
+        // custom data renderer
+        DataRenderer renderer = new CustomCombinedChartRenderer(chart, animator, viewPortHandler);
+        chart.setRenderer(renderer);
     }
 
     private void setupMarker() {
@@ -160,6 +171,7 @@ public class AntropometryChartPlotter implements ChartPlotter {
 
     private void setupData() {
         chart.setData(data);
+        chart.setMaxVisibleValueCount(Integer.MAX_VALUE);
 
         chart.resetZoom();
         chart.invalidate();

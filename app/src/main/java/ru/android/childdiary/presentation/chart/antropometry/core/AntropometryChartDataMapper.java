@@ -98,6 +98,7 @@ public class AntropometryChartDataMapper {
         lineDataSet.setDrawCircles(drawCircles);
         lineDataSet.setDrawCircleHole(false);
         lineDataSet.setCircleColor(lineColor);
+        lineDataSet.setDrawIcons(true);
 
         return lineDataSet;
     }

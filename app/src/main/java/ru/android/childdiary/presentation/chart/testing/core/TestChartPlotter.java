@@ -1,9 +1,11 @@
 package ru.android.childdiary.presentation.chart.testing.core;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Px;
 import android.support.v4.content.ContextCompat;
 
+import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.MarkerView;
@@ -18,6 +20,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.renderer.DataRenderer;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
 import ru.android.childdiary.presentation.chart.core.ChartPlotter;
+import ru.android.childdiary.presentation.chart.core.CustomCombinedChartRenderer;
 import ru.android.childdiary.utils.ui.FontUtils;
 
 public class TestChartPlotter implements ChartPlotter {
@@ -54,6 +59,8 @@ public class TestChartPlotter implements ChartPlotter {
     private final int[] stakedBarColors;
     @Px
     private final int margin;
+    @ColorInt
+    private final int lineColor;
 
     private TestLineEntry selectedEntry;
 
@@ -70,6 +77,7 @@ public class TestChartPlotter implements ChartPlotter {
                 ContextCompat.getColor(context, R.color.advanced_color)
         };
         margin = context.getResources().getDimensionPixelSize(R.dimen.base_margin);
+        lineColor = ContextCompat.getColor(context, R.color.line_color);
     }
 
     @Override
@@ -100,6 +108,13 @@ public class TestChartPlotter implements ChartPlotter {
         chart.getLegend().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
         chart.setNoDataText("");
+
+        ViewPortHandler viewPortHandler = chart.getViewPortHandler();
+        ChartAnimator animator = chart.getAnimator();
+
+        // custom data renderer
+        DataRenderer renderer = new CustomCombinedChartRenderer(chart, animator, viewPortHandler);
+        chart.setRenderer(renderer);
     }
 
     private void setupMarker() {
@@ -201,13 +216,15 @@ public class TestChartPlotter implements ChartPlotter {
         }
 
         LineDataSet lineDataSet = new LineDataSet(lineEntries, null);
-        lineDataSet.setColor(ContextCompat.getColor(context, R.color.line_color));
+        lineDataSet.setColor(lineColor);
         lineDataSet.setLineWidth(LINE_WIDTH_IN_DP);
         lineDataSet.setDrawValues(false);
         lineDataSet.setDrawHighlightIndicators(false);
         lineDataSet.setHighlightEnabled(true);
         lineDataSet.setDrawCircles(false);
         lineDataSet.setDrawCircleHole(false);
+        lineDataSet.setCircleColor(lineColor);
+        lineDataSet.setDrawIcons(true);
 
         LineData lineData = new LineData();
         lineData.addDataSet(lineDataSet);
