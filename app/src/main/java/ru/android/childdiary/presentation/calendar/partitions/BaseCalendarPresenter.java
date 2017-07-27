@@ -286,7 +286,7 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
         } else {
             // проверяем, можно ли выполнить событие
             if (EventUtils.needToFillNoteOrPhoto(event)) {
-                getViewState().showNeedToFillNoteOrPhoto();
+                getViewState().showNeedToFillNoteOrPhoto(event);
             } else {
                 switchDone(event);
             }

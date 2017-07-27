@@ -52,7 +52,7 @@ public interface BaseCalendarView extends BaseView {
     void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showNeedToFillNoteOrPhoto();
+    void showNeedToFillNoteOrPhoto(@NonNull MasterEvent event);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showDeletingEvents(boolean loading);

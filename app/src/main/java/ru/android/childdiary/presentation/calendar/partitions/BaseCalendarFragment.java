@@ -315,10 +315,11 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
     }
 
     @Override
-    public void showNeedToFillNoteOrPhoto() {
+    public void showNeedToFillNoteOrPhoto(@NonNull MasterEvent event) {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.need_to_fill_not_or_photo)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(R.string.add, (dialog, which) -> presenter.requestEventDetail(event))
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
