@@ -46,4 +46,10 @@
         android:id="@+id/notifyTimeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
+        android:id="@+id/checkBoxView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:fieldText="@string/event_is_done" />
 </LinearLayout>

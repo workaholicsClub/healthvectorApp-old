@@ -273,8 +273,7 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
         }
 
         builder.notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(noteView.getText())
-                .isDone(isDone());
+                .note(noteView.getText());
 
         return builder.build();
     }

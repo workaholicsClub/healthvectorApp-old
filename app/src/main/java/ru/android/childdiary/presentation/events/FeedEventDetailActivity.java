@@ -234,8 +234,7 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
                 .leftDurationInMinutes(durationView.getDurationLeft())
                 .rightDurationInMinutes(durationView.getDurationRight())
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(noteView.getText())
-                .isDone(isDone());
+                .note(noteView.getText());
 
         return builder.build();
     }

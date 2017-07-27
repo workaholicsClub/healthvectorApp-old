@@ -1,9 +1,9 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +30,7 @@ public class FieldCheckBoxView extends BaseFieldValueView<Boolean> implements Vi
 
     @Nullable
     private Sex sex;
+    private String text;
 
     @Nullable
     @Setter
@@ -48,10 +49,24 @@ public class FieldCheckBoxView extends BaseFieldValueView<Boolean> implements Vi
     }
 
     @Override
+    protected void init(@Nullable AttributeSet attrs) {
+        super.init(attrs);
+        if (attrs != null) {
+            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldCheckBoxView, 0, 0);
+            try {
+                text = ta.getString(R.styleable.FieldCheckBoxView_fieldText);
+            } finally {
+                ta.recycle();
+            }
+        }
+    }
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         setOnClickListener(this);
         addValueChangeListener(this);
+        textView.setText(text);
     }
 
     @Override
@@ -81,14 +96,6 @@ public class FieldCheckBoxView extends BaseFieldValueView<Boolean> implements Vi
 
     public void setChecked(boolean value) {
         setValue(value);
-    }
-
-    public void setText(String value) {
-        textView.setText(value);
-    }
-
-    public void setText(@StringRes int res) {
-        textView.setText(res);
     }
 
     public void setSex(@Nullable Sex sex) {

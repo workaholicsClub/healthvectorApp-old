@@ -27,10 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import icepick.State;
 import io.reactivex.disposables.Disposable;
-import lombok.AccessLevel;
-import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.ContentObject;
 import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
@@ -64,10 +61,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @BindView(R.id.rootView)
     protected View rootView;
 
-    @State
-    @Getter(AccessLevel.PROTECTED)
-    boolean done;
-
     private ViewGroup detailsView;
 
     @Nullable
@@ -84,6 +77,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         defaultEvent = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_EVENT);
 
         if (masterEvent == null) {
+            setupNewEventUi();
             changeThemeIfNeeded(defaultEvent.getChild());
             setupEventDetail(defaultEvent);
             buttonAdd.setVisibility(VISIBLE);
@@ -96,13 +90,15 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             }
             buttonAdd.setVisibility(GONE);
             if (savedInstanceState == null) {
-                done = EventUtils.isDone(masterEvent);
                 getPresenter().requestEventDetails(masterEvent);
             }
         }
 
         logger.debug("master event: " + masterEvent);
         logger.debug("default event: " + defaultEvent);
+    }
+
+    protected void setupNewEventUi() {
     }
 
     @Override
@@ -212,8 +208,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @Override
     public void eventDone(boolean done) {
-        this.done = done;
-        showToast(getString(done ? R.string.event_is_done : R.string.event_is_not_done));
     }
 
     @Override
@@ -339,18 +333,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
         removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.event_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        if (event == null) {
-            return super.onPrepareOptionsMenu(menu);
-        }
-        MenuItem item = menu.findItem(R.id.menu_done);
-        item.setVisible(EventUtils.canBeDone(getPresenter().getEventType()));
-        item.setChecked(done);
+        inflater.inflate(R.menu.delete_with_icon, menu);
         return true;
     }
 
@@ -364,9 +347,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             return super.onOptionsItemSelected(item);
         }
         switch (item.getItemId()) {
-            case R.id.menu_done:
-                getPresenter().done(buildEvent());
-                return true;
             case R.id.menu_delete:
                 getPresenter().delete(event);
                 return true;

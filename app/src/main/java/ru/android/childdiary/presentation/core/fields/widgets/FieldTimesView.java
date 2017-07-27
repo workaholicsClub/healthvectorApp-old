@@ -59,7 +59,7 @@ public class FieldTimesView extends BaseFieldValueView<LinearGroups> implements 
     }
 
     @Override
-    protected void init() {
+    protected void init(@Nullable AttributeSet attrs) {
         setOrientation(HORIZONTAL);
         setGravity(Gravity.CENTER);
     }

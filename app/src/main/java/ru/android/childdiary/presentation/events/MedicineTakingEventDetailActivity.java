@@ -31,6 +31,7 @@ import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureVal
 import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureValueDialogFragment;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineMeasureValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldMedicineView;
@@ -49,7 +50,8 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 public class MedicineTakingEventDetailActivity
         extends EventDetailActivity<MedicineTakingEventDetailView, MedicineTakingEvent>
         implements MedicineTakingEventDetailView, MedicineMeasureValueDialogFragment.Listener,
-        FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener {
+        FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener,
+        FieldCheckBoxView.FieldCheckBoxListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
@@ -77,6 +79,9 @@ public class MedicineTakingEventDetailActivity
 
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
+
+    @BindView(R.id.checkBoxView)
+    FieldCheckBoxView checkBoxView;
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull MedicineTakingEvent defaultEvent) {
@@ -169,6 +174,7 @@ public class MedicineTakingEventDetailActivity
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(event.getNote());
         noteWithPhotoView.setImageFileName(event.getImageFileName());
+        checkBoxView.setValue(event.getIsDone());
     }
 
     @Override
@@ -194,9 +200,20 @@ public class MedicineTakingEventDetailActivity
                 .notifyTimeInMinutes(minutes)
                 .note(note)
                 .imageFileName(imageFileName)
-                .isDone(isDone());
+                .isDone(checkBoxView.getValue());
 
         return builder.build();
+    }
+
+    @Override
+    public void eventDone(boolean done) {
+        super.eventDone(done);
+        checkBoxView.setValue(done);
+    }
+
+    @Override
+    public void onChecked() {
+        getPresenter().done(buildEvent());
     }
 
     @Override

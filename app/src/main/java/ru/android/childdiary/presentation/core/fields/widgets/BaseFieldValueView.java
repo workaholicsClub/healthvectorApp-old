@@ -25,20 +25,20 @@ public abstract class BaseFieldValueView<T> extends LinearLayout implements Fiel
 
     public BaseFieldValueView(Context context) {
         super(context);
-        init();
+        init(null);
     }
 
     public BaseFieldValueView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
 
     public BaseFieldValueView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(attrs);
     }
 
-    protected void init() {
+    protected void init(@Nullable AttributeSet attrs) {
         inflate(getContext(), getLayoutResourceId(), this);
     }
 

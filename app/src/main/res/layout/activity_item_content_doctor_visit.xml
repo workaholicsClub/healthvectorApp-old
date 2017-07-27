@@ -41,7 +41,8 @@
         android:id="@+id/checkBoxView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/delimiter_margin" />
+        android:layout_marginBottom="@dimen/delimiter_margin"
+        app:fieldText="@string/export_to_calendar" />
 
     <include layout="@layout/delimiter" />
 

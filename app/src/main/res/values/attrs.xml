@@ -29,4 +29,7 @@
         <attr name="fieldHint" />
         <attr name="fieldText" />
     </declare-styleable>
+    <declare-styleable name="FieldCheckBoxView">
+        <attr name="fieldText" />
+    </declare-styleable>
 </resources>

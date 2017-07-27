@@ -24,6 +24,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView;
@@ -42,7 +43,7 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 public class ExerciseEventDetailActivity
         extends EventDetailActivity<ExerciseEventDetailView, ExerciseEvent>
         implements ExerciseEventDetailView, FieldNoteWithPhotoView.PhotoListener,
-        ImagePickerDialogFragment.Listener {
+        ImagePickerDialogFragment.Listener, FieldCheckBoxView.FieldCheckBoxListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
@@ -68,6 +69,9 @@ public class ExerciseEventDetailActivity
 
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
+
+    @BindView(R.id.checkBoxView)
+    FieldCheckBoxView checkBoxView;
 
     private boolean isValidationStarted;
 
@@ -152,6 +156,7 @@ public class ExerciseEventDetailActivity
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(event.getNote());
         noteWithPhotoView.setImageFileName(event.getImageFileName());
+        checkBoxView.setValue(event.getIsDone());
     }
 
     @Override
@@ -174,9 +179,20 @@ public class ExerciseEventDetailActivity
                 .notifyTimeInMinutes(minutes)
                 .note(note)
                 .imageFileName(imageFileName)
-                .isDone(isDone());
+                .isDone(checkBoxView.getValue());
 
         return builder.build();
+    }
+
+    @Override
+    public void eventDone(boolean done) {
+        super.eventDone(done);
+        checkBoxView.setValue(done);
+    }
+
+    @Override
+    public void onChecked() {
+        getPresenter().done(buildEvent());
     }
 
     @Override

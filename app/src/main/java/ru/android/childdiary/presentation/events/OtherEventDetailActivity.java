@@ -24,6 +24,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEv
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView;
@@ -35,7 +36,7 @@ import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDetailView, OtherEvent>
-        implements OtherEventDetailView {
+        implements OtherEventDetailView, FieldCheckBoxView.FieldCheckBoxListener {
     private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
     private static final String TAG_DATE_PICKER_START = "DATE_PICKER_START";
     private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
@@ -71,6 +72,9 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
 
     @BindView(R.id.noteView)
     FieldNoteView noteView;
+
+    @BindView(R.id.checkBoxView)
+    FieldCheckBoxView checkBoxView;
 
     @State
     boolean isButtonDoneEnabled;
@@ -122,6 +126,12 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     }
 
     @Override
+    protected void setupNewEventUi() {
+        super.setupNewEventUi();
+        checkBoxView.setVisibility(View.GONE);
+    }
+
+    @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarLogo(ResourcesUtils.getOtherEventLogoRes(getSex()));
@@ -154,6 +164,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
         notifyTimeView.setValue(event.getNotifyTimeInMinutes());
         notifyTimeView.setVisibility(notifyTimeViewVisible() ? View.VISIBLE : View.GONE);
         noteView.setText(event.getNote());
+        checkBoxView.setValue(event.getIsDone());
     }
 
     @Override
@@ -182,9 +193,20 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
                 .finishDateTime(finishDateTime)
                 .notifyTimeInMinutes(notifyTimeView.getValue())
                 .note(noteView.getText())
-                .isDone(isDone());
+                .isDone(checkBoxView.getValue());
 
         return builder.build();
+    }
+
+    @Override
+    public void eventDone(boolean done) {
+        super.eventDone(done);
+        checkBoxView.setValue(done);
+    }
+
+    @Override
+    public void onChecked() {
+        getPresenter().done(buildEvent());
     }
 
     @Override

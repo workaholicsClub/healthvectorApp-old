@@ -135,9 +135,7 @@
     <string name="other_event_title_hint">Введите название события</string>
     <string name="doctor_visit_title_hint">Введите название визита</string>
     <string name="exercise_title_hint">Введите название занятия</string>
-    <string name="menu_title_done">Выполнено</string>
     <string name="event_is_done">Выполнено</string>
-    <string name="event_is_not_done">Не выполнено</string>
     <string name="save_changes_dialog_title">Сохранить изменения?</string>
     <string name="start_timer">СТАРТ</string>
     <string name="stop_timer">СТОП</string>

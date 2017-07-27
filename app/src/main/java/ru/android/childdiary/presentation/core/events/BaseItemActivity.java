@@ -103,7 +103,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         defaultItem = (T) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_ITEM);
 
         if (getCheckBoxView() != null) {
-            getCheckBoxView().setText(R.string.export_to_calendar);
             getCheckBoxView().setFieldCheckBoxListener(this);
         }
 

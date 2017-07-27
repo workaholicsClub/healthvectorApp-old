@@ -136,8 +136,7 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
         builder.dateTime(dateTime)
                 .diaperState(diaperStateView.getSelected())
                 .notifyTimeInMinutes(notifyTimeView.getValue())
-                .note(noteView.getText())
-                .isDone(isDone());
+                .note(noteView.getText());
 
         return builder.build();
     }
