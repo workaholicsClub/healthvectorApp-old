@@ -59,6 +59,14 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
 
     @Override
     public void startTesting() {
+        startTesting(true);
+    }
+
+    private void startTesting(boolean checkProfile) {
+        if (checkProfile && child.getId() == null) {
+            getViewState().noChildSpecified();
+            return;
+        }
         if (test instanceof DomanTest) {
             getViewState().specifyTestParameters(child, test);
         } else {
@@ -72,6 +80,14 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                     .forward(true)
                     .build());
         }
+    }
+
+    public void addProfile() {
+        getViewState().navigateToProfileAdd();
+    }
+
+    public void continueWithoutProfile() {
+        startTesting(false);
     }
 
     public void onTestParametersSet(@NonNull TestParameters parameters) {

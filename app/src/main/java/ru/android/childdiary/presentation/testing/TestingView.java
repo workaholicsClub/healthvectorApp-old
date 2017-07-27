@@ -36,4 +36,10 @@ public interface TestingView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void askWhenThisHappened(@Nullable TimeUtils.Age age);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void noChildSpecified();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToProfileAdd();
 }

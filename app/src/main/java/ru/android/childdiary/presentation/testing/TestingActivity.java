@@ -16,6 +16,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import org.joda.time.LocalDate;
 
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -26,6 +27,7 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.AgeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.AgeDialogFragment;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersDialogArguments;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersDialogFragment;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
@@ -41,6 +43,7 @@ import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
 public class TestingActivity extends BaseMvpActivity implements TestingView, TestingController,
         TestParametersDialogFragment.Listener, AgeDialogFragment.Listener {
+    private static final int REQUEST_PROFILE_ADD = 1;
     private static final String TAG_DATE_AND_PARAMETER_DIALOG = "TAG_DATE_AND_PARAMETER_DIALOG";
     private static final String TAG_DIALOG_AGE_WHEN_THIS_HAPPENED = "TAG_DIALOG_AGE_WHEN_THIS_HAPPENED";
 
@@ -50,7 +53,11 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     @InjectPresenter
     TestingPresenter presenter;
 
+    @State
+    Child child;
+
     private Test test;
+    private LocalDate date;
 
     public static Intent getIntent(Context context,
                                    @NonNull Test test,
@@ -58,8 +65,8 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
                                    @NonNull LocalDate date) {
         return new Intent(context, TestingActivity.class)
                 .putExtra(ExtraConstants.EXTRA_TEST, test)
-                .putExtra(ExtraConstants.EXTRA_CHILD, child)
-                .putExtra(ExtraConstants.EXTRA_DATE, date);
+                .putExtra(ExtraConstants.EXTRA_DATE, date)
+                .putExtra(ExtraConstants.EXTRA_CHILD, child);
     }
 
     @Override
@@ -70,14 +77,26 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         test = (Test) getIntent().getSerializableExtra(ExtraConstants.EXTRA_TEST);
-
+        date = (LocalDate) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_with_one_fragment);
 
         if (savedInstanceState == null) {
-            Child child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
-            LocalDate date = (LocalDate) getIntent().getSerializableExtra(ExtraConstants.EXTRA_DATE);
+            child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
             presenter.initTest(test, child, date);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_PROFILE_ADD) {
+            if (resultCode == RESULT_OK) {
+                child = (Child) data.getSerializableExtra(ExtraConstants.EXTRA_CHILD);
+                changeThemeIfNeeded(child);
+                presenter.initTest(test, child, date);
+                presenter.startTesting();
+            }
         }
     }
 
@@ -160,6 +179,22 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
                         .maxAge(age)
                         .age(age)
                         .build());
+    }
+
+    @Override
+    public void noChildSpecified() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.no_child_specified_for_testing_dialog_title)
+                .setMessage(R.string.no_child_specified_for_testing_dialog_text)
+                .setPositiveButton(R.string.add_profile, (dialog, which) -> presenter.addProfile())
+                .setNegativeButton(R.string.continue_without_profile, (dialog, which) -> presenter.continueWithoutProfile())
+                .show();
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(this, null);
+        startActivityForResult(intent, REQUEST_PROFILE_ADD);
     }
 
     @Override

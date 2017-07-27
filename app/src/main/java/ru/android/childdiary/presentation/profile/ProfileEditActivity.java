@@ -372,6 +372,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
 
     @Override
     public void childAdded(@NonNull Child child) {
+        setResult(RESULT_OK, new Intent().putExtra(ExtraConstants.EXTRA_CHILD, child));
         finish();
     }
 
