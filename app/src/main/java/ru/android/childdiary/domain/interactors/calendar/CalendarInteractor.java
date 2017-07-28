@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
+import ru.android.childdiary.data.repositories.calendar.CalendarFilterDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.types.Breast;
@@ -41,6 +42,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsFilter;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsRequest;
@@ -93,6 +95,7 @@ public class CalendarInteractor {
     private final MedicineTakingEventValidator medicineTakingEventValidator;
     private final ExerciseEventValidator exerciseEventValidator;
     private final ImagesRepository imagesRepository;
+    private final CalendarFilterDataRepository filterRepository;
 
     @Inject
     public CalendarInteractor(Context context,
@@ -106,7 +109,8 @@ public class CalendarInteractor {
                               DoctorVisitEventValidator doctorVisitEventValidator,
                               MedicineTakingEventValidator medicineTakingEventValidator,
                               ExerciseEventValidator exerciseEventValidator,
-                              ImagesDataRepository imagesRepository) {
+                              ImagesDataRepository imagesRepository,
+                              CalendarFilterDataRepository filterRepository) {
         this.context = context;
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
@@ -119,6 +123,7 @@ public class CalendarInteractor {
         this.medicineTakingEventValidator = medicineTakingEventValidator;
         this.exerciseEventValidator = exerciseEventValidator;
         this.imagesRepository = imagesRepository;
+        this.filterRepository = filterRepository;
     }
 
     public Observable<LocalDate> getSelectedDate() {
@@ -772,5 +777,21 @@ public class CalendarInteractor {
 
     public Observable<Map<TimeUnit, List<Integer>>> getTimeUnitValues() {
         return calendarRepository.getTimeUnitValues();
+    }
+
+    public Observable<GetEventsFilter> getSelectedFilterValue() {
+        return filterRepository.getSelectedValue();
+    }
+
+    public void setSelectedFilterValue(@NonNull GetEventsFilter value) {
+        filterRepository.setSelectedValue(value);
+    }
+
+    public Observable<GetEventsFilter> getSelectedFilterValueOnce() {
+        return filterRepository.getSelectedValueOnce();
+    }
+
+    public Observable<GetEventsFilter> setSelectedFilterValueObservable(@NonNull GetEventsFilter value) {
+        return filterRepository.setSelectedValueObservable(value);
     }
 }

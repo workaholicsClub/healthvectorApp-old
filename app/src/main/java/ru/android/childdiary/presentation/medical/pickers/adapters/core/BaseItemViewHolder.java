@@ -46,7 +46,7 @@ public abstract class BaseItemViewHolder<T,
     }
 
     @Override
-    public void bind(Context context, Sex sex, T item) {
+    public void bind(Context context, @Nullable Sex sex, T item) {
         super.bind(context, sex, item);
 
         textView.setText(getTextForValue(context, item));

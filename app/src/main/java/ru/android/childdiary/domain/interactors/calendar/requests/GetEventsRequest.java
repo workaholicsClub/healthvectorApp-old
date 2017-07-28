@@ -14,4 +14,6 @@ public class GetEventsRequest {
     Child child;
     @NonNull
     LocalDate date;
+    @NonNull
+    GetEventsFilter filter;
 }

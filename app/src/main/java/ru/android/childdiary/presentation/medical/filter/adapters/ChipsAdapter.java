@@ -49,7 +49,7 @@ public class ChipsAdapter extends BaseRecyclerViewAdapter<Chips, ChipsAdapter.Ch
         }
 
         @Override
-        public void bind(Context context, Sex sex, Chips item) {
+        public void bind(Context context, @Nullable Sex sex, Chips item) {
             super.bind(context, sex, item);
             textView.setText(item.getText(context));
         }

@@ -19,10 +19,13 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import org.joda.time.LocalDate;
 
+import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
@@ -35,6 +38,8 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.presentation.calendar.adapters.calendar.CalendarViewAdapter;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventActionListener;
 import ru.android.childdiary.presentation.calendar.adapters.events.EventAdapter;
+import ru.android.childdiary.presentation.calendar.dialogs.EventFilterDialogArguments;
+import ru.android.childdiary.presentation.calendar.dialogs.EventFilterDialogFragment;
 import ru.android.childdiary.presentation.calendar.dialogs.MoveEventDialogArguments;
 import ru.android.childdiary.presentation.calendar.dialogs.MoveEventDialogFragment;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
@@ -56,10 +61,11 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
         extends AppPartitionFragment
         implements BaseCalendarView, AdapterView.OnItemClickListener,
         CalendarViewAdapter.OnSelectedDateChanged, EventActionListener, TimerServiceListener,
-        MoveEventDialogFragment.Listener {
+        MoveEventDialogFragment.Listener, EventFilterDialogFragment.Listener {
     private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
     private static final String TAG_PROGRESS_DIALOG_UPDATING_EVENTS = "TAG_PROGRESS_DIALOG_UPDATING_EVENTS";
     private static final String TAG_MOVE_EVENT_DIALOG = "TAG_MOVE_EVENT_DIALOG";
+    private static final String TAG_EVENT_FILTER_DIALOG = "TAG_EVENT_FILTER_DIALOG";
 
     private static final int REQUEST_UPDATE_EVENT = 1;
 
@@ -227,8 +233,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
 
     @Override
     public void showFilter() {
-        // TODO filter events
-        showToast("filter");
+        presenter.requestFilterDialog();
     }
 
     @Override
@@ -346,6 +351,15 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
     }
 
     @Override
+    public void showFilterDialog(@NonNull Set<EventType> eventTypes) {
+        EventFilterDialogFragment dialogFragment = new EventFilterDialogFragment();
+        dialogFragment.showAllowingStateLoss(getChildFragmentManager(), TAG_EVENT_FILTER_DIALOG, EventFilterDialogArguments.builder()
+                .sex(getSex())
+                .selectedItems(eventTypes)
+                .build());
+    }
+
+    @Override
     public void delete(MasterEvent event) {
         presenter.delete(event);
     }
@@ -373,6 +387,11 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
     @Override
     public void onMoveLinearGroupClick(String tag, @NonNull MasterEvent event, int minutes) {
         presenter.moveLinearGroup(event, minutes);
+    }
+
+    @Override
+    public void onSetFilter(String tag, @NonNull Set<EventType> selectedItems) {
+        presenter.setFilter(selectedItems);
     }
 
     @Override

@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
 
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -343,6 +345,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     public Observable<GetEventsResponse> getAllEvents(@NonNull GetEventsRequest request) {
         Child child = request.getChild();
         LocalDate selectedDate = request.getDate();
+        Set<EventType> eventTypes = request.getFilter().getEventTypes();
         return dataStore.select(EXPRESSIONS)
                 .from(MasterEventEntity.class)
                 .join(ChildEntity.class).on(ChildEntity.ID.eq(MasterEventEntity.CHILD_ID))
@@ -365,6 +368,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.midnight(selectedDate)))
                 .and(MasterEventEntity.DATE_TIME.lessThan(DateUtils.nextDayMidnight(selectedDate)))
                 .and(MasterEventEntity.EVENT_TYPE.notNull())
+                .and(MasterEventEntity.EVENT_TYPE.in(eventTypes))
                 .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
                 .get()
                 .observableResult()

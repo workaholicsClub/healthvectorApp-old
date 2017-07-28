@@ -17,6 +17,7 @@ import lombok.Getter;
 
 public abstract class BaseArrayAdapter<T, VH extends BaseViewHolder<T>> extends ArrayAdapter<T> {
     private final LayoutInflater inflater;
+
     @Getter
     private List<T> items = Collections.emptyList();
 

@@ -7,6 +7,7 @@ import com.arellomobile.mvp.InjectViewState;
 import org.joda.time.LocalDate;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -14,6 +15,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
@@ -25,6 +27,7 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEve
 import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsFilter;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
@@ -52,8 +55,13 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
 
         unsubscribeOnDestroy(Observable.combineLatest(
                 calendarInteractor.getSelectedDate(),
+                calendarInteractor.getSelectedFilterValue(),
                 childInteractor.getActiveChild(),
-                (date, child) -> GetEventsRequest.builder().date(date).child(child).build())
+                (date, filter, child) -> GetEventsRequest.builder()
+                        .date(date)
+                        .filter(filter)
+                        .child(child)
+                        .build())
                 .doOnNext(request -> logger.debug("onGetRequest: " + request))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -299,6 +307,24 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(doneEvent -> logger.debug("event isDone: " + doneEvent))
                 .subscribe(doneEvent -> {
+                }, this::onUnexpectedError));
+    }
+
+    public void requestFilterDialog() {
+        unsubscribeOnDestroy(calendarInteractor.getSelectedFilterValueOnce()
+                .map(GetEventsFilter::getEventTypes)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showFilterDialog, this::onUnexpectedError));
+    }
+
+    public void setFilter(@NonNull Set<EventType> eventTypes) {
+        unsubscribeOnDestroy(calendarInteractor.setSelectedFilterValueObservable(GetEventsFilter.builder()
+                .eventTypes(eventTypes)
+                .build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(selectedFilter -> {
                 }, this::onUnexpectedError));
     }
 }

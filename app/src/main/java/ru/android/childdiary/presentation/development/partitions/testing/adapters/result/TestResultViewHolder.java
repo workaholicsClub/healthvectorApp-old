@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.development.partitions.testing.adapte
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,7 +52,7 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
     }
 
     @Override
-    public void bind(Context context, Sex sex, TestResult item) {
+    public void bind(Context context, @Nullable Sex sex, TestResult item) {
         super.bind(context, sex, item);
 
         String dateStr = DateUtils.date(context, item.getDate());

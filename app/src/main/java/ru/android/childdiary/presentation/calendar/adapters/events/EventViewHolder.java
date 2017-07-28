@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.graphics.ColorUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -71,7 +72,7 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     }
 
     @Override
-    public void bind(Context context, Sex sex, MasterEvent event) {
+    public void bind(Context context, @Nullable Sex sex, MasterEvent event) {
         super.bind(context, sex, event);
 
         //noinspection deprecation

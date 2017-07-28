@@ -6,6 +6,9 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import java.util.Set;
+
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
@@ -59,4 +62,7 @@ public interface BaseCalendarView extends BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showUpdatingEvents(boolean loading);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showFilterDialog(@NonNull Set<EventType> eventTypes);
 }

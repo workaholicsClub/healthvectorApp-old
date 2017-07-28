@@ -48,7 +48,9 @@ public class ProgressDialogFragment extends BaseMvpDialogFragment<ProgressDialog
             public void onBackPressed() {
             }
         };
-        dialog.setContentView(view);
+        if (view != null) {
+            dialog.setContentView(view);
+        }
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         return dialog;

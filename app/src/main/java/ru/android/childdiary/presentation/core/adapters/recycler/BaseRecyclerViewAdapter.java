@@ -26,7 +26,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
         this.inflater = LayoutInflater.from(context);
     }
 
-    public final void setSex(@Nullable Sex sex) {
+    public void setSex(@Nullable Sex sex) {
         if (this.sex != sex) {
             this.sex = sex;
             notifyDataSetChanged();

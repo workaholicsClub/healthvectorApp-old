@@ -105,6 +105,11 @@ public class FieldCheckBoxView extends BaseFieldValueView<Boolean> implements Vi
         }
     }
 
+    public void setText(@Nullable String text) {
+        this.text = text;
+        textView.setText(text);
+    }
+
     private void update() {
         imageView.setImageResource(ResourcesUtils.getCheckBoxRes(sex, isChecked()));
         //noinspection deprecation
