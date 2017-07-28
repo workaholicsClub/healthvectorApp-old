@@ -11,6 +11,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import lombok.AllArgsConstructor;
 import lombok.Value;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.core.bindings.SearchViewQueryTextChangeEventsObservable;
@@ -76,6 +77,7 @@ public abstract class BasePickerPresenter<T, V extends BasePickerView<T>> extend
     protected abstract Observable<T> deleteItemLoader(@NonNull T item);
 
     @Value
+    @AllArgsConstructor(suppressConstructorProperties = true)
     private static class Response<T> {
         @Nullable
         String filter;
