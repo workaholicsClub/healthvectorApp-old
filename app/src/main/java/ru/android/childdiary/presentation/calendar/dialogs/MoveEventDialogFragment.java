@@ -36,10 +36,8 @@ public class MoveEventDialogFragment extends BaseLengthValueDialogFragment<MoveE
                     (dialog, which) -> moveLinearGroupClick());
         }
 
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        return dialog;
+        return builder.setCancelable(false)
+                .create();
     }
 
     private void moveEventClick() {

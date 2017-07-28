@@ -437,11 +437,10 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     }
 
     private void openAppPartition(@NonNull AppPartition appPartition) {
-        if (selectedPartition == appPartition || drawer == null) {
-            return;
+        if (drawer != null) {
+            int position = appPartition.ordinal() + 1;
+            drawer.setSelectionAtPosition(position, false);
         }
-        int position = appPartition.ordinal() + 1;
-        drawer.setSelectionAtPosition(position, false);
         switch (appPartition) {
             case CALENDAR:
                 presenter.openCalendar();

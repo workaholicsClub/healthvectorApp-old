@@ -15,6 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.core.HasDataResponse;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
@@ -90,7 +91,7 @@ public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisits
     }
 
     @Override
-    protected Single<Boolean> hasDataToFilter(@NonNull Child child) {
+    protected Single<HasDataResponse> hasDataToFilter(@NonNull Child child) {
         return doctorVisitInteractor.hasDataToFilter(child);
     }
 

@@ -65,4 +65,7 @@ public interface BaseCalendarView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showFilterDialog(@NonNull Set<EventType> eventTypes);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void noChildSpecified();
 }

@@ -311,11 +311,24 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
     }
 
     public void requestFilterDialog() {
-        unsubscribeOnDestroy(calendarInteractor.getSelectedFilterValueOnce()
-                .map(GetEventsFilter::getEventTypes)
+        unsubscribeOnDestroy(Observable.combineLatest(
+                calendarInteractor.getSelectedDateOnce(),
+                calendarInteractor.getSelectedFilterValueOnce(),
+                childInteractor.getActiveChildOnce(),
+                (date, filter, child) -> GetEventsRequest.builder()
+                        .date(date)
+                        .filter(filter)
+                        .child(child)
+                        .build())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::showFilterDialog, this::onUnexpectedError));
+                .subscribe(request -> {
+                    if (request.getChild().getId() == null) {
+                        getViewState().noChildSpecified();
+                        return;
+                    }
+                    getViewState().showFilterDialog(request.getFilter().getEventTypes());
+                }, this::onUnexpectedError));
     }
 
     public void setFilter(@NonNull Set<EventType> eventTypes) {

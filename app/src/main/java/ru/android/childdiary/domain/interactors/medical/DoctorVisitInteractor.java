@@ -24,6 +24,7 @@ import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository
 import ru.android.childdiary.data.repositories.medical.DoctorVisitFilterDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.DeleteResponse;
+import ru.android.childdiary.domain.core.HasDataResponse;
 import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
@@ -169,8 +170,12 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
         return doctorVisitRepository.hasConnectedEvents(doctorVisit);
     }
 
-    public Single<Boolean> hasDataToFilter(@NonNull Child child) {
-        return doctorVisitRepository.hasDataToFilter(child);
+    public Single<HasDataResponse> hasDataToFilter(@NonNull Child child) {
+        return doctorVisitRepository.hasDataToFilter(child)
+                .map(hasData -> HasDataResponse.builder()
+                        .child(child)
+                        .hasData(hasData)
+                        .build());
     }
 
     private Observable<UpsertDoctorVisitRequest> validate(@NonNull UpsertDoctorVisitRequest request) {

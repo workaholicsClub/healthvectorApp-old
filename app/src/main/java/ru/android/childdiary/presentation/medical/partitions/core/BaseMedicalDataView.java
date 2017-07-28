@@ -11,5 +11,8 @@ public interface BaseMedicalDataView extends BaseView {
     void showDeletingEvents(boolean loading);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void noChildSpecified();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showNoDataToFilter();
 }

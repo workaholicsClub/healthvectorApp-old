@@ -90,6 +90,11 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
     }
 
     @Override
+    public void noChildSpecified() {
+        showToast(getString(R.string.no_child_specified));
+    }
+
+    @Override
     public void showNoDataToFilter() {
         showToast(getString(R.string.no_data_to_filter));
     }

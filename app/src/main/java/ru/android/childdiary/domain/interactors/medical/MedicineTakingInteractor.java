@@ -24,6 +24,7 @@ import ru.android.childdiary.data.repositories.medical.MedicineTakingDataReposit
 import ru.android.childdiary.data.repositories.medical.MedicineTakingFilterDataRepository;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.DeleteResponse;
+import ru.android.childdiary.domain.core.HasDataResponse;
 import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
@@ -174,8 +175,12 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
         return medicineTakingRepository.hasConnectedEvents(medicineTaking);
     }
 
-    public Single<Boolean> hasDataToFilter(@NonNull Child child) {
-        return medicineTakingRepository.hasDataToFilter(child);
+    public Single<HasDataResponse> hasDataToFilter(@NonNull Child child) {
+        return medicineTakingRepository.hasDataToFilter(child)
+                .map(hasData -> HasDataResponse.builder()
+                        .child(child)
+                        .hasData(hasData)
+                        .build());
     }
 
     public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {

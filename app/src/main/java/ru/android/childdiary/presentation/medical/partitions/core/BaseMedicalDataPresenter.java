@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.domain.core.HasDataResponse;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -23,8 +24,12 @@ public abstract class BaseMedicalDataPresenter<V extends BaseMedicalDataView> ex
                 .flatMapSingle(this::hasDataToFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(hasDataToFilter -> {
-                    if (hasDataToFilter) {
+                .subscribe(response -> {
+                    if (response.getChild().getId() == null) {
+                        getViewState().noChildSpecified();
+                        return;
+                    }
+                    if (response.isHasData()) {
                         showFilterDialog();
                     } else {
                         getViewState().showNoDataToFilter();
@@ -32,7 +37,7 @@ public abstract class BaseMedicalDataPresenter<V extends BaseMedicalDataView> ex
                 }, this::onUnexpectedError));
     }
 
-    protected abstract Single<Boolean> hasDataToFilter(@NonNull Child child);
+    protected abstract Single<HasDataResponse> hasDataToFilter(@NonNull Child child);
 
     protected abstract void showFilterDialog();
 

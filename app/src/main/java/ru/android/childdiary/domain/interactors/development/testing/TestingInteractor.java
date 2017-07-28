@@ -14,8 +14,8 @@ import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.development.testing.TestingDataRepository;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
+import ru.android.childdiary.domain.core.HasDataResponse;
 import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.requests.HasDomanChartDataResponse;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
@@ -55,13 +55,13 @@ public class TestingInteractor {
         return testingRepository.checkDate(child, testType, testParameter, date);
     }
 
-    public Single<HasDomanChartDataResponse> hasChartData(@NonNull Child child) {
+    public Single<HasDataResponse> hasChartData(@NonNull Child child) {
         return testingRepository.getTestResults(TestResultsRequest.builder()
                 .child(child)
                 .build())
                 .first(Collections.emptyList())
                 .map(this::hasData)
-                .map(hasData -> HasDomanChartDataResponse.builder()
+                .map(hasData -> HasDataResponse.builder()
                         .child(child)
                         .hasData(hasData)
                         .build());

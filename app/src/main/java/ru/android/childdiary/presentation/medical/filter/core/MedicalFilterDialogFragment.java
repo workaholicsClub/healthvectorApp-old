@@ -102,12 +102,12 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
                             buildFilter(selectedItems, fromDate, toDate);
                         })
                 .setNegativeButton(R.string.cancel, null);
-        AlertDialog dialog = builder.create();
+
+        AlertDialog dialog = builder.setCancelable(false)
+                .create();
         if (dialog.getWindow() != null) {
             dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         }
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }
 

@@ -14,9 +14,9 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDataRepository;
+import ru.android.childdiary.domain.core.HasDataResponse;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
-import ru.android.childdiary.domain.interactors.development.antropometry.requests.HasAntropometryChartDataResponse;
 import ru.android.childdiary.domain.interactors.development.antropometry.requests.WhoNormRequest;
 import ru.android.childdiary.domain.interactors.development.antropometry.validation.AntropometryValidationException;
 import ru.android.childdiary.domain.interactors.development.antropometry.validation.AntropometryValidationResult;
@@ -191,7 +191,7 @@ public class AntropometryInteractor {
         return points.isEmpty() ? null : points.get(points.size() - 1).getDate();
     }
 
-    public Single<HasAntropometryChartDataResponse> hasChartData(@NonNull Child child) {
+    public Single<HasDataResponse> hasChartData(@NonNull Child child) {
         return getAntropometryList(child)
                 .first(Collections.emptyList())
                 .flatMapObservable(Observable::fromIterable)
@@ -199,7 +199,7 @@ public class AntropometryInteractor {
                         || ObjectUtils.isPositive(antropometry.getHeight()))
                 .count()
                 .map(count -> count > 0)
-                .map(hasData -> HasAntropometryChartDataResponse.builder()
+                .map(hasData -> HasDataResponse.builder()
                         .child(child)
                         .hasData(hasData)
                         .build());
