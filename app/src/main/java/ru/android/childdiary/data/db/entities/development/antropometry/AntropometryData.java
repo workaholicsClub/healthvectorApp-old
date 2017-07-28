@@ -26,5 +26,5 @@ public interface AntropometryData extends Persistable {
 
     Double getWeight();
 
-    LocalDate getDate();
+    LocalDate getAntropometryDate();
 }

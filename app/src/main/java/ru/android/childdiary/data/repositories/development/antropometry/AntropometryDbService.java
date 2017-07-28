@@ -41,12 +41,12 @@ public class AntropometryDbService {
         Child child = request.getChild();
         LocalDate birthday = child.getBirthDate();
 
-        val order = request.isAscending() ? AntropometryEntity.DATE.asc() : AntropometryEntity.DATE.desc();
+        val order = request.isAscending() ? AntropometryEntity.ANTROPOMETRY_DATE.asc() : AntropometryEntity.ANTROPOMETRY_DATE.desc();
         WhereAndOr<ReactiveResult<AntropometryEntity>> select = dataStore.select(AntropometryEntity.class)
                 .where(AntropometryEntity.CHILD_ID.eq(child.getId()));
 
         if (request.isStartFromBirthday() && birthday != null) {
-            select = select.and(AntropometryEntity.DATE.greaterThan(birthday));
+            select = select.and(AntropometryEntity.ANTROPOMETRY_DATE.greaterThan(birthday));
         }
 
         return select.orderBy(order, AntropometryEntity.ID)

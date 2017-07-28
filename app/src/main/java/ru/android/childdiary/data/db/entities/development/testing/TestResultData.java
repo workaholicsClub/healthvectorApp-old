@@ -26,16 +26,16 @@ public interface TestResultData extends Persistable {
 
     TestType getTestType();
 
-    LocalDate getBirthDate();
-
-    LocalDate getDate();
-
-    DomanTestParameter getDomanTestParameter();
+    LocalDate getTestResultDate();
 
     // Доман -- Стадия развития
     // Аутизм -- Количество баллов (риск)
     // Новрожденный -- Есть риск (1), Норма (0)
-    Integer getResult();
+    Integer getResultNumber();
+
+    LocalDate getBirthDate();
 
     LocalDate getDomanDate();
+
+    DomanTestParameter getDomanTestParameter();
 }

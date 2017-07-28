@@ -49,7 +49,7 @@ public class TestingDbService {
         if (request.getTestParameter() != null) {
             select = select.and(TestResultEntity.DOMAN_TEST_PARAMETER.eq(request.getTestParameter()));
         }
-        val order = request.isAscending() ? TestResultEntity.DATE.asc() : TestResultEntity.DATE.desc();
+        val order = request.isAscending() ? TestResultEntity.TEST_RESULT_DATE.asc() : TestResultEntity.TEST_RESULT_DATE.desc();
         return select.orderBy(order, TestResultEntity.TEST_TYPE, TestResultEntity.DOMAN_TEST_PARAMETER, TestResultEntity.ID)
                 .get()
                 .observableResult()
@@ -72,7 +72,7 @@ public class TestingDbService {
                 .where(TestResultEntity.CHILD_ID.eq(child.getId()))
                 .and(TestResultEntity.TEST_TYPE.eq(testType))
                 .and(TestResultEntity.DOMAN_TEST_PARAMETER.eq(testParameter))
-                .and(TestResultEntity.DATE.eq(date))
+                .and(TestResultEntity.TEST_RESULT_DATE.eq(date))
                 .get()
                 .single()
                 .map(count -> count == 0);

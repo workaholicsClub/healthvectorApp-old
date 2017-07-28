@@ -23,18 +23,18 @@ public class TestResult implements Serializable {
 
     Test test;
 
-    LocalDate birthDate;
-
     LocalDate date;
-
-    DomanTestParameter domanTestParameter;
 
     // Доман -- Стадия развития
     // Аутизм -- Количество баллов (риск)
     // Новрожденный -- Есть риск (1), Норма (0)
     Integer result;
 
+    LocalDate birthDate;
+
     LocalDate domanDate;
+
+    DomanTestParameter domanTestParameter;
 
     public boolean isInvalid() {
         return !ObjectUtils.equals(child.getBirthDate(), birthDate);

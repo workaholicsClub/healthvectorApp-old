@@ -31,7 +31,7 @@ public class AntropometryMapper implements EntityMapper<AntropometryData, Antrop
                 .child(child)
                 .height(antropometryData.getHeight())
                 .weight(antropometryData.getWeight())
-                .date(antropometryData.getDate())
+                .date(antropometryData.getAntropometryDate())
                 .build();
     }
 
@@ -57,6 +57,6 @@ public class AntropometryMapper implements EntityMapper<AntropometryData, Antrop
     public void fillNonReferencedFields(@NonNull AntropometryEntity to, @NonNull Antropometry from) {
         to.setHeight(from.getHeight());
         to.setWeight(from.getWeight());
-        to.setDate(from.getDate());
+        to.setAntropometryDate(from.getDate());
     }
 }
