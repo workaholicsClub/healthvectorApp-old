@@ -100,7 +100,7 @@ public class TimeDialogFragment extends BaseMvpDialogFragment<TimeDialogArgument
 
     @NonNull
     @Override
-    protected Dialog createDialog(View view) {
+    protected Dialog createDialog(@Nullable View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(dialogArguments.getTitle())

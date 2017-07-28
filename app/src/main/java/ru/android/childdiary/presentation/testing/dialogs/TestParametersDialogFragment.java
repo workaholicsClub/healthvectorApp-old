@@ -127,7 +127,7 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
 
     @NonNull
     @Override
-    protected Dialog createDialog(View view) {
+    protected Dialog createDialog(@Nullable View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setPositiveButton(R.string.ok, null)

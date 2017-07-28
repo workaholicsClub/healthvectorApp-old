@@ -67,7 +67,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
 
     @NonNull
     @Override
-    protected Dialog createDialog(View view) {
+    protected Dialog createDialog(@Nullable View view) {
         Dialog dialog = new Dialog(getContext(), getTheme());
         if (dialog.getWindow() != null) {
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);

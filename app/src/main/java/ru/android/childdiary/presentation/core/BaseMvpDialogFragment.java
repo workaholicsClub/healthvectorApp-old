@@ -110,7 +110,7 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
     protected abstract void setupUi();
 
     @NonNull
-    protected abstract Dialog createDialog(View view);
+    protected abstract Dialog createDialog(@Nullable View view);
 
     protected final void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
