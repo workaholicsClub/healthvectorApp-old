@@ -21,7 +21,6 @@ import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEvents
 import ru.android.childdiary.domain.interactors.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.interactors.child.requests.DeleteChildResponse;
-import ru.android.childdiary.domain.interactors.child.validation.ChildValidationException;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidationResult;
 import ru.android.childdiary.domain.interactors.child.validation.ChildValidator;
 import ru.android.childdiary.domain.interactors.core.images.ImageType;
@@ -67,14 +66,14 @@ public class ChildInteractor {
     }
 
     public Observable<Child> add(@NonNull Child item) {
-        return validate(item)
+        return childValidator.validateObservable(item)
                 .flatMap(this::createImageFile)
                 .flatMap(childRepository::add)
                 .flatMap(this::setActiveChildObservable);
     }
 
     public Observable<Child> update(@NonNull Child item) {
-        return validate(item)
+        return childValidator.validateObservable(item)
                 .flatMap(this::createImageFile)
                 .flatMap(childRepository::update);
     }
@@ -119,17 +118,6 @@ public class ChildInteractor {
 
     public Observable<List<ChildValidationResult>> controlFields(@NonNull Observable<Child> childObservable) {
         return childObservable.map(childValidator::validate);
-    }
-
-    private Observable<Child> validate(@NonNull Child item) {
-        return Observable.just(item)
-                .flatMap(child -> {
-                    List<ChildValidationResult> results = childValidator.validate(child);
-                    if (!childValidator.isValid(results)) {
-                        return Observable.error(new ChildValidationException(results));
-                    }
-                    return Observable.just(child);
-                });
     }
 
     private Observable<Child> createImageFile(@NonNull Child child) {

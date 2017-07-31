@@ -2,6 +2,6 @@ package ru.android.childdiary.domain.core.validation;
 
 import java.util.List;
 
-public interface ValidationException<VR extends ValidationResult> {
-    List<VR> getValidationResults();
+public abstract class ValidationException extends Exception {
+    public abstract List<? extends ValidationResult> getValidationResults();
 }

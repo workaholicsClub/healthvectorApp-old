@@ -5,7 +5,7 @@ import java.util.List;
 
 import ru.android.childdiary.domain.core.validation.ValidationException;
 
-public class CalendarValidationException extends Exception implements ValidationException<CalendarValidationResult> {
+public class CalendarValidationException extends ValidationException {
     private final List<CalendarValidationResult> results;
 
     public CalendarValidationException(List<CalendarValidationResult> results) {

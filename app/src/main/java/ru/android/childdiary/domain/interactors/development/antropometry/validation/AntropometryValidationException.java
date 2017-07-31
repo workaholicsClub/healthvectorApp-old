@@ -5,7 +5,7 @@ import java.util.List;
 
 import ru.android.childdiary.domain.core.validation.ValidationException;
 
-public class AntropometryValidationException extends Exception implements ValidationException<AntropometryValidationResult> {
+public class AntropometryValidationException extends ValidationException {
     private final List<AntropometryValidationResult> results;
 
     public AntropometryValidationException(List<AntropometryValidationResult> results) {

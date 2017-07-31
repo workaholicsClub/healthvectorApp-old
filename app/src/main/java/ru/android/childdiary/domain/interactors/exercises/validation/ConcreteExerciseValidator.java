@@ -11,8 +11,10 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.validation.EventFieldType;
+import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.core.validation.EventValidator;
+import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -39,5 +41,10 @@ public class ConcreteExerciseValidator extends EventValidator<ConcreteExercise> 
         }
 
         return results;
+    }
+
+    @Override
+    protected ValidationException createException(@NonNull List<EventValidationResult> results) {
+        return new EventValidationException(results);
     }
 }

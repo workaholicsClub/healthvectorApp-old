@@ -20,7 +20,6 @@ import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.exercises.ExerciseDataRepository;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -116,13 +115,8 @@ public class ExerciseInteractor {
     }
 
     private Observable<UpsertConcreteExerciseRequest> validate(@NonNull UpsertConcreteExerciseRequest request) {
-        return Observable.defer(() -> {
-            List<EventValidationResult> results = concreteExerciseValidator.validate(request.getConcreteExercise());
-            if (!concreteExerciseValidator.isValid(results)) {
-                return Observable.error(new EventValidationException(results));
-            }
-            return Observable.just(request);
-        });
+        return concreteExerciseValidator.validateObservable(request.getConcreteExercise())
+                .map(concreteExercise -> request.toBuilder().concreteExercise(concreteExercise).build());
     }
 
     public Observable<UpsertConcreteExerciseResponse> addConcreteExercise(@NonNull UpsertConcreteExerciseRequest request) {

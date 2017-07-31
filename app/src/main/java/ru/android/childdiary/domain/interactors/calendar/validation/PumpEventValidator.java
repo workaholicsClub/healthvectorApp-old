@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.PumpEvent;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -45,5 +46,10 @@ public class PumpEventValidator extends Validator<PumpEvent, CalendarValidationR
         }
 
         return results;
+    }
+
+    @Override
+    protected ValidationException createException(@NonNull List<CalendarValidationResult> results) {
+        return new CalendarValidationException(results);
     }
 }

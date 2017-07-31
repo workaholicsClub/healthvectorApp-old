@@ -25,7 +25,6 @@ import ru.android.childdiary.data.repositories.medical.DoctorVisitFilterDataRepo
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.core.DeleteResponse;
 import ru.android.childdiary.domain.core.HasDataResponse;
-import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.child.Child;
@@ -103,17 +102,8 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
     }
 
     public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {
-        return validate(doctor).flatMap(doctorVisitRepository::addDoctor);
-    }
-
-    private Observable<Doctor> validate(@NonNull Doctor doctor) {
-        return Observable.defer(() -> {
-            List<EventValidationResult> results = doctorValidator.validate(doctor);
-            if (!doctorValidator.isValid(results)) {
-                return Observable.error(new EventValidationException(results));
-            }
-            return Observable.just(doctor);
-        });
+        return doctorValidator.validateObservable(doctor)
+                .flatMap(doctorVisitRepository::addDoctor);
     }
 
     public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
@@ -179,13 +169,8 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
     }
 
     private Observable<UpsertDoctorVisitRequest> validate(@NonNull UpsertDoctorVisitRequest request) {
-        return Observable.defer(() -> {
-            List<EventValidationResult> results = doctorVisitValidator.validate(request.getDoctorVisit());
-            if (!doctorVisitValidator.isValid(results)) {
-                return Observable.error(new EventValidationException(results));
-            }
-            return Observable.just(request);
-        });
+        return doctorVisitValidator.validateObservable(request.getDoctorVisit())
+                .map(doctorVisit -> request.toBuilder().doctorVisit(doctorVisit).build());
     }
 
     private Observable<UpsertDoctorVisitRequest> createImageFile(@NonNull UpsertDoctorVisitRequest request) {

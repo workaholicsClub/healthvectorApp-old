@@ -53,7 +53,6 @@ import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExercise
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
-import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.validation.DiaperEventValidator;
 import ru.android.childdiary.domain.interactors.calendar.validation.DoctorVisitEventValidator;
@@ -568,15 +567,7 @@ public class CalendarInteractor {
     }
 
     private <T extends MasterEvent> Observable<T> validate(@NonNull T item) {
-        return Observable.just(item)
-                .flatMap(event -> {
-                    Validator<T, CalendarValidationResult> validator = getValidator(event);
-                    List<CalendarValidationResult> results = validator.validate(event);
-                    if (!validator.isValid(results)) {
-                        return Observable.error(new CalendarValidationException(results));
-                    }
-                    return Observable.just(event);
-                });
+        return getValidator(item).validateObservable(item);
     }
 
     private <T extends MasterEvent> Observable<T> createImageFile(@NonNull T item) {

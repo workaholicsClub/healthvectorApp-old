@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDataRepository;
+import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryRepository;
@@ -45,13 +46,15 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
         results.add(result);
 
         result = new AntropometryValidationResult(AntropometryFieldType.HEIGHT);
-        if (antropometry.getHeight() != null && antropometry.getHeight() > MAX_HEIGHT) {
+        if (antropometry.getHeight() != null
+                && (antropometry.getHeight() < 0 || antropometry.getHeight() > MAX_HEIGHT)) {
             result.addMessage(context.getString(R.string.validation_antropometry_invalid_height));
         }
         results.add(result);
 
         result = new AntropometryValidationResult(AntropometryFieldType.WEIGHT);
-        if (antropometry.getWeight() != null && antropometry.getWeight() > MAX_WEIGHT) {
+        if (antropometry.getWeight() != null
+                && (antropometry.getWeight() < 0 || antropometry.getWeight() > MAX_WEIGHT)) {
             result.addMessage(context.getString(R.string.validation_antropometry_invalid_weight));
         }
         results.add(result);
@@ -75,5 +78,21 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
         }
 
         return results;
+    }
+
+    @Override
+    protected ValidationException createException(@NonNull List<AntropometryValidationResult> results) {
+        return new AntropometryValidationException(results);
+    }
+
+    @Override
+    protected Antropometry fix(@NonNull Antropometry item) {
+        if (!ObjectUtils.isPositive(item.getHeight())) {
+            item = item.toBuilder().height(null).build();
+        }
+        if (!ObjectUtils.isPositive(item.getWeight())) {
+            item = item.toBuilder().weight(null).build();
+        }
+        return item;
     }
 }

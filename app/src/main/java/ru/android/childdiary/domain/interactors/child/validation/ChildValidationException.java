@@ -5,7 +5,7 @@ import java.util.List;
 
 import ru.android.childdiary.domain.core.validation.ValidationException;
 
-public class ChildValidationException extends Exception implements ValidationException<ChildValidationResult> {
+public class ChildValidationException extends ValidationException {
     private final List<ChildValidationResult> results;
 
     public ChildValidationException(List<ChildValidationResult> results) {

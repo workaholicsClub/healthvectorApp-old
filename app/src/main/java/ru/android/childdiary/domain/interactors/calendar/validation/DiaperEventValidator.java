@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.DiaperEvent;
 
@@ -23,5 +24,10 @@ public class DiaperEventValidator extends Validator<DiaperEvent, CalendarValidat
     public List<CalendarValidationResult> validate(@NonNull DiaperEvent event) {
         List<CalendarValidationResult> results = new ArrayList<>();
         return results;
+    }
+
+    @Override
+    protected ValidationException createException(@NonNull List<CalendarValidationResult> results) {
+        return new CalendarValidationException(results);
     }
 }

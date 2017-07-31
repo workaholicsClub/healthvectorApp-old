@@ -11,8 +11,10 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.validation.EventFieldType;
+import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.core.validation.EventValidator;
+import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -47,5 +49,10 @@ public class DoctorVisitValidator extends EventValidator<DoctorVisit> {
         }
 
         return results;
+    }
+
+    @Override
+    protected ValidationException createException(@NonNull List<EventValidationResult> results) {
+        return new EventValidationException(results);
     }
 }

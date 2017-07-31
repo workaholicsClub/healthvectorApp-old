@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -42,5 +43,10 @@ public class DoctorVisitEventValidator extends Validator<DoctorVisitEvent, Calen
         }
 
         return results;
+    }
+
+    @Override
+    protected ValidationException createException(@NonNull List<CalendarValidationResult> results) {
+        return new CalendarValidationException(results);
     }
 }

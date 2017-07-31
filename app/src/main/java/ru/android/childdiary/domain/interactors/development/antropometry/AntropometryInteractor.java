@@ -18,7 +18,6 @@ import ru.android.childdiary.domain.core.HasDataResponse;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
 import ru.android.childdiary.domain.interactors.development.antropometry.requests.WhoNormRequest;
-import ru.android.childdiary.domain.interactors.development.antropometry.validation.AntropometryValidationException;
 import ru.android.childdiary.domain.interactors.development.antropometry.validation.AntropometryValidationResult;
 import ru.android.childdiary.domain.interactors.development.antropometry.validation.AntropometryValidator;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
@@ -43,27 +42,17 @@ public class AntropometryInteractor {
 
     public Observable<Antropometry> add(@NonNull Child child, @NonNull Antropometry item) {
         item = item.toBuilder().child(child).build();
-        return validate(item)
+        return antropometryValidator.validateObservable(item)
                 .flatMap(antropometryRepository::add);
     }
 
     public Observable<Antropometry> update(@NonNull Antropometry item) {
-        return validate(item)
+        return antropometryValidator.validateObservable(item)
                 .flatMap(antropometryRepository::update);
     }
 
     public Observable<Antropometry> delete(@NonNull Antropometry item) {
         return antropometryRepository.delete(item);
-    }
-
-    private Observable<Antropometry> validate(@NonNull Antropometry antropometry) {
-        return Observable.defer(() -> {
-            List<AntropometryValidationResult> results = antropometryValidator.validate(antropometry);
-            if (!antropometryValidator.isValid(results)) {
-                return Observable.error(new AntropometryValidationException(results));
-            }
-            return Observable.just(antropometry);
-        });
     }
 
     public Observable<Boolean> controlDoneButton(

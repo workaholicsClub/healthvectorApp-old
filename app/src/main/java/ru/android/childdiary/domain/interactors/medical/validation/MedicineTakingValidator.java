@@ -9,8 +9,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.core.validation.EventValidator;
+import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -37,5 +39,10 @@ public class MedicineTakingValidator extends EventValidator<MedicineTaking> {
         }
 
         return results;
+    }
+
+    @Override
+    protected ValidationException createException(@NonNull List<EventValidationResult> results) {
+        return new EventValidationException(results);
     }
 }

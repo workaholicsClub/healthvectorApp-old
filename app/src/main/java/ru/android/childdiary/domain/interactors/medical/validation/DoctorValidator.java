@@ -13,7 +13,9 @@ import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository;
 import ru.android.childdiary.domain.core.validation.EventFieldType;
+import ru.android.childdiary.domain.core.validation.EventValidationException;
 import ru.android.childdiary.domain.core.validation.EventValidationResult;
+import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitRepository;
 import ru.android.childdiary.domain.interactors.medical.core.Doctor;
@@ -57,5 +59,10 @@ public class DoctorValidator extends Validator<Doctor, EventValidationResult> {
         }
 
         return results;
+    }
+
+    @Override
+    protected ValidationException createException(@NonNull List<EventValidationResult> results) {
+        return new EventValidationException(results);
     }
 }

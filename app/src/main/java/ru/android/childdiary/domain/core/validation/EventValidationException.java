@@ -3,7 +3,7 @@ package ru.android.childdiary.domain.core.validation;
 import java.util.Collections;
 import java.util.List;
 
-public class EventValidationException extends Exception implements ValidationException<EventValidationResult> {
+public class EventValidationException extends ValidationException {
     private final List<EventValidationResult> results;
 
     public EventValidationException(List<EventValidationResult> results) {

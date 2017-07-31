@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
+import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
@@ -63,5 +64,10 @@ public class SleepEventValidator extends Validator<SleepEvent, CalendarValidatio
         }
 
         return results;
+    }
+
+    @Override
+    protected ValidationException createException(@NonNull List<CalendarValidationResult> results) {
+        return new CalendarValidationException(results);
     }
 }
