@@ -56,6 +56,7 @@ public abstract class AntropometryPresenter<V extends AntropometryView> extends 
     }
 
     public void handleValidationResult(List<AntropometryValidationResult> results) {
+        boolean weightValid = true, heightValid = true;
         for (AntropometryValidationResult result : results) {
             boolean valid = result.isValid();
             if (result.getFieldType() == null) {
@@ -63,9 +64,18 @@ public abstract class AntropometryPresenter<V extends AntropometryView> extends 
             }
             switch (result.getFieldType()) {
                 case HEIGHT_WEIGHT:
-                    getViewState().heightWeightValidated(valid);
+                    weightValid = weightValid && valid;
+                    heightValid = heightValid && valid;
+                    break;
+                case HEIGHT:
+                    heightValid = heightValid && valid;
+                    break;
+                case WEIGHT:
+                    weightValid = weightValid && valid;
                     break;
             }
         }
+        getViewState().heightValidated(heightValid);
+        getViewState().weightValidated(weightValid);
     }
 }

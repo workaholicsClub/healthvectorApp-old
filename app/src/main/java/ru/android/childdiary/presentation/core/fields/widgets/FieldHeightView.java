@@ -23,7 +23,7 @@ public class FieldHeightView extends FieldUnitView {
 
     @Override
     protected InputFilter getInputFilter() {
-        return new RegExpInputFilter.HeightInputFilter();
+        return new RegExpInputFilter.SimpleHeightInputFilter();
     }
 
     @Override

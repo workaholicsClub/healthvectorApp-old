@@ -28,6 +28,13 @@ public abstract class RegExpInputFilter implements InputFilter {
         return matches ? null : "";
     }
 
+    public static class SimpleHeightInputFilter extends RegExpInputFilter {
+        @Override
+        protected Pattern getPattern() {
+            return Pattern.compile("\\d{0,3}(\\.\\d?)?(\\s\\w+)?");
+        }
+    }
+
     public static class HeightInputFilter extends RegExpInputFilter {
         @Override
         protected Pattern getPattern() {
@@ -38,7 +45,7 @@ public abstract class RegExpInputFilter implements InputFilter {
     public static class SimpleWeightInputFilter extends RegExpInputFilter {
         @Override
         protected Pattern getPattern() {
-            return Pattern.compile("\\d{0,2}(\\.\\d{0,3})?(\\s\\w+)?");
+            return Pattern.compile("\\d{0,3}(\\.\\d{0,3})?(\\s\\w+)?");
         }
     }
 

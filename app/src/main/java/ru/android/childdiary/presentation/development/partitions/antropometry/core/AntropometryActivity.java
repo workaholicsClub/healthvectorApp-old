@@ -175,8 +175,12 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
     }
 
     @Override
-    public void heightWeightValidated(boolean valid) {
+    public void heightValidated(boolean valid) {
         heightView.validated(valid);
+    }
+
+    @Override
+    public void weightValidated(boolean valid) {
         weightView.validated(valid);
     }
 

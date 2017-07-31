@@ -19,6 +19,9 @@ import ru.android.childdiary.domain.interactors.development.antropometry.request
 import ru.android.childdiary.utils.ObjectUtils;
 
 public class AntropometryValidator extends Validator<Antropometry, AntropometryValidationResult> {
+    private static final int MAX_HEIGHT = 200;
+    private static final int MAX_WEIGHT = 150;
+
     private final Context context;
     private final AntropometryRepository antropometryRepository;
 
@@ -32,10 +35,24 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
     public List<AntropometryValidationResult> validate(@NonNull Antropometry antropometry) {
         List<AntropometryValidationResult> results = new ArrayList<>();
 
-        AntropometryValidationResult result = new AntropometryValidationResult(AntropometryFieldType.HEIGHT_WEIGHT);
+        AntropometryValidationResult result;
+
+        result = new AntropometryValidationResult(AntropometryFieldType.HEIGHT_WEIGHT);
         if (!ObjectUtils.isPositive(antropometry.getHeight())
                 && !ObjectUtils.isPositive(antropometry.getWeight())) {
             result.addMessage(context.getString(R.string.validation_antropometry_empty));
+        }
+        results.add(result);
+
+        result = new AntropometryValidationResult(AntropometryFieldType.HEIGHT);
+        if (antropometry.getHeight() != null && antropometry.getHeight() > MAX_HEIGHT) {
+            result.addMessage(context.getString(R.string.validation_antropometry_invalid_height));
+        }
+        results.add(result);
+
+        result = new AntropometryValidationResult(AntropometryFieldType.WEIGHT);
+        if (antropometry.getWeight() != null && antropometry.getWeight() > MAX_WEIGHT) {
+            result.addMessage(context.getString(R.string.validation_antropometry_invalid_weight));
         }
         results.add(result);
 

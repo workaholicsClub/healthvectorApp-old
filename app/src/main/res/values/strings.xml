@@ -328,4 +328,6 @@
     <string name="continue_without_profile">Продолжить без профиля</string>
     <string name="add_doctor_intention">Добавьте специализацию</string>
     <string name="add_medicine_intention">Добавьте лекарство</string>
+    <string name="validation_antropometry_invalid_height">Некорректное значение роста</string>
+    <string name="validation_antropometry_invalid_weight">Некорректное значение веса</string>
 </resources>

@@ -14,5 +14,8 @@ public interface AntropometryView extends BaseView {
     void showValidationErrorMessage(String msg);
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void heightWeightValidated(boolean valid);
+    void heightValidated(boolean valid);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void weightValidated(boolean valid);
 }
