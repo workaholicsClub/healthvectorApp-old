@@ -17,15 +17,26 @@ public class AchievementMapper implements EntityMapper<AchievementData, Achievem
 
     @Override
     public Achievement mapToPlainObject(@NonNull AchievementData achievementData) {
-        return null;
+        return Achievement.builder()
+                .id(achievementData.getId())
+                .name(achievementData.getName())
+                .build();
     }
 
     @Override
     public AchievementEntity mapToEntity(BlockingEntityStore blockingEntityStore, @NonNull Achievement achievement) {
-        return null;
+        AchievementEntity achievementEntity;
+        if (achievement.getId() == null) {
+            achievementEntity = new AchievementEntity();
+        } else {
+            achievementEntity = (AchievementEntity) blockingEntityStore.findByKey(AchievementEntity.class, achievement.getId());
+        }
+        fillNonReferencedFields(achievementEntity, achievement);
+        return achievementEntity;
     }
 
     @Override
     public void fillNonReferencedFields(@NonNull AchievementEntity to, @NonNull Achievement from) {
+        to.setName(from.getName());
     }
 }

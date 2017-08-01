@@ -60,6 +60,7 @@ public class CustomDatabaseSource extends DatabaseSource {
         fillTableWithValues(db, R.array.doctor, "doctor", "name");
         fillTableWithValues(db, R.array.medicine, "medicine", "name");
         fillTableWithValues(db, R.array.medicine_measure, "medicine_measure", "name");
+        fillTableWithValues(db, R.array.achievement, "achievement", "name");
         logger.debug("onCreate: finish inserting");
     }
 

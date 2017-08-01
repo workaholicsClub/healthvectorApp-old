@@ -7,7 +7,10 @@ import ru.android.childdiary.domain.interactors.development.achievement.Achievem
 
 @Singleton
 public class AchievementDataRepository implements AchievementRepository {
+    private final AchievementDbService achievementDbService;
+
     @Inject
-    public AchievementDataRepository() {
+    public AchievementDataRepository(AchievementDbService achievementDbService) {
+        this.achievementDbService = achievementDbService;
     }
 }
