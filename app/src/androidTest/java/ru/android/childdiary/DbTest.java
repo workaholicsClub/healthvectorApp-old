@@ -30,6 +30,8 @@ import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParameters
 import ru.android.childdiary.data.repositories.child.ChildDbService;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.CleanUpDbService;
+import ru.android.childdiary.data.repositories.development.achievement.mappers.AchievementMapper;
+import ru.android.childdiary.data.repositories.development.achievement.mappers.ConcreteAchievementMapper;
 import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDbService;
 import ru.android.childdiary.data.repositories.development.antropometry.mappers.AntropometryMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
@@ -93,7 +95,9 @@ public class DbTest {
                 repeatParametersMapper);
         MedicineTakingMapper medicineTakingMapper = new MedicineTakingMapper(childMapper,
                 medicineMapper, medicineMeasureMapper, repeatParametersMapper);
-        childDbService = new ChildDbService(dataStore, childMapper);
+        AchievementMapper achievementMapper = new AchievementMapper();
+        ConcreteAchievementMapper concreteAchievementMapper = new ConcreteAchievementMapper(childMapper, achievementMapper);
+        childDbService = new ChildDbService(dataStore, childMapper, concreteAchievementMapper, achievementMapper);
         cleanUpDbService = new CleanUpDbService(dataStore, doctorVisitMapper, medicineTakingMapper);
         antropometryDbService = new AntropometryDbService(dataStore, antropometryMapper);
     }

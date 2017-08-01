@@ -80,14 +80,17 @@ public class CustomDatabaseSource extends DatabaseSource {
 
     private void fillPredefinedAchievements(SQLiteDatabase db) {
         String[] values = context.getResources().getStringArray(R.array.achievement_predefined);
-        for (String value : values) {
+        for (int i = 0; i < values.length; ++i) {
+            String value = values[i];
             db.execSQL("insert into "
                     + AchievementEntity.$TYPE.getName()
                     + " ("
                     + AchievementEntity.NAME.getName()
                     + ", "
                     + AchievementEntity.PREDEFINED.getName()
-                    + ") values ('" + value + "', 'true');");
+                    + ", "
+                    + AchievementEntity.ORDER_NUMBER.getName()
+                    + ") values ('" + value + "', 1, " + i + ");");
         }
     }
 

@@ -62,7 +62,7 @@ public class CleanUpDbService extends EventsDbService {
     }
 
     public Observable<DeleteChildResponse> deleteChild(@NonNull DeleteChildRequest request) {
-        return Observable.fromCallable(() -> {
+        return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             Child child = request.getChild();
             List<String> imageFilesToDelete = new ArrayList<>();
 
@@ -107,7 +107,7 @@ public class CleanUpDbService extends EventsDbService {
                     .request(request)
                     .imageFilesToDelete(imageFilesToDelete)
                     .build();
-        });
+        }));
     }
 
     public Observable<DeleteDoctorVisitEventsResponse> deleteDoctorVisitEvents(

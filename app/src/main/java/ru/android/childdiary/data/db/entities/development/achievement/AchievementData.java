@@ -17,4 +17,6 @@ public interface AchievementData extends Persistable {
     String getName();
 
     Boolean isPredefined();
+
+    Integer getOrderNumber();
 }

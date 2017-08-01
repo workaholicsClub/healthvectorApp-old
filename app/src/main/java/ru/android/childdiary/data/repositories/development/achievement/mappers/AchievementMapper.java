@@ -21,6 +21,7 @@ public class AchievementMapper implements EntityMapper<AchievementData, Achievem
                 .id(achievementData.getId())
                 .name(achievementData.getName())
                 .isPredefined(achievementData.isPredefined())
+                .orderNumber(achievementData.getOrderNumber())
                 .build();
     }
 
@@ -40,5 +41,6 @@ public class AchievementMapper implements EntityMapper<AchievementData, Achievem
     public void fillNonReferencedFields(@NonNull AchievementEntity to, @NonNull Achievement from) {
         to.setName(from.getName());
         to.setPredefined(from.getIsPredefined());
+        to.setOrderNumber(from.getOrderNumber());
     }
 }

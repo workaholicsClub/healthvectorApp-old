@@ -44,7 +44,9 @@ public class MedicineValidator extends Validator<Medicine, EventValidationResult
             result = new EventValidationResult(EventFieldType.MEDICINE_NAME);
             results.add(result);
 
-            long count = Observable.fromIterable(medicineTakingRepository.getMedicines().blockingFirst())
+            long count = Observable.fromIterable(
+                    medicineTakingRepository.getMedicines()
+                            .blockingFirst())
                     .filter(d -> !TextUtils.isEmpty(d.getName()))
                     .map(Medicine::getName)
                     .filter(name -> name.equals(medicine.getName()))

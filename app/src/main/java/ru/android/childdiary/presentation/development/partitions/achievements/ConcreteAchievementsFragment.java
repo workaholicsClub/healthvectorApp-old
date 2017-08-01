@@ -50,7 +50,7 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
-        textViewIntention.setText(R.string.add_medicine_taking);
+        textViewIntention.setText(R.string.no_achievements);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
@@ -73,7 +73,6 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
         line.setVisibility(concreteAchievements.isEmpty() ? View.GONE : View.VISIBLE);
         textViewIntention.setVisibility(concreteAchievements.isEmpty() ? View.VISIBLE : View.GONE);
-        textViewIntention.setText(R.string.no_antropometry_data);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     @Override
     public void confirmDelete(@NonNull ConcreteAchievement concreteAchievement) {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(R.string.delete_antropometry_dialog_title) // TODO message
+                .setTitle(R.string.delete_achievement_dialog_title)
                 .setPositiveButton(R.string.delete,
                         (dialog, which) -> presenter.forceDelete(concreteAchievement))
                 .setNegativeButton(R.string.cancel, null)

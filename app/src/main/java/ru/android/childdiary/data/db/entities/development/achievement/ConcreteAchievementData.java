@@ -11,7 +11,6 @@ import io.requery.Persistable;
 import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.db.entities.child.ChildData;
-import ru.android.childdiary.domain.interactors.development.achievement.Achievement;
 
 @Table(name = "concrete_achievement")
 @Entity(name = "ConcreteAchievementEntity")
@@ -37,4 +36,6 @@ public interface ConcreteAchievementData extends Persistable {
     String getImageFileName();
 
     Boolean isPredefined();
+
+    Integer getOrderNumber();
 }

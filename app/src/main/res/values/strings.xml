@@ -291,6 +291,7 @@
     <string name="delete_test_result_dialog_title">Удалить результаты тестирования?</string>
     <string name="no_doman_test_data">Пройдите тестирование по методу Гленна Домана</string>
     <string name="no_antropometry_data">Добавьте показатели роста и веса</string>
+    <string name="no_achievements">Добавьте достижения</string>
     <string name="doman_chart_y_title">Уровень</string>
     <string name="doman_chart_x_title">Стадия</string>
     <string name="height">Рост</string>
@@ -298,6 +299,7 @@
     <string name="height_hint">Введите рост (см)</string>
     <string name="weight_hint">Введите вес (кг)</string>
     <string name="delete_antropometry_dialog_title">Удалить показатели роста и веса?</string>
+    <string name="delete_achievement_dialog_title">Удалить достижение?</string>
     <string name="validation_antropometry_empty">Введите рост или вес</string>
     <string name="validation_antropometry_date_not_unique">Введите другую дату. На эту дату показатели роста и веса уже введены.</string>
     <string name="low_limit_who">Нижняя граница по ВОЗ</string>

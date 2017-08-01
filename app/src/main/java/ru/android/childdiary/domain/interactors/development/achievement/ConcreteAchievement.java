@@ -33,6 +33,8 @@ public class ConcreteAchievement implements Serializable, ContentObject<Concrete
 
     Boolean isPredefined;
 
+    Integer orderNumber;
+
     @Override
     public boolean isContentEmpty() {
         return isContentEqual(NULL);

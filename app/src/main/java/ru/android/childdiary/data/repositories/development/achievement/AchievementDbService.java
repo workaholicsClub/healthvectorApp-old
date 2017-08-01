@@ -47,10 +47,11 @@ public class AchievementDbService {
     }
 
     public Observable<List<ConcreteAchievement>> getConcreteAchievements(@NonNull Child child) {
-        // TODO сверху предопределенные в порядке возрастания, снизу пользовательские в порядке убывания
         return dataStore.select(ConcreteAchievementEntity.class)
                 .where(ConcreteAchievementEntity.CHILD_ID.eq(child.getId()))
-                .orderBy(ConcreteAchievementEntity.CONCRETE_ACHIEVEMENT_DATE.desc(), ConcreteAchievementEntity.ID)
+                .orderBy(ConcreteAchievementEntity.PREDEFINED, ConcreteAchievementEntity.ORDER_NUMBER,
+                        ConcreteAchievementEntity.CONCRETE_ACHIEVEMENT_DATE,
+                        ConcreteAchievementEntity.NAME, ConcreteAchievementEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, concreteAchievementMapper));
@@ -112,7 +113,7 @@ public class AchievementDbService {
 
     public Observable<List<Achievement>> getAchievements(@NonNull GetAchievementsRequest request) {
         return dataStore.select(AchievementEntity.class)
-                .orderBy(AchievementEntity.NAME, AchievementEntity.ID)
+                .orderBy(AchievementEntity.PREDEFINED, AchievementEntity.ORDER_NUMBER, AchievementEntity.NAME, AchievementEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, achievementMapper))

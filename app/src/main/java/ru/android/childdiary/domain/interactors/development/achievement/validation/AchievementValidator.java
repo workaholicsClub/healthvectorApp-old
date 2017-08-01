@@ -16,6 +16,7 @@ import ru.android.childdiary.domain.core.validation.ValidationException;
 import ru.android.childdiary.domain.core.validation.Validator;
 import ru.android.childdiary.domain.interactors.development.achievement.Achievement;
 import ru.android.childdiary.domain.interactors.development.achievement.AchievementRepository;
+import ru.android.childdiary.domain.interactors.development.achievement.requests.GetAchievementsRequest;
 
 public class AchievementValidator extends Validator<Achievement, AchievementValidationResult> {
     private final Context context;
@@ -41,7 +42,10 @@ public class AchievementValidator extends Validator<Achievement, AchievementVali
             result = new AchievementValidationResult(AchievementFieldType.ACHIEVEMENT_NAME);
             results.add(result);
 
-            long count = Observable.fromIterable(achievementRepository.getAchievements().blockingFirst())
+            long count = Observable.fromIterable(
+                    achievementRepository.getAchievements(GetAchievementsRequest.builder()
+                            .build())
+                            .blockingFirst())
                     .filter(d -> !TextUtils.isEmpty(d.getName()))
                     .map(Achievement::getName)
                     .filter(name -> name.equals(achievement.getName()))

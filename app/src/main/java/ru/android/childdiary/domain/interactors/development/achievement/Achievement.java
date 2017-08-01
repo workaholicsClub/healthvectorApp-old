@@ -20,6 +20,8 @@ public class Achievement implements Serializable, ContentObject<Achievement> {
 
     Boolean isPredefined;
 
+    Integer orderNumber;
+
     @Override
     public boolean isContentEmpty() {
         return isContentEqual(NULL);

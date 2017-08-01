@@ -54,7 +54,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
-        textViewIntention.setText(R.string.add_medicine_taking);
+        textViewIntention.setText(R.string.no_antropometry_data);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
@@ -77,7 +77,6 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
 
         line.setVisibility(antropometryList.isEmpty() ? View.GONE : View.VISIBLE);
         textViewIntention.setVisibility(antropometryList.isEmpty() ? View.VISIBLE : View.GONE);
-        textViewIntention.setText(R.string.no_antropometry_data);
     }
 
     @Override
