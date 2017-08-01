@@ -60,9 +60,9 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
     private final SettingsRepository settingsRepository;
     private final MedicineTakingRepository medicineTakingRepository;
     private final MedicineTakingValidator medicineTakingValidator;
+    private final MedicineValidator medicineValidator;
     private final ImagesRepository imagesRepository;
     private final MedicineTakingFilterDataRepository filterRepository;
-    private final MedicineValidator medicineValidator;
 
     @Inject
     public MedicineTakingInteractor(ChildDataRepository childRepository,
@@ -70,17 +70,17 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
                                     SettingsDataRepository settingsRepository,
                                     MedicineTakingDataRepository medicineTakingRepository,
                                     MedicineTakingValidator medicineTakingValidator,
+                                    MedicineValidator medicineValidator,
                                     ImagesDataRepository imagesRepository,
-                                    MedicineTakingFilterDataRepository filterRepository,
-                                    MedicineValidator medicineValidator) {
+                                    MedicineTakingFilterDataRepository filterRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
         this.medicineTakingRepository = medicineTakingRepository;
         this.medicineTakingValidator = medicineTakingValidator;
+        this.medicineValidator = medicineValidator;
         this.imagesRepository = imagesRepository;
         this.filterRepository = filterRepository;
-        this.medicineValidator = medicineValidator;
     }
 
     public Observable<GetMedicineTakingListFilter> getSelectedFilterValue() {

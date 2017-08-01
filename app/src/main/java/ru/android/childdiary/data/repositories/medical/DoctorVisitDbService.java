@@ -40,8 +40,8 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisits
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
-import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.strings.DateUtils;
 
 @Singleton
 public class DoctorVisitDbService {
@@ -222,11 +222,7 @@ public class DoctorVisitDbService {
     public Observable<UpsertDoctorVisitResponse> update(@NonNull UpsertDoctorVisitRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             DoctorVisit doctorVisit = request.getDoctorVisit();
-            DoctorVisitEntity oldDoctorVisitEntity = blockingEntityStore
-                    .select(DoctorVisitEntity.class)
-                    .where(DoctorVisitEntity.ID.eq(doctorVisit.getId()))
-                    .get()
-                    .first();
+            DoctorVisitEntity oldDoctorVisitEntity = blockingEntityStore.findByKey(DoctorVisitEntity.class, doctorVisit.getId());
 
             List<String> imageFilesToDelete = new ArrayList<>();
             if (!TextUtils.isEmpty(oldDoctorVisitEntity.getImageFileName())

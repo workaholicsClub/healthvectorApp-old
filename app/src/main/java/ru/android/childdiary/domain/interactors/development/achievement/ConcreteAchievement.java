@@ -13,7 +13,7 @@ import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class ConcreteAchievement implements Serializable, ContentObject<ConcreteAchievement> {
     private static final ConcreteAchievement NULL = ConcreteAchievement.builder().build();
 

@@ -30,6 +30,7 @@ public class ImagesDataRepository implements ImagesRepository {
     private static final String PARENT_DIR_NAME_MEDICINE_TAKING = PARENT_DIR_NAME_IMAGES + File.separator + "medicine_taking";
     private static final String PARENT_DIR_NAME_MEDICINE_TAKING_EVENT = PARENT_DIR_NAME_IMAGES + File.separator + "medicine_taking_event";
     private static final String PARENT_DIR_NAME_EXERCISE_EVENT = PARENT_DIR_NAME_IMAGES + File.separator + "exercise_event";
+    private static final String PARENT_DIR_NAME_ACHIEVEMENT = PARENT_DIR_NAME_IMAGES + File.separator + "achievement";
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy_MM_dd'T'HH_mm_ss_SSS");
 
@@ -111,6 +112,8 @@ public class ImagesDataRepository implements ImagesRepository {
                 return PARENT_DIR_NAME_MEDICINE_TAKING_EVENT;
             case EXERCISE_EVENT:
                 return PARENT_DIR_NAME_EXERCISE_EVENT;
+            case ACHIEVEMENT:
+                return PARENT_DIR_NAME_ACHIEVEMENT;
         }
         throw new IllegalArgumentException("Unsupported image type");
     }

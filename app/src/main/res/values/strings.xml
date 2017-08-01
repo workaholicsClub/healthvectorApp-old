@@ -111,7 +111,7 @@
     <string name="notify_time_text">За %s</string>
     <string name="no_value">Нет</string>
     <string name="food_measure_dialog_title">Введите единицу измерения</string>
-    <string name="food_dialog_title">Введите наименование прикорма</string>
+    <string name="food_dialog_title">Введите название прикорма</string>
     <!-- %s - параметр "Имя ребенка", например, "Егор спит" -->
     <string name="child_sleep">%s спит</string>
     <string name="sleep_timer">Таймер сна</string>
@@ -217,6 +217,8 @@
     <string name="move_linear_group">Перенести линейную группу</string>
     <string name="enter_doctor_name">Введите специализацию</string>
     <string name="enter_medicine_name">Введите лекарство</string>
+    <string name="enter_achievement_name">Введите название достижения</string>
+    <string name="enter_concrete_achievement_name">Введите достижение</string>
     <string name="the_value_already_exists">Такое значение уже есть в списке</string>
     <string name="no_exercises">Не удалось загрузить занятия</string>
     <string name="exercise">Занятие</string>

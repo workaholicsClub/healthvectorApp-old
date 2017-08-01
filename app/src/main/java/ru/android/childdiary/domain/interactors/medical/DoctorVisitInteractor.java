@@ -58,9 +58,9 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
     private final SettingsRepository settingsRepository;
     private final DoctorVisitRepository doctorVisitRepository;
     private final DoctorVisitValidator doctorVisitValidator;
+    private final DoctorValidator doctorValidator;
     private final ImagesRepository imagesRepository;
     private final DoctorVisitFilterDataRepository filterRepository;
-    private final DoctorValidator doctorValidator;
 
     @Inject
     public DoctorVisitInteractor(ChildDataRepository childRepository,
@@ -68,17 +68,17 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
                                  SettingsDataRepository settingsRepository,
                                  DoctorVisitDataRepository doctorVisitRepository,
                                  DoctorVisitValidator doctorVisitValidator,
+                                 DoctorValidator doctorValidator,
                                  ImagesDataRepository imagesRepository,
-                                 DoctorVisitFilterDataRepository filterRepository,
-                                 DoctorValidator doctorValidator) {
+                                 DoctorVisitFilterDataRepository filterRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.settingsRepository = settingsRepository;
         this.doctorVisitRepository = doctorVisitRepository;
         this.doctorVisitValidator = doctorVisitValidator;
+        this.doctorValidator = doctorValidator;
         this.imagesRepository = imagesRepository;
         this.filterRepository = filterRepository;
-        this.doctorValidator = doctorValidator;
     }
 
     public Observable<GetDoctorVisitsFilter> getSelectedFilterValue() {
