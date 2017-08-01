@@ -219,6 +219,12 @@
         <item name="fontPath">@string/font_path_regular</item>
     </style>
 
+    <style name="SplashTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/splash_text</item>
+        <item name="android:textSize">@dimen/text_size_splash</item>
+        <item name="fontPath">@string/font_path_splash</item>
+    </style>
+
     <style name="BorderlessButtonStyle" parent="Widget.AppCompat.Button.Borderless">
         <item name="fontPath">@string/font_path_medium</item>
     </style>

@@ -46,4 +46,5 @@
     <color name="line_color">#F7A731</color>
     <color name="line_color_low">#EF4C33</color>
     <color name="line_color_high">#3B86B4</color>
+    <color name="splash_text">#38A9F6</color>
 </resources>

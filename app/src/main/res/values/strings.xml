@@ -2,6 +2,8 @@
 <resources>
     <!-- &#8230; - символ многоточия -->
     <string name="app_name">Вектор развития</string>
+    <!-- \n - перенос строки -->
+    <string name="app_name_splash">Вектор\nразвития</string>
     <string name="drawer_item_calendar">Календарь</string>
     <string name="drawer_item_development_diary">Дневник развития</string>
     <string name="drawer_item_exercises">Занятия</string>

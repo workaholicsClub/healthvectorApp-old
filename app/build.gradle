@@ -37,6 +37,7 @@ android {
         resValue "string", "font_path_regular", "fonts/Roboto-Regular.ttf"
         resValue "string", "font_path_bold", "fonts/Roboto-Bold.ttf"
         resValue "string", "font_path_medium", "fonts/Roboto-Medium.ttf"
+        resValue "string", "font_path_splash", "fonts/Proxima-Nova-Semibold.otf"
 
         multiDexEnabled true
     }
