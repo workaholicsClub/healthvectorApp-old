@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="duration_separator">:</string>
+    <string name="duration_format">00:00:00</string>
+    <string name="percent_double_format">%.0f%%</string>
+    <string name="percent_string_format">%s%%</string>
+    <!--// TODO: pattern for English: "MMM d, yyyy" -->
+    <string name="date_format">d MMM yyyy</string>
+    <string name="time_format">HH:mm</string>
+    <!-- %s - параметр, число -->
+    <string name="height_review">%s см</string>
+    <!-- %s - параметр, число -->
+    <string name="weight_review">%s кг</string>
+    <!-- %s - параметр, число -->
+    <string name="amount_review">%s мл</string>
+    <!-- %1$s - параметр "Количество лет", %2$s - параметр "Количество месяцев", например, "2 года 10 месяцев" или "2 года 10 мес." -->
+    <string name="years_and_months">%1$s %2$s</string>
+    <!-- %1$s - параметр "Месяц", %2$d - параметр "Год" -->
+    <string name="calendar_month_title">%1$s %2$d</string>
+    <!-- %1$d - параметр "Число, с", \u2014 - длинное тире, %2$d - параметр "Число, по", %3$s - параметр "Месяц" -->
+    <string name="calendar_week_title_one_month">%1$d \u2014 %2$d %3$s</string>
+    <!-- %1$d - параметр "Число, с", %2$s - параметр "Месяц, с", \u2014 - длинное тире, %3$d - параметр "Число, по", %4$s - параметр "Месяц, по" -->
+    <string name="calendar_week_title_two_month">%1$d %2$s \u2014 %3$d %4$s</string>
+    <!-- %1$d - параметр "Число", %2$d - параметр "Месяц" -->
+    <string name="calendar_selected_date_format">%1$d %2$s</string>
+    <!-- %1$s - параметр "Число (дозировка)", %2$s - параметр "Единица измерения" -->
+    <string name="medicine_measure_format">%1$s %2$s</string>
+    <string name="two_values">%1$s • %2$s</string>
+    <string name="no_exercises_format">
+        <![CDATA[
+            %1$s
+            <br /><br />
+            %2$s
+            <br /><br />
+            <a href=\"%3$s\">%4$s</a>
+        ]]>
+    </string>
+</resources>

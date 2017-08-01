@@ -131,8 +131,8 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
     }
 
     private Parameters getStartDateTime(@NonNull DateTime dateTime, List<LocalTime> times) {
-        // Доработка логики: если дата не сегодня, то надо генерировать события "с утра",
-        // а не с указанного времени
+        // Пожелание заказчика (бизнес-логика): если дата не сегодня, то надо генерировать события "с утра",
+        // а не с указанного времени.
         boolean today = dateTime.toLocalDate().isEqual(LocalDate.now());
         if (!today) {
             return Parameters.builder()
