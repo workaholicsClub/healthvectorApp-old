@@ -8,8 +8,10 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.ManyToOne;
 import io.requery.Persistable;
+import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.db.entities.child.ChildData;
+import ru.android.childdiary.domain.interactors.development.achievement.Achievement;
 
 @Table(name = "concrete_achievement")
 @Entity(name = "ConcreteAchievementEntity")
@@ -22,6 +24,10 @@ public interface ConcreteAchievementData extends Persistable {
     @ManyToOne
     ChildData getChild();
 
+    @ForeignKey(delete = ReferentialAction.RESTRICT)
+    @ManyToOne
+    AchievementData getAchievement();
+
     String getName();
 
     LocalDate getConcreteAchievementDate();
@@ -29,4 +35,6 @@ public interface ConcreteAchievementData extends Persistable {
     String getNote();
 
     String getImageFileName();
+
+    Boolean isPredefined();
 }

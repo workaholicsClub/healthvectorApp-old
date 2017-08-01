@@ -7,32 +7,42 @@ import javax.inject.Inject;
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.db.entities.child.ChildEntity;
+import ru.android.childdiary.data.db.entities.development.achievement.AchievementData;
+import ru.android.childdiary.data.db.entities.development.achievement.AchievementEntity;
 import ru.android.childdiary.data.db.entities.development.achievement.ConcreteAchievementData;
 import ru.android.childdiary.data.db.entities.development.achievement.ConcreteAchievementEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.achievement.Achievement;
 import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
 
 public class ConcreteAchievementMapper implements EntityMapper<ConcreteAchievementData, ConcreteAchievementEntity, ConcreteAchievement> {
     private final ChildMapper childMapper;
+    private final AchievementMapper achievementMapper;
 
     @Inject
-    public ConcreteAchievementMapper(ChildMapper childMapper) {
+    public ConcreteAchievementMapper(ChildMapper childMapper,
+                                     AchievementMapper achievementMapper) {
         this.childMapper = childMapper;
+        this.achievementMapper = achievementMapper;
     }
 
     @Override
     public ConcreteAchievement mapToPlainObject(@NonNull ConcreteAchievementData concreteAchievementData) {
         ChildData childData = concreteAchievementData.getChild();
         Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        AchievementData achievementData = concreteAchievementData.getAchievement();
+        Achievement achievement = achievementData == null ? null : achievementMapper.mapToPlainObject(achievementData);
         return ConcreteAchievement.builder()
                 .id(concreteAchievementData.getId())
                 .child(child)
+                .achievement(achievement)
                 .name(concreteAchievementData.getName())
                 .date(concreteAchievementData.getConcreteAchievementDate())
                 .note(concreteAchievementData.getNote())
                 .imageFileName(concreteAchievementData.getImageFileName())
+                .isPredefined(concreteAchievementData.isPredefined())
                 .build();
     }
 
@@ -50,6 +60,11 @@ public class ConcreteAchievementMapper implements EntityMapper<ConcreteAchieveme
             ChildEntity childEntity = (ChildEntity) blockingEntityStore.findByKey(ChildEntity.class, child.getId());
             concreteAchievementEntity.setChild(childEntity);
         }
+        Achievement achievement = concreteAchievement.getAchievement();
+        if (achievement != null) {
+            AchievementEntity achievementEntity = (AchievementEntity) blockingEntityStore.findByKey(AchievementEntity.class, achievement.getId());
+            concreteAchievementEntity.setAchievement(achievementEntity);
+        }
         return concreteAchievementEntity;
     }
 
@@ -59,5 +74,6 @@ public class ConcreteAchievementMapper implements EntityMapper<ConcreteAchieveme
         to.setConcreteAchievementDate(from.getDate());
         to.setNote(from.getNote());
         to.setImageFileName(from.getImageFileName());
+        to.setPredefined(from.getIsPredefined());
     }
 }

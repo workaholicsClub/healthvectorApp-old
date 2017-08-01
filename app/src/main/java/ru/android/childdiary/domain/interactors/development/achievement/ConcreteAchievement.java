@@ -21,6 +21,8 @@ public class ConcreteAchievement implements Serializable, ContentObject<Concrete
 
     Child child;
 
+    Achievement achievement;
+
     String name;
 
     LocalDate date;
@@ -29,6 +31,8 @@ public class ConcreteAchievement implements Serializable, ContentObject<Concrete
 
     String imageFileName;
 
+    Boolean isPredefined;
+
     @Override
     public boolean isContentEmpty() {
         return isContentEqual(NULL);
@@ -36,7 +40,8 @@ public class ConcreteAchievement implements Serializable, ContentObject<Concrete
 
     @Override
     public boolean isContentEqual(@NonNull ConcreteAchievement other) {
-        return ObjectUtils.contentEquals(getName(), other.getName())
+        return ObjectUtils.contentEquals(getAchievement(), other.getAchievement())
+                && ObjectUtils.contentEquals(getName(), other.getName())
                 && ObjectUtils.equals(getDate(), other.getDate())
                 && ObjectUtils.contentEquals(getNote(), other.getNote())
                 && ObjectUtils.contentEquals(getImageFileName(), other.getImageFileName());
