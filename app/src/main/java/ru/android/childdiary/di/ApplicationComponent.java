@@ -22,7 +22,7 @@ import ru.android.childdiary.presentation.cloud.CloudOperationPresenter;
 import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
-import ru.android.childdiary.presentation.development.partitions.achievements.AchievementsPresenter;
+import ru.android.childdiary.presentation.development.partitions.achievements.ConcreteAchievementsPresenter;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListPresenter;
 import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryPresenter;
@@ -161,7 +161,7 @@ public interface ApplicationComponent {
 
     void inject(MedicineTakingFilterPresenter presenter);
 
-    void inject(AchievementsPresenter presenter);
+    void inject(ConcreteAchievementsPresenter presenter);
 
     void inject(AntropometryListPresenter presenter);
 

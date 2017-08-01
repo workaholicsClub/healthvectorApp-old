@@ -14,6 +14,7 @@ import ru.android.childdiary.domain.interactors.development.achievement.Achievem
 import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementResponse;
+import ru.android.childdiary.domain.interactors.development.achievement.requests.GetAchievementsRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementResponse;
 
@@ -47,8 +48,8 @@ public class AchievementDataRepository implements AchievementRepository {
     }
 
     @Override
-    public Observable<List<Achievement>> getAchievements() {
-        return achievementDbService.getAchievements();
+    public Observable<List<Achievement>> getAchievements(@NonNull GetAchievementsRequest request) {
+        return achievementDbService.getAchievements(request);
     }
 
     @Override

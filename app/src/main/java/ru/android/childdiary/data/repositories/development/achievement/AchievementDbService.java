@@ -24,8 +24,10 @@ import ru.android.childdiary.domain.interactors.development.achievement.Achievem
 import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementResponse;
+import ru.android.childdiary.domain.interactors.development.achievement.requests.GetAchievementsRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementResponse;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class AchievementDbService {
@@ -108,12 +110,20 @@ public class AchievementDbService {
         }));
     }
 
-    public Observable<List<Achievement>> getAchievements() {
+    public Observable<List<Achievement>> getAchievements(@NonNull GetAchievementsRequest request) {
         return dataStore.select(AchievementEntity.class)
                 .orderBy(AchievementEntity.NAME, AchievementEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, achievementMapper));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, achievementMapper))
+                .map(achievements -> filter(request, achievements));
+    }
+
+    private List<Achievement> filter(@NonNull GetAchievementsRequest request, @NonNull List<Achievement> achievements) {
+        return Observable.fromIterable(achievements)
+                .filter(achievement -> !request.isPredefined() || ObjectUtils.isTrue(achievement.getIsPredefined()))
+                .toList()
+                .blockingGet();
     }
 
     public Observable<Achievement> add(@NonNull Achievement achievement) {

@@ -15,6 +15,12 @@ import io.requery.sql.Platform;
 import io.requery.sql.platform.SQLite;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.db.entities.calendar.events.core.FoodEntity;
+import ru.android.childdiary.data.db.entities.calendar.events.core.FoodMeasureEntity;
+import ru.android.childdiary.data.db.entities.development.achievement.AchievementEntity;
+import ru.android.childdiary.data.db.entities.medical.core.DoctorEntity;
+import ru.android.childdiary.data.db.entities.medical.core.MedicineEntity;
+import ru.android.childdiary.data.db.entities.medical.core.MedicineMeasureEntity;
 
 public class CustomDatabaseSource extends DatabaseSource {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -55,12 +61,13 @@ public class CustomDatabaseSource extends DatabaseSource {
 
         // TODO: translation tables
         logger.debug("onCreate: start inserting");
-        fillTableWithValues(db, R.array.food, "food", "name");
-        fillTableWithValues(db, R.array.food_measure, "food_measure", "name");
-        fillTableWithValues(db, R.array.doctor, "doctor", "name");
-        fillTableWithValues(db, R.array.medicine, "medicine", "name");
-        fillTableWithValues(db, R.array.medicine_measure, "medicine_measure", "name");
-        fillTableWithValues(db, R.array.achievement, "achievement", "name");
+        fillTableWithValues(db, R.array.food, FoodEntity.$TYPE.getName(), FoodEntity.NAME.getName());
+        fillTableWithValues(db, R.array.food_measure, FoodMeasureEntity.$TYPE.getName(), FoodMeasureEntity.NAME.getName());
+        fillTableWithValues(db, R.array.doctor, DoctorEntity.$TYPE.getName(), DoctorEntity.NAME.getName());
+        fillTableWithValues(db, R.array.medicine, MedicineEntity.$TYPE.getName(), MedicineEntity.NAME.getName());
+        fillTableWithValues(db, R.array.medicine_measure, MedicineMeasureEntity.$TYPE.getName(), MedicineMeasureEntity.NAME.getName());
+        fillTableWithValues(db, R.array.achievement, AchievementEntity.$TYPE.getName(), AchievementEntity.NAME.getName());
+        fillPredefinedAchievements(db);
         logger.debug("onCreate: finish inserting");
     }
 
@@ -68,6 +75,19 @@ public class CustomDatabaseSource extends DatabaseSource {
         String[] values = context.getResources().getStringArray(arrayResId);
         for (String value : values) {
             db.execSQL("insert into " + table + " (" + column + ") values ('" + value + "');");
+        }
+    }
+
+    private void fillPredefinedAchievements(SQLiteDatabase db) {
+        String[] values = context.getResources().getStringArray(R.array.achievement_predefined);
+        for (String value : values) {
+            db.execSQL("insert into "
+                    + AchievementEntity.$TYPE.getName()
+                    + " ("
+                    + AchievementEntity.NAME.getName()
+                    + ", "
+                    + AchievementEntity.PREDEFINED.getName()
+                    + ") values ('" + value + "', 'true');");
         }
     }
 

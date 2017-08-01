@@ -114,12 +114,14 @@
         <item>куб. см</item>
         <item>впрыск</item>
     </string-array>
-    <string-array name="achievement">
+    <string-array name="achievement_predefined">
         <item>Делает осмысленные движения</item>
         <item>Держит голову</item>
         <item>Пробует голос</item>
         <item>Улыбается в ответ</item>
         <item>Поднимает голову</item>
+    </string-array>
+    <string-array name="achievement">
         <item>Гулит</item>
         <item>Рассматривает свою руку</item>
         <item>Сидит, держа голову прямо</item>

@@ -18,6 +18,8 @@ public class Achievement implements Serializable, ContentObject<Achievement> {
 
     String name;
 
+    Boolean isPredefined;
+
     @Override
     public boolean isContentEmpty() {
         return isContentEqual(NULL);

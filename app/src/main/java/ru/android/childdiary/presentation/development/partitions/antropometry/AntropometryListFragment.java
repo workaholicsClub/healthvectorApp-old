@@ -33,6 +33,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     @BindDimen(R.dimen.divider_padding)
     int DIVIDER_PADDING;
 
+    @Getter
     @InjectPresenter
     AntropometryListPresenter presenter;
 
@@ -113,11 +114,6 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
                         (dialog, which) -> presenter.forceDelete(antropometry))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
-    }
-
-    @Override
-    public AntropometryListPresenter getPresenter() {
-        return presenter;
     }
 
     @Override

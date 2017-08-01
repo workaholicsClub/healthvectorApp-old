@@ -280,7 +280,8 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
     }
 
     @Override
-    public Observable<Boolean> controlDoneButton(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+    public Observable<Boolean> controlDoneButton(
+            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
         return nameObservable
                 .map(TextViewAfterTextChangeEvent::editable)
                 .map(Editable::toString)
@@ -289,7 +290,8 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
                 .distinctUntilChanged();
     }
 
-    public Observable<List<EventValidationResult>> controlFields(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+    public Observable<List<EventValidationResult>> controlFields(
+            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
         return nameObservable
                 .map(TextViewAfterTextChangeEvent::editable)
                 .map(Editable::toString)

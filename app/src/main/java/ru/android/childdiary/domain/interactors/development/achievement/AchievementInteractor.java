@@ -1,6 +1,10 @@
 package ru.android.childdiary.domain.interactors.development.achievement;
 
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextUtils;
+
+import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
 import java.util.List;
 
@@ -15,8 +19,10 @@ import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementResponse;
+import ru.android.childdiary.domain.interactors.development.achievement.requests.GetAchievementsRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementResponse;
+import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidationResult;
 import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidator;
 import ru.android.childdiary.domain.interactors.development.achievement.validation.ConcreteAchievementValidator;
 
@@ -83,8 +89,8 @@ public class AchievementInteractor {
         });
     }
 
-    public Observable<List<Achievement>> getAchievements() {
-        return achievementRepository.getAchievements();
+    public Observable<List<Achievement>> getAchievements(@NonNull GetAchievementsRequest request) {
+        return achievementRepository.getAchievements(request);
     }
 
     public Observable<Achievement> add(@NonNull Achievement achievement) {
@@ -94,5 +100,51 @@ public class AchievementInteractor {
 
     public Observable<Achievement> delete(@NonNull Achievement achievement) {
         return achievementRepository.delete(achievement);
+    }
+
+    public Observable<Boolean> controlDoneButtonConcreteAchievement(
+            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+        return nameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(name -> ConcreteAchievement.builder()
+                        .name(name)
+                        .build())
+                .map(concreteAchievementValidator::validate)
+                .map(concreteAchievementValidator::isValid)
+                .distinctUntilChanged();
+    }
+
+    public Observable<List<AchievementValidationResult>> controlFieldsConcreteAchievement(
+            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+        return nameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(name -> ConcreteAchievement.builder()
+                        .name(name)
+                        .build())
+                .map(concreteAchievementValidator::validate);
+    }
+
+    public Observable<Boolean> controlDoneButtonAchievement(
+            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+        return nameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(name -> !TextUtils.isEmpty(name))
+                .distinctUntilChanged();
+    }
+
+    public Observable<List<AchievementValidationResult>> controlFieldsAchievement(
+            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+        return nameObservable
+                .map(TextViewAfterTextChangeEvent::editable)
+                .map(Editable::toString)
+                .map(String::trim)
+                .map(name -> Achievement.builder().name(name).build())
+                .map(achievementValidator::validate);
     }
 }

@@ -8,6 +8,7 @@ import io.reactivex.Observable;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementResponse;
+import ru.android.childdiary.domain.interactors.development.achievement.requests.GetAchievementsRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementResponse;
 
@@ -20,7 +21,7 @@ public interface AchievementRepository {
 
     Observable<DeleteConcreteAchievementResponse> delete(@NonNull DeleteConcreteAchievementRequest request);
 
-    Observable<List<Achievement>> getAchievements();
+    Observable<List<Achievement>> getAchievements(@NonNull GetAchievementsRequest request);
 
     Observable<Achievement> add(@NonNull Achievement achievement);
 

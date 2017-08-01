@@ -15,4 +15,6 @@ public interface AchievementData extends Persistable {
     Long getId();
 
     String getName();
+
+    Boolean isPredefined();
 }
