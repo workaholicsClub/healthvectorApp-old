@@ -12,7 +12,8 @@
     <LinearLayout
         android:id="@+id/bottomView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <View
             android:layout_width="@dimen/event_row_margin_horizontal"

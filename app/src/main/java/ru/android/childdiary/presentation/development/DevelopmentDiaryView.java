@@ -6,12 +6,14 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
+import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.presentation.core.AppPartitionView;
 
 public interface DevelopmentDiaryView extends AppPartitionView {
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToAchievementAdd(@NonNull Child child);
+    void navigateToAchievementAdd(@NonNull Child child, @NonNull ConcreteAchievement defaultConcreteAchievement);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToAntropometryAdd(@NonNull Child child);
+    void navigateToAntropometryAdd(@NonNull Child child, @NonNull Antropometry defaultAntropometry);
 }

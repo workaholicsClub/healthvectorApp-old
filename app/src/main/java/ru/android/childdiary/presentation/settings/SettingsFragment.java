@@ -134,6 +134,12 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
     public void showSelectedDate(@NonNull LocalDate selectedDate) {
         this.selectedDate = selectedDate;
     }

@@ -34,7 +34,7 @@ public class ExerciseEventMapper implements EntityMapper<ExerciseEventData, Exer
     public ExerciseEvent mapToPlainObject(@NonNull ExerciseEventData exerciseEventData) {
         MasterEventData masterEventData = exerciseEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         ConcreteExerciseData concreteExerciseData = exerciseEventData.getConcreteExercise();
         ConcreteExercise concreteExercise = concreteExerciseData == null ? null : concreteExerciseMapper.mapToPlainObject(concreteExerciseData);
         return ExerciseEvent.builder()

@@ -69,12 +69,16 @@ final class SwipeManager {
         showFabIfPossible();
     }
 
-    public void setFabController(@Nullable FabController fabController) {
+    public void setFabController(@Nullable FabController fabController, boolean isActive) {
         if (this.fabController != null && fabController == null) {
             this.fabController.hideFabBar();
         }
         this.fabController = fabController;
-        updateFabState();
+        if (isActive) {
+            updateFabState();
+        } else {
+            hideFab();
+        }
     }
 
     public void updateFabState() {

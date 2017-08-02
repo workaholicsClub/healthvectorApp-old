@@ -27,7 +27,7 @@ public class SleepEventMapper implements EntityMapper<SleepEventData, SleepEvent
     public SleepEvent mapToPlainObject(@NonNull SleepEventData sleepEventData) {
         MasterEventData masterEventData = sleepEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         return SleepEvent.builder()
                 .id(sleepEventData.getId())
                 .masterEventId(masterEventData.getId())

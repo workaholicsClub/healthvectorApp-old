@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.development.partitions.achievements;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +22,7 @@ import ru.android.childdiary.domain.interactors.development.achievement.Concrete
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementActionListener;
 import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementAdapter;
+import ru.android.childdiary.presentation.development.partitions.achievements.edit.EditConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -68,7 +70,7 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
         List<ConcreteAchievement> concreteAchievements = state.getConcreteAchievements();
         adapter.setItems(concreteAchievements);
-        adapter.setFabController(child.getId() == null ? null : fabController);
+        adapter.setFabController(child.getId() == null ? null : fabController, isSelected());
         recyclerView.setVisibility(concreteAchievements.isEmpty() ? View.GONE : View.VISIBLE);
 
         line.setVisibility(concreteAchievements.isEmpty() ? View.GONE : View.VISIBLE);
@@ -77,8 +79,8 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
     @Override
     public void navigateToConcreteAchievement(@NonNull Child child, @NonNull ConcreteAchievement concreteAchievement) {
-        // TODO Intent intent = EditAntropometryActivity.getIntent(getContext(), child, antropometry);
-        //startActivity(intent);
+        Intent intent = EditConcreteAchievementActivity.getIntent(getContext(), child, concreteAchievement);
+        startActivity(intent);
     }
 
     @Override

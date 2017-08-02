@@ -619,25 +619,36 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 || selectedPartition == AppPartition.MEDICAL_DATA) {
             switch (item.getItemId()) {
                 case R.id.menu_filter:
-                    AppPartitionFragment fragment = findAppPartition();
-                    if (fragment != null) {
-                        fragment.showFilter();
-                        return true;
-                    } else {
-                        logger.error("no partition found");
-                    }
+                    showFilter();
+                    return true;
             }
         } else if (selectedPartition == AppPartition.DEVELOPMENT_DIARY) {
-            AppPartitionFragment partition = findAppPartition();
-            if (partition instanceof DevelopmentDiaryFragment) {
-                AppPartitionFragment page = ((DevelopmentDiaryFragment) partition).getSelectedPage();
-                if (page instanceof ChartContainer) {
-                    ((ChartContainer) page).showChart();
+            switch (item.getItemId()) {
+                case R.id.menu_chart:
+                    showChart();
                     return true;
-                }
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showFilter() {
+        AppPartitionFragment fragment = findAppPartition();
+        if (fragment != null) {
+            fragment.showFilter();
+        } else {
+            logger.error("no partition found");
+        }
+    }
+
+    private void showChart() {
+        AppPartitionFragment partition = findAppPartition();
+        if (partition instanceof DevelopmentDiaryFragment) {
+            AppPartitionFragment page = ((DevelopmentDiaryFragment) partition).getSelectedPage();
+            if (page instanceof ChartContainer) {
+                ((ChartContainer) page).showChart();
+            }
+        }
     }
 
     @Override

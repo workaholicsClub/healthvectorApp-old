@@ -31,7 +31,7 @@ public class ConcreteAchievementMapper implements EntityMapper<ConcreteAchieveme
     @Override
     public ConcreteAchievement mapToPlainObject(@NonNull ConcreteAchievementData concreteAchievementData) {
         ChildData childData = concreteAchievementData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         AchievementData achievementData = concreteAchievementData.getAchievement();
         Achievement achievement = achievementData == null ? null : achievementMapper.mapToPlainObject(achievementData);
         return ConcreteAchievement.builder()

@@ -27,7 +27,7 @@ public class OtherEventMapper implements EntityMapper<OtherEventData, OtherEvent
     public OtherEvent mapToPlainObject(@NonNull OtherEventData otherEventData) {
         MasterEventData masterEventData = otherEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         return OtherEvent.builder()
                 .id(otherEventData.getId())
                 .masterEventId(masterEventData.getId())

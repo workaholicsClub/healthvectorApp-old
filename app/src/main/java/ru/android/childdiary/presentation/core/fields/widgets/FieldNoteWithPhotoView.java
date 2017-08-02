@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
@@ -52,23 +53,33 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
     @Setter
     private PhotoListener photoListener;
 
+    private String hint;
+
     public FieldNoteWithPhotoView(Context context) {
         super(context);
-        init();
+        init(null);
     }
 
     public FieldNoteWithPhotoView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
 
     public FieldNoteWithPhotoView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(attrs);
     }
 
-    private void init() {
+    private void init(@Nullable AttributeSet attrs) {
         inflate(getContext(), R.layout.field_note_with_photo, this);
+        if (attrs != null) {
+            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldNoteWithPhotoView, 0, 0);
+            try {
+                hint = ta.getString(R.styleable.FieldNoteWithPhotoView_fieldHint);
+            } finally {
+                ta.recycle();
+            }
+        }
     }
 
     @Override
@@ -158,7 +169,7 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
         } else {
             setVisibility(VISIBLE);
         }
-        editText.setHint(readOnly ? null : getContext().getString(R.string.note_with_photo));
+        editText.setHint(readOnly ? null : hint);
         @DrawableRes int right = readOnly ? 0 : R.drawable.ic_add_photo;
         editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, right, 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

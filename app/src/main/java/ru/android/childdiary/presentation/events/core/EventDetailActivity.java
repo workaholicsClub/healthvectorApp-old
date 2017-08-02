@@ -343,9 +343,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
             saveChangesOrExit();
             return true;
         }
-        if (event == null) {
-            return super.onOptionsItemSelected(item);
-        }
         switch (item.getItemId()) {
             case R.id.menu_delete:
                 getPresenter().delete(event);

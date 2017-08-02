@@ -41,7 +41,7 @@ public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData
     public DoctorVisitEvent mapToPlainObject(@NonNull DoctorVisitEventData doctorVisitEventData) {
         MasterEventData masterEventData = doctorVisitEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         DoctorVisitData doctorVisitData = doctorVisitEventData.getDoctorVisit();
         DoctorVisit doctorVisit = doctorVisitData == null ? null : doctorVisitMapper.mapToPlainObject(doctorVisitData);
         DoctorData doctorData = doctorVisitEventData.getDoctor();

@@ -161,7 +161,7 @@ public class MedicineTakingDbService {
     }
 
     private List<MedicineTaking> sort(List<MedicineTaking> medicineTakingList) {
-        Collections.sort(medicineTakingList, new MedicineTaking.DoneComparator());
+        Collections.sort(medicineTakingList, (o1, o2) -> o1.isDone() == o2.isDone() ? 0 : (o1.isDone() ? 1 : -1));
         return medicineTakingList;
     }
 

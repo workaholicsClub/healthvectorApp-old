@@ -27,7 +27,7 @@ public class PumpEventMapper implements EntityMapper<PumpEventData, PumpEventEnt
     public PumpEvent mapToPlainObject(@NonNull PumpEventData pumpEventData) {
         MasterEventData masterEventData = pumpEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         return PumpEvent.builder()
                 .id(pumpEventData.getId())
                 .masterEventId(masterEventData.getId())

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="test_newborn_name">Тест новрожденного на риск ДЦП</string>
+    <string name="test_newborn_name">Тест новорожденного на риск ДЦП</string>
     <string name="test_newborn_description">
         <![CDATA[
             <p class="tab" style="text-align:justify;">

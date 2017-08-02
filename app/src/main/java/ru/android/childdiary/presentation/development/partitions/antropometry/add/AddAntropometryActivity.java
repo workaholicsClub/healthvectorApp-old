@@ -5,13 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
-import org.joda.time.LocalDate;
 
 import butterknife.OnClick;
 import icepick.State;
@@ -24,10 +20,9 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 import ru.android.childdiary.presentation.development.partitions.antropometry.core.AntropometryActivity;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
-import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class AddAntropometryActivity extends AntropometryActivity<AddAntropometryView>
-        implements AddAntropometryView, DatePickerDialog.OnDateSetListener {
+        implements AddAntropometryView {
     @Getter
     @InjectPresenter
     AddAntropometryPresenter presenter;
@@ -35,9 +30,10 @@ public class AddAntropometryActivity extends AntropometryActivity<AddAntropometr
     @State
     boolean isButtonDoneEnabled;
 
-    public static Intent getIntent(Context context, @NonNull Child child) {
+    public static Intent getIntent(Context context, @NonNull Child child, @NonNull Antropometry defaultAntropometry) {
         return new Intent(context, AddAntropometryActivity.class)
-                .putExtra(ExtraConstants.EXTRA_CHILD, child);
+                .putExtra(ExtraConstants.EXTRA_CHILD, child)
+                .putExtra(ExtraConstants.EXTRA_ITEM, defaultAntropometry);
     }
 
     @Override
@@ -49,13 +45,6 @@ public class AddAntropometryActivity extends AntropometryActivity<AddAntropometr
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         buttonAdd.setVisibility(View.VISIBLE);
-
-        if (savedInstanceState == null) {
-            LocalDate minDate = child.getBirthDate().plusDays(1);
-            LocalDate today = LocalDate.now();
-            minDate = today.isAfter(minDate) ? today : minDate;
-            dateView.setValue(minDate);
-        }
 
         unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(
                 RxFieldValueView.valueChangeEvents(heightView),
@@ -89,18 +78,7 @@ public class AddAntropometryActivity extends AntropometryActivity<AddAntropometr
     }
 
     @Override
-    protected void saveChangesOrExit() {
-        Antropometry newAntropometry = buildAntropometry();
-        if (newAntropometry.isContentEmpty()) {
-            finish();
-            return;
-        }
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(R.string.save_changes_dialog_title)
-                .setPositiveButton(R.string.save,
-                        (dialog, which) -> presenter.add(newAntropometry))
-                .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> finish())
-                .show();
+    protected void upsert(@NonNull Antropometry antropometry) {
+        presenter.add(antropometry);
     }
 }

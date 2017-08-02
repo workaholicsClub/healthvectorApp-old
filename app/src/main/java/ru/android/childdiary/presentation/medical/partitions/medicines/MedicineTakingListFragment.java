@@ -101,7 +101,7 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
 
         List<MedicineTaking> medicineTakingList = medicineTakingListState.getMedicineTakingList();
         adapter.setItems(medicineTakingList);
-        adapter.setFabController(child.getId() == null ? null : fabController);
+        adapter.setFabController(child.getId() == null ? null : fabController, true);
         recyclerView.setVisibility(medicineTakingList.isEmpty() ? View.GONE : View.VISIBLE);
 
         List<Chips> chips = medicineTakingListState.getChips();

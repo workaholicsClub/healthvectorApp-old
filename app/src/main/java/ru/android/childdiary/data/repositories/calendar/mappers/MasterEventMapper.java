@@ -25,7 +25,7 @@ public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEv
     @Override
     public MasterEvent mapToPlainObject(@NonNull MasterEventData masterEventData) {
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         return MasterEvent.masterBuilder()
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())

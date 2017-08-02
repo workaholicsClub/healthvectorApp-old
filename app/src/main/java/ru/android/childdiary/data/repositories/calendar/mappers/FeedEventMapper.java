@@ -39,7 +39,7 @@ public class FeedEventMapper implements EntityMapper<FeedEventData, FeedEventEnt
     public FeedEvent mapToPlainObject(@NonNull FeedEventData feedEventData) {
         MasterEventData masterEventData = feedEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         FoodMeasureData foodMeasureData = feedEventData.getFoodMeasure();
         FoodMeasure foodMeasure = foodMeasureData == null ? null : foodMeasureMapper.mapToPlainObject(foodMeasureData);
         FoodData foodData = feedEventData.getFood();

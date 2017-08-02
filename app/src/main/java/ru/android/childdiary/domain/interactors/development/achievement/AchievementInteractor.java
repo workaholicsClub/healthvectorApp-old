@@ -6,6 +6,8 @@ import android.text.TextUtils;
 
 import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -146,5 +148,20 @@ public class AchievementInteractor {
                 .map(String::trim)
                 .map(name -> Achievement.builder().name(name).build())
                 .map(achievementValidator::validate);
+    }
+
+    public Observable<ConcreteAchievement> getDefaultConcreteAchievement(@NonNull Child child) {
+        return Observable.just(ConcreteAchievement.builder()
+                .child(child)
+                .date(getDefaultDate(child))
+                .build());
+    }
+
+    private LocalDate getDefaultDate(@NonNull Child child) {
+        LocalDate today = LocalDate.now();
+        if (today.isBefore(child.getBirthDate())) {
+            return child.getBirthDate();
+        }
+        return today;
     }
 }

@@ -135,10 +135,16 @@
         <item name="fontPath">@string/font_path_regular</item>
     </style>
 
-    <style name="ItemTitleTextAppearance" parent="@android:style/TextAppearance">
+    <style name="ItemTitleBoldTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">@dimen/text_size_base</item>
         <item name="fontPath">@string/font_path_medium</item>
+    </style>
+
+    <style name="ItemTitleTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">@dimen/text_size_base</item>
+        <item name="fontPath">@string/font_path_regular</item>
     </style>
 
     <style name="ItemDescriptionTextAppearance" parent="@android:style/TextAppearance">

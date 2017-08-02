@@ -1,8 +1,10 @@
 package ru.android.childdiary.presentation.development.partitions.achievements.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,11 +18,10 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.DateUtils;
-import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
-import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchievement, ConcreteAchievementSwipeActionListener, ConcreteAchievementActionListener> {
     @BindView(R.id.swipeLayout)
@@ -35,11 +36,11 @@ public class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchie
     @BindView(R.id.textViewDate)
     TextView textViewDate;
 
-    @BindView(R.id.textViewAntropometry)
-    TextView textViewAntropometry;
+    @BindView(R.id.textViewConcreteAchievement)
+    TextView textViewConcreteAchievement;
 
-    @BindView(R.id.textViewAge)
-    TextView textViewAge;
+    @BindView(R.id.imageView)
+    ImageView imageView;
 
     @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
@@ -54,21 +55,17 @@ public class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchie
     public void bind(Context context, @Nullable Sex sex, ConcreteAchievement item) {
         super.bind(context, sex, item);
 
-        // TODO layout, swipeable and not swipeable for predefined values?
-
         String dateStr = DateUtils.date(context, item.getDate());
-        textViewDate.setText(dateStr);
-
-        textViewAntropometry.setText(item.getName());
-
-        TimeUtils.Age age = TimeUtils.getAge(item.getChild().getBirthDate(), item.getDate());
-        String ageStr = TimeUtils.age(context, age);
-        textViewAge.setText(ageStr);
-        WidgetsUtils.hideIfEmpty(textViewAge);
+        textViewDate.setText(dateStr == null ? context.getString(R.string.fill_achievement_date) : dateStr);
+        textViewConcreteAchievement.setText(item.getName());
+        Drawable placeholder = ContextCompat.getDrawable(context, R.drawable.ic_placeholder_photo);
+        Drawable photo = ResourcesUtils.getPhotoDrawable(context, item.getImageFileName(), placeholder);
+        imageView.setImageDrawable(photo);
 
         //noinspection deprecation
         imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
 
+        swipeLayout.setRightSwipeEnabled(ObjectUtils.isFalse(item.getIsPredefined()));
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
     }

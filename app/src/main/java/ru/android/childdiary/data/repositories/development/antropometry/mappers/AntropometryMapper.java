@@ -25,7 +25,7 @@ public class AntropometryMapper implements EntityMapper<AntropometryData, Antrop
     @Override
     public Antropometry mapToPlainObject(@NonNull AntropometryData antropometryData) {
         ChildData childData = antropometryData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         return Antropometry.builder()
                 .id(antropometryData.getId())
                 .child(child)

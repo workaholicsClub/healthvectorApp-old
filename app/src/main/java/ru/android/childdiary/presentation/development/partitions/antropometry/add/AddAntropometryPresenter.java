@@ -21,7 +21,7 @@ public class AddAntropometryPresenter extends AntropometryPresenter<AddAntropome
 
     public void add(@NonNull Antropometry antropometry) {
         unsubscribeOnDestroy(
-                antropometryInteractor.add(child, antropometry)
+                antropometryInteractor.add(antropometry)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(getViewState()::added, this::onUnexpectedError));

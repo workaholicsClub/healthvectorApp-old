@@ -23,6 +23,10 @@ import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
 import ru.android.childdiary.presentation.development.partitions.achievements.ConcreteAchievementsPresenter;
+import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementActivity;
+import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementPresenter;
+import ru.android.childdiary.presentation.development.partitions.achievements.edit.EditConcreteAchievementActivity;
+import ru.android.childdiary.presentation.development.partitions.achievements.edit.EditConcreteAchievementPresenter;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListPresenter;
 import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryPresenter;
@@ -189,6 +193,10 @@ public interface ApplicationComponent {
 
     void inject(EditAntropometryPresenter presenter);
 
+    void inject(AddConcreteAchievementPresenter presenter);
+
+    void inject(EditConcreteAchievementPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -247,6 +255,10 @@ public interface ApplicationComponent {
     void inject(AddAntropometryActivity activity);
 
     void inject(EditAntropometryActivity activity);
+
+    void inject(AddConcreteAchievementActivity activity);
+
+    void inject(EditConcreteAchievementActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

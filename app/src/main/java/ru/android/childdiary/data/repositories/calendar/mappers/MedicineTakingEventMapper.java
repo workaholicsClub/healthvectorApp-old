@@ -48,7 +48,7 @@ public class MedicineTakingEventMapper implements EntityMapper<MedicineTakingEve
     public MedicineTakingEvent mapToPlainObject(@NonNull MedicineTakingEventData medicineTakingEventData) {
         MasterEventData masterEventData = medicineTakingEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         MedicineTakingData medicineTakingData = medicineTakingEventData.getMedicineTaking();
         MedicineTaking medicineTaking = medicineTakingData == null ? null : medicineTakingMapper.mapToPlainObject(medicineTakingData);
         MedicineData medicineData = medicineTakingEventData.getMedicine();

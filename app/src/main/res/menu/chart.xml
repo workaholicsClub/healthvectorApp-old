@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_filter"
+        android:id="@+id/menu_chart"
         android:icon="@drawable/toolbar_action_chart"
         android:title="@string/menu_chart"
         app:showAsAction="ifRoom" />

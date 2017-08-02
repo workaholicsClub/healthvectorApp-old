@@ -22,11 +22,14 @@ import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
+import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.development.partitions.achievements.ConcreteAchievementsFragment;
+import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListFragment;
 import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
@@ -187,13 +190,14 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     }
 
     @Override
-    public void navigateToAchievementAdd(@NonNull Child child) {
-        // TODO
+    public void navigateToAchievementAdd(@NonNull Child child, @NonNull ConcreteAchievement defaultConcreteAchievement) {
+        Intent intent = AddConcreteAchievementActivity.getIntent(getContext(), child, defaultConcreteAchievement);
+        startActivity(intent);
     }
 
     @Override
-    public void navigateToAntropometryAdd(@NonNull Child child) {
-        Intent intent = AddAntropometryActivity.getIntent(getContext(), child);
+    public void navigateToAntropometryAdd(@NonNull Child child, @NonNull Antropometry antropometry) {
+        Intent intent = AddAntropometryActivity.getIntent(getContext(), child, antropometry);
         startActivity(intent);
     }
 

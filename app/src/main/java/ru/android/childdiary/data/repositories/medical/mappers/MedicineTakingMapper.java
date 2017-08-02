@@ -44,7 +44,7 @@ public class MedicineTakingMapper implements EntityMapper<MedicineTakingData, Me
     @Override
     public MedicineTaking mapToPlainObject(@NonNull MedicineTakingData medicineTakingData) {
         ChildData childData = medicineTakingData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         MedicineData medicineData = medicineTakingData.getMedicine();
         Medicine medicine = medicineData == null ? null : medicineMapper.mapToPlainObject(medicineData);
         MedicineMeasureData medicineMeasureData = medicineTakingData.getMedicineMeasure();

@@ -38,7 +38,7 @@ public class DoctorVisitMapper implements EntityMapper<DoctorVisitData, DoctorVi
     @Override
     public DoctorVisit mapToPlainObject(@NonNull DoctorVisitData doctorVisitData) {
         ChildData childData = doctorVisitData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         DoctorData doctorData = doctorVisitData.getDoctor();
         Doctor doctor = doctorData == null ? null : doctorMapper.mapToPlainObject(doctorData);
         RepeatParametersData repeatParametersData = doctorVisitData.getRepeatParameters();

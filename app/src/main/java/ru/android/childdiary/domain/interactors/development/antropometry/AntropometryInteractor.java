@@ -40,8 +40,7 @@ public class AntropometryInteractor {
                 .build());
     }
 
-    public Observable<Antropometry> add(@NonNull Child child, @NonNull Antropometry item) {
-        item = item.toBuilder().child(child).build();
+    public Observable<Antropometry> add(@NonNull Antropometry item) {
         return antropometryValidator.validateObservable(item)
                 .flatMap(antropometryRepository::add);
     }
@@ -192,5 +191,21 @@ public class AntropometryInteractor {
                         .child(child)
                         .hasData(hasData)
                         .build());
+    }
+
+    public Observable<Antropometry> getDefaultAntropometry(@NonNull Child child) {
+        return Observable.just(Antropometry.builder()
+                .child(child)
+                .date(getDefaultDate(child))
+                .build());
+    }
+
+    private LocalDate getDefaultDate(@NonNull Child child) {
+        LocalDate minDate = child.getBirthDate().plusDays(1);
+        LocalDate today = LocalDate.now();
+        if (today.isBefore(minDate)) {
+            return minDate;
+        }
+        return today;
     }
 }

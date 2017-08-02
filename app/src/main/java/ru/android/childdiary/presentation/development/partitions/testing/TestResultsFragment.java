@@ -1,10 +1,8 @@
 package ru.android.childdiary.presentation.development.partitions.testing;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
@@ -27,7 +25,6 @@ import ru.android.childdiary.domain.interactors.development.testing.tests.core.T
 import ru.android.childdiary.presentation.chart.testing.TestChartActivity;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
-import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.development.partitions.core.ChartContainer;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultActionListener;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultAdapter;
@@ -53,9 +50,6 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
 
     @BindView(R.id.recyclerViewTestResults)
     RecyclerView recyclerViewTestResults;
-
-    @Nullable
-    private FabController fabController;
 
     private TestAdapter testAdapter;
     private TestResultAdapter testResultAdapter;
@@ -86,10 +80,6 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
         ViewCompat.setNestedScrollingEnabled(recyclerViewTestResults, false);
 
         line.setVisibility(View.GONE);
-
-        if (fabController != null) {
-            fabController.hideFabBar();
-        }
     }
 
     @Override
@@ -110,10 +100,6 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
         int visibility = testResults.isEmpty() ? View.GONE : View.VISIBLE;
         recyclerViewTestResults.setVisibility(visibility);
         line.setVisibility(visibility);
-
-        if (fabController != null) {
-            fabController.hideFabBar();
-        }
     }
 
     @Override
@@ -181,19 +167,5 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
     @Override
     public void showChart() {
         presenter.showChart();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof FabController) {
-            fabController = (FabController) context;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        fabController = null;
     }
 }

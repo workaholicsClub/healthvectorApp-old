@@ -20,7 +20,7 @@ public class ConcreteAchievementAdapter extends SwipeViewAdapter<ConcreteAchieve
 
     @Override
     public ConcreteAchievementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = inflater.inflate(R.layout.antropometry_item, parent, false); // TODO layout
+        View v = inflater.inflate(R.layout.concrete_achievement_item, parent, false);
         return new ConcreteAchievementViewHolder(v, itemActionListener, this);
     }
 

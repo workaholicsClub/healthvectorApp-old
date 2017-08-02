@@ -8,6 +8,7 @@
     <integer name="max_length_doctor_visit_name">100</integer>
     <integer name="max_length_exercise_name">100</integer>
     <integer name="max_length_medicine_measure_value_amount">8</integer>
+    <integer name="max_length_concrete_achievement_name">100</integer>
     <!-- animations -->
     <integer name="fragment_enter_exit_animation_duration">@android:integer/config_longAnimTime
     </integer>

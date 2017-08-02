@@ -27,7 +27,7 @@ public class TestResult implements Serializable {
 
     // Доман -- Стадия развития
     // Аутизм -- Количество баллов (риск)
-    // Новрожденный -- Есть риск (1), Норма (0)
+    // Новорожденный -- Есть риск (1), Норма (0)
     Integer result;
 
     LocalDate birthDate;

@@ -55,7 +55,8 @@
     <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView
         android:id="@+id/noteWithPhotoView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:fieldHint="@string/note_with_photo" />
 
     <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
         android:id="@+id/notifyTimeView"

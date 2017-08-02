@@ -49,12 +49,19 @@ public class AchievementDbService {
     public Observable<List<ConcreteAchievement>> getConcreteAchievements(@NonNull Child child) {
         return dataStore.select(ConcreteAchievementEntity.class)
                 .where(ConcreteAchievementEntity.CHILD_ID.eq(child.getId()))
-                .orderBy(ConcreteAchievementEntity.PREDEFINED, ConcreteAchievementEntity.ORDER_NUMBER,
-                        ConcreteAchievementEntity.CONCRETE_ACHIEVEMENT_DATE,
+                .orderBy(ConcreteAchievementEntity.CONCRETE_ACHIEVEMENT_DATE.desc(),
+                        ConcreteAchievementEntity.PREDEFINED.desc(), ConcreteAchievementEntity.ORDER_NUMBER,
                         ConcreteAchievementEntity.NAME, ConcreteAchievementEntity.ID)
                 .get()
                 .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, concreteAchievementMapper));
+                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, concreteAchievementMapper))
+                .map(this::sort);
+    }
+
+    private List<ConcreteAchievement> sort(@NonNull List<ConcreteAchievement> concreteAchievements) {
+        Collections.sort(concreteAchievements,
+                (o1, o2) -> o1.getDate() == null && o2.getDate() == null ? 0 : (o1.getDate() != null ? 1 : -1));
+        return concreteAchievements;
     }
 
     public Observable<UpsertConcreteAchievementResponse> add(@NonNull UpsertConcreteAchievementRequest request) {
@@ -113,7 +120,7 @@ public class AchievementDbService {
 
     public Observable<List<Achievement>> getAchievements(@NonNull GetAchievementsRequest request) {
         return dataStore.select(AchievementEntity.class)
-                .orderBy(AchievementEntity.PREDEFINED, AchievementEntity.ORDER_NUMBER, AchievementEntity.NAME, AchievementEntity.ID)
+                .orderBy(AchievementEntity.PREDEFINED.desc(), AchievementEntity.ORDER_NUMBER, AchievementEntity.NAME, AchievementEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, achievementMapper))

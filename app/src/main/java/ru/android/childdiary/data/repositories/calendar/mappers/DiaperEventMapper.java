@@ -27,7 +27,7 @@ public class DiaperEventMapper implements EntityMapper<DiaperEventData, DiaperEv
     public DiaperEvent mapToPlainObject(@NonNull DiaperEventData diaperEventData) {
         MasterEventData masterEventData = diaperEventData.getMasterEvent();
         ChildData childData = masterEventData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         return DiaperEvent.builder()
                 .id(diaperEventData.getId())
                 .masterEventId(masterEventData.getId())

@@ -38,7 +38,7 @@ public class ConcreteExerciseMapper implements EntityMapper<ConcreteExerciseData
     @Override
     public ConcreteExercise mapToPlainObject(@NonNull ConcreteExerciseData concreteExerciseData) {
         ChildData childData = concreteExerciseData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         ExerciseData exerciseData = concreteExerciseData.getExercise();
         Exercise exercise = exerciseData == null ? null : exerciseMapper.mapToPlainObject(exerciseData);
         RepeatParametersData repeatParametersData = concreteExerciseData.getRepeatParameters();

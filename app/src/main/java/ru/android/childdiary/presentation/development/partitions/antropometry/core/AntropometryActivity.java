@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -21,6 +22,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
+import lombok.AccessLevel;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
@@ -32,7 +35,9 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldHeightView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldWeightView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class AntropometryActivity<V extends AntropometryView> extends BaseMvpActivity
         implements AntropometryView, DatePickerDialog.OnDateSetListener {
@@ -53,12 +58,15 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
     @BindView(R.id.dateView)
     protected FieldDateView dateView;
 
-    protected Child child;
+    private Child child;
+    @Getter(AccessLevel.PROTECTED)
+    private Antropometry item;
     private boolean isValidationStarted;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
+        item = (Antropometry) getIntent().getSerializableExtra(ExtraConstants.EXTRA_ITEM);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
@@ -69,6 +77,7 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
 
         if (savedInstanceState == null) {
             getPresenter().init(child);
+            showAntropometry(item);
         }
     }
 
@@ -104,7 +113,7 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
         ViewGroup detailsView = ButterKnife.findById(this, R.id.detailsView);
-        inflater.inflate(R.layout.activity_add_antropometry, detailsView);
+        inflater.inflate(R.layout.activity_antropometry, detailsView);
     }
 
     @Override
@@ -146,11 +155,11 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
         dateView.setValue(antropometry.getDate());
     }
 
-    protected Antropometry buildAntropometry() {
-        return buildAntropometry(Antropometry.builder());
+    protected final Antropometry buildAntropometry() {
+        return buildAntropometry(item.toBuilder());
     }
 
-    protected Antropometry buildAntropometry(@NonNull Antropometry.AntropometryBuilder builder) {
+    private Antropometry buildAntropometry(@NonNull Antropometry.AntropometryBuilder builder) {
         return builder
                 .weight(weightView.getValue())
                 .height(heightView.getValue())
@@ -198,5 +207,20 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
         return super.onOptionsItemSelected(item);
     }
 
-    protected abstract void saveChangesOrExit();
+    private void saveChangesOrExit() {
+        Antropometry newAntropometry = buildAntropometry();
+        if (ObjectUtils.contentEquals(newAntropometry, item)) {
+            finish();
+            return;
+        }
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.save_changes_dialog_title)
+                .setPositiveButton(R.string.save,
+                        (dialog, which) -> upsert(newAntropometry))
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> finish())
+                .show();
+    }
+
+    protected abstract void upsert(@NonNull Antropometry antropometry);
 }

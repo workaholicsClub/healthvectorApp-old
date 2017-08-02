@@ -25,7 +25,7 @@ public class TestResultMapper implements EntityMapper<TestResultData, TestResult
     @Override
     public TestResult mapToPlainObject(@NonNull TestResultData testResultData) {
         ChildData childData = testResultData.getChild();
-        Child child = childData == null ? null : childMapper.mapToPlainObject(childData);
+        Child child = childData == null ? Child.NULL : childMapper.mapToPlainObject(childData);
         return TestResult.builder()
                 .id(testResultData.getId())
                 .child(child)
