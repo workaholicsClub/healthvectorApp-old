@@ -24,6 +24,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
 
 public class FieldEditTextWithImageView extends FieldEditTextView implements FieldReadOnly {
     @BindView(R.id.imageView)
@@ -88,7 +89,7 @@ public class FieldEditTextWithImageView extends FieldEditTextView implements Fie
     }
 
     @Override
-    public List<Disposable> createSubscriptions(CustomEditText.OnKeyboardHiddenListener listener) {
+    public List<Disposable> createSubscriptions(OnKeyboardHiddenListener listener) {
         editText.setOnKeyboardHiddenListener(listener);
 
         List<Disposable> disposables = new ArrayList<>();

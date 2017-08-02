@@ -29,6 +29,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeListener;
 import ru.android.childdiary.presentation.core.bindings.FieldValueView;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
 import ru.android.childdiary.utils.strings.DoubleUtils;
 
 public abstract class FieldUnitView extends FieldEditTextView implements FieldValueView<Double> {
@@ -99,7 +100,7 @@ public abstract class FieldUnitView extends FieldEditTextView implements FieldVa
     }
 
     @Override
-    public List<Disposable> createSubscriptions(CustomEditText.OnKeyboardHiddenListener listener) {
+    public List<Disposable> createSubscriptions(OnKeyboardHiddenListener listener) {
         editText.setOnKeyboardHiddenListener(listener);
 
         List<Disposable> disposables = new ArrayList<>();

@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
 
 public class FieldNoteView extends FieldEditTextView {
     @BindView(R.id.editTextWrapper)
@@ -58,7 +59,7 @@ public class FieldNoteView extends FieldEditTextView {
     }
 
     @Override
-    public List<Disposable> createSubscriptions(CustomEditText.OnKeyboardHiddenListener listener) {
+    public List<Disposable> createSubscriptions(OnKeyboardHiddenListener listener) {
         editText.setOnKeyboardHiddenListener(listener);
 
         List<Disposable> disposables = new ArrayList<>();

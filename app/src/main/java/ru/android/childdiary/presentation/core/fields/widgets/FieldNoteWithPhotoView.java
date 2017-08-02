@@ -28,6 +28,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldReadOnly, View.OnTouchListener {
@@ -142,7 +143,7 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
     }
 
     @Override
-    public List<Disposable> createSubscriptions(CustomEditText.OnKeyboardHiddenListener listener) {
+    public List<Disposable> createSubscriptions(OnKeyboardHiddenListener listener) {
         editText.setOnKeyboardHiddenListener(listener);
 
         List<Disposable> disposables = new ArrayList<>();

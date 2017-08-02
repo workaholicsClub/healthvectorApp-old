@@ -17,6 +17,7 @@ import java.io.Serializable;
 import butterknife.ButterKnife;
 import lombok.Setter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
 
 public abstract class BaseTokenCompleteTextView<T extends Serializable> extends TokenCompleteTextView<T> {
     @Setter
@@ -94,9 +95,5 @@ public abstract class BaseTokenCompleteTextView<T extends Serializable> extends 
             return true;
         }
         return false;
-    }
-
-    public interface OnKeyboardHiddenListener {
-        void onKeyboardHidden(BaseTokenCompleteTextView textView);
     }
 }

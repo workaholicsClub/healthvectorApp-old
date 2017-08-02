@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
-import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
 
 public abstract class FieldEditTextView extends LinearLayout {
     public FieldEditTextView(Context context) {
@@ -23,5 +23,5 @@ public abstract class FieldEditTextView extends LinearLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public abstract List<Disposable> createSubscriptions(CustomEditText.OnKeyboardHiddenListener listener);
+    public abstract List<Disposable> createSubscriptions(OnKeyboardHiddenListener listener);
 }

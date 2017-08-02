@@ -44,8 +44,4 @@ public class CustomEditText extends AppCompatEditText {
         }
         return super.onKeyPreIme(keyCode, event);
     }
-
-    public interface OnKeyboardHiddenListener {
-        void onKeyboardHidden(CustomEditText editText);
-    }
 }

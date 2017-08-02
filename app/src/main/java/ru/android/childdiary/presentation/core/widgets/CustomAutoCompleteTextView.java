@@ -55,8 +55,4 @@ public class CustomAutoCompleteTextView extends AppCompatAutoCompleteTextView {
         }
         return false;
     }
-
-    public interface OnKeyboardHiddenListener {
-        void onKeyboardHidden(CustomAutoCompleteTextView editText);
-    }
 }

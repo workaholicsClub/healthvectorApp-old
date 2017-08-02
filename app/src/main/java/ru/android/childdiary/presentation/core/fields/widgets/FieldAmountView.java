@@ -17,6 +17,7 @@ import io.reactivex.disposables.Disposable;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
 import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.utils.strings.DoubleUtils;
 
@@ -60,7 +61,7 @@ public class FieldAmountView extends FieldEditTextView {
     }
 
     @Override
-    public List<Disposable> createSubscriptions(CustomEditText.OnKeyboardHiddenListener listener) {
+    public List<Disposable> createSubscriptions(OnKeyboardHiddenListener listener) {
         editText.setOnKeyboardHiddenListener(listener);
 
         List<Disposable> disposables = new ArrayList<>();
