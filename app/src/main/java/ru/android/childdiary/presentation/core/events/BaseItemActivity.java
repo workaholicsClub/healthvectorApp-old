@@ -27,7 +27,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.core.LengthValue;
 import ru.android.childdiary.domain.interactors.core.PeriodicityType;
@@ -210,14 +209,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         LayoutInflater inflater = LayoutInflater.from(this);
         detailsView = ButterKnife.findById(this, R.id.detailsView);
         inflater.inflate(getContentLayoutResourceId(), detailsView);
-    }
-
-    protected void setupEditTextView(FieldEditTextView view) {
-        List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
-        //noinspection Convert2streamapi
-        for (Disposable disposable : disposables) {
-            unsubscribeOnDestroy(disposable);
-        }
     }
 
     @Override

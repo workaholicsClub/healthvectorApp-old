@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import lombok.Getter;
 import ru.android.childdiary.R;
@@ -30,27 +30,24 @@ public class FieldAmountMlView extends FieldEditTextView {
 
     public FieldAmountMlView(Context context) {
         super(context);
-        init();
     }
 
     public FieldAmountMlView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public FieldAmountMlView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
     }
 
-    private void init() {
+    @Override
+    protected void init(@Nullable AttributeSet attrs) {
         inflate(getContext(), R.layout.field_amount_ml, this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ButterKnife.bind(this);
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editText.setFilters(new InputFilter[]{new RegExpInputFilter.AmountMlInputFilter()});
     }

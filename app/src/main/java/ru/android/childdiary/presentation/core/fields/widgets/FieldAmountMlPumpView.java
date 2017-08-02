@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.View;
@@ -34,20 +35,18 @@ public class FieldAmountMlPumpView extends FieldEditTextView {
 
     public FieldAmountMlPumpView(Context context) {
         super(context);
-        init();
     }
 
     public FieldAmountMlPumpView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public FieldAmountMlPumpView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
     }
 
-    private void init() {
+    @Override
+    protected void init(@Nullable AttributeSet attrs) {
         setOrientation(LinearLayout.VERTICAL);
         View view;
 
@@ -69,7 +68,6 @@ public class FieldAmountMlPumpView extends FieldEditTextView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ButterKnife.bind(this);
         editTextAmountMlLeft.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         editTextAmountMlLeft.setFilters(new InputFilter[]{new RegExpInputFilter.AmountMlInputFilter()});
         editTextAmountMlRight.setImeOptions(EditorInfo.IME_ACTION_DONE);

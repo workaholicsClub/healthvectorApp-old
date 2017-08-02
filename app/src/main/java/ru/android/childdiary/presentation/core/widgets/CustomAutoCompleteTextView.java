@@ -10,7 +10,7 @@ import android.view.inputmethod.InputConnection;
 
 import lombok.Setter;
 
-public class CustomAutoCompleteTextView extends AppCompatAutoCompleteTextView {
+public class CustomAutoCompleteTextView extends AppCompatAutoCompleteTextView implements OnKeyboardHiddenListenerContainer {
     @Setter
     @Nullable
     private OnKeyboardHiddenListener onKeyboardHiddenListener;

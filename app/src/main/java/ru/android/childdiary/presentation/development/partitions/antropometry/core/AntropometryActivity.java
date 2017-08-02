@@ -124,14 +124,6 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
         }
     }
 
-    protected void setupEditTextView(FieldEditTextView view) {
-        List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
-        //noinspection Convert2streamapi
-        for (Disposable disposable : disposables) {
-            unsubscribeOnDestroy(disposable);
-        }
-    }
-
     protected void showDatePicker(String tag, @Nullable LocalDate date,
                                   @Nullable LocalDate minDate, @Nullable LocalDate maxDate) {
         DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, date, getSex(),

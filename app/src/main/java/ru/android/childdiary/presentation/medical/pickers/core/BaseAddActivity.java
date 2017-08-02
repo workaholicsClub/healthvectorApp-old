@@ -1,63 +1,64 @@
 package ru.android.childdiary.presentation.medical.pickers.core;
 
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.tokenautocomplete.FilteredArrayAdapter;
 
 import java.util.List;
 
-import butterknife.BindDimen;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
-import ru.android.childdiary.presentation.core.widgets.CustomAutoCompleteTextView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseMvpActivity implements BaseAddView<T> {
-    @BindView(R.id.rootView)
-    protected View rootView;
-
-    @BindView(R.id.imageView)
-    protected ImageView imageView;
-
-    @BindView(R.id.autoCompleteTextView)
-    protected CustomAutoCompleteTextView textView;
-
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
 
-    @BindDimen(R.dimen.name_edit_text_padding_bottom)
-    int editTextBottomPadding;
+    @BindView(R.id.rootView)
+    protected View rootView;
+
+    @BindView(R.id.autoCompleteView)
+    protected FieldEditTextWithImageAutocompleteView autoCompleteView;
 
     @State
     boolean isButtonDoneEnabled;
+
+    private ViewGroup detailsView;
 
     private boolean isValidationStarted;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base_add);
+        setContentView(R.layout.activity_details);
 
-        unsubscribeOnDestroy(RxTextView.editorActionEvents(textView).subscribe(textViewEditorActionEvent -> {
-            if (textViewEditorActionEvent.actionId() == EditorInfo.IME_ACTION_DONE) {
-                hideKeyboardAndClearFocus(textView);
-            }
-        }));
-        textView.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
+        setupEditTextView(autoCompleteView);
 
-        unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(RxTextView.afterTextChangeEvents(textView)));
+        unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(autoCompleteView.textObservable()));
+    }
+
+    @Override
+    protected void setContentViewBeforeBind() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        detailsView = ButterKnife.findById(this, R.id.detailsView);
+        inflater.inflate(getContentLayoutResourceId(), detailsView);
     }
 
     @Override
@@ -83,6 +84,9 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
         getPresenter().add(buildItem());
     }
 
+    @LayoutRes
+    protected abstract int getContentLayoutResourceId();
+
     protected abstract BaseAddPresenter<T, V> getPresenter();
 
     protected abstract T buildItem();
@@ -97,7 +101,7 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
 
     @Override
     public void showList(@NonNull List<T> list) {
-        textView.setAdapter(createFilteredAdapter(list));
+        autoCompleteView.setFilteredAdapter(createFilteredAdapter(list));
     }
 
     @Override
@@ -110,7 +114,7 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
     public void validationFailed() {
         if (!isValidationStarted) {
             isValidationStarted = true;
-            unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(RxTextView.afterTextChangeEvents(textView)));
+            unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(autoCompleteView.textObservable()));
         }
     }
 
@@ -121,16 +125,36 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
 
     @Override
     public void nameValidated(boolean valid) {
-        viewValidated(textView, valid);
-        textView.setPadding(0, 0, 0, editTextBottomPadding);
+        autoCompleteView.validated(valid);
     }
 
-    private void viewValidated(View view, boolean valid) {
-        viewValidated(view, valid, R.drawable.edit_text_background, R.drawable.edit_text_background_error);
+
+    @Override
+    public void onBackPressed() {
+        saveChangesOrExit();
     }
 
-    private void viewValidated(View view, boolean valid,
-                               @DrawableRes int background, @DrawableRes int backgroundError) {
-        view.setBackgroundResource(valid ? background : backgroundError);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            saveChangesOrExit();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void saveChangesOrExit() {
+        String text = autoCompleteView.getText();
+        if (TextUtils.isEmpty(text)) {
+            finish();
+            return;
+        }
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(R.string.save_changes_dialog_title)
+                .setPositiveButton(R.string.save,
+                        (dialog, which) -> getPresenter().add(buildItem()))
+                .setNegativeButton(R.string.cancel,
+                        (dialog, which) -> finish())
+                .show();
     }
 }

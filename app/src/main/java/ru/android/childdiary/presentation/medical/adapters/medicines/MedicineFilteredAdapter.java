@@ -13,6 +13,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 public class MedicineFilteredAdapter extends FilteredArrayAdapter<Medicine> {
     public MedicineFilteredAdapter(Context context, List<Medicine> medicines) {
@@ -21,8 +22,7 @@ public class MedicineFilteredAdapter extends FilteredArrayAdapter<Medicine> {
 
     @Override
     protected boolean keepObject(Medicine obj, String mask) {
-        mask = mask.toLowerCase();
-        return obj.getName() != null && obj.getName().toLowerCase().startsWith(mask);
+        return StringUtils.contains(obj.getName(), mask, false);
     }
 
     @NonNull

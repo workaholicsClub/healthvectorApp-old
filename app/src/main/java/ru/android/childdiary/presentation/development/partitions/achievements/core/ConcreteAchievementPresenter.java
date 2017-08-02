@@ -9,9 +9,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.domain.interactors.development.achievement.AchievementInteractor;
+import ru.android.childdiary.domain.interactors.development.achievement.requests.GetAchievementsRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidationException;
 import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidationResult;
 import ru.android.childdiary.presentation.core.BasePresenter;
@@ -24,6 +27,11 @@ public abstract class ConcreteAchievementPresenter<V extends ConcreteAchievement
 
     public void init(@NonNull Child child) {
         this.child = child;
+        unsubscribeOnDestroy(achievementInteractor.getAchievements(GetAchievementsRequest.builder()
+                .build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::showAchievements, this::onUnexpectedError));
     }
 
     public Disposable listenForFieldsUpdate(

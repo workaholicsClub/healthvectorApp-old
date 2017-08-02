@@ -7,12 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.tokenautocomplete.FilteredArrayAdapter;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.joda.time.LocalDate;
@@ -22,22 +24,25 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.development.achievement.Achievement;
 import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
+import ru.android.childdiary.presentation.medical.adapters.core.StringFilteredAdapter;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -54,7 +59,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
     protected Button buttonAdd;
 
     @BindView(R.id.achievementNameView)
-    protected FieldEditTextWithImageView achievementNameView;
+    protected FieldEditTextWithImageAutocompleteView achievementNameView;
 
     @BindView(R.id.dateView)
     protected FieldDateView dateView;
@@ -130,14 +135,6 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         }
     }
 
-    protected void setupEditTextView(FieldEditTextView view) {
-        List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
-        //noinspection Convert2streamapi
-        for (Disposable disposable : disposables) {
-            unsubscribeOnDestroy(disposable);
-        }
-    }
-
     protected void showDatePicker(String tag, @Nullable LocalDate date,
                                   @Nullable LocalDate minDate, @Nullable LocalDate maxDate) {
         DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, date, getSex(),
@@ -173,6 +170,16 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
                 .note(noteWithPhotoView.getText())
                 .imageFileName(noteWithPhotoView.getImageFileName())
                 .build();
+    }
+
+    @Override
+    public void showAchievements(@NonNull List<Achievement> achievements) {
+        FilteredArrayAdapter<String> adapter = new StringFilteredAdapter(this, Observable.fromIterable(achievements)
+                .filter(item -> !TextUtils.isEmpty(item.getName()))
+                .map(Achievement::getName)
+                .toList()
+                .blockingGet(), StringFilteredAdapter.FilterType.STARTS);
+        achievementNameView.setFilteredAdapter(adapter);
     }
 
     @Override

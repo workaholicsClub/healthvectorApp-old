@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.medical.pickers.medicines;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.arellomobile.mvp.InjectViewState;
 
@@ -15,6 +14,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
 import ru.android.childdiary.domain.interactors.medical.core.Medicine;
 import ru.android.childdiary.presentation.medical.pickers.core.BasePickerPresenter;
+import ru.android.childdiary.utils.strings.StringUtils;
 
 @InjectViewState
 public class MedicinePickerPresenter extends BasePickerPresenter<Medicine, MedicinePickerView> {
@@ -33,9 +33,7 @@ public class MedicinePickerPresenter extends BasePickerPresenter<Medicine, Medic
 
     @Override
     protected boolean filter(@NonNull Medicine item, @Nullable String filter) {
-        return item.getName() != null
-                && (TextUtils.isEmpty(filter)
-                || item.getName().toLowerCase().contains(filter.toLowerCase()));
+        return StringUtils.contains(item.getName(), filter, true);
     }
 
     @Override

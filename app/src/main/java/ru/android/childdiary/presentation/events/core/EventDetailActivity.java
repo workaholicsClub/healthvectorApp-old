@@ -98,6 +98,13 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         logger.debug("default event: " + defaultEvent);
     }
 
+    @Override
+    protected void setContentViewBeforeBind() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        detailsView = ButterKnife.findById(this, R.id.detailsView);
+        inflater.inflate(getContentLayoutResourceId(), detailsView);
+    }
+
     protected void setupNewEventUi() {
     }
 
@@ -120,21 +127,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         T event = buildEvent();
         outState.putSerializable(ExtraConstants.EXTRA_EVENT, event);
         logger.debug("save event: " + event);
-    }
-
-    @Override
-    protected void setContentViewBeforeBind() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        detailsView = ButterKnife.findById(this, R.id.detailsView);
-        inflater.inflate(getContentLayoutResourceId(), detailsView);
-    }
-
-    protected void setupEditTextView(FieldEditTextView view) {
-        List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
-        //noinspection Convert2streamapi
-        for (Disposable disposable : disposables) {
-            unsubscribeOnDestroy(disposable);
-        }
     }
 
     @Override

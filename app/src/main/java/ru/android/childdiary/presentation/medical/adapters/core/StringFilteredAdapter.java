@@ -6,14 +6,28 @@ import com.tokenautocomplete.FilteredArrayAdapter;
 
 import java.util.List;
 
+import ru.android.childdiary.utils.strings.StringUtils;
+
 public class StringFilteredAdapter extends FilteredArrayAdapter<String> {
-    public StringFilteredAdapter(Context context, List<String> strings) {
+    private final FilterType filterType;
+
+    public StringFilteredAdapter(Context context, List<String> strings, FilterType filterType) {
         super(context, android.R.layout.simple_list_item_1, strings);
+        this.filterType = filterType;
     }
 
     @Override
     protected boolean keepObject(String obj, String mask) {
-        mask = mask.toLowerCase();
-        return obj != null && obj.toLowerCase().startsWith(mask);
+        switch (filterType) {
+            case CONTAINS:
+                return StringUtils.contains(obj, mask, false);
+            case STARTS:
+                return StringUtils.starts(obj, mask, false);
+        }
+        return false;
+    }
+
+    public enum FilterType {
+        CONTAINS, STARTS
     }
 }

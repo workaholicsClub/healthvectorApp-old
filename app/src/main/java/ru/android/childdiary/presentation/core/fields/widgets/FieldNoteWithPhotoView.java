@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import lombok.Getter;
@@ -58,20 +57,18 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
 
     public FieldNoteWithPhotoView(Context context) {
         super(context);
-        init(null);
     }
 
     public FieldNoteWithPhotoView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
     }
 
     public FieldNoteWithPhotoView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(attrs);
     }
 
-    private void init(@Nullable AttributeSet attrs) {
+    @Override
+    protected void init(@Nullable AttributeSet attrs) {
         inflate(getContext(), R.layout.field_note_with_photo, this);
         if (attrs != null) {
             TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldNoteWithPhotoView, 0, 0);
@@ -86,7 +83,6 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ButterKnife.bind(this);
         editText.setOnTouchListener(this);
         update();
     }

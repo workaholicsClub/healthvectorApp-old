@@ -237,4 +237,20 @@ public class StringUtils {
         }
         return null;
     }
+
+    public static boolean contains(@Nullable String name, @Nullable String filter, boolean getAllIfFilterEmpty) {
+        name = normalize(name);
+        filter = normalize(filter);
+        return filter.length() == 0 ? getAllIfFilterEmpty : name.contains(filter);
+    }
+
+    public static boolean starts(@Nullable String name, @Nullable String filter, boolean getAllIfFilterEmpty) {
+        name = normalize(name);
+        filter = normalize(filter);
+        return filter.length() == 0 ? getAllIfFilterEmpty : name.contains(filter);
+    }
+
+    private static String normalize(@Nullable String s) {
+        return s == null ? "" : s.trim().toLowerCase();
+    }
 }

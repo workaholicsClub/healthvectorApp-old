@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
@@ -27,27 +27,19 @@ public class FieldNoteView extends FieldEditTextView {
 
     public FieldNoteView(Context context) {
         super(context);
-        init();
     }
 
     public FieldNoteView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public FieldNoteView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
-    }
-
-    private void init() {
-        inflate(getContext(), R.layout.field_note, this);
     }
 
     @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        ButterKnife.bind(this);
+    protected void init(@Nullable AttributeSet attrs) {
+        inflate(getContext(), R.layout.field_note, this);
     }
 
     public String getText() {

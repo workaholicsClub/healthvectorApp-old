@@ -2,7 +2,7 @@ package ru.android.childdiary.presentation.medical.pickers.visits;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +14,7 @@ import com.tokenautocomplete.FilteredArrayAdapter;
 import java.util.List;
 
 import io.reactivex.Observable;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -23,6 +24,7 @@ import ru.android.childdiary.presentation.medical.adapters.core.StringFilteredAd
 import ru.android.childdiary.presentation.medical.pickers.core.BaseAddActivity;
 
 public class DoctorAddActivity extends BaseAddActivity<Doctor, DoctorAddView> implements DoctorAddView {
+    @Getter
     @InjectPresenter
     DoctorAddPresenter presenter;
 
@@ -37,26 +39,20 @@ public class DoctorAddActivity extends BaseAddActivity<Doctor, DoctorAddView> im
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        imageView.setImageResource(R.drawable.ic_doctor);
-        textView.setHint(R.string.enter_doctor_name);
-    }
-
-    @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.add_doctor_title);
     }
 
+    @LayoutRes
     @Override
-    public DoctorAddPresenter getPresenter() {
-        return presenter;
+    protected int getContentLayoutResourceId() {
+        return R.layout.activity_doctor_add;
     }
 
     @Override
     protected Doctor buildItem() {
-        String text = textView.getText().toString().trim();
+        String text = autoCompleteView.getText();
         return Doctor.builder().name(text).build();
     }
 
@@ -66,6 +62,6 @@ public class DoctorAddActivity extends BaseAddActivity<Doctor, DoctorAddView> im
                 .filter(item -> !TextUtils.isEmpty(item.getName()))
                 .map(Doctor::getName)
                 .toList()
-                .blockingGet());
+                .blockingGet(), StringFilteredAdapter.FilterType.CONTAINS);
     }
 }

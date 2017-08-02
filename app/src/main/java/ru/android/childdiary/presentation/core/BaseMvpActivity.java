@@ -29,6 +29,8 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +48,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.Child;
 import ru.android.childdiary.presentation.core.dialogs.ProgressDialogArguments;
 import ru.android.childdiary.presentation.core.dialogs.ProgressDialogFragment;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.permissions.ActivityPermissionHelper;
 import ru.android.childdiary.presentation.core.permissions.PermissionHelper;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
@@ -363,5 +366,13 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         addToolbarMargin();
         return super.onCreateOptionsMenu(menu);
+    }
+
+    protected final void setupEditTextView(FieldEditTextView view) {
+        List<Disposable> disposables = view.createSubscriptions(this::hideKeyboardAndClearFocus);
+        //noinspection Convert2streamapi
+        for (Disposable disposable : disposables) {
+            unsubscribeOnDestroy(disposable);
+        }
     }
 }

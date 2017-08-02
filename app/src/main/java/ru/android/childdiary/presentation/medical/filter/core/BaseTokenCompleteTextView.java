@@ -18,8 +18,10 @@ import butterknife.ButterKnife;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
+import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListenerContainer;
 
-public abstract class BaseTokenCompleteTextView<T extends Serializable> extends TokenCompleteTextView<T> {
+public abstract class BaseTokenCompleteTextView<T extends Serializable> extends TokenCompleteTextView<T>
+        implements OnKeyboardHiddenListenerContainer {
     @Setter
     @Nullable
     private OnKeyboardHiddenListener onKeyboardHiddenListener;

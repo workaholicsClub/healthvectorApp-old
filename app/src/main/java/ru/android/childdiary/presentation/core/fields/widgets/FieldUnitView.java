@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import lombok.Getter;
 import lombok.val;
@@ -54,20 +53,18 @@ public abstract class FieldUnitView extends FieldEditTextView implements FieldVa
 
     public FieldUnitView(Context context) {
         super(context);
-        init(null);
     }
 
     public FieldUnitView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
     }
 
     public FieldUnitView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(attrs);
     }
 
-    private void init(@Nullable AttributeSet attrs) {
+    @Override
+    protected void init(@Nullable AttributeSet attrs) {
         inflate(getContext(), R.layout.field_unit, this);
         if (attrs != null) {
             TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldUnitView, 0, 0);
@@ -84,7 +81,6 @@ public abstract class FieldUnitView extends FieldEditTextView implements FieldVa
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ButterKnife.bind(this);
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editText.setFilters(new InputFilter[]{getInputFilter()});
 

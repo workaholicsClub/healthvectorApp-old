@@ -10,7 +10,7 @@ import android.view.inputmethod.InputConnection;
 
 import lombok.Setter;
 
-public class CustomEditText extends AppCompatEditText {
+public class CustomEditText extends AppCompatEditText implements OnKeyboardHiddenListenerContainer {
     @Setter
     @Nullable
     private OnKeyboardHiddenListener onKeyboardHiddenListener;
