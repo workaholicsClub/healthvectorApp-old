@@ -17,11 +17,9 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import org.joda.time.LocalDate;
 
 import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.Disposable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
@@ -31,7 +29,6 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldHeightView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldWeightView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;

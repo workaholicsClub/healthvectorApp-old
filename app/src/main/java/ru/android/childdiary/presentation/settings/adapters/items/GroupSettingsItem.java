@@ -14,7 +14,7 @@ public class GroupSettingsItem extends BaseSettingsItem {
     String title;
 
     @Builder
-    private GroupSettingsItem(int id, @NonNull String title) {
+    private GroupSettingsItem(long id, @NonNull String title) {
         super(id);
         this.title = title;
     }

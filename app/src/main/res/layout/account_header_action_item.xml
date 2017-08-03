@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:ignore="UnusedAttribute">
 
     <com.mikepenz.materialdrawer.view.BezelImageView
         android:id="@+id/imageViewPhoto"
@@ -13,6 +14,7 @@
         android:layout_height="@dimen/account_header_action_item_image_size"
         android:layout_marginLeft="@dimen/base_margin"
         android:layout_marginStart="@dimen/base_margin"
+        android:elevation="@dimen/image_elevation"
         android:src="@color/white"
         app:biv_selectorOnPress="@android:color/transparent" />
 

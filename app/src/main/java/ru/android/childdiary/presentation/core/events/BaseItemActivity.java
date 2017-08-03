@@ -59,8 +59,8 @@ import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
-import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerActivity;
-import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerActivity;
+import ru.android.childdiary.presentation.pickers.medicines.MedicinePickerActivity;
+import ru.android.childdiary.presentation.pickers.doctors.DoctorPickerActivity;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 

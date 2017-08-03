@@ -71,14 +71,18 @@ import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakin
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterPresenter;
 import ru.android.childdiary.presentation.medical.partitions.medicines.MedicineTakingListPresenter;
 import ru.android.childdiary.presentation.medical.partitions.visits.DoctorVisitsPresenter;
-import ru.android.childdiary.presentation.medical.pickers.medicines.MedicineAddActivity;
-import ru.android.childdiary.presentation.medical.pickers.medicines.MedicineAddPresenter;
-import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerActivity;
-import ru.android.childdiary.presentation.medical.pickers.medicines.MedicinePickerPresenter;
-import ru.android.childdiary.presentation.medical.pickers.visits.DoctorAddActivity;
-import ru.android.childdiary.presentation.medical.pickers.visits.DoctorAddPresenter;
-import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerActivity;
-import ru.android.childdiary.presentation.medical.pickers.visits.DoctorPickerPresenter;
+import ru.android.childdiary.presentation.pickers.doctors.DoctorAddActivity;
+import ru.android.childdiary.presentation.pickers.doctors.DoctorAddPresenter;
+import ru.android.childdiary.presentation.pickers.doctors.DoctorPickerActivity;
+import ru.android.childdiary.presentation.pickers.doctors.DoctorPickerPresenter;
+import ru.android.childdiary.presentation.pickers.food.FoodAddActivity;
+import ru.android.childdiary.presentation.pickers.food.FoodAddPresenter;
+import ru.android.childdiary.presentation.pickers.food.FoodPickerActivity;
+import ru.android.childdiary.presentation.pickers.food.FoodPickerPresenter;
+import ru.android.childdiary.presentation.pickers.medicines.MedicineAddActivity;
+import ru.android.childdiary.presentation.pickers.medicines.MedicineAddPresenter;
+import ru.android.childdiary.presentation.pickers.medicines.MedicinePickerActivity;
+import ru.android.childdiary.presentation.pickers.medicines.MedicinePickerPresenter;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditPresenter;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
@@ -152,6 +156,10 @@ public interface ApplicationComponent {
     void inject(MedicinePickerPresenter presenter);
 
     void inject(MedicineAddPresenter presenter);
+
+    void inject(FoodPickerPresenter presenter);
+
+    void inject(FoodAddPresenter presenter);
 
     void inject(DoctorVisitEventDetailPresenter presenter);
 
@@ -229,6 +237,10 @@ public interface ApplicationComponent {
     void inject(MedicinePickerActivity activity);
 
     void inject(MedicineAddActivity activity);
+
+    void inject(FoodPickerActivity activity);
+
+    void inject(FoodAddActivity activity);
 
     void inject(DoctorVisitEventDetailActivity activity);
 

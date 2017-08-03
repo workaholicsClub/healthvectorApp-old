@@ -25,7 +25,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
@@ -35,7 +34,6 @@ import ru.android.childdiary.domain.interactors.development.achievement.Concrete
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;

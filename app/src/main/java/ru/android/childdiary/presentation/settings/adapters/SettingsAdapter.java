@@ -39,6 +39,12 @@ public class SettingsAdapter extends BaseRecyclerViewAdapter<BaseSettingsItem, B
             case INTENT:
                 v = inflater.inflate(R.layout.settings_item_intent, parent, false);
                 return new IntentSettingsViewHolder(v);
+            case PROFILE_GROUP:
+                v = inflater.inflate(R.layout.settings_item_profile_group, parent, false);
+                return new ProfileGroupSettingsViewHolder(v);
+            case PROFILE:
+                v = inflater.inflate(R.layout.settings_item_profile, parent, false);
+                return new ProfileSettingsViewHolder(v);
             default:
                 throw new IllegalArgumentException("Unsupported settings item type");
         }

@@ -80,8 +80,8 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 0).get();
         selectedPage = selectedPage == null ? 0 : selectedPage;
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(putArguments(new DoctorVisitsFragment()), getString(R.string.medical_tab_title_doctor_visits));
-        viewPagerAdapter.addFragment(putArguments(new MedicineTakingListFragment()), getString(R.string.medical_tab_title_medicine_taking_list));
+        viewPagerAdapter.addFragment(putArguments(new DoctorVisitsFragment()), getString(R.string.doctor_visits));
+        viewPagerAdapter.addFragment(putArguments(new MedicineTakingListFragment()), getString(R.string.medicines));
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(1);

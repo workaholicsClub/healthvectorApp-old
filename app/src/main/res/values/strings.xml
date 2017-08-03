@@ -8,8 +8,8 @@
     <string name="drawer_item_development_diary">Дневник развития</string>
     <string name="drawer_item_exercises">Занятия</string>
     <string name="drawer_item_medical_data">Медицинские данные</string>
-    <string name="drawer_item_settings">Настройки</string>
-    <string name="drawer_item_help">Помощь</string>
+    <string name="settings">Настройки</string>
+    <string name="help">Помощь</string>
     <string name="profile">Профиль</string>
     <string name="add_profile">Добавить профиль</string>
     <string name="edit">Редактировать</string>
@@ -138,8 +138,10 @@
     <string name="menu_filter">Фильтр</string>
     <string name="menu_rotate">Повернуть</string>
     <string name="menu_save">Сохранить</string>
-    <string name="medical_tab_title_doctor_visits">Визиты к врачу</string>
-    <string name="medical_tab_title_medicine_taking_list">Лекарства</string>
+    <string name="doctor_visits">Визиты к врачу</string>
+    <string name="medicines">Лекарства</string>
+    <string name="doctors">Специализации</string>
+    <string name="achievements">Достижения</string>
     <string name="development_tab_title_achievements">Достижения</string>
     <string name="development_tab_title_testing">Тестирование</string>
     <string name="development_tab_title_antropometry_list">Рост/Вес</string>
@@ -317,4 +319,6 @@
     <string name="achievement">Достижение</string>
     <string name="comment">Комментарий</string>
     <string name="fill_achievement_date">Укажите дату достижения</string>
+    <string name="child_profile">Профиль ребенка</string>
+    <string name="add_food">Добавить прикорм</string>
 </resources>

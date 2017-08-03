@@ -24,6 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
@@ -38,18 +39,24 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
+import ru.android.childdiary.presentation.pickers.medicines.MedicinePickerActivity;
+import ru.android.childdiary.presentation.pickers.doctors.DoctorPickerActivity;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.settings.adapters.SettingsAdapter;
 import ru.android.childdiary.presentation.settings.adapters.items.BaseSettingsItem;
 import ru.android.childdiary.presentation.settings.adapters.items.DelimiterSettingsItem;
 import ru.android.childdiary.presentation.settings.adapters.items.GroupSettingsItem;
 import ru.android.childdiary.presentation.settings.adapters.items.IntentSettingsItem;
+import ru.android.childdiary.presentation.settings.adapters.items.ProfileGroupSettingsItem;
+import ru.android.childdiary.presentation.settings.adapters.items.ProfileSettingsItem;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 import static android.app.Activity.RESULT_OK;
 
 public class SettingsFragment extends BaseMvpFragment implements SettingsView,
-        IntentSettingsItem.Listener {
+        IntentSettingsItem.Listener, ProfileGroupSettingsItem.Listener, ProfileSettingsItem.Listener {
     private static final String TAG_PROGRESS_DIALOG_AUTHORIZE = "TAG_PROGRESS_DIALOG_AUTHORIZE";
     private static final String TAG_PROGRESS_DIALOG_RESTORE = "TAG_PROGRESS_DIALOG_RESTORE";
     private static final String TAG_PROGRESS_DIALOG_BACKUP = "TAG_PROGRESS_DIALOG_BACKUP";
@@ -68,18 +75,17 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    private IntentSettingsItem accountItem;
+    private List<BaseSettingsItem> fixedItems;
     private SettingsAdapter settingsAdapter;
 
     @Nullable
     @Getter
     private LocalDate selectedDate;
     private Child child;
-
     @Nullable
     @Getter(AccessLevel.PROTECTED)
     private Sex sex;
-
-    private IntentSettingsItem accountItem;
 
     @Override
     protected void injectFragment(ApplicationComponent component) {
@@ -113,17 +119,11 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     }
 
     private void setupUi() {
-        accountItem = IntentSettingsItem.builder()
-                .id(Intention.ACCOUNT.ordinal())
-                .title(getString(R.string.settings_account))
-                .iconRes(R.drawable.ic_settings_account)
-                .listener(this)
-                .enabled(true)
-                .build();
+        initItems();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         settingsAdapter = new SettingsAdapter(getContext());
-        settingsAdapter.setItems(generateItems());
+        settingsAdapter.setItems(fixedItems);
         recyclerView.setAdapter(settingsAdapter);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
@@ -137,6 +137,14 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     public void onResume() {
         super.onResume();
         getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void showChildList(@NonNull List<Child> childList) {
+        List<BaseSettingsItem> items = new ArrayList<>();
+        items.addAll(generateProfileItems(childList));
+        items.addAll(fixedItems);
+        settingsAdapter.setItems(items);
     }
 
     @Override
@@ -160,10 +168,73 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         settingsAdapter.updateItem(accountItem);
     }
 
-    private List<BaseSettingsItem> generateItems() {
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), null);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToProfileEdit(@NonNull Child child) {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), child);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showDeleteChildConfirmation(@NonNull Child child) {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setTitle(getString(R.string.delete_child_confirmation_dialog_title, child.getName()))
+                .setMessage(R.string.delete_child_confirmation_dialog_text)
+                .setPositiveButton(R.string.delete,
+                        (dialog, which) -> presenter.forceDeleteChild(child))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
+    public void childDeleted(@NonNull Child child) {
+    }
+
+    private void initItems() {
+        if (accountItem == null) {
+            accountItem = IntentSettingsItem.builder()
+                    .id(Intention.ACCOUNT.ordinal())
+                    .title(getString(R.string.settings_account))
+                    .iconRes(R.drawable.ic_settings_account)
+                    .listener(this)
+                    .enabled(true)
+                    .build();
+        }
+        if (fixedItems == null) {
+            fixedItems = generateFixedItems();
+        }
+    }
+
+    private List<? extends BaseSettingsItem> generateProfileItems(@NonNull List<Child> childList) {
+        int id = 2000;
+        List<BaseSettingsItem> items = new ArrayList<>();
+        items.add(ProfileGroupSettingsItem.builder()
+                .id(id)
+                .listener(this)
+                .title(getString(R.string.child_profile))
+                .build());
+        items.addAll(Observable.fromIterable(childList)
+                .filter(child -> child.getId() != null)
+                .map(child -> ProfileSettingsItem.builder()
+                        .id(id + child.getId())
+                        .listener(this)
+                        .child(child)
+                        .icon(ResourcesUtils.getChildIconForAccountHeader(getContext(), child))
+                        .title(child.getName())
+                        .build())
+                .toList()
+                .blockingGet());
+        return items;
+    }
+
+    private List<BaseSettingsItem> generateFixedItems() {
         List<BaseSettingsItem> items = new ArrayList<>();
         int id = 1000;
-        // TODO: generate child profiles items with special ids
         items.add(GroupSettingsItem.builder()
                 .id(++id)
                 .title(getString(R.string.settings_notifications))
@@ -225,41 +296,91 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .listener(this)
                 .enabled(true)
                 .build());
+        items.add(IntentSettingsItem.builder()
+                .id(Intention.MEDICINE.ordinal())
+                .title(getString(R.string.medicines))
+                .iconRes(R.drawable.ic_medicine)
+                .listener(this)
+                .enabled(true)
+                .build());
+        items.add(IntentSettingsItem.builder()
+                .id(Intention.DOCTOR.ordinal())
+                .title(getString(R.string.doctors))
+                .iconRes(R.drawable.ic_doctor)
+                .listener(this)
+                .enabled(true)
+                .build());
+        items.add(IntentSettingsItem.builder()
+                .id(Intention.ACHIEVEMENT.ordinal())
+                .title(getString(R.string.achievements))
+                .iconRes(R.drawable.ic_brain)
+                .listener(this)
+                .enabled(true)
+                .build());
         return items;
     }
 
     @Override
     public void onClick(IntentSettingsItem item) {
-        Intention intention = Intention.values()[item.getId()];
+        Intention intention = Intention.values()[(int) item.getId()];
         switch (intention) {
             case NOTIFICATIONS:
                 break;
             case ACCOUNT:
                 presenter.bindAccount();
                 break;
-            case BACKUP: {
-                Intent intent = CloudOperationActivity.getIntent(getContext(),
-                        CloudOperationType.BACKUP, getSex());
-                startActivity(intent);
-                getActivity().finish();
+            case BACKUP:
+                backup();
                 break;
-            }
-            case RESTORE: {
-                Intent intent = CloudOperationActivity.getIntent(getContext(),
-                        CloudOperationType.RESTORE, getSex());
-                startActivity(intent);
-                getActivity().finish();
+            case RESTORE:
+                restore();
                 break;
-            }
             case DAY_LENGTH:
                 break;
             case FOOD_MEASURE:
                 break;
             case FOOD:
                 break;
+            case MEDICINE:
+                startActivity(MedicinePickerActivity.getIntent(getContext(), getSex()));
+                break;
+            case DOCTOR:
+                startActivity(DoctorPickerActivity.getIntent(getContext(), getSex()));
+                break;
+            case ACHIEVEMENT:
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported intention");
         }
+    }
+
+    private void backup() {
+        Intent intent = CloudOperationActivity.getIntent(getContext(),
+                CloudOperationType.BACKUP, getSex());
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    private void restore() {
+        Intent intent = CloudOperationActivity.getIntent(getContext(),
+                CloudOperationType.RESTORE, getSex());
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    @Override
+    public void addProfile(ProfileGroupSettingsItem item) {
+        presenter.addChild();
+    }
+
+    @Override
+    public void reviewProfile(ProfileSettingsItem item) {
+        presenter.editChild(item.getChild());
+    }
+
+    @Override
+    public void deleteProfile(ProfileSettingsItem item) {
+        presenter.deleteChild(item.getChild());
     }
 
     @Override
@@ -472,6 +593,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     }
 
     private enum Intention {
-        NOTIFICATIONS, ACCOUNT, BACKUP, RESTORE, DAY_LENGTH, FOOD_MEASURE, FOOD
+        NOTIFICATIONS, ACCOUNT, BACKUP, RESTORE, DAY_LENGTH,
+        FOOD_MEASURE, FOOD, MEDICINE, DOCTOR, ACHIEVEMENT
     }
 }

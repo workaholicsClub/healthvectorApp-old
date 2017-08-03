@@ -106,11 +106,11 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                     .withOnDrawerItemClickListener(this),
             new CustomPrimaryDrawerItem()
                     .withTag(AppPartition.SETTINGS)
-                    .withName(R.string.drawer_item_settings)
+                    .withName(R.string.settings)
                     .withOnDrawerItemClickListener(this),
             new CustomPrimaryDrawerItem()
                     .withTag(AppPartition.HELP)
-                    .withName(R.string.drawer_item_help)
+                    .withName(R.string.help)
                     .withOnDrawerItemClickListener(this)
     };
 
@@ -126,6 +126,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
     private Runnable navigationCommand;
+
 
     public static Intent getIntent(Context context,
                                    @NonNull AppPartition appPartition,
@@ -243,18 +244,31 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     public void showChild(@NonNull Child child) {
         logger.debug("showChild: " + child);
         changeThemeIfNeeded(child);
+        if (child.getId() != null && accountHeader != null) {
+            accountHeader.setActiveProfile(mapToProfileId(child));
+        }
+        AppPartition appPartition = selectedPartition == null ? readAppPartition(getIntent()) : selectedPartition;
+        openAppPartition(appPartition);
+    }
+
+    private void updateTitle(@NonNull AppPartition appPartition, @NonNull Child child) {
+        if (appPartition == AppPartition.SETTINGS) {
+            hideToolbarLogo();
+            setupToolbarTitle(R.string.settings);
+            return;
+        }
+        if (appPartition == AppPartition.HELP) {
+            hideToolbarLogo();
+            setupToolbarTitle(R.string.help);
+            return;
+        }
         if (child.getId() == null) {
             hideToolbarLogo();
             setupToolbarTitle(R.string.app_name);
         } else {
             setupToolbarLogo(ResourcesUtils.getChildIconForToolbar(this, child));
             setupToolbarTitle(child.getName());
-            if (accountHeader != null) {
-                accountHeader.setActiveProfile(mapToProfileId(child));
-            }
         }
-        AppPartition appPartition = selectedPartition == null ? readAppPartition(getIntent()) : selectedPartition;
-        openAppPartition(appPartition);
     }
 
     @Override
@@ -283,9 +297,13 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .setTitle(getString(R.string.delete_child_confirmation_dialog_title, child.getName()))
                 .setMessage(R.string.delete_child_confirmation_dialog_text)
                 .setPositiveButton(R.string.delete,
-                        (dialog, which) -> presenter.deleteChild(child))
+                        (dialog, which) -> presenter.forceDeleteChild(child))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    @Override
+    public void childDeleted(@NonNull Child child) {
     }
 
     @Override
@@ -320,6 +338,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     private void openAppPartition(@NonNull AppPartition appPartition,
                                   @NonNull AppPartitionArguments arguments) {
+        updateTitle(appPartition, arguments.getChild());
+
         selectedPartition = appPartition;
 
         String tag = appPartition.toString();

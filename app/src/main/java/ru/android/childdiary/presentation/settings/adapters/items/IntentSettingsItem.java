@@ -24,7 +24,7 @@ public class IntentSettingsItem extends BaseSettingsItem {
     boolean enabled;
 
     @Builder(toBuilder = true)
-    private IntentSettingsItem(int id,
+    private IntentSettingsItem(long id,
                                @NonNull Listener listener,
                                @DrawableRes int iconRes,
                                @NonNull String title,

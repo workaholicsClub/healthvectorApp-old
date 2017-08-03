@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
 @Getter
 public abstract class BaseSettingsItem {
-    int id;
+    long id;
 
     public abstract SettingsItemType getType();
 }

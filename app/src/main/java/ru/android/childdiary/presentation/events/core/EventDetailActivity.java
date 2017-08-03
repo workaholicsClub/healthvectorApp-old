@@ -27,7 +27,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.core.ContentObject;
 import ru.android.childdiary.domain.interactors.calendar.events.core.LinearGroupFieldType;
@@ -37,7 +36,6 @@ import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEv
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextView;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -334,6 +332,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         if (item.getItemId() == android.R.id.home) {
             saveChangesOrExit();
             return true;
+        }
+        if (event == null) {
+            return super.onOptionsItemSelected(item);
         }
         switch (item.getItemId()) {
             case R.id.menu_delete:

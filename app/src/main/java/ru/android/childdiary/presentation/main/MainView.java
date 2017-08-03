@@ -32,6 +32,9 @@ public interface MainView extends BaseView {
     void showDeleteChildConfirmation(@NonNull Child child);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void childDeleted(@NonNull Child child);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToCalendar(@NonNull AppPartitionArguments arguments);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

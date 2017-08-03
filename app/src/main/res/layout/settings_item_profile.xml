@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentView"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/field_height"
+    android:background="@drawable/background_clickable"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    tools:ignore="UnusedAttribute">
+
+    <com.mikepenz.materialdrawer.view.BezelImageView
+        android:id="@+id/imageViewPhoto"
+        android:layout_width="@dimen/settings_profile_icon_size"
+        android:layout_height="@dimen/settings_profile_icon_size"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
+        android:elevation="@dimen/image_elevation"
+        app:biv_selectorOnPress="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAppearance="@style/PrimaryTextAppearance"
+        tools:ignore="Deprecated" />
+
+    <FrameLayout
+        android:id="@+id/imageViewWrapper"
+        android:layout_width="@dimen/field_height"
+        android:layout_height="@dimen/field_height"
+        android:background="@drawable/background_clickable">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/image_picker_action_delete_image" />
+    </FrameLayout>
+</LinearLayout>

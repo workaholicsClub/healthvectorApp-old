@@ -131,6 +131,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
         recyclerViewEvents.setLayoutManager(layoutManager);
         eventAdapter = new EventAdapter(getContext(), this, fabController);
         recyclerViewEvents.setAdapter(eventAdapter);
+        recyclerViewEvents.setVisibility(View.GONE);
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewEvents, false);
     }
@@ -248,6 +249,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
 
         eventAdapter.setItems(calendarState.getEvents());
         eventAdapter.setFabController(calendarState.getChild().getId() == null ? null : fabController, true);
+        recyclerViewEvents.setVisibility(calendarState.getEvents().isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override

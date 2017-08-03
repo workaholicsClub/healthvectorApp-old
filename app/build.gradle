@@ -77,7 +77,7 @@ android {
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
             // other
             buildConfigField "boolean", "ENABLE_CONFIGURATION_CHANGE", "true"
-            buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
+            buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "true"
             buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
             buildConfigField "boolean", "COPY_BACKUP_TO_EXTERNAL_STORAGE", "true"
         }

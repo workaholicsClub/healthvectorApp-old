@@ -10,7 +10,7 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class DelimiterSettingsItem extends BaseSettingsItem {
     @Builder
-    private DelimiterSettingsItem(int id) {
+    private DelimiterSettingsItem(long id) {
         super(id);
     }
 

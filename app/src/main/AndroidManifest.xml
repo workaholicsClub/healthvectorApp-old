@@ -154,16 +154,22 @@
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
-            android:name=".presentation.medical.pickers.visits.DoctorAddActivity"
+            android:name=".presentation.pickers.doctors.DoctorAddActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".presentation.medical.pickers.visits.DoctorPickerActivity"
+            android:name=".presentation.pickers.doctors.DoctorPickerActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".presentation.medical.pickers.medicines.MedicineAddActivity"
+            android:name=".presentation.pickers.medicines.MedicineAddActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".presentation.medical.pickers.medicines.MedicinePickerActivity"
+            android:name=".presentation.pickers.medicines.MedicinePickerActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".presentation.pickers.food.FoodAddActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".presentation.pickers.food.FoodPickerActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".presentation.core.images.crop.CropActivity" />
         <activity android:name=".presentation.core.images.review.ImageReviewActivity" />
