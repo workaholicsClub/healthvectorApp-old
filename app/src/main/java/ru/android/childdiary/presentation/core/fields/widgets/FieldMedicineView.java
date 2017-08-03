@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
 
 public class FieldMedicineView extends FieldDialogView<Medicine> {
     public FieldMedicineView(Context context) {

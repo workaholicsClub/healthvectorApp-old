@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import ru.android.childdiary.domain.interactors.core.ValueRepository;
 
 public abstract class ValueDataRepository<T> implements ValueRepository<T> {
     private final Logger logger = LoggerFactory.getLogger(toString());

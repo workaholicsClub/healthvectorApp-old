@@ -5,23 +5,23 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.db.entities.calendar.events.DoctorVisitEventData;
-import ru.android.childdiary.data.db.entities.calendar.events.DoctorVisitEventEntity;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventData;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.DoctorVisitEventData;
+import ru.android.childdiary.data.db.entities.calendar.DoctorVisitEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventData;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
 import ru.android.childdiary.data.db.entities.child.ChildData;
+import ru.android.childdiary.data.db.entities.dictionaries.DoctorData;
+import ru.android.childdiary.data.db.entities.dictionaries.DoctorEntity;
 import ru.android.childdiary.data.db.entities.medical.DoctorVisitData;
 import ru.android.childdiary.data.db.entities.medical.DoctorVisitEntity;
-import ru.android.childdiary.data.db.entities.medical.core.DoctorData;
-import ru.android.childdiary.data.db.entities.medical.core.DoctorEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.data.repositories.medical.mappers.DoctorMapper;
+import ru.android.childdiary.data.repositories.dictionaries.DoctorMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
-import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 
 public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData, DoctorVisitEventEntity, DoctorVisitEvent> {
     private final ChildMapper childMapper;

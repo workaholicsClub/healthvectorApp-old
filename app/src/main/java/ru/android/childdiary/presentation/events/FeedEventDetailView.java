@@ -8,9 +8,9 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
-import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasure;
+import ru.android.childdiary.domain.interactors.calendar.data.standard.FeedEvent;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 
 public interface FeedEventDetailView extends EventDetailView<FeedEvent> {

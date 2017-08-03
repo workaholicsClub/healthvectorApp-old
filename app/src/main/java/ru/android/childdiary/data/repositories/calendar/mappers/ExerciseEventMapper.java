@@ -5,19 +5,19 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.db.entities.calendar.events.ExerciseEventData;
-import ru.android.childdiary.data.db.entities.calendar.events.ExerciseEventEntity;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventData;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.ExerciseEventData;
+import ru.android.childdiary.data.db.entities.calendar.ExerciseEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventData;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
 import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.db.entities.exercises.ConcreteExerciseData;
 import ru.android.childdiary.data.db.entities.exercises.ConcreteExerciseEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ConcreteExerciseMapper;
-import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
+import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
 
 public class ExerciseEventMapper implements EntityMapper<ExerciseEventData, ExerciseEventEntity, ExerciseEvent> {
     private final ChildMapper childMapper;

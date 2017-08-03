@@ -10,7 +10,7 @@ import io.reactivex.Observable;
 import ru.android.childdiary.data.network.dto.Program;
 import ru.android.childdiary.data.network.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
-import ru.android.childdiary.domain.interactors.exercises.Exercise;
+import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
 
 public class ProgramsToExercisesMapper implements Mapper<Programs, List<Exercise>> {
     private final Mapper<Program, Exercise> mapper;

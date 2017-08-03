@@ -18,7 +18,7 @@ import butterknife.BindDimen;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroups;
 import ru.android.childdiary.utils.TimesMatcher;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.FontUtils;

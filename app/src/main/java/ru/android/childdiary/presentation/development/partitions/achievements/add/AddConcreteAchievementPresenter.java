@@ -10,7 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
+import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementResponse;
 import ru.android.childdiary.presentation.development.partitions.achievements.core.ConcreteAchievementPresenter;

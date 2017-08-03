@@ -8,9 +8,9 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
-import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 
 public interface MedicineTakingEventDetailView extends EventDetailView<MedicineTakingEvent> {

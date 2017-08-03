@@ -7,8 +7,9 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;

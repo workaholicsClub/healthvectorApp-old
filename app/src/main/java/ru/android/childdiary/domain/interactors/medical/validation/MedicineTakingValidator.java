@@ -9,12 +9,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.core.validation.EventValidationException;
-import ru.android.childdiary.domain.core.validation.EventValidationResult;
-import ru.android.childdiary.domain.core.validation.EventValidator;
-import ru.android.childdiary.domain.core.validation.ValidationException;
-import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.core.validation.EventValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
+import ru.android.childdiary.domain.interactors.core.validation.EventValidator;
+import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public class MedicineTakingValidator extends EventValidator<MedicineTaking> {

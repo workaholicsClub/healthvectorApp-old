@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import javax.inject.Inject;
 
 import io.reactivex.Single;
+import ru.android.childdiary.data.availability.exceptions.NetworkUnavailableException;
 
 public class NetworkAvailability {
     private final Context context;

@@ -32,7 +32,7 @@ import java.util.List;
 import lombok.NonNull;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
-import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.presentation.chart.core.ChartPlotter;
 import ru.android.childdiary.presentation.chart.core.CustomCombinedChartRenderer;
 import ru.android.childdiary.utils.ui.FontUtils;

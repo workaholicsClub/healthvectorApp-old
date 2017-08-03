@@ -4,7 +4,7 @@ import org.joda.time.LocalTime;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
+import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
 
 @Value
 @Builder

@@ -5,24 +5,26 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
+import ru.android.childdiary.data.db.entities.calendar.core.RepeatParametersData;
+import ru.android.childdiary.data.db.entities.calendar.core.RepeatParametersEntity;
 import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.db.entities.child.ChildEntity;
-import ru.android.childdiary.data.db.entities.core.RepeatParametersData;
-import ru.android.childdiary.data.db.entities.core.RepeatParametersEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.MedicineData;
+import ru.android.childdiary.data.db.entities.dictionaries.MedicineEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureData;
+import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureEntity;
 import ru.android.childdiary.data.db.entities.medical.MedicineTakingData;
 import ru.android.childdiary.data.db.entities.medical.MedicineTakingEntity;
-import ru.android.childdiary.data.db.entities.medical.core.MedicineData;
-import ru.android.childdiary.data.db.entities.medical.core.MedicineEntity;
-import ru.android.childdiary.data.db.entities.medical.core.MedicineMeasureData;
-import ru.android.childdiary.data.db.entities.medical.core.MedicineMeasureEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
-import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.data.repositories.dictionaries.MedicineMapper;
+import ru.android.childdiary.data.repositories.dictionaries.MedicineMeasureMapper;
+import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 
 public class MedicineTakingMapper implements EntityMapper<MedicineTakingData, MedicineTakingEntity, MedicineTaking> {
     private final ChildMapper childMapper;

@@ -8,8 +8,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.core.LengthValue;
+import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
 import ru.android.childdiary.presentation.core.dialogs.BaseLengthValueDialogFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 

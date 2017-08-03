@@ -20,12 +20,8 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/profile_top_panel_height"
-            android:layout_marginEnd="@dimen/profile_margin_horizontal"
-            android:layout_marginLeft="@dimen/profile_margin_horizontal"
-            android:layout_marginRight="@dimen/profile_margin_horizontal"
-            android:layout_marginStart="@dimen/profile_margin_horizontal">
+            android:layout_width="@dimen/profile_top_panel_height"
+            android:layout_height="@dimen/profile_top_panel_height">
 
             <com.mikepenz.materialdrawer.view.BezelImageView
                 android:id="@+id/imageViewPhoto"
@@ -53,8 +49,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/profile_margin_vertical"
-            android:layout_marginEnd="@dimen/profile_margin_horizontal"
-            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_marginEnd="@dimen/base_margin"
+            android:layout_marginRight="@dimen/base_margin"
             android:layout_marginTop="@dimen/profile_margin_vertical"
             android:layout_weight="1"
             android:hint="@string/child_name"
@@ -67,8 +63,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin_horizontal"
-        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
         android:layout_marginTop="@dimen/profile_margin_vertical"
         android:text="@string/sex"
         android:textAppearance="@style/PlaceholderTextAppearance" />
@@ -77,8 +73,8 @@
         android:id="@+id/textViewSexWrapper"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_field_height"
-        android:layout_marginLeft="@dimen/profile_margin_horizontal"
-        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
         android:background="@drawable/background_clickable">
 
         <TextView
@@ -97,8 +93,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin_horizontal"
-        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
         android:layout_marginTop="@dimen/profile_margin_vertical"
         android:text="@string/birth_date_and_time"
         android:textAppearance="@style/PlaceholderTextAppearance" />
@@ -106,8 +102,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin_horizontal"
-        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
         android:baselineAligned="false"
         android:orientation="horizontal">
 
@@ -115,8 +111,8 @@
             android:id="@+id/textViewDateWrapper"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
-            android:layout_marginEnd="@dimen/profile_margin_horizontal"
-            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_marginEnd="@dimen/base_margin"
+            android:layout_marginRight="@dimen/base_margin"
             android:layout_weight="1"
             android:background="@drawable/background_clickable">
 
@@ -157,8 +153,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin_horizontal"
-        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
         android:layout_marginTop="@dimen/profile_margin_vertical"
         android:text="@string/birth_height_and_weight"
         android:textAppearance="@style/PlaceholderTextAppearance" />
@@ -166,16 +162,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/profile_margin_horizontal"
-        android:layout_marginRight="@dimen/profile_margin_horizontal"
+        android:layout_marginLeft="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
         android:orientation="horizontal">
 
         <ru.android.childdiary.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextBirthHeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
-            android:layout_marginEnd="@dimen/profile_margin_horizontal"
-            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_marginEnd="@dimen/base_margin"
+            android:layout_marginRight="@dimen/base_margin"
             android:layout_weight="1"
             android:background="@drawable/edit_text_background"
             android:drawableEnd="@drawable/arrow_down_gray"

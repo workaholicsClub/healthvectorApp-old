@@ -6,9 +6,10 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
-import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;

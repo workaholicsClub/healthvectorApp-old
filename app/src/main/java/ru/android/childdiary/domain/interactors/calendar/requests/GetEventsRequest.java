@@ -5,7 +5,7 @@ import org.joda.time.LocalDate;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 
 @Value
 @Builder

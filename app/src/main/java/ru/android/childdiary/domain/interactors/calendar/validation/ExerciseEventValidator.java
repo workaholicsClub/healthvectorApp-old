@@ -10,9 +10,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.core.validation.ValidationException;
-import ru.android.childdiary.domain.core.validation.Validator;
-import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
+import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.Validator;
+import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
 
 public class ExerciseEventValidator extends Validator<ExerciseEvent, CalendarValidationResult> {
     private final Context context;

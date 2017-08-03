@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -22,7 +22,7 @@ public class ProfileSettingsItem extends BaseSettingsItem {
     @NonNull
     String title;
 
-    @Builder(toBuilder = true)
+    @Builder
     private ProfileSettingsItem(long id,
                                 @NonNull Listener listener,
                                 @NonNull Child child,

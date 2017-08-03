@@ -3,8 +3,8 @@ package ru.android.childdiary.data.db.converters;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.android.childdiary.domain.interactors.core.LengthValue;
-import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
+import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
 
 public class LengthValueConverter extends SimpleConverter<LengthValue> {
     private static final String DELIMITER = ";";

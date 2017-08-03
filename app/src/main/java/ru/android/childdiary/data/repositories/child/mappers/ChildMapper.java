@@ -8,7 +8,7 @@ import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.db.entities.child.ChildEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 
 public class ChildMapper implements EntityMapper<ChildData, ChildEntity, Child> {
     @Inject

@@ -5,8 +5,8 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import ru.android.childdiary.domain.core.DeleteResponse;
-import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
+import ru.android.childdiary.domain.interactors.core.requests.DeleteResponse;
+import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 
 @Value
 @Builder

@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 
 public abstract class AppPartitionPresenter<V extends AppPartitionView> extends BasePresenter<V> {

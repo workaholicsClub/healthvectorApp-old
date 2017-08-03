@@ -12,7 +12,7 @@ import io.requery.Persistable;
 import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.db.entities.child.ChildData;
-import ru.android.childdiary.data.db.entities.core.RepeatParametersData;
+import ru.android.childdiary.data.db.entities.calendar.core.RepeatParametersData;
 
 @Table(name = "concrete_exercise")
 @Entity(name = "ConcreteExerciseEntity")

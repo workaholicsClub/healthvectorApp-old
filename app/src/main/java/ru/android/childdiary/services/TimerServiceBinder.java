@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.data.standard.SleepEvent;
 
 class TimerServiceBinder extends Binder implements TimerServiceListener {
     private final Logger logger = LoggerFactory.getLogger(toString());

@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.Value;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 
 @Value
 @Builder

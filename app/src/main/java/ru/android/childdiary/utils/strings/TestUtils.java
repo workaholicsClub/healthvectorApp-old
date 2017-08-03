@@ -10,12 +10,12 @@ import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.interactors.development.testing.TestResult;
-import ru.android.childdiary.domain.interactors.development.testing.processors.core.DomanResult;
-import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestFactory;
-import ru.android.childdiary.domain.interactors.development.testing.processors.core.TestProcessor;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestFactory;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.DomanTest;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
 
 public class TestUtils {
     @Nullable

@@ -13,13 +13,13 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.child.ChildEntity;
-import ru.android.childdiary.data.db.entities.development.achievement.AchievementEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.AchievementEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
-import ru.android.childdiary.data.repositories.development.achievement.mappers.AchievementMapper;
 import ru.android.childdiary.data.repositories.development.achievement.mappers.ConcreteAchievementMapper;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.achievement.Achievement;
-import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
+import ru.android.childdiary.data.repositories.dictionaries.AchievementMapper;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
+import ru.android.childdiary.domain.interactors.dictionaries.achievements.Achievement;
 
 @Singleton
 public class ChildDbService {

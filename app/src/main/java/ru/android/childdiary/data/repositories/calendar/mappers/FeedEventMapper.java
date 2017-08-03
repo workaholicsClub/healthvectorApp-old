@@ -5,21 +5,23 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.db.entities.calendar.events.core.FoodData;
-import ru.android.childdiary.data.db.entities.calendar.events.core.FoodEntity;
-import ru.android.childdiary.data.db.entities.calendar.events.core.FoodMeasureData;
-import ru.android.childdiary.data.db.entities.calendar.events.core.FoodMeasureEntity;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventData;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventEntity;
-import ru.android.childdiary.data.db.entities.calendar.events.standard.FeedEventData;
-import ru.android.childdiary.data.db.entities.calendar.events.standard.FeedEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventData;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.standard.FeedEventData;
+import ru.android.childdiary.data.db.entities.calendar.standard.FeedEventEntity;
 import ru.android.childdiary.data.db.entities.child.ChildData;
+import ru.android.childdiary.data.db.entities.dictionaries.FoodData;
+import ru.android.childdiary.data.db.entities.dictionaries.FoodEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.FoodMeasureData;
+import ru.android.childdiary.data.db.entities.dictionaries.FoodMeasureEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
-import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.FeedEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.data.repositories.dictionaries.FoodMapper;
+import ru.android.childdiary.data.repositories.dictionaries.FoodMeasureMapper;
+import ru.android.childdiary.domain.interactors.calendar.data.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasure;
 
 public class FeedEventMapper implements EntityMapper<FeedEventData, FeedEventEntity, FeedEvent> {
     private final ChildMapper childMapper;

@@ -23,7 +23,7 @@
             app:tabTextColor="@color/white_transparent" />
     </android.support.design.widget.AppBarLayout>
 
-    <ru.android.childdiary.presentation.main.widgets.NotSwipeableViewPager
+    <ru.android.childdiary.presentation.core.widgets.NotSwipeableViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

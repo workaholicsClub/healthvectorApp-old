@@ -28,7 +28,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.R;
 import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.availability.NetworkAvailability;
-import ru.android.childdiary.data.availability.NetworkUnavailableException;
+import ru.android.childdiary.data.availability.exceptions.NetworkUnavailableException;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.utils.strings.DateUtils;

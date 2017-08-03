@@ -7,12 +7,12 @@ import javax.inject.Inject;
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.db.entities.child.ChildEntity;
-import ru.android.childdiary.data.db.entities.development.testing.TestResultData;
-import ru.android.childdiary.data.db.entities.development.testing.TestResultEntity;
+import ru.android.childdiary.data.db.entities.development.TestResultData;
+import ru.android.childdiary.data.db.entities.development.TestResultEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.TestResult;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 
 public class TestResultMapper implements EntityMapper<TestResultData, TestResultEntity, TestResult> {
     private final ChildMapper childMapper;

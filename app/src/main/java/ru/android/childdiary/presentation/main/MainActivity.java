@@ -44,7 +44,7 @@ import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.presentation.calendar.CalendarFragment;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
@@ -126,7 +126,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
     private Runnable navigationCommand;
-
 
     public static Intent getIntent(Context context,
                                    @NonNull AppPartition appPartition,

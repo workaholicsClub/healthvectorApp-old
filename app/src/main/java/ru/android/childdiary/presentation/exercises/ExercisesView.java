@@ -11,8 +11,8 @@ import org.joda.time.LocalTime;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
-import ru.android.childdiary.domain.interactors.exercises.Exercise;
+import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
+import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
 import ru.android.childdiary.presentation.core.AppPartitionView;
 
 public interface ExercisesView extends AppPartitionView {

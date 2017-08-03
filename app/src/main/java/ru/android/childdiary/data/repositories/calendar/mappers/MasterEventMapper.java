@@ -5,14 +5,14 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventData;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventData;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
 import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.db.entities.child.ChildEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 
 public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEventEntity, MasterEvent> {
     private final ChildMapper childMapper;

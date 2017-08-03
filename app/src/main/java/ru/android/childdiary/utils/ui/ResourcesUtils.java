@@ -11,14 +11,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 
 import java.io.File;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 
 public class ResourcesUtils {
     public static Drawable getChildIconForToolbar(Context context, @NonNull Child child) {
@@ -27,6 +28,11 @@ public class ResourcesUtils {
     }
 
     public static Drawable getChildIconForAccountHeader(Context context, @NonNull Child child) {
+        return getChildIcon(context, child,
+                ContextCompat.getDrawable(context, R.drawable.ic_placeholder_account_header));
+    }
+
+    public static Drawable getChildIconForSettings(Context context, @NonNull Child child) {
         return getChildIcon(context, child,
                 ContextCompat.getDrawable(context, R.drawable.ic_placeholder_account_header));
     }
@@ -52,7 +58,7 @@ public class ResourcesUtils {
     public static Drawable getPhotoDrawable(Context context,
                                             @Nullable String imageFileName,
                                             @Nullable Drawable placeholder) {
-        if (imageFileName == null) {
+        if (TextUtils.isEmpty(imageFileName)) {
             return placeholder;
         }
         File file = new File(context.getFilesDir(), imageFileName);

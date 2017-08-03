@@ -10,7 +10,7 @@ import java.util.List;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.presentation.chart.antropometry.pages.HeightChartFragment;
 import ru.android.childdiary.presentation.chart.antropometry.pages.WeightChartFragment;
 import ru.android.childdiary.presentation.chart.core.ChartActivity;

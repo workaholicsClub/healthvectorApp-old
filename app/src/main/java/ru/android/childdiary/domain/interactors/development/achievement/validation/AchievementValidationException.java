@@ -3,7 +3,7 @@ package ru.android.childdiary.domain.interactors.development.achievement.validat
 import java.util.Collections;
 import java.util.List;
 
-import ru.android.childdiary.domain.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
 
 public class AchievementValidationException extends ValidationException {
     private final List<AchievementValidationResult> results;

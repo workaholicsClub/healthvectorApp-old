@@ -9,7 +9,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import org.joda.time.LocalTime;
 
-import ru.android.childdiary.domain.interactors.exercises.ConcreteExercise;
+import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
 import ru.android.childdiary.presentation.core.BaseView;
 
 public interface ExerciseDetailView extends BaseView {

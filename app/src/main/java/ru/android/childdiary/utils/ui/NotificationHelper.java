@@ -17,7 +17,7 @@ import org.joda.time.DateTime;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.SleepEvent;
+import ru.android.childdiary.domain.interactors.calendar.data.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.services.TimerService;

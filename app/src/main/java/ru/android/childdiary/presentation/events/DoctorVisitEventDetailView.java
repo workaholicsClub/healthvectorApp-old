@@ -6,8 +6,8 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-import ru.android.childdiary.domain.interactors.calendar.events.DoctorVisitEvent;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 
 public interface DoctorVisitEventDetailView extends EventDetailView<DoctorVisitEvent> {

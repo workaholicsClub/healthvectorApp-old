@@ -6,7 +6,7 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-import ru.android.childdiary.domain.interactors.development.testing.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.presentation.core.BaseView;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
 

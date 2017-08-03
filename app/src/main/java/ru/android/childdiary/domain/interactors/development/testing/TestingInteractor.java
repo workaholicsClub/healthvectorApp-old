@@ -14,11 +14,12 @@ import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.development.testing.TestingDataRepository;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.core.HasDataResponse;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.DomanTest;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.DomanTest;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
 
 public class TestingInteractor {
     private final TestingRepository testingRepository;

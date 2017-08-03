@@ -18,12 +18,12 @@ import io.requery.reactivex.ReactiveEntityStore;
 import io.requery.reactivex.ReactiveResult;
 import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
-import ru.android.childdiary.data.db.entities.development.testing.TestResultEntity;
+import ru.android.childdiary.data.db.entities.development.TestResultEntity;
 import ru.android.childdiary.data.repositories.development.testing.mappers.TestResultMapper;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.TestResult;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 
 @Singleton

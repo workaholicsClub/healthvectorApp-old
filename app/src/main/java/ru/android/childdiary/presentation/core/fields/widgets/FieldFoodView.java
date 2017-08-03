@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
 import ru.android.childdiary.presentation.core.fields.adapters.FoodAdapter;
 
 public class FieldFoodView extends FieldSpinnerView<Food> {

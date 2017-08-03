@@ -15,8 +15,8 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.calendar.events.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
 import ru.android.childdiary.presentation.core.dialogs.BaseLengthValueDialogArguments;
 
 @ToString(callSuper = true)

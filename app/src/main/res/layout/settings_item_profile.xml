@@ -10,14 +10,26 @@
     android:orientation="horizontal"
     tools:ignore="UnusedAttribute">
 
-    <com.mikepenz.materialdrawer.view.BezelImageView
-        android:id="@+id/imageViewPhoto"
-        android:layout_width="@dimen/settings_profile_icon_size"
-        android:layout_height="@dimen/settings_profile_icon_size"
-        android:layout_marginLeft="@dimen/base_margin"
-        android:layout_marginRight="@dimen/base_margin"
-        android:elevation="@dimen/image_elevation"
-        app:biv_selectorOnPress="@android:color/transparent" />
+    <FrameLayout
+        android:layout_width="72dp"
+        android:layout_height="@dimen/field_height">
+
+        <com.mikepenz.materialdrawer.view.BezelImageView
+            android:id="@+id/imageViewPhoto"
+            android:layout_width="@dimen/settings_profile_icon_size"
+            android:layout_height="@dimen/settings_profile_icon_size"
+            android:layout_gravity="center"
+            android:elevation="@dimen/image_elevation"
+            app:biv_selectorOnPress="@android:color/transparent" />
+
+        <ImageView
+            android:id="@+id/imageViewPlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_placeholder_settings"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/textViewTitle"

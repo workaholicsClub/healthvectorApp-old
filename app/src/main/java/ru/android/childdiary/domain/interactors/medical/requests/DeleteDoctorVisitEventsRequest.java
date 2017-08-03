@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 
 @Value
 @Builder

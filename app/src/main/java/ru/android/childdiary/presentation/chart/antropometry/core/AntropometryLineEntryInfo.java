@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryPoint;
+import ru.android.childdiary.domain.interactors.development.antropometry.data.AntropometryPoint;
 import ru.android.childdiary.presentation.chart.core.LineEntryInfo;
 
 @ToString(callSuper = true)

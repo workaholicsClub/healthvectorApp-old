@@ -13,7 +13,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.events.ExerciseEvent;
+import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseInteractor;
 import ru.android.childdiary.presentation.events.core.EventDetailPresenter;

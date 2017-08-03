@@ -5,15 +5,15 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventData;
-import ru.android.childdiary.data.db.entities.calendar.events.core.MasterEventEntity;
-import ru.android.childdiary.data.db.entities.calendar.events.standard.OtherEventData;
-import ru.android.childdiary.data.db.entities.calendar.events.standard.OtherEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventData;
+import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
+import ru.android.childdiary.data.db.entities.calendar.standard.OtherEventData;
+import ru.android.childdiary.data.db.entities.calendar.standard.OtherEventEntity;
 import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.calendar.events.standard.OtherEvent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.data.standard.OtherEvent;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 
 public class OtherEventMapper implements EntityMapper<OtherEventData, OtherEventEntity, OtherEvent> {
     private final ChildMapper childMapper;

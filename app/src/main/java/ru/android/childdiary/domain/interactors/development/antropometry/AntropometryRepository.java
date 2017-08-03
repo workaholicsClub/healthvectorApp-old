@@ -7,6 +7,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.types.Sex;
+import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
 import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
 
 public interface AntropometryRepository {

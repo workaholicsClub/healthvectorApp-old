@@ -5,7 +5,7 @@ import org.joda.time.DateTime;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 
 @Value
 @Builder

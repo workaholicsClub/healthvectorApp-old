@@ -3,7 +3,7 @@ package ru.android.childdiary.domain.interactors.development.achievement.request
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
+import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 
 @Value
 @Builder(toBuilder = true)

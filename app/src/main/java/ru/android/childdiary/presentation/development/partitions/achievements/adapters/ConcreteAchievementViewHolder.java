@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +15,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
+import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.DateUtils;
@@ -58,9 +57,9 @@ public class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchie
         String dateStr = DateUtils.date(context, item.getDate());
         textViewDate.setText(dateStr == null ? context.getString(R.string.fill_achievement_date) : dateStr);
         textViewConcreteAchievement.setText(item.getName());
-        Drawable placeholder = ContextCompat.getDrawable(context, R.drawable.ic_placeholder_photo);
-        Drawable photo = ResourcesUtils.getPhotoDrawable(context, item.getImageFileName(), placeholder);
+        Drawable photo = ResourcesUtils.getPhotoDrawable(context, item.getImageFileName());
         imageView.setImageDrawable(photo);
+        imageView.setVisibility(photo == null ? View.GONE : View.VISIBLE);
 
         //noinspection deprecation
         imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));

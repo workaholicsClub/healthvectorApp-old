@@ -17,7 +17,7 @@ import butterknife.BindView;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;

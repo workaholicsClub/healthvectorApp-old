@@ -13,8 +13,8 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
-import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasureValue;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.BaseDialogArguments;
 
 @ToString(callSuper = true)

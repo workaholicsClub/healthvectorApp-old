@@ -8,7 +8,7 @@ import android.view.View;
 import java.util.List;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.events.core.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
 
 public class FoodAdapter extends SpinnerItemAdapter<Food, FoodAdapter.ViewHolder> {
     public FoodAdapter(Context context, List<Food> foodList) {

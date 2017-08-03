@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 
 class ChildObservable extends Observable<Child> {
     private final ProfileEditActivity activity;

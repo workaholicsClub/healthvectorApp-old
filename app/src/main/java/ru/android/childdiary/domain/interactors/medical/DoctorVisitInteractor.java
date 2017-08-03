@@ -23,20 +23,24 @@ import ru.android.childdiary.data.repositories.core.settings.SettingsDataReposit
 import ru.android.childdiary.data.repositories.medical.DoctorVisitDataRepository;
 import ru.android.childdiary.data.repositories.medical.DoctorVisitFilterDataRepository;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.DeleteResponse;
-import ru.android.childdiary.domain.core.HasDataResponse;
-import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
+import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
-import ru.android.childdiary.domain.interactors.core.LengthValue;
-import ru.android.childdiary.domain.interactors.core.LinearGroups;
-import ru.android.childdiary.domain.interactors.core.PeriodicityType;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.core.ValueRepository;
 import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+import ru.android.childdiary.domain.interactors.core.requests.DeleteResponse;
+import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
+import ru.android.childdiary.domain.interactors.dictionaries.core.MedicalDictionaryInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.DoctorValidator;
+import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
@@ -48,7 +52,6 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisits
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitResponse;
-import ru.android.childdiary.domain.interactors.medical.validation.DoctorValidator;
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorVisitValidator;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
@@ -60,7 +63,7 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
     private final DoctorVisitValidator doctorVisitValidator;
     private final DoctorValidator doctorValidator;
     private final ImagesRepository imagesRepository;
-    private final DoctorVisitFilterDataRepository filterRepository;
+    private final ValueRepository<GetDoctorVisitsFilter> filterRepository;
 
     @Inject
     public DoctorVisitInteractor(ChildDataRepository childRepository,

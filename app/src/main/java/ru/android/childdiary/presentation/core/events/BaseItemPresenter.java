@@ -13,14 +13,14 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.validation.EventValidationException;
-import ru.android.childdiary.domain.core.validation.EventValidationResult;
+import ru.android.childdiary.domain.interactors.core.validation.EventValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 

@@ -16,7 +16,7 @@ import org.joda.time.format.PeriodFormatterBuilder;
 import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 
 public class TimeUtils {
     public static final int MONTHS_IN_YEAR = 12;

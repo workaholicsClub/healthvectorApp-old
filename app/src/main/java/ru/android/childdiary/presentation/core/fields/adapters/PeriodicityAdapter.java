@@ -7,7 +7,7 @@ import android.view.View;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 public class PeriodicityAdapter extends SpinnerItemAdapter<PeriodicityType, PeriodicityAdapter.ViewHolder> {

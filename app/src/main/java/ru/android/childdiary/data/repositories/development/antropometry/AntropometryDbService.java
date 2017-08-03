@@ -17,10 +17,10 @@ import io.requery.reactivex.ReactiveEntityStore;
 import io.requery.reactivex.ReactiveResult;
 import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
-import ru.android.childdiary.data.db.entities.development.antropometry.AntropometryEntity;
+import ru.android.childdiary.data.db.entities.development.AntropometryEntity;
 import ru.android.childdiary.data.repositories.development.antropometry.mappers.AntropometryMapper;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.antropometry.Antropometry;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
 import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
 
 @Singleton

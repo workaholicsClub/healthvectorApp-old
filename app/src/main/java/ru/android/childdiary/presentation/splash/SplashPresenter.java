@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.BuildConfig;
-import ru.android.childdiary.data.db.DowngradeDatabaseException;
+import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.cloud.CloudInteractor;

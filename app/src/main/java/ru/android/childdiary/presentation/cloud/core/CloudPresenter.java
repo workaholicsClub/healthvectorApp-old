@@ -12,10 +12,10 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.availability.NetworkAvailability;
-import ru.android.childdiary.data.availability.NetworkUnavailableException;
+import ru.android.childdiary.data.availability.exceptions.NetworkUnavailableException;
 import ru.android.childdiary.data.availability.PlayServicesAvailability;
-import ru.android.childdiary.data.cloud.BackupUnavailableException;
-import ru.android.childdiary.domain.cloud.AccountNameNotSpecifiedException;
+import ru.android.childdiary.data.cloud.exceptions.BackupUnavailableException;
+import ru.android.childdiary.domain.cloud.exceptions.AccountNameNotSpecifiedException;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 

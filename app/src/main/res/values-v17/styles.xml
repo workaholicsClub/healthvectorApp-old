@@ -3,6 +3,6 @@
 
     <style name="AutoCompleteTextViewStyle" parent="BaseAutoCompleteTextViewStyle">
         <item name="android:layout_marginEnd">@dimen/auto_complete_text_view_margin_right</item>
-        <item name="android:layout_marginStart">@dimen/profile_margin_horizontal</item>
+        <item name="android:layout_marginStart">@dimen/base_margin</item>
     </style>
 </resources>

@@ -15,8 +15,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/profile_margin_horizontal"
-            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_marginLeft="@dimen/base_margin"
+            android:layout_marginRight="@dimen/base_margin"
             android:layout_marginTop="@dimen/profile_margin_vertical"
             android:text="@string/filter_by_date"
             android:textAppearance="@style/FilterPlaceholderTextAppearance" />
@@ -38,8 +38,8 @@
             android:id="@+id/textViewByDoctor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/profile_margin_horizontal"
-            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_marginLeft="@dimen/base_margin"
+            android:layout_marginRight="@dimen/base_margin"
             android:layout_marginTop="@dimen/profile_margin_vertical"
             android:text="@string/filter_by_doctor"
             android:textAppearance="@style/FilterPlaceholderTextAppearance" />
@@ -53,8 +53,8 @@
             android:id="@+id/textViewByMedicine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/profile_margin_horizontal"
-            android:layout_marginRight="@dimen/profile_margin_horizontal"
+            android:layout_marginLeft="@dimen/base_margin"
+            android:layout_marginRight="@dimen/base_margin"
             android:layout_marginTop="@dimen/profile_margin_vertical"
             android:text="@string/filter_by_medicine"
             android:textAppearance="@style/FilterPlaceholderTextAppearance" />

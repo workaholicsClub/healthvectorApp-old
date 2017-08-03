@@ -134,8 +134,9 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
     }
 
     private void update() {
-        imageView.setImageDrawable(ResourcesUtils.getPhotoDrawable(getContext(), imageFileName));
-        imageViewContainer.setVisibility(imageFileName == null ? GONE : VISIBLE);
+        Drawable photo = ResourcesUtils.getPhotoDrawable(getContext(), imageFileName);
+        imageView.setImageDrawable(photo);
+        imageViewContainer.setVisibility(photo == null ? GONE : VISIBLE);
     }
 
     @Override

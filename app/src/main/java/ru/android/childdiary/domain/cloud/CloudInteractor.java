@@ -12,6 +12,7 @@ import io.reactivex.Single;
 import ru.android.childdiary.data.cloud.BackupService;
 import ru.android.childdiary.data.cloud.RestoreService;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
+import ru.android.childdiary.domain.cloud.exceptions.AccountNameNotSpecifiedException;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 
 public class CloudInteractor {

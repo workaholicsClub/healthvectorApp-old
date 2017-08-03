@@ -7,15 +7,16 @@ import javax.inject.Inject;
 import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.db.entities.child.ChildEntity;
-import ru.android.childdiary.data.db.entities.development.achievement.AchievementData;
-import ru.android.childdiary.data.db.entities.development.achievement.AchievementEntity;
-import ru.android.childdiary.data.db.entities.development.achievement.ConcreteAchievementData;
-import ru.android.childdiary.data.db.entities.development.achievement.ConcreteAchievementEntity;
+import ru.android.childdiary.data.db.entities.development.ConcreteAchievementData;
+import ru.android.childdiary.data.db.entities.development.ConcreteAchievementEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.AchievementData;
+import ru.android.childdiary.data.db.entities.dictionaries.AchievementEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.achievement.Achievement;
-import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
+import ru.android.childdiary.data.repositories.dictionaries.AchievementMapper;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
+import ru.android.childdiary.domain.interactors.dictionaries.achievements.Achievement;
 
 public class ConcreteAchievementMapper implements EntityMapper<ConcreteAchievementData, ConcreteAchievementEntity, ConcreteAchievement> {
     private final ChildMapper childMapper;

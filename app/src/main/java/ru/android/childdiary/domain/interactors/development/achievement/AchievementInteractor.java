@@ -15,18 +15,20 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.development.achievement.AchievementDataRepository;
-import ru.android.childdiary.domain.core.DeleteResponse;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.core.requests.DeleteResponse;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementResponse;
-import ru.android.childdiary.domain.interactors.development.achievement.requests.GetAchievementsRequest;
+import ru.android.childdiary.domain.interactors.dictionaries.GetAchievementsRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementResponse;
 import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidationResult;
 import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidator;
 import ru.android.childdiary.domain.interactors.development.achievement.validation.ConcreteAchievementValidator;
+import ru.android.childdiary.domain.interactors.dictionaries.achievements.Achievement;
 
 public class AchievementInteractor {
     private final AchievementRepository achievementRepository;

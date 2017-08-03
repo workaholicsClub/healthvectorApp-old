@@ -6,7 +6,8 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
 import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseRequest;
 import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseResponse;
 

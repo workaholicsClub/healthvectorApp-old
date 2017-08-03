@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryInteractor;
 import ru.android.childdiary.domain.interactors.development.antropometry.validation.AntropometryValidationException;
 import ru.android.childdiary.domain.interactors.development.antropometry.validation.AntropometryValidationResult;

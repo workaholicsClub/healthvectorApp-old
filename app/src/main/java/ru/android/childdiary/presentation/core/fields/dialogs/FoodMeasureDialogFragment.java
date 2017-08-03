@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.events.core.FoodMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasure;
 
 public class FoodMeasureDialogFragment extends AddValueDialogFragment<FoodMeasureDialogArguments> {
     @Nullable

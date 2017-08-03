@@ -9,10 +9,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.core.validation.ValidationException;
-import ru.android.childdiary.domain.core.validation.Validator;
-import ru.android.childdiary.domain.interactors.calendar.events.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.Validator;
+import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
 
 public class MedicineTakingEventValidator extends Validator<MedicineTakingEvent, CalendarValidationResult> {
     private final Context context;

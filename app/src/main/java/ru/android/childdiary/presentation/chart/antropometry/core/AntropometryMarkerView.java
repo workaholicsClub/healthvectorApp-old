@@ -11,7 +11,7 @@ import com.github.mikephil.charting.utils.MPPointF;
 
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryPoint;
+import ru.android.childdiary.domain.interactors.development.antropometry.data.AntropometryPoint;
 import ru.android.childdiary.presentation.chart.core.ValueFormatter;
 import ru.android.childdiary.utils.strings.DateUtils;
 

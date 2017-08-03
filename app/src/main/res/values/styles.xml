@@ -243,7 +243,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/profile_margin_vertical</item>
-        <item name="android:layout_marginLeft">@dimen/profile_margin_horizontal</item>
+        <item name="android:layout_marginLeft">@dimen/base_margin</item>
         <item name="android:layout_marginRight">@dimen/auto_complete_text_view_margin_right</item>
         <item name="android:layout_marginTop">@dimen/profile_margin_vertical</item>
         <item name="android:background">@drawable/edit_text_background</item>

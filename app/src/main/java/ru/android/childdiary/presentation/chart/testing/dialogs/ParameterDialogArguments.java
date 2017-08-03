@@ -11,7 +11,7 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
 import ru.android.childdiary.presentation.core.BaseDialogArguments;
 
 @ToString(callSuper = true)

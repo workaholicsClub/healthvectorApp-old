@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.profile;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -45,7 +46,7 @@ import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
@@ -294,8 +295,9 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     }
 
     private void setupImage() {
-        imageViewPhoto.setImageDrawable(ResourcesUtils.getChildIconForProfile(this, editedChild));
-        textViewPhoto.setVisibility(editedChild.getImageFileName() == null ? VISIBLE : GONE);
+        Drawable photo = ResourcesUtils.getChildIconForProfile(this, editedChild);
+        imageViewPhoto.setImageDrawable(photo);
+        textViewPhoto.setVisibility(TextUtils.isEmpty(editedChild.getImageFileName()) ? VISIBLE : GONE);
     }
 
     private void setupDate() {

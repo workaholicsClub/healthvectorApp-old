@@ -2,7 +2,7 @@ package ru.android.childdiary.presentation.chart.antropometry.core;
 
 import android.support.annotation.NonNull;
 
-import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryPoint;
+import ru.android.childdiary.domain.interactors.development.antropometry.data.AntropometryPoint;
 import ru.android.childdiary.presentation.chart.core.LineEntry;
 
 class AntropometryLineEntrySimple extends LineEntry<AntropometryLineEntryInfo> {

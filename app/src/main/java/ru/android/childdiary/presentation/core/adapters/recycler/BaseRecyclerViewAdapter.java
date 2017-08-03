@@ -63,6 +63,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
             if (areItemsTheSame(items.get(i), item)) {
                 items.set(i, item);
                 notifyItemChanged(i, new Object());
+                break;
             }
         }
     }
@@ -72,6 +73,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
             if (areItemsTheSame(items.get(i), item)) {
                 items.set(i, item);
                 notifyItemChanged(i);
+                break;
             }
         }
     }

@@ -15,12 +15,13 @@ import io.requery.sql.Platform;
 import io.requery.sql.platform.SQLite;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.db.entities.calendar.events.core.FoodEntity;
-import ru.android.childdiary.data.db.entities.calendar.events.core.FoodMeasureEntity;
-import ru.android.childdiary.data.db.entities.development.achievement.AchievementEntity;
-import ru.android.childdiary.data.db.entities.medical.core.DoctorEntity;
-import ru.android.childdiary.data.db.entities.medical.core.MedicineEntity;
-import ru.android.childdiary.data.db.entities.medical.core.MedicineMeasureEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.AchievementEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.DoctorEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.FoodEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.FoodMeasureEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.MedicineEntity;
+import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureEntity;
+import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 
 public class CustomDatabaseSource extends DatabaseSource {
     private final Logger logger = LoggerFactory.getLogger(toString());

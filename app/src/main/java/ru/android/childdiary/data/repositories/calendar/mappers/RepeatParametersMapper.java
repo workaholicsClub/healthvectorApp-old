@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.requery.BlockingEntityStore;
-import ru.android.childdiary.data.db.entities.core.RepeatParametersData;
-import ru.android.childdiary.data.db.entities.core.RepeatParametersEntity;
+import ru.android.childdiary.data.db.entities.calendar.core.RepeatParametersData;
+import ru.android.childdiary.data.db.entities.calendar.core.RepeatParametersEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
 
 public class RepeatParametersMapper implements EntityMapper<RepeatParametersData, RepeatParametersEntity, RepeatParameters> {
     @Inject

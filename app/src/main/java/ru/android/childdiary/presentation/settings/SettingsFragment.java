@@ -30,17 +30,17 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.presentation.cloud.CloudOperationActivity;
 import ru.android.childdiary.presentation.cloud.CloudOperationType;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
+import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
+import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
 import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
-import ru.android.childdiary.presentation.pickers.medicines.MedicinePickerActivity;
-import ru.android.childdiary.presentation.pickers.doctors.DoctorPickerActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.settings.adapters.SettingsAdapter;
 import ru.android.childdiary.presentation.settings.adapters.items.BaseSettingsItem;
@@ -166,6 +166,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     public void showSelectedAccount(@NonNull String accountName) {
         accountItem = accountItem.toBuilder().subtitle(accountName).build();
         settingsAdapter.updateItem(accountItem);
+        fixedItems = generateFixedItems();
     }
 
     @Override
@@ -224,7 +225,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                         .id(id + child.getId())
                         .listener(this)
                         .child(child)
-                        .icon(ResourcesUtils.getChildIconForAccountHeader(getContext(), child))
+                        .icon(ResourcesUtils.getChildIconForSettings(getContext(), child))
                         .title(child.getName())
                         .build())
                 .toList()

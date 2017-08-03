@@ -12,9 +12,9 @@ import io.requery.Persistable;
 import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.db.entities.child.ChildData;
-import ru.android.childdiary.data.db.entities.core.RepeatParametersData;
-import ru.android.childdiary.data.db.entities.medical.core.MedicineData;
-import ru.android.childdiary.data.db.entities.medical.core.MedicineMeasureData;
+import ru.android.childdiary.data.db.entities.calendar.core.RepeatParametersData;
+import ru.android.childdiary.data.db.entities.dictionaries.MedicineData;
+import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureData;
 
 @Table(name = "medicine_taking")
 @Entity(name = "MedicineTakingEntity")

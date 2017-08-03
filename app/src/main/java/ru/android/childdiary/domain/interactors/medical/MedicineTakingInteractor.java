@@ -23,22 +23,26 @@ import ru.android.childdiary.data.repositories.core.settings.SettingsDataReposit
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDataRepository;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingFilterDataRepository;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.DeleteResponse;
-import ru.android.childdiary.domain.core.HasDataResponse;
-import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
+import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.child.ChildRepository;
-import ru.android.childdiary.domain.interactors.core.LengthValue;
-import ru.android.childdiary.domain.interactors.core.LinearGroups;
-import ru.android.childdiary.domain.interactors.core.PeriodicityType;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.core.ValueRepository;
 import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+import ru.android.childdiary.domain.interactors.core.requests.DeleteResponse;
+import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
-import ru.android.childdiary.domain.interactors.medical.core.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
+import ru.android.childdiary.domain.interactors.dictionaries.core.MedicalDictionaryInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.MedicineValidator;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
@@ -51,7 +55,6 @@ import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTaki
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
 import ru.android.childdiary.domain.interactors.medical.validation.MedicineTakingValidator;
-import ru.android.childdiary.domain.interactors.medical.validation.MedicineValidator;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
 public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Medicine> {
@@ -62,7 +65,7 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
     private final MedicineTakingValidator medicineTakingValidator;
     private final MedicineValidator medicineValidator;
     private final ImagesRepository imagesRepository;
-    private final MedicineTakingFilterDataRepository filterRepository;
+    private final ValueRepository<GetMedicineTakingListFilter> filterRepository;
 
     @Inject
     public MedicineTakingInteractor(ChildDataRepository childRepository,

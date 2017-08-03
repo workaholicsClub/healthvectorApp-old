@@ -14,7 +14,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
 import ru.android.childdiary.presentation.medical.filter.core.MedicalFilterDialogArguments;
 
 @ToString(callSuper = true)

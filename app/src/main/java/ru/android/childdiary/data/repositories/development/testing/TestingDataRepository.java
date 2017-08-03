@@ -22,16 +22,16 @@ import io.reactivex.Single;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.interactors.child.Child;
-import ru.android.childdiary.domain.interactors.development.testing.TestResult;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.TestingRepository;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
-import ru.android.childdiary.domain.interactors.development.testing.tests.AutismTest;
-import ru.android.childdiary.domain.interactors.development.testing.tests.DomanMentalTest;
-import ru.android.childdiary.domain.interactors.development.testing.tests.DomanPhysicalTest;
-import ru.android.childdiary.domain.interactors.development.testing.tests.NewbornTest;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.Question;
-import ru.android.childdiary.domain.interactors.development.testing.tests.core.Test;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.AutismTest;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.DomanMentalTest;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.DomanPhysicalTest;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.NewbornTest;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Question;
+import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
 import ru.android.childdiary.utils.strings.TestUtils;
 
 @Singleton

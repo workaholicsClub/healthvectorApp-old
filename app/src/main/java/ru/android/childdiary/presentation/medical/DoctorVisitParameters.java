@@ -4,7 +4,7 @@ import org.joda.time.LocalTime;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisit;
+import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 
 @Value
 @Builder

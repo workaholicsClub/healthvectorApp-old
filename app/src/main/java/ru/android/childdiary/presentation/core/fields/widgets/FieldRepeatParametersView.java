@@ -19,10 +19,10 @@ import icepick.State;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.core.LengthValue;
-import ru.android.childdiary.domain.interactors.core.LinearGroups;
-import ru.android.childdiary.domain.interactors.core.PeriodicityType;
-import ru.android.childdiary.domain.interactors.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
+import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroups;
+import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 

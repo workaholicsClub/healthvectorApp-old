@@ -9,7 +9,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import org.joda.time.LocalTime;
 
-import ru.android.childdiary.domain.interactors.medical.MedicineTaking;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
 import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataView;
 

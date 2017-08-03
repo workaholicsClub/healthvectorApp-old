@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value

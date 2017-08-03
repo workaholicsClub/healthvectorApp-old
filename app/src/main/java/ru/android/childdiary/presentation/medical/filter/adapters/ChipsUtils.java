@@ -7,8 +7,8 @@ import org.joda.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.medical.core.Doctor;
-import ru.android.childdiary.domain.interactors.medical.core.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsFilter;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListFilter;
 

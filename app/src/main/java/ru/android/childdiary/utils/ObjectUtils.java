@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import org.joda.time.DateTime;
 
-import ru.android.childdiary.domain.core.ContentObject;
+import ru.android.childdiary.domain.interactors.core.data.ContentObject;
 
 public class ObjectUtils {
     public static boolean equals(@Nullable Object o1, @Nullable Object o2) {

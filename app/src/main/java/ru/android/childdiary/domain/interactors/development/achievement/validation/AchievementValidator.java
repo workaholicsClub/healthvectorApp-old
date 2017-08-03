@@ -12,11 +12,11 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.development.achievement.AchievementDataRepository;
-import ru.android.childdiary.domain.core.validation.ValidationException;
-import ru.android.childdiary.domain.core.validation.Validator;
-import ru.android.childdiary.domain.interactors.development.achievement.Achievement;
+import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.Validator;
+import ru.android.childdiary.domain.interactors.dictionaries.achievements.Achievement;
 import ru.android.childdiary.domain.interactors.development.achievement.AchievementRepository;
-import ru.android.childdiary.domain.interactors.development.achievement.requests.GetAchievementsRequest;
+import ru.android.childdiary.domain.interactors.dictionaries.GetAchievementsRequest;
 
 public class AchievementValidator extends Validator<Achievement, AchievementValidationResult> {
     private final Context context;

@@ -10,9 +10,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.core.validation.ValidationException;
-import ru.android.childdiary.domain.core.validation.Validator;
-import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievement;
+import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.Validator;
+import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 
 public class ConcreteAchievementValidator extends Validator<ConcreteAchievement, AchievementValidationResult> {
     private final Context context;

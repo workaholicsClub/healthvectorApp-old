@@ -5,12 +5,14 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.domain.interactors.child.Child;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementResponse;
-import ru.android.childdiary.domain.interactors.development.achievement.requests.GetAchievementsRequest;
+import ru.android.childdiary.domain.interactors.dictionaries.GetAchievementsRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementResponse;
+import ru.android.childdiary.domain.interactors.dictionaries.achievements.Achievement;
 
 public interface AchievementRepository {
     Observable<List<ConcreteAchievement>> getConcreteAchievements(@NonNull Child child);
