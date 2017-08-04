@@ -21,17 +21,17 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.fields.dialogs.FoodDialogArguments;
-import ru.android.childdiary.presentation.core.fields.dialogs.FoodDialogFragment;
-import ru.android.childdiary.presentation.core.fields.dialogs.FoodMeasureDialogArguments;
-import ru.android.childdiary.presentation.core.fields.dialogs.FoodMeasureDialogFragment;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
+import ru.android.childdiary.presentation.core.fields.dialogs.add.food.AddFoodDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.add.food.AddFoodDialogFragment;
+import ru.android.childdiary.presentation.core.fields.dialogs.add.foodmeasure.AddFoodMeasureDialogArguments;
+import ru.android.childdiary.presentation.core.fields.dialogs.add.foodmeasure.AddFoodMeasureDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldAmountMlView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldAmountView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldBreastFeedDurationView;
@@ -50,7 +50,7 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetailView, FeedEvent>
         implements FeedEventDetailView, FieldSpinnerView.FieldSpinnerListener,
-        FoodMeasureDialogFragment.Listener, FoodDialogFragment.Listener {
+        AddFoodMeasureDialogFragment.Listener, AddFoodDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_FOOD_MEASURE_DIALOG = "FOOD_MEASURE_DIALOG";
@@ -273,9 +273,9 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         } else if (view == foodMeasureView) {
             FoodMeasure foodMeasure = (FoodMeasure) item;
             if (foodMeasure == FoodMeasure.NULL) {
-                FoodMeasureDialogFragment dialogFragment = new FoodMeasureDialogFragment();
+                AddFoodMeasureDialogFragment dialogFragment = new AddFoodMeasureDialogFragment();
                 dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_FOOD_MEASURE_DIALOG,
-                        FoodMeasureDialogArguments.builder()
+                        AddFoodMeasureDialogArguments.builder()
                                 .sex(getSex())
                                 .build());
             } else {
@@ -284,9 +284,9 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
         } else if (view == foodView) {
             Food food = (Food) item;
             if (food == Food.NULL) {
-                FoodDialogFragment dialogFragment = new FoodDialogFragment();
+                AddFoodDialogFragment dialogFragment = new AddFoodDialogFragment();
                 dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_FOOD_DIALOG,
-                        FoodDialogArguments.builder()
+                        AddFoodDialogArguments.builder()
                                 .sex(getSex())
                                 .build());
             } else {
@@ -297,21 +297,11 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
 
     @Override
     public void onSetFoodMeasure(String tag, @NonNull FoodMeasure foodMeasure) {
-        presenter.addFoodMeasure(foodMeasure);
-    }
-
-    @Override
-    public void foodMeasureAdded(@NonNull FoodMeasure foodMeasure) {
         foodMeasureView.setValue(foodMeasure);
     }
 
     @Override
     public void onSetFood(String tag, @NonNull Food food) {
-        presenter.addFood(food);
-    }
-
-    @Override
-    public void foodAdded(@NonNull Food food) {
         foodView.setValue(food);
     }
 

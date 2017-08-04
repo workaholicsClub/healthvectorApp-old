@@ -1,13 +1,23 @@
-package ru.android.childdiary.presentation.core.fields.dialogs;
+package ru.android.childdiary.presentation.core.fields.dialogs.add.food;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.presentation.core.fields.dialogs.add.core.AddValueDialogFragment;
 
-public class FoodDialogFragment extends AddValueDialogFragment<FoodDialogArguments> {
+public class AddFoodDialogFragment
+        extends AddValueDialogFragment<AddFoodDialogArguments, Food, AddFoodView>
+        implements AddFoodView {
+    @Getter
+    @InjectPresenter
+    AddFoodPresenter presenter;
+
     @Nullable
     private Listener listener;
 
@@ -22,9 +32,15 @@ public class FoodDialogFragment extends AddValueDialogFragment<FoodDialogArgumen
     }
 
     @Override
-    protected void addValue(String name) {
+    protected Food buildItem(@NonNull String name) {
+        return Food.builder().name(name).build();
+    }
+
+    @Override
+    public void added(@NonNull Food item) {
+        getDialog().dismiss();
         if (listener != null) {
-            listener.onSetFood(getTag(), Food.builder().name(name).build());
+            listener.onSetFood(getTag(), item);
         }
     }
 

@@ -1,13 +1,23 @@
-package ru.android.childdiary.presentation.core.fields.dialogs;
+package ru.android.childdiary.presentation.core.fields.dialogs.add.foodmeasure;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
+import ru.android.childdiary.presentation.core.fields.dialogs.add.core.AddValueDialogFragment;
 
-public class FoodMeasureDialogFragment extends AddValueDialogFragment<FoodMeasureDialogArguments> {
+public class AddFoodMeasureDialogFragment
+        extends AddValueDialogFragment<AddFoodMeasureDialogArguments, FoodMeasure, AddFoodMeasureView>
+        implements AddFoodMeasureView {
+    @Getter
+    @InjectPresenter
+    AddFoodMeasurePresenter presenter;
+
     @Nullable
     private Listener listener;
 
@@ -22,9 +32,15 @@ public class FoodMeasureDialogFragment extends AddValueDialogFragment<FoodMeasur
     }
 
     @Override
-    protected void addValue(String name) {
+    protected FoodMeasure buildItem(@NonNull String name) {
+        return FoodMeasure.builder().name(name).build();
+    }
+
+    @Override
+    public void added(@NonNull FoodMeasure item) {
+        getDialog().dismiss();
         if (listener != null) {
-            listener.onSetFoodMeasure(getTag(), FoodMeasure.builder().name(name).build());
+            listener.onSetFoodMeasure(getTag(), item);
         }
     }
 

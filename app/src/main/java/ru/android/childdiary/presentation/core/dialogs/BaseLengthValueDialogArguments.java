@@ -24,7 +24,7 @@ import ru.android.childdiary.utils.CollectionUtils;
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
-public class BaseLengthValueDialogArguments extends BaseDialogArguments {
+public abstract class BaseLengthValueDialogArguments extends BaseDialogArguments {
     @NonNull
     List<TimeUnit> timeUnits;
     @NonNull
@@ -32,7 +32,6 @@ public class BaseLengthValueDialogArguments extends BaseDialogArguments {
     @Nullable
     LengthValue lengthValue;
 
-    @Builder(builderMethodName = "baseLengthValueBuilder")
     public BaseLengthValueDialogArguments(@Nullable Sex sex,
                                           @NonNull Map<TimeUnit, List<Integer>> timeUnitValues,
                                           @Nullable LengthValue lengthValue) {

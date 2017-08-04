@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.core.fields.dialogs;
+package ru.android.childdiary.presentation.core.fields.dialogs.add.core;
 
 import android.app.Dialog;
 import android.support.annotation.LayoutRes;
@@ -6,9 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
@@ -16,7 +16,8 @@ import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public abstract class AddValueDialogFragment<T extends AddValueDialogArguments> extends BaseMvpDialogFragment<T> {
+public abstract class AddValueDialogFragment<P extends AddValueDialogArguments, T, V extends AddValueView<T>>
+        extends BaseMvpDialogFragment<P> implements AddValueView<T> {
     @BindView(R.id.rootView)
     View rootView;
 
@@ -56,25 +57,35 @@ public abstract class AddValueDialogFragment<T extends AddValueDialogArguments> 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(getTitle())
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> {
-                            hideKeyboardAndClearFocus(rootView.findFocus());
-                            String text = editText.getText().toString().trim();
-                            if (TextUtils.isEmpty(text)) {
-                                return;
-                            }
-                            addValue(text);
-                        })
+                .setPositiveButton(R.string.ok, null)
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
 
-        return builder.setCancelable(false)
+        AlertDialog dialog = builder.setCancelable(false)
                 .create();
+
+        dialog.setOnShowListener(dialogInterface -> {
+            Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener((dialogView) -> {
+                hideKeyboardAndClearFocus(rootView.findFocus());
+                String name = editText.getText().toString().trim();
+                getPresenter().add(buildItem(name));
+            });
+        });
+
+        return dialog;
     }
 
     protected abstract int getMaxLength();
 
     protected abstract String getTitle();
 
-    protected abstract void addValue(String name);
+    protected abstract T buildItem(@NonNull String name);
+
+    protected abstract AddValuePresenter<T, V> getPresenter();
+
+    @Override
+    public void showValidationErrorMessage(@NonNull String message) {
+        showToast(message);
+    }
 }
