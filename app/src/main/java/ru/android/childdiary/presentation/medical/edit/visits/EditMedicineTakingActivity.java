@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.medical.edit.visits;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -108,6 +109,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
     }
 
     @Override
+    @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_item_content_medicine_taking;
     }

@@ -19,8 +19,8 @@ import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
 import ru.android.childdiary.presentation.cloud.CloudInitialPresenter;
 import ru.android.childdiary.presentation.cloud.CloudOperationActivity;
 import ru.android.childdiary.presentation.cloud.CloudOperationPresenter;
-import ru.android.childdiary.presentation.core.fields.dialogs.add.foodmeasure.AddFoodMeasurePresenter;
 import ru.android.childdiary.presentation.core.fields.dialogs.add.food.AddFoodPresenter;
+import ru.android.childdiary.presentation.core.fields.dialogs.add.foodmeasure.AddFoodMeasurePresenter;
 import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
@@ -101,6 +101,8 @@ import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditPresenter;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
+import ru.android.childdiary.presentation.settings.daylength.DayLengthActivity;
+import ru.android.childdiary.presentation.settings.daylength.DayLengthPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
 import ru.android.childdiary.presentation.testing.TestResultActivity;
@@ -235,6 +237,8 @@ public interface ApplicationComponent {
 
     void inject(AddFoodMeasurePresenter presenter);
 
+    void inject(DayLengthPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -313,6 +317,8 @@ public interface ApplicationComponent {
     void inject(AddConcreteAchievementActivity activity);
 
     void inject(EditConcreteAchievementActivity activity);
+
+    void inject(DayLengthActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

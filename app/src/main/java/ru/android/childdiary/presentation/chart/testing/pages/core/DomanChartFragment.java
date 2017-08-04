@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.chart.testing.pages.core;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -29,6 +30,7 @@ public abstract class DomanChartFragment extends ChartFragment<DomanChartState, 
     private DomanChartState state;
 
     @Override
+    @LayoutRes
     protected final int getLayoutResourceId() {
         return R.layout.fragment_doman_chart;
     }

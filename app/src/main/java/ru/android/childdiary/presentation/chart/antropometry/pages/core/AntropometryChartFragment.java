@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.chart.antropometry.pages.core;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ public abstract class AntropometryChartFragment extends ChartFragment<Antropomet
     private AntropometryChartState state;
 
     @Override
+    @LayoutRes
     protected final int getLayoutResourceId() {
         return R.layout.fragment_antropometry_chart;
     }

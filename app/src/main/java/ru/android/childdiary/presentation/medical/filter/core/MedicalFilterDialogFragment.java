@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.medical.filter.core;
 
 import android.app.Dialog;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -54,6 +55,7 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
     FieldDateFilterView dateToView;
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.dialog_filter_medical;
     }

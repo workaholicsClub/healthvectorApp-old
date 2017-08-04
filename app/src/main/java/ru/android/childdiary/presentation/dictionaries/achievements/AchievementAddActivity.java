@@ -44,8 +44,8 @@ public class AchievementAddActivity extends BaseAddActivity<Achievement, Achieve
         setupToolbarTitle(R.string.add_achievement);
     }
 
-    @LayoutRes
     @Override
+    @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_add_achievement;
     }

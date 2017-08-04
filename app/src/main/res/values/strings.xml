@@ -332,4 +332,6 @@
     <string name="deletion_restricted_medicine_measure">Данная единица измерения привязана к событиям или рецептам</string>
     <string name="dictionaries">Справочники</string>
     <string name="onboarding">Демо-экраны</string>
+    <string name="day_start">Начало дня</string>
+    <string name="day_finish">Конец дня</string>
 </resources>

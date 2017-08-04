@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.development.partitions.testing;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
@@ -55,6 +56,7 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
     private TestResultAdapter testResultAdapter;
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.fragment_test_results;
     }

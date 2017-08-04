@@ -53,6 +53,7 @@ import ru.android.childdiary.presentation.settings.adapters.items.GroupSettingsI
 import ru.android.childdiary.presentation.settings.adapters.items.IntentSettingsItem;
 import ru.android.childdiary.presentation.settings.adapters.items.ProfileGroupSettingsItem;
 import ru.android.childdiary.presentation.settings.adapters.items.ProfileSettingsItem;
+import ru.android.childdiary.presentation.settings.daylength.DayLengthActivity;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -363,6 +364,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 restore();
                 break;
             case DAY_LENGTH:
+                startActivity(DayLengthActivity.getIntent(getContext(), getSex()));
                 break;
             case FOOD_MEASURE:
                 startActivity(FoodMeasurePickerActivity.getIntent(getContext(), getSex(), false));

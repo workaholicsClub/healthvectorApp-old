@@ -44,8 +44,8 @@ public class MedicineMeasureAddActivity extends BaseAddActivity<MedicineMeasure,
         setupToolbarTitle(R.string.add_measure_unit);
     }
 
-    @LayoutRes
     @Override
+    @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_add_medicine_measure;
     }

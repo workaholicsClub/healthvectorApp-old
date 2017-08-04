@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.testing.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.widget.Button;
 
@@ -37,6 +38,7 @@ public class TestingQuestionFragment extends AppPartitionFragment {
     private DomanTestParameter parameter;
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.fragment_testing_question;
     }

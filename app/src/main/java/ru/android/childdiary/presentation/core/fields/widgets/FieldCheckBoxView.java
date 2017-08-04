@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.core.fields.widgets;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -70,6 +71,7 @@ public class FieldCheckBoxView extends BaseFieldValueView<Boolean> implements Vi
     }
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.field_check_box;
     }

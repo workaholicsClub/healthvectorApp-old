@@ -44,8 +44,8 @@ public class DoctorAddActivity extends BaseAddActivity<Doctor, DoctorAddView> im
         setupToolbarTitle(R.string.add_doctor_title);
     }
 
-    @LayoutRes
     @Override
+    @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_add_doctor;
     }

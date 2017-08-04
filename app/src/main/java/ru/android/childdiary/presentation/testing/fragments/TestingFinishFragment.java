@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
@@ -65,6 +66,7 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
     private List<DomanResult> results;
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return parameter != null ? R.layout.fragment_testing_finish_chart : R.layout.fragment_testing_finish;
     }

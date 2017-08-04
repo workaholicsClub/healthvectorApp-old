@@ -44,8 +44,8 @@ public class MedicineAddActivity extends BaseAddActivity<Medicine, MedicineAddVi
         setupToolbarTitle(R.string.add_medicine_title);
     }
 
-    @LayoutRes
     @Override
+    @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_add_medicine;
     }

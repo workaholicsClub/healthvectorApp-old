@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -65,6 +66,7 @@ public class FieldTimesView extends BaseFieldValueView<LinearGroups> implements 
     }
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return 0;
     }

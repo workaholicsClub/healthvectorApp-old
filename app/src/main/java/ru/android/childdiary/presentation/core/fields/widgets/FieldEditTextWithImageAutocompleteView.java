@@ -28,8 +28,8 @@ public class FieldEditTextWithImageAutocompleteView extends FieldEditTextWithIma
         super(context, attrs, defStyle);
     }
 
-    @LayoutRes
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.field_edit_text_with_image_autocomplete;
     }

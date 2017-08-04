@@ -44,8 +44,8 @@ public class FoodAddActivity extends BaseAddActivity<Food, FoodAddView> implemen
         setupToolbarTitle(R.string.add_food);
     }
 
-    @LayoutRes
     @Override
+    @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_add_food;
     }

@@ -44,8 +44,8 @@ public class FoodMeasureAddActivity extends BaseAddActivity<FoodMeasure, FoodMea
         setupToolbarTitle(R.string.add_measure_unit);
     }
 
-    @LayoutRes
     @Override
+    @LayoutRes
     protected int getContentLayoutResourceId() {
         return R.layout.activity_add_food_measure;
     }

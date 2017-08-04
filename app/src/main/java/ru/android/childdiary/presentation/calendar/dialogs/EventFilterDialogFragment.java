@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.calendar.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -25,6 +26,7 @@ public class EventFilterDialogFragment extends BaseMvpDialogFragment<EventFilter
     private Listener listener;
 
     @Override
+    @LayoutRes
     protected int getLayoutResourceId() {
         return 0;
     }

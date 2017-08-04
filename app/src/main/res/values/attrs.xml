@@ -35,4 +35,7 @@
     <declare-styleable name="FieldNoteWithPhotoView">
         <attr name="fieldHint" />
     </declare-styleable>
+    <declare-styleable name="FieldDayTimeView">
+        <attr name="fieldText" />
+    </declare-styleable>
 </resources>
