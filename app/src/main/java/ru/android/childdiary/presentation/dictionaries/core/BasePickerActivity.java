@@ -2,10 +2,12 @@ package ru.android.childdiary.presentation.dictionaries.core;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,11 +22,13 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewAdapter;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewHolder;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
@@ -36,6 +40,9 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class BasePickerActivity<T extends Serializable, V extends BasePickerView<T>> extends BaseMvpActivity
         implements BasePickerView<T>, ItemActionListener<T>, FabController {
+    @BindDimen(R.dimen.divider_padding)
+    int DIVIDER_PADDING;
+
     @BindView(R.id.rootView)
     View rootView;
 
@@ -52,14 +59,21 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     FloatingActionButton fab;
 
     private BaseRecyclerViewAdapter<T, ? extends BaseRecyclerViewHolder<T>> adapter;
+    private boolean pick;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        pick = getIntent().getBooleanExtra(ExtraConstants.EXTRA_PICK, false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picker);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        Drawable divider = ContextCompat.getDrawable(this, R.drawable.divider);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(divider, DIVIDER_PADDING);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
         adapter = createAdapter();
         adapter.setSex(getSex());
         recyclerView.setAdapter(adapter);
@@ -133,9 +147,11 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
 
     @Override
     public void edit(T item) {
-        Intent data = new Intent().putExtra(ExtraConstants.EXTRA_ITEM, item);
-        setResult(RESULT_OK, data);
-        finish();
+        if (pick) {
+            Intent data = new Intent().putExtra(ExtraConstants.EXTRA_ITEM, item);
+            setResult(RESULT_OK, data);
+            finish();
+        }
     }
 
     @Override

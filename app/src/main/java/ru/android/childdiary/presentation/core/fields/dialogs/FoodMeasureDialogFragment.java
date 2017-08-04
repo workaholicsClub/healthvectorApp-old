@@ -13,7 +13,7 @@ public class FoodMeasureDialogFragment extends AddValueDialogFragment<FoodMeasur
 
     @Override
     protected int getMaxLength() {
-        return getResources().getInteger(R.integer.max_length_field_food_measure);
+        return getResources().getInteger(R.integer.max_length_name_small);
     }
 
     @Override

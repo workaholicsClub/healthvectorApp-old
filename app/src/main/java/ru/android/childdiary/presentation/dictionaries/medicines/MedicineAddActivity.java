@@ -47,7 +47,7 @@ public class MedicineAddActivity extends BaseAddActivity<Medicine, MedicineAddVi
     @LayoutRes
     @Override
     protected int getContentLayoutResourceId() {
-        return R.layout.activity_medicine_add;
+        return R.layout.activity_add_medicine;
     }
 
     @Override

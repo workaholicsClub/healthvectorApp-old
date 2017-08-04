@@ -47,7 +47,7 @@ public class FoodAddActivity extends BaseAddActivity<Food, FoodAddView> implemen
     @LayoutRes
     @Override
     protected int getContentLayoutResourceId() {
-        return R.layout.activity_food_add;
+        return R.layout.activity_add_food;
     }
 
     @Override

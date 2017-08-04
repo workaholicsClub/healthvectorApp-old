@@ -56,7 +56,7 @@
             android:hint="@string/child_name"
             android:imeOptions="actionNext"
             android:inputType="textCapWords|textMultiLine"
-            android:maxLength="@integer/max_length_child_name"
+            android:maxLength="@integer/max_length_name"
             android:textCursorDrawable="@drawable/name_edit_text_cursor" />
     </LinearLayout>
 

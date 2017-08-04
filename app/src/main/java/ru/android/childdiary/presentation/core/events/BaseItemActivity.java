@@ -32,8 +32,8 @@ import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -59,8 +59,9 @@ import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
-import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
 import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
+import ru.android.childdiary.presentation.dictionaries.medicinemeasure.MedicineMeasureAddActivity;
+import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -80,6 +81,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
 
     private static final int REQUEST_DOCTOR = 1;
     private static final int REQUEST_MEDICINE = 2;
+    private static final int REQUEST_MEDICINE_MEASURE_ADD = 3;
 
     protected T defaultItem;
 
@@ -142,14 +144,14 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         }
         if (getDoctorView() != null) {
             getDoctorView().setFieldDialogListener(view -> {
-                startActivityForResult(DoctorPickerActivity.getIntent(this, getSex()),
+                startActivityForResult(DoctorPickerActivity.getIntent(this, getSex(), true),
                         REQUEST_DOCTOR);
                 hideKeyboardAndClearFocus(rootView.findFocus());
             });
         }
         if (getMedicineView() != null) {
             getMedicineView().setFieldDialogListener(view -> {
-                startActivityForResult(MedicinePickerActivity.getIntent(this, getSex()),
+                startActivityForResult(MedicinePickerActivity.getIntent(this, getSex(), true),
                         REQUEST_MEDICINE);
                 hideKeyboardAndClearFocus(rootView.findFocus());
             });
@@ -183,6 +185,10 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                 getMedicineView().setValue(medicine);
             } else {
                 getPresenter().checkValue(getMedicineView().getValue());
+            }
+        } else if (requestCode == REQUEST_MEDICINE_MEASURE_ADD) {
+            if (resultCode == RESULT_OK) {
+                getPresenter().requestMedicineMeasureValueDialog();
             }
         }
     }
@@ -263,6 +269,11 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @Override
     public void showMedicineMeasureValueDialog(@NonNull List<MedicineMeasure> medicineMeasureList) {
         if (getMedicineMeasureValueView() == null) {
+            return;
+        }
+        if (medicineMeasureList.isEmpty()) {
+            Intent intent = MedicineMeasureAddActivity.getIntent(this, getSex());
+            startActivityForResult(intent, REQUEST_MEDICINE_MEASURE_ADD);
             return;
         }
         MedicineMeasureValueDialogFragment dialogFragment = new MedicineMeasureValueDialogFragment();

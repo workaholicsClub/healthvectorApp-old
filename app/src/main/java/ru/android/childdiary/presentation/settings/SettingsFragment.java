@@ -37,8 +37,11 @@ import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
+import ru.android.childdiary.presentation.dictionaries.achievements.AchievementPickerActivity;
 import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
 import ru.android.childdiary.presentation.dictionaries.food.FoodPickerActivity;
+import ru.android.childdiary.presentation.dictionaries.foodmeasure.FoodMeasurePickerActivity;
+import ru.android.childdiary.presentation.dictionaries.medicinemeasure.MedicineMeasurePickerActivity;
 import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
 import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
@@ -275,25 +278,11 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .build());
         items.add(GroupSettingsItem.builder()
                 .id(++id)
-                .title(getString(R.string.settings_additional))
-                .build());
-        items.add(IntentSettingsItem.builder()
-                .id(Intention.DAY_LENGTH.ordinal())
-                .title(getString(R.string.settings_day_length))
-                .iconRes(R.drawable.ic_length)
-                .listener(this)
-                .enabled(true)
-                .build());
-        items.add(IntentSettingsItem.builder()
-                .id(Intention.FOOD_MEASURE.ordinal())
-                .title(getString(R.string.settings_food_measure))
-                .iconRes(R.drawable.ic_food_measure)
-                .listener(this)
-                .enabled(true)
+                .title(getString(R.string.dictionaries))
                 .build());
         items.add(IntentSettingsItem.builder()
                 .id(Intention.FOOD.ordinal())
-                .title(getString(R.string.settings_food))
+                .title(getString(R.string.food))
                 .iconRes(R.drawable.ic_food)
                 .listener(this)
                 .enabled(true)
@@ -319,6 +308,41 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .listener(this)
                 .enabled(true)
                 .build());
+        items.add(DelimiterSettingsItem.builder()
+                .id(++id)
+                .build());
+        items.add(GroupSettingsItem.builder()
+                .id(++id)
+                .title(getString(R.string.measure_units))
+                .build());
+        items.add(IntentSettingsItem.builder()
+                .id(Intention.FOOD_MEASURE.ordinal())
+                .title(getString(R.string.food))
+                .iconRes(R.drawable.ic_measure_unit)
+                .listener(this)
+                .enabled(true)
+                .build());
+        items.add(IntentSettingsItem.builder()
+                .id(Intention.MEDICINE_MEASURE.ordinal())
+                .title(getString(R.string.medicines))
+                .iconRes(R.drawable.ic_measure_unit)
+                .listener(this)
+                .enabled(true)
+                .build());
+        items.add(DelimiterSettingsItem.builder()
+                .id(++id)
+                .build());
+        items.add(GroupSettingsItem.builder()
+                .id(++id)
+                .title(getString(R.string.settings_additional))
+                .build());
+        items.add(IntentSettingsItem.builder()
+                .id(Intention.DAY_LENGTH.ordinal())
+                .title(getString(R.string.settings_day_length))
+                .iconRes(R.drawable.ic_length)
+                .listener(this)
+                .enabled(true)
+                .build());
         return items;
     }
 
@@ -340,17 +364,22 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
             case DAY_LENGTH:
                 break;
             case FOOD_MEASURE:
+                startActivity(FoodMeasurePickerActivity.getIntent(getContext(), getSex(), false));
                 break;
             case FOOD:
-                startActivity(FoodPickerActivity.getIntent(getContext(), getSex()));
+                startActivity(FoodPickerActivity.getIntent(getContext(), getSex(), false));
                 break;
             case MEDICINE:
-                startActivity(MedicinePickerActivity.getIntent(getContext(), getSex()));
+                startActivity(MedicinePickerActivity.getIntent(getContext(), getSex(), false));
+                break;
+            case MEDICINE_MEASURE:
+                startActivity(MedicineMeasurePickerActivity.getIntent(getContext(), getSex(), false));
                 break;
             case DOCTOR:
-                startActivity(DoctorPickerActivity.getIntent(getContext(), getSex()));
+                startActivity(DoctorPickerActivity.getIntent(getContext(), getSex(), false));
                 break;
             case ACHIEVEMENT:
+                startActivity(AchievementPickerActivity.getIntent(getContext(), getSex(), false));
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported intention");
@@ -597,6 +626,6 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     private enum Intention {
         NOTIFICATIONS, ACCOUNT, BACKUP, RESTORE, DAY_LENGTH,
-        FOOD_MEASURE, FOOD, MEDICINE, DOCTOR, ACHIEVEMENT
+        FOOD_MEASURE, FOOD, MEDICINE, MEDICINE_MEASURE, DOCTOR, ACHIEVEMENT
     }
 }

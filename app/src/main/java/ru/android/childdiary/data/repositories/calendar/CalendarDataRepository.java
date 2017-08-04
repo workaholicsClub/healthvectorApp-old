@@ -147,7 +147,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     private FoodMeasure getLastFoodMeasure(@NonNull List<FoodMeasure> foodMeasureList, Long id) {
-        return Observable
+        return foodMeasureList.isEmpty() ? FoodMeasure.NULL : Observable
                 .fromIterable(foodMeasureList)
                 .filter(food -> ObjectUtils.equals(food.getId(), id))
                 .first(foodMeasureList.get(0))

@@ -13,7 +13,7 @@ public class FoodDialogFragment extends AddValueDialogFragment<FoodDialogArgumen
 
     @Override
     protected int getMaxLength() {
-        return getResources().getInteger(R.integer.max_length_field_food);
+        return getResources().getInteger(R.integer.max_length_name_small);
     }
 
     @Override

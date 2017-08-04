@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:fieldHideIfEmpty="true"
-        app:fieldHint="@string/enter_medicine_name"
-        app:fieldIcon="@drawable/ic_medicine"
-        app:fieldMaxLength="@integer/max_length_concrete_achievement_name" />
+        app:fieldHint="@string/enter_measure_name"
+        app:fieldIcon="@drawable/ic_measure_unit"
+        app:fieldMaxLength="@integer/max_length_name_small" />
 </LinearLayout>

@@ -47,7 +47,7 @@ public class DoctorAddActivity extends BaseAddActivity<Doctor, DoctorAddView> im
     @LayoutRes
     @Override
     protected int getContentLayoutResourceId() {
-        return R.layout.activity_doctor_add;
+        return R.layout.activity_add_doctor;
     }
 
     @Override

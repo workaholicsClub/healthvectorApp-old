@@ -128,7 +128,7 @@ public class DoctorVisitEventDetailActivity
                             .build());
         });
         doctorView.setFieldDialogListener(view -> {
-            startActivityForResult(DoctorPickerActivity.getIntent(this, getSex()),
+            startActivityForResult(DoctorPickerActivity.getIntent(this, getSex(), true),
                     REQUEST_DOCTOR);
             hideKeyboardAndClearFocus(rootView.findFocus());
         });

@@ -46,6 +46,7 @@ public class MedicineTakingEventDetailPresenter extends EventDetailPresenter<Med
 
     public void requestMedicineMeasureValueDialog() {
         unsubscribeOnDestroy(medicineMeasureInteractor.getAll()
+                .first(Collections.emptyList())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showMedicineMeasureValueDialog, this::onUnexpectedError));

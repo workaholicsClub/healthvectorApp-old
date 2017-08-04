@@ -166,10 +166,28 @@
             android:name=".presentation.dictionaries.medicines.MedicinePickerActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
+            android:name=".presentation.dictionaries.medicinemeasure.MedicineMeasureAddActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".presentation.dictionaries.medicinemeasure.MedicineMeasurePickerActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
             android:name=".presentation.dictionaries.food.FoodAddActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.food.FoodPickerActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".presentation.dictionaries.foodmeasure.FoodMeasureAddActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".presentation.dictionaries.foodmeasure.FoodMeasurePickerActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".presentation.dictionaries.achievements.AchievementAddActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".presentation.dictionaries.achievements.AchievementPickerActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".presentation.core.images.crop.CropActivity" />
         <activity android:name=".presentation.core.images.review.ImageReviewActivity" />

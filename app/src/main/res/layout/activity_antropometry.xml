@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:fieldHint="@string/weight_hint"
-        app:fieldIcon="@drawable/ic_food_measure"
+        app:fieldIcon="@drawable/ic_measure_unit"
         app:fieldText="@string/weight" />
 
     <ru.android.childdiary.presentation.core.fields.widgets.FieldHeightView

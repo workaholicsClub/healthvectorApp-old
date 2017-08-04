@@ -105,6 +105,7 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
 
     public void requestMedicineMeasureValueDialog() {
         unsubscribeOnDestroy(medicineMeasureInteractor.getAll()
+                .first(Collections.emptyList())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showMedicineMeasureValueDialog, this::onUnexpectedError));

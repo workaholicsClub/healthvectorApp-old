@@ -10,7 +10,7 @@
         android:layout_width="@dimen/field_icon_size"
         android:layout_height="@dimen/field_icon_size"
         android:scaleType="center"
-        android:src="@drawable/ic_food_measure" />
+        android:src="@drawable/ic_measure_unit" />
 
     <TextView
         android:layout_width="0dp"

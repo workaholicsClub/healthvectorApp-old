@@ -252,8 +252,8 @@
     <string name="settings_restore_data">Восстановить данные</string>
     <string name="settings_additional">Дополнительные настройки</string>
     <string name="settings_day_length">Продолжительность дня</string>
-    <string name="settings_food_measure">Единицы измерения</string>
-    <string name="settings_food">Прикорм</string>
+    <string name="measure_units">Единицы измерения</string>
+    <string name="food">Прикорм</string>
     <string name="authorize">Войти</string>
     <string name="authorize_account">Войти в аккаунт</string>
     <string name="restore">Восстановить</string>
@@ -321,4 +321,14 @@
     <string name="fill_achievement_date">Укажите дату достижения</string>
     <string name="child_profile">Профиль ребенка</string>
     <string name="add_food">Добавить прикорм</string>
+    <string name="add_achievement">Добавить достижение</string>
+    <string name="add_measure_unit">Добавить единицу измерения</string>
+    <string name="delete_food">Удалить прикорм?</string>
+    <string name="delete_measure_unit">Удалить единицу измерения?</string>
+    <string name="intention_add_food">Добавьте прикорм</string>
+    <string name="intention_add_measure_unit">Добавьте единицу измерения</string>
+    <string name="deletion_restricted_food">Данный прикорм привязан к событиям</string>
+    <string name="deletion_restricted_food_measure">Данная единица измерения привязана к событиям</string>
+    <string name="deletion_restricted_medicine_measure">Данная единица измерения привязана к событиям или рецептам</string>
+    <string name="dictionaries">Справочники</string>
 </resources>

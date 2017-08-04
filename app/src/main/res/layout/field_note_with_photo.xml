@@ -22,7 +22,7 @@
         android:drawableRight="@drawable/ic_add_photo"
         android:imeOptions="actionDone"
         android:inputType="textCapSentences|textMultiLine"
-        android:maxLength="@integer/max_length_other_event_name"
+        android:maxLength="@integer/max_length_name"
         android:paddingBottom="@dimen/note_with_photo_edit_text_padding_bottom"
         android:textAppearance="@style/PrimaryTextAppearance"
         android:textColor="@drawable/field_editable_text_color"

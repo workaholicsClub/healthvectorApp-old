@@ -29,9 +29,10 @@ public class MedicinePickerActivity extends BasePickerActivity<Medicine, Medicin
     @InjectPresenter
     MedicinePickerPresenter presenter;
 
-    public static Intent getIntent(Context context, @Nullable Sex sex) {
+    public static Intent getIntent(Context context, @Nullable Sex sex, boolean pick) {
         return new Intent(context, MedicinePickerActivity.class)
-                .putExtra(ExtraConstants.EXTRA_SEX, sex);
+                .putExtra(ExtraConstants.EXTRA_SEX, sex)
+                .putExtra(ExtraConstants.EXTRA_PICK, pick);
     }
 
     @Override

@@ -33,6 +33,30 @@ import ru.android.childdiary.presentation.development.partitions.antropometry.ad
 import ru.android.childdiary.presentation.development.partitions.antropometry.edit.EditAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.antropometry.edit.EditAntropometryPresenter;
 import ru.android.childdiary.presentation.development.partitions.testing.TestResultsPresenter;
+import ru.android.childdiary.presentation.dictionaries.achievements.AchievementAddActivity;
+import ru.android.childdiary.presentation.dictionaries.achievements.AchievementAddPresenter;
+import ru.android.childdiary.presentation.dictionaries.achievements.AchievementPickerActivity;
+import ru.android.childdiary.presentation.dictionaries.achievements.AchievementPickerPresenter;
+import ru.android.childdiary.presentation.dictionaries.doctors.DoctorAddActivity;
+import ru.android.childdiary.presentation.dictionaries.doctors.DoctorAddPresenter;
+import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
+import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerPresenter;
+import ru.android.childdiary.presentation.dictionaries.food.FoodAddActivity;
+import ru.android.childdiary.presentation.dictionaries.food.FoodAddPresenter;
+import ru.android.childdiary.presentation.dictionaries.food.FoodPickerActivity;
+import ru.android.childdiary.presentation.dictionaries.food.FoodPickerPresenter;
+import ru.android.childdiary.presentation.dictionaries.foodmeasure.FoodMeasureAddActivity;
+import ru.android.childdiary.presentation.dictionaries.foodmeasure.FoodMeasureAddPresenter;
+import ru.android.childdiary.presentation.dictionaries.foodmeasure.FoodMeasurePickerActivity;
+import ru.android.childdiary.presentation.dictionaries.foodmeasure.FoodMeasurePickerPresenter;
+import ru.android.childdiary.presentation.dictionaries.medicinemeasure.MedicineMeasureAddActivity;
+import ru.android.childdiary.presentation.dictionaries.medicinemeasure.MedicineMeasureAddPresenter;
+import ru.android.childdiary.presentation.dictionaries.medicinemeasure.MedicineMeasurePickerActivity;
+import ru.android.childdiary.presentation.dictionaries.medicinemeasure.MedicineMeasurePickerPresenter;
+import ru.android.childdiary.presentation.dictionaries.medicines.MedicineAddActivity;
+import ru.android.childdiary.presentation.dictionaries.medicines.MedicineAddPresenter;
+import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
+import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerPresenter;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DiaperEventDetailPresenter;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
@@ -71,18 +95,6 @@ import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakin
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterPresenter;
 import ru.android.childdiary.presentation.medical.partitions.medicines.MedicineTakingListPresenter;
 import ru.android.childdiary.presentation.medical.partitions.visits.DoctorVisitsPresenter;
-import ru.android.childdiary.presentation.dictionaries.doctors.DoctorAddActivity;
-import ru.android.childdiary.presentation.dictionaries.doctors.DoctorAddPresenter;
-import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
-import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerPresenter;
-import ru.android.childdiary.presentation.dictionaries.food.FoodAddActivity;
-import ru.android.childdiary.presentation.dictionaries.food.FoodAddPresenter;
-import ru.android.childdiary.presentation.dictionaries.food.FoodPickerActivity;
-import ru.android.childdiary.presentation.dictionaries.food.FoodPickerPresenter;
-import ru.android.childdiary.presentation.dictionaries.medicines.MedicineAddActivity;
-import ru.android.childdiary.presentation.dictionaries.medicines.MedicineAddPresenter;
-import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
-import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerPresenter;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditPresenter;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
@@ -157,9 +169,21 @@ public interface ApplicationComponent {
 
     void inject(MedicineAddPresenter presenter);
 
+    void inject(MedicineMeasurePickerPresenter presenter);
+
+    void inject(MedicineMeasureAddPresenter presenter);
+
     void inject(FoodPickerPresenter presenter);
 
     void inject(FoodAddPresenter presenter);
+
+    void inject(FoodMeasurePickerPresenter presenter);
+
+    void inject(FoodMeasureAddPresenter presenter);
+
+    void inject(AchievementPickerPresenter presenter);
+
+    void inject(AchievementAddPresenter presenter);
 
     void inject(DoctorVisitEventDetailPresenter presenter);
 
@@ -238,9 +262,21 @@ public interface ApplicationComponent {
 
     void inject(MedicineAddActivity activity);
 
+    void inject(MedicineMeasurePickerActivity activity);
+
+    void inject(MedicineMeasureAddActivity activity);
+
     void inject(FoodPickerActivity activity);
 
     void inject(FoodAddActivity activity);
+
+    void inject(FoodMeasurePickerActivity activity);
+
+    void inject(FoodMeasureAddActivity activity);
+
+    void inject(AchievementPickerActivity activity);
+
+    void inject(AchievementAddActivity activity);
 
     void inject(DoctorVisitEventDetailActivity activity);
 

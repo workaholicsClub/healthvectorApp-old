@@ -115,7 +115,7 @@ public class MedicineTakingEventDetailActivity
                             .build());
         });
         medicineView.setFieldDialogListener(view -> {
-            startActivityForResult(MedicinePickerActivity.getIntent(this, getSex()),
+            startActivityForResult(MedicinePickerActivity.getIntent(this, getSex(), true),
                     REQUEST_MEDICINE);
             hideKeyboardAndClearFocus(rootView.findFocus());
         });

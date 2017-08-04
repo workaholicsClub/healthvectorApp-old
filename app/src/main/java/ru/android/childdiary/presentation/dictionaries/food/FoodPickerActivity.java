@@ -29,9 +29,10 @@ public class FoodPickerActivity extends BasePickerActivity<Food, FoodPickerView>
     @InjectPresenter
     FoodPickerPresenter presenter;
 
-    public static Intent getIntent(Context context, @Nullable Sex sex) {
+    public static Intent getIntent(Context context, @Nullable Sex sex, boolean pick) {
         return new Intent(context, FoodPickerActivity.class)
-                .putExtra(ExtraConstants.EXTRA_SEX, sex);
+                .putExtra(ExtraConstants.EXTRA_SEX, sex)
+                .putExtra(ExtraConstants.EXTRA_PICK, pick);
     }
 
     @Override
@@ -42,13 +43,13 @@ public class FoodPickerActivity extends BasePickerActivity<Food, FoodPickerView>
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarTitle(R.string.medicines_title);
+        setupToolbarTitle(R.string.food);
     }
 
     @Override
     public void delete(Food food) {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.delete_medicine_confirmation_dialog_title)
+                .setMessage(R.string.delete_food)
                 .setPositiveButton(R.string.delete,
                         (dialog, which) -> getPresenter().deleteItem(food))
                 .setNegativeButton(R.string.cancel, null)
@@ -58,7 +59,7 @@ public class FoodPickerActivity extends BasePickerActivity<Food, FoodPickerView>
     @Override
     public void deletionRestricted() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.deletion_restricted_medicine)
+                .setMessage(R.string.deletion_restricted_food)
                 .setPositiveButton(R.string.ok, null)
                 .show();
     }
@@ -76,6 +77,6 @@ public class FoodPickerActivity extends BasePickerActivity<Food, FoodPickerView>
     @Override
     protected String getIntentionText(boolean isFiltering) {
         return (isFiltering ? getString(R.string.nothing_found) + "\n\n" : "")
-                + getString(R.string.add_medicine_intention);
+                + getString(R.string.intention_add_food);
     }
 }
