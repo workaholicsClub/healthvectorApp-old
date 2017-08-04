@@ -331,4 +331,5 @@
     <string name="deletion_restricted_food_measure">Данная единица измерения привязана к событиям</string>
     <string name="deletion_restricted_medicine_measure">Данная единица измерения привязана к событиям или рецептам</string>
     <string name="dictionaries">Справочники</string>
+    <string name="onboarding">Демо-экраны</string>
 </resources>
