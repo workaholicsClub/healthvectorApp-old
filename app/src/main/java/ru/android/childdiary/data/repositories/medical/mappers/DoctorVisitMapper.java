@@ -16,10 +16,10 @@ import ru.android.childdiary.data.db.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.data.repositories.dictionaries.DoctorMapper;
+import ru.android.childdiary.data.repositories.dictionaries.doctors.mappers.DoctorMapper;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 
 public class DoctorVisitMapper implements EntityMapper<DoctorVisitData, DoctorVisitEntity, DoctorVisit> {

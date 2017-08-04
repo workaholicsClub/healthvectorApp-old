@@ -10,7 +10,7 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListFilter;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineFilteredAdapter;
 import ru.android.childdiary.presentation.medical.filter.core.BaseTokenCompleteTextView;

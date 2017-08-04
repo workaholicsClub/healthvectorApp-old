@@ -13,7 +13,7 @@ import android.widget.NumberPicker;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;

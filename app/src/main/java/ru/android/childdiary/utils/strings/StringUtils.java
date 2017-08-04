@@ -16,7 +16,7 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineMeasureValue;
 import ru.android.childdiary.utils.ObjectUtils;
 

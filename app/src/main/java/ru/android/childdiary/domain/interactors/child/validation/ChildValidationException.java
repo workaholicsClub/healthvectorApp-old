@@ -3,7 +3,7 @@ package ru.android.childdiary.domain.interactors.child.validation;
 import java.util.Collections;
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.core.ValidationException;
 
 public class ChildValidationException extends ValidationException {
     private final List<ChildValidationResult> results;

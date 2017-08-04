@@ -44,7 +44,7 @@ public class ProfileEditPresenter extends BasePresenter<ProfileEditView> {
         if (e instanceof ChildValidationException) {
             List<ChildValidationResult> results = ((ChildValidationException) e).getValidationResults();
             if (results.isEmpty()) {
-                logger.error("child validation results empty");
+                logger.error("validation results empty");
                 return;
             }
 

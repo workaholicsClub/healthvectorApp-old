@@ -3,6 +3,7 @@ package ru.android.childdiary.domain.interactors.core.validation;
 import android.support.annotation.Nullable;
 
 import lombok.Getter;
+import ru.android.childdiary.domain.interactors.core.validation.core.ValidationResult;
 
 public class EventValidationResult extends ValidationResult {
     @Nullable

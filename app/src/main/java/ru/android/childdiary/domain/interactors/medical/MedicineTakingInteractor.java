@@ -1,10 +1,6 @@
 package ru.android.childdiary.domain.interactors.medical;
 
 import android.support.annotation.NonNull;
-import android.text.Editable;
-import android.text.TextUtils;
-
-import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -38,10 +34,7 @@ import ru.android.childdiary.domain.interactors.core.requests.DeleteResponse;
 import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
-import ru.android.childdiary.domain.interactors.dictionaries.core.MedicalDictionaryInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.MedicineValidator;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingResponse;
@@ -57,13 +50,12 @@ import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineT
 import ru.android.childdiary.domain.interactors.medical.validation.MedicineTakingValidator;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
-public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Medicine> {
+public class MedicineTakingInteractor {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
     private final SettingsRepository settingsRepository;
     private final MedicineTakingRepository medicineTakingRepository;
     private final MedicineTakingValidator medicineTakingValidator;
-    private final MedicineValidator medicineValidator;
     private final ImagesRepository imagesRepository;
     private final ValueRepository<GetMedicineTakingListFilter> filterRepository;
 
@@ -73,7 +65,6 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
                                     SettingsDataRepository settingsRepository,
                                     MedicineTakingDataRepository medicineTakingRepository,
                                     MedicineTakingValidator medicineTakingValidator,
-                                    MedicineValidator medicineValidator,
                                     ImagesDataRepository imagesRepository,
                                     MedicineTakingFilterDataRepository filterRepository) {
         this.childRepository = childRepository;
@@ -81,7 +72,6 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
         this.settingsRepository = settingsRepository;
         this.medicineTakingRepository = medicineTakingRepository;
         this.medicineTakingValidator = medicineTakingValidator;
-        this.medicineValidator = medicineValidator;
         this.imagesRepository = imagesRepository;
         this.filterRepository = filterRepository;
     }
@@ -100,19 +90,6 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
 
     public Observable<GetMedicineTakingListFilter> setSelectedFilterValueObservable(@NonNull GetMedicineTakingListFilter value) {
         return filterRepository.setSelectedValueObservable(value);
-    }
-
-    public Observable<List<Medicine>> getMedicines() {
-        return medicineTakingRepository.getMedicines();
-    }
-
-    public Observable<Medicine> addMedicine(@NonNull Medicine medicine) {
-        return medicineValidator.validateObservable(medicine)
-                .flatMap(medicineTakingRepository::addMedicine);
-    }
-
-    public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
-        return medicineTakingRepository.deleteMedicine(medicine);
     }
 
     public Observable<MedicineTaking> getDefaultMedicineTaking() {
@@ -158,10 +135,6 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
 
     public Observable<LocalTime> getFinishTimeOnce() {
         return settingsRepository.getFinishTimeOnce();
-    }
-
-    public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
-        return medicineTakingRepository.getMedicineMeasureList();
     }
 
     public Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking) {
@@ -280,26 +253,5 @@ public class MedicineTakingInteractor implements MedicalDictionaryInteractor<Med
                                 .build())
                         .build())
                 .map(medicineTakingValidator::validate);
-    }
-
-    @Override
-    public Observable<Boolean> controlDoneButton(
-            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
-        return nameObservable
-                .map(TextViewAfterTextChangeEvent::editable)
-                .map(Editable::toString)
-                .map(String::trim)
-                .map(name -> !TextUtils.isEmpty(name))
-                .distinctUntilChanged();
-    }
-
-    public Observable<List<EventValidationResult>> controlFields(
-            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
-        return nameObservable
-                .map(TextViewAfterTextChangeEvent::editable)
-                .map(Editable::toString)
-                .map(String::trim)
-                .map(name -> Medicine.builder().name(name).build())
-                .map(medicineValidator::validate);
     }
 }

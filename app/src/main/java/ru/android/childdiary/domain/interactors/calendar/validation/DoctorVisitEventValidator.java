@@ -10,10 +10,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
-import ru.android.childdiary.domain.interactors.core.validation.Validator;
+import ru.android.childdiary.domain.interactors.core.validation.core.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.core.Validator;
 import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 
 public class DoctorVisitEventValidator extends Validator<DoctorVisitEvent, CalendarValidationResult> {
     private final Context context;

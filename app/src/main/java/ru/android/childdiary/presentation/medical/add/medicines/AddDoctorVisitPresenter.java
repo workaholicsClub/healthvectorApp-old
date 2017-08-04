@@ -19,7 +19,7 @@ import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVisitRequest;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;

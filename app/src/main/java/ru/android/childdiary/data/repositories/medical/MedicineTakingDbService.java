@@ -25,18 +25,13 @@ import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.calendar.MedicineTakingEventEntity;
 import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
-import ru.android.childdiary.data.db.entities.dictionaries.MedicineEntity;
-import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureEntity;
 import ru.android.childdiary.data.db.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.core.generators.MedicineTakingEventsGenerator;
-import ru.android.childdiary.data.repositories.dictionaries.MedicineMapper;
-import ru.android.childdiary.data.repositories.dictionaries.MedicineMeasureMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListFilter;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
@@ -52,49 +47,19 @@ public class MedicineTakingDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
     private final BlockingEntityStore<Persistable> blockingEntityStore;
     private final MedicineTakingEventsGenerator eventsGenerator;
-    private final MedicineMapper medicineMapper;
-    private final MedicineMeasureMapper medicineMeasureMapper;
     private final MedicineTakingMapper medicineTakingMapper;
     private final RepeatParametersMapper repeatParametersMapper;
 
     @Inject
     public MedicineTakingDbService(ReactiveEntityStore<Persistable> dataStore,
                                    MedicineTakingEventsGenerator eventsGenerator,
-                                   MedicineMapper medicineMapper,
-                                   MedicineMeasureMapper medicineMeasureMapper,
                                    MedicineTakingMapper medicineTakingMapper,
                                    RepeatParametersMapper repeatParametersMapper) {
         this.dataStore = dataStore;
         this.blockingEntityStore = dataStore.toBlocking();
         this.eventsGenerator = eventsGenerator;
-        this.medicineMapper = medicineMapper;
-        this.medicineMeasureMapper = medicineMeasureMapper;
         this.medicineTakingMapper = medicineTakingMapper;
         this.repeatParametersMapper = repeatParametersMapper;
-    }
-
-    public Observable<List<Medicine>> getMedicines() {
-        return dataStore.select(MedicineEntity.class)
-                .orderBy(MedicineEntity.NAME, MedicineEntity.ID)
-                .get()
-                .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineMapper));
-    }
-
-    public Observable<Medicine> addMedicine(@NonNull Medicine medicine) {
-        return DbUtils.insertObservable(blockingEntityStore, medicine, medicineMapper);
-    }
-
-    public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
-        return DbUtils.deleteObservable(blockingEntityStore, MedicineEntity.class, medicine, medicine.getId());
-    }
-
-    public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
-        return dataStore.select(MedicineMeasureEntity.class)
-                .orderBy(MedicineMeasureEntity.ID)
-                .get()
-                .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineMeasureMapper));
     }
 
     public Observable<GetMedicineTakingListResponse> getMedicineTakingList(@NonNull GetMedicineTakingListRequest request) {

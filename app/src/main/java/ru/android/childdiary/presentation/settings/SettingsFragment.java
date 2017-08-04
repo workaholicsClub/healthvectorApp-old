@@ -38,6 +38,7 @@ import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
+import ru.android.childdiary.presentation.dictionaries.food.FoodPickerActivity;
 import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
 import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
@@ -341,6 +342,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
             case FOOD_MEASURE:
                 break;
             case FOOD:
+                startActivity(FoodPickerActivity.getIntent(getContext(), getSex()));
                 break;
             case MEDICINE:
                 startActivity(MedicinePickerActivity.getIntent(getContext(), getSex()));

@@ -14,7 +14,7 @@ import ru.android.childdiary.domain.interactors.core.validation.EventFieldType;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidationException;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidator;
-import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.core.ValidationException;
 import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
 import ru.android.childdiary.utils.ObjectUtils;
 

@@ -24,7 +24,7 @@ public class AddConcreteAchievementPresenter extends ConcreteAchievementPresente
 
     public void add(@NonNull ConcreteAchievement concreteAchievement) {
         unsubscribeOnDestroy(
-                achievementInteractor.add(UpsertConcreteAchievementRequest.builder()
+                concreteAchievementInteractor.add(UpsertConcreteAchievementRequest.builder()
                         .concreteAchievement(concreteAchievement)
                         .build())
                         .map(UpsertConcreteAchievementResponse::getConcreteAchievement)
@@ -35,7 +35,7 @@ public class AddConcreteAchievementPresenter extends ConcreteAchievementPresente
 
     public Disposable listenForDoneButtonUpdate(
             @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
-        return achievementInteractor.controlDoneButtonConcreteAchievement(
+        return concreteAchievementInteractor.controlDoneButton(
                 nameObservable)
                 .subscribe(getViewState()::setButtonDoneEnabled, this::onUnexpectedError);
     }

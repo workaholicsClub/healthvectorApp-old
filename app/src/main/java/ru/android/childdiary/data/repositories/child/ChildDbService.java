@@ -16,10 +16,10 @@ import ru.android.childdiary.data.db.entities.child.ChildEntity;
 import ru.android.childdiary.data.db.entities.dictionaries.AchievementEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.development.achievement.mappers.ConcreteAchievementMapper;
-import ru.android.childdiary.data.repositories.dictionaries.AchievementMapper;
+import ru.android.childdiary.data.repositories.dictionaries.achievements.mappers.AchievementMapper;
 import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.Achievement;
+import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
 
 @Singleton
 public class ChildDbService {

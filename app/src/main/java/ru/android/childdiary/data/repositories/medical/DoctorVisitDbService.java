@@ -25,15 +25,13 @@ import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.calendar.DoctorVisitEventEntity;
 import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
-import ru.android.childdiary.data.db.entities.dictionaries.DoctorEntity;
 import ru.android.childdiary.data.db.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.core.generators.DoctorVisitEventsGenerator;
-import ru.android.childdiary.data.repositories.dictionaries.DoctorMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsFilter;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
@@ -49,38 +47,19 @@ public class DoctorVisitDbService {
     private final ReactiveEntityStore<Persistable> dataStore;
     private final BlockingEntityStore<Persistable> blockingEntityStore;
     private final DoctorVisitEventsGenerator eventsGenerator;
-    private final DoctorMapper doctorMapper;
     private final DoctorVisitMapper doctorVisitMapper;
     private final RepeatParametersMapper repeatParametersMapper;
 
     @Inject
     public DoctorVisitDbService(ReactiveEntityStore<Persistable> dataStore,
                                 DoctorVisitEventsGenerator eventsGenerator,
-                                DoctorMapper doctorMapper,
                                 DoctorVisitMapper doctorVisitMapper,
                                 RepeatParametersMapper repeatParametersMapper) {
         this.dataStore = dataStore;
         this.blockingEntityStore = dataStore.toBlocking();
         this.eventsGenerator = eventsGenerator;
-        this.doctorMapper = doctorMapper;
         this.doctorVisitMapper = doctorVisitMapper;
         this.repeatParametersMapper = repeatParametersMapper;
-    }
-
-    public Observable<List<Doctor>> getDoctors() {
-        return dataStore.select(DoctorEntity.class)
-                .orderBy(DoctorEntity.NAME, DoctorEntity.ID)
-                .get()
-                .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, doctorMapper));
-    }
-
-    public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {
-        return DbUtils.insertObservable(blockingEntityStore, doctor, doctorMapper);
-    }
-
-    public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
-        return DbUtils.deleteObservable(blockingEntityStore, DoctorEntity.class, doctor, doctor.getId());
     }
 
     public Observable<GetDoctorVisitsResponse> getDoctorVisits(@NonNull GetDoctorVisitsRequest request) {

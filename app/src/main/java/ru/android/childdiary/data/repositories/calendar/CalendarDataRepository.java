@@ -18,6 +18,9 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.core.ValueDataRepository;
+import ru.android.childdiary.data.repositories.dictionaries.core.CrudDbService;
+import ru.android.childdiary.data.repositories.dictionaries.food.FoodDbService;
+import ru.android.childdiary.data.repositories.dictionaries.foodmeasure.FoodMeasureDbService;
 import ru.android.childdiary.data.repositories.medical.DoctorVisitDbService;
 import ru.android.childdiary.data.repositories.medical.MedicineTakingDbService;
 import ru.android.childdiary.data.types.EventType;
@@ -26,9 +29,9 @@ import ru.android.childdiary.domain.interactors.calendar.CalendarRepository;
 import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
+import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.OtherEvent;
@@ -48,8 +51,8 @@ import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExercise
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
-import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
-import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
+import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsRequest;
 import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
@@ -71,6 +74,8 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     private final DoctorVisitDbService doctorVisitDbService;
     private final MedicineTakingDbService medicineTakingDbService;
     private final CleanUpDbService cleanUpDbService;
+    private CrudDbService<Food> foodDbService;
+    private CrudDbService<FoodMeasure> foodMeasureDbService;
 
     @Inject
     public CalendarDataRepository(RxSharedPreferences preferences,
@@ -78,13 +83,17 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
                                   AllEventsDbService allEventsDbService,
                                   DoctorVisitDbService doctorVisitDbService,
                                   MedicineTakingDbService medicineTakingDbService,
-                                  CleanUpDbService cleanUpDbService) {
+                                  CleanUpDbService cleanUpDbService,
+                                  FoodDbService foodDbService,
+                                  FoodMeasureDbService foodMeasureDbService) {
         this.preferences = preferences;
         this.calendarDbService = calendarDbService;
         this.allEventsDbService = allEventsDbService;
         this.doctorVisitDbService = doctorVisitDbService;
         this.medicineTakingDbService = medicineTakingDbService;
         this.cleanUpDbService = cleanUpDbService;
+        this.foodDbService = foodDbService;
+        this.foodMeasureDbService = foodMeasureDbService;
     }
 
     @Override
@@ -113,26 +122,6 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     @Override
-    public Observable<List<FoodMeasure>> getFoodMeasureList() {
-        return calendarDbService.getFoodMeasureList();
-    }
-
-    @Override
-    public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
-        return calendarDbService.addFoodMeasure(foodMeasure);
-    }
-
-    @Override
-    public Observable<List<Food>> getFoodList() {
-        return calendarDbService.getFoodList();
-    }
-
-    @Override
-    public Observable<Food> addFood(@NonNull Food food) {
-        return calendarDbService.addFood(food);
-    }
-
-    @Override
     public Observable<FeedType> getLastFeedType() {
         return preferences
                 .getEnum(KEY_LAST_FEED_TYPE, FeedType.BREAST_MILK, FeedType.class)
@@ -144,7 +133,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     @Override
     public Observable<FoodMeasure> getLastFoodMeasure() {
         return Observable.combineLatest(
-                getFoodMeasureList()
+                foodMeasureDbService.getAll()
                         .first(Collections.singletonList(FoodMeasure.NULL))
                         .toObservable(),
                 preferences
@@ -168,7 +157,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     @Override
     public Observable<Food> getLastFood() {
         return Observable.combineLatest(
-                getFoodList()
+                foodDbService.getAll()
                         .first(Collections.singletonList(Food.NULL))
                         .toObservable(),
                 preferences

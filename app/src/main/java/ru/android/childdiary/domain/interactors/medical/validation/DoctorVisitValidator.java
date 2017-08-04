@@ -14,9 +14,9 @@ import ru.android.childdiary.domain.interactors.core.validation.EventFieldType;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidationException;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidator;
-import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.core.ValidationException;
 import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public class DoctorVisitValidator extends EventValidator<DoctorVisit> {

@@ -17,6 +17,8 @@ import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryValidationException;
+import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryValidationResult;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.strings.EventUtils;
 
@@ -139,7 +141,7 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
         if (e instanceof CalendarValidationException) {
             List<CalendarValidationResult> results = ((CalendarValidationException) e).getValidationResults();
             if (results.isEmpty()) {
-                logger.error("calendar validation results empty");
+                logger.error("validation results empty");
                 return;
             }
 
@@ -150,6 +152,23 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
                     .blockingFirst();
             getViewState().showValidationErrorMessage(msg);
             handleValidationResult(results);
+        } else if (e instanceof DictionaryValidationException) {
+            // TODO: добавить другую обработку при необходимости
+            // перенести в диалог добавления прикорма, добавления единицы измерения
+            // не закрывать диалог при нажатии ОК и пустой строке в имени
+            // показывать сообщение, что значение уже есть в справочнике и не закрыввать диалог
+            // или брать имеющееся значение и подставлять
+            List<DictionaryValidationResult> results = ((DictionaryValidationException) e).getValidationResults();
+            if (results.isEmpty()) {
+                logger.error("validation results empty");
+                return;
+            }
+
+            String msg = Observable.fromIterable(results)
+                    .filter(DictionaryValidationResult::notValid)
+                    .map(DictionaryValidationResult::toString)
+                    .blockingFirst();
+            getViewState().showValidationErrorMessage(msg);
         } else {
             super.onUnexpectedError(e);
         }

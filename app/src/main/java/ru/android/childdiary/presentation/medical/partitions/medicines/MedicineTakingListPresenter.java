@@ -15,10 +15,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
+import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.MedicineInteractor;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
@@ -32,6 +33,9 @@ import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<MedicineTakingListView> {
+    @Inject
+    MedicineInteractor medicineInteractor;
+
     @Inject
     MedicineTakingInteractor medicineTakingInteractor;
 
@@ -95,7 +99,7 @@ public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<Medici
     protected void showFilterDialog() {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
-                        medicineTakingInteractor.getMedicines()
+                        medicineInteractor.getAll()
                                 .first(Collections.emptyList())
                                 .toObservable(),
                         medicineTakingInteractor.getSelectedFilterValueOnce(),

@@ -16,13 +16,21 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasureInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.MedicineInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
 import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class MedicineTakingEventDetailPresenter extends EventDetailPresenter<MedicineTakingEventDetailView, MedicineTakingEvent> {
+    @Inject
+    MedicineInteractor medicineInteractor;
+
+    @Inject
+    MedicineMeasureInteractor medicineMeasureInteractor;
+
     @Inject
     MedicineTakingInteractor medicineTakingInteractor;
 
@@ -37,7 +45,7 @@ public class MedicineTakingEventDetailPresenter extends EventDetailPresenter<Med
     }
 
     public void requestMedicineMeasureValueDialog() {
-        unsubscribeOnDestroy(medicineTakingInteractor.getMedicineMeasureList()
+        unsubscribeOnDestroy(medicineMeasureInteractor.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showMedicineMeasureValueDialog, this::onUnexpectedError));
@@ -47,7 +55,7 @@ public class MedicineTakingEventDetailPresenter extends EventDetailPresenter<Med
         if (medicine == null || medicine.getId() == null) {
             return;
         }
-        unsubscribeOnDestroy(medicineTakingInteractor.getMedicines()
+        unsubscribeOnDestroy(medicineInteractor.getAll()
                 .first(Collections.emptyList())
                 .map(medicines -> findMedicine(medicine, medicines))
                 .subscribeOn(Schedulers.io())

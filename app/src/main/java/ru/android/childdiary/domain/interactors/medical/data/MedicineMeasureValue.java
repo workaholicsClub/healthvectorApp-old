@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
 
 @Value
 @Builder

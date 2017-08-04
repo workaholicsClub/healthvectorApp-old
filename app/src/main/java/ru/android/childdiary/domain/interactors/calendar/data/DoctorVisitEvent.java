@@ -18,7 +18,7 @@ import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroupIt
 import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value

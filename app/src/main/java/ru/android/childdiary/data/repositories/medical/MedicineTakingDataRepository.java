@@ -2,8 +2,6 @@ package ru.android.childdiary.data.repositories.medical;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -11,10 +9,8 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.calendar.CleanUpDbService;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingRepository;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
@@ -36,26 +32,6 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
                                         CleanUpDbService cleanUpDbService) {
         this.medicineTakingDbService = medicineTakingDbService;
         this.cleanUpDbService = cleanUpDbService;
-    }
-
-    @Override
-    public Observable<List<Medicine>> getMedicines() {
-        return medicineTakingDbService.getMedicines();
-    }
-
-    @Override
-    public Observable<Medicine> addMedicine(@NonNull Medicine medicine) {
-        return medicineTakingDbService.addMedicine(medicine);
-    }
-
-    @Override
-    public Observable<Medicine> deleteMedicine(@NonNull Medicine medicine) {
-        return medicineTakingDbService.deleteMedicine(medicine);
-    }
-
-    @Override
-    public Observable<List<MedicineMeasure>> getMedicineMeasureList() {
-        return medicineTakingDbService.getMedicineMeasureList();
     }
 
     @Override

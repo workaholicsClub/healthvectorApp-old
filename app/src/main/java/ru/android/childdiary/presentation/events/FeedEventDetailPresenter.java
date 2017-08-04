@@ -4,17 +4,27 @@ import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasure;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.FeedEvent;
+import ru.android.childdiary.domain.interactors.dictionaries.food.FoodInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasureInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
 
 @InjectViewState
 public class FeedEventDetailPresenter extends EventDetailPresenter<FeedEventDetailView, FeedEvent> {
+    @Inject
+    FoodInteractor foodInteractor;
+
+    @Inject
+    FoodMeasureInteractor foodMeasureInteractor;
+
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
@@ -24,12 +34,12 @@ public class FeedEventDetailPresenter extends EventDetailPresenter<FeedEventDeta
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(calendarInteractor.getFoodMeasureList()
+        unsubscribeOnDestroy(foodMeasureInteractor.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(foodMeasureList -> logger.debug("showFoodMeasureList: " + foodMeasureList))
                 .subscribe(getViewState()::showFoodMeasureList, this::onUnexpectedError));
-        unsubscribeOnDestroy(calendarInteractor.getFoodList()
+        unsubscribeOnDestroy(foodInteractor.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(foodList -> logger.debug("showFoodList: " + foodList))
@@ -37,7 +47,7 @@ public class FeedEventDetailPresenter extends EventDetailPresenter<FeedEventDeta
     }
 
     public void addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
-        unsubscribeOnDestroy(calendarInteractor.addFoodMeasure(foodMeasure)
+        unsubscribeOnDestroy(foodMeasureInteractor.add(foodMeasure)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(addedFoodMeasure -> logger.debug("addFoodMeasure: " + addedFoodMeasure))
@@ -45,7 +55,7 @@ public class FeedEventDetailPresenter extends EventDetailPresenter<FeedEventDeta
     }
 
     public void addFood(@NonNull Food food) {
-        unsubscribeOnDestroy(calendarInteractor.addFood(food)
+        unsubscribeOnDestroy(foodInteractor.add(food)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(addedFood -> logger.debug("addFood: " + addedFood))

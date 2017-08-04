@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.domain.interactors.core.data.ContentObject;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.Achievement;
+import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value

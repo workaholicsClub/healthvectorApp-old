@@ -5,21 +5,20 @@ import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.InjectViewState;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
+import lombok.Getter;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.MedicineInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.presentation.dictionaries.core.BasePickerPresenter;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 @InjectViewState
 public class MedicinePickerPresenter extends BasePickerPresenter<Medicine, MedicinePickerView> {
+    @Getter
     @Inject
-    MedicineTakingInteractor medicineTakingInteractor;
+    MedicineInteractor interactor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -27,17 +26,7 @@ public class MedicinePickerPresenter extends BasePickerPresenter<Medicine, Medic
     }
 
     @Override
-    protected Observable<List<Medicine>> getAllItemsLoader() {
-        return medicineTakingInteractor.getMedicines();
-    }
-
-    @Override
     protected boolean filter(@NonNull Medicine item, @Nullable String filter) {
         return StringUtils.contains(item.getName(), filter, true);
-    }
-
-    @Override
-    protected Observable<Medicine> deleteItemLoader(@NonNull Medicine item) {
-        return medicineTakingInteractor.deleteMedicine(item);
     }
 }

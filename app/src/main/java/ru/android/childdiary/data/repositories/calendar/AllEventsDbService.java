@@ -47,9 +47,9 @@ import ru.android.childdiary.domain.interactors.calendar.data.standard.SleepEven
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
-import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
 import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
 import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;

@@ -18,13 +18,13 @@ import ru.android.childdiary.data.db.entities.medical.MedicineTakingData;
 import ru.android.childdiary.data.db.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.data.repositories.dictionaries.MedicineMapper;
-import ru.android.childdiary.data.repositories.dictionaries.MedicineMeasureMapper;
+import ru.android.childdiary.data.repositories.dictionaries.medicines.mappers.MedicineMapper;
+import ru.android.childdiary.data.repositories.dictionaries.medicinemeasure.mappers.MedicineMeasureMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 
 public class MedicineTakingEventMapper implements EntityMapper<MedicineTakingEventData, MedicineTakingEventEntity, MedicineTakingEvent> {

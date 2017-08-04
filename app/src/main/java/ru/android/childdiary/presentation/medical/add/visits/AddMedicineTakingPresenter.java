@@ -14,7 +14,7 @@ import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 import ru.android.childdiary.presentation.core.events.BaseAddItemPresenter;

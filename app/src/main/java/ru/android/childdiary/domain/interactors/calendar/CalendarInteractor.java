@@ -65,9 +65,7 @@ import ru.android.childdiary.domain.interactors.core.ValueRepository;
 import ru.android.childdiary.domain.interactors.core.images.ImageType;
 import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
 import ru.android.childdiary.domain.interactors.core.requests.DeleteResponse;
-import ru.android.childdiary.domain.interactors.core.validation.Validator;
-import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasure;
+import ru.android.childdiary.domain.interactors.core.validation.core.Validator;
 import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
 import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsRequest;
 import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsResponse;
@@ -140,22 +138,6 @@ public class CalendarInteractor {
 
     public Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date) {
         return calendarRepository.setSelectedDateObservable(date);
-    }
-
-    public Observable<List<FoodMeasure>> getFoodMeasureList() {
-        return calendarRepository.getFoodMeasureList();
-    }
-
-    public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
-        return calendarRepository.addFoodMeasure(foodMeasure);
-    }
-
-    public Observable<List<Food>> getFoodList() {
-        return calendarRepository.getFoodList();
-    }
-
-    public Observable<Food> addFood(@NonNull Food food) {
-        return calendarRepository.addFood(food);
     }
 
     public Observable<DiaperEvent> getDefaultDiaperEvent() {

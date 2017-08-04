@@ -28,8 +28,6 @@ import ru.android.childdiary.data.db.entities.calendar.standard.OtherEventEntity
 import ru.android.childdiary.data.db.entities.calendar.standard.PumpEventEntity;
 import ru.android.childdiary.data.db.entities.calendar.standard.SleepEventEntity;
 import ru.android.childdiary.data.db.entities.dictionaries.DoctorEntity;
-import ru.android.childdiary.data.db.entities.dictionaries.FoodEntity;
-import ru.android.childdiary.data.db.entities.dictionaries.FoodMeasureEntity;
 import ru.android.childdiary.data.db.entities.dictionaries.MedicineEntity;
 import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.DiaperEventMapper;
@@ -41,8 +39,6 @@ import ru.android.childdiary.data.repositories.calendar.mappers.MedicineTakingEv
 import ru.android.childdiary.data.repositories.calendar.mappers.OtherEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.PumpEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.SleepEventMapper;
-import ru.android.childdiary.data.repositories.dictionaries.FoodMapper;
-import ru.android.childdiary.data.repositories.dictionaries.FoodMeasureMapper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
@@ -66,8 +62,6 @@ import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExercise
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
-import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasure;
 
 @Singleton
 public class CalendarDbService extends EventsDbService {
@@ -75,8 +69,6 @@ public class CalendarDbService extends EventsDbService {
     private final DoctorVisitEventMapper doctorVisitEventMapper;
     private final ExerciseEventMapper exerciseEventMapper;
     private final FeedEventMapper feedEventMapper;
-    private final FoodMapper foodMapper;
-    private final FoodMeasureMapper foodMeasureMapper;
     private final MasterEventMapper masterEventMapper;
     private final MedicineTakingEventMapper medicineTakingEventMapper;
     private final OtherEventMapper otherEventMapper;
@@ -88,8 +80,6 @@ public class CalendarDbService extends EventsDbService {
                              DiaperEventMapper diaperEventMapper,
                              DoctorVisitEventMapper doctorVisitEventMapper,
                              FeedEventMapper feedEventMapper,
-                             FoodMapper foodMapper,
-                             FoodMeasureMapper foodMeasureMapper,
                              ExerciseEventMapper exerciseEventMapper,
                              MasterEventMapper masterEventMapper,
                              MedicineTakingEventMapper medicineTakingEventMapper,
@@ -101,37 +91,11 @@ public class CalendarDbService extends EventsDbService {
         this.doctorVisitEventMapper = doctorVisitEventMapper;
         this.exerciseEventMapper = exerciseEventMapper;
         this.feedEventMapper = feedEventMapper;
-        this.foodMapper = foodMapper;
-        this.foodMeasureMapper = foodMeasureMapper;
         this.masterEventMapper = masterEventMapper;
         this.medicineTakingEventMapper = medicineTakingEventMapper;
         this.otherEventMapper = otherEventMapper;
         this.pumpEventMapper = pumpEventMapper;
         this.sleepEventMapper = sleepEventMapper;
-    }
-
-    public Observable<List<FoodMeasure>> getFoodMeasureList() {
-        return dataStore.select(FoodMeasureEntity.class)
-                .orderBy(FoodMeasureEntity.NAME, FoodMeasureEntity.ID)
-                .get()
-                .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, foodMeasureMapper));
-    }
-
-    public Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure foodMeasure) {
-        return DbUtils.insertObservable(blockingEntityStore, foodMeasure, foodMeasureMapper);
-    }
-
-    public Observable<List<Food>> getFoodList() {
-        return dataStore.select(FoodEntity.class)
-                .orderBy(FoodEntity.NAME, FoodEntity.ID)
-                .get()
-                .observableResult()
-                .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, foodMapper));
-    }
-
-    public Observable<Food> addFood(@NonNull Food food) {
-        return DbUtils.insertObservable(blockingEntityStore, food, foodMapper);
     }
 
     public Observable<GetSleepEventsResponse> getSleepEvents(@NonNull GetSleepEventsRequest request) {

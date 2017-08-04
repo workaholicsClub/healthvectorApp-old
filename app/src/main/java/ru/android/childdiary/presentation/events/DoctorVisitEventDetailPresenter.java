@@ -19,13 +19,17 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.DoctorInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
 import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class DoctorVisitEventDetailPresenter extends EventDetailPresenter<DoctorVisitEventDetailView, DoctorVisitEvent> {
+    @Inject
+    DoctorInteractor doctorInteractor;
+
     @Inject
     DoctorVisitInteractor doctorVisitInteractor;
 
@@ -63,7 +67,7 @@ public class DoctorVisitEventDetailPresenter extends EventDetailPresenter<Doctor
         if (doctor == null || doctor.getId() == null) {
             return;
         }
-        unsubscribeOnDestroy(doctorVisitInteractor.getDoctors()
+        unsubscribeOnDestroy(doctorInteractor.getAll()
                 .first(Collections.emptyList())
                 .map(doctors -> findDoctor(doctor, doctors))
                 .subscribeOn(Schedulers.io())

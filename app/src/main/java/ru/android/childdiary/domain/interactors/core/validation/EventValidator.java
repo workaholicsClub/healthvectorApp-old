@@ -10,6 +10,7 @@ import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroups;
 import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
+import ru.android.childdiary.domain.interactors.core.validation.core.Validator;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public abstract class EventValidator<T> extends Validator<T, EventValidationResult> {

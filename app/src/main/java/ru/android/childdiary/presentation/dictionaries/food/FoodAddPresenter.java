@@ -1,26 +1,21 @@
 package ru.android.childdiary.presentation.dictionaries.food;
 
-import android.support.annotation.NonNull;
-
 import com.arellomobile.mvp.InjectViewState;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import lombok.Getter;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
-import ru.android.childdiary.domain.interactors.dictionaries.core.MedicalDictionaryInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryFieldType;
+import ru.android.childdiary.domain.interactors.dictionaries.food.FoodInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
 import ru.android.childdiary.presentation.dictionaries.core.BaseAddPresenter;
 
 @InjectViewState
 public class FoodAddPresenter extends BaseAddPresenter<Food, FoodAddView> {
+    @Getter
     @Inject
-    CalendarInteractor calendarInteractor;
+    FoodInteractor interactor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -28,20 +23,7 @@ public class FoodAddPresenter extends BaseAddPresenter<Food, FoodAddView> {
     }
 
     @Override
-    public void add(@NonNull Food item) {
-        unsubscribeOnDestroy(calendarInteractor.addFood(item)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::itemAdded, this::onUnexpectedError));
-    }
-
-    @Override
-    protected Observable<List<Food>> getAllItemsLoader() {
-        return calendarInteractor.getFoodList();
-    }
-
-    @Override
-    protected MedicalDictionaryInteractor<Food> getInteractor() {
-        return null; // TODO calendarInteractor;
+    protected DictionaryFieldType getNameFieldType() {
+        return DictionaryFieldType.FOOD_NAME;
     }
 }

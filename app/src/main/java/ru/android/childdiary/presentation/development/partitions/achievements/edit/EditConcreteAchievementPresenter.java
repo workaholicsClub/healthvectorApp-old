@@ -23,7 +23,7 @@ public class EditConcreteAchievementPresenter extends ConcreteAchievementPresent
 
     public void update(@NonNull ConcreteAchievement concreteAchievement) {
         unsubscribeOnDestroy(
-                achievementInteractor.update(UpsertConcreteAchievementRequest.builder()
+                concreteAchievementInteractor.update(UpsertConcreteAchievementRequest.builder()
                         .concreteAchievement(concreteAchievement)
                         .build())
                         .map(UpsertConcreteAchievementResponse::getConcreteAchievement)
@@ -38,7 +38,7 @@ public class EditConcreteAchievementPresenter extends ConcreteAchievementPresent
 
     public void forceDelete(@NonNull ConcreteAchievement concreteAchievement) {
         unsubscribeOnDestroy(
-                achievementInteractor.delete(DeleteConcreteAchievementRequest.builder()
+                concreteAchievementInteractor.delete(DeleteConcreteAchievementRequest.builder()
                         .concreteAchievement(concreteAchievement)
                         .build())
                         .map(DeleteConcreteAchievementResponse::getRequest)

@@ -10,9 +10,10 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.domain.interactors.core.validation.EventValidationException;
-import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
-import ru.android.childdiary.domain.interactors.dictionaries.core.MedicalDictionaryInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.core.DictionaryInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryFieldType;
+import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryValidationException;
+import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryValidationResult;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class BaseAddPresenter<T, V extends BaseAddView<T>> extends BasePresenter<V> {
@@ -24,32 +25,37 @@ public abstract class BaseAddPresenter<T, V extends BaseAddView<T>> extends Base
     }
 
     private void requestList() {
-        unsubscribeOnDestroy(getAllItemsLoader()
+        unsubscribeOnDestroy(getInteractor().getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showList, this::onUnexpectedError));
     }
 
-    public abstract void add(@NonNull T item);
+    public final void add(@NonNull T item) {
+        unsubscribeOnDestroy(getInteractor().add(item)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::itemAdded, this::onUnexpectedError));
+    }
 
-    protected abstract Observable<List<T>> getAllItemsLoader();
+    protected abstract DictionaryInteractor<T> getInteractor();
 
-    protected abstract MedicalDictionaryInteractor<T> getInteractor();
+    protected abstract DictionaryFieldType getNameFieldType();
 
-    public Disposable listenForDoneButtonUpdate(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+    public final Disposable listenForDoneButtonUpdate(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
         return getInteractor().controlDoneButton(nameObservable)
                 .subscribe(getViewState()::setButtonDoneEnabled, this::onUnexpectedError);
     }
 
-    public Disposable listenForFieldsUpdate(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+    public final Disposable listenForFieldsUpdate(@NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
         return getInteractor().controlFields(nameObservable)
                 .subscribe(this::handleValidationResult, this::onUnexpectedError);
     }
 
     @Override
     public void onUnexpectedError(Throwable e) {
-        if (e instanceof EventValidationException) {
-            List<EventValidationResult> results = ((EventValidationException) e).getValidationResults();
+        if (e instanceof DictionaryValidationException) {
+            List<DictionaryValidationResult> results = ((DictionaryValidationException) e).getValidationResults();
             if (results.isEmpty()) {
                 logger.error("validation results empty");
                 return;
@@ -57,8 +63,8 @@ public abstract class BaseAddPresenter<T, V extends BaseAddView<T>> extends Base
 
             getViewState().validationFailed();
             String msg = Observable.fromIterable(results)
-                    .filter(EventValidationResult::notValid)
-                    .map(EventValidationResult::toString)
+                    .filter(DictionaryValidationResult::notValid)
+                    .map(DictionaryValidationResult::toString)
                     .blockingFirst();
             getViewState().showValidationErrorMessage(msg);
             handleValidationResult(results);
@@ -67,19 +73,14 @@ public abstract class BaseAddPresenter<T, V extends BaseAddView<T>> extends Base
         }
     }
 
-    private void handleValidationResult(List<EventValidationResult> results) {
-        for (EventValidationResult result : results) {
+    protected void handleValidationResult(List<DictionaryValidationResult> results) {
+        for (DictionaryValidationResult result : results) {
             boolean valid = result.isValid();
             if (result.getFieldType() == null) {
                 continue;
             }
-            switch (result.getFieldType()) {
-                case DOCTOR_NAME:
-                    getViewState().nameValidated(valid);
-                    break;
-                case MEDICINE_NAME:
-                    getViewState().nameValidated(valid);
-                    break;
+            if (result.getFieldType() == getNameFieldType()) {
+                getViewState().nameValidated(valid);
             }
         }
     }

@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
-import ru.android.childdiary.domain.interactors.development.achievement.AchievementInteractor;
+import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievementInteractor;
 import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementResponse;
@@ -24,7 +24,7 @@ public class ConcreteAchievementsPresenter extends BaseDevelopmentDiaryPresenter
     ChildInteractor childInteractor;
 
     @Inject
-    AchievementInteractor achievementInteractor;
+    ConcreteAchievementInteractor concreteAchievementInteractor;
 
     private Disposable subscription;
 
@@ -46,7 +46,7 @@ public class ConcreteAchievementsPresenter extends BaseDevelopmentDiaryPresenter
 
     private void requestData(@NonNull Child child) {
         unsubscribe(subscription);
-        subscription = unsubscribeOnDestroy(achievementInteractor.getConcreteAchievements(child)
+        subscription = unsubscribeOnDestroy(concreteAchievementInteractor.getConcreteAchievements(child)
                 .map(concreteAchievements -> ConcreteAchievementsState.builder()
                         .child(child)
                         .concreteAchievements(concreteAchievements)
@@ -72,7 +72,7 @@ public class ConcreteAchievementsPresenter extends BaseDevelopmentDiaryPresenter
 
     public void forceDelete(@NonNull ConcreteAchievement concreteAchievement) {
         unsubscribeOnDestroy(
-                achievementInteractor.delete(DeleteConcreteAchievementRequest.builder()
+                concreteAchievementInteractor.delete(DeleteConcreteAchievementRequest.builder()
                         .concreteAchievement(concreteAchievement)
                         .build())
                         .map(DeleteConcreteAchievementResponse::getRequest)

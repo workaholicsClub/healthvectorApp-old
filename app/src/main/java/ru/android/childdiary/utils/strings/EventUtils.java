@@ -13,15 +13,15 @@ import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
 import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.DiaperEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.FeedEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.OtherEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.PumpEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.standard.SleepEvent;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.utils.ObjectUtils;
 
 import static ru.android.childdiary.data.types.FeedType.BREAST_MILK;

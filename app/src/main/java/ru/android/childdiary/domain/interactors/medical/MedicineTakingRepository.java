@@ -2,13 +2,9 @@ package ru.android.childdiary.domain.interactors.medical;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingResponse;
@@ -22,14 +18,6 @@ import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineT
 import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
 
 public interface MedicineTakingRepository {
-    Observable<List<Medicine>> getMedicines();
-
-    Observable<Medicine> addMedicine(@NonNull Medicine medicine);
-
-    Observable<Medicine> deleteMedicine(@NonNull Medicine medicine);
-
-    Observable<List<MedicineMeasure>> getMedicineMeasureList();
-
     Single<Boolean> hasConnectedEvents(@NonNull MedicineTaking medicineTaking);
 
     Single<Boolean> hasDataToFilter(@NonNull Child child);

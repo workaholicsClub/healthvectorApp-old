@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.development.achievement.AchievementInteractor;
+import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievementInteractor;
 import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryInteractor;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
@@ -17,7 +17,7 @@ public class DevelopmentDiaryPresenter extends AppPartitionPresenter<Development
     AntropometryInteractor antropometryInteractor;
 
     @Inject
-    AchievementInteractor achievementInteractor;
+    ConcreteAchievementInteractor concreteAchievementInteractor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -27,7 +27,7 @@ public class DevelopmentDiaryPresenter extends AppPartitionPresenter<Development
     public void addAchievement() {
         unsubscribeOnDestroy(
                 childInteractor.getActiveChildOnce()
-                        .flatMap(child -> achievementInteractor.getDefaultConcreteAchievement(child))
+                        .flatMap(child -> concreteAchievementInteractor.getDefaultConcreteAchievement(child))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(

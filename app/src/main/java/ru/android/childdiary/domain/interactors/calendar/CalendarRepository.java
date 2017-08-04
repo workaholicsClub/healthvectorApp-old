@@ -36,8 +36,8 @@ import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExercise
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateExerciseEventResponse;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventRequest;
 import ru.android.childdiary.domain.interactors.calendar.requests.UpdateMedicineTakingEventResponse;
-import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsRequest;
 import ru.android.childdiary.domain.interactors.exercises.requests.DeleteConcreteExerciseEventsResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
@@ -53,14 +53,6 @@ public interface CalendarRepository {
     Observable<LocalDate> getSelectedDateOnce();
 
     Observable<LocalDate> setSelectedDateObservable(@NonNull LocalDate date);
-
-    Observable<List<FoodMeasure>> getFoodMeasureList();
-
-    Observable<FoodMeasure> addFoodMeasure(@NonNull FoodMeasure value);
-
-    Observable<List<Food>> getFoodList();
-
-    Observable<Food> addFood(@NonNull Food value);
 
     Observable<FeedType> getLastFeedType();
 

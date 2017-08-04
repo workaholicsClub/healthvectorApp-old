@@ -2,7 +2,6 @@ package ru.android.childdiary.domain.interactors.medical;
 
 import android.support.annotation.NonNull;
 import android.text.Editable;
-import android.text.TextUtils;
 
 import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
@@ -37,9 +36,7 @@ import ru.android.childdiary.domain.interactors.core.requests.DeleteResponse;
 import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
-import ru.android.childdiary.domain.interactors.dictionaries.core.MedicalDictionaryInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.DoctorValidator;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
@@ -55,13 +52,12 @@ import ru.android.childdiary.domain.interactors.medical.requests.UpsertDoctorVis
 import ru.android.childdiary.domain.interactors.medical.validation.DoctorVisitValidator;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
-public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor> {
+public class DoctorVisitInteractor {
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
     private final SettingsRepository settingsRepository;
     private final DoctorVisitRepository doctorVisitRepository;
     private final DoctorVisitValidator doctorVisitValidator;
-    private final DoctorValidator doctorValidator;
     private final ImagesRepository imagesRepository;
     private final ValueRepository<GetDoctorVisitsFilter> filterRepository;
 
@@ -71,7 +67,6 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
                                  SettingsDataRepository settingsRepository,
                                  DoctorVisitDataRepository doctorVisitRepository,
                                  DoctorVisitValidator doctorVisitValidator,
-                                 DoctorValidator doctorValidator,
                                  ImagesDataRepository imagesRepository,
                                  DoctorVisitFilterDataRepository filterRepository) {
         this.childRepository = childRepository;
@@ -79,7 +74,6 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
         this.settingsRepository = settingsRepository;
         this.doctorVisitRepository = doctorVisitRepository;
         this.doctorVisitValidator = doctorVisitValidator;
-        this.doctorValidator = doctorValidator;
         this.imagesRepository = imagesRepository;
         this.filterRepository = filterRepository;
     }
@@ -98,19 +92,6 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
 
     public Observable<GetDoctorVisitsFilter> setSelectedFilterValueObservable(@NonNull GetDoctorVisitsFilter value) {
         return filterRepository.setSelectedValueObservable(value);
-    }
-
-    public Observable<List<Doctor>> getDoctors() {
-        return doctorVisitRepository.getDoctors();
-    }
-
-    public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {
-        return doctorValidator.validateObservable(doctor)
-                .flatMap(doctorVisitRepository::addDoctor);
-    }
-
-    public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
-        return doctorVisitRepository.deleteDoctor(doctor);
     }
 
     public Observable<DoctorVisit> getDefaultDoctorVisit() {
@@ -292,26 +273,5 @@ public class DoctorVisitInteractor implements MedicalDictionaryInteractor<Doctor
                                 .build())
                         .build())
                 .map(doctorVisitValidator::validate);
-    }
-
-    @Override
-    public Observable<Boolean> controlDoneButton(
-            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
-        return nameObservable
-                .map(TextViewAfterTextChangeEvent::editable)
-                .map(Editable::toString)
-                .map(String::trim)
-                .map(name -> !TextUtils.isEmpty(name))
-                .distinctUntilChanged();
-    }
-
-    public Observable<List<EventValidationResult>> controlFields(
-            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
-        return nameObservable
-                .map(TextViewAfterTextChangeEvent::editable)
-                .map(Editable::toString)
-                .map(String::trim)
-                .map(name -> Doctor.builder().name(name).build())
-                .map(doctorValidator::validate);
     }
 }

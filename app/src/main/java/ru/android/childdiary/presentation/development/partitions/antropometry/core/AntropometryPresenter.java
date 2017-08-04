@@ -39,7 +39,7 @@ public abstract class AntropometryPresenter<V extends AntropometryView> extends 
         if (e instanceof AntropometryValidationException) {
             List<AntropometryValidationResult> results = ((AntropometryValidationException) e).getValidationResults();
             if (results.isEmpty()) {
-                logger.error("antropometry validation results empty");
+                logger.error("validation results empty");
                 return;
             }
 

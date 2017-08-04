@@ -16,10 +16,12 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.calendar.CleanUpDbService;
+import ru.android.childdiary.data.repositories.dictionaries.core.CrudDbService;
+import ru.android.childdiary.data.repositories.dictionaries.doctors.DoctorDbService;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitRepository;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.CompleteDoctorVisitResponse;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
@@ -40,22 +42,25 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
     private final RxSharedPreferences preferences;
     private final DoctorVisitDbService doctorVisitDbService;
     private final CleanUpDbService cleanUpDbService;
+    private final CrudDbService<Doctor> doctorDbService;
 
     @Inject
     public DoctorVisitDataRepository(Context context,
                                      RxSharedPreferences preferences,
                                      DoctorVisitDbService doctorVisitDbService,
-                                     CleanUpDbService cleanUpDbService) {
+                                     CleanUpDbService cleanUpDbService,
+                                     DoctorDbService doctorDbService) {
         this.context = context;
         this.preferences = preferences;
         this.doctorVisitDbService = doctorVisitDbService;
         this.cleanUpDbService = cleanUpDbService;
+        this.doctorDbService = doctorDbService;
     }
 
     @Override
     public Observable<Doctor> getLastDoctor() {
         return Observable.combineLatest(
-                getDoctors()
+                doctorDbService.getAll()
                         .first(Collections.singletonList(Doctor.NULL))
                         .toObservable(),
                 preferences
@@ -93,21 +98,6 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
     public Doctor setLastDoctor(@Nullable Doctor doctor) {
         preferences.getLong(KEY_LAST_DOCTOR).set(doctor == null ? null : doctor.getId());
         return doctor;
-    }
-
-    @Override
-    public Observable<List<Doctor>> getDoctors() {
-        return doctorVisitDbService.getDoctors();
-    }
-
-    @Override
-    public Observable<Doctor> addDoctor(@NonNull Doctor doctor) {
-        return doctorVisitDbService.addDoctor(doctor);
-    }
-
-    @Override
-    public Observable<Doctor> deleteDoctor(@NonNull Doctor doctor) {
-        return doctorVisitDbService.deleteDoctor(doctor);
     }
 
     @Override

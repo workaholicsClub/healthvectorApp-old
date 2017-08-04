@@ -1,26 +1,21 @@
 package ru.android.childdiary.presentation.dictionaries.doctors;
 
-import android.support.annotation.NonNull;
-
 import com.arellomobile.mvp.InjectViewState;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import lombok.Getter;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.core.MedicalDictionaryInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryFieldType;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.DoctorInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.presentation.dictionaries.core.BaseAddPresenter;
 
 @InjectViewState
 public class DoctorAddPresenter extends BaseAddPresenter<Doctor, DoctorAddView> {
+    @Getter
     @Inject
-    DoctorVisitInteractor doctorVisitInteractor;
+    DoctorInteractor interactor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -28,20 +23,7 @@ public class DoctorAddPresenter extends BaseAddPresenter<Doctor, DoctorAddView> 
     }
 
     @Override
-    public void add(@NonNull Doctor item) {
-        unsubscribeOnDestroy(doctorVisitInteractor.addDoctor(item)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::itemAdded, this::onUnexpectedError));
-    }
-
-    @Override
-    protected Observable<List<Doctor>> getAllItemsLoader() {
-        return doctorVisitInteractor.getDoctors();
-    }
-
-    @Override
-    protected MedicalDictionaryInteractor<Doctor> getInteractor() {
-        return doctorVisitInteractor;
+    protected DictionaryFieldType getNameFieldType() {
+        return DictionaryFieldType.DOCTOR_NAME;
     }
 }

@@ -12,7 +12,7 @@ import com.tokenautocomplete.FilteredArrayAdapter;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 public class DoctorFilteredAdapter extends FilteredArrayAdapter<Doctor> {

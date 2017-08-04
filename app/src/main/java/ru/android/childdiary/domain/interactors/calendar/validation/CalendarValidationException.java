@@ -3,7 +3,7 @@ package ru.android.childdiary.domain.interactors.calendar.validation;
 import java.util.Collections;
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.core.validation.ValidationException;
+import ru.android.childdiary.domain.interactors.core.validation.core.ValidationException;
 
 public class CalendarValidationException extends ValidationException {
     private final List<CalendarValidationResult> results;

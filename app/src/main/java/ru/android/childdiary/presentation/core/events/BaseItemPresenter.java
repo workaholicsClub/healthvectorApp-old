@@ -13,20 +13,32 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
+import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidationException;
 import ru.android.childdiary.domain.interactors.core.validation.EventValidationResult;
-import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.DoctorInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasureInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.MedicineInteractor;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.exercises.ExerciseInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
 import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.Doctor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Serializable> extends BasePresenter<V> {
     @Inject
+    protected DoctorInteractor doctorInteractor;
+
+    @Inject
     protected DoctorVisitInteractor doctorVisitInteractor;
+
+    @Inject
+    protected MedicineInteractor medicineInteractor;
+
+    @Inject
+    protected MedicineMeasureInteractor medicineMeasureInteractor;
 
     @Inject
     protected MedicineTakingInteractor medicineTakingInteractor;
@@ -55,7 +67,7 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
         if (doctor == null || doctor.getId() == null) {
             return;
         }
-        unsubscribeOnDestroy(doctorVisitInteractor.getDoctors()
+        unsubscribeOnDestroy(doctorInteractor.getAll()
                 .first(Collections.emptyList())
                 .map(doctors -> findDoctor(doctor, doctors))
                 .subscribeOn(Schedulers.io())
@@ -75,7 +87,7 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
         if (medicine == null || medicine.getId() == null) {
             return;
         }
-        unsubscribeOnDestroy(medicineTakingInteractor.getMedicines()
+        unsubscribeOnDestroy(medicineInteractor.getAll()
                 .first(Collections.emptyList())
                 .map(medicines -> findMedicine(medicine, medicines))
                 .subscribeOn(Schedulers.io())
@@ -92,7 +104,7 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
     }
 
     public void requestMedicineMeasureValueDialog() {
-        unsubscribeOnDestroy(medicineTakingInteractor.getMedicineMeasureList()
+        unsubscribeOnDestroy(medicineMeasureInteractor.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showMedicineMeasureValueDialog, this::onUnexpectedError));
@@ -110,7 +122,7 @@ public abstract class BaseItemPresenter<V extends BaseItemView<T>, T extends Ser
         if (e instanceof EventValidationException) {
             List<EventValidationResult> results = ((EventValidationException) e).getValidationResults();
             if (results.isEmpty()) {
-                logger.error("medical validation results empty");
+                logger.error("validation results empty");
                 return;
             }
 

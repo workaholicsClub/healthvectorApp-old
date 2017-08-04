@@ -110,8 +110,8 @@
     <!-- %s - например, "За 4 д. 2 ч. 1 мин." -->
     <string name="notify_time_text">За %s</string>
     <string name="no_value">Нет</string>
-    <string name="food_measure_dialog_title">Введите единицу измерения</string>
-    <string name="food_dialog_title">Введите название прикорма</string>
+    <string name="enter_measure_name">Введите единицу измерения</string>
+    <string name="enter_food_name">Введите название прикорма</string>
     <!-- %s - параметр "Имя ребенка", например, "Егор спит" -->
     <string name="child_sleep">%s спит</string>
     <string name="sleep_timer">Таймер сна</string>

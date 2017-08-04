@@ -15,11 +15,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
-import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
-import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
+import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
+import ru.android.childdiary.domain.interactors.dictionaries.doctors.DoctorInteractor;
 import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
+import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitEventsRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.DeleteDoctorVisitRequest;
 import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsRequest;
@@ -35,6 +36,9 @@ import ru.android.childdiary.utils.ObjectUtils;
 public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisitsView> {
     @Inject
     ChildInteractor childInteractor;
+
+    @Inject
+    DoctorInteractor doctorInteractor;
 
     @Inject
     DoctorVisitInteractor doctorVisitInteractor;
@@ -99,7 +103,7 @@ public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisits
     protected void showFilterDialog() {
         unsubscribeOnDestroy(
                 Observable.combineLatest(
-                        doctorVisitInteractor.getDoctors()
+                        doctorInteractor.getAll()
                                 .first(Collections.emptyList())
                                 .toObservable(),
                         doctorVisitInteractor.getSelectedFilterValueOnce(),

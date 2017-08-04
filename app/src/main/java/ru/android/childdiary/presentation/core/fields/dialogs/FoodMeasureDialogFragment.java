@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
 
 public class FoodMeasureDialogFragment extends AddValueDialogFragment<FoodMeasureDialogArguments> {
     @Nullable
@@ -18,7 +18,7 @@ public class FoodMeasureDialogFragment extends AddValueDialogFragment<FoodMeasur
 
     @Override
     protected String getTitle() {
-        return getString(R.string.food_measure_dialog_title);
+        return getString(R.string.enter_measure_name);
     }
 
     @Override

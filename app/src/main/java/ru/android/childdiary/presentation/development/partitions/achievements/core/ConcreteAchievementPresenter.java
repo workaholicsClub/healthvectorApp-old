@@ -13,22 +13,24 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.achievement.AchievementInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.GetAchievementsRequest;
+import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievementInteractor;
 import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidationException;
 import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidationResult;
+import ru.android.childdiary.domain.interactors.dictionaries.achievements.AchievementInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class ConcreteAchievementPresenter<V extends ConcreteAchievementView> extends BasePresenter<V> {
     @Inject
     protected AchievementInteractor achievementInteractor;
 
+    @Inject
+    protected ConcreteAchievementInteractor concreteAchievementInteractor;
+
     protected Child child;
 
     public void init(@NonNull Child child) {
         this.child = child;
-        unsubscribeOnDestroy(achievementInteractor.getAchievements(GetAchievementsRequest.builder()
-                .build())
+        unsubscribeOnDestroy(achievementInteractor.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showAchievements, this::onUnexpectedError));
@@ -36,7 +38,7 @@ public abstract class ConcreteAchievementPresenter<V extends ConcreteAchievement
 
     public Disposable listenForFieldsUpdate(
             @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
-        return achievementInteractor.controlFieldsConcreteAchievement(
+        return concreteAchievementInteractor.controlFields(
                 nameObservable)
                 .subscribe(this::handleValidationResult, this::onUnexpectedError);
     }
@@ -46,7 +48,7 @@ public abstract class ConcreteAchievementPresenter<V extends ConcreteAchievement
         if (e instanceof AchievementValidationException) {
             List<AchievementValidationResult> results = ((AchievementValidationException) e).getValidationResults();
             if (results.isEmpty()) {
-                logger.error("concrete achievement validation results empty");
+                logger.error("validation results empty");
                 return;
             }
 

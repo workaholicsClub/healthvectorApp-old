@@ -12,8 +12,8 @@ import ru.android.childdiary.domain.interactors.core.data.ContentObject;
 import ru.android.childdiary.domain.interactors.core.data.RepeatParametersContainer;
 import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.Medicine;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
+import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value

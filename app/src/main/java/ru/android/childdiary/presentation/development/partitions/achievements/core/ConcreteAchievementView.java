@@ -8,7 +8,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.Achievement;
+import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.presentation.core.BaseView;
 
 public interface ConcreteAchievementView extends BaseView {

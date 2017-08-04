@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.dictionaries.food.Food;
+import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
 
 public class FoodDialogFragment extends AddValueDialogFragment<FoodDialogArguments> {
     @Nullable
@@ -18,7 +18,7 @@ public class FoodDialogFragment extends AddValueDialogFragment<FoodDialogArgumen
 
     @Override
     protected String getTitle() {
-        return getString(R.string.food_dialog_title);
+        return getString(R.string.enter_food_name);
     }
 
     @Override
