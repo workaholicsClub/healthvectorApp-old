@@ -1,13 +1,11 @@
 package ru.android.childdiary.domain.cloud;
 
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.data.cloud.BackupService;
 import ru.android.childdiary.data.cloud.RestoreService;
@@ -30,30 +28,6 @@ public class CloudInteractor {
         this.settingsRepository = settingsRepository;
         this.backupService = backupService;
         this.restoreService = restoreService;
-    }
-
-    public Observable<String> getAccountName() {
-        return settingsRepository.getAccountName();
-    }
-
-    public void setAccountName(@Nullable String accountName) {
-        settingsRepository.setAccountName(accountName);
-    }
-
-    public Observable<String> getAccountNameOnce() {
-        return settingsRepository.getAccountNameOnce();
-    }
-
-    public void removeAccount() {
-        settingsRepository.removeAccount();
-    }
-
-    public Observable<Boolean> getIsCloudShownOnce() {
-        return settingsRepository.getIsCloudShownOnce();
-    }
-
-    public void setIsCloudShown(boolean value) {
-        settingsRepository.setIsCloudShown(value);
     }
 
     public Single<Boolean> checkIsBackupAvailable() {

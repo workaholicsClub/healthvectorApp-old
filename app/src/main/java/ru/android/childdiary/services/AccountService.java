@@ -18,15 +18,13 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.cloud.CloudInteractor;
+import ru.android.childdiary.domain.interactors.core.settings.SettingsInteractor;
 
 public class AccountService extends Service {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     @Inject
-    CloudInteractor cloudInteractor;
-
-    private AccountManager accountManager;
+    SettingsInteractor settingsInteractor;
 
     private final OnAccountsUpdateListener accountsUpdateListener = new OnAccountsUpdateListener() {
         @Override
@@ -35,11 +33,11 @@ public class AccountService extends Service {
             logger.debug("onAccountsUpdated: " + Arrays.toString(accounts));
 
             if (accounts == null) {
-                cloudInteractor.removeAccount();
+                settingsInteractor.removeAccount();
                 return;
             }
 
-            String accountName = cloudInteractor.getAccountNameOnce().blockingFirst();
+            String accountName = settingsInteractor.getAccountNameOnce().blockingFirst();
 
             if (TextUtils.isEmpty(accountName)) {
                 return;
@@ -55,10 +53,12 @@ public class AccountService extends Service {
             }
 
             if (!accountExists) {
-                cloudInteractor.removeAccount();
+                settingsInteractor.removeAccount();
             }
         }
     };
+
+    private AccountManager accountManager;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

@@ -15,13 +15,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
 import ru.android.childdiary.domain.interactors.core.InitializationInteractor;
+import ru.android.childdiary.domain.interactors.core.settings.SettingsInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState
@@ -35,7 +34,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     InitializationInteractor initializationInteractor;
 
     @Inject
-    CloudInteractor cloudInteractor;
+    SettingsInteractor settingsInteractor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -53,12 +52,15 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     initializationInteractor.startUpdateDataService(),
                     childInteractor.getActiveChildOnce()
                             .doOnNext(child -> logger.debug("active child: " + child)),
-                    cloudInteractor.getAccountNameOnce()
+                    settingsInteractor.getAccountNameOnce()
                             .doOnNext(accountName -> logger.debug("account name: " + accountName)),
-                    cloudInteractor.getIsCloudShownOnce()
+                    settingsInteractor.getIsCloudShownOnce()
                             .doOnNext(isCloudShown -> logger.debug("is cloud shown: " + isCloudShown)),
-                    (zero, isUpdateServiceStarted, child, accountName, isCloudShown) -> Parameters.builder()
+                    settingsInteractor.getIsAppIntroShownOnce()
+                            .doOnNext(isAppIntroShown -> logger.debug("is app intro shown: " + isAppIntroShown)),
+                    (zero, isUpdateServiceStarted, child, accountName, isCloudShown, isAppIntroShown) -> Parameters.builder()
                             .sex(child.getSex())
+                            .showAppIntro(isAppIntroShown)
                             .showCloud(TextUtils.isEmpty(accountName) && !isCloudShown)
                             .build())
                     .subscribeOn(Schedulers.io())
@@ -74,8 +76,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void onFinished(@NonNull Parameters parameters) {
-        if (parameters.isShowCloud() || BuildConfig.SHOW_CLOUD_ON_EACH_START) {
-            cloudInteractor.setIsCloudShown(true);
+        if (parameters.isShowAppIntro()) {
+            // TODO: called on ui thread
+            settingsInteractor.setIsAppIntroShown(true);
+            getViewState().navigateToAppIntro(parameters.getSex());
+        } else if (parameters.isShowCloud()) {
+            // TODO: called on ui thread
+            settingsInteractor.setIsCloudShown(true);
             getViewState().navigateToCloud(parameters.getSex());
         } else {
             getViewState().navigateToMain(parameters.getSex());
@@ -87,6 +94,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private static class Parameters {
         @Nullable
         Sex sex;
+        boolean showAppIntro;
         boolean showCloud;
     }
 }

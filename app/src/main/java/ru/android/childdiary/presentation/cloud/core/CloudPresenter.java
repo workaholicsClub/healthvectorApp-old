@@ -12,14 +12,18 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.availability.NetworkAvailability;
-import ru.android.childdiary.data.availability.exceptions.NetworkUnavailableException;
 import ru.android.childdiary.data.availability.PlayServicesAvailability;
+import ru.android.childdiary.data.availability.exceptions.NetworkUnavailableException;
 import ru.android.childdiary.data.cloud.exceptions.BackupUnavailableException;
-import ru.android.childdiary.domain.cloud.exceptions.AccountNameNotSpecifiedException;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
+import ru.android.childdiary.domain.cloud.exceptions.AccountNameNotSpecifiedException;
+import ru.android.childdiary.domain.interactors.core.settings.SettingsInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<T> {
+    @Inject
+    protected SettingsInteractor settingsInteractor;
+
     @Inject
     protected CloudInteractor cloudInteractor;
 
@@ -76,7 +80,7 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
 
     public void permissionGranted() {
         unsubscribeOnDestroy(
-                cloudInteractor.getAccountNameOnce()
+                settingsInteractor.getAccountNameOnce()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -89,7 +93,8 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
     }
 
     public void accountChosen(@Nullable String accountName) {
-        cloudInteractor.setAccountName(accountName);
+        // TODO: called on ui thread
+        settingsInteractor.setAccountName(accountName);
         checkIsBackupAvailable();
     }
 

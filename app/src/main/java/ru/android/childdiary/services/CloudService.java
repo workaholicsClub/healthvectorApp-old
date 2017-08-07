@@ -31,8 +31,9 @@ import ru.android.childdiary.data.availability.NetworkAvailability;
 import ru.android.childdiary.data.availability.exceptions.NetworkUnavailableException;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
-import ru.android.childdiary.utils.strings.DateUtils;
+import ru.android.childdiary.domain.interactors.core.settings.SettingsInteractor;
 import ru.android.childdiary.utils.log.LogSystem;
+import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.NotificationHelper;
 
 public class CloudService extends Service {
@@ -45,6 +46,9 @@ public class CloudService extends Service {
 
     @Inject
     NetworkAvailability networkAvailability;
+
+    @Inject
+    SettingsInteractor settingsInteractor;
 
     @Inject
     CloudInteractor cloudInteractor;
@@ -102,7 +106,7 @@ public class CloudService extends Service {
 
     private void handleIntent(@Nullable Intent intent) {
         unsubscribeOnDestroy(
-                cloudInteractor.getAccountNameOnce()
+                settingsInteractor.getAccountNameOnce()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(accountName -> {

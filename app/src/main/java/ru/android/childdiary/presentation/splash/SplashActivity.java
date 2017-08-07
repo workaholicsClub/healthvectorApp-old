@@ -13,6 +13,7 @@ import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
+import ru.android.childdiary.presentation.onboarding.AppIntroActivity;
 
 public class SplashActivity extends BaseMvpActivity implements SplashView {
     @InjectPresenter
@@ -32,6 +33,13 @@ public class SplashActivity extends BaseMvpActivity implements SplashView {
     @Override
     public void navigateToMain(@Nullable Sex sex) {
         Intent intent = MainActivity.getIntent(this, AppPartition.CALENDAR, sex);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void navigateToAppIntro(@Nullable Sex sex) {
+        Intent intent = AppIntroActivity.getIntent(this);
         startActivity(intent);
         finish();
     }

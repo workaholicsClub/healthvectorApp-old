@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
 
 @Singleton
@@ -26,6 +27,7 @@ public class SettingsDataRepository implements SettingsRepository {
     private static final String KEY_FINISH_TIME = "finish_time";
     private static final String KEY_ACCOUNT_NAME = "account_name";
     private static final String KEY_IS_CLOUD_SHOWN = "is_cloud_shown";
+    private static final String KEY_IS_APP_INTRO_SHOWN = "is_app_intro_shown";
 
     private static final LocalTime DEFAULT_START_TIME = new LocalTime(8, 0);
     private static final LocalTime DEFAULT_FINISH_TIME = new LocalTime(22, 0);
@@ -95,8 +97,25 @@ public class SettingsDataRepository implements SettingsRepository {
     }
 
     @Override
+    public Observable<Boolean> getIsAppIntroShown() {
+        return preferences.getBoolean(KEY_IS_APP_INTRO_SHOWN).asObservable()
+                .map(value -> value || BuildConfig.SHOW_APP_INTRO_ON_EACH_START);
+    }
+
+    @Override
+    public void setIsAppIntroShown(boolean value) {
+        preferences.getBoolean(KEY_IS_APP_INTRO_SHOWN).set(value);
+    }
+
+    @Override
+    public Observable<Boolean> getIsAppIntroShownOnce() {
+        return getIsAppIntroShown().first(false).toObservable();
+    }
+
+    @Override
     public Observable<Boolean> getIsCloudShown() {
-        return preferences.getBoolean(KEY_IS_CLOUD_SHOWN).asObservable();
+        return preferences.getBoolean(KEY_IS_CLOUD_SHOWN).asObservable()
+                .map(value -> value || BuildConfig.SHOW_CLOUD_ON_EACH_START);
     }
 
     @Override

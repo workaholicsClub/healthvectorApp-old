@@ -31,6 +31,13 @@ public interface SettingsRepository {
 
     void removeAccount();
 
+    // is app intro shown
+    Observable<Boolean> getIsAppIntroShown();
+
+    void setIsAppIntroShown(boolean value);
+
+    Observable<Boolean> getIsAppIntroShownOnce();
+
     // is cloud shown
     Observable<Boolean> getIsCloudShown();
 

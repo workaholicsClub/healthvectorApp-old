@@ -20,7 +20,7 @@ public class CloudOperationPresenter extends CloudPresenter<CloudOperationView> 
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(cloudInteractor.getAccountName()
+        unsubscribeOnDestroy(settingsInteractor.getAccountName()
                 .map(accountName -> !TextUtils.isEmpty(accountName))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

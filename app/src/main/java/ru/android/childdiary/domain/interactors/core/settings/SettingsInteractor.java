@@ -1,6 +1,7 @@
 package ru.android.childdiary.domain.interactors.core.settings;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.LocalTime;
 
@@ -40,5 +41,37 @@ public class SettingsInteractor {
             settingsRepository.setFinishTime(finishTime);
             return true;
         });
+    }
+
+    public Observable<String> getAccountName() {
+        return settingsRepository.getAccountName();
+    }
+
+    public void setAccountName(@Nullable String accountName) {
+        settingsRepository.setAccountName(accountName);
+    }
+
+    public Observable<String> getAccountNameOnce() {
+        return settingsRepository.getAccountNameOnce();
+    }
+
+    public void removeAccount() {
+        settingsRepository.removeAccount();
+    }
+
+    public Observable<Boolean> getIsCloudShownOnce() {
+        return settingsRepository.getIsCloudShownOnce();
+    }
+
+    public void setIsCloudShown(boolean value) {
+        settingsRepository.setIsCloudShown(value);
+    }
+
+    public Observable<Boolean> getIsAppIntroShownOnce() {
+        return settingsRepository.getIsAppIntroShownOnce();
+    }
+
+    public void setIsAppIntroShown(boolean value) {
+        settingsRepository.setIsAppIntroShown(value);
     }
 }

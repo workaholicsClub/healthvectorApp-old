@@ -124,7 +124,7 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
 
     @Override
     public void noChildSpecified() {
-        showToast(getString(R.string.no_child_specified));
+        showToast(getString(R.string.intention_add_child_profile));
     }
 
     @Override

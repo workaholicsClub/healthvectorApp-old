@@ -13,5 +13,8 @@ public interface SplashView extends BaseView {
     void navigateToMain(@Nullable Sex sex);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToAppIntro(@Nullable Sex sex);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToCloud(@Nullable Sex sex);
 }

@@ -34,6 +34,9 @@
     <string name="cancel">Отмена</string>
     <string name="delete">Удалить</string>
     <string name="save">Сохранить</string>
+    <string name="skip">Пропустить</string>
+    <string name="done">Готово</string>
+    <string name="next">Далее</string>
     <string name="request_read_external_storage_permission_title">Запрос на чтение SD-карты</string>
     <string name="request_read_external_storage_permission_text">Необходимо для чтения файлов с SD-карты.</string>
     <string name="request_get_accounts_permission_title">Запрос на получение аккаунта</string>
@@ -282,7 +285,6 @@
     <string name="deletion_restricted_doctor">Данная специализация привязана к событиям или визитам</string>
     <string name="start_testing">Начать тестирование</string>
     <string name="stop_testing_confirm_dialog_title">Прервать тестирование?</string>
-    <string name="no_child_specified">Добавьте профиль ребенка</string>
     <string name="parameter">Параметр</string>
     <string name="age">Возраст</string>
     <string name="validation_no_age">Введите возраст</string>
@@ -335,4 +337,9 @@
     <string name="day_start">Начало дня</string>
     <string name="day_finish">Конец дня</string>
     <string name="restrict_delete_achievement_message">Невозможно удалить обязательные достижения</string>
+    <string name="intention_add_child_profile">Добавьте профиль ребенка</string>
+    <string name="app_intro_calendar">Планируйте время и следите за равитием ребенка</string>
+    <string name="app_intro_achievements">Сохраняйте важные события развития ребенка</string>
+    <string name="app_intro_doctor_visits">Используйте оповещения и помните о визитах к врачу</string>
+    <string name="app_intro_charts">Смотрите графики-отчеты о развитии ребенка</string>
 </resources>
