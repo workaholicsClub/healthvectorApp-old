@@ -17,4 +17,7 @@ public interface EditConcreteAchievementView extends ConcreteAchievementView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void confirmDelete(@NonNull ConcreteAchievement concreteAchievement);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void deletionRestrictedAchievement();
 }

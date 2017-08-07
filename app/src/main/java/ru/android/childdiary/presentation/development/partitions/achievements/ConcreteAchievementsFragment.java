@@ -98,6 +98,14 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     }
 
     @Override
+    public void deletionRestrictedAchievement() {
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.restrict_delete_achievement_message)
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
+    @Override
     public void delete(ConcreteAchievement item) {
         presenter.delete(item);
     }

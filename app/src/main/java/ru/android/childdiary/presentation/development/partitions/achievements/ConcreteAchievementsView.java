@@ -22,4 +22,7 @@ public interface ConcreteAchievementsView extends BaseDevelopmentDiaryView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void confirmDelete(@NonNull ConcreteAchievement concreteAchievement);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void deletionRestrictedAchievement();
 }

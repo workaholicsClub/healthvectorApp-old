@@ -13,6 +13,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import ru.android.childdiary.data.repositories.core.exceptions.RestrictDeleteException;
 import ru.android.childdiary.domain.interactors.dictionaries.core.DictionaryInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.core.bindings.SearchViewQueryTextChangeEventsObservable;
@@ -68,7 +69,13 @@ public abstract class BasePickerPresenter<T, V extends BasePickerView<T>> extend
                 .doOnError(throwable -> logger.error("failed to delete", throwable))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::itemDeleted, throwable -> getViewState().deletionRestricted()));
+                .subscribe(getViewState()::itemDeleted, throwable -> {
+                    if (throwable instanceof RestrictDeleteException) {
+                        onUnexpectedError(throwable);
+                    } else {
+                        getViewState().deletionRestricted();
+                    }
+                }));
     }
 
     protected abstract DictionaryInteractor<T> getInteractor();

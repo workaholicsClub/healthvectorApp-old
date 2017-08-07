@@ -17,7 +17,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -64,7 +63,6 @@ public class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchie
         //noinspection deprecation
         imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
 
-        swipeLayout.setRightSwipeEnabled(ObjectUtils.isFalse(item.getIsPredefined()));
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
     }

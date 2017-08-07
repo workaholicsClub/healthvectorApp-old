@@ -16,6 +16,7 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.development.ConcreteAchievementEntity;
+import ru.android.childdiary.data.repositories.core.exceptions.RestrictDeleteException;
 import ru.android.childdiary.data.repositories.development.achievement.mappers.ConcreteAchievementMapper;
 import ru.android.childdiary.data.repositories.dictionaries.achievements.mappers.AchievementMapper;
 import ru.android.childdiary.domain.interactors.child.data.Child;
@@ -24,6 +25,7 @@ import ru.android.childdiary.domain.interactors.development.achievement.requests
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementResponse;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.UpsertConcreteAchievementResponse;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class ConcreteAchievementDbService {
@@ -96,6 +98,9 @@ public class ConcreteAchievementDbService {
     }
 
     public Observable<DeleteConcreteAchievementResponse> delete(@NonNull DeleteConcreteAchievementRequest request) {
+        if (ObjectUtils.isTrue(request.getConcreteAchievement().getIsPredefined())) {
+            return Observable.error(new RestrictDeleteException("Can't remove predefined concrete achievement"));
+        }
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             ConcreteAchievement concreteAchievement = request.getConcreteAchievement();
             ConcreteAchievementEntity concreteAchievementEntity = blockingEntityStore.findByKey(ConcreteAchievementEntity.class, concreteAchievement.getId());

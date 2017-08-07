@@ -21,6 +21,12 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 public class CustomTimePickerDialog extends TimePickerDialog {
     public static TimePickerDialog create(Context context, OnTimeSetListener callback,
                                           @Nullable LocalTime time, @Nullable Sex sex) {
+        return create(context, callback, time, sex, null, null);
+    }
+
+    public static TimePickerDialog create(Context context, OnTimeSetListener callback,
+                                          @Nullable LocalTime time, @Nullable Sex sex,
+                                          @Nullable LocalTime minTime, @Nullable LocalTime maxTime) {
         if (time == null) {
             time = LocalTime.now();
         }
@@ -32,6 +38,14 @@ public class CustomTimePickerDialog extends TimePickerDialog {
         dialog.setAccentColor(ThemeUtils.getColorPrimary(context, sex));
         dialog.setOkText(R.string.ok);
         dialog.setCancelText(R.string.cancel);
+
+        if (minTime != null) {
+            dialog.setMinTime(minTime.getHourOfDay(), minTime.getMinuteOfHour(), 0);
+        }
+        if (maxTime != null) {
+            dialog.setMaxTime(maxTime.getHourOfDay(), maxTime.getMinuteOfHour(), 0);
+        }
+
         return dialog;
     }
 

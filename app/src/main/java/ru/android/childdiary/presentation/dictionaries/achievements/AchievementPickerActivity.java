@@ -65,6 +65,14 @@ public class AchievementPickerActivity extends BasePickerActivity<Achievement, A
     }
 
     @Override
+    public void deletionRestrictedAchievement() {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.restrict_delete_achievement_message)
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
+    @Override
     protected Class<? extends BaseAddActivity<Achievement, ? extends BaseAddView<Achievement>>> getAddActivityClass() {
         return AchievementAddActivity.class;
     }

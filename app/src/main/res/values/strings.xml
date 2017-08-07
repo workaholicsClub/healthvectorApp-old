@@ -334,4 +334,5 @@
     <string name="onboarding">Демо-экраны</string>
     <string name="day_start">Начало дня</string>
     <string name="day_finish">Конец дня</string>
+    <string name="restrict_delete_achievement_message">Невозможно удалить обязательные достижения</string>
 </resources>

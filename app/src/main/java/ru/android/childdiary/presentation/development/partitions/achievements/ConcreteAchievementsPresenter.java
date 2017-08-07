@@ -9,9 +9,10 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.repositories.core.exceptions.RestrictDeleteException;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievementInteractor;
 import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.interactors.development.achievement.requests.DeleteConcreteAchievementRequest;
@@ -80,5 +81,14 @@ public class ConcreteAchievementsPresenter extends BaseDevelopmentDiaryPresenter
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(getViewState()::deleted, this::onUnexpectedError));
+    }
+
+    @Override
+    public void onUnexpectedError(Throwable e) {
+        if (e instanceof RestrictDeleteException) {
+            getViewState().deletionRestrictedAchievement();
+        } else {
+            super.onUnexpectedError(e);
+        }
     }
 }

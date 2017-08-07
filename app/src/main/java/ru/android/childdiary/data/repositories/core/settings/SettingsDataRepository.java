@@ -32,6 +32,8 @@ public class SettingsDataRepository implements SettingsRepository {
     private static final String DEFAULT_ACCOUNT_NAME = "";
 
     private final RxSharedPreferences preferences;
+    private final LocalTimeAdapter startTimeAdapter = new LocalTimeAdapter(DEFAULT_START_TIME);
+    private final LocalTimeAdapter finishTimeAdapter = new LocalTimeAdapter(DEFAULT_FINISH_TIME);
 
     @Inject
     public SettingsDataRepository(RxSharedPreferences preferences) {
@@ -41,12 +43,13 @@ public class SettingsDataRepository implements SettingsRepository {
     @Override
     public Observable<LocalTime> getStartTime() {
         return preferences.getObject(KEY_START_TIME, DEFAULT_START_TIME,
-                new LocalTimeAdapter(DEFAULT_START_TIME))
+                startTimeAdapter)
                 .asObservable();
     }
 
     @Override
     public void setStartTime(@NonNull LocalTime startTime) {
+        preferences.getObject(KEY_START_TIME, startTimeAdapter).set(startTime);
     }
 
     @Override
@@ -57,12 +60,13 @@ public class SettingsDataRepository implements SettingsRepository {
     @Override
     public Observable<LocalTime> getFinishTime() {
         return preferences.getObject(KEY_FINISH_TIME, DEFAULT_FINISH_TIME,
-                new LocalTimeAdapter(DEFAULT_FINISH_TIME))
+                finishTimeAdapter)
                 .asObservable();
     }
 
     @Override
     public void setFinishTime(@NonNull LocalTime finishTime) {
+        preferences.getObject(KEY_FINISH_TIME, finishTimeAdapter).set(finishTime);
     }
 
     @Override
