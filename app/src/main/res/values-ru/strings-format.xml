@@ -4,14 +4,14 @@
     <string name="duration_format">00:00:00</string>
     <string name="percent_double_format">%.0f%%</string>
     <string name="percent_string_format">%s%%</string>
-    <string name="date_format">MMM d, yyyy</string>
+    <string name="date_format">d MMM yyyy</string>
     <string name="time_format">HH:mm</string>
     <!-- %s - параметр, число -->
-    <string name="height_review">%s cm</string>
+    <string name="height_review">%s см</string>
     <!-- %s - параметр, число -->
-    <string name="weight_review">%s kg</string>
+    <string name="weight_review">%s кг</string>
     <!-- %s - параметр, число -->
-    <string name="amount_review">%s ml</string>
+    <string name="amount_review">%s мл</string>
     <!-- %1$s - параметр "Количество лет", %2$s - параметр "Количество месяцев", например, "2 года 10 месяцев" или "2 года 10 мес." -->
     <string name="years_and_months">%1$s %2$s</string>
     <!-- %1$s - параметр "Месяц", %2$d - параметр "Год" -->
