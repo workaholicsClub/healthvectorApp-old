@@ -2,45 +2,33 @@ package ru.android.childdiary.presentation.onboarding;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Arrays;
+import java.util.List;
 
-import ru.android.childdiary.presentation.onboarding.core.AppIntroBase;
+import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.presentation.onboarding.core.BaseAppIntroActivity;
 import ru.android.childdiary.presentation.onboarding.slides.AchievementsSlideFragment;
 import ru.android.childdiary.presentation.onboarding.slides.CalendarSlideFragment;
 import ru.android.childdiary.presentation.onboarding.slides.ChartsSlideFragment;
 import ru.android.childdiary.presentation.onboarding.slides.DoctorVisitsSlideFragment;
 import ru.android.childdiary.presentation.onboarding.slides.ProfileSlideFragment;
-import ru.android.childdiary.utils.ui.ConfigUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class AppIntroActivity extends AppIntroBase {
-    private final Logger logger = LoggerFactory.getLogger(toString());
-
+public class AppIntroActivity extends BaseAppIntroActivity {
     public static Intent getIntent(Context context) {
         return new Intent(context, AppIntroActivity.class);
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    protected void injectActivity(ApplicationComponent applicationComponent) {
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        logger.debug("onCreate");
-        ConfigUtils.setupOrientation(this);
-        super.onCreate(savedInstanceState);
-
-        addSlide(new ProfileSlideFragment());
-        addSlide(new CalendarSlideFragment());
-        addSlide(new AchievementsSlideFragment());
-        addSlide(new DoctorVisitsSlideFragment());
-        addSlide(new ChartsSlideFragment());
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -62,20 +50,13 @@ public class AppIntroActivity extends AppIntroBase {
     }
 
     @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(0, 0);
-    }
-
-    @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-        overridePendingTransition(0, 0);
-    }
-
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
-        overridePendingTransition(0, 0);
+    protected List<Fragment> getSlides() {
+        return Arrays.asList(
+                new ProfileSlideFragment(),
+                new CalendarSlideFragment(),
+                new AchievementsSlideFragment(),
+                new DoctorVisitsSlideFragment(),
+                new ChartsSlideFragment()
+        );
     }
 }

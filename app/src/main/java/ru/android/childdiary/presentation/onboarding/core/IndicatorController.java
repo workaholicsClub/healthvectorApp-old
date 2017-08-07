@@ -1,41 +1,49 @@
 package ru.android.childdiary.presentation.onboarding.core;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.view.View;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-public interface IndicatorController {
-    /**
-     * Create a new instance of the view to be inserted in the AppIntro layout.
-     * This method is only called once for each creation of the activity.
-     * <p/>
-     * {@link IndicatorController#initialize(int)} is called after this.
-     *
-     * @param context A context to be used for the view instantiation
-     * @return An instance of the indicator view
-     */
-    View newInstance(@NonNull Context context);
+import java.util.ArrayList;
+import java.util.List;
 
-    /**
-     * Initialize the indicator view with the requested amount of elements.
-     * As with {@link IndicatorController#newInstance(Context)}, this method is only called once for each creation of
-     * the activity as well.
-     * <p/>
-     * {@link IndicatorController#newInstance(Context)} is called before this.
-     *
-     * @param slideCount The amount of slides present in the AppIntro
-     */
-    void initialize(int slideCount);
+import ru.android.childdiary.R;
 
-    /**
-     * Select the position for the new page that became selected.
-     * This method is called every time the selected page changed.
-     *
-     * @param index The index of the page that became selected
-     */
-    void selectPosition(int index);
+class IndicatorController {
+    int mCurrentPosition;
+    private Context mContext;
+    private LinearLayout mDotLayout;
+    private List<ImageView> mDots;
+    private int mSlideCount;
 
-    void setSelectedIndicatorColor(int color);
+    public void initialize(LinearLayout view, int slideCount) {
+        mDotLayout = view;
+        mContext = view.getContext();
+        mDots = new ArrayList<>();
+        mSlideCount = slideCount;
+        for (int i = 0; i < slideCount; i++) {
+            ImageView dot = new ImageView(mContext);
+            dot.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.indicator_dot_grey));
 
-    void setUnselectedIndicatorColor(int color);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            mDotLayout.addView(dot, params);
+            mDots.add(dot);
+        }
+        selectPosition(0);
+    }
+
+    public void selectPosition(int index) {
+        mCurrentPosition = index;
+        for (int i = 0; i < mSlideCount; i++) {
+            int drawableId = (i == index) ?
+                    (R.drawable.indicator_dot_white) : (R.drawable.indicator_dot_grey);
+            Drawable drawable = ContextCompat.getDrawable(mContext, drawableId);
+            mDots.get(i).setImageDrawable(drawable);
+        }
+    }
 }

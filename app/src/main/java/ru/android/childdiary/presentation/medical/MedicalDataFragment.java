@@ -27,7 +27,7 @@ import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
-import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
+import ru.android.childdiary.presentation.core.adapters.PagesAdapter;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.medical.add.medicines.AddDoctorVisitActivity;
@@ -57,7 +57,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
-    private ViewPagerAdapter viewPagerAdapter;
+    private PagesAdapter pagesAdapter;
 
     @Override
     protected void injectFragment(ApplicationComponent component) {
@@ -79,10 +79,10 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     private void setupViewPager() {
         Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 0).get();
         selectedPage = selectedPage == null ? 0 : selectedPage;
-        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(putArguments(new DoctorVisitsFragment()), getString(R.string.doctor_visits));
-        viewPagerAdapter.addFragment(putArguments(new MedicineTakingListFragment()), getString(R.string.medicines));
-        viewPager.setAdapter(viewPagerAdapter);
+        pagesAdapter = new PagesAdapter(getChildFragmentManager());
+        pagesAdapter.addFragment(putArguments(new DoctorVisitsFragment()), getString(R.string.doctor_visits));
+        pagesAdapter.addFragment(putArguments(new MedicineTakingListFragment()), getString(R.string.medicines));
+        viewPager.setAdapter(pagesAdapter);
         viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);

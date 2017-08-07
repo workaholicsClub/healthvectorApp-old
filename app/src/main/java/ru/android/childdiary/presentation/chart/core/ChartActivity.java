@@ -20,7 +20,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
+import ru.android.childdiary.presentation.core.adapters.PagesAdapter;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -34,7 +34,7 @@ public abstract class ChartActivity extends BaseMvpActivity implements ViewPager
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
-    private ViewPagerAdapter viewPagerAdapter;
+    private PagesAdapter pagesAdapter;
     @Getter(AccessLevel.PROTECTED)
     private Child child;
 
@@ -49,14 +49,14 @@ public abstract class ChartActivity extends BaseMvpActivity implements ViewPager
     private void setupViewPager() {
         Integer selectedPage = preferences.getInteger(getKeySelectedPage(), 0).get();
         selectedPage = selectedPage == null ? 0 : selectedPage;
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        pagesAdapter = new PagesAdapter(getSupportFragmentManager());
         List<ChartFragment> chartFragments = getChartFragments();
         List<String> titles = getTitles();
         for (int i = 0; i < chartFragments.size(); ++i) {
             String title = i < titles.size() ? titles.get(i) : null;
-            viewPagerAdapter.addFragment(putArguments(chartFragments.get(i)), title);
+            pagesAdapter.addFragment(putArguments(chartFragments.get(i)), title);
         }
-        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setAdapter(pagesAdapter);
         viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);

@@ -25,7 +25,7 @@ import ru.android.childdiary.domain.interactors.child.data.Child;
 import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
-import ru.android.childdiary.presentation.core.adapters.ViewPagerAdapter;
+import ru.android.childdiary.presentation.core.adapters.PagesAdapter;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.development.partitions.achievements.ConcreteAchievementsFragment;
@@ -56,7 +56,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
-    private ViewPagerAdapter viewPagerAdapter;
+    private PagesAdapter pagesAdapter;
 
     @Override
     protected void injectFragment(ApplicationComponent component) {
@@ -78,11 +78,11 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     private void setupViewPager() {
         Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 0).get();
         selectedPage = selectedPage == null ? 0 : selectedPage;
-        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(putArguments(new ConcreteAchievementsFragment()), getString(R.string.development_tab_title_achievements));
-        viewPagerAdapter.addFragment(putArguments(new TestResultsFragment()), getString(R.string.development_tab_title_testing));
-        viewPagerAdapter.addFragment(putArguments(new AntropometryListFragment()), getString(R.string.development_tab_title_antropometry_list));
-        viewPager.setAdapter(viewPagerAdapter);
+        pagesAdapter = new PagesAdapter(getChildFragmentManager());
+        pagesAdapter.addFragment(putArguments(new ConcreteAchievementsFragment()), getString(R.string.development_tab_title_achievements));
+        pagesAdapter.addFragment(putArguments(new TestResultsFragment()), getString(R.string.development_tab_title_testing));
+        pagesAdapter.addFragment(putArguments(new AntropometryListFragment()), getString(R.string.development_tab_title_antropometry_list));
+        viewPager.setAdapter(pagesAdapter);
         viewPager.setCurrentItem(selectedPage, false);
         viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);
