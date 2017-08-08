@@ -127,9 +127,8 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     private ListPopupWindow popupWindow;
 
     public static Intent getIntent(Context context, @Nullable Child child) {
-        Intent intent = new Intent(context, ProfileEditActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_CHILD, child);
-        return intent;
+        return new Intent(context, ProfileEditActivity.class)
+                .putExtra(ExtraConstants.EXTRA_CHILD, child);
     }
 
     void addOnUpdateChildListener(OnUpdateChildListener listener) {

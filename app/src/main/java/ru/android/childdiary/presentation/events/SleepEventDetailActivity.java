@@ -36,8 +36,8 @@ import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.events.core.EventDetailView;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
-import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -91,10 +91,9 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull SleepEvent defaultEvent) {
-        Intent intent = new Intent(context, SleepEventDetailActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
-        return intent;
+        return new Intent(context, SleepEventDetailActivity.class)
+                .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
     }
 
     @Override

@@ -23,8 +23,8 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
 import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.MedicineMeasureValueDialogArguments;
@@ -41,8 +41,8 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
-import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
+import ru.android.childdiary.presentation.events.core.EventDetailActivity;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
@@ -85,10 +85,9 @@ public class MedicineTakingEventDetailActivity
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull MedicineTakingEvent defaultEvent) {
-        Intent intent = new Intent(context, MedicineTakingEventDetailActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
-        return intent;
+        return new Intent(context, MedicineTakingEventDetailActivity.class)
+                .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
     }
 
     @Override

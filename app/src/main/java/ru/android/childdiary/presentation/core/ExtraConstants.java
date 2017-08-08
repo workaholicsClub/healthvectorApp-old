@@ -23,4 +23,5 @@ public class ExtraConstants {
     public static final String EXTRA_TEST = PACKAGE_NAME + ".test";
     public static final String EXTRA_TEST_RESULT = PACKAGE_NAME + ".test_result";
     public static final String EXTRA_PICK = PACKAGE_NAME + ".pick";
+    public static final String EXTRA_INIT = PACKAGE_NAME + ".init";
 }

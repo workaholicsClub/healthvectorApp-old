@@ -39,7 +39,7 @@ public class SplashActivity extends BaseMvpActivity implements SplashView {
 
     @Override
     public void navigateToAppIntro(@Nullable Sex sex) {
-        Intent intent = AppIntroActivity.getIntent(this);
+        Intent intent = AppIntroActivity.getIntent(this, true);
         startActivity(intent);
         finish();
     }

@@ -22,10 +22,10 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineMeasureValue;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.events.BaseEditItemActivity;
 import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
@@ -77,12 +77,11 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
     public static Intent getIntent(Context context, @NonNull MedicineTaking medicineTaking,
                                    @NonNull MedicineTaking defaultMedicineTaking,
                                    @Nullable LocalTime startTime, @Nullable LocalTime finishTime) {
-        Intent intent = new Intent(context, EditMedicineTakingActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_ITEM, medicineTaking);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultMedicineTaking);
-        intent.putExtra(ExtraConstants.EXTRA_START_TIME, startTime);
-        intent.putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
-        return intent;
+        return new Intent(context, EditMedicineTakingActivity.class)
+                .putExtra(ExtraConstants.EXTRA_ITEM, medicineTaking)
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultMedicineTaking)
+                .putExtra(ExtraConstants.EXTRA_START_TIME, startTime)
+                .putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
     }
 
     @Override

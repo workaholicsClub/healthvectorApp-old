@@ -17,14 +17,13 @@ public class ImageReviewActivity extends BaseMvpActivity {
     @BindView(R.id.imageView)
     ImageView imageView;
 
-    @Override
-    protected void injectActivity(ApplicationComponent applicationComponent) {
+    public static Intent getIntent(Context context, String relativePath) {
+        return new Intent(context, ImageReviewActivity.class)
+                .putExtra(ExtraConstants.EXTRA_RELATIVE_PATH, relativePath);
     }
 
-    public static Intent getIntent(Context context, String relativePath) {
-        Intent intent = new Intent(context, ImageReviewActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_RELATIVE_PATH, relativePath);
-        return intent;
+    @Override
+    protected void injectActivity(ApplicationComponent applicationComponent) {
     }
 
     @Override

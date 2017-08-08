@@ -97,6 +97,8 @@ import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakin
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterPresenter;
 import ru.android.childdiary.presentation.medical.partitions.medicines.MedicineTakingListPresenter;
 import ru.android.childdiary.presentation.medical.partitions.visits.DoctorVisitsPresenter;
+import ru.android.childdiary.presentation.onboarding.AppIntroActivity;
+import ru.android.childdiary.presentation.onboarding.AppIntroPresenter;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditPresenter;
 import ru.android.childdiary.presentation.settings.SettingsFragment;
@@ -239,6 +241,8 @@ public interface ApplicationComponent {
 
     void inject(DayLengthPresenter presenter);
 
+    void inject(AppIntroPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -319,6 +323,8 @@ public interface ApplicationComponent {
     void inject(EditConcreteAchievementActivity activity);
 
     void inject(DayLengthActivity activity);
+
+    void inject(AppIntroActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

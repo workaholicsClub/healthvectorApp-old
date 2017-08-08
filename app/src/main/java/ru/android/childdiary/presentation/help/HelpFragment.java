@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.help;
 
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import java.util.List;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.onboarding.AppIntroActivity;
 import ru.android.childdiary.presentation.settings.adapters.SettingsAdapter;
 import ru.android.childdiary.presentation.settings.adapters.items.BaseSettingsItem;
 import ru.android.childdiary.presentation.settings.adapters.items.IntentSettingsItem;
@@ -74,7 +76,8 @@ public class HelpFragment extends AppPartitionFragment implements HelpView,
         Intention intention = Intention.values()[(int) item.getId()];
         switch (intention) {
             case ONBOARDING:
-                // TODO show app intro
+                Intent intent = AppIntroActivity.getIntent(getContext(), false);
+                startActivity(intent);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported intention");

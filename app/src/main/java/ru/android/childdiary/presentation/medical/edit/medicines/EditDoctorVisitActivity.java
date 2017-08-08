@@ -22,8 +22,8 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.events.BaseEditItemActivity;
 import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
@@ -79,12 +79,11 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     public static Intent getIntent(Context context, @NonNull DoctorVisit doctorVisit,
                                    @NonNull DoctorVisit defaultDoctorVisit,
                                    @Nullable LocalTime startTime, @Nullable LocalTime finishTime) {
-        Intent intent = new Intent(context, EditDoctorVisitActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_ITEM, doctorVisit);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultDoctorVisit);
-        intent.putExtra(ExtraConstants.EXTRA_START_TIME, startTime);
-        intent.putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
-        return intent;
+        return new Intent(context, EditDoctorVisitActivity.class)
+                .putExtra(ExtraConstants.EXTRA_ITEM, doctorVisit)
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultDoctorVisit)
+                .putExtra(ExtraConstants.EXTRA_START_TIME, startTime)
+                .putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
     }
 
     @Override

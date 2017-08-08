@@ -113,10 +113,9 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     public static Intent getIntent(Context context,
                                    @NonNull CloudOperationType operationType,
                                    @Nullable Sex sex) {
-        Intent intent = new Intent(context, CloudOperationActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_TYPE, operationType);
-        intent.putExtra(ExtraConstants.EXTRA_SEX, sex);
-        return intent;
+        return new Intent(context, CloudOperationActivity.class)
+                .putExtra(ExtraConstants.EXTRA_TYPE, operationType)
+                .putExtra(ExtraConstants.EXTRA_SEX, sex);
     }
 
     @Override

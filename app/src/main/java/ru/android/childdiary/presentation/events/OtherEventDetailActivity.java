@@ -83,10 +83,9 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull OtherEvent defaultEvent) {
-        Intent intent = new Intent(context, OtherEventDetailActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
-        return intent;
+        return new Intent(context, OtherEventDetailActivity.class)
+                .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
     }
 
     @Override

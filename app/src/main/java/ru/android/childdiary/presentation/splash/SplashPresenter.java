@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.splash;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.arellomobile.mvp.InjectViewState;
 
@@ -28,10 +27,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private static final long SPLASH_TIME_IN_MILLISECONDS = 1500;
 
     @Inject
-    ChildInteractor childInteractor;
+    InitializationInteractor initializationInteractor;
 
     @Inject
-    InitializationInteractor initializationInteractor;
+    ChildInteractor childInteractor;
 
     @Inject
     SettingsInteractor settingsInteractor;
@@ -52,16 +51,14 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     initializationInteractor.startUpdateDataService(),
                     childInteractor.getActiveChildOnce()
                             .doOnNext(child -> logger.debug("active child: " + child)),
-                    settingsInteractor.getAccountNameOnce()
-                            .doOnNext(accountName -> logger.debug("account name: " + accountName)),
                     settingsInteractor.getIsCloudShownOnce()
                             .doOnNext(isCloudShown -> logger.debug("is cloud shown: " + isCloudShown)),
                     settingsInteractor.getIsAppIntroShownOnce()
                             .doOnNext(isAppIntroShown -> logger.debug("is app intro shown: " + isAppIntroShown)),
-                    (zero, isUpdateServiceStarted, child, accountName, isCloudShown, isAppIntroShown) -> Parameters.builder()
+                    (zero, isUpdateServiceStarted, child, isCloudShown, isAppIntroShown) -> Parameters.builder()
                             .sex(child.getSex())
-                            .showAppIntro(isAppIntroShown)
-                            .showCloud(TextUtils.isEmpty(accountName) && !isCloudShown)
+                            .showAppIntro(!isAppIntroShown)
+                            .showCloud(!isCloudShown)
                             .build())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

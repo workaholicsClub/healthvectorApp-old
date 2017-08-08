@@ -233,6 +233,17 @@
 
     <style name="BorderlessButtonStyle" parent="Widget.AppCompat.Button.Borderless">
         <item name="fontPath">@string/font_path_medium</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="BorderlessButtonStyle.SingleLine">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">

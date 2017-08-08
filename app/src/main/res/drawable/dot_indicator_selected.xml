@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:left="@dimen/dot_indicator_distance_half"
+        android:right="@dimen/dot_indicator_distance_half">
+        <shape android:shape="oval">
+            <solid android:color="@color/white" />
+            <size
+                android:width="@dimen/dot_indicator_selected_size"
+                android:height="@dimen/dot_indicator_selected_size" />
+        </shape>
+    </item>
+</layer-list>

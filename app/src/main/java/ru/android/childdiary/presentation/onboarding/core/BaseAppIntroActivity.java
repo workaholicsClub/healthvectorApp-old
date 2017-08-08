@@ -1,13 +1,17 @@
 package ru.android.childdiary.presentation.onboarding.core;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -17,42 +21,47 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.adapters.SlidesAdapter;
 
 public abstract class BaseAppIntroActivity extends BaseMvpActivity {
-    protected SlidesAdapter slidesAdapter;
-    protected IndicatorController indicatorController;
+    private final List<ImageView> dotIndicators = new ArrayList<>();
 
-    @BindView(R.id.view_pager)
+    @BindView(R.id.viewPager)
     ViewPager viewPager;
 
-    @BindView(R.id.skip)
-    Button skipButton;
+    @BindView(R.id.buttonNext)
+    Button buttonNext;
 
-    @BindView(R.id.next)
-    Button nextButton;
+    @BindView(R.id.buttonSkip)
+    Button buttonSkip;
 
-    @BindView(R.id.indicator_container)
-    LinearLayout indicatorContainer;
+    @BindView(R.id.dotIndicatorsContainer)
+    LinearLayout dotIndicatorsContainer;
 
     @State
     int currentlySelectedItem;
+
+    private SlidesAdapter slidesAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_intro);
 
+        buttonNext.setOnClickListener(v -> onNextPressed());
+        buttonSkip.setOnClickListener(v -> onSkipPressed());
+
+        setupViewPager();
+        initDotIndicators();
+        updateDotIndicators();
+        updateButtonNextTitle();
+    }
+
+    private void setupViewPager() {
         slidesAdapter = new SlidesAdapter(getSupportFragmentManager());
-
-        skipButton.setOnClickListener(v -> onSkipPressed(slidesAdapter.getItem(viewPager.getCurrentItem())));
-        nextButton.setOnClickListener(v -> changeSlide());
-
-        List<Fragment> slides = getSlides();
-        for (Fragment slide : slides) {
+        for (Fragment slide : getSlides()) {
             slidesAdapter.addFragment(slide);
         }
         viewPager.setAdapter(slidesAdapter);
         viewPager.setCurrentItem(currentlySelectedItem, false);
-        // TODO indicator
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(getSlidesCount() - 1);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -60,46 +69,55 @@ public abstract class BaseAppIntroActivity extends BaseMvpActivity {
 
             @Override
             public void onPageSelected(int position) {
-                indicatorController.selectPosition(position);
                 currentlySelectedItem = position;
-                int count = slidesAdapter.getCount();
-                int item = viewPager.getCurrentItem();
-                boolean isLast = item == count - 1;
-                nextButton.setText(isLast ? R.string.done : R.string.next);
+                updateDotIndicators();
+                updateButtonNextTitle();
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
-        indicatorController = new IndicatorController();
-        indicatorController.initialize(indicatorContainer, slidesAdapter.getCount());
-        indicatorController.selectPosition(currentlySelectedItem);
     }
 
-    public void onSkipPressed(Fragment currentFragment) {
+    private void initDotIndicators() {
+        dotIndicators.clear();
+        dotIndicatorsContainer.removeAllViews();
+        for (int i = 0; i < getSlidesCount(); ++i) {
+            ImageView dot = new ImageView(this);
+            dotIndicators.add(dot);
+            dotIndicatorsContainer.addView(dot);
+        }
     }
 
-    public void addSlide(@NonNull Fragment fragment) {
-        slidesAdapter.addFragment(fragment);
-        viewPager.setOffscreenPageLimit(slidesAdapter.getCount() - 1);
+    private void updateDotIndicators() {
+        for (int i = 0; i < dotIndicators.size(); i++) {
+            boolean isCurrent = i == currentlySelectedItem;
+            @DrawableRes int drawableId = isCurrent ? R.drawable.dot_indicator_selected : R.drawable.dot_indicator_normal;
+            Drawable drawable = ContextCompat.getDrawable(this, drawableId);
+            dotIndicators.get(i).setImageDrawable(drawable);
+        }
     }
 
-    public void onDonePressed(Fragment currentFragment) {
+    private void updateButtonNextTitle() {
+        boolean isLast = currentlySelectedItem == getSlidesCount() - 1;
+        buttonNext.setText(isLast ? R.string.done : R.string.next);
     }
 
-    public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
-    }
-
-    private void changeSlide() {
-        int count = slidesAdapter.getCount();
-        int nextItem = viewPager.getCurrentItem() + 1;
-        if (nextItem < count) {
+    private void onNextPressed() {
+        int nextItem = currentlySelectedItem + 1;
+        if (nextItem < getSlidesCount()) {
             viewPager.setCurrentItem(nextItem);
         } else {
-            finish();
+            onDonePressed();
         }
     }
 
     protected abstract List<Fragment> getSlides();
+
+    protected abstract int getSlidesCount();
+
+    protected abstract void onSkipPressed();
+
+    protected abstract void onDonePressed();
 }

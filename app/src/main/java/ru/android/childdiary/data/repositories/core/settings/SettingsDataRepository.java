@@ -99,7 +99,7 @@ public class SettingsDataRepository implements SettingsRepository {
     @Override
     public Observable<Boolean> getIsAppIntroShown() {
         return preferences.getBoolean(KEY_IS_APP_INTRO_SHOWN).asObservable()
-                .map(value -> value || BuildConfig.SHOW_APP_INTRO_ON_EACH_START);
+                .map(value -> shown(value, BuildConfig.SHOW_APP_INTRO_ON_EACH_START));
     }
 
     @Override
@@ -115,7 +115,7 @@ public class SettingsDataRepository implements SettingsRepository {
     @Override
     public Observable<Boolean> getIsCloudShown() {
         return preferences.getBoolean(KEY_IS_CLOUD_SHOWN).asObservable()
-                .map(value -> value || BuildConfig.SHOW_CLOUD_ON_EACH_START);
+                .map(value -> shown(value, BuildConfig.SHOW_CLOUD_ON_EACH_START));
     }
 
     @Override
@@ -126,6 +126,10 @@ public class SettingsDataRepository implements SettingsRepository {
     @Override
     public Observable<Boolean> getIsCloudShownOnce() {
         return getIsCloudShown().first(false).toObservable();
+    }
+
+    private boolean shown(boolean shown, boolean showEachTimeValue) {
+        return shown && !showEachTimeValue;
     }
 
     private static class LocalTimeAdapter implements Preference.Adapter<LocalTime> {

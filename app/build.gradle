@@ -56,9 +56,9 @@ android {
     }
     buildTypes {
         debug {
-            resValue "string", "font_path_regular", "fonts/OpenSansCondensed-LightItalic.ttf"
-            resValue "string", "font_path_bold", "fonts/OpenSansCondensed-Light.ttf"
-            resValue "string", "font_path_medium", "fonts/OpenSansCondensed-Bold.ttf"
+            //resValue "string", "font_path_regular", "fonts/OpenSansCondensed-LightItalic.ttf"
+            //resValue "string", "font_path_bold", "fonts/OpenSansCondensed-Light.ttf"
+            //resValue "string", "font_path_medium", "fonts/OpenSansCondensed-Bold.ttf"
 
             signingConfig signingConfigs.debug
 
@@ -77,8 +77,8 @@ android {
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
             // other
             buildConfigField "boolean", "ENABLE_CONFIGURATION_CHANGE", "true"
-            buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "true"
-            buildConfigField "boolean", "SHOW_APP_INTRO_ON_EACH_START", "true"
+            buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
+            buildConfigField "boolean", "SHOW_APP_INTRO_ON_EACH_START", "false"
             buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
             buildConfigField "boolean", "COPY_BACKUP_TO_EXTERNAL_STORAGE", "true"
         }

@@ -2,61 +2,94 @@ package ru.android.childdiary.presentation.onboarding;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.Getter;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.presentation.cloud.CloudInitialActivity;
+import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.main.AppPartition;
+import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.onboarding.core.BaseAppIntroActivity;
 import ru.android.childdiary.presentation.onboarding.slides.AchievementsSlideFragment;
 import ru.android.childdiary.presentation.onboarding.slides.CalendarSlideFragment;
 import ru.android.childdiary.presentation.onboarding.slides.ChartsSlideFragment;
 import ru.android.childdiary.presentation.onboarding.slides.DoctorVisitsSlideFragment;
 import ru.android.childdiary.presentation.onboarding.slides.ProfileSlideFragment;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class AppIntroActivity extends BaseAppIntroActivity {
-    public static Intent getIntent(Context context) {
-        return new Intent(context, AppIntroActivity.class);
+public class AppIntroActivity extends BaseAppIntroActivity implements AppIntroView {
+    @Getter
+    private final List<Fragment> slides = Arrays.asList(
+            new ProfileSlideFragment(),
+            new CalendarSlideFragment(),
+            new AchievementsSlideFragment(),
+            new DoctorVisitsSlideFragment(),
+            new ChartsSlideFragment()
+    );
+
+    @InjectPresenter
+    AppIntroPresenter presenter;
+
+    private boolean init;
+
+    public static Intent getIntent(Context context, boolean init) {
+        return new Intent(context, AppIntroActivity.class)
+                .putExtra(ExtraConstants.EXTRA_INIT, init);
     }
 
     @Override
     protected void injectActivity(ApplicationComponent applicationComponent) {
+        applicationComponent.inject(this);
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        init = getIntent().getBooleanExtra(ExtraConstants.EXTRA_INIT, false);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
-    public void onSkipPressed(Fragment currentFragment) {
-        logger.debug("onSkipPressed: " + currentFragment);
-        super.onSkipPressed(currentFragment);
+    protected void onSkipPressed() {
+        if (init) {
+            presenter.skipPressed();
+        } else {
+            finish();
+        }
     }
 
     @Override
-    public void onDonePressed(Fragment currentFragment) {
-        logger.debug("onDonePressed: " + currentFragment);
-        super.onDonePressed(currentFragment);
+    protected void onDonePressed() {
+        if (init) {
+            presenter.donePressed();
+        } else {
+            finish();
+        }
     }
 
     @Override
-    public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
-        logger.debug("onSlideChanged: oldFragment = " + oldFragment + "; newFragment = " + newFragment);
-        super.onSlideChanged(oldFragment, newFragment);
+    protected int getSlidesCount() {
+        return slides.size();
     }
 
     @Override
-    protected List<Fragment> getSlides() {
-        return Arrays.asList(
-                new ProfileSlideFragment(),
-                new CalendarSlideFragment(),
-                new AchievementsSlideFragment(),
-                new DoctorVisitsSlideFragment(),
-                new ChartsSlideFragment()
-        );
+    public void navigateToMain(@Nullable Sex sex) {
+        Intent intent = MainActivity.getIntent(this, AppPartition.CALENDAR, sex);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void navigateToCloud(@Nullable Sex sex) {
+        Intent intent = CloudInitialActivity.getIntent(this, sex);
+        startActivity(intent);
+        finish();
     }
 }

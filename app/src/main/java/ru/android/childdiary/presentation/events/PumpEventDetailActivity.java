@@ -63,10 +63,9 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull PumpEvent defaultEvent) {
-        Intent intent = new Intent(context, PumpEventDetailActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
-        return intent;
+        return new Intent(context, PumpEventDetailActivity.class)
+                .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
     }
 
     @Override

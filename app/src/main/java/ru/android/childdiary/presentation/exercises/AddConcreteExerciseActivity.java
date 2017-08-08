@@ -65,11 +65,10 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
 
     public static Intent getIntent(Context context, @NonNull ConcreteExercise defaultConcreteExercise,
                                    @Nullable LocalTime startTime, @Nullable LocalTime finishTime) {
-        Intent intent = new Intent(context, AddConcreteExerciseActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultConcreteExercise);
-        intent.putExtra(ExtraConstants.EXTRA_START_TIME, startTime);
-        intent.putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
-        return intent;
+        return new Intent(context, AddConcreteExerciseActivity.class)
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, defaultConcreteExercise)
+                .putExtra(ExtraConstants.EXTRA_START_TIME, startTime)
+                .putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
     }
 
     @Override

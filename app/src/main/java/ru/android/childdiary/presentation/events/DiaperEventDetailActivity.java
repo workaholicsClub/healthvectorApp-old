@@ -59,10 +59,9 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
 
     public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
                                    @NonNull DiaperEvent defaultEvent) {
-        Intent intent = new Intent(context, DiaperEventDetailActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
-        return intent;
+        return new Intent(context, DiaperEventDetailActivity.class)
+                .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
     }
 
     @Override

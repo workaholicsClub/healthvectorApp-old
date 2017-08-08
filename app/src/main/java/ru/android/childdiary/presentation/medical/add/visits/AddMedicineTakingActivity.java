@@ -21,10 +21,10 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.interactors.medical.data.MedicineMeasureValue;
+import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 import ru.android.childdiary.presentation.core.events.BaseAddItemActivity;
@@ -73,11 +73,10 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
 
     public static Intent getIntent(Context context, @NonNull MedicineTaking medicineTaking,
                                    @Nullable LocalTime startTime, @Nullable LocalTime finishTime) {
-        Intent intent = new Intent(context, AddMedicineTakingActivity.class);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, medicineTaking);
-        intent.putExtra(ExtraConstants.EXTRA_START_TIME, startTime);
-        intent.putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
-        return intent;
+        return new Intent(context, AddMedicineTakingActivity.class)
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_ITEM, medicineTaking)
+                .putExtra(ExtraConstants.EXTRA_START_TIME, startTime)
+                .putExtra(ExtraConstants.EXTRA_FINISH_TIME, finishTime);
     }
 
     @Override
