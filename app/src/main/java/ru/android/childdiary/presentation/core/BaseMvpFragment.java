@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.core;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -38,6 +39,12 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
     protected PermissionHelper permissionHelper;
 
     private Unbinder unbinder;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        logger.debug("onAttach");
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +106,12 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
         super.onDestroyView();
         logger.debug("onDestroyView");
         unbinder.unbind();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        logger.debug("onDetach");
     }
 
     @Override
