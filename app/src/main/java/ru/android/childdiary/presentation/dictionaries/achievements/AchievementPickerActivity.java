@@ -43,7 +43,7 @@ public class AchievementPickerActivity extends BasePickerActivity<Achievement, A
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarTitle(R.string.medicines_title);
+        setupToolbarTitle(R.string.achievements_title);
     }
 
     @Override
@@ -85,6 +85,6 @@ public class AchievementPickerActivity extends BasePickerActivity<Achievement, A
     @Override
     protected String getIntentionText(boolean isFiltering) {
         return (isFiltering ? getString(R.string.nothing_found) + "\n\n" : "")
-                + getString(R.string.add_medicine_intention);
+                + getString(R.string.add_achievement_intention);
     }
 }
