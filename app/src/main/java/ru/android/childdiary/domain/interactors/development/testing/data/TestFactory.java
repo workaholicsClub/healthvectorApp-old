@@ -1,16 +1,25 @@
-package ru.android.childdiary.domain.interactors.development.testing.data.processors.core;
+package ru.android.childdiary.domain.interactors.development.testing.data;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 
+import javax.inject.Inject;
+
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.AutismTestInterpreter;
+import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.DomanMentalTestInterpreter;
+import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.DomanPhysicalTestInterpreter;
+import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.NewbornTestInterpreter;
+import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.core.TestInterpreter;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.AutismTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.DomanMentalTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.DomanPhysicalTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.NewbornTestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.BaseTestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanTestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestParameters;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.AutismTest;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.DomanMentalTest;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.DomanPhysicalTest;
@@ -18,12 +27,16 @@ import ru.android.childdiary.domain.interactors.development.testing.data.tests.N
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
 
 public class TestFactory {
-    public static BiTestProcessor createTestProcessor(@Nullable Test test,
-                                                      @NonNull TestParameters parameters) {
-        TestType testType = test == null ? null : test.getTestType();
-        if (testType == null) {
-            throw new IllegalStateException("Test type is null");
-        }
+    private final Context context;
+
+    @Inject
+    public TestFactory(Context context) {
+        this.context = context;
+    }
+
+    public BaseTestProcessor createTestProcessor(@NonNull Test test,
+                                                 @NonNull TestParameters parameters) {
+        TestType testType = test.getTestType();
         switch (testType) {
             case DOMAN_PHYSICAL:
                 if (parameters.getBirthDate() != null && parameters.getDate() != null) {
@@ -63,8 +76,8 @@ public class TestFactory {
         throw new IllegalStateException("Unsupported test type");
     }
 
-    public static TestProcessor createTestProcessor(@NonNull TestResult testResult) {
-        TestProcessor testProcessor = TestFactory.createTestProcessor(testResult.getTest(), TestParameters.builder()
+    public BaseTestProcessor createTestProcessor(@NonNull TestResult testResult) {
+        BaseTestProcessor testProcessor = createTestProcessor(testResult.getTest(), TestParameters.builder()
                 .birthDate(testResult.getBirthDate())
                 .date(testResult.getDate())
                 .parameter(testResult.getDomanTestParameter())
@@ -74,5 +87,20 @@ public class TestFactory {
             ((DomanTestProcessor) testProcessor).setDomanDate(testResult.getDomanDate());
         }
         return testProcessor;
+    }
+
+    public TestInterpreter createTestInterpreter(@NonNull BaseTestProcessor testProcessor) {
+        TestType testType = testProcessor.getTest().getTestType();
+        switch (testType) {
+            case DOMAN_PHYSICAL:
+                return new DomanPhysicalTestInterpreter(context, (DomanPhysicalTestProcessor) testProcessor);
+            case DOMAN_MENTAL:
+                return new DomanMentalTestInterpreter(context, (DomanMentalTestProcessor) testProcessor);
+            case AUTISM:
+                return new AutismTestInterpreter(context, (AutismTestProcessor) testProcessor);
+            case NEWBORN:
+                return new NewbornTestInterpreter(context, (NewbornTestProcessor) testProcessor);
+        }
+        throw new IllegalStateException("Unsupported test type");
     }
 }

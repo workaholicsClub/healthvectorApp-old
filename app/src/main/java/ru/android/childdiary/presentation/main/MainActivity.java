@@ -383,7 +383,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @Override
     public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
         presenter.editChild();
-        return false;
+        return true;
     }
 
     @Override

@@ -9,9 +9,11 @@ import android.webkit.WebView;
 import ru.android.childdiary.R;
 
 public class JustifiedTextHelper {
+    public static final String PARAGRAPH_FORMAT_JUSTIFIED = "<p class=\"tab\" style=\"text-align:justify\">%s</p>";
+    public static final String PARAGRAPH_FORMAT_CENTERED = "<p class=\"tab\" style=\"text-align:center\">%s</p>";
+
     private static final String BASE_URL = "file:///android_asset/";
     private static final String APP_FONT_FAMILY = "CevFontFamily";
-    private static final String PARAGRAPH_FORMAT = "<p class=\"tab\" style=\"text-align:justify\">%s</p>";
 
     /**
      * Размер текста описания занятия в пикселях. Подбирается опытным путем.
@@ -61,7 +63,7 @@ public class JustifiedTextHelper {
         }
         boolean containsHtml = text.contains("</p>");
         if (!containsHtml) {
-            text = String.format(PARAGRAPH_FORMAT, text);
+            text = String.format(PARAGRAPH_FORMAT_JUSTIFIED, text);
         }
         text = String.format(justifiedTextFormat, text);
         return text;

@@ -16,8 +16,4 @@ public interface TestProcessor {
     int getResult();
 
     void setResult(@Nullable Integer result);
-
-    String interpretResult();
-
-    String interpretResultShort();
 }

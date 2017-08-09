@@ -29,6 +29,7 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
     private final List<Question> questions;
     private final List<Boolean> answers = new ArrayList<>();
 
+    @Getter
     private final int initialStage;
     private int index, stage;
     private boolean stopped;
@@ -39,10 +40,10 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
     @Nullable
     private LocalDate domanDate;
 
-    public DomanTestProcessor(@NonNull T test,
-                              @NonNull DomanTestParameter parameter,
-                              @NonNull LocalDate birthDate,
-                              @NonNull LocalDate date) {
+    protected DomanTestProcessor(@NonNull T test,
+                                 @NonNull DomanTestParameter parameter,
+                                 @NonNull LocalDate birthDate,
+                                 @NonNull LocalDate date) {
         super(test);
         this.parameter = parameter;
         this.birthDate = birthDate;
@@ -121,21 +122,6 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
     @Override
     public void setResult(@Nullable Integer result) {
         this.result = result;
-    }
-
-    @Override
-    public String interpretResult() {
-        int stage = getResult();
-        return String.format(test.getResultTextFormat(),
-                test.getStageTitle(stage),
-                test.getStageDescription(stage),
-                test.getStageType(initialStage, stage, domanDate));
-    }
-
-    @Override
-    public String interpretResultShort() {
-        int stage = getResult();
-        return test.getStageTitle(stage);
     }
 
     @Nullable

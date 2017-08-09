@@ -11,9 +11,10 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.core.TestInterpreter;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.BaseTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestFactory;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
 
@@ -90,8 +91,10 @@ public class TestUtils {
 
     @Nullable
     public static String getTestResultShort(Context context, @NonNull TestResult testResult) {
-        TestProcessor testProcessor = TestFactory.createTestProcessor(testResult);
-        return testProcessor.interpretResultShort();
+        TestFactory testFactory = new TestFactory(context);
+        BaseTestProcessor testProcessor = testFactory.createTestProcessor(testResult);
+        TestInterpreter testInterpreter = testFactory.createTestInterpreter(testProcessor);
+        return testInterpreter.interpretShort();
     }
 
     public static List<DomanResult> filterResults(@NonNull List<DomanResult> results) {

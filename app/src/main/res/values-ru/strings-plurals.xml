@@ -98,4 +98,11 @@
         <item quantity="many">Добавлено %d событий</item>
         <item quantity="zero">Добавлено %d событий</item>
     </plurals>
+    <plurals name="numberOfPoints">
+        <item quantity="one">%d балл</item>
+        <item quantity="few">%d балла</item>
+        <item quantity="other">%d баллов</item>
+        <item quantity="many">%d баллов</item>
+        <item quantity="zero">%d баллов</item>
+    </plurals>
 </resources>

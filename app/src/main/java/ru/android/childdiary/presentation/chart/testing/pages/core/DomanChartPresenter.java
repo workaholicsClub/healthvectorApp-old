@@ -16,11 +16,11 @@ import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanTestProcessor;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestFactory;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.presentation.chart.core.ChartPresenter;
 import ru.android.childdiary.presentation.chart.testing.dialogs.ParameterDialogArguments;
@@ -30,6 +30,9 @@ import ru.android.childdiary.utils.strings.TestUtils;
 public class DomanChartPresenter extends ChartPresenter<DomanChartView> {
     @Inject
     TestingInteractor testingInteractor;
+
+    @Inject
+    TestFactory testFactory;
 
     private Child child;
     private TestType testType;
@@ -102,7 +105,7 @@ public class DomanChartPresenter extends ChartPresenter<DomanChartView> {
     }
 
     private DomanResult map(@NonNull TestResult testResult) {
-        DomanTestProcessor testProcessor = (DomanTestProcessor) TestFactory.createTestProcessor(testResult);
+        DomanTestProcessor testProcessor = (DomanTestProcessor) testFactory.createTestProcessor(testResult);
         return testProcessor.getDomanResult();
     }
 }

@@ -2,6 +2,7 @@ package ru.android.childdiary.domain.interactors.development.testing.data.proces
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
@@ -10,6 +11,7 @@ import ru.android.childdiary.domain.interactors.development.testing.data.tests.c
 @EqualsAndHashCode
 @AllArgsConstructor(suppressConstructorProperties = true)
 public abstract class BaseTestProcessor<T extends Test> implements BiTestProcessor {
+    @Getter
     @NonNull
     protected final T test;
 }

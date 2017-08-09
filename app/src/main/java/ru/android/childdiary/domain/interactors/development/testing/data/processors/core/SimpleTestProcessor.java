@@ -19,7 +19,7 @@ public abstract class SimpleTestProcessor<T extends SimpleTest> extends BaseTest
     private final List<Question> questions;
     private int index;
 
-    public SimpleTestProcessor(@NonNull T test) {
+    protected SimpleTestProcessor(@NonNull T test) {
         super(test);
         questions = Collections.unmodifiableList(test.getQuestions());
         for (int i = 0; i < questions.size(); ++i) {

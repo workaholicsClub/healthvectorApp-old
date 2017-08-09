@@ -42,16 +42,4 @@ public class NewbornTestProcessor extends SimpleTestProcessor<NewbornTest> {
     public void setResult(@Nullable Integer result) {
         this.result = result;
     }
-
-    @Override
-    public String interpretResult() {
-        int count = getResult();
-        return count == 0 ? test.getResultGood() : test.getResultBad();
-    }
-
-    @Override
-    public String interpretResultShort() {
-        int count = getResult();
-        return count == 0 ? test.getShortResultGood() : test.getShortResultBad();
-    }
 }

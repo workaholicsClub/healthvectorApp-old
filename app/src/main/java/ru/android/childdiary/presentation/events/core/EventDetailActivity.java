@@ -323,7 +323,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         }
         removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.delete_with_icon, menu);
+        inflater.inflate(R.menu.delete, menu);
         return true;
     }
 

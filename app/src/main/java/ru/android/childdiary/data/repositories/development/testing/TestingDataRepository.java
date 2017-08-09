@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
@@ -23,16 +24,17 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.TestingRepository;
-import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.AutismTest;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.DomanMentalTest;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.DomanPhysicalTest;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.NewbornTest;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Question;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
+import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.utils.strings.TestUtils;
+import ru.android.childdiary.utils.ui.JustifiedTextHelper;
 
 @Singleton
 public class TestingDataRepository implements TestingRepository {
@@ -92,14 +94,13 @@ public class TestingDataRepository implements TestingRepository {
                         .stageDescriptions(getStrings(R.array.stage_descriptions))
                         .build();
             case AUTISM:
-                String finishText = context.getString(R.string.test_autism_finish_text);
                 return AutismTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
-                        .questions(getQuestions(R.array.test_autism))
-                        .finishTextHigh(context.getString(R.string.test_autism_finish_text_high) + finishText)
-                        .finishTextMedium(context.getString(R.string.test_autism_finish_text_medium) + finishText)
-                        .finishTextLow(context.getString(R.string.test_autism_finish_text_low) + finishText)
+                        .questions(getQuestions(R.array.test_autism, true))
+                        .finishTextHigh(getAutismFinishTextFormat(R.string.test_autism_finish_text_high))
+                        .finishTextMedium(getAutismFinishTextFormat(R.string.test_autism_finish_text_medium))
+                        .finishTextLow(getAutismFinishTextFormat(R.string.test_autism_finish_text_low))
                         .shortTextHigh(context.getString(R.string.test_autism_high))
                         .shortTextMedium(context.getString(R.string.test_autism_medium))
                         .shortTextLow(context.getString(R.string.test_autism_low))
@@ -108,7 +109,7 @@ public class TestingDataRepository implements TestingRepository {
                 return NewbornTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
-                        .questions(getQuestions(R.array.test_newborn))
+                        .questions(getQuestions(R.array.test_newborn, true))
                         .resultBad(context.getString(R.string.test_newborn_result_bad))
                         .resultGood(context.getString(R.string.test_newborn_result_good))
                         .shortResultBad(context.getString(R.string.test_newborn_bad))
@@ -116,6 +117,14 @@ public class TestingDataRepository implements TestingRepository {
                         .build();
         }
         return null;
+    }
+
+    private String getAutismFinishTextFormat(@StringRes int stringId) {
+        // TODO !!! дропнуть из классов тестов все строковые поля
+        // TODO !!! перенести логику форматирования в TestInterpreters классы, добавить подстановку количества баллов для теста на аутизм
+        String text = JustifiedTextHelper.PARAGRAPH_FORMAT_CENTERED;
+        String finishText = context.getString(R.string.test_autism_finish_text);
+        return text + context.getString(stringId) + finishText;
     }
 
     private List<String> getStageTitles() {
@@ -128,11 +137,11 @@ public class TestingDataRepository implements TestingRepository {
     private Map<DomanTestParameter, List<Question>> getDomanPhysicalQuestions() {
         Map<DomanTestParameter, List<Question>> map = new HashMap<>();
         List<Question> list;
-        list = getQuestions(R.array.physical_manual_stages);
+        list = getQuestions(R.array.physical_manual_stages, false);
         map.put(DomanTestParameter.PHYSICAL_MANUAL, list);
-        list = getQuestions(R.array.physical_mobility_stages);
+        list = getQuestions(R.array.physical_mobility_stages, false);
         map.put(DomanTestParameter.PHYSICAL_MOBILITY, list);
-        list = getQuestions(R.array.physical_speech_stages);
+        list = getQuestions(R.array.physical_speech_stages, false);
         map.put(DomanTestParameter.PHYSICAL_SPEECH, list);
         return map;
     }
@@ -140,20 +149,29 @@ public class TestingDataRepository implements TestingRepository {
     private Map<DomanTestParameter, List<Question>> getDomanMentalQuestions() {
         Map<DomanTestParameter, List<Question>> map = new HashMap<>();
         List<Question> list;
-        list = getQuestions(R.array.mental_audition_stages);
+        list = getQuestions(R.array.mental_audition_stages, false);
         map.put(DomanTestParameter.MENTAL_AUDITION, list);
-        list = getQuestions(R.array.mental_sensitivity_stages);
+        list = getQuestions(R.array.mental_sensitivity_stages, false);
         map.put(DomanTestParameter.MENTAL_SENSITIVITY, list);
-        list = getQuestions(R.array.mental_vision_stages);
+        list = getQuestions(R.array.mental_vision_stages, false);
         map.put(DomanTestParameter.MENTAL_VISION, list);
         return map;
     }
 
-    private List<Question> getQuestions(@ArrayRes int id) {
-        return Observable.fromArray(context.getResources().getStringArray(id))
+    private List<Question> getQuestions(@ArrayRes int id, boolean withNumbers) {
+        String[] strings = context.getResources().getStringArray(id);
+        int count = strings.length;
+        return Observable.zip(
+                Observable.range(0, count),
+                Observable.fromArray(strings),
+                (i, text) -> formatQuestionText(i, count, text, withNumbers))
                 .map(text -> Question.builder().text(text).build())
                 .toList()
                 .blockingGet();
+    }
+
+    private String formatQuestionText(int i, int count, String text, boolean withNumbers) {
+        return withNumbers ? context.getString(R.string.question_format, i + 1, count, text) : text;
     }
 
     private List<String> getStrings(@ArrayRes int id) {

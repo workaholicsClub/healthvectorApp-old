@@ -14,12 +14,13 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.core.TestInterpreter;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.BaseTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanTestProcessor;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestFactory;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
@@ -29,8 +30,11 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
     @Inject
     TestingInteractor testingInteractor;
 
+    @Inject
+    TestFactory testFactory;
+
     private TestResult testResult;
-    private TestProcessor testProcessor;
+    private BaseTestProcessor testProcessor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -39,12 +43,13 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
 
     public void initTestResult(@NonNull TestResult testResult) {
         this.testResult = testResult;
-        testProcessor = TestFactory.createTestProcessor(testResult);
+        testProcessor = testFactory.createTestProcessor(testResult);
         showFinishPage(testResult.getTest(), testResult.getChild(), testResult.getDate());
     }
 
     private void showFinishPage(@NonNull Test test, @NonNull Child child, @NonNull LocalDate date) {
-        String text = testProcessor.interpretResult();
+        TestInterpreter testInterpreter = testFactory.createTestInterpreter(testProcessor);
+        String text = testInterpreter.interpret();
         getViewState().showFinish(TestingFinishArguments.testingFinishBuilder()
                 .child(child)
                 .selectedDate(date)

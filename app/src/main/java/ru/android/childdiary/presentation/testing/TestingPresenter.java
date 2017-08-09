@@ -14,12 +14,13 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.BiTestProcessor;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
+import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.core.TestInterpreter;
+import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.BaseTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanTestProcessor;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestFactory;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestParameters;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
@@ -34,10 +35,13 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     @Inject
     TestingInteractor testingInteractor;
 
+    @Inject
+    TestFactory testFactory;
+
     private Test test;
     private Child child;
     private LocalDate date;
-    private BiTestProcessor testProcessor;
+    private BaseTestProcessor testProcessor;
 
     @Override
     protected void injectPresenter(ApplicationComponent applicationComponent) {
@@ -70,7 +74,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
         if (test instanceof DomanTest) {
             getViewState().specifyTestParameters(child, test);
         } else {
-            testProcessor = TestFactory.createTestProcessor(test, TestParameters.builder().build());
+            testProcessor = testFactory.createTestProcessor(test, TestParameters.builder().build());
             getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                     .child(child)
                     .selectedDate(date)
@@ -92,7 +96,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
 
     public void onTestParametersSet(@NonNull TestParameters parameters) {
         date = parameters.getDate();
-        testProcessor = TestFactory.createTestProcessor(test, parameters);
+        testProcessor = testFactory.createTestProcessor(test, parameters);
         getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()
                 .child(child)
                 .selectedDate(date)
@@ -177,7 +181,8 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     private void goToNextQuestion() {
         Boolean forward = testProcessor.goToNextQuestion();
         if (testProcessor.isFinished()) {
-            String text = testProcessor.interpretResult();
+            TestInterpreter interpreter = testFactory.createTestInterpreter(testProcessor);
+            String text = interpreter.interpret();
             getViewState().showFinish(TestingFinishArguments.testingFinishBuilder()
                     .child(child)
                     .selectedDate(date)

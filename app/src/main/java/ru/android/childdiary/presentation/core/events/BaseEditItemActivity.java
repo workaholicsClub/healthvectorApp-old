@@ -105,7 +105,7 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
     public boolean onCreateOptionsMenu(Menu menu) {
         removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.delete_with_icon, menu);
+        inflater.inflate(R.menu.delete, menu);
         return true;
     }
 

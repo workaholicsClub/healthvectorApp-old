@@ -49,28 +49,4 @@ public class AutismTestProcessor extends SimpleTestProcessor<AutismTest> {
     public void setResult(@Nullable Integer result) {
         this.result = result;
     }
-
-    @Override
-    public String interpretResult() {
-        int count = getResult();
-        if (count <= 2) {
-            return test.getFinishTextLow();
-        } else if (count <= 7) {
-            return test.getFinishTextMedium();
-        } else {
-            return test.getFinishTextHigh();
-        }
-    }
-
-    @Override
-    public String interpretResultShort() {
-        int count = getResult();
-        if (count <= 2) {
-            return test.getShortTextLow();
-        } else if (count <= 7) {
-            return test.getShortTextMedium();
-        } else {
-            return test.getShortTextHigh();
-        }
-    }
 }
