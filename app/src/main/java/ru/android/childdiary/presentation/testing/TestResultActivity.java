@@ -7,7 +7,6 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -25,9 +24,8 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishArguments;
 import ru.android.childdiary.presentation.testing.fragments.TestingFinishFragment;
+import ru.android.childdiary.utils.ui.FragmentAnimationUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
-
-import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
 public class TestResultActivity extends BaseMvpActivity implements TestResultView {
     @IdRes
@@ -90,19 +88,7 @@ public class TestResultActivity extends BaseMvpActivity implements TestResultVie
         Bundle bundle = new Bundle();
         bundle.putSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS, arguments);
         fragment.setArguments(bundle);
-        FragmentTransaction transaction = getSupportFragmentManager()
-                .beginTransaction();
-        if (forward == null) {
-            transaction.setTransition(TRANSIT_UNSET);
-        } else {
-            if (forward) {
-                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
-            } else {
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-            }
-        }
-        transaction.replace(FRAGMENT_CONTAINER_ID, fragment)
-                .commit();
+        FragmentAnimationUtils.slideTo(fragment, FRAGMENT_CONTAINER_ID, getSupportFragmentManager(), forward);
     }
 
     @Override
