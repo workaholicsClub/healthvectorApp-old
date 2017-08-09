@@ -8,7 +8,7 @@ repositories {
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "25.0.3"
 
     applicationVariants.all { variant -> renameArtifact(variant, defaultConfig) }
@@ -23,7 +23,7 @@ android {
     defaultConfig {
         applicationId "ru.android.childdiary"
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 39
         versionName "1.0"
 
@@ -168,7 +168,7 @@ dependencies {
     })
     testCompile "junit:junit:4.12"
 
-    def androidSupportVersion = '25.4.0'
+    def androidSupportVersion = '26.0.1'
     compile "com.android.support:support-v4:$androidSupportVersion"
     compile "com.android.support:appcompat-v7:$androidSupportVersion"
     compile "com.android.support:design:$androidSupportVersion"
