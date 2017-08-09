@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -102,7 +104,6 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(test.getName());
-        toolbar.setNavigationIcon(R.drawable.toolbar_action_close);
     }
 
     @Override
@@ -194,12 +195,22 @@ public class TestingActivity extends BaseMvpActivity implements TestingView, Tes
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        removeToolbarMargin();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.close, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            stopTesting();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.menu_close:
+                stopTesting();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

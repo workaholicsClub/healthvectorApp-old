@@ -69,7 +69,7 @@ public class EditAntropometryActivity extends AntropometryActivity<EditAntropome
     public boolean onCreateOptionsMenu(Menu menu) {
         removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.delete_with_icon, menu);
+        inflater.inflate(R.menu.delete, menu);
         return true;
     }
 

@@ -83,7 +83,7 @@ public class EditConcreteAchievementActivity extends ConcreteAchievementActivity
         }
         removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.delete_with_icon, menu);
+        inflater.inflate(R.menu.delete, menu);
         return true;
     }
 

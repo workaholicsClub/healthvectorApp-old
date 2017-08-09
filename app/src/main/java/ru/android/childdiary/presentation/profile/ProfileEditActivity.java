@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
+import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -146,22 +147,15 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_edit);
-
         child = (Child) getIntent().getSerializableExtra(ExtraConstants.EXTRA_CHILD);
         if (savedInstanceState == null && child != null) {
             editedChild = child.toBuilder().build();
         }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile_edit);
 
-        if (child == null) {
-            setupToolbarTitle(R.string.add_profile);
-            buttonAdd.setVisibility(VISIBLE);
-            buttonAdd.setOnClickListener(v -> presenter.addChild(editedChild));
-        } else {
-            setupToolbarTitle(R.string.profile);
-            buttonAdd.setVisibility(GONE);
-        }
+        buttonAdd.setVisibility(child == null ? VISIBLE : GONE);
+        buttonAdd.setOnClickListener(v -> presenter.addChild(editedChild));
 
         setupTextViews();
         setupSex();
@@ -170,6 +164,12 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         setupTime();
 
         unsubscribeOnDestroy(presenter.listenForDoneButtonUpdate(new ChildObservable(this)));
+    }
+
+    @Override
+    protected void setupToolbar(Toolbar toolbar) {
+        super.setupToolbar(toolbar);
+        setupToolbarTitle(child == null ? R.string.add_profile : R.string.profile);
     }
 
     @Override
@@ -451,7 +451,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     public boolean onCreateOptionsMenu(Menu menu) {
         removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.profile, menu);
+        inflater.inflate(R.menu.close, menu);
         return true;
     }
 
