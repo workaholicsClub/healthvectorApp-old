@@ -166,6 +166,7 @@
     <string name="medicines_title">Список лекарств</string>
     <string name="add_doctor_title">Добавить специализацию</string>
     <string name="doctors_title">Список специализаций</string>
+    <string name="achievements_title">Список достижений</string>
     <string name="search">Поиск</string>
     <string name="medicine_measure_value_dialog_title">Дозировка</string>
     <string name="frequency_once">Однократно</string>
@@ -316,6 +317,7 @@
     <string name="continue_without_profile">Продолжить без профиля</string>
     <string name="add_doctor_intention">Добавьте специализацию</string>
     <string name="add_medicine_intention">Добавьте лекарство</string>
+    <string name="add_achievement_intention">Добавьте достижение</string>
     <string name="validation_antropometry_invalid_height">Некорректное значение роста</string>
     <string name="validation_antropometry_invalid_weight">Некорректное значение веса</string>
     <string name="achievement">Достижение</string>

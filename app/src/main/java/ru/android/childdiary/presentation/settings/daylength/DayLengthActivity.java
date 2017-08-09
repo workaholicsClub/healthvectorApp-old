@@ -88,6 +88,7 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
+        setupToolbarTitle(R.string.settings_day_length);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
     }
 
