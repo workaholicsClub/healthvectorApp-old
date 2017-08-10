@@ -58,6 +58,7 @@ public class TestResultPresenter extends BasePresenter<TestResultView> {
                 .text(text)
                 .result(getDomanResult())
                 .invalidResults(testResult.isInvalid())
+                .isInTestMode(false)
                 .build());
     }
 

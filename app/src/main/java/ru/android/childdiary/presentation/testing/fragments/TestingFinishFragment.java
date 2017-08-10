@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -14,6 +15,7 @@ import com.github.mikephil.charting.charts.CombinedChart;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
@@ -26,6 +28,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedText
 import ru.android.childdiary.presentation.testing.TestingController;
 import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.strings.TestUtils;
+import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class TestingFinishFragment extends AppPartitionFragment implements HtmlUtils.OnLinkClickListener {
     @Nullable
@@ -56,6 +59,9 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
     @BindView(R.id.textViewNoChartData)
     TextView textViewNoChartData;
 
+    @BindView(R.id.buttonStopTesting)
+    Button buttonStopTesting;
+
     @Nullable
     private TestingController testingController;
 
@@ -64,6 +70,7 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
     @Nullable
     private DomanTestParameter parameter;
     private List<DomanResult> results;
+    private boolean isInTestMode;
 
     @Override
     @LayoutRes
@@ -97,6 +104,7 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
         test = arguments.getTest();
         parameter = arguments.getParameter();
         results = arguments.getResults();
+        isInTestMode = arguments.isInTestMode();
     }
 
     @Override
@@ -126,6 +134,20 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
         }
         if (legendView != null) {
             legendView.setVisibility(results.isEmpty() ? View.INVISIBLE : View.VISIBLE);
+        }
+        buttonStopTesting.setVisibility(isInTestMode ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        buttonStopTesting.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
+    }
+
+    @OnClick(R.id.buttonStopTesting)
+    void onButtonStartTestingClick() {
+        if (testingController != null) {
+            testingController.stopTesting();
         }
     }
 

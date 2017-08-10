@@ -289,6 +289,7 @@
     <string name="deletion_restricted_medicine">Данное лекарство привязано к событиям или рецептам</string>
     <string name="deletion_restricted_doctor">Данная специализация привязана к событиям или визитам</string>
     <string name="start_testing">Начать тестирование</string>
+    <string name="stop_testing">Завершить</string>
     <string name="stop_testing_confirm_dialog_title">Прервать тестирование?</string>
     <string name="parameter">Параметр</string>
     <string name="age">Возраст</string>

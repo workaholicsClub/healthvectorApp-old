@@ -190,6 +190,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                     .parameter(getDomanParameter())
                     .text(text)
                     .result(getDomanResult())
+                    .isInTestMode(true)
                     .build());
         } else {
             getViewState().showQuestion(TestingQuestionArguments.testingQuestionBuilder()

@@ -35,6 +35,7 @@ public class TestingFinishArguments extends AppPartitionArguments {
     @NonNull
     List<DomanResult> results;
     boolean invalidResults;
+    boolean isInTestMode;
 
     @Builder(builderMethodName = "testingFinishBuilder")
     public TestingFinishArguments(@NonNull Child child,
@@ -43,7 +44,8 @@ public class TestingFinishArguments extends AppPartitionArguments {
                                   @Nullable DomanTestParameter parameter,
                                   @NonNull String text,
                                   @Nullable DomanResult result,
-                                  boolean invalidResults) {
+                                  boolean invalidResults,
+                                  boolean isInTestMode) {
         super(child, selectedDate);
         this.test = test;
         this.parameter = parameter;
@@ -52,5 +54,6 @@ public class TestingFinishArguments extends AppPartitionArguments {
                 ? Collections.emptyList()
                 : TestUtils.filterResults(Collections.singletonList(result));
         this.invalidResults = invalidResults;
+        this.isInTestMode = isInTestMode;
     }
 }
