@@ -348,6 +348,6 @@
     <string name="app_intro_achievements">Сохраняйте важные события развития ребенка</string>
     <string name="app_intro_doctor_visits">Используйте оповещения и помните о визитах к врачу</string>
     <string name="app_intro_charts">Смотрите графики-отчеты о развитии ребенка</string>
-    <!-- %1$d - число, номер вопроса, %2$d - число, количество вопросов, %3$s - строка, текст вопроса -->
-    <string name="question_format">%1$d из %2$d. %3$s</string>
+    <!-- %1$d - число, номер вопроса, %2$d - число, количество вопросов -->
+    <string name="question_format">%1$d из %2$d</string>
 </resources>

@@ -9,8 +9,9 @@ import android.webkit.WebView;
 import ru.android.childdiary.R;
 
 public class JustifiedTextHelper {
-    public static final String PARAGRAPH_FORMAT_JUSTIFIED = "<p class=\"tab\" style=\"text-align:justify\">%s</p>";
-    public static final String PARAGRAPH_FORMAT_CENTERED = "<p class=\"tab\" style=\"text-align:center\">%s</p>";
+    public static final String PARAGRAPH_FORMAT_JUSTIFY = "<p class=\"tab\" style=\"text-align:justify\">%s</p>";
+    public static final String PARAGRAPH_FORMAT_CENTER = "<p class=\"tab\" style=\"text-align:center\">%s</p>";
+    public static final String PARAGRAPH_FORMAT_LEFT = "<p class=\"tab\" style=\"text-align:left\">%s</p>";
 
     private static final String BASE_URL = "file:///android_asset/";
     private static final String APP_FONT_FAMILY = "CevFontFamily";
@@ -63,7 +64,7 @@ public class JustifiedTextHelper {
         }
         boolean containsHtml = text.contains("</p>");
         if (!containsHtml) {
-            text = String.format(PARAGRAPH_FORMAT_JUSTIFIED, text);
+            text = String.format(PARAGRAPH_FORMAT_JUSTIFY, text);
         }
         text = String.format(justifiedTextFormat, text);
         return text;

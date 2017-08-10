@@ -132,7 +132,11 @@ public class TestingDataRepository implements TestingRepository {
     }
 
     private String formatQuestionText(int i, int count, String text, boolean withNumbers) {
-        return withNumbers ? context.getString(R.string.question_format, i + 1, count, text) : text;
+        if (withNumbers) {
+            String numberStr = context.getString(R.string.question_format, i + 1, count);
+            return numberStr;
+        }
+        return text;
     }
 
     @Override

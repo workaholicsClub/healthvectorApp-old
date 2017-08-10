@@ -34,4 +34,13 @@
             <a href=\"%3$s\">%4$s</a>
         ]]>
     </string>
+    <string name="doman_result_text_format">
+        <![CDATA[
+            %1$s
+            <br />
+            (%2$s)
+            <br /><br />
+            %3$s
+        ]]>
+    </string>
 </resources>
