@@ -10,13 +10,14 @@ import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
+import ru.android.childdiary.domain.interactors.development.testing.data.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
 import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.core.TestInterpreter;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.BaseTestProcessor;
 import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestFactory;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.DomanTest;
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
+import ru.android.childdiary.utils.ui.JustifiedTextHelper;
 
 public class TestUtils {
     @Nullable
@@ -44,13 +45,12 @@ public class TestUtils {
         }
         switch (testType) {
             case DOMAN_PHYSICAL:
-                return context.getString(R.string.test_doman_mental_description);
             case DOMAN_MENTAL:
-                return context.getString(R.string.test_doman_physical_description);
+                return JustifiedTextHelper.getParagraphsWithJustifyAlignment(context, R.array.test_doman_description_paragraphs);
             case AUTISM:
-                return context.getString(R.string.test_autism_description);
+                return JustifiedTextHelper.getParagraphsWithJustifyAlignment(context, R.array.test_autism_description_paragraphs);
             case NEWBORN:
-                return context.getString(R.string.test_newborn_description);
+                return JustifiedTextHelper.getParagraphWithJustifyAlignment(context, R.string.test_newborn_description);
         }
         return null;
     }

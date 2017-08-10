@@ -2,29 +2,19 @@
 <resources>
     <string name="test_newborn_name">Тест новорожденного на риск ДЦП</string>
     <string name="test_newborn_description">
-        <![CDATA[
-            <p class="tab" style="text-align:justify;">
             Каждый ответ «Да» означает риск церебрального паралича
-            </p>
-        ]]>
     </string>
     <string name="test_newborn_result_good">
-        <![CDATA[
-            <p style="text-align:center;">
             Риск церебрального паралича не обнаружен
-            </p>
-        ]]>
     </string>
-    <string name="test_newborn_result_bad">
-        <![CDATA[
-            <p style="text-align:center;">
+    <string-array name="test_newborn_result_bad_paragraphs">
+        <item>
             Риск церебрального паралича
-            </p>
-            <p style="text-align:center;">
+        </item>
+        <item>
             Обратитесь за консультацией к врачу
-            </p>
-        ]]>
-    </string>
+        </item>
+    </string-array>
     <string name="test_newborn_short_result_bad">Есть риск</string>
     <string name="test_newborn_short_result_good">Нет риска</string>
     <string-array name="test_newborn">

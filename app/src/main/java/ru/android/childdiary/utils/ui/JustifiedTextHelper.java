@@ -1,17 +1,25 @@
 package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.webkit.WebView;
 
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import ru.android.childdiary.R;
 
 public class JustifiedTextHelper {
-    public static final String PARAGRAPH_FORMAT_JUSTIFY = "<p class=\"tab\" style=\"text-align:justify\">%s</p>";
-    public static final String PARAGRAPH_FORMAT_CENTER = "<p class=\"tab\" style=\"text-align:center\">%s</p>";
-    public static final String PARAGRAPH_FORMAT_LEFT = "<p class=\"tab\" style=\"text-align:left\">%s</p>";
+    private static final String PARAGRAPH_FORMAT_JUSTIFY = "<p class=\"tab\" style=\"text-align:justify\">%s</p>";
+    private static final String PARAGRAPH_FORMAT_CENTER = "<p style=\"text-align:center\">%s</p>";
+    private static final String PARAGRAPH_FORMAT_LEFT = "<p class=\"tab\" style=\"text-align:left\">%s</p>";
 
     private static final String BASE_URL = "file:///android_asset/";
     private static final String APP_FONT_FAMILY = "CevFontFamily";
@@ -57,14 +65,56 @@ public class JustifiedTextHelper {
         webView.loadDataWithBaseURL(BASE_URL, text, "text/html", "utf-8", "about:blank");
     }
 
+    public static String getParagraphsWithJustifyAlignment(Context context, @ArrayRes int stringArrayId) {
+        return getParagraphs(context, stringArrayId, JustifiedTextHelper::getParagraphWithJustifyAlignment);
+    }
+
+    public static String getParagraphsWithCenterAlignment(Context context, @ArrayRes int stringArrayId) {
+        return getParagraphs(context, stringArrayId, JustifiedTextHelper::getParagraphWithCenterAlignment);
+    }
+
+    public static String getParagraphsWithLeftAlignment(Context context, @ArrayRes int stringArrayId) {
+        return getParagraphs(context, stringArrayId, JustifiedTextHelper::getParagraphWithLeftAlignment);
+    }
+
+    private static String getParagraphs(Context context,
+                                        @ArrayRes int stringArrayId,
+                                        @NonNull Function<String, String> mapper) {
+        List<String> strings = Observable.fromArray(context.getResources().getStringArray(stringArrayId))
+                .map(mapper)
+                .toList()
+                .blockingGet();
+        return TextUtils.join("", strings);
+    }
+
+    public static String getParagraphWithJustifyAlignment(Context context, @StringRes int stringId) {
+        return getParagraphWithJustifyAlignment(context.getString(stringId));
+    }
+
+    public static String getParagraphWithJustifyAlignment(String text) {
+        return String.format(PARAGRAPH_FORMAT_JUSTIFY, text);
+    }
+
+    public static String getParagraphWithCenterAlignment(Context context, @StringRes int stringId) {
+        return getParagraphWithCenterAlignment(context.getString(stringId));
+    }
+
+    public static String getParagraphWithCenterAlignment(String text) {
+        return String.format(PARAGRAPH_FORMAT_CENTER, text);
+    }
+
+    public static String getParagraphWithLeftAlignment(Context context, @StringRes int stringId) {
+        return getParagraphWithLeftAlignment(context.getString(stringId));
+    }
+
+    public static String getParagraphWithLeftAlignment(String text) {
+        return String.format(PARAGRAPH_FORMAT_LEFT, text);
+    }
+
     @Nullable
     private String map(@Nullable String text) {
         if (text == null) {
             return null;
-        }
-        boolean containsHtml = text.contains("</p>");
-        if (!containsHtml) {
-            text = String.format(PARAGRAPH_FORMAT_JUSTIFY, text);
         }
         text = String.format(justifiedTextFormat, text);
         return text;
