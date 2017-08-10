@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
@@ -34,7 +33,6 @@ import ru.android.childdiary.domain.interactors.development.testing.data.tests.c
 import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
 import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.utils.strings.TestUtils;
-import ru.android.childdiary.utils.ui.JustifiedTextHelper;
 
 @Singleton
 public class TestingDataRepository implements TestingRepository {
@@ -74,64 +72,27 @@ public class TestingDataRepository implements TestingRepository {
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
                         .questions(getDomanPhysicalQuestions())
-                        .resultTextFormat(context.getString(R.string.doman_result_text_format))
-                        .advanced(context.getString(R.string.doman_stage_advanced))
-                        .normal(context.getString(R.string.doman_stage_normal))
-                        .slow(context.getString(R.string.doman_stage_slow))
-                        .stageTitles(getStageTitles())
-                        .stageDescriptions(getStrings(R.array.stage_descriptions))
                         .build();
             case DOMAN_MENTAL:
                 return DomanMentalTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
                         .questions(getDomanMentalQuestions())
-                        .resultTextFormat(context.getString(R.string.doman_result_text_format))
-                        .advanced(context.getString(R.string.doman_stage_advanced))
-                        .normal(context.getString(R.string.doman_stage_normal))
-                        .slow(context.getString(R.string.doman_stage_slow))
-                        .stageTitles(getStageTitles())
-                        .stageDescriptions(getStrings(R.array.stage_descriptions))
                         .build();
             case AUTISM:
                 return AutismTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
                         .questions(getQuestions(R.array.test_autism, true))
-                        .finishTextHigh(getAutismFinishTextFormat(R.string.test_autism_finish_text_high))
-                        .finishTextMedium(getAutismFinishTextFormat(R.string.test_autism_finish_text_medium))
-                        .finishTextLow(getAutismFinishTextFormat(R.string.test_autism_finish_text_low))
-                        .shortTextHigh(context.getString(R.string.test_autism_high))
-                        .shortTextMedium(context.getString(R.string.test_autism_medium))
-                        .shortTextLow(context.getString(R.string.test_autism_low))
                         .build();
             case NEWBORN:
                 return NewbornTest.builder()
                         .name(TestUtils.getTestName(context, testType))
                         .description(TestUtils.getTestDescription(context, testType))
                         .questions(getQuestions(R.array.test_newborn, true))
-                        .resultBad(context.getString(R.string.test_newborn_result_bad))
-                        .resultGood(context.getString(R.string.test_newborn_result_good))
-                        .shortResultBad(context.getString(R.string.test_newborn_bad))
-                        .shortResultGood(context.getString(R.string.test_newborn_good))
                         .build();
         }
         return null;
-    }
-
-    private String getAutismFinishTextFormat(@StringRes int stringId) {
-        // TODO !!! дропнуть из классов тестов все строковые поля
-        // TODO !!! перенести логику форматирования в TestInterpreters классы, добавить подстановку количества баллов для теста на аутизм
-        String text = JustifiedTextHelper.PARAGRAPH_FORMAT_CENTERED;
-        String finishText = context.getString(R.string.test_autism_finish_text);
-        return text + context.getString(stringId) + finishText;
-    }
-
-    private List<String> getStageTitles() {
-        return Observable.range(1, 7)
-                .map(i -> context.getString(R.string.stage, i))
-                .toList()
-                .blockingGet();
     }
 
     private Map<DomanTestParameter, List<Question>> getDomanPhysicalQuestions() {
@@ -172,12 +133,6 @@ public class TestingDataRepository implements TestingRepository {
 
     private String formatQuestionText(int i, int count, String text, boolean withNumbers) {
         return withNumbers ? context.getString(R.string.question_format, i + 1, count, text) : text;
-    }
-
-    private List<String> getStrings(@ArrayRes int id) {
-        return Observable.fromArray(context.getResources().getStringArray(id))
-                .toList()
-                .blockingGet();
     }
 
     @Override
