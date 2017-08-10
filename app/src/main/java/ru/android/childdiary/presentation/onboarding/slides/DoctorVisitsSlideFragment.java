@@ -8,4 +8,9 @@ public class DoctorVisitsSlideFragment extends SlideFragment {
     protected int getTextResourceId() {
         return R.string.app_intro_doctor_visits;
     }
+
+    @Override
+    protected int getImageResourceId() {
+        return R.drawable.onboarding_doctor_visits;
+    }
 }

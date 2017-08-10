@@ -145,7 +145,7 @@
     <dimen name="splash_margin_base_vertical">48dp</dimen>
     <dimen name="splash_drawable_padding">22dp</dimen>
     <!-- app intro -->
-    <dimen name="app_intro_top_panel_height">143dp</dimen>
+    <dimen name="app_intro_text_min_height">143dp</dimen>
     <dimen name="dot_indicator_normal_size">8dp</dimen>
     <dimen name="dot_indicator_selected_size">11dp</dimen>
     <dimen name="dot_indicator_distance_half">3dp</dimen>

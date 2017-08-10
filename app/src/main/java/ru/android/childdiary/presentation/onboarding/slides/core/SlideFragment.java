@@ -1,9 +1,11 @@
 package ru.android.childdiary.presentation.onboarding.slides.core;
 
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -14,6 +16,9 @@ import ru.android.childdiary.presentation.core.BaseMvpFragment;
 public abstract class SlideFragment extends BaseMvpFragment {
     @BindView(R.id.textView)
     TextView textView;
+
+    @BindView(R.id.imageView)
+    ImageView imageView;
 
     @Nullable
     @Override
@@ -32,10 +37,12 @@ public abstract class SlideFragment extends BaseMvpFragment {
         super.onActivityCreated(savedInstanceState);
 
         textView.setText(getTextResourceId());
-
-        // TODO onboarding images
+        imageView.setImageResource(getImageResourceId());
     }
 
     @StringRes
     protected abstract int getTextResourceId();
+
+    @DrawableRes
+    protected abstract int getImageResourceId();
 }

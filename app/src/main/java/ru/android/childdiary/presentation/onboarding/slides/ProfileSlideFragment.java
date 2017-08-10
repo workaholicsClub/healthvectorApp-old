@@ -8,4 +8,9 @@ public class ProfileSlideFragment extends SlideFragment {
     protected int getTextResourceId() {
         return R.string.intention_add_child_profile;
     }
+
+    @Override
+    protected int getImageResourceId() {
+        return R.drawable.onboarding_profile;
+    }
 }

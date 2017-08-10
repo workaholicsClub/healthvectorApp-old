@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="gray_background">#EEF1F3</color>
+    <color name="gray_background">#FAFAFA</color>
     <color name="primary_boy">#26A6F6</color>
     <color name="primary_dark_boy">#4288B4</color>
     <color name="accent_boy">#4288B4</color>

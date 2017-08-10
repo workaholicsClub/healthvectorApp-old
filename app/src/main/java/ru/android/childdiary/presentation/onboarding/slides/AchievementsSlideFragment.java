@@ -8,4 +8,9 @@ public class AchievementsSlideFragment extends SlideFragment {
     protected int getTextResourceId() {
         return R.string.app_intro_achievements;
     }
+
+    @Override
+    protected int getImageResourceId() {
+        return R.drawable.onboarding_achievements;
+    }
 }

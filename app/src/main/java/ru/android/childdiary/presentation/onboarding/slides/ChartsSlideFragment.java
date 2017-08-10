@@ -8,4 +8,9 @@ public class ChartsSlideFragment extends SlideFragment {
     protected int getTextResourceId() {
         return R.string.app_intro_charts;
     }
+
+    @Override
+    protected int getImageResourceId() {
+        return R.drawable.onboarding_charts;
+    }
 }
