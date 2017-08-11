@@ -1,9 +1,7 @@
 package ru.android.childdiary.presentation.development.partitions.antropometry;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +12,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.List;
 
-import butterknife.BindDimen;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.data.Child;
@@ -30,9 +27,6 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<AntropometryListView>
         implements AntropometryListView, ChartContainer, AntropometryActionListener {
-    @BindDimen(R.dimen.divider_padding)
-    int DIVIDER_PADDING;
-
     @Getter
     @InjectPresenter
     AntropometryListPresenter presenter;
@@ -45,8 +39,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(divider, DIVIDER_PADDING);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter = new AntropometryAdapter(getContext(), this, fabController);
@@ -59,8 +52,6 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         recyclerViewChips.setVisibility(View.GONE);
-
-        line.setVisibility(View.GONE);
     }
 
     @Override
@@ -75,7 +66,6 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         adapter.setFabController(child.getId() == null ? null : fabController, isSelected());
         recyclerView.setVisibility(antropometryList.isEmpty() ? View.GONE : View.VISIBLE);
 
-        line.setVisibility(antropometryList.isEmpty() ? View.GONE : View.VISIBLE);
         textViewIntention.setVisibility(antropometryList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 

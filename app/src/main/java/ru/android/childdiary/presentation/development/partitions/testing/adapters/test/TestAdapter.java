@@ -19,7 +19,7 @@ public class TestAdapter extends BaseRecyclerViewAdapter<Test, TestViewHolder> {
     }
 
     @Override
-    public TestViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected TestViewHolder createViewHolder(ViewGroup parent) {
         View v = inflater.inflate(R.layout.test_item, parent, false);
         return new TestViewHolder(v, listener);
     }

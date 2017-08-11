@@ -1,11 +1,9 @@
 package ru.android.childdiary.presentation.exercises;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +18,6 @@ import org.joda.time.LocalTime;
 
 import java.util.List;
 
-import butterknife.BindDimen;
 import butterknife.BindView;
 import icepick.State;
 import lombok.Getter;
@@ -46,17 +43,11 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     @BindView(R.id.recyclerViewChips)
     RecyclerView recyclerViewChips;
 
-    @BindView(R.id.line)
-    View line;
-
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-
-    @BindDimen(R.dimen.divider_padding)
-    int DIVIDER_PADDING;
 
     @State
     boolean loading;
@@ -79,8 +70,7 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(divider, DIVIDER_PADDING);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter = new ExerciseAdapter(getContext(), this);
@@ -88,9 +78,6 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         recyclerView.setVisibility(View.GONE);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-
-        // setup delimiter
-        line.setVisibility(View.GONE);
 
         // setup chips
         recyclerViewChips.setVisibility(View.GONE);
@@ -134,9 +121,6 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         adapter.setItems(exercises);
         recyclerView.setVisibility(exercises.isEmpty() ? View.GONE : View.VISIBLE);
 
-        // setup delimiter
-        line.setVisibility(exercises.isEmpty() ? View.GONE : View.VISIBLE);
-
         // no chips
 
         // setup intention
@@ -169,7 +153,6 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     public void startLoading() {
         loading = true;
         recyclerView.setVisibility(View.GONE);
-        line.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);

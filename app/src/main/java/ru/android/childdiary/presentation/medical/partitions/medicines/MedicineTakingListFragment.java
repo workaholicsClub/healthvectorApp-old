@@ -1,10 +1,8 @@
 package ru.android.childdiary.presentation.medical.partitions.medicines;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +16,6 @@ import org.joda.time.LocalTime;
 
 import java.util.List;
 
-import butterknife.BindDimen;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.data.Child;
@@ -36,9 +33,6 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MedicineTakingListFragment extends BaseMedicalDataFragment
         implements MedicineTakingListView, MedicineTakingActionListener {
-    @BindDimen(R.dimen.divider_padding)
-    int DIVIDER_PADDING;
-
     @Getter
     @InjectPresenter
     MedicineTakingListPresenter presenter;
@@ -51,8 +45,7 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(divider, DIVIDER_PADDING);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter = new MedicineTakingAdapter(getContext(), this, fabController);
@@ -71,8 +64,6 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         chipsAdapter = new ChipsAdapter(getContext(), this);
         recyclerViewChips.setAdapter(chipsAdapter);
         recyclerViewChips.setVisibility(View.GONE);
-
-        line.setVisibility(View.GONE);
     }
 
     @Override
@@ -108,7 +99,6 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         chipsAdapter.setItems(chips);
         recyclerViewChips.setVisibility(chips.isEmpty() ? View.GONE : View.VISIBLE);
 
-        line.setVisibility(medicineTakingList.isEmpty() && chips.isEmpty() ? View.GONE : View.VISIBLE);
         textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
         textViewIntention.setText(chips.isEmpty() ? R.string.add_medicine_taking : R.string.nothing_found);
     }

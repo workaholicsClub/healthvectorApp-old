@@ -19,7 +19,7 @@ public class AntropometryAdapter extends SwipeViewAdapter<Antropometry, Antropom
     }
 
     @Override
-    public AntropometryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected AntropometryViewHolder createViewHolder(ViewGroup parent) {
         View v = inflater.inflate(R.layout.antropometry_item, parent, false);
         return new AntropometryViewHolder(v, itemActionListener, this);
     }

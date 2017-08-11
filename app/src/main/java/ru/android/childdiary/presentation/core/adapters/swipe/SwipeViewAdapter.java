@@ -25,7 +25,7 @@ public abstract class SwipeViewAdapter<
     }
 
     @Override
-    public void setItems(@NonNull List<T> items) {
+    public final void setItems(@NonNull List<T> items) {
         super.setItems(items);
         swipeManager.closeAllItems();
     }

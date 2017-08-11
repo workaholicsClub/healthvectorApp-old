@@ -19,9 +19,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewTests"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/base_margin"
-                android:paddingTop="@dimen/base_margin" />
+                android:layout_height="wrap_content" />
 
             <include
                 android:id="@+id/line"
@@ -30,9 +28,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewTestResults"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/base_margin"
-                android:paddingTop="@dimen/base_margin" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </FrameLayout>

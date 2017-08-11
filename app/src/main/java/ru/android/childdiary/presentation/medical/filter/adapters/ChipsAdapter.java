@@ -23,7 +23,7 @@ public class ChipsAdapter extends BaseRecyclerViewAdapter<Chips, ChipsAdapter.Ch
     }
 
     @Override
-    public ChipsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected ChipsViewHolder createViewHolder(ViewGroup parent) {
         View v = inflater.inflate(R.layout.chips_item, parent, false);
         return new ChipsViewHolder(v, chipsDeleteClickListener);
     }

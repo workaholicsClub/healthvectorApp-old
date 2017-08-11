@@ -24,7 +24,7 @@ public class AchievementAdapter extends SwipeViewAdapter<
     }
 
     @Override
-    public AchievementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected AchievementViewHolder createViewHolder(ViewGroup parent) {
         View v = inflater.inflate(R.layout.picker_item, parent, false);
         return new AchievementViewHolder(v, itemActionListener, this);
     }

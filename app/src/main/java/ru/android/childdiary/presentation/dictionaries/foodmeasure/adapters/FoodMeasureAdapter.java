@@ -24,7 +24,7 @@ public class FoodMeasureAdapter extends SwipeViewAdapter<
     }
 
     @Override
-    public FoodMeasureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected FoodMeasureViewHolder createViewHolder(ViewGroup parent) {
         View v = inflater.inflate(R.layout.picker_item, parent, false);
         return new FoodMeasureViewHolder(v, itemActionListener, this);
     }

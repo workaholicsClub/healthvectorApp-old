@@ -5,21 +5,8 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/base_margin"
-                android:paddingTop="@dimen/base_margin" />
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+        android:layout_height="wrap_content" />
 </LinearLayout>

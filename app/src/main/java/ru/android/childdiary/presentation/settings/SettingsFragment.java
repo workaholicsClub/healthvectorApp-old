@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import icepick.State;
 import io.reactivex.Observable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -36,6 +38,7 @@ import ru.android.childdiary.presentation.cloud.CloudOperationType;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.presentation.dictionaries.achievements.AchievementPickerActivity;
 import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
@@ -79,6 +82,9 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    @State
+    boolean isFirstTime = true;
 
     private IntentSettingsItem accountItem;
     private List<BaseSettingsItem> fixedItems;
@@ -128,6 +134,8 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         initItems();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), false);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         settingsAdapter = new SettingsAdapter(getContext());
         settingsAdapter.setItems(fixedItems);
         recyclerView.setAdapter(settingsAdapter);
@@ -143,6 +151,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     public void onResume() {
         super.onResume();
         getActivity().invalidateOptionsMenu();
+        if (isFirstTime) {
+            new Handler().post(() -> recyclerView.getLayoutManager().scrollToPosition(0));
+            isFirstTime = false;
+        }
     }
 
     @Override

@@ -14,6 +14,7 @@ import java.util.List;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
+import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.onboarding.AppIntroActivity;
 import ru.android.childdiary.presentation.settings.adapters.SettingsAdapter;
 import ru.android.childdiary.presentation.settings.adapters.items.BaseSettingsItem;
@@ -41,6 +42,8 @@ public class HelpFragment extends AppPartitionFragment implements HelpView,
         initItems();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), false);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         settingsAdapter = new SettingsAdapter(getContext());
         settingsAdapter.setItems(fixedItems);
         recyclerView.setAdapter(settingsAdapter);

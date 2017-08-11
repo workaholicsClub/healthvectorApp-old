@@ -2,12 +2,10 @@ package ru.android.childdiary.presentation.dictionaries.core;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +20,6 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.List;
 
-import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
@@ -40,9 +37,6 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class BasePickerActivity<T extends Serializable, V extends BasePickerView<T>> extends BaseMvpActivity
         implements BasePickerView<T>, ItemActionListener<T>, FabController {
-    @BindDimen(R.dimen.divider_padding)
-    int DIVIDER_PADDING;
-
     @BindView(R.id.rootView)
     View rootView;
 
@@ -70,8 +64,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        Drawable divider = ContextCompat.getDrawable(this, R.drawable.divider);
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(divider, DIVIDER_PADDING);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(this);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter = createAdapter();

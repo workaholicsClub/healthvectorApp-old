@@ -24,13 +24,13 @@ public class EventFilterAdapter extends BaseRecyclerViewAdapter<EventType, Event
     }
 
     @Override
-    public EventFilterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected EventFilterViewHolder createViewHolder(ViewGroup parent) {
         View v = inflater.inflate(R.layout.event_filter_item, parent, false);
         return new EventFilterViewHolder(v, this);
     }
 
     @Override
-    public void onBindViewHolder(EventFilterViewHolder viewHolder, int position) {
+    public final void onBindViewHolder(EventFilterViewHolder viewHolder, int position) {
         super.onBindViewHolder(viewHolder, position);
         boolean selected = selectedItems.contains(items.get(position));
         viewHolder.setSelected(selected);

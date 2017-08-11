@@ -19,14 +19,17 @@ public class SettingsAdapter extends BaseRecyclerViewAdapter<BaseSettingsItem, B
         return oldItem.getId() == newItem.getId();
     }
 
+    /* // TODO !!!
+        @Override
+        public int getItemViewType(int position) {
+            BaseSettingsItem item = items.get(position);
+            return item.getType().ordinal();
+        }
+    */
     @Override
-    public int getItemViewType(int position) {
-        BaseSettingsItem item = items.get(position);
-        return item.getType().ordinal();
-    }
-
-    @Override
-    public final BaseSettingsViewHolder<? extends BaseSettingsItem> onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected final BaseSettingsViewHolder<? extends BaseSettingsItem> createViewHolder(ViewGroup parent) {
+        // TODO !!!
+        int viewType = 0;
         View v;
         SettingsItemType type = SettingsItemType.values()[viewType];
         switch (type) {

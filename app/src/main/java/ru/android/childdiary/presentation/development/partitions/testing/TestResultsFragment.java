@@ -1,10 +1,8 @@
 package ru.android.childdiary.presentation.development.partitions.testing;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +15,6 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
-import butterknife.BindDimen;
 import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.interactors.child.data.Child;
@@ -39,9 +36,6 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
         TestClickListener, TestResultActionListener, ChartContainer {
     @InjectPresenter
     TestResultsPresenter presenter;
-
-    @BindDimen(R.dimen.divider_padding)
-    int DIVIDER_PADDING;
 
     @BindView(R.id.recyclerViewTests)
     RecyclerView recyclerViewTests;
@@ -162,8 +156,7 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
     }
 
     private RecyclerView.ItemDecoration getItemDecoration() {
-        Drawable divider = ContextCompat.getDrawable(getContext(), R.drawable.divider);
-        return new DividerItemDecoration(divider, DIVIDER_PADDING);
+        return new DividerItemDecoration(getContext());
     }
 
     @Override

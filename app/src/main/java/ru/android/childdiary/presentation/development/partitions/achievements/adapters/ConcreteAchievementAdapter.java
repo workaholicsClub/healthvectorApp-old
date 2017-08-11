@@ -19,7 +19,7 @@ public class ConcreteAchievementAdapter extends SwipeViewAdapter<ConcreteAchieve
     }
 
     @Override
-    public ConcreteAchievementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected ConcreteAchievementViewHolder createViewHolder(ViewGroup parent) {
         View v = inflater.inflate(R.layout.concrete_achievement_item, parent, false);
         return new ConcreteAchievementViewHolder(v, itemActionListener, this);
     }
