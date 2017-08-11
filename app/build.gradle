@@ -24,7 +24,7 @@ android {
         applicationId "ru.android.childdiary"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 39
+        versionCode 40
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -78,7 +78,7 @@ android {
             // other
             buildConfigField "boolean", "ENABLE_CONFIGURATION_CHANGE", "true"
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
-            buildConfigField "boolean", "SHOW_APP_INTRO_ON_EACH_START", "true"
+            buildConfigField "boolean", "SHOW_APP_INTRO_ON_EACH_START", "false"
             buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
             buildConfigField "boolean", "COPY_BACKUP_TO_EXTERNAL_STORAGE", "true"
         }
