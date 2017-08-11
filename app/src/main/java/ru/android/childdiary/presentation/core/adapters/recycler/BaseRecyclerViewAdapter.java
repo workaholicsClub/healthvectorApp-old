@@ -19,9 +19,9 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.adapters.swipe.ListDiff;
 
 public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHolder<T>>
-        extends RecyclerView.Adapter<VH> implements ListDiff.Callback<T> {
+        extends RecyclerView.Adapter<BaseRecyclerViewHolder<T>> implements ListDiff.Callback<T> {
+    private static final int TYPE_FOOTER = -1;
     private static final int TYPE_ITEM = 0;
-    private static final int TYPE_FOOTER = 1;
 
     protected final Context context;
     protected final LayoutInflater inflater;
@@ -98,37 +98,45 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
 
     @Override
     public final int getItemViewType(int position) {
-        return position == items.size() - 1 ? TYPE_FOOTER : TYPE_ITEM;
+        return useFooter() && position >= items.size() ? TYPE_FOOTER : getUserViewType(position);
+    }
+
+    protected int getUserViewType(int position) {
+        return TYPE_ITEM;
     }
 
     @Override
-    public final VH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final BaseRecyclerViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case TYPE_ITEM:
-                return createViewHolder(parent);
             case TYPE_FOOTER:
-                return createViewHolder(parent);
+                return createFooterViewHolder(parent);
+            default:
+                return createUserViewHolder(parent, viewType);
         }
-        return null;
     }
 
-    protected abstract VH createViewHolder(ViewGroup parent);
+    protected abstract VH createUserViewHolder(ViewGroup parent, int viewType);
 
     private FooterViewHolder<T> createFooterViewHolder(ViewGroup parent) {
-        View v = inflater.inflate(R.layout.picker_item, parent, false);
+        View v = inflater.inflate(R.layout.view_footer, parent, false);
         return new FooterViewHolder<>(v);
     }
 
-    @CallSuper
     @Override
-    public void onBindViewHolder(VH viewHolder, int position) {
+    public final void onBindViewHolder(BaseRecyclerViewHolder<T> viewHolder, int position) {
         if (position < items.size()) {
-            viewHolder.bind(context, sex, items.get(position));
+            //noinspection unchecked
+            bindUserViewHolder((VH) viewHolder, position);
         }
     }
 
+    @CallSuper
+    protected void bindUserViewHolder(VH viewHolder, int position) {
+        viewHolder.bind(context, sex, items.get(position));
+    }
+
     @Override
-    public final void onBindViewHolder(VH viewHolder, int position, List<Object> payloads) {
+    public final void onBindViewHolder(BaseRecyclerViewHolder<T> viewHolder, int position, List<Object> payloads) {
         if (payloads.isEmpty()) {
             onBindViewHolder(viewHolder, position);
         } else {
@@ -138,7 +146,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
 
     @Override
     public final int getItemCount() {
-        return items.size() + 1;
+        return items.size() + (useFooter() ? 1 : 0);
     }
 
     @Override
@@ -157,4 +165,8 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
         super.onDetachedFromRecyclerView(recyclerView);
         this.recyclerView = null;
     }
+
+    public abstract boolean paintDividers();
+
+    public abstract boolean useFooter();
 }

@@ -46,7 +46,7 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.fragment_app_partition_sub_list;
+        return R.layout.fragment_app_partition_with_list_and_chips;
     }
 
     @Override

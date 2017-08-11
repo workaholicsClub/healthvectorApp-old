@@ -23,9 +23,6 @@ public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiar
     @BindView(R.id.textViewIntention)
     protected TextView textViewIntention;
 
-    @BindView(R.id.recyclerViewChips)
-    protected RecyclerView recyclerViewChips;
-
     @BindView(R.id.recyclerView)
     protected RecyclerView recyclerView;
 
@@ -42,7 +39,7 @@ public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiar
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.fragment_app_partition_sub_list;
+        return R.layout.fragment_app_partition_with_list;
     }
 
     @Override

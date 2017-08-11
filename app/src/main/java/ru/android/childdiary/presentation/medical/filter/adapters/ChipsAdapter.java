@@ -23,7 +23,7 @@ public class ChipsAdapter extends BaseRecyclerViewAdapter<Chips, ChipsAdapter.Ch
     }
 
     @Override
-    protected ChipsViewHolder createViewHolder(ViewGroup parent) {
+    protected ChipsViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.chips_item, parent, false);
         return new ChipsViewHolder(v, chipsDeleteClickListener);
     }
@@ -31,6 +31,16 @@ public class ChipsAdapter extends BaseRecyclerViewAdapter<Chips, ChipsAdapter.Ch
     @Override
     public boolean areItemsTheSame(Chips oldItem, Chips newItem) {
         return oldItem.sameAs(newItem);
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return false;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return false;
     }
 
     public interface ChipsDeleteClickListener {

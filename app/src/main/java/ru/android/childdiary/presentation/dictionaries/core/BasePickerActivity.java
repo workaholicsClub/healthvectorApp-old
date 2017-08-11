@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -64,14 +63,11 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(this);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
         adapter = createAdapter();
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(this, adapter);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         adapter.setSex(getSex());
         recyclerView.setAdapter(adapter);
-
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         progressBar.setVisibility(View.VISIBLE);
         textViewIntention.setVisibility(View.GONE);

@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -134,12 +133,11 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         initItems();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), false);
-        recyclerView.addItemDecoration(dividerItemDecoration);
         settingsAdapter = new SettingsAdapter(getContext());
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), settingsAdapter);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         settingsAdapter.setItems(fixedItems);
         recyclerView.setAdapter(settingsAdapter);
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
 
     private void themeChanged() {

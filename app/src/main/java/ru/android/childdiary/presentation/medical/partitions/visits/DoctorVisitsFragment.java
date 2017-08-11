@@ -45,10 +45,9 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
         adapter = new DoctorVisitAdapter(getContext(), this, fabController);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), adapter);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);

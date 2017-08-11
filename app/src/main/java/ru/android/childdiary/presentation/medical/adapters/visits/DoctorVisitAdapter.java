@@ -24,7 +24,7 @@ public class DoctorVisitAdapter extends SwipeViewAdapter<
     }
 
     @Override
-    protected DoctorVisitViewHolder createViewHolder(ViewGroup parent) {
+    protected DoctorVisitViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.medical_item, parent, false);
         return new DoctorVisitViewHolder(v, itemActionListener, this);
     }
@@ -32,5 +32,15 @@ public class DoctorVisitAdapter extends SwipeViewAdapter<
     @Override
     public boolean areItemsTheSame(DoctorVisit oldItem, DoctorVisit newItem) {
         return ObjectUtils.equals(oldItem.getId(), newItem.getId());
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return true;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return true;
     }
 }

@@ -24,7 +24,7 @@ public class MedicineTakingAdapter extends SwipeViewAdapter<
     }
 
     @Override
-    protected MedicineTakingViewHolder createViewHolder(ViewGroup parent) {
+    protected MedicineTakingViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.medical_item, parent, false);
         return new MedicineTakingViewHolder(v, itemActionListener, this);
     }
@@ -32,5 +32,15 @@ public class MedicineTakingAdapter extends SwipeViewAdapter<
     @Override
     public boolean areItemsTheSame(MedicineTaking oldItem, MedicineTaking newItem) {
         return ObjectUtils.equals(oldItem.getId(), newItem.getId());
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return true;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return true;
     }
 }

@@ -45,10 +45,9 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
         adapter = new MedicineTakingAdapter(getContext(), this, fabController);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), adapter);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);

@@ -24,14 +24,14 @@ public class EventFilterAdapter extends BaseRecyclerViewAdapter<EventType, Event
     }
 
     @Override
-    protected EventFilterViewHolder createViewHolder(ViewGroup parent) {
+    protected EventFilterViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.event_filter_item, parent, false);
         return new EventFilterViewHolder(v, this);
     }
 
     @Override
-    public final void onBindViewHolder(EventFilterViewHolder viewHolder, int position) {
-        super.onBindViewHolder(viewHolder, position);
+    protected void bindUserViewHolder(EventFilterViewHolder viewHolder, int position) {
+        super.bindUserViewHolder(viewHolder, position);
         boolean selected = selectedItems.contains(items.get(position));
         viewHolder.setSelected(selected);
     }
@@ -48,5 +48,15 @@ public class EventFilterAdapter extends BaseRecyclerViewAdapter<EventType, Event
         } else {
             selectedItems.remove(eventType);
         }
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return false;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return false;
     }
 }

@@ -41,4 +41,4 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
-app/build_/*
+app/build*/*

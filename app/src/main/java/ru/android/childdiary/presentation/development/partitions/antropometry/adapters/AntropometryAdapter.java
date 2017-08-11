@@ -19,7 +19,7 @@ public class AntropometryAdapter extends SwipeViewAdapter<Antropometry, Antropom
     }
 
     @Override
-    protected AntropometryViewHolder createViewHolder(ViewGroup parent) {
+    protected AntropometryViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.antropometry_item, parent, false);
         return new AntropometryViewHolder(v, itemActionListener, this);
     }
@@ -27,5 +27,15 @@ public class AntropometryAdapter extends SwipeViewAdapter<Antropometry, Antropom
     @Override
     public boolean areItemsTheSame(Antropometry oldItem, Antropometry newItem) {
         return ObjectUtils.equals(oldItem.getId(), newItem.getId());
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return true;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return true;
     }
 }

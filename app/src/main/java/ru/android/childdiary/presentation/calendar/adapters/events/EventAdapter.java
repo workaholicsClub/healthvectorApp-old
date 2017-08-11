@@ -23,7 +23,7 @@ public class EventAdapter extends SwipeViewAdapter<
     }
 
     @Override
-    protected EventViewHolder createViewHolder(ViewGroup parent) {
+    protected EventViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.event_item, parent, false);
         return new EventViewHolder(v, itemActionListener, this);
     }
@@ -43,5 +43,15 @@ public class EventAdapter extends SwipeViewAdapter<
     public void move(EventViewHolder viewHolder) {
         viewHolder.swipeLayout.addSwipeListener(new SwipeMoveAction(viewHolder.getItem(), itemActionListener));
         closeAllItems();
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return false;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return false;
     }
 }

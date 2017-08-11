@@ -24,7 +24,7 @@ public class AchievementAdapter extends SwipeViewAdapter<
     }
 
     @Override
-    protected AchievementViewHolder createViewHolder(ViewGroup parent) {
+    protected AchievementViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.picker_item, parent, false);
         return new AchievementViewHolder(v, itemActionListener, this);
     }
@@ -32,5 +32,15 @@ public class AchievementAdapter extends SwipeViewAdapter<
     @Override
     public boolean areItemsTheSame(Achievement oldItem, Achievement newItem) {
         return ObjectUtils.equals(oldItem.getId(), newItem.getId());
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return true;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return true;
     }
 }

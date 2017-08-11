@@ -24,7 +24,7 @@ public class FoodMeasureAdapter extends SwipeViewAdapter<
     }
 
     @Override
-    protected FoodMeasureViewHolder createViewHolder(ViewGroup parent) {
+    protected FoodMeasureViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.picker_item, parent, false);
         return new FoodMeasureViewHolder(v, itemActionListener, this);
     }
@@ -32,5 +32,15 @@ public class FoodMeasureAdapter extends SwipeViewAdapter<
     @Override
     public boolean areItemsTheSame(FoodMeasure oldItem, FoodMeasure newItem) {
         return ObjectUtils.equals(oldItem.getId(), newItem.getId());
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return true;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return true;
     }
 }

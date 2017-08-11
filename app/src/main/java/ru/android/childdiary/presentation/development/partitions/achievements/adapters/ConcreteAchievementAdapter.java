@@ -19,7 +19,7 @@ public class ConcreteAchievementAdapter extends SwipeViewAdapter<ConcreteAchieve
     }
 
     @Override
-    protected ConcreteAchievementViewHolder createViewHolder(ViewGroup parent) {
+    protected ConcreteAchievementViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.concrete_achievement_item, parent, false);
         return new ConcreteAchievementViewHolder(v, itemActionListener, this);
     }
@@ -27,5 +27,15 @@ public class ConcreteAchievementAdapter extends SwipeViewAdapter<ConcreteAchieve
     @Override
     public boolean areItemsTheSame(ConcreteAchievement oldItem, ConcreteAchievement newItem) {
         return ObjectUtils.equals(oldItem.getId(), newItem.getId());
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return true;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return true;
     }
 }

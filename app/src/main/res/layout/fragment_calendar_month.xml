@@ -25,6 +25,6 @@
 
         <include layout="@layout/events_view" />
 
-        <include layout="@layout/events_view_footer" />
+        <include layout="@layout/view_footer" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

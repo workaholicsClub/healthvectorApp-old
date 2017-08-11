@@ -23,6 +23,7 @@ import ru.android.childdiary.domain.interactors.development.testing.data.tests.c
 import ru.android.childdiary.presentation.chart.testing.TestChartActivity;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
+import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewAdapter;
 import ru.android.childdiary.presentation.development.partitions.core.ChartContainer;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultActionListener;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultAdapter;
@@ -63,13 +64,13 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
         LinearLayoutManager layoutManagerTestResults = new LinearLayoutManager(getContext());
         recyclerViewTestResults.setLayoutManager(layoutManagerTestResults);
 
-        recyclerViewTests.addItemDecoration(getItemDecoration());
-        recyclerViewTestResults.addItemDecoration(getItemDecoration());
-
         testAdapter = new TestAdapter(getContext(), this);
-        recyclerViewTests.setAdapter(testAdapter);
-
         testResultAdapter = new TestResultAdapter(getContext(), this, null);
+
+        recyclerViewTests.addItemDecoration(getItemDecoration(testAdapter));
+        recyclerViewTestResults.addItemDecoration(getItemDecoration(testResultAdapter));
+
+        recyclerViewTests.setAdapter(testAdapter);
         recyclerViewTestResults.setAdapter(testResultAdapter);
 
         ViewCompat.setNestedScrollingEnabled(recyclerViewTests, false);
@@ -155,8 +156,8 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
         presenter.reviewTestResult(item);
     }
 
-    private RecyclerView.ItemDecoration getItemDecoration() {
-        return new DividerItemDecoration(getContext());
+    private RecyclerView.ItemDecoration getItemDecoration(BaseRecyclerViewAdapter adapter) {
+        return new DividerItemDecoration(getContext(), adapter);
     }
 
     @Override

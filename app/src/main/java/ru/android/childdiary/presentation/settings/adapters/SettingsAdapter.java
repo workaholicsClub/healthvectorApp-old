@@ -19,17 +19,14 @@ public class SettingsAdapter extends BaseRecyclerViewAdapter<BaseSettingsItem, B
         return oldItem.getId() == newItem.getId();
     }
 
-    /* // TODO !!!
-        @Override
-        public int getItemViewType(int position) {
-            BaseSettingsItem item = items.get(position);
-            return item.getType().ordinal();
-        }
-    */
     @Override
-    protected final BaseSettingsViewHolder<? extends BaseSettingsItem> createViewHolder(ViewGroup parent) {
-        // TODO !!!
-        int viewType = 0;
+    protected int getUserViewType(int position) {
+        BaseSettingsItem item = items.get(position);
+        return item.getType().ordinal();
+    }
+
+    @Override
+    protected BaseSettingsViewHolder<? extends BaseSettingsItem> createUserViewHolder(ViewGroup parent, int viewType) {
         View v;
         SettingsItemType type = SettingsItemType.values()[viewType];
         switch (type) {
@@ -51,5 +48,15 @@ public class SettingsAdapter extends BaseRecyclerViewAdapter<BaseSettingsItem, B
             default:
                 throw new IllegalArgumentException("Unsupported settings item type");
         }
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return false;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return false;
     }
 }

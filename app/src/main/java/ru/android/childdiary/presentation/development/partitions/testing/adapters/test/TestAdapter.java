@@ -19,7 +19,7 @@ public class TestAdapter extends BaseRecyclerViewAdapter<Test, TestViewHolder> {
     }
 
     @Override
-    protected TestViewHolder createViewHolder(ViewGroup parent) {
+    protected TestViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.test_item, parent, false);
         return new TestViewHolder(v, listener);
     }
@@ -27,5 +27,15 @@ public class TestAdapter extends BaseRecyclerViewAdapter<Test, TestViewHolder> {
     @Override
     public boolean areItemsTheSame(Test oldItem, Test newItem) {
         return ObjectUtils.equals(oldItem.getTestType(), newItem.getTestType());
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return true;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return false;
     }
 }

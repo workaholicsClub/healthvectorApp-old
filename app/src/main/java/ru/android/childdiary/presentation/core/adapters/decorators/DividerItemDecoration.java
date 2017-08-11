@@ -9,36 +9,37 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewAdapter;
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private final Drawable divider;
     private final int dividerPadding, extraPadding;
     private final boolean paintDividers;
+    private final boolean useFooter;
 
-    public DividerItemDecoration(Context context, boolean paintDividers) {
+    public DividerItemDecoration(Context context, BaseRecyclerViewAdapter adapter) {
         this.divider = ContextCompat.getDrawable(context, R.drawable.divider);
         this.dividerPadding = context.getResources().getDimensionPixelSize(R.dimen.divider_padding);
         this.extraPadding = context.getResources().getDimensionPixelSize(R.dimen.base_margin);
-        this.paintDividers = paintDividers;
-    }
-
-    public DividerItemDecoration(Context context) {
-        this(context, true);
+        this.paintDividers = adapter.paintDividers();
+        this.useFooter = adapter.useFooter();
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        int position = parent.getChildAdapterPosition(view);
         outRect.set(0, 0, 0, 0);
 
-        int itemsCount = state.getItemCount();
-        int position = parent.getChildAdapterPosition(view);
-        if (paintDividers && itemsCount > 1 && position > 0) {
+        int count = state.getItemCount();
+        int last = useFooter ? count - 2 : count - 1;
+
+        if (paintDividers && position >= 1 && position <= last) {
             outRect.top = divider.getIntrinsicHeight();
         }
         if (position == 0) {
             outRect.top += extraPadding;
         }
-        if (position == itemsCount - 1) {
+        if (position == last) {
             outRect.bottom += extraPadding;
         }
     }
@@ -52,15 +53,20 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         int dividerLeft = parent.getPaddingLeft() + dividerPadding;
         int dividerRight = parent.getWidth() - parent.getPaddingRight() - dividerPadding;
 
-        int childCount = parent.getChildCount();
-        for (int i = 1; i < childCount; ++i) {
+        int count = state.getItemCount();
+        int last = useFooter ? count - 2 : count - 1;
+
+        for (int i = 0; i < parent.getChildCount(); ++i) {
             View child = parent.getChildAt(i);
+            int position = parent.getChildAdapterPosition(child);
 
-            int dividerBottom = child.getTop();
-            int dividerTop = dividerBottom - divider.getIntrinsicHeight();
+            if (position >= 1 && position <= last) {
+                int dividerBottom = child.getTop();
+                int dividerTop = dividerBottom - divider.getIntrinsicHeight();
 
-            divider.setBounds(dividerLeft, dividerTop, dividerRight, dividerBottom);
-            divider.draw(canvas);
+                divider.setBounds(dividerLeft, dividerTop, dividerRight, dividerBottom);
+                divider.draw(canvas);
+            }
         }
     }
 }

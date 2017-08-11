@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.help;
 
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -42,12 +41,11 @@ public class HelpFragment extends AppPartitionFragment implements HelpView,
         initItems();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), false);
-        recyclerView.addItemDecoration(dividerItemDecoration);
         settingsAdapter = new SettingsAdapter(getContext());
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), settingsAdapter);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         settingsAdapter.setItems(fixedItems);
         recyclerView.setAdapter(settingsAdapter);
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
 
     @Override

@@ -31,8 +31,8 @@ public abstract class SwipeViewAdapter<
     }
 
     @Override
-    public final void onBindViewHolder(VH viewHolder, int position) {
-        super.onBindViewHolder(viewHolder, position);
+    protected void bindUserViewHolder(VH viewHolder, int position) {
+        super.bindUserViewHolder(viewHolder, position);
         swipeManager.bindViewHolder(viewHolder, position);
     }
 

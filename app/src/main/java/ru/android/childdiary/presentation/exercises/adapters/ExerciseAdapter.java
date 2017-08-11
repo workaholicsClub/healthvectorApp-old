@@ -24,8 +24,18 @@ public class ExerciseAdapter extends BaseRecyclerViewAdapter<Exercise, ExerciseV
     }
 
     @Override
-    protected ExerciseViewHolder createViewHolder(ViewGroup parent) {
+    protected ExerciseViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.exercise_item, parent, false);
         return new ExerciseViewHolder(v, listener);
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return true;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return false;
     }
 }

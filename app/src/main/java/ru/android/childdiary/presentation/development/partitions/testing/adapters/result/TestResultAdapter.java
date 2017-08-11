@@ -19,7 +19,7 @@ public class TestResultAdapter extends SwipeViewAdapter<TestResult, TestResultVi
     }
 
     @Override
-    protected TestResultViewHolder createViewHolder(ViewGroup parent) {
+    protected TestResultViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.test_result_item, parent, false);
         return new TestResultViewHolder(v, itemActionListener, this);
     }
@@ -27,5 +27,15 @@ public class TestResultAdapter extends SwipeViewAdapter<TestResult, TestResultVi
     @Override
     public boolean areItemsTheSame(TestResult oldItem, TestResult newItem) {
         return ObjectUtils.equals(oldItem.getId(), newItem.getId());
+    }
+
+    @Override
+    public boolean paintDividers() {
+        return true;
+    }
+
+    @Override
+    public boolean useFooter() {
+        return false;
     }
 }

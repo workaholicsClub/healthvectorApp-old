@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -40,9 +39,6 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     @BindView(R.id.textViewIntention)
     TextView textViewIntention;
 
-    @BindView(R.id.recyclerViewChips)
-    RecyclerView recyclerViewChips;
-
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -61,7 +57,7 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.fragment_app_partition_sub_list;
+        return R.layout.fragment_app_partition_with_list;
     }
 
     @Override
@@ -70,17 +66,11 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
         adapter = new ExerciseAdapter(getContext(), this);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), adapter);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
-
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-
-        // setup chips
-        recyclerViewChips.setVisibility(View.GONE);
 
         // setup intention
         imageView.setVisibility(View.GONE);

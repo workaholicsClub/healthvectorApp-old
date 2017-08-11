@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.development.partitions.achievements;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,19 +36,14 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
         adapter = new ConcreteAchievementAdapter(getContext(), this, fabController);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), adapter);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         textViewIntention.setText(R.string.no_achievements);
-
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-
-        recyclerViewChips.setVisibility(View.GONE);
     }
 
     @Override
