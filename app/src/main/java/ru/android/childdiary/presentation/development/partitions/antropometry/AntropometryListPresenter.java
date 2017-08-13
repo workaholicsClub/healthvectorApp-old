@@ -10,10 +10,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.child.ChildInteractor;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
-import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryInteractor;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.child.ChildInteractor;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.development.antropometry.AntropometryInteractor;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryPresenter;
 
 @InjectViewState

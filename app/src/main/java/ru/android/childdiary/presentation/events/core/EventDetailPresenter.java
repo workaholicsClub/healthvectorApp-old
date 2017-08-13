@@ -11,12 +11,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.CalendarInteractor;
-import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroupFieldType;
-import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationException;
-import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
-import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
+import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.calendar.validation.CalendarValidationException;
+import ru.android.childdiary.domain.calendar.validation.CalendarValidationResult;
+import ru.android.childdiary.domain.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.utils.strings.EventUtils;
 

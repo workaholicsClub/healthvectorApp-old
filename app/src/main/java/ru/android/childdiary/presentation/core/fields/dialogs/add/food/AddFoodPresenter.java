@@ -9,8 +9,8 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.dictionaries.food.FoodInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.dictionaries.food.FoodInteractor;
+import ru.android.childdiary.domain.dictionaries.food.data.Food;
 import ru.android.childdiary.presentation.core.fields.dialogs.add.core.AddValuePresenter;
 
 @InjectViewState

@@ -11,8 +11,8 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.data.standard.OtherEvent;
-import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
+import ru.android.childdiary.domain.calendar.data.standard.OtherEvent;
+import ru.android.childdiary.domain.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
 
 @InjectViewState

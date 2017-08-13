@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.presentation.core.AppPartitionView;
 
 public interface DevelopmentDiaryView extends AppPartitionView {

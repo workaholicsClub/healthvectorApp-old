@@ -9,7 +9,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.dictionaries.food.data.Food;
 import ru.android.childdiary.presentation.dictionaries.core.BaseItemViewHolder;
 
 public class FoodViewHolder extends BaseItemViewHolder<Food,

@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.core.images.ImagesInteractor;
+import ru.android.childdiary.domain.core.images.ImagesInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState

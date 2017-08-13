@@ -14,7 +14,7 @@ import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.dictionaries.DoctorEntity;
 import ru.android.childdiary.data.repositories.dictionaries.core.BaseCrudDbService;
 import ru.android.childdiary.data.repositories.dictionaries.doctors.mappers.DoctorMapper;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
 
 @Singleton
 public class DoctorDbService extends BaseCrudDbService<Doctor> {

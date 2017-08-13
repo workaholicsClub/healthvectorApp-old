@@ -15,7 +15,7 @@ import ru.android.childdiary.data.db.entities.dictionaries.AchievementEntity;
 import ru.android.childdiary.data.repositories.core.exceptions.RestrictDeleteException;
 import ru.android.childdiary.data.repositories.dictionaries.achievements.mappers.AchievementMapper;
 import ru.android.childdiary.data.repositories.dictionaries.core.BaseCrudDbService;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
+import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton

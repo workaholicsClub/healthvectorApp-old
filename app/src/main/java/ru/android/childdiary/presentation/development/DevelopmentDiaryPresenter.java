@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievementInteractor;
-import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryInteractor;
+import ru.android.childdiary.domain.development.achievement.ConcreteAchievementInteractor;
+import ru.android.childdiary.domain.development.antropometry.AntropometryInteractor;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
 @InjectViewState

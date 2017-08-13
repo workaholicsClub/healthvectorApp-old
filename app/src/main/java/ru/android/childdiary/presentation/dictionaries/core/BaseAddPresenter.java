@@ -10,10 +10,10 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.domain.interactors.dictionaries.core.DictionaryInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryFieldType;
-import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryValidationException;
-import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryValidationResult;
+import ru.android.childdiary.domain.dictionaries.core.DictionaryInteractor;
+import ru.android.childdiary.domain.dictionaries.core.validation.DictionaryFieldType;
+import ru.android.childdiary.domain.dictionaries.core.validation.DictionaryValidationException;
+import ru.android.childdiary.domain.dictionaries.core.validation.DictionaryValidationResult;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class BaseAddPresenter<T, V extends BaseAddView<T>> extends BasePresenter<V> {

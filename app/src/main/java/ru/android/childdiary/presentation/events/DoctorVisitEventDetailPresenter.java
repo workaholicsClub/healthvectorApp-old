@@ -17,11 +17,11 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
-import ru.android.childdiary.domain.interactors.calendar.validation.CalendarValidationResult;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.DoctorInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
+import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
+import ru.android.childdiary.domain.calendar.validation.CalendarValidationResult;
+import ru.android.childdiary.domain.dictionaries.doctors.DoctorInteractor;
+import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.medical.DoctorVisitInteractor;
 import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 

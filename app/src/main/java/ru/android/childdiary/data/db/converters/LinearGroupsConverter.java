@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroups;
+import ru.android.childdiary.domain.calendar.data.core.LinearGroups;
 
 public class LinearGroupsConverter extends SimpleConverter<LinearGroups> {
     private static final String DELIMITER = ",";

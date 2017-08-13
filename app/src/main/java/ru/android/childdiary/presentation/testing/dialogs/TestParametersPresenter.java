@@ -10,9 +10,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestParameters;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.testing.TestingInteractor;
+import ru.android.childdiary.domain.development.testing.data.processors.core.TestParameters;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState

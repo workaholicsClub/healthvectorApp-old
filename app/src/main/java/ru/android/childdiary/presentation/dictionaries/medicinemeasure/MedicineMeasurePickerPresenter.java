@@ -9,8 +9,8 @@ import javax.inject.Inject;
 
 import lombok.Getter;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasureInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.dictionaries.medicinemeasure.MedicineMeasureInteractor;
+import ru.android.childdiary.domain.dictionaries.medicinemeasure.data.MedicineMeasure;
 import ru.android.childdiary.presentation.dictionaries.core.BasePickerPresenter;
 import ru.android.childdiary.utils.strings.StringUtils;
 

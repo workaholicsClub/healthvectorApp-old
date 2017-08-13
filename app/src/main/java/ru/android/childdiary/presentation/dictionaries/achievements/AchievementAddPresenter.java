@@ -6,9 +6,9 @@ import javax.inject.Inject;
 
 import lombok.Getter;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.AchievementInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
-import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryFieldType;
+import ru.android.childdiary.domain.dictionaries.achievements.AchievementInteractor;
+import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
+import ru.android.childdiary.domain.dictionaries.core.validation.DictionaryFieldType;
 import ru.android.childdiary.presentation.dictionaries.core.BaseAddPresenter;
 
 @InjectViewState

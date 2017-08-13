@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import lombok.Getter;
 import lombok.NonNull;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.AntropometryPoint;
+import ru.android.childdiary.domain.development.antropometry.data.AntropometryPoint;
 import ru.android.childdiary.presentation.chart.core.LineEntry;
 
 public class AntropometryChartDataMapper {

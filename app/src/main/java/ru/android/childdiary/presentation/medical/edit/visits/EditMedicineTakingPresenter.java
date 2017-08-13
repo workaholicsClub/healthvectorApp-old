@@ -10,11 +10,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
-import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
+import ru.android.childdiary.domain.medical.data.MedicineTaking;
+import ru.android.childdiary.domain.medical.requests.CompleteMedicineTakingRequest;
+import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingEventsRequest;
+import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingRequest;
+import ru.android.childdiary.domain.medical.requests.UpsertMedicineTakingRequest;
 import ru.android.childdiary.presentation.core.events.BaseEditItemPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 

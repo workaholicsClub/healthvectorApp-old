@@ -8,7 +8,7 @@ import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureData;
 import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.dictionaries.medicinemeasure.data.MedicineMeasure;
 
 public class MedicineMeasureMapper implements EntityMapper<MedicineMeasureData, MedicineMeasureEntity, MedicineMeasure> {
     @Inject

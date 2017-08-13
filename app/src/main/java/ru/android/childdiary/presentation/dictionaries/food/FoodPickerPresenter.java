@@ -9,8 +9,8 @@ import javax.inject.Inject;
 
 import lombok.Getter;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.dictionaries.food.FoodInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.dictionaries.food.FoodInteractor;
+import ru.android.childdiary.domain.dictionaries.food.data.Food;
 import ru.android.childdiary.presentation.dictionaries.core.BasePickerPresenter;
 import ru.android.childdiary.utils.strings.StringUtils;
 

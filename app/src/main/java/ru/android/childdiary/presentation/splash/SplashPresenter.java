@@ -17,9 +17,9 @@ import lombok.Value;
 import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.ChildInteractor;
-import ru.android.childdiary.domain.interactors.core.InitializationInteractor;
-import ru.android.childdiary.domain.interactors.core.settings.SettingsInteractor;
+import ru.android.childdiary.domain.child.ChildInteractor;
+import ru.android.childdiary.domain.core.InitializationInteractor;
+import ru.android.childdiary.domain.core.settings.SettingsInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState

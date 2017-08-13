@@ -27,12 +27,12 @@ import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParameters
 import ru.android.childdiary.data.repositories.core.generators.ExerciseEventsGenerator;
 import ru.android.childdiary.data.repositories.exercises.mappers.ConcreteExerciseMapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ExerciseMapper;
-import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
-import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
-import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseRequest;
-import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseResponse;
+import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
+import ru.android.childdiary.domain.exercises.data.Exercise;
+import ru.android.childdiary.domain.exercises.requests.UpsertConcreteExerciseRequest;
+import ru.android.childdiary.domain.exercises.requests.UpsertConcreteExerciseResponse;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton

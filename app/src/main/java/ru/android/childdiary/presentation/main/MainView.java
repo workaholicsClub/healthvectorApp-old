@@ -8,7 +8,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseView;
 

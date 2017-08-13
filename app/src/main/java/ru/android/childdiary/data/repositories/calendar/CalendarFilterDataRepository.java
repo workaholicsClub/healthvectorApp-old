@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 import ru.android.childdiary.data.repositories.core.ValueDataRepository;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.requests.GetEventsFilter;
+import ru.android.childdiary.domain.calendar.requests.GetEventsFilter;
 
 @Singleton
 public class CalendarFilterDataRepository extends ValueDataRepository<GetEventsFilter> {

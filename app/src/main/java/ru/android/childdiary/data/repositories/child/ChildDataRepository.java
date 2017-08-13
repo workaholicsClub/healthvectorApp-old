@@ -11,10 +11,10 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CleanUpDbService;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.child.ChildRepository;
-import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
-import ru.android.childdiary.domain.interactors.child.requests.DeleteChildResponse;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.child.ChildRepository;
+import ru.android.childdiary.domain.child.requests.DeleteChildRequest;
+import ru.android.childdiary.domain.child.requests.DeleteChildResponse;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton

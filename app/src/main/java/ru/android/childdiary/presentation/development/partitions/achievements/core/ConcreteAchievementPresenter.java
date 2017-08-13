@@ -12,11 +12,11 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.achievement.ConcreteAchievementInteractor;
-import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidationException;
-import ru.android.childdiary.domain.interactors.development.achievement.validation.AchievementValidationResult;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.AchievementInteractor;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.achievement.ConcreteAchievementInteractor;
+import ru.android.childdiary.domain.development.achievement.validation.AchievementValidationException;
+import ru.android.childdiary.domain.development.achievement.validation.AchievementValidationResult;
+import ru.android.childdiary.domain.dictionaries.achievements.AchievementInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class ConcreteAchievementPresenter<V extends ConcreteAchievementView> extends BasePresenter<V> {

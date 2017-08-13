@@ -16,7 +16,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.presentation.chart.core.ChartActivity;
 import ru.android.childdiary.presentation.chart.core.ChartFragment;
 import ru.android.childdiary.presentation.chart.testing.pages.MentalChartFragment;

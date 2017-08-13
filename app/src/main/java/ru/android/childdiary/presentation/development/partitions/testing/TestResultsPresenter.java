@@ -12,11 +12,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
-import ru.android.childdiary.domain.interactors.development.testing.TestingInteractor;
-import ru.android.childdiary.domain.interactors.development.testing.requests.TestResultsRequest;
-import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.testing.data.TestResult;
+import ru.android.childdiary.domain.development.testing.TestingInteractor;
+import ru.android.childdiary.domain.development.testing.requests.TestResultsRequest;
+import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
 @InjectViewState

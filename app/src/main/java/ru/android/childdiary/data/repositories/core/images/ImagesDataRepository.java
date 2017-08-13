@@ -18,8 +18,8 @@ import javax.inject.Singleton;
 
 import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.core.images.exceptions.ImagesException;
-import ru.android.childdiary.domain.interactors.core.images.ImageType;
-import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+import ru.android.childdiary.domain.core.images.ImageType;
+import ru.android.childdiary.domain.core.images.ImagesRepository;
 import ru.android.childdiary.utils.io.FileUtils;
 
 @Singleton

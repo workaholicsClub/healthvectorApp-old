@@ -12,7 +12,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.core.settings.SettingsInteractor;
+import ru.android.childdiary.domain.core.settings.SettingsInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState

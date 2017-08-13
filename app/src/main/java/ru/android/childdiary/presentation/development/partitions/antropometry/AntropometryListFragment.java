@@ -13,8 +13,8 @@ import java.util.List;
 
 import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.presentation.chart.antropometry.AntropometryChartActivity;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.development.partitions.antropometry.adapters.AntropometryActionListener;

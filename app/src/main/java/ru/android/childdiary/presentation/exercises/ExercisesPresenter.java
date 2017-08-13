@@ -11,10 +11,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.core.exceptions.TryCountExceededException;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
-import ru.android.childdiary.domain.interactors.exercises.ExerciseInteractor;
+import ru.android.childdiary.domain.core.exceptions.TryCountExceededException;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.exercises.data.Exercise;
+import ru.android.childdiary.domain.exercises.ExerciseInteractor;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
 @InjectViewState

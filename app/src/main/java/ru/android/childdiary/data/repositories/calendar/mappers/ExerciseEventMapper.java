@@ -15,9 +15,9 @@ import ru.android.childdiary.data.db.entities.exercises.ConcreteExerciseEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ConcreteExerciseMapper;
-import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
+import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
 
 public class ExerciseEventMapper implements EntityMapper<ExerciseEventData, ExerciseEventEntity, ExerciseEvent> {
     private final ChildMapper childMapper;

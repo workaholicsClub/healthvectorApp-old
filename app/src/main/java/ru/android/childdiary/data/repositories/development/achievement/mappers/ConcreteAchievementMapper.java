@@ -14,9 +14,9 @@ import ru.android.childdiary.data.db.entities.dictionaries.AchievementEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
 import ru.android.childdiary.data.repositories.dictionaries.achievements.mappers.AchievementMapper;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
+import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 
 public class ConcreteAchievementMapper implements EntityMapper<ConcreteAchievementData, ConcreteAchievementEntity, ConcreteAchievement> {
     private final ChildMapper childMapper;

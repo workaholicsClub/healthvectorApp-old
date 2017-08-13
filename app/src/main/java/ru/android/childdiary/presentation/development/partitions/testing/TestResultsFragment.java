@@ -17,9 +17,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
-import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.testing.data.TestResult;
+import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
 import ru.android.childdiary.presentation.chart.testing.TestChartActivity;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;

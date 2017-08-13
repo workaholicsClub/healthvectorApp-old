@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.domain.interactors.dictionaries.core.CrudRepository;
+import ru.android.childdiary.domain.dictionaries.core.CrudRepository;
 
 public abstract class CrudDataRepository<T> implements CrudRepository<T> {
     protected final Logger logger = LoggerFactory.getLogger(toString());

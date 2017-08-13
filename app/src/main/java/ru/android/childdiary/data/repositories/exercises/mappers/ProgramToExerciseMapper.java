@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.data.network.dto.Program;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
-import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
+import ru.android.childdiary.domain.exercises.data.Exercise;
 
 public class ProgramToExerciseMapper implements Mapper<Program, Exercise> {
     @Inject

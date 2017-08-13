@@ -12,8 +12,8 @@ import ru.android.childdiary.data.db.entities.calendar.standard.PumpEventEntity;
 import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.calendar.data.standard.PumpEvent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.calendar.data.standard.PumpEvent;
+import ru.android.childdiary.domain.child.data.Child;
 
 public class PumpEventMapper implements EntityMapper<PumpEventData, PumpEventEntity, PumpEvent> {
     private final ChildMapper childMapper;

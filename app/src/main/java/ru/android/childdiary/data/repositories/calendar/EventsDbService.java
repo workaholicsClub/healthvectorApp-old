@@ -25,15 +25,15 @@ import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureEntity
 import ru.android.childdiary.data.db.entities.exercises.ConcreteExerciseEntity;
 import ru.android.childdiary.data.db.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.db.entities.medical.MedicineTakingEntity;
-import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
-import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
-import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
-import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
+import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
+import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
+import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
+import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
+import ru.android.childdiary.domain.medical.data.DoctorVisit;
+import ru.android.childdiary.domain.medical.data.MedicineTaking;
 
 abstract class EventsDbService {
     protected final Logger logger = LoggerFactory.getLogger(toString());

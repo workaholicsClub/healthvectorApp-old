@@ -14,7 +14,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 

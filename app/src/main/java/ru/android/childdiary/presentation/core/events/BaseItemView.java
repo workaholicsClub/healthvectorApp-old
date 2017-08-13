@@ -11,11 +11,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
-import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
+import ru.android.childdiary.domain.calendar.data.core.TimeUnit;
+import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
+import ru.android.childdiary.domain.dictionaries.medicinemeasure.data.MedicineMeasure;
 import ru.android.childdiary.presentation.core.BaseView;
 
 public interface BaseItemView<T extends Serializable> extends BaseView {

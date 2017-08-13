@@ -8,8 +8,8 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import org.joda.time.LocalDate;
 
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.TestParameters;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.testing.data.processors.core.TestParameters;
 import ru.android.childdiary.presentation.core.BaseView;
 
 public interface TestParametersView extends BaseView {

@@ -18,8 +18,8 @@ import ru.android.childdiary.data.repositories.calendar.mappers.ExerciseEventMap
 import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
 import ru.android.childdiary.data.repositories.core.generators.EventsGenerator;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
-import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
+import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
+import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
 
 public class ExerciseEventsGenerator extends EventsGenerator<ConcreteExercise> {
     private final MasterEventMapper masterEventMapper;

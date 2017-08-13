@@ -6,7 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ru.android.childdiary.data.repositories.core.ValueDataRepository;
-import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListFilter;
+import ru.android.childdiary.domain.medical.requests.GetMedicineTakingListFilter;
 
 @Singleton
 public class MedicineTakingFilterDataRepository extends ValueDataRepository<GetMedicineTakingListFilter> {

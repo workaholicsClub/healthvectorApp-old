@@ -17,7 +17,7 @@ import ru.android.childdiary.data.availability.exceptions.NetworkUnavailableExce
 import ru.android.childdiary.data.cloud.exceptions.BackupUnavailableException;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.domain.cloud.exceptions.AccountNameNotSpecifiedException;
-import ru.android.childdiary.domain.interactors.core.settings.SettingsInteractor;
+import ru.android.childdiary.domain.core.settings.SettingsInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<T> {

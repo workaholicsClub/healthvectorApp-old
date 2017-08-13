@@ -10,10 +10,10 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryInteractor;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.AntropometryPoint;
-import ru.android.childdiary.domain.interactors.development.antropometry.requests.WhoNormRequest;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.antropometry.AntropometryInteractor;
+import ru.android.childdiary.domain.development.antropometry.data.AntropometryPoint;
+import ru.android.childdiary.domain.development.antropometry.requests.WhoNormRequest;
 import ru.android.childdiary.presentation.chart.antropometry.core.AntropometryChartDataMapper;
 import ru.android.childdiary.presentation.chart.core.ChartPresenter;
 

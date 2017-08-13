@@ -15,11 +15,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.MedicineMeasureInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.MedicineInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
-import ru.android.childdiary.domain.interactors.medical.MedicineTakingInteractor;
+import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.dictionaries.medicinemeasure.MedicineMeasureInteractor;
+import ru.android.childdiary.domain.dictionaries.medicines.MedicineInteractor;
+import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
+import ru.android.childdiary.domain.medical.MedicineTakingInteractor;
 import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 

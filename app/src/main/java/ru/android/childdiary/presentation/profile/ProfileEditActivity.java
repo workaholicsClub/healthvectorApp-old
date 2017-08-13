@@ -47,7 +47,7 @@ import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;

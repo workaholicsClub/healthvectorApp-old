@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.daimajia.swipe.SwipeLayout;
 
-import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeAction;
 
 class SwipeDoneAction extends SwipeAction<MasterEvent, EventActionListener> {

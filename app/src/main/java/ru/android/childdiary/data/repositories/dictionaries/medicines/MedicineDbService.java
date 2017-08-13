@@ -14,7 +14,7 @@ import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.dictionaries.MedicineEntity;
 import ru.android.childdiary.data.repositories.dictionaries.core.BaseCrudDbService;
 import ru.android.childdiary.data.repositories.dictionaries.medicines.mappers.MedicineMapper;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
+import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
 
 @Singleton
 public class MedicineDbService extends BaseCrudDbService<Medicine> {

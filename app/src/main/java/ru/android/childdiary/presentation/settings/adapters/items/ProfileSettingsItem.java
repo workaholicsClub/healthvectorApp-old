@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.child.data.Child;
 
 @Value
 @EqualsAndHashCode(callSuper = true)

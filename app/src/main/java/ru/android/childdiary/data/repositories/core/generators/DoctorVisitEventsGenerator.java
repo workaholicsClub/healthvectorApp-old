@@ -17,8 +17,8 @@ import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.DoctorVisitEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
-import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
+import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
+import ru.android.childdiary.domain.medical.data.DoctorVisit;
 
 public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit> {
     private final MasterEventMapper masterEventMapper;

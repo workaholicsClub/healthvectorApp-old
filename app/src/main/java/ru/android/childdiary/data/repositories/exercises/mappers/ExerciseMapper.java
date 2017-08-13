@@ -8,7 +8,7 @@ import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.db.entities.exercises.ExerciseData;
 import ru.android.childdiary.data.db.entities.exercises.ExerciseEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
+import ru.android.childdiary.domain.exercises.data.Exercise;
 
 public class ExerciseMapper implements EntityMapper<ExerciseData, ExerciseEntity, Exercise> {
     @Inject

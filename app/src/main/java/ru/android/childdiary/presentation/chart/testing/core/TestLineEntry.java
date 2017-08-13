@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
 import ru.android.childdiary.data.types.DomanTestParameter;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
+import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.presentation.chart.core.LineEntry;
 
 class TestLineEntry extends LineEntry<TestLineEntryInfo> {

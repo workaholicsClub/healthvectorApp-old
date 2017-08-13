@@ -9,7 +9,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import org.joda.time.LocalTime;
 
-import ru.android.childdiary.domain.interactors.medical.data.DoctorVisit;
+import ru.android.childdiary.domain.medical.data.DoctorVisit;
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogArguments;
 import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataView;
 

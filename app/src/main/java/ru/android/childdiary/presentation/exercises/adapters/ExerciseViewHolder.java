@@ -11,7 +11,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
+import ru.android.childdiary.domain.exercises.data.Exercise;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewHolder;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 

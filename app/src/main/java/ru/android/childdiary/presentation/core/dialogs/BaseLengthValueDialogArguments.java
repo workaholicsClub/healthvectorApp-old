@@ -14,8 +14,8 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
-import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
+import ru.android.childdiary.domain.calendar.data.core.TimeUnit;
 import ru.android.childdiary.presentation.core.BaseDialogArguments;
 import ru.android.childdiary.utils.CollectionUtils;
 

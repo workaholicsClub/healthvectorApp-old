@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
-import ru.android.childdiary.domain.interactors.core.images.ImagesRepository;
+import ru.android.childdiary.domain.core.images.ImagesRepository;
 import ru.android.childdiary.utils.io.FileUtils;
 import ru.android.childdiary.utils.io.ZipUtils;
 

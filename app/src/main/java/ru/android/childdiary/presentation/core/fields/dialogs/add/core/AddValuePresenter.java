@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryValidationException;
-import ru.android.childdiary.domain.interactors.dictionaries.core.validation.DictionaryValidationResult;
+import ru.android.childdiary.domain.dictionaries.core.validation.DictionaryValidationException;
+import ru.android.childdiary.domain.dictionaries.core.validation.DictionaryValidationResult;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 public abstract class AddValuePresenter<T, V extends AddValueView<T>> extends BasePresenter<V> {

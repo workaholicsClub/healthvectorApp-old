@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
+import ru.android.childdiary.domain.calendar.data.core.TimeUnit;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.utils.strings.StringUtils;
 import ru.android.childdiary.utils.strings.TimeUtils;

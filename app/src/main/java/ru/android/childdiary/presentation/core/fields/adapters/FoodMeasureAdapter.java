@@ -8,7 +8,7 @@ import android.view.View;
 import java.util.List;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
+import ru.android.childdiary.domain.dictionaries.foodmeasure.data.FoodMeasure;
 
 public class FoodMeasureAdapter extends SpinnerItemAdapter<FoodMeasure, FoodMeasureAdapter.ViewHolder> {
     public FoodMeasureAdapter(Context context, List<FoodMeasure> foodMeasureList) {

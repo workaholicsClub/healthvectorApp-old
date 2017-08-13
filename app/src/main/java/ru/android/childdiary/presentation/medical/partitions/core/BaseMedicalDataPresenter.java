@@ -9,9 +9,9 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.domain.interactors.core.requests.HasDataResponse;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.child.ChildInteractor;
+import ru.android.childdiary.domain.core.requests.HasDataResponse;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.child.ChildInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
 

@@ -14,7 +14,7 @@ import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.dictionaries.FoodEntity;
 import ru.android.childdiary.data.repositories.dictionaries.core.BaseCrudDbService;
 import ru.android.childdiary.data.repositories.dictionaries.food.mappers.FoodMapper;
-import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.dictionaries.food.data.Food;
 
 @Singleton
 public class FoodDbService extends BaseCrudDbService<Food> {

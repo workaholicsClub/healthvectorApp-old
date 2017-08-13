@@ -7,10 +7,10 @@ import org.joda.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
-import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsFilter;
-import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListFilter;
+import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
+import ru.android.childdiary.domain.medical.requests.GetDoctorVisitsFilter;
+import ru.android.childdiary.domain.medical.requests.GetMedicineTakingListFilter;
 
 public class ChipsUtils {
     public static GetMedicineTakingListFilter mapToMedicineFilter(List<Chips> chips) {

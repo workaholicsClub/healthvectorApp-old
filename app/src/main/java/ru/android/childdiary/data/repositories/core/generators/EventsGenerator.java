@@ -17,12 +17,12 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.domain.interactors.core.data.RepeatParametersContainer;
-import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
-import ru.android.childdiary.domain.interactors.calendar.data.core.LinearGroups;
-import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
-import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.calendar.data.core.TimeUnit;
+import ru.android.childdiary.domain.core.data.RepeatParametersContainer;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
+import ru.android.childdiary.domain.calendar.data.core.LinearGroups;
+import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
+import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
+import ru.android.childdiary.domain.calendar.data.core.TimeUnit;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public abstract class EventsGenerator<From extends RepeatParametersContainer> {

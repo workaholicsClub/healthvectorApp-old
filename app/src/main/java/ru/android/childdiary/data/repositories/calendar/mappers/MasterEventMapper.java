@@ -11,8 +11,8 @@ import ru.android.childdiary.data.db.entities.child.ChildData;
 import ru.android.childdiary.data.db.entities.child.ChildEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.child.data.Child;
 
 public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEventEntity, MasterEvent> {
     private final ChildMapper childMapper;

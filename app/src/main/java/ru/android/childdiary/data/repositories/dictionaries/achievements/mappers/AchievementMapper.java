@@ -8,7 +8,7 @@ import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.db.entities.dictionaries.AchievementData;
 import ru.android.childdiary.data.db.entities.dictionaries.AchievementEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
+import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 
 public class AchievementMapper implements EntityMapper<AchievementData, AchievementEntity, Achievement> {
     @Inject

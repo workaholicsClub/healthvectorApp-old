@@ -11,8 +11,8 @@ import ru.android.childdiary.data.db.entities.development.AntropometryData;
 import ru.android.childdiary.data.db.entities.development.AntropometryEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 
 public class AntropometryMapper implements EntityMapper<AntropometryData, AntropometryEntity, Antropometry> {
     private final ChildMapper childMapper;

@@ -18,8 +18,8 @@ import java.io.File;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.child.data.Child;
 
 public class ResourcesUtils {
     public static Drawable getChildIconForToolbar(Context context, @NonNull Child child) {

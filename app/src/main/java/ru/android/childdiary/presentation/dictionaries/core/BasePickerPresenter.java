@@ -14,7 +14,7 @@ import io.reactivex.schedulers.Schedulers;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import ru.android.childdiary.data.repositories.core.exceptions.RestrictDeleteException;
-import ru.android.childdiary.domain.interactors.dictionaries.core.DictionaryInteractor;
+import ru.android.childdiary.domain.dictionaries.core.DictionaryInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
 import ru.android.childdiary.presentation.core.bindings.SearchViewQueryTextChangeEventsObservable;
 import ru.android.childdiary.presentation.core.bindings.SearchViewQueryTextEvent;

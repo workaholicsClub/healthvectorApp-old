@@ -4,7 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ru.android.childdiary.data.repositories.dictionaries.core.CrudDataRepository;
-import ru.android.childdiary.domain.interactors.dictionaries.medicines.data.Medicine;
+import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
 
 @Singleton
 public class MedicineDataRepository extends CrudDataRepository<Medicine> {

@@ -10,7 +10,7 @@ import com.github.mikephil.charting.utils.MPPointF;
 
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
+import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.strings.DoubleUtils;
 

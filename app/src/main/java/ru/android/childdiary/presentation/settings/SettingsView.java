@@ -10,7 +10,7 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.presentation.cloud.core.CloudView;
 
 public interface SettingsView extends CloudView {

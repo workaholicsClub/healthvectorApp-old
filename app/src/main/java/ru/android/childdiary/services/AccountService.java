@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.core.settings.SettingsInteractor;
+import ru.android.childdiary.domain.core.settings.SettingsInteractor;
 
 public class AccountService extends Service {
     private final Logger logger = LoggerFactory.getLogger(toString());

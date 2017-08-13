@@ -8,7 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
+import ru.android.childdiary.domain.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.presentation.core.fields.dialogs.add.core.AddValueDialogFragment;
 
 public class AddFoodMeasureDialogFragment

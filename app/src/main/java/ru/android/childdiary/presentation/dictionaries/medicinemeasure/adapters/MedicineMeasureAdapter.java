@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.dictionaries.medicinemeasure.data.MedicineMeasure;
+import ru.android.childdiary.domain.dictionaries.medicinemeasure.data.MedicineMeasure;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.utils.ObjectUtils;

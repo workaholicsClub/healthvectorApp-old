@@ -9,7 +9,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
+import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.presentation.dictionaries.core.BaseItemViewHolder;
 
 public class AchievementViewHolder extends BaseItemViewHolder<Achievement,

@@ -4,7 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ru.android.childdiary.data.repositories.dictionaries.core.CrudDataRepository;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
+import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 
 @Singleton
 public class AchievementDataRepository extends CrudDataRepository<Achievement> {

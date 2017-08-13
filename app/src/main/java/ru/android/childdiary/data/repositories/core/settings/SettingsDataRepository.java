@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.BuildConfig;
-import ru.android.childdiary.domain.interactors.core.settings.SettingsRepository;
+import ru.android.childdiary.domain.core.settings.SettingsRepository;
 
 @Singleton
 public class SettingsDataRepository implements SettingsRepository {

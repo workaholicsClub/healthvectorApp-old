@@ -18,8 +18,8 @@ import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMappe
 import ru.android.childdiary.data.repositories.calendar.mappers.MedicineTakingEventMapper;
 import ru.android.childdiary.data.repositories.core.generators.EventsGenerator;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
+import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.medical.data.MedicineTaking;
 
 public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTaking> {
     private final MasterEventMapper masterEventMapper;

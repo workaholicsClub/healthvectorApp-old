@@ -8,9 +8,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.calendar.data.standard.FeedEvent;
-import ru.android.childdiary.domain.interactors.dictionaries.food.FoodInteractor;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.FoodMeasureInteractor;
+import ru.android.childdiary.domain.calendar.data.standard.FeedEvent;
+import ru.android.childdiary.domain.dictionaries.food.FoodInteractor;
+import ru.android.childdiary.domain.dictionaries.foodmeasure.FoodMeasureInteractor;
 import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
 
 @InjectViewState

@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.Value;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
+import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.presentation.chart.core.ChartState;
 import ru.android.childdiary.utils.strings.TestUtils;
 

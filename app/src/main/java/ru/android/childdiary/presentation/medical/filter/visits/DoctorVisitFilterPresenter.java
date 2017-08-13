@@ -9,8 +9,8 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.medical.DoctorVisitInteractor;
-import ru.android.childdiary.domain.interactors.medical.requests.GetDoctorVisitsFilter;
+import ru.android.childdiary.domain.medical.DoctorVisitInteractor;
+import ru.android.childdiary.domain.medical.requests.GetDoctorVisitsFilter;
 import ru.android.childdiary.presentation.core.BasePresenter;
 
 @InjectViewState

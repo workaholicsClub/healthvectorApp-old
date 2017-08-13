@@ -20,12 +20,12 @@ import io.reactivex.functions.Function;
 import ru.android.childdiary.data.network.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ProgramsToExercisesMapper;
-import ru.android.childdiary.domain.interactors.core.exceptions.TryCountExceededException;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
-import ru.android.childdiary.domain.interactors.exercises.ExerciseRepository;
-import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseRequest;
-import ru.android.childdiary.domain.interactors.exercises.requests.UpsertConcreteExerciseResponse;
+import ru.android.childdiary.domain.core.exceptions.TryCountExceededException;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.exercises.data.Exercise;
+import ru.android.childdiary.domain.exercises.ExerciseRepository;
+import ru.android.childdiary.domain.exercises.requests.UpsertConcreteExerciseRequest;
+import ru.android.childdiary.domain.exercises.requests.UpsertConcreteExerciseResponse;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 @Singleton

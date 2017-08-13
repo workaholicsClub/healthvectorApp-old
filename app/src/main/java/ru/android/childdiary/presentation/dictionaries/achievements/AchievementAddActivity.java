@@ -18,7 +18,7 @@ import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.interactors.dictionaries.achievements.data.Achievement;
+import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.dictionaries.core.BaseAddActivity;
 import ru.android.childdiary.presentation.medical.adapters.core.StringFilteredAdapter;

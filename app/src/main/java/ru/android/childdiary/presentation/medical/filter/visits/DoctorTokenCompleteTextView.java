@@ -3,7 +3,7 @@ package ru.android.childdiary.presentation.medical.filter.visits;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import ru.android.childdiary.domain.interactors.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.presentation.medical.filter.core.BaseTokenCompleteTextView;
 
 public class DoctorTokenCompleteTextView extends BaseTokenCompleteTextView<Doctor> {

@@ -8,19 +8,19 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.calendar.CleanUpDbService;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.medical.MedicineTakingRepository;
-import ru.android.childdiary.domain.interactors.medical.data.MedicineTaking;
-import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.CompleteMedicineTakingResponse;
-import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingEventsResponse;
-import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.DeleteMedicineTakingResponse;
-import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.GetMedicineTakingListResponse;
-import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingRequest;
-import ru.android.childdiary.domain.interactors.medical.requests.UpsertMedicineTakingResponse;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.medical.MedicineTakingRepository;
+import ru.android.childdiary.domain.medical.data.MedicineTaking;
+import ru.android.childdiary.domain.medical.requests.CompleteMedicineTakingRequest;
+import ru.android.childdiary.domain.medical.requests.CompleteMedicineTakingResponse;
+import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingEventsRequest;
+import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingEventsResponse;
+import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingRequest;
+import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingResponse;
+import ru.android.childdiary.domain.medical.requests.GetMedicineTakingListRequest;
+import ru.android.childdiary.domain.medical.requests.GetMedicineTakingListResponse;
+import ru.android.childdiary.domain.medical.requests.UpsertMedicineTakingRequest;
+import ru.android.childdiary.domain.medical.requests.UpsertMedicineTakingResponse;
 
 @Singleton
 public class MedicineTakingDataRepository implements MedicineTakingRepository {

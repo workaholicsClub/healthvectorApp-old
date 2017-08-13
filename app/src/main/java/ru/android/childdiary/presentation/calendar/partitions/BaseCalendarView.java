@@ -9,15 +9,15 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import java.util.Set;
 
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.interactors.calendar.data.DoctorVisitEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.ExerciseEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.MedicineTakingEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.core.MasterEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.standard.DiaperEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.standard.FeedEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.standard.OtherEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.standard.PumpEvent;
-import ru.android.childdiary.domain.interactors.calendar.data.standard.SleepEvent;
+import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
+import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
+import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.calendar.data.standard.DiaperEvent;
+import ru.android.childdiary.domain.calendar.data.standard.FeedEvent;
+import ru.android.childdiary.domain.calendar.data.standard.OtherEvent;
+import ru.android.childdiary.domain.calendar.data.standard.PumpEvent;
+import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
 import ru.android.childdiary.presentation.core.BaseView;
 
 public interface BaseCalendarView extends BaseView {

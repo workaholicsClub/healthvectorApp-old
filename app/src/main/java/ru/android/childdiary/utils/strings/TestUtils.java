@@ -10,13 +10,13 @@ import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestFactory;
-import ru.android.childdiary.domain.interactors.development.testing.data.TestResult;
-import ru.android.childdiary.domain.interactors.development.testing.data.interpreters.core.TestInterpreter;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.BaseTestProcessor;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
-import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.DomanTest;
-import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
+import ru.android.childdiary.domain.development.testing.data.TestFactory;
+import ru.android.childdiary.domain.development.testing.data.TestResult;
+import ru.android.childdiary.domain.development.testing.data.interpreters.core.TestInterpreter;
+import ru.android.childdiary.domain.development.testing.data.processors.core.BaseTestProcessor;
+import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
+import ru.android.childdiary.domain.development.testing.data.tests.core.DomanTest;
+import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
 import ru.android.childdiary.utils.ui.JustifiedTextHelper;
 
 public class TestUtils {

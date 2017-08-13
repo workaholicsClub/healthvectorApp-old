@@ -6,8 +6,8 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryView;
 
 public interface AntropometryListView extends BaseDevelopmentDiaryView {

@@ -15,9 +15,9 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.DomanTestParameter;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
-import ru.android.childdiary.domain.interactors.development.testing.data.tests.core.Test;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
+import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.utils.strings.TestUtils;
 

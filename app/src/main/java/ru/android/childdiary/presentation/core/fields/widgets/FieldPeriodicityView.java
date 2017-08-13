@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.data.core.PeriodicityType;
+import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.presentation.core.fields.adapters.PeriodicityAdapter;
 import ru.android.childdiary.utils.strings.StringUtils;
 

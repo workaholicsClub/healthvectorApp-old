@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.medical.data.MedicineMeasureValue;
+import ru.android.childdiary.domain.medical.data.MedicineMeasureValue;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 public class FieldMedicineMeasureValueView extends FieldDialogView<MedicineMeasureValue> {

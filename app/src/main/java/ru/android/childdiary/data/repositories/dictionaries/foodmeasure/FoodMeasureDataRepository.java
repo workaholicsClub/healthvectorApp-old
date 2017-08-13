@@ -4,7 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ru.android.childdiary.data.repositories.dictionaries.core.CrudDataRepository;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
+import ru.android.childdiary.domain.dictionaries.foodmeasure.data.FoodMeasure;
 
 @Singleton
 public class FoodMeasureDataRepository extends CrudDataRepository<FoodMeasure> {

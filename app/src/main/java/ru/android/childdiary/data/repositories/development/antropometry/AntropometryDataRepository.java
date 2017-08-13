@@ -11,9 +11,9 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
-import ru.android.childdiary.domain.interactors.development.antropometry.AntropometryRepository;
-import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.development.antropometry.AntropometryRepository;
+import ru.android.childdiary.domain.development.antropometry.requests.AntropometryListRequest;
 
 @Singleton
 public class AntropometryDataRepository implements AntropometryRepository {

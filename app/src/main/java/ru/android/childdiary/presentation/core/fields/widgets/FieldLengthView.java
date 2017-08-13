@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.calendar.data.core.LengthValue;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 public class FieldLengthView extends FieldDialogView<LengthValue> {

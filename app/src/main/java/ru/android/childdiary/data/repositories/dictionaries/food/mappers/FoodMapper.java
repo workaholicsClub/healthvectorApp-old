@@ -8,7 +8,7 @@ import io.requery.BlockingEntityStore;
 import ru.android.childdiary.data.db.entities.dictionaries.FoodData;
 import ru.android.childdiary.data.db.entities.dictionaries.FoodEntity;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.dictionaries.food.data.Food;
 
 public class FoodMapper implements EntityMapper<FoodData, FoodEntity, Food> {
     @Inject

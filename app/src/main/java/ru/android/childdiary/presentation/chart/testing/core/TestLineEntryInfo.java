@@ -6,7 +6,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.DomanTestParameter;
-import ru.android.childdiary.domain.interactors.development.testing.data.processors.core.DomanResult;
+import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.presentation.chart.core.LineEntryInfo;
 
 @ToString(callSuper = true)

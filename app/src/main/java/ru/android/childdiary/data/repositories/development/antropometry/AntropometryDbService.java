@@ -19,9 +19,9 @@ import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.development.AntropometryEntity;
 import ru.android.childdiary.data.repositories.development.antropometry.mappers.AntropometryMapper;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
-import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.development.antropometry.requests.AntropometryListRequest;
 
 @Singleton
 public class AntropometryDbService {

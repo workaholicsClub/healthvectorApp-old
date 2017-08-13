@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.dictionaries.foodmeasure.data.FoodMeasure;
+import ru.android.childdiary.domain.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.presentation.core.fields.adapters.FoodMeasureAdapter;
 
 public class FieldFoodMeasureView extends FieldSpinnerView<FoodMeasure> {

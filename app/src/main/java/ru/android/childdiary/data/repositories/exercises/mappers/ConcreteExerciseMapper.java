@@ -16,10 +16,10 @@ import ru.android.childdiary.data.db.entities.exercises.ExerciseEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.domain.interactors.calendar.data.core.RepeatParameters;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.exercises.data.ConcreteExercise;
-import ru.android.childdiary.domain.interactors.exercises.data.Exercise;
+import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
+import ru.android.childdiary.domain.exercises.data.Exercise;
 
 public class ConcreteExerciseMapper implements EntityMapper<ConcreteExerciseData, ConcreteExerciseEntity, ConcreteExercise> {
     private final ChildMapper childMapper;

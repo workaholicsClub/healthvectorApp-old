@@ -40,10 +40,10 @@ import ru.android.childdiary.data.repositories.dictionaries.medicines.mappers.Me
 import ru.android.childdiary.data.repositories.dictionaries.medicinemeasure.mappers.MedicineMeasureMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.child.requests.DeleteChildRequest;
-import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
-import ru.android.childdiary.domain.interactors.development.antropometry.requests.AntropometryListRequest;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.child.requests.DeleteChildRequest;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.development.antropometry.requests.AntropometryListRequest;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.log.LogSystem;
 

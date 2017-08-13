@@ -11,7 +11,7 @@ import org.joda.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.child.data.Child;
+import ru.android.childdiary.domain.child.data.Child;
 
 public abstract class AppPartitionFragment extends BaseMvpFragment implements AppPartitionView {
     protected static final String TAG_FILTER = "TAG_FILTER";

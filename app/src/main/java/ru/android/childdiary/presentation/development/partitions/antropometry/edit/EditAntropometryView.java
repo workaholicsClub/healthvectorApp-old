@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-import ru.android.childdiary.domain.interactors.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.presentation.development.partitions.antropometry.core.AntropometryView;
 
 public interface EditAntropometryView extends AntropometryView {

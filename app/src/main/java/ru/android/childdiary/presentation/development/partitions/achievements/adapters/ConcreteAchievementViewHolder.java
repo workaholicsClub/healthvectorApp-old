@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
+import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;

@@ -13,8 +13,8 @@ import java.util.List;
 
 import lombok.Getter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.interactors.child.data.Child;
-import ru.android.childdiary.domain.interactors.development.achievement.data.ConcreteAchievement;
+import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementActionListener;
 import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementAdapter;
