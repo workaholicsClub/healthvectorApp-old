@@ -277,6 +277,8 @@
         <service android:name=".services.UpdateDataService" />
         <service android:name=".services.CloudService" />
         <service android:name=".services.AccountService" />
+        <service android:name=".services.EventScheduleService" />
+        <service android:name=".services.LinearGroupFinishedService" />
 
         <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>

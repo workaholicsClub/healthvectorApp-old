@@ -16,7 +16,7 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Function;
 import ru.android.childdiary.R;
 
-public class JustifiedTextHelper {
+public class FormatTextHelper {
     private static final String PARAGRAPH_FORMAT_JUSTIFY = "<p class=\"tab\" style=\"text-align:justify\">%s</p>";
     private static final String PARAGRAPH_FORMAT_CENTER = "<p style=\"text-align:center\">%s</p>";
     private static final String PARAGRAPH_FORMAT_LEFT = "<p class=\"tab\" style=\"text-align:left\">%s</p>";
@@ -32,7 +32,7 @@ public class JustifiedTextHelper {
 
     private final String justifiedTextFormat;
 
-    private JustifiedTextHelper(Context context) {
+    private FormatTextHelper(Context context) {
         int indent = context.getResources().getDimensionPixelSize(R.dimen.base_margin);
         @ColorInt int color = ContextCompat.getColor(context, R.color.primary_text);
         String primaryTextColor = String.format("#%08X", color);
@@ -57,7 +57,7 @@ public class JustifiedTextHelper {
     }
 
     public static void showInWebView(WebView webView, @Nullable String text) {
-        JustifiedTextHelper helper = new JustifiedTextHelper(webView.getContext());
+        FormatTextHelper helper = new FormatTextHelper(webView.getContext());
         text = helper.map(text);
         if (text == null) {
             return;
@@ -66,15 +66,15 @@ public class JustifiedTextHelper {
     }
 
     public static String getParagraphsWithJustifyAlignment(Context context, @ArrayRes int stringArrayId) {
-        return getParagraphs(context, stringArrayId, JustifiedTextHelper::getParagraphWithJustifyAlignment);
+        return getParagraphs(context, stringArrayId, FormatTextHelper::getParagraphWithJustifyAlignment);
     }
 
     public static String getParagraphsWithCenterAlignment(Context context, @ArrayRes int stringArrayId) {
-        return getParagraphs(context, stringArrayId, JustifiedTextHelper::getParagraphWithCenterAlignment);
+        return getParagraphs(context, stringArrayId, FormatTextHelper::getParagraphWithCenterAlignment);
     }
 
     public static String getParagraphsWithLeftAlignment(Context context, @ArrayRes int stringArrayId) {
-        return getParagraphs(context, stringArrayId, JustifiedTextHelper::getParagraphWithLeftAlignment);
+        return getParagraphs(context, stringArrayId, FormatTextHelper::getParagraphWithLeftAlignment);
     }
 
     private static String getParagraphs(Context context,

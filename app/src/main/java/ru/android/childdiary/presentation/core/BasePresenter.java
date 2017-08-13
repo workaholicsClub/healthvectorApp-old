@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -27,7 +28,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 
     protected abstract void injectPresenter(ApplicationComponent applicationComponent);
 
-    protected final void unsubscribe(Disposable subscription) {
+    protected final void unsubscribe(@Nullable Disposable subscription) {
         if (subscription != null && !subscription.isDisposed()) {
             subscription.dispose();
         }

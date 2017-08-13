@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.HtmlUtils;
-import ru.android.childdiary.utils.ui.JustifiedTextHelper;
+import ru.android.childdiary.utils.ui.FormatTextHelper;
 
 public class FieldJustifiedTextView extends LinearLayout {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -118,6 +118,6 @@ public class FieldJustifiedTextView extends LinearLayout {
     }
 
     public void setText(String text) {
-        JustifiedTextHelper.showInWebView(webView, text);
+        FormatTextHelper.showInWebView(webView, text);
     }
 }

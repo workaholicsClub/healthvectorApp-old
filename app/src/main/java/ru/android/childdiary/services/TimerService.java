@@ -1,17 +1,14 @@
 package ru.android.childdiary.services;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,10 +19,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.app.ChildDiaryApplication;
+import lombok.Getter;
 import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.CalendarInteractor;
@@ -33,20 +29,21 @@ import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
 import ru.android.childdiary.domain.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.utils.strings.EventUtils;
+import ru.android.childdiary.services.core.BaseService;
 import ru.android.childdiary.utils.log.LogSystem;
+import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ui.NotificationHelper;
 
-public class TimerService extends Service {
+public class TimerService extends BaseService {
     public static final String EXTRA_ACTION = "TimerService.EXTRA_ACTION";
     public static final String ACTION_STOP_SLEEP_EVENT_TIMER = "TimerService.ACTION_STOP_SLEEP_EVENT_TIMER";
     public static final String ACTION_RESUBSCRIBE = "TimerService.ACTION_RESUBSCRIBE";
 
     private static final long TIMER_PERIOD = 1000;
 
-    private final Logger logger = LoggerFactory.getLogger(toString());
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    @Getter
     private final TimerServiceBinder binder = new TimerServiceBinder(this);
+
     @SuppressLint("UseSparseArrays")
     private final Map<Long, NotificationCompat.Builder> notificationBuilders = new HashMap<>();
 
@@ -61,46 +58,24 @@ public class TimerService extends Service {
     private List<SleepEvent> events = new ArrayList<>();
 
     @Override
-    public int onStartCommand(final Intent intent, int flags, int startId) {
-        logger.debug("onStartCommand: " + intent);
-
-        handleIntent(intent);
-
-        return START_STICKY;
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        logger.debug("onBind: " + intent);
-        return binder;
-    }
-
-    @Override
-    public void onCreate() {
-        logger.debug("onCreate");
-
-        ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
-        component.inject(this);
-
+    protected void onCreate(ApplicationComponent applicationComponent) {
+        applicationComponent.inject(this);
         subscribeOnUpdates();
     }
 
     @Override
     public void onDestroy() {
-        logger.debug("onDestroy");
-
-        compositeDisposable.dispose();
-
+        super.onDestroy();
         clear();
     }
 
-    private void handleIntent(Intent intent) {
+    @Override
+    protected void handleIntent(@Nullable Intent intent) {
         if (intent == null) {
             return;
         }
 
         String action = intent.getStringExtra(EXTRA_ACTION);
-
         if (action == null) {
             return;
         }
@@ -237,16 +212,5 @@ public class TimerService extends Service {
             }
             notificationHelper.showSleepNotification(notificationId, builder);
         }
-    }
-
-    private void unsubscribe(Disposable subscription) {
-        if (subscription != null && !subscription.isDisposed()) {
-            subscription.dispose();
-        }
-    }
-
-    private Disposable unsubscribeOnDestroy(@NonNull Disposable disposable) {
-        compositeDisposable.add(disposable);
-        return disposable;
     }
 }

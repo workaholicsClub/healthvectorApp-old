@@ -17,7 +17,7 @@ import ru.android.childdiary.domain.development.testing.data.processors.core.Bas
 import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.domain.development.testing.data.tests.core.DomanTest;
 import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
-import ru.android.childdiary.utils.ui.JustifiedTextHelper;
+import ru.android.childdiary.utils.ui.FormatTextHelper;
 
 public class TestUtils {
     @Nullable
@@ -46,11 +46,11 @@ public class TestUtils {
         switch (testType) {
             case DOMAN_PHYSICAL:
             case DOMAN_MENTAL:
-                return JustifiedTextHelper.getParagraphsWithJustifyAlignment(context, R.array.test_doman_description_paragraphs);
+                return FormatTextHelper.getParagraphsWithJustifyAlignment(context, R.array.test_doman_description_paragraphs);
             case AUTISM:
-                return JustifiedTextHelper.getParagraphsWithJustifyAlignment(context, R.array.test_autism_description_paragraphs);
+                return FormatTextHelper.getParagraphsWithJustifyAlignment(context, R.array.test_autism_description_paragraphs);
             case NEWBORN:
-                return JustifiedTextHelper.getParagraphWithJustifyAlignment(context, R.string.test_newborn_description);
+                return FormatTextHelper.getParagraphWithJustifyAlignment(context, R.string.test_newborn_description);
         }
         return null;
     }

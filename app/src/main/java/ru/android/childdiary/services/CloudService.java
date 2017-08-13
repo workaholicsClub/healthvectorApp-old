@@ -1,12 +1,9 @@
 package ru.android.childdiary.services;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
@@ -14,35 +11,23 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.R;
-import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.availability.NetworkAvailability;
 import ru.android.childdiary.data.availability.exceptions.NetworkUnavailableException;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.domain.core.settings.SettingsInteractor;
+import ru.android.childdiary.services.core.BaseService;
 import ru.android.childdiary.utils.log.LogSystem;
-import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.NotificationHelper;
 
-public class CloudService extends Service {
+public class CloudService extends BaseService {
     private static final int NOTIFICATION_ID_ERROR = -1;
     private static final int NOTIFICATION_ID_BACKUP = -2;
-
-    private final Logger logger = LoggerFactory.getLogger(toString());
-
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Inject
     NetworkAvailability networkAvailability;
@@ -56,55 +41,30 @@ public class CloudService extends Service {
     @Inject
     NotificationHelper notificationHelper;
 
-    public static void installAlarm(Context context) {
-        PendingIntent pendingIntent = getPendingIntent(context);
-
-        DateTime dateTime = DateUtils.nextDayMidnight(LocalDate.now());
-        long midnightMillis = dateTime.getMillis();
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, midnightMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
-
-    private static PendingIntent getPendingIntent(Context context) {
+    public static PendingIntent getPendingIntent(Context context) {
         Intent intent = new Intent(context, CloudService.class);
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    @Nullable
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        logger.debug("onStartCommand: " + intent);
-
-        handleIntent(intent);
-
-        return START_STICKY;
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        logger.debug("onBind: " + intent);
+    protected IBinder getBinder() {
         return null;
     }
 
     @Override
-    public void onCreate() {
-        logger.debug("onCreate");
-
-        ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
-        component.inject(this);
+    protected void onCreate(ApplicationComponent applicationComponent) {
+        applicationComponent.inject(this);
     }
 
     @Override
     public void onDestroy() {
-        logger.debug("onDestroy");
-
-        compositeDisposable.dispose();
-
+        super.onDestroy();
         notificationHelper.hideNotification(NOTIFICATION_ID_BACKUP);
     }
 
-    private void handleIntent(@Nullable Intent intent) {
+    @Override
+    protected void handleIntent(@Nullable Intent intent) {
         unsubscribeOnDestroy(
                 settingsInteractor.getAccountNameOnce()
                         .subscribeOn(Schedulers.io())
@@ -187,10 +147,5 @@ public class CloudService extends Service {
         LogSystem.report(logger, "unexpected error", e);
 
         stopSelf();
-    }
-
-    private Disposable unsubscribeOnDestroy(@NonNull Disposable disposable) {
-        compositeDisposable.add(disposable);
-        return disposable;
     }
 }

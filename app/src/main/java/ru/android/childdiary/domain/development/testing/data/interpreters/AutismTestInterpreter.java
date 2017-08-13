@@ -10,7 +10,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.domain.development.testing.data.interpreters.core.BaseTestInterpreter;
 import ru.android.childdiary.domain.development.testing.data.processors.AutismTestProcessor;
 import ru.android.childdiary.domain.development.testing.data.tests.AutismTest;
-import ru.android.childdiary.utils.ui.JustifiedTextHelper;
+import ru.android.childdiary.utils.ui.FormatTextHelper;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -46,8 +46,8 @@ public class AutismTestInterpreter extends BaseTestInterpreter<AutismTest, Autis
 
     private String getAutismFinishText(@StringRes int stringId, int count) {
         String countStr = context.getResources().getQuantityString(R.plurals.numberOfPoints, count, count);
-        return JustifiedTextHelper.getParagraphWithCenterAlignment(countStr)
-                + JustifiedTextHelper.getParagraphWithJustifyAlignment(context, stringId)
-                + JustifiedTextHelper.getParagraphWithJustifyAlignment(context, R.string.test_autism_finish_text);
+        return FormatTextHelper.getParagraphWithCenterAlignment(countStr)
+                + FormatTextHelper.getParagraphWithJustifyAlignment(context, stringId)
+                + FormatTextHelper.getParagraphWithJustifyAlignment(context, R.string.test_autism_finish_text);
     }
 }

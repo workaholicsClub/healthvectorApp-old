@@ -33,7 +33,7 @@ import ru.android.childdiary.domain.development.testing.data.tests.core.Question
 import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
 import ru.android.childdiary.domain.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.utils.strings.TestUtils;
-import ru.android.childdiary.utils.ui.JustifiedTextHelper;
+import ru.android.childdiary.utils.ui.FormatTextHelper;
 
 @Singleton
 public class TestingDataRepository implements TestingRepository {
@@ -133,10 +133,10 @@ public class TestingDataRepository implements TestingRepository {
     }
 
     private String formatQuestionText(int i, int count, String text, boolean withNumbers) {
-        text = JustifiedTextHelper.getParagraphWithJustifyAlignment(text);
+        text = FormatTextHelper.getParagraphWithJustifyAlignment(text);
         if (withNumbers) {
             String numberStr = context.getString(R.string.question_format, i + 1, count);
-            return JustifiedTextHelper.getParagraphWithLeftAlignment(numberStr)
+            return FormatTextHelper.getParagraphWithLeftAlignment(numberStr)
                     + text;
         }
         return text;

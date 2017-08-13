@@ -114,6 +114,8 @@ import ru.android.childdiary.presentation.testing.TestingPresenter;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersPresenter;
 import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.CloudService;
+import ru.android.childdiary.services.EventScheduleService;
+import ru.android.childdiary.services.LinearGroupFinishedService;
 import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.services.UpdateDataService;
 
@@ -343,4 +345,8 @@ public interface ApplicationComponent {
     void inject(CloudService service);
 
     void inject(AccountService service);
+
+    void inject(EventScheduleService service);
+
+    void inject(LinearGroupFinishedService service);
 }

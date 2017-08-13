@@ -15,8 +15,8 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.di.DaggerApplicationComponent;
 import ru.android.childdiary.di.modules.ApplicationModule;
 import ru.android.childdiary.services.AccountService;
-import ru.android.childdiary.services.CloudService;
 import ru.android.childdiary.services.TimerService;
+import ru.android.childdiary.services.core.ScheduleHelper;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.FontUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -51,6 +51,6 @@ public class ChildDiaryApplication extends MultiDexApplication {
 
         startService(new Intent(this, TimerService.class));
         startService(new Intent(this, AccountService.class));
-        CloudService.installAlarm(this);
+        ScheduleHelper.scheduleAllRepeatingTasks(this);
     }
 }
