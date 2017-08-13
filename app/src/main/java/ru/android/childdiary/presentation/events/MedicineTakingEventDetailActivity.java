@@ -116,7 +116,7 @@ public class MedicineTakingEventDetailActivity
         medicineView.setFieldDialogListener(view -> {
             startActivityForResult(MedicinePickerActivity.getIntent(this, getSex(), true),
                     REQUEST_MEDICINE);
-            hideKeyboardAndClearFocus(rootView.findFocus());
+            hideKeyboardAndClearFocus();
         });
         medicineMeasureValueView.setFieldDialogListener(view -> getPresenter().requestMedicineMeasureValueDialog());
         setupEditTextView(noteWithPhotoView);

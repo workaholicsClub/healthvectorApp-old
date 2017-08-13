@@ -129,7 +129,7 @@ public class DoctorVisitEventDetailActivity
         doctorView.setFieldDialogListener(view -> {
             startActivityForResult(DoctorPickerActivity.getIntent(this, getSex(), true),
                     REQUEST_DOCTOR);
-            hideKeyboardAndClearFocus(rootView.findFocus());
+            hideKeyboardAndClearFocus();
         });
         setupEditTextView(noteWithPhotoView);
         noteWithPhotoView.setPhotoListener(this);

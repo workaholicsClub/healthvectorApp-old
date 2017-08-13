@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -28,11 +27,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupItem;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
+import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
@@ -55,9 +54,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
 
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
-
-    @BindView(R.id.rootView)
-    protected View rootView;
 
     private ViewGroup detailsView;
 
@@ -142,7 +138,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     protected void onPause() {
         super.onPause();
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     protected final T buildEvent() {

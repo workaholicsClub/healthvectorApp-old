@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -39,9 +38,6 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 public abstract class AntropometryActivity<V extends AntropometryView> extends BaseMvpActivity
         implements AntropometryView, DatePickerDialog.OnDateSetListener {
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
-
-    @BindView(R.id.rootView)
-    protected View rootView;
 
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;

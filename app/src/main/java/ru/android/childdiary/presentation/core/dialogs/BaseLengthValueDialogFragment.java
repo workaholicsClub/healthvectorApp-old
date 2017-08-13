@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.core.dialogs;
 
 import android.support.annotation.LayoutRes;
-import android.view.View;
 import android.widget.NumberPicker;
 
 import java.util.List;
@@ -16,9 +15,6 @@ import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 public abstract class BaseLengthValueDialogFragment<T extends BaseLengthValueDialogArguments> extends BaseMvpDialogFragment<T> {
-    @BindView(R.id.rootView)
-    View rootView;
-
     @BindView(R.id.numberPickerLength)
     NumberPicker numberPickerLength;
 
@@ -110,9 +106,5 @@ public abstract class BaseLengthValueDialogFragment<T extends BaseLengthValueDia
                 .map(strings -> strings.toArray(new String[strings.size()]))
                 .blockingGet();
         numberPickerTimeUnit.setDisplayedValues(names);
-    }
-
-    protected void hideKeyboardAndClearFocus() {
-        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 }

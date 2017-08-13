@@ -21,9 +21,6 @@ import ru.android.childdiary.utils.strings.DoubleUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<MedicineMeasureValueDialogArguments> {
-    @BindView(R.id.rootView)
-    View rootView;
-
     @BindView(R.id.editText)
     CustomEditText editText;
 
@@ -86,7 +83,7 @@ public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<Me
                 .setTitle(R.string.medicine_measure_value_dialog_title)
                 .setPositiveButton(R.string.ok,
                         (dialog, which) -> {
-                            hideKeyboardAndClearFocus(rootView.findFocus());
+                            hideKeyboardAndClearFocus();
                             Double amount = readAmount();
                             MedicineMeasure medicineMeasure = readMedicineMeasure();
                             if (listener != null) {
@@ -98,7 +95,7 @@ public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<Me
                             }
                         })
                 .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
+                        (dialog, which) -> hideKeyboardAndClearFocus());
 
         return builder.setCancelable(false)
                 .create();

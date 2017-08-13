@@ -88,9 +88,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
 
-    @BindView(R.id.rootView)
-    View rootView;
-
     private ViewGroup detailsView;
 
     private boolean isValidationStarted;
@@ -146,14 +143,14 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
             getDoctorView().setFieldDialogListener(view -> {
                 startActivityForResult(DoctorPickerActivity.getIntent(this, getSex(), true),
                         REQUEST_DOCTOR);
-                hideKeyboardAndClearFocus(rootView.findFocus());
+                hideKeyboardAndClearFocus();
             });
         }
         if (getMedicineView() != null) {
             getMedicineView().setFieldDialogListener(view -> {
                 startActivityForResult(MedicinePickerActivity.getIntent(this, getSex(), true),
                         REQUEST_MEDICINE);
-                hideKeyboardAndClearFocus(rootView.findFocus());
+                hideKeyboardAndClearFocus();
             });
         }
         if (getMedicineMeasureValueView() != null) {
@@ -235,7 +232,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @Override
     protected void onPause() {
         super.onPause();
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     @Override

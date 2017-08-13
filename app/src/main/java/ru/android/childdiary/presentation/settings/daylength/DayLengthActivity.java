@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -41,9 +40,6 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
 
     @BindView(R.id.buttonAdd)
     Button buttonAdd;
-
-    @BindView(R.id.rootView)
-    View rootView;
 
     @BindView(R.id.dayStartTimeView)
     FieldDayTimeView dayStartTimeView;

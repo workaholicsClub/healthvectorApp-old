@@ -36,9 +36,6 @@ import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class BasePickerActivity<T extends Serializable, V extends BasePickerView<T>> extends BaseMvpActivity
         implements BasePickerView<T>, ItemActionListener<T>, FabController {
-    @BindView(R.id.rootView)
-    View rootView;
-
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
@@ -92,7 +89,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     @Override
     protected void onPause() {
         super.onPause();
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     @OnClick(R.id.fab)

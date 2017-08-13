@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -30,9 +29,6 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseMvpActivity implements BaseAddView<T> {
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
-
-    @BindView(R.id.rootView)
-    protected View rootView;
 
     @BindView(R.id.autoCompleteView)
     protected FieldEditTextWithImageAutocompleteView autoCompleteView;
@@ -76,7 +72,7 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
     @Override
     protected void onPause() {
         super.onPause();
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     @OnClick(R.id.buttonAdd)

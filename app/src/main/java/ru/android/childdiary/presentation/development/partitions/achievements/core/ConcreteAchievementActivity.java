@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -29,8 +28,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.child.data.Child;
-import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
+import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
@@ -49,9 +48,6 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         implements ConcreteAchievementView, DatePickerDialog.OnDateSetListener,
         FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener {
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
-
-    @BindView(R.id.rootView)
-    protected View rootView;
 
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;

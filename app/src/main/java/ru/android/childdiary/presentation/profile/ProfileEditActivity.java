@@ -80,9 +80,6 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     @InjectPresenter
     ProfileEditPresenter presenter;
 
-    @BindView(R.id.rootView)
-    View rootView;
-
     @BindView(R.id.topPanel)
     View topPanel;
 
@@ -182,7 +179,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     @Override
     protected void onPause() {
         super.onPause();
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     private void updateChild(Child child) {
@@ -276,7 +273,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         Sex sex = ((SexAdapter) parent.getAdapter()).getItem(position);
         updateChild(editedChild.toBuilder().sex(sex).build());
         setupSex();
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     @Override
@@ -328,7 +325,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, birthDate, getSex(),
                 null, LocalDate.now());
         dpd.show(getFragmentManager(), TAG_DATE_PICKER);
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     @OnClick(R.id.textViewTimeWrapper)
@@ -336,7 +333,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         LocalTime birthTime = editedChild.getBirthTime();
         TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, birthTime, getSex());
         tpd.show(getFragmentManager(), TAG_TIME_PICKER);
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     @Override

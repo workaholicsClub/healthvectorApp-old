@@ -24,9 +24,6 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments> {
     private final List<Listener> listeners = new ArrayList<>();
 
-    @BindView(R.id.rootView)
-    View rootView;
-
     @BindView(R.id.numberPickerYears)
     NumberPicker numberPickerYears;
 
@@ -91,7 +88,7 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
                 .setTitle(dialogArguments.getTitle())
                 .setPositiveButton(R.string.ok,
                         (dialog, which) -> {
-                            hideKeyboardAndClearFocus(rootView.findFocus());
+                            hideKeyboardAndClearFocus();
                             int months = numberPickerYears.getValue() * TimeUtils.MONTHS_IN_YEAR
                                     + numberPickerMonths.getValue();
                             for (Listener listener : listeners) {
@@ -99,7 +96,7 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
                             }
                         })
                 .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
+                        (dialog, which) -> hideKeyboardAndClearFocus());
 
         return builder.setCancelable(false)
                 .create();

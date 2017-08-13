@@ -39,6 +39,10 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
     protected T dialogArguments;
 
     @Nullable
+    @BindView(R.id.rootView)
+    View rootView;
+
+    @Nullable
     @BindView(R.id.dummy)
     View dummy;
 
@@ -92,6 +96,14 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
                     .setPositiveButton(R.string.ok, null)
                     .show();
         }
+    }
+
+    public final void hideKeyboardAndClearFocus() {
+        if (rootView == null) {
+            logger.error("specify root view");
+            return;
+        }
+        hideKeyboardAndClearFocus();
     }
 
     public final void hideKeyboardAndClearFocus(@Nullable View view) {

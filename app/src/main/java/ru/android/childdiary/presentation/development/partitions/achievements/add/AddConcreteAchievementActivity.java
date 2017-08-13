@@ -60,7 +60,7 @@ public class AddConcreteAchievementActivity extends ConcreteAchievementActivity<
     void onButtonAddClick() {
         presenter.add(buildConcreteAchievement());
         if (isButtonDoneEnabled) {
-            hideKeyboardAndClearFocus(rootView);
+            hideKeyboardAndClearFocus();
         }
     }
 

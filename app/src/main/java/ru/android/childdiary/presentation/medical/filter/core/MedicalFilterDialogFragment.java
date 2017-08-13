@@ -45,9 +45,6 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
     @BindView(R.id.medicineAutoCompleteTextView)
     protected MedicineTokenCompleteTextView medicineTokenCompleteTextView;
 
-    @BindView(R.id.rootView)
-    View rootView;
-
     @BindView(R.id.dateFromView)
     FieldDateFilterView dateFromView;
 
@@ -69,7 +66,7 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
         dateToView.setValue(dialogArguments.getToDate());
 
         dateFromView.setFieldDialogListener(view -> {
-            hideKeyboardAndClearFocus(rootView.findFocus());
+            hideKeyboardAndClearFocus();
             LocalDate date = dateFromView.getValue();
             LocalDate maxDate = dateToView.getValue();
             DatePickerDialog dpd = CustomDatePickerDialog.create(getContext(), this,
@@ -77,7 +74,7 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
             dpd.show(getActivity().getFragmentManager(), TAG_DIALOG_FROM_DATE);
         });
         dateToView.setFieldDialogListener(view -> {
-            hideKeyboardAndClearFocus(rootView.findFocus());
+            hideKeyboardAndClearFocus();
             LocalDate date = dateToView.getValue();
             LocalDate minDate = dateFromView.getValue();
             DatePickerDialog dpd = CustomDatePickerDialog.create(getContext(), this,
@@ -116,13 +113,13 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
     @Override
     public void onResume() {
         super.onResume();
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        hideKeyboardAndClearFocus(rootView.findFocus());
+        hideKeyboardAndClearFocus();
     }
 
     protected abstract BaseTokenCompleteTextView<T> getAutoCompleteTextView();

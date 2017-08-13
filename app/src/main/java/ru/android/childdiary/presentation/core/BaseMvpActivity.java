@@ -78,6 +78,10 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
     Toolbar toolbar;
 
     @Nullable
+    @BindView(R.id.rootView)
+    View rootView;
+
+    @Nullable
     @BindView(R.id.dummy)
     View dummy;
 
@@ -217,6 +221,14 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
             setupToolbarColor();
             themeChanged();
         }
+    }
+
+    public final void hideKeyboardAndClearFocus() {
+        if (rootView == null) {
+            logger.error("specify root view");
+            return;
+        }
+        hideKeyboardAndClearFocus();
     }
 
     public final void hideKeyboardAndClearFocus(@Nullable View view) {

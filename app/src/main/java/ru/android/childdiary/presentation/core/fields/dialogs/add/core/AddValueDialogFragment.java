@@ -18,9 +18,6 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class AddValueDialogFragment<P extends AddValueDialogArguments, T, V extends AddValueView<T>>
         extends BaseMvpDialogFragment<P> implements AddValueView<T> {
-    @BindView(R.id.rootView)
-    View rootView;
-
     @BindView(R.id.editText)
     CustomEditText editText;
 
@@ -59,7 +56,7 @@ public abstract class AddValueDialogFragment<P extends AddValueDialogArguments, 
                 .setTitle(getTitle())
                 .setPositiveButton(R.string.ok, null)
                 .setNegativeButton(R.string.cancel,
-                        (dialog, which) -> hideKeyboardAndClearFocus(rootView.findFocus()));
+                        (dialog, which) -> hideKeyboardAndClearFocus());
 
         AlertDialog dialog = builder.setCancelable(false)
                 .create();
@@ -67,7 +64,7 @@ public abstract class AddValueDialogFragment<P extends AddValueDialogArguments, 
         dialog.setOnShowListener(dialogInterface -> {
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             button.setOnClickListener((dialogView) -> {
-                hideKeyboardAndClearFocus(rootView.findFocus());
+                hideKeyboardAndClearFocus();
                 String name = editText.getText().toString().trim();
                 getPresenter().add(buildItem(name));
             });
