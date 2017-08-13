@@ -65,11 +65,11 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
         setContentView(R.layout.activity_details);
         buttonAdd.setText(R.string.save);
         dayStartTimeView.setFieldDialogListener(v -> {
-            LocalTime maxTime = null;//dayFinishTimeView.getValue().minusHours(1);
+            LocalTime maxTime = dayFinishTimeView.getValue().minusHours(1);
             showTimePicker(TAG_TIME_PICKER_START, dayStartTimeView.getValue(), null, maxTime);
         });
         dayFinishTimeView.setFieldDialogListener(v -> {
-            LocalTime minTime = null;//dayStartTimeView.getValue().plusHours(1);
+            LocalTime minTime = dayStartTimeView.getValue().plusHours(1);
             showTimePicker(TAG_TIME_PICKER_FINISH, dayFinishTimeView.getValue(), minTime, null);
         });
     }
