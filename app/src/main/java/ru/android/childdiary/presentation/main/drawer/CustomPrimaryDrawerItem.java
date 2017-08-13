@@ -7,7 +7,6 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.ui.FontUtils;
 
@@ -18,7 +17,7 @@ public class CustomPrimaryDrawerItem extends PrimaryDrawerItem {
 
         Context context = viewHolder.itemView.getContext();
 
-        TextView textView = ButterKnife.findById(viewHolder.itemView, R.id.material_drawer_name);
+        TextView textView = viewHolder.itemView.findViewById(R.id.material_drawer_name);
         //noinspection deprecation
         textView.setTextAppearance(context, R.style.DrawerItemTextAppearance);
         textView.setTypeface(FontUtils.getTypefaceBold(context));

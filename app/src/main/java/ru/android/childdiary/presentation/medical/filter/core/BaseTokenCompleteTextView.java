@@ -14,7 +14,6 @@ import com.tokenautocomplete.TokenCompleteTextView;
 
 import java.io.Serializable;
 
-import butterknife.ButterKnife;
 import lombok.Setter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
@@ -57,7 +56,7 @@ public abstract class BaseTokenCompleteTextView<T extends Serializable> extends 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.token_item, (ViewGroup) getParent(), false);
 
-        TextView textView = ButterKnife.findById(view, R.id.textView);
+        TextView textView = view.findViewById(R.id.textView);
         textView.setText(getTextForValue(item));
 
         return view;

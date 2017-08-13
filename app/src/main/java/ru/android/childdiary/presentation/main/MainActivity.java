@@ -38,7 +38,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import icepick.State;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
@@ -538,7 +537,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
         setupToolbar(getToolbar());
 
-        switcherImage = ButterKnife.findById(accountHeader.getView(), R.id.material_drawer_account_header_text_switcher);
+        switcherImage = accountHeader.getView().findViewById(R.id.material_drawer_account_header_text_switcher);
         switcherImage.setImageResource(R.drawable.arrow_down_white);
         switcherImage.setOnClickListener(this);
     }

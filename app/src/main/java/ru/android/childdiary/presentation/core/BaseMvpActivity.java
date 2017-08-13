@@ -149,9 +149,9 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
         }
-        toolbarLogo = ButterKnife.findById(toolbar, R.id.toolbarLogo);
+        toolbarLogo = toolbar.findViewById(R.id.toolbarLogo);
         toolbarLogo.setVisibility(View.GONE);
-        toolbarTitle = ButterKnife.findById(toolbar, R.id.toolbarTitle);
+        toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(R.string.app_name);
     }
 

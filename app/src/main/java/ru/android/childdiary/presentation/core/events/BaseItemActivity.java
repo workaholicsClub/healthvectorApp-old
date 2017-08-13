@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
@@ -210,7 +208,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        detailsView = ButterKnife.findById(this, R.id.detailsView);
+        detailsView = findViewById(R.id.detailsView);
         inflater.inflate(getContentLayoutResourceId(), detailsView);
     }
 

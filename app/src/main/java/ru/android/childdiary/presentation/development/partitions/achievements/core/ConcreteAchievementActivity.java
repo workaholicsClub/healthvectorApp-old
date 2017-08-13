@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -117,7 +116,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        ViewGroup detailsView = ButterKnife.findById(this, R.id.detailsView);
+        ViewGroup detailsView = findViewById(R.id.detailsView);
         inflater.inflate(R.layout.activity_concrete_achievement, detailsView);
     }
 

@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.FontUtils;
@@ -51,10 +50,10 @@ public class CropActivity extends UCropActivity {
         ConfigUtils.setupOrientation(this);
         super.onCreate(savedInstanceState);
 
-        final Toolbar toolbar = ButterKnife.findById(this, com.yalantis.ucrop.R.id.toolbar);
+        final Toolbar toolbar = findViewById(com.yalantis.ucrop.R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.toolbar_action_back);
 
-        final TextView toolbarTitle = ButterKnife.findById(this, com.yalantis.ucrop.R.id.toolbar_title);
+        final TextView toolbarTitle = findViewById(com.yalantis.ucrop.R.id.toolbar_title);
         toolbarTitle.setText(R.string.crop_image_title);
         //noinspection deprecation
         toolbarTitle.setTextAppearance(this, R.style.ToolbarTitleTextAppearance);

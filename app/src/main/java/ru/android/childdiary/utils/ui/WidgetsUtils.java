@@ -88,19 +88,19 @@ public class WidgetsUtils {
         Context context = searchView.getContext();
 
         resId = android.support.v7.appcompat.R.id.search_button;
-        imageView = (ImageView) searchView.findViewById(resId);
+        imageView = searchView.findViewById(resId);
         if (imageView != null) {
             imageView.setImageResource(R.drawable.toolbar_action_search);
         }
 
         resId = android.support.v7.appcompat.R.id.search_close_btn;
-        imageView = (ImageView) searchView.findViewById(resId);
+        imageView = searchView.findViewById(resId);
         if (imageView != null) {
             imageView.setImageResource(R.drawable.toolbar_action_close);
         }
 
         resId = android.support.v7.appcompat.R.id.search_src_text;
-        TextView textView = (TextView) searchView.findViewById(resId);
+        TextView textView = searchView.findViewById(resId);
         //noinspection deprecation
         textView.setTextAppearance(context, R.style.SearchTextAppearance);
         textView.setTypeface(FontUtils.getTypefaceRegular(context));

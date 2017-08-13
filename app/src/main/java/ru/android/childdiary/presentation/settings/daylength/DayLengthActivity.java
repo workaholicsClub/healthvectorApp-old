@@ -19,7 +19,6 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import org.joda.time.LocalTime;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -77,7 +76,7 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        detailsView = ButterKnife.findById(this, R.id.detailsView);
+        detailsView = findViewById(R.id.detailsView);
         inflater.inflate(R.layout.activity_day_length, detailsView);
     }
 

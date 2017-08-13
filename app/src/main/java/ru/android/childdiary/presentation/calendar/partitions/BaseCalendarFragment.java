@@ -22,7 +22,6 @@ import org.joda.time.LocalDate;
 import java.util.Set;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
@@ -99,13 +98,13 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
     @Override
     protected void setupUi() {
         if (calendarHeader != null) {
-            calendarTitle = ButterKnife.findById(calendarHeader, R.id.title);
+            calendarTitle = calendarHeader.findViewById(R.id.title);
             calendarHeader.findViewById(R.id.left).setOnClickListener(v -> moveLeft());
             calendarHeader.findViewById(R.id.right).setOnClickListener(v -> moveRight());
             calendarHeader.findViewById(R.id.today).setOnClickListener(v -> moveToday());
         }
 
-        eventsTitle = ButterKnife.findById(eventsHeader, R.id.title);
+        eventsTitle = eventsHeader.findViewById(R.id.title);
         if (showEventsHeaderNavigationButtons()) {
             eventsHeader.findViewById(R.id.left).setOnClickListener(v -> moveLeft());
             eventsHeader.findViewById(R.id.right).setOnClickListener(v -> moveRight());
