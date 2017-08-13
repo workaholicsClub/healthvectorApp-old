@@ -47,21 +47,20 @@ public class FieldAmountMlPumpView extends FieldEditTextView {
     @Override
     protected void init(@Nullable AttributeSet attrs) {
         setOrientation(LinearLayout.VERTICAL);
-        View view;
 
-        view = inflate(getContext(), R.layout.field_amount_ml_pump, null);
-        addView(view);
-        textViewAmountMl = view.findViewById(R.id.textView);
+        View viewAmount = inflate(getContext(), R.layout.field_amount_ml_pump, null);
+        addView(viewAmount);
+        textViewAmountMl = viewAmount.findViewById(R.id.textView);
 
-        view = inflate(getContext(), R.layout.field_amount_ml_pump_left, null);
-        addView(view);
-        imageViewLeft = view.findViewById(R.id.imageView);
-        editTextAmountMlLeft = view.findViewById(R.id.editText);
+        View viewLeft = inflate(getContext(), R.layout.field_amount_ml_pump_left, null);
+        addView(viewLeft);
+        imageViewLeft = viewLeft.findViewById(R.id.imageView);
+        editTextAmountMlLeft = viewLeft.findViewById(R.id.editText);
 
-        view = inflate(getContext(), R.layout.field_amount_ml_pump_right, null);
-        addView(view);
-        imageViewRight = view.findViewById(R.id.imageView);
-        editTextAmountMlRight = view.findViewById(R.id.editText);
+        View viewRight = inflate(getContext(), R.layout.field_amount_ml_pump_right, null);
+        addView(viewRight);
+        imageViewRight = viewRight.findViewById(R.id.imageView);
+        editTextAmountMlRight = viewRight.findViewById(R.id.editText);
     }
 
     @Override

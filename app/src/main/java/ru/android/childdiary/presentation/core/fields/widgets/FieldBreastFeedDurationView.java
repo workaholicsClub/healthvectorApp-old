@@ -49,25 +49,24 @@ public class FieldBreastFeedDurationView extends LinearLayout implements View.On
 
     private void init() {
         setOrientation(LinearLayout.VERTICAL);
-        View view;
 
-        view = inflate(getContext(), R.layout.field_duration_breast_feed, null);
-        addView(view);
-        textViewDuration = view.findViewById(R.id.textView);
+        View viewDuration = inflate(getContext(), R.layout.field_duration_breast_feed, null);
+        addView(viewDuration);
+        textViewDuration = viewDuration.findViewById(R.id.textView);
 
-        view = inflate(getContext(), R.layout.field_duration_left, null);
-        addView(view);
-        textViewDurationLeftWrapper = view.findViewById(R.id.textViewWrapper);
+        View viewLeft = inflate(getContext(), R.layout.field_duration_left, null);
+        addView(viewLeft);
+        textViewDurationLeftWrapper = viewLeft.findViewById(R.id.textViewWrapper);
         textViewDurationLeftWrapper.setOnClickListener(this);
-        textViewDurationLeft = view.findViewById(R.id.textView);
-        imageViewLeft = view.findViewById(R.id.imageView);
+        textViewDurationLeft = viewLeft.findViewById(R.id.textView);
+        imageViewLeft = viewLeft.findViewById(R.id.imageView);
 
-        view = inflate(getContext(), R.layout.field_duration_right, null);
-        addView(view);
-        textViewDurationRightWrapper = view.findViewById(R.id.textViewWrapper);
+        View viewRight = inflate(getContext(), R.layout.field_duration_right, null);
+        addView(viewRight);
+        textViewDurationRightWrapper = viewRight.findViewById(R.id.textViewWrapper);
         textViewDurationRightWrapper.setOnClickListener(this);
-        textViewDurationRight = view.findViewById(R.id.textView);
-        imageViewRight = view.findViewById(R.id.imageView);
+        textViewDurationRight = viewRight.findViewById(R.id.textView);
+        imageViewRight = viewRight.findViewById(R.id.imageView);
     }
 
     public void setLeftDuration(@Nullable Integer value) {

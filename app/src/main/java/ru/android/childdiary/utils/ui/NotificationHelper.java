@@ -1,6 +1,7 @@
 package ru.android.childdiary.utils.ui;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.support.v4.app.TaskStackBuilder;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
@@ -23,9 +25,16 @@ import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.utils.strings.TimeUtils;
 
+@Singleton
 public class NotificationHelper {
+    // TODO: what values?
+    private static final String CHANNEL_ID = "default";
+    private static final String CHANNEL_NAME = "CEV";
+    private static final String CHANNEL_DESCRIPTION = "CEV application";
+
     private final Context context;
     private final NotificationManager notificationManager;
+    private boolean isChannelInitialized;
 
     @Inject
     public NotificationHelper(Context context) {
@@ -58,7 +67,7 @@ public class NotificationHelper {
     public NotificationCompat.Builder buildSleepNotification(int notificationId,
                                                              @NonNull SleepEvent event,
                                                              @NonNull SleepEvent defaultEvent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        NotificationCompat.Builder builder = createNotificationBuilder();
         builder.setContentIntent(buildSleepPendingIntent(notificationId, event, defaultEvent))
                 .addAction(R.drawable.ic_action_stop_sleep_timer,
                         context.getString(R.string.stop_sleep_timer),
@@ -104,7 +113,7 @@ public class NotificationHelper {
                                             String title,
                                             String text,
                                             @Nullable PendingIntent pendingIntent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        NotificationCompat.Builder builder = createNotificationBuilder();
         if (pendingIntent != null) {
             builder.setContentIntent(pendingIntent);
         }
@@ -121,7 +130,7 @@ public class NotificationHelper {
     public void showBackupProgressNotification(int notificationId) {
         String title = context.getString(R.string.app_name);
         String text = context.getString(R.string.notification_text_backup);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        NotificationCompat.Builder builder = createNotificationBuilder();
         builder.setSmallIcon(R.drawable.ic_stat_autobackup)
                 .setContentTitle(title)
                 .setContentText(text)
@@ -129,5 +138,24 @@ public class NotificationHelper {
                 .setProgress(0, 0, true);
         Notification notification = builder.build();
         notificationManager.notify(notificationId, notification);
+    }
+
+    private NotificationCompat.Builder createNotificationBuilder() {
+        initChannel();
+        return new NotificationCompat.Builder(context, CHANNEL_ID);
+    }
+
+    private synchronized void initChannel() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
+        if (isChannelInitialized) {
+            return;
+        }
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription(CHANNEL_DESCRIPTION);
+        notificationManager.createNotificationChannel(channel);
+        isChannelInitialized = true;
     }
 }
