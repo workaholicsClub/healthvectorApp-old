@@ -8,8 +8,8 @@ import android.support.annotation.CallSuper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BaseReceiver extends BroadcastReceiver {
-    private final Logger logger = LoggerFactory.getLogger(toString());
+public abstract class BaseReceiver extends BroadcastReceiver {
+    protected final Logger logger = LoggerFactory.getLogger(toString());
 
     @CallSuper
     @Override

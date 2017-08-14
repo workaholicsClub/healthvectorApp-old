@@ -301,6 +301,11 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
+    public static int getNotificationEventRes(@Nullable Child child) {
+        return R.drawable.ic_notification_event;
+    }
+
+    @DrawableRes
     public static int getNotificationSleepRes(@Nullable Child child) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Sex sex = child == null ? null : child.getSex();

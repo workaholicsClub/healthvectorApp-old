@@ -16,10 +16,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
+import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.CalendarInteractor;
@@ -31,8 +33,8 @@ import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.receivers.EventNotificationReceiver;
 import ru.android.childdiary.services.core.BaseService;
-import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.utils.log.LogSystem;
+import ru.android.childdiary.utils.strings.DateUtils;
 
 public class EventScheduleService extends BaseService {
     @Inject
@@ -68,19 +70,22 @@ public class EventScheduleService extends BaseService {
     @Override
     protected void onCreate(ApplicationComponent applicationComponent) {
         applicationComponent.inject(this);
-        subscribeOnUpdates();
     }
 
     @Override
     protected void handleIntent(@Nullable Intent intent) {
-        subscribeOnUpdates();
+        LocalTime time = intent == null ? null : (LocalTime) intent.getSerializableExtra(ExtraConstants.EXTRA_TIME);
+        if (time == null) {
+            time = LocalTime.MIDNIGHT;
+        }
+        subscribeOnUpdates(time);
     }
 
-    private void subscribeOnUpdates() {
+    private void subscribeOnUpdates(@NonNull LocalTime time) {
         unsubscribe(subscription);
         try {
             LocalDate date = LocalDate.now();
-            LocalTime time = LocalTime.now();
+            logger.debug("schedule events since " + DateUtils.time(this, time) + ", " + DateUtils.date(this, date));
             subscription = unsubscribeOnDestroy(
                     calendarInteractor.getAll(
                             GetEventsRequest.builder()
@@ -92,6 +97,11 @@ public class EventScheduleService extends BaseService {
                                     .child(Child.NULL)
                                     .build())
                             .map(GetEventsResponse::getEvents)
+                            .flatMap(Observable::fromIterable)
+                            .map(event -> {
+                                MasterEvent defaultEvent = calendarInteractor.getDefaultEvent(event).blockingFirst();
+                                return Arrays.asList(event, defaultEvent);
+                            })
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::handleResult, this::onUnexpectedError));
@@ -101,15 +111,17 @@ public class EventScheduleService extends BaseService {
     }
 
     private void handleResult(@NonNull List<MasterEvent> events) {
+        MasterEvent event = events.get(0);
+        MasterEvent defaultEvent = events.get(1);
+        logger.debug("schedule event: " + event);
         // нельзя шедулить больше 500 будильников, по крайней мере, на самсунге
-        for (MasterEvent event : events) {
-            Long masterEventId = event.getMasterEventId();
-            int requestCode = (int) (masterEventId % Integer.MAX_VALUE);
-            Intent intent = new Intent(this, EventNotificationReceiver.class);
-            intent.putExtra(ExtraConstants.EXTRA_EVENT_ID, masterEventId);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            scheduleHelper.installAlarm(pendingIntent, event.getDateTime().getMillis());
-        }
+        Long masterEventId = event.getMasterEventId();
+        int requestCode = (int) (masterEventId % Integer.MAX_VALUE);
+        Intent intent = new Intent(this, EventNotificationReceiver.class);
+        intent.putExtra(ExtraConstants.EXTRA_EVENT, event);
+        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        scheduleHelper.installAlarm(pendingIntent, event.getDateTime().getMillis());
     }
 
     private void onUnexpectedError(Throwable e) {
