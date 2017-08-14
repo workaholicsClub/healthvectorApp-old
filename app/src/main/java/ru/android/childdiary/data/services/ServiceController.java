@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.LocalTime;
 
-import javax.inject.Inject;
-
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
 import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.EventScheduleService;
@@ -16,7 +14,6 @@ import ru.android.childdiary.services.UpdateDataService;
 public class ServiceController {
     private final Context context;
 
-    @Inject
     public ServiceController(Context context) {
         this.context = context;
     }
