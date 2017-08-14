@@ -14,7 +14,7 @@ import ru.android.childdiary.data.services.ServiceController;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.di.DaggerApplicationComponent;
 import ru.android.childdiary.di.modules.ApplicationModule;
-import ru.android.childdiary.services.core.ScheduleHelper;
+import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.FontUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;

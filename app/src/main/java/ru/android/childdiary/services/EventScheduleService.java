@@ -31,7 +31,7 @@ import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.receivers.EventNotificationReceiver;
 import ru.android.childdiary.services.core.BaseService;
-import ru.android.childdiary.services.core.ScheduleHelper;
+import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.utils.log.LogSystem;
 
 public class EventScheduleService extends BaseService {

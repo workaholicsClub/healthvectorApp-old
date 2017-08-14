@@ -11,7 +11,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ru.android.childdiary.data.services.ServiceController;
-import ru.android.childdiary.services.core.ScheduleHelper;
+import ru.android.childdiary.data.services.ScheduleHelper;
 
 @Module
 public class ApplicationModule {

@@ -11,7 +11,7 @@ import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.services.ServiceController;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.receivers.core.BaseReceiver;
-import ru.android.childdiary.services.core.ScheduleHelper;
+import ru.android.childdiary.data.services.ScheduleHelper;
 
 public class TimeChangedReceiver extends BaseReceiver {
     @Inject
