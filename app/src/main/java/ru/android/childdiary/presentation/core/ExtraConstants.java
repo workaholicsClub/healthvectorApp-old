@@ -7,6 +7,7 @@ public class ExtraConstants {
     public static final String EXTRA_SEX = PACKAGE_NAME + ".sex";
     public static final String EXTRA_MASTER_EVENT = PACKAGE_NAME + ".master_event";
     public static final String EXTRA_EVENT = PACKAGE_NAME + ".event";
+    public static final String EXTRA_EVENT_ID = PACKAGE_NAME + ".event_id";
     public static final String EXTRA_DEFAULT_EVENT = PACKAGE_NAME + ".default_event";
     public static final String EXTRA_ITEM = PACKAGE_NAME + ".item";
     public static final String EXTRA_DEFAULT_ITEM = PACKAGE_NAME + ".default_item";
@@ -24,4 +25,5 @@ public class ExtraConstants {
     public static final String EXTRA_TEST_RESULT = PACKAGE_NAME + ".test_result";
     public static final String EXTRA_PICK = PACKAGE_NAME + ".pick";
     public static final String EXTRA_INIT = PACKAGE_NAME + ".init";
+    public static final String EXTRA_TIME = PACKAGE_NAME + ".time";
 }

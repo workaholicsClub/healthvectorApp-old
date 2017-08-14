@@ -2,30 +2,27 @@ package ru.android.childdiary.receivers;
 
 import android.content.Context;
 import android.content.Intent;
-
-import org.joda.time.LocalTime;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
 import ru.android.childdiary.app.ChildDiaryApplication;
-import ru.android.childdiary.data.services.ServiceController;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.receivers.core.BaseReceiver;
-import ru.android.childdiary.services.core.ScheduleHelper;
+import ru.android.childdiary.utils.notifications.EventNotificationHelper;
 
-public class TimeChangedReceiver extends BaseReceiver {
+public class EventNotificationReceiver extends BaseReceiver {
     @Inject
-    ServiceController serviceController;
-
-    @Inject
-    ScheduleHelper scheduleHelper;
+    EventNotificationHelper eventNotificationHelper;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         ApplicationComponent applicationComponent = ChildDiaryApplication.getApplicationComponent();
         applicationComponent.inject(this);
-        serviceController.scheduleEvents(LocalTime.now());
-        scheduleHelper.scheduleAll();
+        // TODO show notification, log
+        long eventId = intent.getLongExtra(ExtraConstants.EXTRA_EVENT_ID, 0);
+        Toast.makeText(context, String.valueOf(eventId) + (eventNotificationHelper == null ? " no" : " yes"), Toast.LENGTH_SHORT).show();
     }
 }

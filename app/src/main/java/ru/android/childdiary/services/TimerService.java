@@ -1,9 +1,11 @@
 package ru.android.childdiary.services;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -31,14 +33,13 @@ import ru.android.childdiary.domain.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.services.core.BaseService;
 import ru.android.childdiary.utils.log.LogSystem;
+import ru.android.childdiary.utils.notifications.SleepNotificationHelper;
 import ru.android.childdiary.utils.strings.EventUtils;
-import ru.android.childdiary.utils.ui.NotificationHelper;
 
 public class TimerService extends BaseService {
-    public static final String EXTRA_ACTION = "TimerService.EXTRA_ACTION";
     public static final String ACTION_STOP_SLEEP_EVENT_TIMER = "TimerService.ACTION_STOP_SLEEP_EVENT_TIMER";
-    public static final String ACTION_RESUBSCRIBE = "TimerService.ACTION_RESUBSCRIBE";
-
+    public static final String ACTION_RESUBSCRIBE_TIMER = "TimerService.ACTION_RESUBSCRIBE_TIMER";
+    private static final String EXTRA_ACTION = "TimerService.EXTRA_ACTION";
     private static final long TIMER_PERIOD = 1000;
 
     @Getter
@@ -51,11 +52,39 @@ public class TimerService extends BaseService {
     CalendarInteractor calendarInteractor;
 
     @Inject
-    NotificationHelper notificationHelper;
+    SleepNotificationHelper sleepNotificationHelper;
 
     private Disposable subscription;
     private Handler handler;
     private List<SleepEvent> events = new ArrayList<>();
+
+    private static Intent getServiceIntent(Context context,
+                                           @Nullable String action,
+                                           @Nullable SleepEvent event) {
+        Intent intent = new Intent(context, TimerService.class);
+        if (action != null) {
+            intent.putExtra(TimerService.EXTRA_ACTION, action);
+        }
+        if (event != null) {
+            intent.putExtra(ExtraConstants.EXTRA_EVENT, event);
+        }
+        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
+        return intent;
+    }
+
+    public static void startService(Context context,
+                                    @Nullable String action,
+                                    @Nullable SleepEvent event) {
+        Intent intent = getServiceIntent(context, action, event);
+        context.startService(intent);
+    }
+
+    public static PendingIntent getPendingIntent(int requestCode, Context context,
+                                                 @Nullable String action,
+                                                 @Nullable SleepEvent event) {
+        Intent intent = getServiceIntent(context, action, event);
+        return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
 
     @Override
     protected void onCreate(ApplicationComponent applicationComponent) {
@@ -89,7 +118,7 @@ public class TimerService extends BaseService {
 
                 stopSleepEventTimer(event);
                 break;
-            case ACTION_RESUBSCRIBE:
+            case ACTION_RESUBSCRIBE_TIMER:
                 subscribeOnUpdates();
                 break;
         }
@@ -98,14 +127,16 @@ public class TimerService extends BaseService {
     private void subscribeOnUpdates() {
         unsubscribe(subscription);
         try {
-            subscription = unsubscribeOnDestroy(calendarInteractor.getSleepEvents(GetSleepEventsRequest.builder()
-                    .child(null)
-                    .withStartedTimer(true)
-                    .build())
-                    .map(GetSleepEventsResponse::getEvents)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::handleResult, this::onUnexpectedError));
+            subscription = unsubscribeOnDestroy(
+                    calendarInteractor.getSleepEvents(
+                            GetSleepEventsRequest.builder()
+                                    .child(null)
+                                    .withStartedTimer(true)
+                                    .build())
+                            .map(GetSleepEventsResponse::getEvents)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::handleResult, this::onUnexpectedError));
         } catch (DowngradeDatabaseException e) {
             logger.error("Can't subscribe to updates", e);
         }
@@ -113,16 +144,17 @@ public class TimerService extends BaseService {
 
     private void stopSleepEventTimer(@NonNull SleepEvent event) {
         DateTime now = DateTime.now();
-        unsubscribeOnDestroy(calendarInteractor.getEventDetailOnce(event)
-                .map(sleepEvent -> (SleepEvent) sleepEvent)
-                .map(sleepEvent -> sleepEvent.toBuilder()
-                        .isTimerStarted(false)
-                        .finishDateTime(now.isAfter(sleepEvent.getDateTime()) ? now : null)
-                        .build())
-                .flatMap(calendarInteractor::update)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(stoppedEvent -> logger.debug("event stopped: " + stoppedEvent), this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                calendarInteractor.getEventDetailOnce(event)
+                        .map(sleepEvent -> (SleepEvent) sleepEvent)
+                        .map(sleepEvent -> sleepEvent.toBuilder()
+                                .isTimerStarted(false)
+                                .finishDateTime(now.isAfter(sleepEvent.getDateTime()) ? now : null)
+                                .build())
+                        .flatMap(calendarInteractor::update)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(stoppedEvent -> logger.debug("event stopped: " + stoppedEvent), this::onUnexpectedError));
     }
 
     private void handleResult(@NonNull List<SleepEvent> events) {
@@ -178,7 +210,8 @@ public class TimerService extends BaseService {
         removeAll(events, newEvents);
         for (SleepEvent event : events) {
             Long masterEventId = event.getMasterEventId();
-            notificationHelper.hideNotification((int) (masterEventId % Integer.MAX_VALUE));
+            int notificationId = (int) (masterEventId % Integer.MAX_VALUE);
+            sleepNotificationHelper.hideNotification(notificationId);
         }
         events = new ArrayList<>(newEvents);
     }
@@ -205,12 +238,12 @@ public class TimerService extends BaseService {
             NotificationCompat.Builder builder = notificationBuilders.get(masterEventId);
             if (builder == null) {
                 SleepEvent defaultEvent = calendarInteractor.getDefaultSleepEvent().blockingFirst();
-                builder = notificationHelper.buildSleepNotification(notificationId, event, defaultEvent);
+                builder = sleepNotificationHelper.buildSleepNotification(notificationId, event, defaultEvent);
                 notificationBuilders.put(masterEventId, builder);
             } else {
-                notificationHelper.updateSleepNotification(builder, event);
+                sleepNotificationHelper.updateSleepNotification(builder, event);
             }
-            notificationHelper.showSleepNotification(notificationId, builder);
+            sleepNotificationHelper.showNotification(notificationId, builder);
         }
     }
 }

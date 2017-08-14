@@ -10,13 +10,27 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import ru.android.childdiary.data.services.ServiceController;
+import ru.android.childdiary.services.core.ScheduleHelper;
 
 @Module
 public class ApplicationModule {
     private final Context appContext;
+    private final ServiceController serviceController;
+    private final ScheduleHelper scheduleHelper;
 
-    public ApplicationModule(Context appContext) {
+    public ApplicationModule(Context appContext,
+                             ServiceController serviceController,
+                             ScheduleHelper scheduleHelper) {
         this.appContext = appContext;
+        this.serviceController = serviceController;
+        this.scheduleHelper = scheduleHelper;
+    }
+
+    @Provides
+    @Singleton
+    public ScheduleHelper provideScheduleHelper() {
+        return scheduleHelper;
     }
 
     @Provides

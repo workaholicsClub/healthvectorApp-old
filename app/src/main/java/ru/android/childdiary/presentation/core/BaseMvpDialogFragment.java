@@ -103,7 +103,7 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
             logger.error("specify root view");
             return;
         }
-        hideKeyboardAndClearFocus();
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     public final void hideKeyboardAndClearFocus(@Nullable View view) {

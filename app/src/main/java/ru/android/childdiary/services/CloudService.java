@@ -23,7 +23,7 @@ import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.domain.core.settings.SettingsInteractor;
 import ru.android.childdiary.services.core.BaseService;
 import ru.android.childdiary.utils.log.LogSystem;
-import ru.android.childdiary.utils.ui.NotificationHelper;
+import ru.android.childdiary.utils.notifications.CloudNotificationHelper;
 
 public class CloudService extends BaseService {
     private static final int NOTIFICATION_ID_ERROR = -1;
@@ -39,11 +39,20 @@ public class CloudService extends BaseService {
     CloudInteractor cloudInteractor;
 
     @Inject
-    NotificationHelper notificationHelper;
+    CloudNotificationHelper cloudNotificationHelper;
 
-    public static PendingIntent getPendingIntent(Context context) {
-        Intent intent = new Intent(context, CloudService.class);
-        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private static Intent getServiceIntent(Context context) {
+        return new Intent(context, CloudService.class);
+    }
+
+    public static void startService(Context context) {
+        Intent intent = getServiceIntent(context);
+        context.startService(intent);
+    }
+
+    public static PendingIntent getPendingIntent(int requestCode, Context context) {
+        Intent intent = getServiceIntent(context);
+        return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @Nullable
@@ -60,7 +69,7 @@ public class CloudService extends BaseService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        notificationHelper.hideNotification(NOTIFICATION_ID_BACKUP);
+        cloudNotificationHelper.hideNotification(NOTIFICATION_ID_BACKUP);
     }
 
     @Override
@@ -80,7 +89,7 @@ public class CloudService extends BaseService {
     }
 
     private void backup() {
-        notificationHelper.showBackupProgressNotification(NOTIFICATION_ID_BACKUP);
+        cloudNotificationHelper.showBackupProgressNotification(NOTIFICATION_ID_BACKUP);
         unsubscribeOnDestroy(
                 networkAvailability.checkNetworkAvailability(true)
                         .flatMap(isNetworkAvailable -> cloudInteractor.backup())
@@ -112,7 +121,7 @@ public class CloudService extends BaseService {
             if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
                 pendingIntent = apiAvailability.getErrorResolutionPendingIntent(this, connectionStatusCode, 0);
             }
-            notificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
+            cloudNotificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
                     getString(R.string.notification_title_play_services),
                     getString(R.string.notification_text_play_services),
                     pendingIntent);
@@ -120,21 +129,21 @@ public class CloudService extends BaseService {
         } else if (throwable instanceof UserRecoverableAuthIOException) {
             Intent intent = ((UserRecoverableAuthIOException) throwable).getIntent();
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-            notificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
+            cloudNotificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
                     getString(R.string.notification_title_authorization),
                     getString(R.string.notification_text_authorization_recoverable),
                     pendingIntent);
             return true;
         } else if (throwable instanceof NetworkUnavailableException) {
-            PendingIntent pendingIntent = getPendingIntent(this);
-            notificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
+            PendingIntent pendingIntent = getPendingIntent(0, this);
+            cloudNotificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
                     getString(R.string.notification_title_network),
                     getString(R.string.notification_text_network),
                     pendingIntent);
             return true;
         } else if (throwable instanceof SecurityException) {
-            PendingIntent pendingIntent = getPendingIntent(this);
-            notificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
+            PendingIntent pendingIntent = getPendingIntent(0, this);
+            cloudNotificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
                     getString(R.string.notification_title_authorization),
                     getString(R.string.notification_text_authorization_unrecoverable),
                     pendingIntent);

@@ -1,24 +1,21 @@
 package ru.android.childdiary.domain.core;
 
-import android.content.Context;
-import android.content.Intent;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import ru.android.childdiary.services.UpdateDataService;
+import ru.android.childdiary.data.services.ServiceController;
 
 public class InitializationInteractor {
-    private final Context context;
+    private final ServiceController serviceController;
 
     @Inject
-    public InitializationInteractor(Context context) {
-        this.context = context;
+    public InitializationInteractor(ServiceController serviceController) {
+        this.serviceController = serviceController;
     }
 
     public Observable<Boolean> startUpdateDataService() {
         return Observable.fromCallable(() -> {
-            context.startService(new Intent(context, UpdateDataService.class));
+            serviceController.updateData();
             return true;
         });
     }

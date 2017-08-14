@@ -11,9 +11,18 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.services.core.BaseService;
 
 public class LinearGroupFinishedService extends BaseService {
-    public static PendingIntent getPendingIntent(Context context) {
-        Intent intent = new Intent(context, LinearGroupFinishedService.class);
-        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private static Intent getServiceIntent(Context context) {
+        return new Intent(context, LinearGroupFinishedService.class);
+    }
+
+    public static void startService(Context context) {
+        Intent intent = getServiceIntent(context);
+        context.startService(intent);
+    }
+
+    public static PendingIntent getPendingIntent(int requestCode, Context context) {
+        Intent intent = getServiceIntent(context);
+        return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @Nullable

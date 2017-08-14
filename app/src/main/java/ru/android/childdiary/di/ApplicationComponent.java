@@ -112,6 +112,8 @@ import ru.android.childdiary.presentation.testing.TestResultPresenter;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 import ru.android.childdiary.presentation.testing.TestingPresenter;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersPresenter;
+import ru.android.childdiary.receivers.EventNotificationReceiver;
+import ru.android.childdiary.receivers.TimeChangedReceiver;
 import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.CloudService;
 import ru.android.childdiary.services.EventScheduleService;
@@ -349,4 +351,9 @@ public interface ApplicationComponent {
     void inject(EventScheduleService service);
 
     void inject(LinearGroupFinishedService service);
+
+    // receivers
+    void inject(EventNotificationReceiver receiver);
+
+    void inject(TimeChangedReceiver receiver);
 }

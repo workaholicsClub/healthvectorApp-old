@@ -3,7 +3,7 @@ package ru.android.childdiary.services.core;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
@@ -19,21 +19,12 @@ public class ScheduleHelper {
     private final Context context;
     private final AlarmManager alarmManager;
 
-    private ScheduleHelper(Context context) {
+    public ScheduleHelper(Context context) {
         this.context = context;
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    /**
-     * Schedules alarms on application started and on time changed.
-     *
-     * @param context application context
-     */
-    public static void scheduleAllRepeatingTasks(Context context) {
-        ScheduleHelper scheduleHelper = new ScheduleHelper(context);
-
-        context.startService(new Intent(context, EventScheduleService.class));
-
+    public void scheduleAll() {
         LocalDate today = LocalDate.now();
         DateTime midnight = DateUtils.nextDayMidnight(today);
         // schedule on 17:00 today or next day
@@ -42,13 +33,22 @@ public class ScheduleHelper {
             fiveOClock = fiveOClock.plusDays(1);
         }
 
-        scheduleHelper.installAlarm(CloudService.getPendingIntent(context), midnight.getMillis());
-        scheduleHelper.installAlarm(EventScheduleService.getPendingIntent(context), midnight.getMillis());
-        scheduleHelper.installAlarm(LinearGroupFinishedService.getPendingIntent(context), fiveOClock.getMillis());
+        installRepeatingAlarm(EventScheduleService.getPendingIntent(0, context, LocalTime.MIDNIGHT), midnight.getMillis());
+        installRepeatingAlarm(CloudService.getPendingIntent(0, context), midnight.getMillis());
+        installRepeatingAlarm(LinearGroupFinishedService.getPendingIntent(0, context), fiveOClock.getMillis());
     }
 
-    private void installAlarm(@NonNull PendingIntent pendingIntent, long millis) {
+    private void installRepeatingAlarm(@NonNull PendingIntent pendingIntent, long millis) {
         alarmManager.cancel(pendingIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, millis, AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    public void installAlarm(@NonNull PendingIntent pendingIntent, long millis) {
+        alarmManager.cancel(pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+        }
     }
 }

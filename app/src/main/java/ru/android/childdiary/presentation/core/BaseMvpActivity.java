@@ -228,7 +228,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
             logger.error("specify root view");
             return;
         }
-        hideKeyboardAndClearFocus();
+        hideKeyboardAndClearFocus(rootView.findFocus());
     }
 
     public final void hideKeyboardAndClearFocus(@Nullable View view) {

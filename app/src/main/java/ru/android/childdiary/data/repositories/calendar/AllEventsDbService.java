@@ -3,6 +3,7 @@ package ru.android.childdiary.data.repositories.calendar;
 import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import java.util.Set;
 
@@ -14,7 +15,9 @@ import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
 import io.requery.query.Expression;
 import io.requery.query.Tuple;
+import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
+import io.requery.reactivex.ReactiveResult;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.calendar.DoctorVisitEventEntity;
 import ru.android.childdiary.data.db.entities.calendar.ExerciseEventEntity;
@@ -344,9 +347,10 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     public Observable<GetEventsResponse> getAllEvents(@NonNull GetEventsRequest request) {
         Child child = request.getChild();
-        LocalDate selectedDate = request.getDate();
+        LocalDate date = request.getDate();
+        LocalTime time = request.getTime();
         Set<EventType> eventTypes = request.getFilter().getEventTypes();
-        return dataStore.select(EXPRESSIONS)
+        WhereAndOr<ReactiveResult<Tuple>> select = dataStore.select(EXPRESSIONS)
                 .from(MasterEventEntity.class)
                 .join(ChildEntity.class).on(ChildEntity.ID.eq(MasterEventEntity.CHILD_ID))
                 .leftJoin(DiaperEventEntity.class).on(DiaperEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
@@ -364,12 +368,16 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .leftJoin(ExerciseEventEntity.class).on(ExerciseEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .leftJoin(ConcreteExerciseEntity.class).on(ConcreteExerciseEntity.ID.eq(ExerciseEventEntity.CONCRETE_EXERCISE_ID))
                 .leftJoin(ExerciseEntity.class).on(ExerciseEntity.ID.eq(ConcreteExerciseEntity.EXERCISE_ID))
-                .where(MasterEventEntity.CHILD_ID.eq(child.getId()))
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.midnight(selectedDate)))
-                .and(MasterEventEntity.DATE_TIME.lessThan(DateUtils.nextDayMidnight(selectedDate)))
-                .and(MasterEventEntity.EVENT_TYPE.notNull())
+                .where(MasterEventEntity.EVENT_TYPE.notNull())
                 .and(MasterEventEntity.EVENT_TYPE.in(eventTypes))
-                .orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
+                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(date.toDateTime(time)))
+                .and(MasterEventEntity.DATE_TIME.lessThan(DateUtils.nextDayMidnight(date)));
+
+        if (child.getId() != null) {
+            select = select.and(MasterEventEntity.CHILD_ID.eq(child.getId()));
+        }
+
+        return select.orderBy(MasterEventEntity.DATE_TIME, MasterEventEntity.EVENT_TYPE, MasterEventEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, this))

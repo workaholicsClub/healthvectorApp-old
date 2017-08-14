@@ -1,6 +1,5 @@
 package ru.android.childdiary.app;
 
-import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -11,11 +10,10 @@ import org.slf4j.LoggerFactory;
 import lombok.Getter;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.services.ServiceController;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.di.DaggerApplicationComponent;
 import ru.android.childdiary.di.modules.ApplicationModule;
-import ru.android.childdiary.services.AccountService;
-import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.services.core.ScheduleHelper;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.FontUtils;
@@ -40,8 +38,10 @@ public class ChildDiaryApplication extends MultiDexApplication {
 
         JodaTimeAndroid.init(this);
 
+        ServiceController serviceController = new ServiceController(this);
+        ScheduleHelper scheduleHelper = new ScheduleHelper(this);
         applicationComponent = DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this))
+                .applicationModule(new ApplicationModule(this, serviceController, scheduleHelper))
                 .build();
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -49,8 +49,7 @@ public class ChildDiaryApplication extends MultiDexApplication {
                 .setFontAttrId(R.attr.fontPath)
                 .build());
 
-        startService(new Intent(this, TimerService.class));
-        startService(new Intent(this, AccountService.class));
-        ScheduleHelper.scheduleAllRepeatingTasks(this);
+        serviceController.onApplicationStart();
+        scheduleHelper.scheduleAll();
     }
 }

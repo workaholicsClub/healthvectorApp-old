@@ -1,7 +1,5 @@
 package ru.android.childdiary.domain.calendar;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -25,6 +23,7 @@ import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.calendar.CalendarFilterDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
+import ru.android.childdiary.data.services.ServiceController;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
@@ -75,13 +74,12 @@ import ru.android.childdiary.domain.medical.requests.DeleteDoctorVisitEventsRequ
 import ru.android.childdiary.domain.medical.requests.DeleteDoctorVisitEventsResponse;
 import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingEventsResponse;
-import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.utils.strings.EventUtils;
 
 public class CalendarInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
-    private final Context context;
+    private final ServiceController serviceController;
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
     private final DiaperEventValidator diaperEventValidator;
@@ -96,7 +94,7 @@ public class CalendarInteractor {
     private final ValueRepository<GetEventsFilter> filterRepository;
 
     @Inject
-    public CalendarInteractor(Context context,
+    public CalendarInteractor(ServiceController serviceController,
                               ChildDataRepository childRepository,
                               CalendarDataRepository calendarRepository,
                               DiaperEventValidator diaperEventValidator,
@@ -109,7 +107,7 @@ public class CalendarInteractor {
                               ExerciseEventValidator exerciseEventValidator,
                               ImagesDataRepository imagesRepository,
                               CalendarFilterDataRepository filterRepository) {
-        this.context = context;
+        this.serviceController = serviceController;
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
         this.diaperEventValidator = diaperEventValidator;
@@ -700,9 +698,7 @@ public class CalendarInteractor {
             } else if (event.getEventType() == EventType.PUMP) {
                 return event;
             } else if (event.getEventType() == EventType.SLEEP) {
-                Intent intent = new Intent(context, TimerService.class);
-                intent.putExtra(TimerService.EXTRA_ACTION, TimerService.ACTION_RESUBSCRIBE);
-                context.startService(intent);
+                serviceController.resubscribeTimer();
                 return event;
             }
             throw new IllegalArgumentException("Unsupported event type");
