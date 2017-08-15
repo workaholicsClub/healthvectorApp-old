@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.InjectViewState;
 
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -61,7 +60,6 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                         childInteractor.getActiveChild(),
                         (date, filter, child) -> GetEventsRequest.builder()
                                 .date(date)
-                                .time(LocalTime.MIDNIGHT)
                                 .filter(filter)
                                 .child(child)
                                 .build())
@@ -336,7 +334,6 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                         childInteractor.getActiveChildOnce(),
                         (date, filter, child) -> GetEventsRequest.builder()
                                 .date(date)
-                                .time(LocalTime.MIDNIGHT)
                                 .filter(filter)
                                 .child(child)
                                 .build())

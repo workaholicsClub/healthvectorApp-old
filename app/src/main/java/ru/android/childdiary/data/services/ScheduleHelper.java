@@ -11,7 +11,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import ru.android.childdiary.services.CloudService;
-import ru.android.childdiary.services.EventScheduleService;
 import ru.android.childdiary.services.LinearGroupFinishedService;
 import ru.android.childdiary.utils.strings.DateUtils;
 
@@ -33,7 +32,6 @@ public class ScheduleHelper {
             fiveOClock = fiveOClock.plusDays(1);
         }
 
-        installRepeatingAlarm(EventScheduleService.getPendingIntent(0, context, LocalTime.MIDNIGHT), midnight.getMillis());
         installRepeatingAlarm(CloudService.getPendingIntent(0, context), midnight.getMillis());
         installRepeatingAlarm(LinearGroupFinishedService.getPendingIntent(0, context), fiveOClock.getMillis());
     }

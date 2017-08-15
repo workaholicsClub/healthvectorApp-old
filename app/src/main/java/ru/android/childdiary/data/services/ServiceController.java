@@ -3,8 +3,6 @@ package ru.android.childdiary.data.services;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import org.joda.time.LocalTime;
-
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
 import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.EventScheduleService;
@@ -19,7 +17,6 @@ public class ServiceController {
     }
 
     public void onApplicationStart() {
-        scheduleEvents(LocalTime.now());
         TimerService.startService(context, null, null);
         AccountService.startService(context);
     }
@@ -36,7 +33,7 @@ public class ServiceController {
         TimerService.startService(context, TimerService.ACTION_RESUBSCRIBE_TIMER, null);
     }
 
-    public void scheduleEvents(@NonNull LocalTime time) {
-        EventScheduleService.startService(context, time);
+    public void scheduleEvents() {
+        EventScheduleService.startService(context);
     }
 }

@@ -3,7 +3,6 @@ package ru.android.childdiary.data.repositories.calendar;
 import android.support.annotation.NonNull;
 
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 import java.util.Set;
 
@@ -348,7 +347,6 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     public Observable<GetEventsResponse> getAllEvents(@NonNull GetEventsRequest request) {
         Child child = request.getChild();
         LocalDate date = request.getDate();
-        LocalTime time = request.getTime();
         Set<EventType> eventTypes = request.getFilter().getEventTypes();
         WhereAndOr<ReactiveResult<Tuple>> select = dataStore.select(EXPRESSIONS)
                 .from(MasterEventEntity.class)
@@ -370,7 +368,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .leftJoin(ExerciseEntity.class).on(ExerciseEntity.ID.eq(ConcreteExerciseEntity.EXERCISE_ID))
                 .where(MasterEventEntity.EVENT_TYPE.notNull())
                 .and(MasterEventEntity.EVENT_TYPE.in(eventTypes))
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(date.toDateTime(time)))
+                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.midnight(date)))
                 .and(MasterEventEntity.DATE_TIME.lessThan(DateUtils.nextDayMidnight(date)));
 
         if (child.getId() != null) {

@@ -8,18 +8,19 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 import java.util.Arrays;
-import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
+import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.CalendarInteractor;
@@ -31,8 +32,8 @@ import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.receivers.EventNotificationReceiver;
 import ru.android.childdiary.services.core.BaseService;
-import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.utils.log.LogSystem;
+import ru.android.childdiary.utils.strings.DateUtils;
 
 public class EventScheduleService extends BaseService {
     @Inject
@@ -43,19 +44,19 @@ public class EventScheduleService extends BaseService {
 
     private Disposable subscription;
 
-    private static Intent getServiceIntent(Context context, @NonNull LocalTime time) {
-        return new Intent(context, EventScheduleService.class)
-                .putExtra(ExtraConstants.EXTRA_TIME, time)
-                .setAction(String.valueOf(SystemClock.elapsedRealtime()));
+    private static Intent getServiceIntent(Context context) {
+        Intent intent = new Intent(context, EventScheduleService.class);
+        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
+        return intent;
     }
 
-    public static void startService(Context context, @NonNull LocalTime time) {
-        Intent intent = getServiceIntent(context, time);
+    public static void startService(Context context) {
+        Intent intent = getServiceIntent(context);
         context.startService(intent);
     }
 
-    public static PendingIntent getPendingIntent(int requestCode, Context context, @NonNull LocalTime time) {
-        Intent intent = getServiceIntent(context, time);
+    public static PendingIntent getPendingIntent(int requestCode, Context context) {
+        Intent intent = getServiceIntent(context);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -73,25 +74,30 @@ public class EventScheduleService extends BaseService {
 
     @Override
     protected void handleIntent(@Nullable Intent intent) {
+        LocalDate today = LocalDate.now();
+        DateTime midnight = DateUtils.nextDayMidnight(today);
+        scheduleHelper.installAlarm(getPendingIntent(0, this), midnight.getMillis());
         subscribeOnUpdates();
     }
 
     private void subscribeOnUpdates() {
         unsubscribe(subscription);
         try {
-            LocalDate date = LocalDate.now();
-            LocalTime time = LocalTime.now();
+            DateTime now = DateTime.now();
             subscription = unsubscribeOnDestroy(
                     calendarInteractor.getAll(
                             GetEventsRequest.builder()
-                                    .date(date)
-                                    .time(time)
+                                    .date(now.toLocalDate())
                                     .filter(GetEventsFilter.builder()
                                             .eventTypes(Arrays.asList(EventType.values()))
                                             .build())
                                     .child(Child.NULL)
                                     .build())
                             .map(GetEventsResponse::getEvents)
+                            .flatMap(Observable::fromIterable)
+                            .filter(event -> event.getMasterEventId() != null
+                                    && event.getDateTime() != null
+                                    && event.getDateTime().isAfter(now))
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::handleResult, this::onUnexpectedError));
@@ -100,16 +106,14 @@ public class EventScheduleService extends BaseService {
         }
     }
 
-    private void handleResult(@NonNull List<MasterEvent> events) {
+    private void handleResult(@NonNull MasterEvent event) {
         // нельзя шедулить больше 500 будильников, по крайней мере, на самсунге
-        for (MasterEvent event : events) {
-            Long masterEventId = event.getMasterEventId();
-            int requestCode = (int) (masterEventId % Integer.MAX_VALUE);
-            Intent intent = new Intent(this, EventNotificationReceiver.class);
-            intent.putExtra(ExtraConstants.EXTRA_EVENT_ID, masterEventId);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            scheduleHelper.installAlarm(pendingIntent, event.getDateTime().getMillis());
-        }
+        Long masterEventId = event.getMasterEventId();
+        int requestCode = (int) (masterEventId % Integer.MAX_VALUE);
+        Intent intent = new Intent(this, EventNotificationReceiver.class);
+        intent.putExtra(ExtraConstants.EXTRA_EVENT_ID, masterEventId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        scheduleHelper.installAlarm(pendingIntent, event.getDateTime().getMillis());
     }
 
     private void onUnexpectedError(Throwable e) {

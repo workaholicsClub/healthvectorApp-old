@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 import lombok.Getter;
 import ru.android.childdiary.BuildConfig;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.data.services.ServiceController;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.di.DaggerApplicationComponent;
 import ru.android.childdiary.di.modules.ApplicationModule;
-import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.ui.FontUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -50,6 +50,7 @@ public class ChildDiaryApplication extends MultiDexApplication {
                 .build());
 
         serviceController.onApplicationStart();
+        serviceController.scheduleEvents();
         scheduleHelper.scheduleAll();
     }
 }

@@ -1,7 +1,6 @@
 package ru.android.childdiary.domain.calendar.requests;
 
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -15,8 +14,6 @@ public class GetEventsRequest {
     Child child;
     @NonNull
     LocalDate date;
-    @NonNull
-    LocalTime time;
     @NonNull
     GetEventsFilter filter;
 }
