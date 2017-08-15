@@ -105,6 +105,10 @@ import ru.android.childdiary.presentation.settings.SettingsFragment;
 import ru.android.childdiary.presentation.settings.SettingsPresenter;
 import ru.android.childdiary.presentation.settings.daylength.DayLengthActivity;
 import ru.android.childdiary.presentation.settings.daylength.DayLengthPresenter;
+import ru.android.childdiary.presentation.settings.notification.NotificationActivity;
+import ru.android.childdiary.presentation.settings.notification.NotificationPresenter;
+import ru.android.childdiary.presentation.settings.notifications.NotificationsActivity;
+import ru.android.childdiary.presentation.settings.notifications.NotificationsPresenter;
 import ru.android.childdiary.presentation.splash.SplashActivity;
 import ru.android.childdiary.presentation.splash.SplashPresenter;
 import ru.android.childdiary.presentation.testing.TestResultActivity;
@@ -247,6 +251,10 @@ public interface ApplicationComponent {
 
     void inject(AppIntroPresenter presenter);
 
+    void inject(NotificationPresenter presenter);
+
+    void inject(NotificationsPresenter presenter);
+
     // activities
     void inject(SplashActivity activity);
 
@@ -329,6 +337,10 @@ public interface ApplicationComponent {
     void inject(DayLengthActivity activity);
 
     void inject(AppIntroActivity activity);
+
+    void inject(NotificationActivity activity);
+
+    void inject(NotificationsActivity activity);
 
     // fragments
     void inject(CalendarFragment fragment);

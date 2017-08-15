@@ -84,11 +84,10 @@ public class EventScheduleService extends BaseService {
     private void subscribeOnUpdates() {
         unsubscribe(subscription);
         try {
-            DateTime now = DateTime.now();
             subscription = unsubscribeOnDestroy(
                     calendarInteractor.getAll(
                             GetEventsRequest.builder()
-                                    .date(now.toLocalDate())
+                                    .date(LocalDate.now())
                                     .filter(GetEventsFilter.builder()
                                             .eventTypes(Arrays.asList(EventType.values()))
                                             .build())
@@ -98,7 +97,7 @@ public class EventScheduleService extends BaseService {
                             .flatMap(Observable::fromIterable)
                             .filter(event -> event.getMasterEventId() != null
                                     && event.getDateTime() != null
-                                    && event.getDateTime().isAfter(now))
+                                    && event.getDateTime().getMillis() >= DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0).getMillis())
                             .map(event -> {
                                 MasterEvent defaultEvent = calendarInteractor.getDefaultEvent(event).blockingFirst();
                                 return Arrays.asList(event, defaultEvent);

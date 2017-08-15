@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/field_margin_base"
+    android:paddingTop="@dimen/field_margin_base">
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldTextViewWithImageView
+        android:id="@+id/eventTypeNameView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:fieldIcon="@drawable/ic_notify_time" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
+        android:id="@+id/checkBoxViewDontNotify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:fieldText="@string/dont_notify" />
+
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
+        android:id="@+id/notifyTimeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- // TODO Melody -->
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
+        android:id="@+id/checkBoxViewVibration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:fieldText="@string/vibration" />
+</LinearLayout>

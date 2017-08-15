@@ -30,6 +30,7 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
@@ -160,6 +161,17 @@ public class CalendarInteractor {
             default:
                 throw new IllegalArgumentException("Unsupported event type");
         }
+    }
+
+    public Observable<List<EventNotification>> getNotificationSettings() {
+        return Observable.fromArray(EventType.values())
+                .flatMap(eventType -> calendarRepository.getDefaultNotifyTimeInMinutes(eventType)
+                        .map(minutes -> EventNotification.builder()
+                                .eventType(eventType)
+                                .minutes(minutes)
+                                .build()))
+                .toList()
+                .toObservable();
     }
 
     public Observable<DiaperEvent> getDefaultDiaperEvent() {

@@ -56,6 +56,7 @@ import ru.android.childdiary.presentation.settings.adapters.items.IntentSettings
 import ru.android.childdiary.presentation.settings.adapters.items.ProfileGroupSettingsItem;
 import ru.android.childdiary.presentation.settings.adapters.items.ProfileSettingsItem;
 import ru.android.childdiary.presentation.settings.daylength.DayLengthActivity;
+import ru.android.childdiary.presentation.settings.notifications.NotificationsActivity;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -363,6 +364,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         Intention intention = Intention.values()[(int) item.getId()];
         switch (intention) {
             case NOTIFICATIONS:
+                startActivity(NotificationsActivity.getIntent(getContext(), getSex()));
                 break;
             case ACCOUNT:
                 presenter.bindAccount();

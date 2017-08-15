@@ -38,7 +38,6 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-
         adapter = new AntropometryAdapter(getContext(), this, fabController);
         RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), adapter);
         recyclerView.addItemDecoration(dividerItemDecoration);

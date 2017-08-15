@@ -252,8 +252,9 @@
     <string name="restore_error_dialog_text">При восстановлении данных произошла ошибка</string>
     <string name="backup_success_dialog_text">Данные сохранены</string>
     <string name="backup_error_dialog_text">При сохранении данных произошла ошибка</string>
-    <string name="settings_notifications">Уведомления</string>
-    <string name="settings_setup_notifications">Настройка оповещений</string>
+    <string name="settings_notifications">Оповещения</string>
+    <string name="settings_setup_notifications">Настройка уведомлений</string>
+    <string name="settings_setup_notification">Настроить уведомление</string>
     <string name="settings_data_control">Управление данными</string>
     <string name="settings_account">Аккаунт Google Drive</string>
     <string name="settings_backup_data">Сохранить данные</string>
@@ -351,4 +352,6 @@
     <string name="app_intro_charts">Смотрите графики-отчеты о развитии ребенка</string>
     <!-- %1$d - число, номер вопроса, %2$d - число, количество вопросов -->
     <string name="question_format">%1$d из %2$d</string>
+    <string name="dont_notify">Не оповещать</string>
+    <string name="vibration">Вибрация</string>
 </resources>
