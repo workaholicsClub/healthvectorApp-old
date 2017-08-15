@@ -32,23 +32,6 @@ public class SleepNotificationHelper extends BaseNotificationHelper {
         this.serviceController = serviceController;
     }
 
-    private PendingIntent buildSleepPendingIntent(int notificationId,
-                                                  @NonNull SleepEvent event,
-                                                  @NonNull SleepEvent defaultEvent) {
-        Intent intent = SleepEventDetailActivity.getIntent(context, event, defaultEvent);
-        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(SleepEventDetailActivity.class);
-        stackBuilder.addNextIntent(intent);
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
-        return pendingIntent;
-    }
-
-    private PendingIntent buildSleepActionPendingIntent(int notificationId,
-                                                        @NonNull SleepEvent event) {
-        return TimerService.getPendingIntent(0, context, TimerService.ACTION_STOP_SLEEP_EVENT_TIMER, event);
-    }
-
     public NotificationCompat.Builder buildSleepNotification(int notificationId,
                                                              @NonNull SleepEvent event,
                                                              @NonNull SleepEvent defaultEvent) {
@@ -89,5 +72,22 @@ public class SleepNotificationHelper extends BaseNotificationHelper {
         Notification notification = builder.build();
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
         notificationManager.notify(notificationId, notification);
+    }
+
+    private PendingIntent buildSleepPendingIntent(int notificationId,
+                                                  @NonNull SleepEvent event,
+                                                  @NonNull SleepEvent defaultEvent) {
+        Intent intent = SleepEventDetailActivity.getIntent(context, event, defaultEvent);
+        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(SleepEventDetailActivity.class);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
+        return pendingIntent;
+    }
+
+    private PendingIntent buildSleepActionPendingIntent(int notificationId,
+                                                        @NonNull SleepEvent event) {
+        return TimerService.getPendingIntent(0, context, TimerService.ACTION_STOP_SLEEP_EVENT_TIMER, event);
     }
 }

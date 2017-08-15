@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -98,6 +99,10 @@ public class EventScheduleService extends BaseService {
                             .filter(event -> event.getMasterEventId() != null
                                     && event.getDateTime() != null
                                     && event.getDateTime().isAfter(now))
+                            .map(event -> {
+                                MasterEvent defaultEvent = calendarInteractor.getDefaultEvent(event).blockingFirst();
+                                return Arrays.asList(event, defaultEvent);
+                            })
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::handleResult, this::onUnexpectedError));
@@ -106,12 +111,16 @@ public class EventScheduleService extends BaseService {
         }
     }
 
-    private void handleResult(@NonNull MasterEvent event) {
+    private void handleResult(@NonNull List<MasterEvent> events) {
+        MasterEvent event = events.get(0);
+        MasterEvent defaultEvent = events.get(1);
+        logger.debug("schedule event: " + event);
         // нельзя шедулить больше 500 будильников, по крайней мере, на самсунге
         Long masterEventId = event.getMasterEventId();
         int requestCode = (int) (masterEventId % Integer.MAX_VALUE);
         Intent intent = new Intent(this, EventNotificationReceiver.class);
-        intent.putExtra(ExtraConstants.EXTRA_EVENT_ID, masterEventId);
+        intent.putExtra(ExtraConstants.EXTRA_EVENT, event);
+        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         scheduleHelper.installAlarm(pendingIntent, event.getDateTime().getMillis());
     }

@@ -63,6 +63,8 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         chipsAdapter = new ChipsAdapter(getContext(), this);
         recyclerViewChips.setAdapter(chipsAdapter);
         recyclerViewChips.setVisibility(View.GONE);
+
+        line.setVisibility(View.GONE);
     }
 
     @Override
@@ -100,6 +102,8 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
 
         textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
         textViewIntention.setText(chips.isEmpty() ? R.string.add_medicine_taking : R.string.nothing_found);
+
+        line.setVisibility(medicineTakingList.isEmpty() && !chips.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override

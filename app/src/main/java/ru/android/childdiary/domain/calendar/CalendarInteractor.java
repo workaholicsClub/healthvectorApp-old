@@ -138,6 +138,30 @@ public class CalendarInteractor {
         return calendarRepository.setSelectedDateObservable(date);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends MasterEvent> Observable<T> getDefaultEvent(@NonNull MasterEvent event) {
+        switch (event.getEventType()) {
+            case DIAPER:
+                return (Observable<T>) getDefaultDiaperEvent();
+            case FEED:
+                return (Observable<T>) getDefaultFeedEvent();
+            case OTHER:
+                return (Observable<T>) getDefaultOtherEvent();
+            case PUMP:
+                return (Observable<T>) getDefaultPumpEvent();
+            case SLEEP:
+                return (Observable<T>) getDefaultSleepEvent();
+            case DOCTOR_VISIT:
+                return (Observable<T>) getDefaultDoctorVisitEvent();
+            case MEDICINE_TAKING:
+                return (Observable<T>) getDefaultMedicineTakingEvent();
+            case EXERCISE:
+                return (Observable<T>) getDefaultExerciseEvent();
+            default:
+                throw new IllegalArgumentException("Unsupported event type");
+        }
+    }
+
     public Observable<DiaperEvent> getDefaultDiaperEvent() {
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),

@@ -22,6 +22,7 @@ import io.requery.Persistable;
 import io.requery.query.WhereAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
 import io.requery.reactivex.ReactiveResult;
+import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.calendar.DoctorVisitEventEntity;
 import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
@@ -110,17 +111,17 @@ public class DoctorVisitDbService {
         if (doctorVisit.getFinishDateTime() != null) {
             return doctorVisit.toBuilder().isDone(true).build();
         }
-        List<DoctorVisitEventEntity> events = blockingEntityStore.select(DoctorVisitEventEntity.class)
+        val select = blockingEntityStore.count(DoctorVisitEventEntity.class)
                 .join(MasterEventEntity.class).on(MasterEventEntity.ID.eq(DoctorVisitEventEntity.MASTER_EVENT_ID))
                 .where(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisit.getId()))
-                .and(MasterEventEntity.CHILD_ID.eq(child.getId()))
+                .and(MasterEventEntity.CHILD_ID.eq(child.getId()));
+        int count;
+        count = select.get()
+                .value();
+        boolean isEmpty = count == 0;
+        count = select.and(MasterEventEntity.DONE.isNull().or(MasterEventEntity.DONE.eq(false)))
                 .get()
-                .toList();
-        boolean isEmpty = events.isEmpty();
-        long count = Observable.fromIterable(events)
-                .filter(event -> !ObjectUtils.isTrue(event.getMasterEvent().isDone()))
-                .count()
-                .blockingGet();
+                .value();
         boolean allDone = count == 0;
         return doctorVisit.toBuilder().isDone(!isEmpty && allDone).build();
     }

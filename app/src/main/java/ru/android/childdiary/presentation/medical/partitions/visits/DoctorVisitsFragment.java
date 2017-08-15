@@ -63,6 +63,8 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         chipsAdapter = new ChipsAdapter(getContext(), this);
         recyclerViewChips.setAdapter(chipsAdapter);
         recyclerViewChips.setVisibility(View.GONE);
+
+        line.setVisibility(View.GONE);
     }
 
     @Override
@@ -100,6 +102,8 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
 
         textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
         textViewIntention.setText(chips.isEmpty() ? R.string.add_doctor_visit : R.string.nothing_found);
+
+        line.setVisibility(doctorVisits.isEmpty() && !chips.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override
