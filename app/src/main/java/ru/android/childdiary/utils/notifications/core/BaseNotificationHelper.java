@@ -1,4 +1,4 @@
-package ru.android.childdiary.utils.notifications;
+package ru.android.childdiary.utils.notifications.core;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -44,12 +44,12 @@ public abstract class BaseNotificationHelper {
         }
     }
 
-    public void showNotification(int notificationId, NotificationCompat.Builder builder) {
+    protected void showNotification(int notificationId, NotificationCompat.Builder builder) {
         Notification notification = builder.build();
         notificationManager.notify(notificationId, notification);
     }
 
-    public void hideNotification(int notificationId) {
+    public final void hideNotification(int notificationId) {
         notificationManager.cancel(notificationId);
     }
 }

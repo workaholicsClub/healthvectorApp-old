@@ -20,15 +20,15 @@ import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.repositories.exercises.ExerciseDataRepository;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.calendar.CalendarRepository;
-import ru.android.childdiary.domain.child.data.Child;
-import ru.android.childdiary.domain.child.ChildRepository;
 import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroups;
 import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
+import ru.android.childdiary.domain.child.ChildRepository;
+import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.core.settings.SettingsRepository;
+import ru.android.childdiary.domain.core.validation.EventValidationResult;
 import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
 import ru.android.childdiary.domain.exercises.data.Exercise;
 import ru.android.childdiary.domain.exercises.requests.UpsertConcreteExerciseRequest;
@@ -73,11 +73,12 @@ public class ExerciseInteractor {
     }
 
     public Observable<ConcreteExercise> getDefaultConcreteExercise(@NonNull Child child, @NonNull Exercise exercise) {
+        EventType eventType = EventType.EXERCISE;
         return Observable.combineLatest(
                 getDefaultRepeatParameters(),
                 Observable.just(DateTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.EXERCISE),
-                (repeatParameters, dateTime, minutes) -> ConcreteExercise.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (repeatParameters, dateTime, eventNotification) -> ConcreteExercise.builder()
                         .child(child)
                         .exercise(exercise)
                         .repeatParameters(repeatParameters)
@@ -86,7 +87,7 @@ public class ExerciseInteractor {
                         .dateTime(dateTime)
                         .finishDateTime(null)
                         .isExported(true)
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .note(null)
                         .imageFileName(null)
                         .isDeleted(null)

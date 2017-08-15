@@ -262,9 +262,12 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
-    public static int getCheckBoxRes(@Nullable Sex sex, boolean on) {
-        return on ? (sex == null || sex == Sex.MALE ? R.drawable.checkbox_on_boy : R.drawable.checkbox_on_girl)
-                : R.drawable.checkbox_off;
+    public static int getCheckBoxRes(@Nullable Sex sex, boolean on, boolean enabled) {
+        if (enabled) {
+            return on ? (sex == null || sex == Sex.MALE ? R.drawable.checkbox_on_boy : R.drawable.checkbox_on_girl)
+                    : R.drawable.checkbox_off;
+        }
+        return on ? R.drawable.checkbox_on_disabled : R.drawable.checkbox_off_disabled;
     }
 
     @ColorInt
@@ -302,7 +305,14 @@ public class ResourcesUtils {
 
     @DrawableRes
     public static int getNotificationEventRes(@Nullable Child child) {
-        return R.drawable.ic_notification_event;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Sex sex = child == null ? null : child.getSex();
+            return sex == null || sex == Sex.MALE
+                    ? R.drawable.ic_notification_event_pre_lollipop_boy
+                    : R.drawable.ic_notification_event_pre_lollipop_girl;
+        } else {
+            return R.drawable.ic_notification_event;
+        }
     }
 
     @DrawableRes

@@ -93,14 +93,15 @@ public class MedicineTakingInteractor {
     }
 
     public Observable<MedicineTaking> getDefaultMedicineTaking() {
+        EventType eventType = EventType.MEDICINE_TAKING;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 settingsRepository.getStartTimeOnce()
                         .map(Collections::singletonList)
                         .map(this::getDefaultRepeatParameters),
                 Observable.just(DateTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.MEDICINE_TAKING),
-                (child, repeatParameters, dateTime, minutes) -> MedicineTaking.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (child, repeatParameters, dateTime, eventNotification) -> MedicineTaking.builder()
                         .child(child)
                         .medicine(null)
                         .amount(null)
@@ -109,7 +110,7 @@ public class MedicineTakingInteractor {
                         .dateTime(dateTime)
                         .finishDateTime(null)
                         .isExported(true)
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .note(null)
                         .imageFileName(null)
                         .isDeleted(null)

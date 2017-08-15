@@ -29,6 +29,7 @@ import ru.android.childdiary.domain.calendar.CalendarRepository;
 import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.domain.calendar.data.core.TimeUnit;
@@ -67,6 +68,19 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     private static final String KEY_LAST_FEED_TYPE = "last_feed_type";
     private static final String KEY_LAST_FOOD_MEASURE_ID = "last_food_measure";
     private static final String KEY_LAST_FOOD_ID = "last_food";
+    private static final String KEY_NOTIFY_TIME_PREFIX = "notify_time_";
+    private static final String KEY_DONT_NOTIFY_PREFIX = "dont_notify_";
+    private static final String KEY_VIBRATION_PREFIX = "vibration_";
+    private static final Map<EventType, Integer> defaultNotifyTimeValues = new HashMap<EventType, Integer>() {{
+        put(EventType.DIAPER, 5);
+        put(EventType.FEED, 30);
+        put(EventType.OTHER, 10);
+        put(EventType.PUMP, 10);
+        put(EventType.SLEEP, 60);
+        put(EventType.DOCTOR_VISIT, TimeUtils.MINUTES_IN_DAY);
+        put(EventType.MEDICINE_TAKING, 10);
+        put(EventType.EXERCISE, 30);
+    }};
 
     private final RxSharedPreferences preferences;
     private final CalendarDbService calendarDbService;
@@ -344,26 +358,71 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     @Override
-    public Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType) {
-        switch (eventType) {
-            case DIAPER:
-                return Observable.just(0);
-            case FEED:
-                return Observable.just(30);
-            case OTHER:
-                return Observable.just(10);
-            case PUMP:
-                return Observable.just(10);
-            case SLEEP:
-                return Observable.just(60);
-            case DOCTOR_VISIT:
-                return Observable.just(TimeUtils.MINUTES_IN_DAY);
-            case MEDICINE_TAKING:
-                return Observable.just(10);
-            case EXERCISE:
-                return Observable.just(30);
-        }
-        throw new IllegalArgumentException("Unsupported event type");
+    public Observable<EventNotification> getNotificationSettings(@NonNull EventType eventType) {
+        return Observable.combineLatest(
+                getDontNotify(eventType),
+                getNotifyTimeInMinutes(eventType),
+                getVibration(eventType),
+                (dontNotify, minutes, vibration) -> EventNotification.builder()
+                        .eventType(eventType)
+                        .dontNotify(dontNotify)
+                        .minutes(minutes)
+                        // TODO Melody
+                        .vibration(vibration)
+                        .build());
+    }
+
+    @Override
+    public Observable<EventNotification> getNotificationSettingsOnce(@NonNull EventType eventType) {
+        return getNotificationSettings(eventType)
+                .first(EventNotification.builder()
+                        .eventType(eventType)
+                        .build())
+                .toObservable();
+    }
+
+    @Override
+    public Observable<EventNotification> setNotificationSettings(@NonNull EventNotification eventNotification) {
+        return Observable.fromCallable(() -> {
+            EventType eventType = eventNotification.getEventType();
+            String keyNotifyTime = KEY_NOTIFY_TIME_PREFIX + eventType;
+            preferences.getInteger(keyNotifyTime).set(eventNotification.getMinutes());
+            // TODO Melody
+            String keyDontNotify=KEY_DONT_NOTIFY_PREFIX+eventType;
+            preferences.getBoolean(keyDontNotify).set(eventNotification.isDontNotify());
+            String keyVibration = KEY_VIBRATION_PREFIX + eventType;
+            preferences.getBoolean(keyVibration).set(eventNotification.isVibration());
+            return eventNotification;
+        });
+    }
+
+    private Observable<Integer> getNotifyTimeInMinutes(@NonNull EventType eventType) {
+        String key = KEY_NOTIFY_TIME_PREFIX + eventType;
+        int defaultValue = defaultNotifyTimeValues.get(eventType);
+        return preferences.getInteger(key, defaultValue).asObservable();
+    }
+
+    private Observable<Integer> getNotifyTimeInMinutesOnce(@NonNull EventType eventType) {
+        int defaultValue = defaultNotifyTimeValues.get(eventType);
+        return getNotifyTimeInMinutes(eventType).first(defaultValue).toObservable();
+    }
+
+    private Observable<Boolean> getDontNotify(@NonNull EventType eventType) {
+        String key = KEY_DONT_NOTIFY_PREFIX + eventType;
+        return preferences.getBoolean(key, false).asObservable();
+    }
+
+    private Observable<Boolean> getDontNotifyOnce(@NonNull EventType eventType) {
+        return getDontNotify(eventType).first(false).toObservable();
+    }
+
+    private Observable<Boolean> getVibration(@NonNull EventType eventType) {
+        String key = KEY_VIBRATION_PREFIX + eventType;
+        return preferences.getBoolean(key, false).asObservable();
+    }
+
+    private Observable<Boolean> getVibrationOnce(@NonNull EventType eventType) {
+        return getVibration(eventType).first(false).toObservable();
     }
 
     @Override

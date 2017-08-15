@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -12,11 +11,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import lombok.Setter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.ui.FontUtils;
 
 public abstract class FieldDialogView<T> extends BaseFieldValueView<T> implements View.OnClickListener {
-    private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
-
     @BindView(R.id.textViewWrapper)
     View textViewWrapper;
 
@@ -59,10 +55,17 @@ public abstract class FieldDialogView<T> extends BaseFieldValueView<T> implement
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        textView.setTypeface(typeface);
         imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
         textViewWrapper.setOnClickListener(readOnly ? null : this);
         textViewWrapper.setClickable(!readOnly);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        setReadOnly(!enabled);
+        //noinspection deprecation
+        textView.setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
+        textView.setTypeface(typeface);
     }
 
     @Nullable

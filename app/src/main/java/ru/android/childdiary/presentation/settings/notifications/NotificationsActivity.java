@@ -100,6 +100,6 @@ public class NotificationsActivity extends BaseMvpActivity implements Notificati
 
     @Override
     public void onItemClicked(EventNotification eventNotification) {
-        startActivity(NotificationActivity.getIntent(this, getSex()));
+        startActivity(NotificationActivity.getIntent(this, getSex(), eventNotification.getEventType()));
     }
 }

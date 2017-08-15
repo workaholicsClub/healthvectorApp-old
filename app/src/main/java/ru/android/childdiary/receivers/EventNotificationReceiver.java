@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.receivers.core.BaseReceiver;
@@ -24,11 +25,12 @@ public class EventNotificationReceiver extends BaseReceiver {
 
         MasterEvent event = (MasterEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
         MasterEvent defaultEvent = (MasterEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_DEFAULT_EVENT);
+        EventNotification eventNotification = (EventNotification) intent.getSerializableExtra(ExtraConstants.EXTRA_SETTINGS);
 
         logger.debug("received notification: " + event);
 
         Long masterEventId = event.getMasterEventId();
         int notificationId = (int) (masterEventId % Integer.MAX_VALUE);
-        eventNotificationHelper.showEventNotification(notificationId, event, defaultEvent);
+        eventNotificationHelper.showEventNotification(notificationId, event, defaultEvent, eventNotification);
     }
 }

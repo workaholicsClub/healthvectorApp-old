@@ -70,4 +70,12 @@ public abstract class BaseAddItemActivity<V extends BaseAddItemView<T>, T extend
     }
 
     protected abstract BaseAddItemPresenter<V, T> getPresenter();
+
+    @Override
+    public void onChecked() {
+        if (getCheckBoxView() != null) {
+            boolean readOnly = !getCheckBoxView().isChecked();
+            getRepeatParametersView().setReadOnly(readOnly);
+        }
+    }
 }

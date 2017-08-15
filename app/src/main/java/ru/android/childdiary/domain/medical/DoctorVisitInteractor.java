@@ -95,13 +95,14 @@ public class DoctorVisitInteractor {
     }
 
     public Observable<DoctorVisit> getDefaultDoctorVisit() {
+        EventType eventType = EventType.DOCTOR_VISIT;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 doctorVisitRepository.getLastDoctor(),
                 getDefaultRepeatParameters(),
                 Observable.just(DateTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.DOCTOR_VISIT),
-                (child, doctor, repeatParameters, dateTime, minutes) -> DoctorVisit.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (child, doctor, repeatParameters, dateTime, eventNotification) -> DoctorVisit.builder()
                         .child(child)
                         .doctor(doctor)
                         .repeatParameters(repeatParameters)
@@ -110,7 +111,7 @@ public class DoctorVisitInteractor {
                         .dateTime(dateTime)
                         .finishDateTime(null)
                         .isExported(true)
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .note(null)
                         .imageFileName(null)
                         .isDeleted(null)

@@ -14,6 +14,7 @@ import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.domain.calendar.data.core.TimeUnit;
@@ -126,7 +127,11 @@ public interface CalendarRepository {
 
     Observable<DeleteConcreteExerciseEventsResponse> deleteLinearGroup(@NonNull DeleteConcreteExerciseEventsRequest request);
 
-    Observable<Integer> getDefaultNotifyTimeInMinutes(@NonNull EventType eventType);
+    Observable<EventNotification> getNotificationSettings(@NonNull EventType eventType);
+
+    Observable<EventNotification> getNotificationSettingsOnce(@NonNull EventType eventType);
+
+    Observable<EventNotification> setNotificationSettings(@NonNull EventNotification eventNotification);
 
     Observable<List<Integer>> getFrequencyList(@NonNull EventType eventType);
 

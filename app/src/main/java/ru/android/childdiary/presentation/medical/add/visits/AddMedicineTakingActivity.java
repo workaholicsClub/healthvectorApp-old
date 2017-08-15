@@ -164,14 +164,6 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     }
 
     @Override
-    public void onChecked() {
-        if (getCheckBoxView() != null) {
-            boolean readOnly = !getCheckBoxView().isChecked();
-            repeatParametersView.setReadOnly(readOnly);
-        }
-    }
-
-    @Override
     protected boolean contentEquals(MedicineTaking item1, MedicineTaking item2) {
         return ObjectUtils.contentEquals(item1, item2);
     }

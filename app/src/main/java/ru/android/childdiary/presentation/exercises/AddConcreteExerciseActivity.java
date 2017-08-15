@@ -143,14 +143,6 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
     }
 
     @Override
-    public void onChecked() {
-        if (getCheckBoxView() != null) {
-            boolean readOnly = !getCheckBoxView().isChecked();
-            repeatParametersView.setReadOnly(readOnly);
-        }
-    }
-
-    @Override
     protected boolean contentEquals(ConcreteExercise item1, ConcreteExercise item2) {
         return ObjectUtils.contentEquals(item1, item2);
     }

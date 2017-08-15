@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,8 +17,11 @@ import lombok.val;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeListener;
 import ru.android.childdiary.presentation.core.bindings.FieldValueView;
 import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.ui.FontUtils;
 
 public abstract class BaseFieldValueView<T> extends LinearLayout implements FieldValueView<T>, FieldReadOnly {
+    protected final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
+
     private final Set<FieldValueChangeListener<T>> valueChangeListeners = new HashSet<>();
 
     @Getter

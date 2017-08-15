@@ -1,8 +1,11 @@
 package ru.android.childdiary.utils.notifications;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -14,6 +17,7 @@ import javax.inject.Inject;
 import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.data.standard.DiaperEvent;
 import ru.android.childdiary.domain.calendar.data.standard.FeedEvent;
@@ -26,6 +30,7 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.MedicineTakingEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
+import ru.android.childdiary.utils.notifications.core.BaseNotificationHelper;
 import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -38,7 +43,9 @@ public class EventNotificationHelper extends BaseNotificationHelper {
 
     public void showEventNotification(int notificationId,
                                       @NonNull MasterEvent event,
-                                      @NonNull MasterEvent defaultEvent) {
+                                      @NonNull MasterEvent defaultEvent,
+                                      @NonNull EventNotification eventNotification) {
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         String title = EventUtils.getTitle(context, event);
         String text = EventUtils.getDescription(context, event);
         NotificationCompat.Builder builder = createNotificationBuilder();
@@ -48,17 +55,21 @@ public class EventNotificationHelper extends BaseNotificationHelper {
                 .setContentText(text)
                 .setWhen(event.getDateTime().toDate().getTime())
                 .setAutoCancel(true)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                .setSound(soundUri);
+        if (eventNotification.isVibration()) {
+            builder.setDefaults(Notification.DEFAULT_VIBRATE);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setColor(ThemeUtils.getColorPrimary(context, event.getChild() == null ? null : event.getChild().getSex()));
         }
         showNotification(notificationId, builder);
     }
 
-    public PendingIntent buildPendingIntent(Context context,
-                                            int notificationId,
-                                            @NonNull MasterEvent event,
-                                            @NonNull MasterEvent defaultEvent) {
+    private PendingIntent buildPendingIntent(Context context,
+                                             int notificationId,
+                                             @NonNull MasterEvent event,
+                                             @NonNull MasterEvent defaultEvent) {
         switch (event.getEventType()) {
             case DIAPER:
                 return buildPendingIntent(context, notificationId,

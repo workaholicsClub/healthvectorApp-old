@@ -12,7 +12,6 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.Arrays;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,11 +19,14 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import lombok.Builder;
+import lombok.Value;
 import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.CalendarInteractor;
+import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.requests.GetEventsFilter;
 import ru.android.childdiary.domain.calendar.requests.GetEventsRequest;
@@ -98,10 +100,14 @@ public class EventScheduleService extends BaseService {
                             .filter(event -> event.getMasterEventId() != null
                                     && event.getDateTime() != null
                                     && event.getDateTime().getMillis() >= DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0).getMillis())
-                            .map(event -> {
-                                MasterEvent defaultEvent = calendarInteractor.getDefaultEvent(event).blockingFirst();
-                                return Arrays.asList(event, defaultEvent);
-                            })
+                            .flatMap(event -> Observable.combineLatest(
+                                    calendarInteractor.getDefaultEvent(event),
+                                    calendarInteractor.getNotificationSettingsOnce(event.getEventType()),
+                                    (defaultEvent, eventNotification) -> NotificationInfo.builder()
+                                            .event(event)
+                                            .defaultEvent((MasterEvent) defaultEvent)
+                                            .eventNotification(eventNotification)
+                                            .build()))
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::handleResult, this::onUnexpectedError));
@@ -110,9 +116,10 @@ public class EventScheduleService extends BaseService {
         }
     }
 
-    private void handleResult(@NonNull List<MasterEvent> events) {
-        MasterEvent event = events.get(0);
-        MasterEvent defaultEvent = events.get(1);
+    private void handleResult(@NonNull NotificationInfo notificationInfo) {
+        MasterEvent event = notificationInfo.getEvent();
+        MasterEvent defaultEvent = notificationInfo.getDefaultEvent();
+        EventNotification eventNotification = notificationInfo.getEventNotification();
         logger.debug("schedule event: " + event);
         // нельзя шедулить больше 500 будильников, по крайней мере, на самсунге
         Long masterEventId = event.getMasterEventId();
@@ -120,11 +127,23 @@ public class EventScheduleService extends BaseService {
         Intent intent = new Intent(this, EventNotificationReceiver.class);
         intent.putExtra(ExtraConstants.EXTRA_EVENT, event);
         intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
+        intent.putExtra(ExtraConstants.EXTRA_SETTINGS, eventNotification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         scheduleHelper.installAlarm(pendingIntent, event.getDateTime().getMillis());
     }
 
     private void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
+    }
+
+    @Value
+    @Builder
+    private static class NotificationInfo {
+        @NonNull
+        MasterEvent event;
+        @NonNull
+        MasterEvent defaultEvent;
+        @NonNull
+        EventNotification eventNotification;
     }
 }

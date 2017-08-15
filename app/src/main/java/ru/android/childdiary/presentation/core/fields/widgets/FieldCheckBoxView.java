@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Typeface;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -16,12 +15,12 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.bindings.FieldValueChangeListener;
 import ru.android.childdiary.utils.ObjectUtils;
-import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FieldCheckBoxView extends BaseFieldValueView<Boolean> implements View.OnClickListener,
         FieldValueChangeListener<Boolean> {
-    private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
+    @BindView(R.id.contentView)
+    View contentView;
 
     @BindView(R.id.imageView)
     ImageView imageView;
@@ -32,6 +31,7 @@ public class FieldCheckBoxView extends BaseFieldValueView<Boolean> implements Vi
     @Nullable
     private Sex sex;
     private String text;
+    private boolean enabled = true;
 
     @Nullable
     @Setter
@@ -113,9 +113,21 @@ public class FieldCheckBoxView extends BaseFieldValueView<Boolean> implements Vi
     }
 
     private void update() {
-        imageView.setImageResource(ResourcesUtils.getCheckBoxRes(sex, isChecked()));
+        imageView.setImageResource(ResourcesUtils.getCheckBoxRes(sex, isChecked(), enabled));
         //noinspection deprecation
         textView.setTextAppearance(getContext(), isChecked() ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
+        textView.setTypeface(typeface);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        setOnClickListener(enabled ? this : null);
+        //noinspection deprecation
+        contentView.setBackgroundResource(enabled ? R.drawable.background_clickable : 0);
+        imageView.setImageResource(ResourcesUtils.getCheckBoxRes(sex, isChecked(), enabled));
+        //noinspection deprecation
+        textView.setTextAppearance(getContext(), enabled ? R.style.PrimaryTextAppearance : R.style.SecondaryTextAppearance);
         textView.setTypeface(typeface);
     }
 

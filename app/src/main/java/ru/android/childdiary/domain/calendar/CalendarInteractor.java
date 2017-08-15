@@ -12,6 +12,7 @@ import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -164,43 +165,59 @@ public class CalendarInteractor {
     }
 
     public Observable<List<EventNotification>> getNotificationSettings() {
-        return Observable.fromArray(EventType.values())
-                .flatMap(eventType -> calendarRepository.getDefaultNotifyTimeInMinutes(eventType)
-                        .map(minutes -> EventNotification.builder()
-                                .eventType(eventType)
-                                .minutes(minutes)
-                                .build()))
-                .toList()
-                .toObservable();
+        List<Observable<EventNotification>> observables = new ArrayList<>();
+        for (EventType eventType : EventType.values()) {
+            observables.add(getNotificationSettings(eventType));
+        }
+        return Observable.combineLatest(
+                observables,
+                eventNotifications -> Observable.fromArray(eventNotifications)
+                        .map(o -> (EventNotification) o)
+                        .toList()
+                        .blockingGet());
+    }
+
+    public Observable<EventNotification> getNotificationSettings(@NonNull EventType eventType) {
+        return calendarRepository.getNotificationSettings(eventType);
+    }
+
+    public Observable<EventNotification> getNotificationSettingsOnce(@NonNull EventType eventType) {
+        return calendarRepository.getNotificationSettingsOnce(eventType);
+    }
+
+    public Observable<EventNotification> setNotificationSettings(@NonNull EventNotification eventNotification) {
+        return calendarRepository.setNotificationSettings(eventNotification);
     }
 
     public Observable<DiaperEvent> getDefaultDiaperEvent() {
+        EventType eventType = EventType.DIAPER;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.DIAPER),
-                (child, date, time, minutes) -> DiaperEvent.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (child, date, time, eventNotification) -> DiaperEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .diaperState(DiaperState.WET)
                         .build());
     }
 
     public Observable<FeedEvent> getDefaultFeedEvent() {
+        EventType eventType = EventType.FEED;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.FEED),
+                calendarRepository.getNotificationSettings(eventType),
                 calendarRepository.getLastFeedType(),
                 calendarRepository.getLastFoodMeasure(),
                 calendarRepository.getLastFood(),
-                (child, date, time, minutes, feedType, foodMeasure, food) -> FeedEvent.builder()
+                (child, date, time, eventNotification, feedType, foodMeasure, food) -> FeedEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .feedType(feedType)
                         .foodMeasure(foodMeasure)
                         .food(food)
@@ -209,81 +226,87 @@ public class CalendarInteractor {
     }
 
     public Observable<OtherEvent> getDefaultOtherEvent() {
+        EventType eventType = EventType.OTHER;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.OTHER),
-                (child, date, time, minutes) -> OtherEvent.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (child, date, time, eventNotification) -> OtherEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .build());
     }
 
     public Observable<PumpEvent> getDefaultPumpEvent() {
+        EventType eventType = EventType.PUMP;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.PUMP),
-                (child, date, time, minutes) -> PumpEvent.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (child, date, time, eventNotification) -> PumpEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .breast(Breast.LEFT)
                         .build());
     }
 
     public Observable<SleepEvent> getDefaultSleepEvent() {
+        EventType eventType = EventType.SLEEP;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.SLEEP),
-                (child, date, time, minutes) -> SleepEvent.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (child, date, time, eventNotification) -> SleepEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .build());
     }
 
     public Observable<DoctorVisitEvent> getDefaultDoctorVisitEvent() {
+        EventType eventType = EventType.DOCTOR_VISIT;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.DOCTOR_VISIT),
-                (child, date, time, minutes) -> DoctorVisitEvent.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (child, date, time, eventNotification) -> DoctorVisitEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .build());
     }
 
     public Observable<MedicineTakingEvent> getDefaultMedicineTakingEvent() {
+        EventType eventType = EventType.MEDICINE_TAKING;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.MEDICINE_TAKING),
-                (child, date, time, minutes) -> MedicineTakingEvent.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (child, date, time, eventNotification) -> MedicineTakingEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .build());
     }
 
     public Observable<ExerciseEvent> getDefaultExerciseEvent() {
+        EventType eventType = EventType.EXERCISE;
         return Observable.combineLatest(
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getDefaultNotifyTimeInMinutes(EventType.EXERCISE),
-                (child, date, time, minutes) -> ExerciseEvent.builder()
+                calendarRepository.getNotificationSettings(eventType),
+                (child, date, time, eventNotification) -> ExerciseEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
-                        .notifyTimeInMinutes(minutes)
+                        .notifyTimeInMinutes(eventNotification.getNotifyTime())
                         .build());
     }
 

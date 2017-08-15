@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -22,12 +21,9 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroups;
 import ru.android.childdiary.utils.TimesMatcher;
 import ru.android.childdiary.utils.strings.DateUtils;
-import ru.android.childdiary.utils.ui.FontUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class FieldTimesView extends BaseFieldValueView<LinearGroups> implements View.OnClickListener {
-    private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
-
     @BindDimen(R.dimen.times_margin)
     int margin;
 
@@ -106,7 +102,6 @@ public class FieldTimesView extends BaseFieldValueView<LinearGroups> implements 
             layoutParams.setMargins(margin, 0, margin, 0);
             textView.setLayoutParams(layoutParams);
             textView.setPadding(padding, padding, padding, padding);
-            textView.setTypeface(typeface);
             textView.setBackgroundResource(ResourcesUtils.getTimeItemBackgroundRes(sex, !readOnly));
             textView.setOnClickListener(readOnly ? null : this);
             textView.setTag(i);

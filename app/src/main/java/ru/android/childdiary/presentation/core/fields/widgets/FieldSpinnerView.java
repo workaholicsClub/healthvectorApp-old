@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ListPopupWindow;
@@ -19,12 +18,9 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import lombok.Setter;
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.ui.FontUtils;
 
 public abstract class FieldSpinnerView<T> extends BaseFieldValueView<T> implements View.OnClickListener,
         AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
-    private final Typeface typeface = FontUtils.getTypefaceRegular(getContext());
-
     @BindView(R.id.textViewWrapper)
     View textViewWrapper;
 
@@ -107,7 +103,6 @@ public abstract class FieldSpinnerView<T> extends BaseFieldValueView<T> implemen
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        textView.setTypeface(typeface);
         imageView.setVisibility(readOnly ? INVISIBLE : VISIBLE);
         textViewWrapper.setOnClickListener(readOnly ? null : this);
         textViewWrapper.setClickable(!readOnly);
