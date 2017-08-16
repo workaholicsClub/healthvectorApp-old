@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.requery.Persistable;
 import io.requery.query.JoinAndOr;
 import io.requery.reactivex.ReactiveEntityStore;
@@ -681,5 +682,13 @@ public class CalendarDbService extends EventsDbService {
             notifyDateTime = event.getDateTime().minusMinutes(notifyTimeInMinutes);
         }
         return event.toMasterBuilder().notifyDateTime(notifyDateTime).build();
+    }
+
+    public Single<Boolean> exists(@NonNull MasterEvent event) {
+        return dataStore.count(MasterEventEntity.class)
+                .where(MasterEventEntity.ID.eq(event.getMasterEventId()))
+                .get()
+                .single()
+                .map(count -> count == 1);
     }
 }

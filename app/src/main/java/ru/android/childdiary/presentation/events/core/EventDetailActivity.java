@@ -36,7 +36,6 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
-import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -433,7 +432,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected final boolean notifyTimeViewVisible() {
-        return defaultEvent != null && ObjectUtils.isPositive(defaultEvent.getNotifyTimeInMinutes());
+        return defaultEvent != null && defaultEvent.getNotifyTimeInMinutes() != null;
     }
 
     @Nullable

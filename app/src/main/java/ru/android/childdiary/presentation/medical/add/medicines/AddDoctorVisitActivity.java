@@ -131,7 +131,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
         checkBoxView.setChecked(exported);
 
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
-        boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
+        boolean notifyTimeViewVisible = item.getNotifyTimeInMinutes() != null;
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(item.getNote());
         noteWithPhotoView.setImageFileName(item.getImageFileName());

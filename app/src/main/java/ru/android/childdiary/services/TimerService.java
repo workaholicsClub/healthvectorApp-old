@@ -33,7 +33,7 @@ import ru.android.childdiary.domain.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.services.core.BaseService;
 import ru.android.childdiary.utils.log.LogSystem;
-import ru.android.childdiary.utils.notifications.SleepNotificationHelper;
+import ru.android.childdiary.utils.notifications.SleepEventNotificationHelper;
 import ru.android.childdiary.utils.strings.EventUtils;
 
 public class TimerService extends BaseService {
@@ -52,7 +52,7 @@ public class TimerService extends BaseService {
     CalendarInteractor calendarInteractor;
 
     @Inject
-    SleepNotificationHelper sleepNotificationHelper;
+    SleepEventNotificationHelper sleepEventNotificationHelper;
 
     private Disposable subscription;
     private Handler handler;
@@ -168,7 +168,6 @@ public class TimerService extends BaseService {
 
     private void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
-
         clear();
     }
 
@@ -209,9 +208,7 @@ public class TimerService extends BaseService {
     private void updateNotifications(Context context, List<SleepEvent> newEvents) {
         removeAll(events, newEvents);
         for (SleepEvent event : events) {
-            Long masterEventId = event.getMasterEventId();
-            int notificationId = (int) (masterEventId % Integer.MAX_VALUE);
-            sleepNotificationHelper.hideNotification(notificationId);
+            sleepEventNotificationHelper.hideNotification(event);
         }
         events = new ArrayList<>(newEvents);
     }
@@ -234,16 +231,15 @@ public class TimerService extends BaseService {
     private void updateNotifications(Context context) {
         for (SleepEvent event : events) {
             Long masterEventId = event.getMasterEventId();
-            int notificationId = (int) (masterEventId % Integer.MAX_VALUE);
             NotificationCompat.Builder builder = notificationBuilders.get(masterEventId);
             if (builder == null) {
                 SleepEvent defaultEvent = calendarInteractor.getDefaultSleepEvent().blockingFirst();
-                builder = sleepNotificationHelper.buildSleepNotification(notificationId, event, defaultEvent);
+                builder = sleepEventNotificationHelper.buildSleepNotification(event, defaultEvent);
                 notificationBuilders.put(masterEventId, builder);
             } else {
-                sleepNotificationHelper.updateSleepNotification(builder, event);
+                sleepEventNotificationHelper.updateSleepNotification(builder, event);
             }
-            sleepNotificationHelper.showNotification(notificationId, builder);
+            sleepEventNotificationHelper.showNotification(event, builder);
         }
     }
 }

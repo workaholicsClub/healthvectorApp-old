@@ -120,7 +120,7 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
         durationView.setValue(item.getDurationInMinutes());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
-        boolean notifyTimeViewVisible = ObjectUtils.isPositive(item.getNotifyTimeInMinutes());
+        boolean notifyTimeViewVisible = item.getNotifyTimeInMinutes() != null;
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
     }
 

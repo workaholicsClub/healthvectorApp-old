@@ -116,7 +116,6 @@ import ru.android.childdiary.presentation.testing.TestResultPresenter;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 import ru.android.childdiary.presentation.testing.TestingPresenter;
 import ru.android.childdiary.presentation.testing.dialogs.TestParametersPresenter;
-import ru.android.childdiary.receivers.EventNotificationReceiver;
 import ru.android.childdiary.receivers.TimeChangedReceiver;
 import ru.android.childdiary.services.AccountService;
 import ru.android.childdiary.services.CloudService;
@@ -124,6 +123,8 @@ import ru.android.childdiary.services.EventScheduleService;
 import ru.android.childdiary.services.LinearGroupFinishedService;
 import ru.android.childdiary.services.TimerService;
 import ru.android.childdiary.services.UpdateDataService;
+import ru.android.childdiary.services.notifications.AlarmEventService;
+import ru.android.childdiary.services.notifications.NotificationEventService;
 
 @Component(modules = {ApplicationModule.class,
         DbModule.class,
@@ -364,8 +365,10 @@ public interface ApplicationComponent {
 
     void inject(LinearGroupFinishedService service);
 
-    // receivers
-    void inject(EventNotificationReceiver receiver);
+    void inject(AlarmEventService service);
 
+    void inject(NotificationEventService service);
+
+    // receivers
     void inject(TimeChangedReceiver receiver);
 }

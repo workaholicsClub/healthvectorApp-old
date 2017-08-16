@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.core.ValueDataRepository;
 import ru.android.childdiary.data.repositories.dictionaries.core.CrudDbService;
 import ru.android.childdiary.data.repositories.dictionaries.food.FoodDbService;
@@ -388,7 +389,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
             String keyNotifyTime = KEY_NOTIFY_TIME_PREFIX + eventType;
             preferences.getInteger(keyNotifyTime).set(eventNotification.getMinutes());
             // TODO Melody
-            String keyDontNotify=KEY_DONT_NOTIFY_PREFIX+eventType;
+            String keyDontNotify = KEY_DONT_NOTIFY_PREFIX + eventType;
             preferences.getBoolean(keyDontNotify).set(eventNotification.isDontNotify());
             String keyVibration = KEY_VIBRATION_PREFIX + eventType;
             preferences.getBoolean(keyVibration).set(eventNotification.isVibration());
@@ -409,11 +410,11 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
 
     private Observable<Boolean> getDontNotify(@NonNull EventType eventType) {
         String key = KEY_DONT_NOTIFY_PREFIX + eventType;
-        return preferences.getBoolean(key, false).asObservable();
+        return preferences.getBoolean(key, eventType == EventType.DIAPER).asObservable();
     }
 
     private Observable<Boolean> getDontNotifyOnce(@NonNull EventType eventType) {
-        return getDontNotify(eventType).first(false).toObservable();
+        return getDontNotify(eventType).first(eventType == EventType.DIAPER).toObservable();
     }
 
     private Observable<Boolean> getVibration(@NonNull EventType eventType) {
@@ -447,5 +448,10 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
             map.put(TimeUnit.MONTH, Observable.range(1, TimeUtils.MONTHS_IN_YEAR).toList().blockingGet());
             return map;
         });
+    }
+
+    @Override
+    public Single<Boolean> exists(@NonNull MasterEvent event) {
+        return calendarDbService.exists(event);
     }
 }

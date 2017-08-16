@@ -11,13 +11,15 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.utils.notifications.core.BaseNotificationHelper;
 
 public class CloudNotificationHelper extends BaseNotificationHelper {
+    private static final int NOTIFICATION_ID_ERROR = -1;
+    private static final int NOTIFICATION_ID_BACKUP = -2;
+
     @Inject
     public CloudNotificationHelper(Context context) {
         super(context);
     }
 
-    public void showBackupErrorNotification(int notificationId,
-                                            String title,
+    public void showBackupErrorNotification(String title,
                                             String text,
                                             @Nullable PendingIntent pendingIntent) {
         NotificationCompat.Builder builder = createNotificationBuilder();
@@ -30,10 +32,10 @@ public class CloudNotificationHelper extends BaseNotificationHelper {
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
-        showNotification(notificationId, builder);
+        showNotification(NOTIFICATION_ID_ERROR, builder);
     }
 
-    public void showBackupProgressNotification(int notificationId) {
+    public void showBackupProgressNotification() {
         String title = context.getString(R.string.app_name);
         String text = context.getString(R.string.notification_text_backup);
         NotificationCompat.Builder builder = createNotificationBuilder();
@@ -42,6 +44,10 @@ public class CloudNotificationHelper extends BaseNotificationHelper {
                 .setContentText(text)
                 .setWhen(System.currentTimeMillis())
                 .setProgress(0, 0, true);
-        showNotification(notificationId, builder);
+        showNotification(NOTIFICATION_ID_BACKUP, builder);
+    }
+
+    public void hideBackupProgressNotification() {
+        hideNotification(NOTIFICATION_ID_BACKUP);
     }
 }

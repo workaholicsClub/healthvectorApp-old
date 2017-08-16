@@ -24,18 +24,23 @@ import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class SleepNotificationHelper extends BaseNotificationHelper {
+public class SleepEventNotificationHelper extends BaseNotificationHelper {
     private final ServiceController serviceController;
 
     @Inject
-    public SleepNotificationHelper(Context context, ServiceController serviceController) {
+    public SleepEventNotificationHelper(Context context, ServiceController serviceController) {
         super(context);
         this.serviceController = serviceController;
     }
 
-    public NotificationCompat.Builder buildSleepNotification(int notificationId,
-                                                             @NonNull SleepEvent event,
+    public int getNotificationId(@NonNull SleepEvent event) {
+        Long masterEventId = event.getMasterEventId();
+        return (int) (masterEventId % Integer.MAX_VALUE);
+    }
+
+    public NotificationCompat.Builder buildSleepNotification(@NonNull SleepEvent event,
                                                              @NonNull SleepEvent defaultEvent) {
+        int notificationId = getNotificationId(event);
         NotificationCompat.Builder builder = createNotificationBuilder();
         builder.setContentIntent(buildSleepPendingIntent(notificationId, event, defaultEvent))
                 .addAction(R.drawable.ic_action_stop_sleep_timer,
@@ -68,8 +73,13 @@ public class SleepNotificationHelper extends BaseNotificationHelper {
         }
     }
 
+    public void showNotification(@NonNull SleepEvent event, NotificationCompat.Builder builder) {
+        int notificationId = getNotificationId(event);
+        showNotification(notificationId, builder);
+    }
+
     @Override
-    public void showNotification(int notificationId, NotificationCompat.Builder builder) {
+    protected void showNotification(int notificationId, NotificationCompat.Builder builder) {
         Notification notification = builder.build();
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
         notificationManager.notify(notificationId, notification);
@@ -90,5 +100,10 @@ public class SleepNotificationHelper extends BaseNotificationHelper {
     private PendingIntent buildSleepActionPendingIntent(int notificationId,
                                                         @NonNull SleepEvent event) {
         return TimerService.getPendingIntent(0, context, TimerService.ACTION_STOP_SLEEP_EVENT_TIMER, event);
+    }
+
+    public void hideNotification(@NonNull SleepEvent event) {
+        int notificationId = getNotificationId(event);
+        hideNotification(notificationId);
     }
 }

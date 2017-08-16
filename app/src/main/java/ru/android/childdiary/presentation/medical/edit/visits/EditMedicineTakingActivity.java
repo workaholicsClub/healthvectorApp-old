@@ -124,7 +124,7 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
         repeatParametersView.setRepeatParameters(item.getRepeatParameters());
         WidgetsUtils.setDateTime(item.getDateTime(), dateView, timeView);
         notifyTimeView.setValue(item.getNotifyTimeInMinutes());
-        boolean notifyTimeViewVisible = ObjectUtils.isPositive(defaultItem.getNotifyTimeInMinutes());
+        boolean notifyTimeViewVisible = defaultItem.getNotifyTimeInMinutes() != null;
         notifyTimeView.setVisibility(notifyTimeViewVisible ? View.VISIBLE : View.GONE);
         noteWithPhotoView.setText(item.getNote());
         noteWithPhotoView.setImageFileName(item.getImageFileName());

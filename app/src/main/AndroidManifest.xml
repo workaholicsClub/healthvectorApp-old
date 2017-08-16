@@ -293,6 +293,8 @@
         <service android:name=".services.AccountService" />
         <service android:name=".services.EventScheduleService" />
         <service android:name=".services.LinearGroupFinishedService" />
+        <service android:name=".services.notifications.AlarmEventService" />
+        <service android:name=".services.notifications.NotificationEventService" />
 
         <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>
@@ -307,7 +309,6 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.EventNotificationReceiver" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

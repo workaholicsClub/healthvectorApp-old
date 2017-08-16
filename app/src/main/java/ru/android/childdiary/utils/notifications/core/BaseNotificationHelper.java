@@ -49,7 +49,7 @@ public abstract class BaseNotificationHelper {
         notificationManager.notify(notificationId, notification);
     }
 
-    public final void hideNotification(int notificationId) {
+    protected void hideNotification(int notificationId) {
         notificationManager.cancel(notificationId);
     }
 }

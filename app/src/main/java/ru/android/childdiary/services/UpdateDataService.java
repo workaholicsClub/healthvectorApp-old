@@ -68,7 +68,6 @@ public class UpdateDataService extends BaseService {
         } else {
             LogSystem.report(logger, "unexpected error", e);
         }
-
         stopSelf();
     }
 }

@@ -19,23 +19,20 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lombok.Builder;
-import lombok.Value;
 import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.CalendarInteractor;
-import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.requests.GetEventsFilter;
 import ru.android.childdiary.domain.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.calendar.requests.GetEventsResponse;
 import ru.android.childdiary.domain.child.data.Child;
-import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.receivers.EventNotificationReceiver;
 import ru.android.childdiary.services.core.BaseService;
+import ru.android.childdiary.services.notifications.AlarmEventService;
 import ru.android.childdiary.utils.log.LogSystem;
+import ru.android.childdiary.utils.notifications.EventNotificationHelper;
 import ru.android.childdiary.utils.strings.DateUtils;
 
 public class EventScheduleService extends BaseService {
@@ -44,6 +41,9 @@ public class EventScheduleService extends BaseService {
 
     @Inject
     ScheduleHelper scheduleHelper;
+
+    @Inject
+    EventNotificationHelper eventNotificationHelper;
 
     private Disposable subscription;
 
@@ -61,6 +61,16 @@ public class EventScheduleService extends BaseService {
     public static PendingIntent getPendingIntent(int requestCode, Context context) {
         Intent intent = getServiceIntent(context);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private static boolean isInTheFuture(@NonNull MasterEvent event) {
+        return event.getMasterEventId() != null
+                && event.getNotifyDateTime() != null
+                && event.getNotifyDateTime().getMillis() >= now();
+    }
+
+    private static long now() {
+        return DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0).getMillis();
     }
 
     @Nullable
@@ -97,17 +107,7 @@ public class EventScheduleService extends BaseService {
                                     .build())
                             .map(GetEventsResponse::getEvents)
                             .flatMap(Observable::fromIterable)
-                            .filter(event -> event.getMasterEventId() != null
-                                    && event.getNotifyDateTime() != null
-                                    && event.getNotifyDateTime().getMillis() >= DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0).getMillis())
-                            .flatMap(event -> Observable.combineLatest(
-                                    calendarInteractor.getDefaultEvent(event),
-                                    calendarInteractor.getNotificationSettingsOnce(event.getEventType()),
-                                    (defaultEvent, eventNotification) -> NotificationInfo.builder()
-                                            .event(event)
-                                            .defaultEvent((MasterEvent) defaultEvent)
-                                            .eventNotification(eventNotification)
-                                            .build()))
+                            .filter(EventScheduleService::isInTheFuture)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::handleResult, this::onUnexpectedError));
@@ -116,34 +116,15 @@ public class EventScheduleService extends BaseService {
         }
     }
 
-    private void handleResult(@NonNull NotificationInfo notificationInfo) {
-        MasterEvent event = notificationInfo.getEvent();
-        MasterEvent defaultEvent = notificationInfo.getDefaultEvent();
-        EventNotification eventNotification = notificationInfo.getEventNotification();
+    private void handleResult(@NonNull MasterEvent event) {
         logger.debug("schedule event: " + event);
-        // нельзя шедулить больше 500 будильников, по крайней мере, на самсунге
-        Long masterEventId = event.getMasterEventId();
-        int requestCode = (int) (masterEventId % Integer.MAX_VALUE);
-        Intent intent = new Intent(this, EventNotificationReceiver.class);
-        intent.putExtra(ExtraConstants.EXTRA_EVENT, event);
-        intent.putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
-        intent.putExtra(ExtraConstants.EXTRA_SETTINGS, eventNotification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        scheduleHelper.installAlarm(pendingIntent, event.getDateTime().getMillis());
+        int requestCode = eventNotificationHelper.getNotificationId(event);
+        PendingIntent pendingIntent = AlarmEventService.getPendingIntent(requestCode, this, event);
+        long time = event.getNotifyDateTime().withSecondOfMinute(0).withMillisOfSecond(0).getMillis();
+        scheduleHelper.installAlarm(pendingIntent, time);
     }
 
     private void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
-    }
-
-    @Value
-    @Builder
-    private static class NotificationInfo {
-        @NonNull
-        MasterEvent event;
-        @NonNull
-        MasterEvent defaultEvent;
-        @NonNull
-        EventNotification eventNotification;
     }
 }

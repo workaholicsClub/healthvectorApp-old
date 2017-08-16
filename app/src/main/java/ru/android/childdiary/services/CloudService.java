@@ -26,9 +26,6 @@ import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.notifications.CloudNotificationHelper;
 
 public class CloudService extends BaseService {
-    private static final int NOTIFICATION_ID_ERROR = -1;
-    private static final int NOTIFICATION_ID_BACKUP = -2;
-
     @Inject
     NetworkAvailability networkAvailability;
 
@@ -69,7 +66,7 @@ public class CloudService extends BaseService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        cloudNotificationHelper.hideNotification(NOTIFICATION_ID_BACKUP);
+        cloudNotificationHelper.hideBackupProgressNotification();
     }
 
     @Override
@@ -89,7 +86,7 @@ public class CloudService extends BaseService {
     }
 
     private void backup() {
-        cloudNotificationHelper.showBackupProgressNotification(NOTIFICATION_ID_BACKUP);
+        cloudNotificationHelper.showBackupProgressNotification();
         unsubscribeOnDestroy(
                 networkAvailability.checkNetworkAvailability(true)
                         .flatMap(isNetworkAvailable -> cloudInteractor.backup())
@@ -121,7 +118,7 @@ public class CloudService extends BaseService {
             if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
                 pendingIntent = apiAvailability.getErrorResolutionPendingIntent(this, connectionStatusCode, 0);
             }
-            cloudNotificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
+            cloudNotificationHelper.showBackupErrorNotification(
                     getString(R.string.notification_title_play_services),
                     getString(R.string.notification_text_play_services),
                     pendingIntent);
@@ -129,21 +126,21 @@ public class CloudService extends BaseService {
         } else if (throwable instanceof UserRecoverableAuthIOException) {
             Intent intent = ((UserRecoverableAuthIOException) throwable).getIntent();
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-            cloudNotificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
+            cloudNotificationHelper.showBackupErrorNotification(
                     getString(R.string.notification_title_authorization),
                     getString(R.string.notification_text_authorization_recoverable),
                     pendingIntent);
             return true;
         } else if (throwable instanceof NetworkUnavailableException) {
             PendingIntent pendingIntent = getPendingIntent(0, this);
-            cloudNotificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
+            cloudNotificationHelper.showBackupErrorNotification(
                     getString(R.string.notification_title_network),
                     getString(R.string.notification_text_network),
                     pendingIntent);
             return true;
         } else if (throwable instanceof SecurityException) {
             PendingIntent pendingIntent = getPendingIntent(0, this);
-            cloudNotificationHelper.showBackupErrorNotification(NOTIFICATION_ID_ERROR,
+            cloudNotificationHelper.showBackupErrorNotification(
                     getString(R.string.notification_title_authorization),
                     getString(R.string.notification_text_authorization_unrecoverable),
                     pendingIntent);
@@ -154,7 +151,6 @@ public class CloudService extends BaseService {
 
     private void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
-
         stopSelf();
     }
 }

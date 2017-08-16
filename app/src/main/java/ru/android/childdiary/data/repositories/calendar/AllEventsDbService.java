@@ -65,6 +65,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     private static final String MASTER_EVENT_ENTITY_EVENT_TYPE = "MASTER_EVENT_ENTITY_EVENT_TYPE";
     private static final String MASTER_EVENT_ENTITY_DATE_TIME = "MASTER_EVENT_ENTITY_DATE_TIME";
     private static final String MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME = "MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME";
+    private static final String MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES = "MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES";
     private static final String MASTER_EVENT_ENTITY_NOTE = "MASTER_EVENT_ENTITY_NOTE";
     private static final String MASTER_EVENT_ENTITY_DONE = "MASTER_EVENT_ENTITY_DONE";
     private static final String MASTER_EVENT_ENTITY_LINEAR_GROUP = "MASTER_EVENT_ENTITY_LINEAR_GROUP";
@@ -119,6 +120,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
             MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE),
             MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME),
             MasterEventEntity.NOTIFY_DATE_TIME.as(MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME),
+            MasterEventEntity.NOTIFY_TIME_IN_MINUTES.as(MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES),
             MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE),
             MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE),
             MasterEventEntity.LINEAR_GROUP.as(MASTER_EVENT_ENTITY_LINEAR_GROUP),
@@ -188,6 +190,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
                 .notifyDateTime(data.get(MasterEventEntity.NOTIFY_DATE_TIME.as(MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME)))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES.as(MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES)))
                 .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
@@ -203,6 +206,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
                 .notifyDateTime(data.get(MasterEventEntity.NOTIFY_DATE_TIME.as(MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME)))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES.as(MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES)))
                 .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
@@ -226,6 +230,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
                 .notifyDateTime(data.get(MasterEventEntity.NOTIFY_DATE_TIME.as(MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME)))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES.as(MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES)))
                 .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
@@ -241,6 +246,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
                 .notifyDateTime(data.get(MasterEventEntity.NOTIFY_DATE_TIME.as(MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME)))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES.as(MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES)))
                 .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
@@ -256,6 +262,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
                 .notifyDateTime(data.get(MasterEventEntity.NOTIFY_DATE_TIME.as(MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME)))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES.as(MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES)))
                 .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
@@ -272,6 +279,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
                 .notifyDateTime(data.get(MasterEventEntity.NOTIFY_DATE_TIME.as(MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME)))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES.as(MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES)))
                 .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
@@ -302,6 +310,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
                 .notifyDateTime(data.get(MasterEventEntity.NOTIFY_DATE_TIME.as(MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME)))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES.as(MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES)))
                 .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
@@ -331,6 +340,7 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .eventType(data.get(MasterEventEntity.EVENT_TYPE.as(MASTER_EVENT_ENTITY_EVENT_TYPE)))
                 .dateTime(data.get(MasterEventEntity.DATE_TIME.as(MASTER_EVENT_ENTITY_DATE_TIME)))
                 .notifyDateTime(data.get(MasterEventEntity.NOTIFY_DATE_TIME.as(MASTER_EVENT_ENTITY_NOTIFY_DATE_TIME)))
+                .notifyTimeInMinutes(data.get(MasterEventEntity.NOTIFY_TIME_IN_MINUTES.as(MASTER_EVENT_ENTITY_NOTIFY_TIME_IN_MINUTES)))
                 .note(data.get(MasterEventEntity.NOTE.as(MASTER_EVENT_ENTITY_NOTE)))
                 .isDone(data.get(MasterEventEntity.DONE.as(MASTER_EVENT_ENTITY_DONE)))
                 .child(mapToChild(data))
