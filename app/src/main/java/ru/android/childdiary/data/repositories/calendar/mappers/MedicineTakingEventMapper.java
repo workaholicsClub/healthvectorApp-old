@@ -18,8 +18,8 @@ import ru.android.childdiary.data.db.entities.medical.MedicineTakingData;
 import ru.android.childdiary.data.db.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.core.mappers.EntityMapper;
-import ru.android.childdiary.data.repositories.dictionaries.medicines.mappers.MedicineMapper;
 import ru.android.childdiary.data.repositories.dictionaries.medicinemeasure.mappers.MedicineMeasureMapper;
+import ru.android.childdiary.data.repositories.dictionaries.medicines.mappers.MedicineMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
 import ru.android.childdiary.domain.child.data.Child;
@@ -60,6 +60,7 @@ public class MedicineTakingEventMapper implements EntityMapper<MedicineTakingEve
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
+                .notifyDateTime(masterEventData.getNotifyDateTime())
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())

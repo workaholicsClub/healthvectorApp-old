@@ -27,6 +27,8 @@ public interface MasterEventData extends Persistable {
 
     DateTime getDateTime();
 
+    DateTime getNotifyDateTime();
+
     Integer getNotifyTimeInMinutes();
 
     String getNote();

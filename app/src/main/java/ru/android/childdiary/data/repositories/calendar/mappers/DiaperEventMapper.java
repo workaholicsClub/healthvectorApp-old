@@ -33,6 +33,7 @@ public class DiaperEventMapper implements EntityMapper<DiaperEventData, DiaperEv
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
+                .notifyDateTime(masterEventData.getNotifyDateTime())
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())

@@ -13,11 +13,11 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupItem;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
 import ru.android.childdiary.domain.exercises.data.Exercise;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -42,6 +42,7 @@ public class ExerciseEvent extends MasterEvent implements ContentObject<Exercise
     private ExerciseEvent(Long masterEventId,
                           EventType eventType,
                           DateTime dateTime,
+                          DateTime notifyDateTime,
                           Integer notifyTimeInMinutes,
                           String note,
                           Boolean isDone,
@@ -52,7 +53,7 @@ public class ExerciseEvent extends MasterEvent implements ContentObject<Exercise
                           String name,
                           Integer durationInMinutes,
                           String imageFileName) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
+        super(masterEventId, eventType, dateTime, notifyDateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
         this.id = id;
         this.concreteExercise = concreteExercise;
         this.name = name;

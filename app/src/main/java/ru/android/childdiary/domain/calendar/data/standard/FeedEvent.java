@@ -14,13 +14,13 @@ import lombok.Value;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
-import ru.android.childdiary.domain.core.data.ContentObject;
-import ru.android.childdiary.domain.dictionaries.food.data.Food;
-import ru.android.childdiary.domain.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupItem;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.data.ContentObject;
+import ru.android.childdiary.domain.dictionaries.food.data.Food;
+import ru.android.childdiary.domain.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
@@ -51,6 +51,7 @@ public class FeedEvent extends MasterEvent implements ContentObject<FeedEvent>, 
     private FeedEvent(Long masterEventId,
                       EventType eventType,
                       DateTime dateTime,
+                      DateTime notifyDateTime,
                       Integer notifyTimeInMinutes,
                       String note,
                       Boolean isDone,
@@ -65,7 +66,7 @@ public class FeedEvent extends MasterEvent implements ContentObject<FeedEvent>, 
                       Double amountMl,
                       FoodMeasure foodMeasure,
                       Food food) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
+        super(masterEventId, eventType, dateTime, notifyDateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
         this.id = id;
         this.feedType = feedType;
         this.breast = breast;

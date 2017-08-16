@@ -98,8 +98,8 @@ public class EventScheduleService extends BaseService {
                             .map(GetEventsResponse::getEvents)
                             .flatMap(Observable::fromIterable)
                             .filter(event -> event.getMasterEventId() != null
-                                    && event.getDateTime() != null
-                                    && event.getDateTime().getMillis() >= DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0).getMillis())
+                                    && event.getNotifyDateTime() != null
+                                    && event.getNotifyDateTime().getMillis() >= DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0).getMillis())
                             .flatMap(event -> Observable.combineLatest(
                                     calendarInteractor.getDefaultEvent(event),
                                     calendarInteractor.getNotificationSettingsOnce(event.getEventType()),

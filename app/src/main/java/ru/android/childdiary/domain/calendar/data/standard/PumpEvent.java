@@ -13,11 +13,11 @@ import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupItem;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
@@ -38,6 +38,7 @@ public class PumpEvent extends MasterEvent implements ContentObject<PumpEvent>, 
     private PumpEvent(Long masterEventId,
                       EventType eventType,
                       DateTime dateTime,
+                      DateTime notifyDateTime,
                       Integer notifyTimeInMinutes,
                       String note,
                       Boolean isDone,
@@ -47,7 +48,7 @@ public class PumpEvent extends MasterEvent implements ContentObject<PumpEvent>, 
                       Breast breast,
                       Double leftAmountMl,
                       Double rightAmountMl) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
+        super(masterEventId, eventType, dateTime, notifyDateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
         this.id = id;
         this.breast = breast;
         this.leftAmountMl = leftAmountMl;

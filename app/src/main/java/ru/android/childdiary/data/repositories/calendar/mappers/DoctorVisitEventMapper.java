@@ -51,6 +51,7 @@ public class DoctorVisitEventMapper implements EntityMapper<DoctorVisitEventData
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
+                .notifyDateTime(masterEventData.getNotifyDateTime())
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())

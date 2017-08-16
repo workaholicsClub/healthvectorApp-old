@@ -33,6 +33,7 @@ public class OtherEventMapper implements EntityMapper<OtherEventData, OtherEvent
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
+                .notifyDateTime(masterEventData.getNotifyDateTime())
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())

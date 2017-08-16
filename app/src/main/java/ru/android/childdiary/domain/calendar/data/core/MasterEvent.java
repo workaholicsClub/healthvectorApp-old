@@ -32,6 +32,8 @@ public class MasterEvent implements Serializable {
 
     DateTime dateTime;
 
+    DateTime notifyDateTime;
+
     Integer notifyTimeInMinutes;
 
     String note;
@@ -63,6 +65,7 @@ public class MasterEvent implements Serializable {
                 .masterEventId(masterEventId)
                 .eventType(eventType)
                 .dateTime(dateTime)
+                .notifyDateTime(notifyDateTime)
                 .notifyTimeInMinutes(notifyTimeInMinutes)
                 .note(note)
                 .isDone(isDone)

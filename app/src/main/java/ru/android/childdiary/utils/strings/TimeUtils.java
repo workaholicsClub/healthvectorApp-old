@@ -145,8 +145,12 @@ public class TimeUtils {
     }
 
     public static String notifyTime(Context context, @Nullable Integer minutes) {
-        if (minutes == null || minutes <= 0) {
+        if (minutes == null || minutes < 0) {
             return context.getString(R.string.no_value);
+        }
+
+        if (minutes == 0) {
+            return context.getString(R.string.in_the_moment);
         }
 
         Time.TimeBuilder timeBuilder = splitMinutes(minutes);

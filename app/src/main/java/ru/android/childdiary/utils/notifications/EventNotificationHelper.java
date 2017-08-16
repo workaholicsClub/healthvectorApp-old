@@ -23,6 +23,7 @@ import ru.android.childdiary.domain.calendar.data.standard.DiaperEvent;
 import ru.android.childdiary.domain.calendar.data.standard.FeedEvent;
 import ru.android.childdiary.domain.calendar.data.standard.OtherEvent;
 import ru.android.childdiary.domain.calendar.data.standard.PumpEvent;
+import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.DoctorVisitEventDetailActivity;
 import ru.android.childdiary.presentation.events.ExerciseEventDetailActivity;
@@ -30,6 +31,7 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.MedicineTakingEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
+import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
 import ru.android.childdiary.utils.notifications.core.BaseNotificationHelper;
 import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -89,8 +91,8 @@ public class EventNotificationHelper extends BaseNotificationHelper {
                         PumpEventDetailActivity.class);
             case SLEEP:
                 return buildPendingIntent(context, notificationId,
-                        FeedEventDetailActivity.getIntent(context, event, (FeedEvent) defaultEvent),
-                        FeedEventDetailActivity.class);
+                        SleepEventDetailActivity.getIntent(context, event, (SleepEvent) defaultEvent),
+                        SleepEventDetailActivity.class);
             case DOCTOR_VISIT:
                 return buildPendingIntent(context, notificationId,
                         DoctorVisitEventDetailActivity.getIntent(context, event, (DoctorVisitEvent) defaultEvent),

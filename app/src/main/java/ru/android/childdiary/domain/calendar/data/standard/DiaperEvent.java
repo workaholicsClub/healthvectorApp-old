@@ -13,11 +13,11 @@ import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.DiaperState;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupItem;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.data.ContentObject;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -33,6 +33,7 @@ public class DiaperEvent extends MasterEvent implements ContentObject<DiaperEven
     private DiaperEvent(Long masterEventId,
                         EventType eventType,
                         DateTime dateTime,
+                        DateTime notifyDateTime,
                         Integer notifyTimeInMinutes,
                         String note,
                         Boolean isDone,
@@ -40,7 +41,7 @@ public class DiaperEvent extends MasterEvent implements ContentObject<DiaperEven
                         Integer linearGroup,
                         Long id,
                         DiaperState diaperState) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
+        super(masterEventId, eventType, dateTime, notifyDateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
         this.id = id;
         this.diaperState = diaperState;
     }

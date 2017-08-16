@@ -640,23 +640,46 @@ public class CalendarDbService extends EventsDbService {
             case NOTIFY_TIME_IN_MINUTES:
                 Integer notifyTimeInMinutes = from.getNotifyTimeInMinutes();
                 to.setNotifyTimeInMinutes(notifyTimeInMinutes);
+                updateNotifyTime(to);
                 break;
             case TIME:
                 DateTime dateTime = to.getDateTime().plusMinutes(minutes);
                 to.setDateTime(dateTime);
+                updateNotifyTime(to);
                 break;
         }
     }
 
+    private void updateNotifyTime(MasterEventEntity event) {
+        Integer notifyTimeInMinutes = event.getNotifyTimeInMinutes();
+        DateTime notifyDateTime = null;
+        if (notifyTimeInMinutes != null) {
+            notifyDateTime = event.getDateTime().minusMinutes(notifyTimeInMinutes);
+        }
+        event.setNotifyDateTime(notifyDateTime);
+    }
+
     private MasterEvent insertMasterEvent(@NonNull MasterEvent event) {
+        event = addNotifyTime(event);
         return DbUtils.insert(blockingEntityStore, event, masterEventMapper);
     }
 
     public MasterEvent updateMasterEvent(@NonNull MasterEvent event) {
+        event = addNotifyTime(event);
         return DbUtils.update(blockingEntityStore, event, masterEventMapper);
     }
 
     public Observable<MasterEvent> updateMasterEventObservable(@NonNull MasterEvent event) {
+        event = addNotifyTime(event);
         return DbUtils.updateObservable(blockingEntityStore, event, masterEventMapper);
+    }
+
+    private MasterEvent addNotifyTime(@NonNull MasterEvent event) {
+        Integer notifyTimeInMinutes = event.getNotifyTimeInMinutes();
+        DateTime notifyDateTime = null;
+        if (notifyTimeInMinutes != null) {
+            notifyDateTime = event.getDateTime().minusMinutes(notifyTimeInMinutes);
+        }
+        return event.toMasterBuilder().notifyDateTime(notifyDateTime).build();
     }
 }

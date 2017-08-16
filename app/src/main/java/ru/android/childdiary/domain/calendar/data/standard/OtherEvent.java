@@ -12,11 +12,11 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
-import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupItem;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
@@ -35,6 +35,7 @@ public class OtherEvent extends MasterEvent implements ContentObject<OtherEvent>
     private OtherEvent(Long masterEventId,
                        EventType eventType,
                        DateTime dateTime,
+                       DateTime notifyDateTime,
                        Integer notifyTimeInMinutes,
                        String note,
                        Boolean isDone,
@@ -43,7 +44,7 @@ public class OtherEvent extends MasterEvent implements ContentObject<OtherEvent>
                        Long id,
                        String name,
                        DateTime finishDateTime) {
-        super(masterEventId, eventType, dateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
+        super(masterEventId, eventType, dateTime, notifyDateTime, notifyTimeInMinutes, note, isDone, child, linearGroup);
         this.id = id;
         this.name = name;
         this.finishDateTime = finishDateTime;

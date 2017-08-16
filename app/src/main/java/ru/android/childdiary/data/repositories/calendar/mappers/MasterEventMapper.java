@@ -30,6 +30,7 @@ public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEv
                 .masterEventId(masterEventData.getId())
                 .eventType(masterEventData.getEventType())
                 .dateTime(masterEventData.getDateTime())
+                .notifyDateTime(masterEventData.getNotifyDateTime())
                 .notifyTimeInMinutes(masterEventData.getNotifyTimeInMinutes())
                 .note(masterEventData.getNote())
                 .isDone(masterEventData.isDone())
@@ -60,6 +61,7 @@ public class MasterEventMapper implements EntityMapper<MasterEventData, MasterEv
     public void fillNonReferencedFields(@NonNull MasterEventEntity to, @NonNull MasterEvent from) {
         to.setEventType(from.getEventType());
         to.setDateTime(from.getDateTime());
+        to.setNotifyDateTime(from.getNotifyDateTime());
         to.setNotifyTimeInMinutes(from.getNotifyTimeInMinutes());
         to.setNote(from.getNote());
         to.setDone(from.getIsDone());
