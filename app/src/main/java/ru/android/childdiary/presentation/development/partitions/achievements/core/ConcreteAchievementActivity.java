@@ -47,6 +47,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         implements ConcreteAchievementView, DatePickerDialog.OnDateSetListener,
         FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener {
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
+    private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
 
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
@@ -198,7 +199,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
     @Override
     public void requestPhotoAdd() {
         ImagePickerDialogFragment dialogFragment = new ImagePickerDialogFragment();
-        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER,
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_IMAGE_PICKER,
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
                         .showDeleteItem(false)

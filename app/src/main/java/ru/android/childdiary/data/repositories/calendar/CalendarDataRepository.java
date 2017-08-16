@@ -1,11 +1,16 @@
 package ru.android.childdiary.data.repositories.calendar;
 
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -61,6 +66,7 @@ import ru.android.childdiary.domain.medical.requests.DeleteDoctorVisitEventsResp
 import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingEventsRequest;
 import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingEventsResponse;
 import ru.android.childdiary.utils.ObjectUtils;
+import ru.android.childdiary.utils.Optional;
 import ru.android.childdiary.utils.strings.TimeUtils;
 
 @Singleton
@@ -69,6 +75,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     private static final String KEY_LAST_FOOD_MEASURE_ID = "last_food_measure";
     private static final String KEY_LAST_FOOD_ID = "last_food";
     private static final String KEY_NOTIFY_TIME_PREFIX = "notify_time_";
+    private static final String KEY_NOTIFICATION_SOUND_PREFIX = "notification_sound_";
     private static final String KEY_DONT_NOTIFY_PREFIX = "dont_notify_";
     private static final String KEY_VIBRATION_PREFIX = "vibration_";
     private static final Map<EventType, Integer> defaultNotifyTimeValues = new HashMap<EventType, Integer>() {{
@@ -81,6 +88,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
         put(EventType.MEDICINE_TAKING, 10);
         put(EventType.EXERCISE, 30);
     }};
+    private static final UriAdapter uriAdapter = new UriAdapter();
 
     private final RxSharedPreferences preferences;
     private final CalendarDbService calendarDbService;
@@ -360,14 +368,15 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     @Override
     public Observable<EventNotification> getNotificationSettings(@NonNull EventType eventType) {
         return Observable.combineLatest(
-                getDontNotify(eventType),
                 getNotifyTimeInMinutes(eventType),
+                getNotificationSound(eventType),
+                getDontNotify(eventType),
                 getVibration(eventType),
-                (dontNotify, minutes, vibration) -> EventNotification.builder()
+                (minutes, sound, dontNotify, vibration) -> EventNotification.builder()
                         .eventType(eventType)
-                        .dontNotify(dontNotify)
                         .minutes(minutes)
-                        // TODO Melody
+                        .sound(sound.orNull())
+                        .dontNotify(dontNotify)
                         .vibration(vibration)
                         .build());
     }
@@ -387,7 +396,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
             EventType eventType = eventNotification.getEventType();
             String keyNotifyTime = KEY_NOTIFY_TIME_PREFIX + eventType;
             preferences.getInteger(keyNotifyTime).set(eventNotification.getMinutes());
-            // TODO Melody
+            preferences.getObject(KEY_NOTIFICATION_SOUND_PREFIX + eventType, Optional.empty(), uriAdapter).set(Optional.of(eventNotification.getSound()));
             String keyDontNotify = KEY_DONT_NOTIFY_PREFIX + eventType;
             preferences.getBoolean(keyDontNotify).set(eventNotification.isDontNotify());
             String keyVibration = KEY_VIBRATION_PREFIX + eventType;
@@ -405,6 +414,15 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     private Observable<Integer> getNotifyTimeInMinutesOnce(@NonNull EventType eventType) {
         int defaultValue = defaultNotifyTimeValues.get(eventType);
         return getNotifyTimeInMinutes(eventType).first(defaultValue).toObservable();
+    }
+
+    private Observable<Optional<Uri>> getNotificationSound(@NonNull EventType eventType) {
+        String key = KEY_NOTIFICATION_SOUND_PREFIX + eventType;
+        return preferences.getObject(key, Optional.empty(), uriAdapter).asObservable();
+    }
+
+    private Observable<Optional<Uri>> getNotificationSoundOnce(@NonNull EventType eventType) {
+        return getNotificationSound(eventType).first(Optional.empty()).toObservable();
     }
 
     private Observable<Boolean> getDontNotify(@NonNull EventType eventType) {
@@ -447,5 +465,22 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
             map.put(TimeUnit.MONTH, Observable.range(1, TimeUtils.MONTHS_IN_YEAR).toList().blockingGet());
             return map;
         });
+    }
+
+    private static class UriAdapter implements Preference.Adapter<Optional<Uri>> {
+        private final Logger logger = LoggerFactory.getLogger(toString());
+
+        @Override
+        public Optional<Uri> get(@NonNull String key, @NonNull SharedPreferences preferences) {
+            String content = preferences.getString(key, null);
+            Uri uri = content == null ? null : Uri.parse(content);
+            return Optional.of(uri);
+        }
+
+        @Override
+        public void set(@NonNull String key, @NonNull Optional<Uri> value, @NonNull SharedPreferences.Editor editor) {
+            String content = value.isPresent() ? value.get().toString() : null;
+            editor.putString(key, content).commit();
+        }
     }
 }

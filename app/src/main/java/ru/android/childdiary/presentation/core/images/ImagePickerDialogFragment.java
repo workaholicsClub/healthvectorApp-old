@@ -155,6 +155,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_PICK_IMAGE) {
             if (resultCode == RESULT_OK) {
                 final Uri selectedImageFileUri = data.getData();

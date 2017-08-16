@@ -54,6 +54,7 @@ public class MedicineTakingEventDetailActivity
         FieldCheckBoxView.FieldCheckBoxListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
+    private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
     private static final String TAG_MEDICINE_MEASURE_VALUE_DIALOG = "TAG_MEDICINE_MEASURE_VALUE_DIALOG";
 
@@ -254,7 +255,7 @@ public class MedicineTakingEventDetailActivity
     @Override
     public void requestPhotoAdd() {
         ImagePickerDialogFragment dialogFragment = new ImagePickerDialogFragment();
-        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER,
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_IMAGE_PICKER,
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
                         .showDeleteItem(false)

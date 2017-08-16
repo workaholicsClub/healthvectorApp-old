@@ -33,9 +33,10 @@ public class SettingsDataRepository implements SettingsRepository {
     private static final LocalTime DEFAULT_FINISH_TIME = new LocalTime(22, 0);
     private static final String DEFAULT_ACCOUNT_NAME = "";
 
+    private static final LocalTimeAdapter startTimeAdapter = new LocalTimeAdapter(DEFAULT_START_TIME);
+    private static final LocalTimeAdapter finishTimeAdapter = new LocalTimeAdapter(DEFAULT_FINISH_TIME);
+
     private final RxSharedPreferences preferences;
-    private final LocalTimeAdapter startTimeAdapter = new LocalTimeAdapter(DEFAULT_START_TIME);
-    private final LocalTimeAdapter finishTimeAdapter = new LocalTimeAdapter(DEFAULT_FINISH_TIME);
 
     @Inject
     public SettingsDataRepository(RxSharedPreferences preferences) {

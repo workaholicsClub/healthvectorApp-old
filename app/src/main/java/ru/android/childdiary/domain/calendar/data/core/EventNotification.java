@@ -1,5 +1,6 @@
 package ru.android.childdiary.domain.calendar.data.core;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -17,7 +18,8 @@ public class EventNotification implements Serializable {
     boolean dontNotify;
     @Nullable
     Integer minutes;
-    // TODO Melody
+    @Nullable
+    Uri sound;
     boolean vibration;
 
     @Nullable

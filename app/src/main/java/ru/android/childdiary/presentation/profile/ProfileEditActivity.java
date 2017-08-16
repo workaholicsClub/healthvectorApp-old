@@ -311,7 +311,7 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     @OnClick(R.id.imageViewPhoto)
     void onPhotoClick() {
         ImagePickerDialogFragment dialogFragment = new ImagePickerDialogFragment();
-        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER,
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_IMAGE_PICKER,
                 ImagePickerDialogArguments.builder()
                         .sex(getSex())
                         .showDeleteItem(!TextUtils.isEmpty(editedChild.getImageFileName()))
