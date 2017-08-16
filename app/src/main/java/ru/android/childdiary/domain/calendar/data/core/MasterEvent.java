@@ -26,6 +26,8 @@ import ru.android.childdiary.utils.ObjectUtils;
 @Getter
 @Builder(builderMethodName = "masterBuilder")
 public class MasterEvent implements Serializable {
+    public static final MasterEvent NULL = MasterEvent.masterBuilder().build();
+
     Long masterEventId;
 
     EventType eventType;

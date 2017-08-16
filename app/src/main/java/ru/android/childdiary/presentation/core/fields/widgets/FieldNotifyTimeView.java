@@ -11,8 +11,8 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.utils.strings.TimeUtils;
 
 public class FieldNotifyTimeView extends FieldDialogView<Integer> {
-    @BindView(R.id.notifyIcon)
-    ImageView notifyIcon;
+    @BindView(R.id.notificationIcon)
+    ImageView notificationIcon;
 
     public FieldNotifyTimeView(Context context) {
         super(context);
@@ -45,6 +45,6 @@ public class FieldNotifyTimeView extends FieldDialogView<Integer> {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        notifyIcon.setImageResource(enabled ? R.drawable.ic_notify_time : R.drawable.ic_notify_time_disabled);
+        notificationIcon.setImageResource(enabled ? R.drawable.ic_notification : R.drawable.ic_notification_disabled);
     }
 }

@@ -77,14 +77,15 @@ public class NotificationEventService extends BaseIntentService {
             return;
         }
         MasterEvent event = (MasterEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
-        boolean exists = calendarInteractor.exists(event).blockingGet();
-        if (exists) {
-            MasterEvent defaultEvent = calendarInteractor.getDefaultEvent(event).blockingFirst();
-            showEventDetail(this, event, defaultEvent);
-        } else {
-            logger.debug("event is already deleted: " + event);
+        logger.debug("notification clicked: " + event);
+        event = calendarInteractor.getEventDetail(event).onErrorReturnItem(MasterEvent.NULL).blockingFirst();
+        if (event == MasterEvent.NULL) {
+            logger.debug("event is already deleted");
             Child child = childInteractor.getActiveChild().blockingFirst();
             showMain(this, child.getSex());
+        } else {
+            MasterEvent defaultEvent = calendarInteractor.getDefaultEvent(event).blockingFirst();
+            showEventDetail(this, event, defaultEvent);
         }
     }
 

@@ -57,18 +57,19 @@ public class AlarmEventService extends BaseIntentService {
         }
         DateTime now = DateTime.now();
         MasterEvent event = (MasterEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
-        boolean exists = calendarInteractor.exists(event).blockingGet();
-        if (exists) {
+        logger.debug("alarm fired: " + event);
+        event = calendarInteractor.getEventDetail(event).onErrorReturnItem(MasterEvent.NULL).blockingFirst();
+        if (event == MasterEvent.NULL) {
+            logger.debug("event is already deleted");
+        } else {
             boolean inTime = ObjectUtils.equalsToMinutes(now, event.getNotifyDateTime());
             if (inTime) {
                 MasterEvent defaultEvent = calendarInteractor.getDefaultEvent(event).blockingFirst();
                 EventNotification eventNotification = calendarInteractor.getNotificationSettings(event.getEventType()).blockingFirst();
                 eventNotificationHelper.showEventNotification(event, eventNotification);
             } else {
-                logger.debug("event is expired: " + event);
+                logger.debug("notify time changed");
             }
-        } else {
-            logger.debug("event is already deleted: " + event);
         }
     }
 }

@@ -20,7 +20,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.calendar.CalendarFilterDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
@@ -823,9 +822,5 @@ public class CalendarInteractor {
 
     public Observable<GetEventsFilter> setSelectedFilterValueObservable(@NonNull GetEventsFilter value) {
         return filterRepository.setSelectedValueObservable(value);
-    }
-
-    public Single<Boolean> exists(@NonNull MasterEvent event) {
-        return calendarRepository.exists(event);
     }
 }

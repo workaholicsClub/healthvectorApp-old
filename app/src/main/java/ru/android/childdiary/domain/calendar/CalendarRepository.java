@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
@@ -139,6 +138,4 @@ public interface CalendarRepository {
     Observable<List<PeriodicityType>> getPeriodicityList();
 
     Observable<Map<TimeUnit, List<Integer>>> getTimeUnitValues();
-
-    Single<Boolean> exists(@NonNull MasterEvent event);
 }

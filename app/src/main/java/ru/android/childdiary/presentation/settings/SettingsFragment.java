@@ -260,7 +260,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         items.add(IntentSettingsItem.builder()
                 .id(Intention.NOTIFICATIONS.ordinal())
                 .title(getString(R.string.settings_setup_notifications))
-                .iconRes(R.drawable.ic_notify_time)
+                .iconRes(R.drawable.ic_notification)
                 .listener(this)
                 .enabled(true)
                 .build());

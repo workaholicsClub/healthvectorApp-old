@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.core.ValueDataRepository;
 import ru.android.childdiary.data.repositories.dictionaries.core.CrudDbService;
 import ru.android.childdiary.data.repositories.dictionaries.food.FoodDbService;
@@ -448,10 +447,5 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
             map.put(TimeUnit.MONTH, Observable.range(1, TimeUtils.MONTHS_IN_YEAR).toList().blockingGet());
             return map;
         });
-    }
-
-    @Override
-    public Single<Boolean> exists(@NonNull MasterEvent event) {
-        return calendarDbService.exists(event);
     }
 }

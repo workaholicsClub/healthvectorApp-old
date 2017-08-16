@@ -12,7 +12,7 @@
         android:id="@+id/eventTypeNameView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:fieldIcon="@drawable/ic_notify_time" />
+        app:fieldIcon="@drawable/ic_notification" />
 
     <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
         android:id="@+id/checkBoxViewDontNotify"
