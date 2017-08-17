@@ -30,7 +30,7 @@ public class FieldSoundInfoView extends FieldDialogView<SoundInfo> {
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
-        return R.layout.field_notification_sound;
+        return R.layout.field_sound_info;
     }
 
     @Nullable
