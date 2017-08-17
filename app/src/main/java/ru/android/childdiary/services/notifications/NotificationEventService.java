@@ -92,44 +92,44 @@ public class NotificationEventService extends BaseIntentService {
     private void showEventDetail(Context context,
                                  @NonNull MasterEvent event,
                                  @NonNull MasterEvent defaultEvent) {
-        Intent intent = getEventDetailIntent(context, event, defaultEvent);
-        startActivity(intent);
+        TaskStackBuilder stackBuilder = getEventDetailStackBuilder(context, event, defaultEvent);
+        stackBuilder.startActivities();
     }
 
-    private Intent getEventDetailIntent(Context context,
-                                        @NonNull MasterEvent event,
-                                        @NonNull MasterEvent defaultEvent) {
+    private TaskStackBuilder getEventDetailStackBuilder(Context context,
+                                                        @NonNull MasterEvent event,
+                                                        @NonNull MasterEvent defaultEvent) {
         switch (event.getEventType()) {
             case DIAPER:
-                return wrapEventDetailIntent(
+                return getEventDetailStackBuilder(
                         DiaperEventDetailActivity.getIntent(context, event, (DiaperEvent) defaultEvent),
                         DiaperEventDetailActivity.class);
             case FEED:
-                return wrapEventDetailIntent(
+                return getEventDetailStackBuilder(
                         FeedEventDetailActivity.getIntent(context, event, (FeedEvent) defaultEvent),
                         FeedEventDetailActivity.class);
             case OTHER:
-                return wrapEventDetailIntent(
+                return getEventDetailStackBuilder(
                         OtherEventDetailActivity.getIntent(context, event, (OtherEvent) defaultEvent),
                         OtherEventDetailActivity.class);
             case PUMP:
-                return wrapEventDetailIntent(
+                return getEventDetailStackBuilder(
                         PumpEventDetailActivity.getIntent(context, event, (PumpEvent) defaultEvent),
                         PumpEventDetailActivity.class);
             case SLEEP:
-                return wrapEventDetailIntent(
+                return getEventDetailStackBuilder(
                         SleepEventDetailActivity.getIntent(context, event, (SleepEvent) defaultEvent),
                         SleepEventDetailActivity.class);
             case DOCTOR_VISIT:
-                return wrapEventDetailIntent(
+                return getEventDetailStackBuilder(
                         DoctorVisitEventDetailActivity.getIntent(context, event, (DoctorVisitEvent) defaultEvent),
                         DoctorVisitEventDetailActivity.class);
             case MEDICINE_TAKING:
-                return wrapEventDetailIntent(
+                return getEventDetailStackBuilder(
                         MedicineTakingEventDetailActivity.getIntent(context, event, (MedicineTakingEvent) defaultEvent),
                         MedicineTakingEventDetailActivity.class);
             case EXERCISE:
-                return wrapEventDetailIntent(
+                return getEventDetailStackBuilder(
                         ExerciseEventDetailActivity.getIntent(context, event, (ExerciseEvent) defaultEvent),
                         ExerciseEventDetailActivity.class);
             default:
@@ -137,12 +137,11 @@ public class NotificationEventService extends BaseIntentService {
         }
     }
 
-    private Intent wrapEventDetailIntent(Intent intent, Class<?> activityClass) {
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+    private TaskStackBuilder getEventDetailStackBuilder(Intent intent, Class<?> activityClass) {
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
         stackBuilder.addParentStack(activityClass);
         stackBuilder.addNextIntent(intent);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return intent;
+        return stackBuilder;
     }
 
     private void showMain(Context context, @Nullable Sex sex) {
