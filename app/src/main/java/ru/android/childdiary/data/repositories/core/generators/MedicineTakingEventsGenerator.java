@@ -16,7 +16,6 @@ import ru.android.childdiary.data.db.entities.calendar.MedicineTakingEventEntity
 import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.MedicineTakingEventMapper;
-import ru.android.childdiary.data.repositories.core.generators.EventsGenerator;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
 import ru.android.childdiary.domain.medical.data.MedicineTaking;
@@ -51,6 +50,7 @@ public class MedicineTakingEventsGenerator extends EventsGenerator<MedicineTakin
                 .masterEventId(null)
                 .eventType(EventType.MEDICINE_TAKING)
                 .dateTime(dateTime)
+                .notifyDateTime(calculateNotifyTime(dateTime, medicineTaking.getNotifyTimeInMinutes()))
                 .notifyTimeInMinutes(medicineTaking.getNotifyTimeInMinutes())
                 .note(null)
                 .isDone(null)

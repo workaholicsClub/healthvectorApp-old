@@ -50,6 +50,7 @@ public class DoctorVisitEventsGenerator extends EventsGenerator<DoctorVisit> {
                 .masterEventId(null)
                 .eventType(EventType.DOCTOR_VISIT)
                 .dateTime(dateTime)
+                .notifyDateTime(calculateNotifyTime(dateTime, doctorVisit.getNotifyTimeInMinutes()))
                 .notifyTimeInMinutes(doctorVisit.getNotifyTimeInMinutes())
                 .note(null)
                 .isDone(null)

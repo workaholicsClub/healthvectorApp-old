@@ -16,7 +16,6 @@ import ru.android.childdiary.data.db.entities.calendar.ExerciseEventEntity;
 import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.ExerciseEventMapper;
 import ru.android.childdiary.data.repositories.calendar.mappers.MasterEventMapper;
-import ru.android.childdiary.data.repositories.core.generators.EventsGenerator;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
@@ -51,6 +50,7 @@ public class ExerciseEventsGenerator extends EventsGenerator<ConcreteExercise> {
                 .masterEventId(null)
                 .eventType(EventType.EXERCISE)
                 .dateTime(dateTime)
+                .notifyDateTime(calculateNotifyTime(dateTime, concreteExercise.getNotifyTimeInMinutes()))
                 .notifyTimeInMinutes(concreteExercise.getNotifyTimeInMinutes())
                 .note(null)
                 .isDone(null)

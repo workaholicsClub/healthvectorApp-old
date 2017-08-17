@@ -17,12 +17,12 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.domain.core.data.RepeatParametersContainer;
 import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroups;
 import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
 import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.calendar.data.core.TimeUnit;
+import ru.android.childdiary.domain.core.data.RepeatParametersContainer;
 import ru.android.childdiary.utils.ObjectUtils;
 
 public abstract class EventsGenerator<From extends RepeatParametersContainer> {
@@ -196,6 +196,14 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
     protected abstract void createEvent(@NonNull From from, @NonNull DateTime dateTime, @Nullable Integer linearGroup);
 
     protected abstract void finishInsertion();
+
+    protected DateTime calculateNotifyTime(@NonNull DateTime dateTime, @Nullable Integer notifyTimeInMinutes) {
+        DateTime notifyDateTime = null;
+        if (notifyTimeInMinutes != null) {
+            notifyDateTime = dateTime.minusMinutes(notifyTimeInMinutes);
+        }
+        return notifyDateTime;
+    }
 
     @Value
     @Builder
