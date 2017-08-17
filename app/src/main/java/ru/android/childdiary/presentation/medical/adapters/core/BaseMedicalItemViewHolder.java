@@ -56,9 +56,7 @@ public abstract class BaseMedicalItemViewHolder<T,
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, T item) {
-        super.bind(context, sex, item);
-
+    protected void bind(Context context, @Nullable Sex sex) {
         boolean isDone = isDone(item);
         boolean enabled = !isDone;
 

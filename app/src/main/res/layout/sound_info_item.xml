@@ -8,26 +8,23 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <View
-        android:id="@+id/marginView"
-        android:layout_width="@dimen/field_icon_size"
-        android:layout_height="@dimen/field_icon_size" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textAppearance="@style/PrimaryTextAppearance"
-        tools:ignore="Deprecated" />
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="@dimen/field_height"
         android:layout_height="@dimen/field_height"
         android:scaleType="center"
         android:src="@drawable/radio_off" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/base_margin"
+        android:layout_marginRight="@dimen/base_margin"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAppearance="@style/PrimaryTextAppearance"
+        tools:ignore="Deprecated" />
 </LinearLayout>

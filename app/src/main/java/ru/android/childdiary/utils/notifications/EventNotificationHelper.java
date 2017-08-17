@@ -3,7 +3,6 @@ package ru.android.childdiary.utils.notifications;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -15,6 +14,7 @@ import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
 import ru.android.childdiary.services.notifications.NotificationEventService;
+import ru.android.childdiary.utils.RingtoneUtils;
 import ru.android.childdiary.utils.notifications.core.BaseNotificationHelper;
 import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -34,7 +34,8 @@ public class EventNotificationHelper extends BaseNotificationHelper {
     public void showEventNotification(@NonNull MasterEvent event,
                                       @NonNull EventNotification eventNotification) {
         int notificationId = getNotificationId(event);
-        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri soundUri = eventNotification.getSoundUri();
+        soundUri = soundUri == null ? RingtoneUtils.getDefaultNotificationUri() : soundUri;
         String title = EventUtils.getTitle(context, event);
         String text = EventUtils.getDescription(context, event);
         NotificationCompat.Builder builder = createNotificationBuilder();

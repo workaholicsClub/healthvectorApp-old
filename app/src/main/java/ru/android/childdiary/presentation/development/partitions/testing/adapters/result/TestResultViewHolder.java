@@ -52,9 +52,7 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, TestResult item) {
-        super.bind(context, sex, item);
-
+    protected void bind(Context context, @Nullable Sex sex) {
         String dateStr = DateUtils.date(context, item.getDate());
         TimeUtils.Age age = TimeUtils.getAge(item.getBirthDate(), item.getDate());
         String ageStr = TimeUtils.age(context, age);

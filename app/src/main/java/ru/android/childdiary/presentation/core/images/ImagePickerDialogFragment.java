@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -67,7 +68,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
 
     @NonNull
     @Override
-    protected Dialog createDialog(@Nullable View view) {
+    protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getContext(), getTheme());
         if (dialog.getWindow() != null) {
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);

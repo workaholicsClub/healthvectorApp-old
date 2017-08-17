@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.calendar.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,7 +38,7 @@ public class EventFilterDialogFragment extends BaseMvpDialogFragment<EventFilter
 
     @NonNull
     @Override
-    protected Dialog createDialog(@Nullable View view) {
+    protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         RecyclerView recyclerView = new RecyclerView(getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);

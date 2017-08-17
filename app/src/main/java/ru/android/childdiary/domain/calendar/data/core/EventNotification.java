@@ -1,12 +1,12 @@
 package ru.android.childdiary.domain.calendar.data.core;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.Serializable;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 import ru.android.childdiary.data.types.EventType;
 
@@ -19,11 +19,16 @@ public class EventNotification implements Serializable {
     @Nullable
     Integer minutes;
     @Nullable
-    Uri sound;
+    SoundInfo soundInfo;
     boolean vibration;
 
     @Nullable
     public Integer getNotifyTime() {
         return dontNotify ? null : minutes;
+    }
+
+    @Nullable
+    public Uri getSoundUri() {
+        return soundInfo == null ? null : soundInfo.getSoundUri();
     }
 }

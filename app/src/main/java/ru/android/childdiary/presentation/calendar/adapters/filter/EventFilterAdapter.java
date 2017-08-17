@@ -42,7 +42,7 @@ public class EventFilterAdapter extends BaseRecyclerViewAdapter<EventType, Event
     }
 
     @Override
-    public void onItemSelected(EventType eventType, boolean selected) {
+    public void onItemSelected(@NonNull EventType eventType, boolean selected) {
         if (selected) {
             selectedItems.add(eventType);
         } else {

@@ -1,7 +1,6 @@
 package ru.android.childdiary.presentation.core.fields.widgets;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -9,20 +8,22 @@ import android.widget.ImageView;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.calendar.data.core.SoundInfo;
+import ru.android.childdiary.utils.strings.StringUtils;
 
-public class FieldNotificationSoundView extends FieldDialogView<Uri> {
+public class FieldSoundInfoView extends FieldDialogView<SoundInfo> {
     @BindView(R.id.soundIcon)
     ImageView soundIcon;
 
-    public FieldNotificationSoundView(Context context) {
+    public FieldSoundInfoView(Context context) {
         super(context);
     }
 
-    public FieldNotificationSoundView(Context context, AttributeSet attrs) {
+    public FieldSoundInfoView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FieldNotificationSoundView(Context context, AttributeSet attrs, int defStyle) {
+    public FieldSoundInfoView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -34,8 +35,8 @@ public class FieldNotificationSoundView extends FieldDialogView<Uri> {
 
     @Nullable
     @Override
-    protected String getTextForValue(@Nullable Uri value) {
-        return value == null ? null : value.toString();
+    protected String getTextForValue(@Nullable SoundInfo value) {
+        return StringUtils.soundInfoName(getContext(), value);
     }
 
     @Override

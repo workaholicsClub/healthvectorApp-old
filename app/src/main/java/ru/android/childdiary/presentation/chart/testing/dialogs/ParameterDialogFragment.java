@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.chart.testing.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -66,7 +67,7 @@ public class ParameterDialogFragment extends BaseMvpDialogFragment<ParameterDial
 
     @NonNull
     @Override
-    protected Dialog createDialog(@Nullable View view) {
+    protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {

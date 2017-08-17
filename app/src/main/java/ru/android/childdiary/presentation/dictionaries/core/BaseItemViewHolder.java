@@ -46,9 +46,7 @@ public abstract class BaseItemViewHolder<T,
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, T item) {
-        super.bind(context, sex, item);
-
+    protected void bind(Context context, @Nullable Sex sex) {
         textView.setText(getTextForValue(context, item));
         //noinspection deprecation
         imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));

@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.fields.dialogs.add.core;
 
 import android.app.Dialog;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,7 +51,7 @@ public abstract class AddValueDialogFragment<P extends AddValueDialogArguments, 
 
     @NonNull
     @Override
-    protected Dialog createDialog(@Nullable View view) {
+    protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(getTitle())

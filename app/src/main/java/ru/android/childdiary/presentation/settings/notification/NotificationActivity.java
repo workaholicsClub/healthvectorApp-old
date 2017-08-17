@@ -3,7 +3,6 @@ package ru.android.childdiary.presentation.settings.notification;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,26 +23,27 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.data.core.EventNotification;
+import ru.android.childdiary.domain.calendar.data.core.SoundInfo;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogArguments;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldNotificationSoundView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldSoundInfoView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTextViewWithImageView;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
-import ru.android.childdiary.presentation.settings.notification.ringtones.RingtonePickerDialogArguments;
-import ru.android.childdiary.presentation.settings.notification.ringtones.RingtonePickerDialogFragment;
+import ru.android.childdiary.presentation.settings.notification.sounds.SoundPickerDialogArguments;
+import ru.android.childdiary.presentation.settings.notification.sounds.SoundPickerDialogFragment;
 import ru.android.childdiary.utils.strings.StringUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class NotificationActivity extends BaseMvpActivity implements NotificationView,
         TimeDialogFragment.Listener, FieldCheckBoxView.FieldCheckBoxListener,
-        RingtonePickerDialogFragment.Listener {
+        SoundPickerDialogFragment.Listener {
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
-    private static final String TAG_RINGTONE_PICKER = "TAG_RINGTONE_PICKER";
+    private static final String TAG_SOUND_PICKER = "TAG_SOUND_PICKER";
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 101;
 
     @InjectPresenter
@@ -61,8 +61,8 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
     @BindView(R.id.notifyTimeView)
     FieldNotifyTimeView notifyTimeView;
 
-    @BindView(R.id.notificationSoundView)
-    FieldNotificationSoundView notificationSoundView;
+    @BindView(R.id.soundInfoView)
+    FieldSoundInfoView soundInfoView;
 
     @BindView(R.id.checkBoxViewVibration)
     FieldCheckBoxView checkBoxViewVibration;
@@ -103,10 +103,10 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
                             .title(getString(R.string.notify_time_dialog_title))
                             .build());
         });
-        notificationSoundView.setFieldDialogListener(v -> requestPermissionAndPickRingtone());
+        soundInfoView.setFieldDialogListener(v -> requestPermissionAndPickSound());
     }
 
-    private void requestPermissionAndPickRingtone() {
+    private void requestPermissionAndPickSound() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             RequestPermissionInfo permissionInfo = RequestPermissionInfo.builder()
                     .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -116,7 +116,7 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
                     .build();
             permissionHelper.requestPermission(permissionInfo, getSex());
         } else {
-            pickRingtone();
+            pickSound();
         }
     }
 
@@ -124,22 +124,22 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
     public void permissionGranted(RequestPermissionInfo permissionInfo) {
         super.permissionGranted(permissionInfo);
         if (permissionInfo.getRequestCode() == REQUEST_PERMISSION_READ_EXTERNAL_STORAGE) {
-            pickRingtone();
+            pickSound();
         }
     }
 
-    private void pickRingtone() {
-        RingtonePickerDialogFragment dialogFragment = new RingtonePickerDialogFragment();
-        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_RINGTONE_PICKER,
-                RingtonePickerDialogArguments.builder()
+    private void pickSound() {
+        SoundPickerDialogFragment dialogFragment = new SoundPickerDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_SOUND_PICKER,
+                SoundPickerDialogArguments.builder()
                         .sex(getSex())
-                        .soundUri(Uri.parse("sdfsdf"))//notificationSoundView.getValue())
+                        .selectedSoundInfo(soundInfoView.getValue())
                         .build());
     }
 
     @Override
-    public void onRingtoneSelected(String ringtoneName, Uri ringtoneUri) {
-        notificationSoundView.setValue(ringtoneUri);
+    public void onSoundSelected(@Nullable SoundInfo soundInfo) {
+        soundInfoView.setValue(soundInfo);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
         return EventNotification.builder()
                 .eventType(eventType)
                 .minutes(notifyTimeView.getValue())
-                .sound(notificationSoundView.getValue())
+                .soundInfo(soundInfoView.getValue())
                 .dontNotify(checkBoxViewDontNotify.isChecked())
                 .vibration(checkBoxViewVibration.isChecked())
                 .build();
@@ -178,7 +178,7 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
     public void showNotificationSettings(@NonNull EventNotification eventNotification) {
         checkBoxViewDontNotify.setChecked(eventNotification.isDontNotify());
         notifyTimeView.setValue(eventNotification.getMinutes());
-        notificationSoundView.setValue(eventNotification.getSound());
+        soundInfoView.setValue(eventNotification.getSoundInfo());
         checkBoxViewVibration.setChecked(eventNotification.isVibration());
     }
 
@@ -207,7 +207,7 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
     public void onChecked() {
         boolean enabled = !checkBoxViewDontNotify.isChecked();
         notifyTimeView.setEnabled(enabled);
-        notificationSoundView.setEnabled(enabled);
+        soundInfoView.setEnabled(enabled);
         checkBoxViewVibration.setEnabled(enabled);
     }
 

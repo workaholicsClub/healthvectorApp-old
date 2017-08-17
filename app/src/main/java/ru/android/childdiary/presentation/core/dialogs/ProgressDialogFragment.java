@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.core.dialogs;
 
 import android.app.Dialog;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -44,7 +45,7 @@ public class ProgressDialogFragment extends BaseMvpDialogFragment<ProgressDialog
 
     @NonNull
     @Override
-    protected Dialog createDialog(@Nullable View view) {
+    protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex())) {
             @Override
             public void onBackPressed() {

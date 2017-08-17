@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewAdapter;
-import ru.android.childdiary.utils.ObjectUtils;
 
 public class TestAdapter extends BaseRecyclerViewAdapter<Test, TestViewHolder> {
     private final TestClickListener listener;
@@ -26,7 +25,7 @@ public class TestAdapter extends BaseRecyclerViewAdapter<Test, TestViewHolder> {
 
     @Override
     public boolean areItemsTheSame(Test oldItem, Test newItem) {
-        return ObjectUtils.equals(oldItem.getTestType(), newItem.getTestType());
+        return oldItem.getTestType() == newItem.getTestType();
     }
 
     @Override

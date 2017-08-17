@@ -25,8 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldNotificationSoundView
-        android:id="@+id/notificationSoundView"
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldSoundInfoView
+        android:id="@+id/soundInfoView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

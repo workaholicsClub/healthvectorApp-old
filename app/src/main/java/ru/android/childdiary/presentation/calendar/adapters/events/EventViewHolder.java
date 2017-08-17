@@ -72,33 +72,31 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, MasterEvent event) {
-        super.bind(context, sex, event);
-
+    protected void bind(Context context, @Nullable Sex sex) {
         //noinspection deprecation
         eventView.setBackgroundDrawable(
-                getEventViewBackgroundDrawable(ResourcesUtils.getEventColor(context, sex, event)));
+                getEventViewBackgroundDrawable(ResourcesUtils.getEventColor(context, sex, item)));
         //noinspection deprecation
         actionsView.setBackgroundDrawable(
                 getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
 
-        textViewTime.setText(DateUtils.time(context, event.getDateTime()));
-        textViewTitle.setText(EventUtils.getTitle(context, event));
-        textViewDescription.setText(EventUtils.getDescription(context, event));
+        textViewTime.setText(DateUtils.time(context, item.getDateTime()));
+        textViewTitle.setText(EventUtils.getTitle(context, item));
+        textViewDescription.setText(EventUtils.getDescription(context, item));
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
 
-        boolean showActionDone = EventUtils.canBeDone(event);
+        boolean showActionDone = EventUtils.canBeDone(item);
         actionDoneView.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
         delimiter1.setVisibility(showActionDone ? View.VISIBLE : View.GONE);
 
-        boolean isDone = EventUtils.isDone(event);
-        boolean isExpired = EventUtils.isExpired(event);
+        boolean isDone = EventUtils.isDone(item);
+        boolean isExpired = EventUtils.isExpired(item);
         int resId = showActionDone ? (isDone ? R.drawable.ic_event_done : (isExpired ? R.drawable.ic_event_expired : 0)) : 0;
         imageViewDoneOrExpired.setImageResource(resId);
         imageViewDoneOrExpired.setVisibility(resId == 0 ? View.GONE : View.VISIBLE);
-        imageViewRepeating.setVisibility(event.getLinearGroup() == null ? View.GONE : View.VISIBLE);
+        imageViewRepeating.setVisibility(item.getLinearGroup() == null ? View.GONE : View.VISIBLE);
     }
 
     @Override

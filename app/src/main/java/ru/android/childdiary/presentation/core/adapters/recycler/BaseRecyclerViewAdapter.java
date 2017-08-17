@@ -132,7 +132,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
 
     @CallSuper
     protected void bindUserViewHolder(VH viewHolder, int position) {
-        viewHolder.bind(context, sex, items.get(position));
+        viewHolder.bind(context, sex, items.get(position), position);
     }
 
     @Override
@@ -150,7 +150,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
     }
 
     @Override
-    public final boolean areContentsTheSame(T oldItem, T newItem) {
+    public boolean areContentsTheSame(T oldItem, T newItem) {
         return oldItem.equals(newItem);
     }
 

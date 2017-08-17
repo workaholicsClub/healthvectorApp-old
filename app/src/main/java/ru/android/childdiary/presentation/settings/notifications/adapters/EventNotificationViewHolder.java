@@ -31,8 +31,7 @@ public class EventNotificationViewHolder extends BaseRecyclerViewHolder<EventNot
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, EventNotification item) {
-        super.bind(context, sex, item);
+    protected void bind(Context context, @Nullable Sex sex) {
         textViewTitle.setText(StringUtils.eventType(context, item.getEventType()));
         textViewSubtitle.setText(TimeUtils.notifyTime(context, item.getNotifyTime()));
     }

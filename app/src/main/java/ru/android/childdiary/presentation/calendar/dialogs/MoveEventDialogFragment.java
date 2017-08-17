@@ -2,14 +2,15 @@ package ru.android.childdiary.presentation.calendar.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.data.core.LengthValue;
+import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.presentation.core.dialogs.BaseLengthValueDialogFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -19,7 +20,7 @@ public class MoveEventDialogFragment extends BaseLengthValueDialogFragment<MoveE
 
     @NonNull
     @Override
-    protected Dialog createDialog(@Nullable View view) {
+    protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(R.string.move_event);

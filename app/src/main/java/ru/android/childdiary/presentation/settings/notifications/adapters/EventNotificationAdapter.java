@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerViewAdapter;
 
@@ -27,9 +26,7 @@ public class EventNotificationAdapter extends BaseRecyclerViewAdapter<EventNotif
 
     @Override
     public boolean areItemsTheSame(EventNotification oldItem, EventNotification newItem) {
-        EventType oldEventType = oldItem == null ? null : oldItem.getEventType();
-        EventType newEventType = newItem == null ? null : newItem.getEventType();
-        return oldEventType == newEventType;
+        return oldItem.getEventType() == newItem.getEventType();
     }
 
     @Override

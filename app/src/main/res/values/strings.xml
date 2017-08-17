@@ -356,4 +356,6 @@
     <string name="vibration">Вибрация</string>
     <string name="in_the_moment">В момент события</string>
     <string name="notification_sound">Мелодия</string>
+    <string name="select_sound">Выберите мелодию</string>
+    <string name="default_sound">По умолчанию</string>
 </resources>

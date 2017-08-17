@@ -25,8 +25,7 @@ public class TestViewHolder extends BaseRecyclerViewHolder<Test> {
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, Test item) {
-        super.bind(context, sex, item);
+    protected void bind(Context context, @Nullable Sex sex) {
         textView.setText(item.getName());
     }
 

@@ -50,9 +50,7 @@ public class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchie
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, ConcreteAchievement item) {
-        super.bind(context, sex, item);
-
+    protected void bind(Context context, @Nullable Sex sex) {
         String dateStr = DateUtils.date(context, item.getDate());
         textViewDate.setText(dateStr == null ? context.getString(R.string.fill_achievement_date) : dateStr);
         textViewConcreteAchievement.setText(item.getName());

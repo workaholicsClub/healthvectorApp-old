@@ -13,7 +13,7 @@ import ru.android.childdiary.presentation.core.adapters.recycler.BaseRecyclerVie
 import ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView;
 import ru.android.childdiary.utils.strings.StringUtils;
 
-public class EventFilterViewHolder extends BaseRecyclerViewHolder<EventType> implements FieldCheckBoxView.FieldCheckBoxListener {
+class EventFilterViewHolder extends BaseRecyclerViewHolder<EventType> implements FieldCheckBoxView.FieldCheckBoxListener {
     @BindView(R.id.checkBoxView)
     FieldCheckBoxView checkBoxView;
 
@@ -26,8 +26,7 @@ public class EventFilterViewHolder extends BaseRecyclerViewHolder<EventType> imp
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, EventType item) {
-        super.bind(context, sex, item);
+    protected void bind(Context context, @Nullable Sex sex) {
         checkBoxView.setSex(sex);
         checkBoxView.setText(StringUtils.eventType(context, item));
         checkBoxView.setFieldCheckBoxListener(this);

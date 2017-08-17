@@ -15,6 +15,7 @@ import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.calendar.data.core.PeriodicityType;
+import ru.android.childdiary.domain.calendar.data.core.SoundInfo;
 import ru.android.childdiary.domain.calendar.data.core.TimeUnit;
 import ru.android.childdiary.domain.dictionaries.medicinemeasure.data.MedicineMeasure;
 import ru.android.childdiary.domain.medical.data.MedicineMeasureValue;
@@ -252,5 +253,10 @@ public class StringUtils {
 
     private static String normalize(@Nullable String s) {
         return s == null ? "" : s.trim().toLowerCase();
+    }
+
+    @Nullable
+    public static String soundInfoName(Context context, @Nullable SoundInfo soundInfo) {
+        return soundInfo == null ? null : (soundInfo == SoundInfo.NULL ? context.getString(R.string.default_sound) : soundInfo.getName());
     }
 }

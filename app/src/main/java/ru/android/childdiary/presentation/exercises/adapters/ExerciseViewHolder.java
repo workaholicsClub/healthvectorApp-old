@@ -33,8 +33,7 @@ public class ExerciseViewHolder extends BaseRecyclerViewHolder<Exercise> {
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, Exercise item) {
-        super.bind(context, sex, item);
+    protected void bind(Context context, @Nullable Sex sex) {
         textView.setText(item.getName());
         imageViewExported.setVisibility(item.isExported() ? View.VISIBLE : View.GONE);
         imageViewExported.setImageResource(ResourcesUtils.getExerciseExportedIcon(sex));

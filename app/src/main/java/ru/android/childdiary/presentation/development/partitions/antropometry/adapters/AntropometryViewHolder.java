@@ -52,9 +52,7 @@ public class AntropometryViewHolder extends SwipeViewHolder<Antropometry, Antrop
     }
 
     @Override
-    public void bind(Context context, @Nullable Sex sex, Antropometry item) {
-        super.bind(context, sex, item);
-
+    protected void bind(Context context, @Nullable Sex sex) {
         String dateStr = DateUtils.date(context, item.getDate());
         textViewDate.setText(dateStr);
 

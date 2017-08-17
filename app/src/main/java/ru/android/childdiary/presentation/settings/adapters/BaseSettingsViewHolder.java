@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.settings.adapters;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import ru.android.childdiary.data.types.Sex;
@@ -13,8 +14,12 @@ public abstract class BaseSettingsViewHolder<T extends BaseSettingsItem> extends
     }
 
     @Override
-    public final void bind(Context context, Sex sex, BaseSettingsItem item) {
-        super.bind(context, sex, item);
+    protected void bind(Context context, @Nullable Sex sex) {
+    }
+
+    @Override
+    public final void bind(Context context, Sex sex, BaseSettingsItem item, int position) {
+        super.bind(context, sex, item, position);
         //noinspection unchecked
         bindT(context, sex, (T) item);
     }
