@@ -11,6 +11,9 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,12 +21,14 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.availability.NetworkAvailability;
 import ru.android.childdiary.data.availability.exceptions.NetworkUnavailableException;
+import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.cloud.CloudInteractor;
 import ru.android.childdiary.domain.core.settings.SettingsInteractor;
 import ru.android.childdiary.services.core.BaseService;
 import ru.android.childdiary.utils.log.LogSystem;
 import ru.android.childdiary.utils.notifications.CloudNotificationHelper;
+import ru.android.childdiary.utils.strings.DateUtils;
 
 public class CloudService extends BaseService {
     @Inject
@@ -34,6 +39,9 @@ public class CloudService extends BaseService {
 
     @Inject
     CloudInteractor cloudInteractor;
+
+    @Inject
+    ScheduleHelper scheduleHelper;
 
     @Inject
     CloudNotificationHelper cloudNotificationHelper;
@@ -50,6 +58,12 @@ public class CloudService extends BaseService {
     public static PendingIntent getPendingIntent(int requestCode, Context context) {
         Intent intent = getServiceIntent(context);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public static void reschedule(ScheduleHelper scheduleHelper, Context context) {
+        LocalDate today = LocalDate.now();
+        DateTime midnight = DateUtils.nextDayMidnight(today);
+        scheduleHelper.installExactAlarm(getPendingIntent(0, context), midnight.getMillis());
     }
 
     @Nullable
@@ -71,6 +85,7 @@ public class CloudService extends BaseService {
 
     @Override
     protected void handleIntent(@Nullable Intent intent) {
+        reschedule(scheduleHelper, this);
         unsubscribeOnDestroy(
                 settingsInteractor.getAccountNameOnce()
                         .subscribeOn(Schedulers.io())

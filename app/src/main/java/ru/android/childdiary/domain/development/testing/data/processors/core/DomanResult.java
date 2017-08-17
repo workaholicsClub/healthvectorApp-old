@@ -8,9 +8,9 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-import static ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessorHelper.ADVANCED_RANGES;
-import static ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessorHelper.NORMAL_RANGES;
-import static ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessorHelper.SLOW_RANGES;
+import static ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessorUtils.ADVANCED_RANGES;
+import static ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessorUtils.NORMAL_RANGES;
+import static ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessorUtils.SLOW_RANGES;
 
 @Value
 public class DomanResult {
@@ -42,10 +42,10 @@ public class DomanResult {
 
     private double calculatePercents() {
         LocalDate toDate = domanDate == null ? date : domanDate;
-        double months = DomanTestProcessorHelper.getMonths(birthDate, toDate);
-        DomanTestProcessorHelper.Range advancedRange = ADVANCED_RANGES[stage];
-        DomanTestProcessorHelper.Range normalRange = NORMAL_RANGES[stage];
-        DomanTestProcessorHelper.Range slowRange = SLOW_RANGES[stage];
+        double months = DomanTestProcessorUtils.getMonths(birthDate, toDate);
+        DomanTestProcessorUtils.Range advancedRange = ADVANCED_RANGES[stage];
+        DomanTestProcessorUtils.Range normalRange = NORMAL_RANGES[stage];
+        DomanTestProcessorUtils.Range slowRange = SLOW_RANGES[stage];
         double percents;
         if (months < advancedRange.getTo()) {
             percents = (months - advancedRange.getFrom()) / (advancedRange.getTo() - advancedRange.getFrom()) * ADVANCED;

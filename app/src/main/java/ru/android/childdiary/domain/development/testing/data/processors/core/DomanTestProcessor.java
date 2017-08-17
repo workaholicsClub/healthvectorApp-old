@@ -54,8 +54,8 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
             answers.add(null);
         }
 
-        double months = DomanTestProcessorHelper.getMonths(birthDate, date);
-        index = DomanTestProcessorHelper.getIndex(months);
+        double months = DomanTestProcessorUtils.getMonths(birthDate, date);
+        index = DomanTestProcessorUtils.getIndex(months);
         initialStage = index;
     }
 

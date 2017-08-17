@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -48,9 +47,7 @@ public class EventScheduleService extends BaseService {
     private Disposable subscription;
 
     private static Intent getServiceIntent(Context context) {
-        Intent intent = new Intent(context, EventScheduleService.class);
-        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
-        return intent;
+        return new Intent(context, EventScheduleService.class);
     }
 
     public static void startService(Context context) {
@@ -61,6 +58,12 @@ public class EventScheduleService extends BaseService {
     public static PendingIntent getPendingIntent(int requestCode, Context context) {
         Intent intent = getServiceIntent(context);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private static void reschedule(ScheduleHelper scheduleHelper, Context context) {
+        LocalDate today = LocalDate.now();
+        DateTime midnight = DateUtils.nextDayMidnight(today);
+        scheduleHelper.installExactAlarm(getPendingIntent(0, context), midnight.getMillis());
     }
 
     private static boolean isInTheFuture(@NonNull MasterEvent event) {
@@ -87,9 +90,7 @@ public class EventScheduleService extends BaseService {
 
     @Override
     protected void handleIntent(@Nullable Intent intent) {
-        LocalDate today = LocalDate.now();
-        DateTime midnight = DateUtils.nextDayMidnight(today);
-        scheduleHelper.installAlarm(getPendingIntent(0, this), midnight.getMillis());
+        reschedule(scheduleHelper, this);
         subscribeOnUpdates();
     }
 
@@ -121,7 +122,7 @@ public class EventScheduleService extends BaseService {
         int requestCode = eventNotificationHelper.getNotificationId(event);
         PendingIntent pendingIntent = AlarmEventService.getPendingIntent(requestCode, this, event);
         long time = event.getNotifyDateTime().withSecondOfMinute(0).withMillisOfSecond(0).getMillis();
-        scheduleHelper.installAlarm(pendingIntent, time);
+        scheduleHelper.installExactAlarm(pendingIntent, time);
     }
 
     private void onUnexpectedError(Throwable e) {

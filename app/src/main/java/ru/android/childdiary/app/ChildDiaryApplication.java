@@ -38,8 +38,8 @@ public class ChildDiaryApplication extends MultiDexApplication {
 
         JodaTimeAndroid.init(this);
 
-        ServiceController serviceController = new ServiceController(this);
         ScheduleHelper scheduleHelper = new ScheduleHelper(this);
+        ServiceController serviceController = new ServiceController(this, scheduleHelper);
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this, serviceController, scheduleHelper))
                 .build();
@@ -50,7 +50,5 @@ public class ChildDiaryApplication extends MultiDexApplication {
                 .build());
 
         serviceController.onApplicationStart();
-        serviceController.scheduleEvents();
-        scheduleHelper.scheduleAll();
     }
 }

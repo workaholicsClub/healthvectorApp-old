@@ -9,7 +9,7 @@ import org.joda.time.Months;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-class DomanTestProcessorHelper {
+class DomanTestProcessorUtils {
     static final Range[] ADVANCED_RANGES = new Range[]{
             new Range(0.25, 0.75),
             new Range(0.625, 1.875),
@@ -41,7 +41,7 @@ class DomanTestProcessorHelper {
             1, 2.5, 7, 12, 18, 36, 72
     };
 
-    public static double getMonths(@NonNull LocalDate birthDate, @NonNull LocalDate date) {
+    static double getMonths(@NonNull LocalDate birthDate, @NonNull LocalDate date) {
         if (birthDate.isAfter(date)) {
             return 0;
         }
@@ -56,7 +56,7 @@ class DomanTestProcessorHelper {
         return months + part;
     }
 
-    public static int getIndex(double months) {
+    static int getIndex(double months) {
         int length = AVERAGES.length;
         int last = length - 1;
 

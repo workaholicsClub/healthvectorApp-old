@@ -61,15 +61,10 @@ public class TimerService extends BaseService {
     private static Intent getServiceIntent(Context context,
                                            @Nullable String action,
                                            @Nullable SleepEvent event) {
-        Intent intent = new Intent(context, TimerService.class);
-        if (action != null) {
-            intent.putExtra(TimerService.EXTRA_ACTION, action);
-        }
-        if (event != null) {
-            intent.putExtra(ExtraConstants.EXTRA_EVENT, event);
-        }
-        intent.setAction(String.valueOf(SystemClock.elapsedRealtime()));
-        return intent;
+        return new Intent(context, TimerService.class)
+                .putExtra(EXTRA_ACTION, action)
+                .putExtra(ExtraConstants.EXTRA_EVENT, event)
+                .setAction(String.valueOf(SystemClock.elapsedRealtime()));
     }
 
     public static void startService(Context context,
