@@ -64,7 +64,6 @@ public class AlarmEventService extends BaseIntentService {
         } else {
             boolean inTime = ObjectUtils.equalsToMinutes(now, event.getNotifyDateTime());
             if (inTime) {
-                MasterEvent defaultEvent = calendarInteractor.getDefaultEvent(event).blockingFirst();
                 EventNotification eventNotification = calendarInteractor.getNotificationSettings(event.getEventType()).blockingFirst();
                 eventNotificationHelper.showEventNotification(event, eventNotification);
             } else {

@@ -481,8 +481,6 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
             if (parts.length != 2 || TextUtils.isEmpty(parts[0]) || TextUtils.isEmpty(parts[1])) {
                 return SoundInfo.NULL;
             }
-            String name = parts[0];
-            String path = parts[1];
             return SoundInfo.builder()
                     .name(parts[0])
                     .path(parts[1])

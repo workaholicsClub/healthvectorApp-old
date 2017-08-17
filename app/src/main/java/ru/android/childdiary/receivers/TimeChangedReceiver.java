@@ -1,5 +1,6 @@
 package ru.android.childdiary.receivers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
@@ -18,6 +19,7 @@ public class TimeChangedReceiver extends BaseReceiver {
     @Inject
     ScheduleHelper scheduleHelper;
 
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
