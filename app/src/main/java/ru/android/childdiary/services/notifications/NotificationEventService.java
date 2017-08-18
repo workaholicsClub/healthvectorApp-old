@@ -143,7 +143,7 @@ public class NotificationEventService extends BaseIntentService {
 
     private void showMain(Context context, @Nullable Sex sex) {
         Intent intent = MainActivity.getIntent(context, AppPartition.CALENDAR, sex);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 }
