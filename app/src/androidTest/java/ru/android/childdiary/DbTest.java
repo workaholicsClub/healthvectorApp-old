@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,18 +25,18 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import lombok.val;
 import ru.android.childdiary.data.db.DbUtils;
+import ru.android.childdiary.data.repositories.calendar.CleanUpDbService;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.child.ChildDbService;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
-import ru.android.childdiary.data.repositories.calendar.CleanUpDbService;
-import ru.android.childdiary.data.repositories.dictionaries.achievements.mappers.AchievementMapper;
 import ru.android.childdiary.data.repositories.development.achievement.mappers.ConcreteAchievementMapper;
 import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDbService;
 import ru.android.childdiary.data.repositories.development.antropometry.mappers.AntropometryMapper;
+import ru.android.childdiary.data.repositories.dictionaries.achievements.mappers.AchievementMapper;
 import ru.android.childdiary.data.repositories.dictionaries.doctors.mappers.DoctorMapper;
-import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
-import ru.android.childdiary.data.repositories.dictionaries.medicines.mappers.MedicineMapper;
 import ru.android.childdiary.data.repositories.dictionaries.medicinemeasure.mappers.MedicineMeasureMapper;
+import ru.android.childdiary.data.repositories.dictionaries.medicines.mappers.MedicineMapper;
+import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.child.data.Child;
@@ -254,7 +253,7 @@ public class DbTest {
         return Child.builder()
                 .name("Child" + RANDOM.nextInt())
                 .birthDate(now.toLocalDate().minusDays(RANDOM.nextInt()))
-                .birthTime(new LocalTime(now.getHourOfDay(), now.getMinuteOfHour()).minusMinutes(RANDOM.nextInt()))
+                .birthTime(now.toLocalTime().minusMinutes(RANDOM.nextInt()))
                 .sex(RANDOM.nextBoolean() ? Sex.MALE : Sex.FEMALE)
                 .imageFileName(null)
                 .birthHeight(RANDOM.nextDouble())

@@ -69,11 +69,7 @@ public class EventScheduleService extends BaseService {
     private static boolean isInTheFuture(@NonNull MasterEvent event) {
         return event.getMasterEventId() != null
                 && event.getNotifyDateTime() != null
-                && event.getNotifyDateTime().getMillis() >= now();
-    }
-
-    private static long now() {
-        return DateTime.now().withSecondOfMinute(0).withMillisOfSecond(0).getMillis();
+                && event.getNotifyDateTime().getMillis() >= DateTime.now().getMillis();
     }
 
     @Nullable
@@ -122,7 +118,7 @@ public class EventScheduleService extends BaseService {
         logger.debug("schedule event: " + event);
         int requestCode = eventNotificationHelper.getNotificationId(event);
         PendingIntent pendingIntent = AlarmEventService.getPendingIntent(requestCode, this, event);
-        long time = event.getNotifyDateTime().withSecondOfMinute(0).withMillisOfSecond(0).getMillis();
+        long time = event.getNotifyDateTime().getMillis();
         scheduleHelper.installExactAlarm(pendingIntent, time);
     }
 
