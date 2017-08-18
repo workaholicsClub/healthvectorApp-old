@@ -1,6 +1,5 @@
 package ru.android.childdiary.services;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
@@ -31,11 +30,6 @@ public class UpdateDataService extends BaseService {
     public static void startService(Context context) {
         Intent intent = getServiceIntent(context);
         context.startService(intent);
-    }
-
-    public static PendingIntent getPendingIntent(int requestCode, Context context) {
-        Intent intent = getServiceIntent(context);
-        return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @Nullable

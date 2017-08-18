@@ -35,11 +35,6 @@ public class AlarmEventService extends BaseIntentService {
                 .putExtra(ExtraConstants.EXTRA_EVENT, event);
     }
 
-    public static void startService(Context context, @NonNull MasterEvent event) {
-        Intent intent = getServiceIntent(context, event);
-        context.startService(intent);
-    }
-
     public static PendingIntent getPendingIntent(int requestCode, Context context, @NonNull MasterEvent event) {
         Intent intent = getServiceIntent(context, event);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);

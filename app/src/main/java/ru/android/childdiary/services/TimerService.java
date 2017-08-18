@@ -63,8 +63,7 @@ public class TimerService extends BaseService {
                                            @Nullable SleepEvent event) {
         return new Intent(context, TimerService.class)
                 .putExtra(EXTRA_ACTION, action)
-                .putExtra(ExtraConstants.EXTRA_EVENT, event)
-                .setAction(String.valueOf(SystemClock.elapsedRealtime()));
+                .putExtra(ExtraConstants.EXTRA_EVENT, event);
     }
 
     public static void startService(Context context,
@@ -77,7 +76,8 @@ public class TimerService extends BaseService {
     public static PendingIntent getPendingIntent(int requestCode, Context context,
                                                  @Nullable String action,
                                                  @Nullable SleepEvent event) {
-        Intent intent = getServiceIntent(context, action, event);
+        Intent intent = getServiceIntent(context, action, event)
+                .setAction(String.valueOf(SystemClock.elapsedRealtime()));
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

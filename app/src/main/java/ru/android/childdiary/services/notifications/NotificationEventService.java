@@ -3,6 +3,7 @@ package ru.android.childdiary.services.notifications;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.TaskStackBuilder;
@@ -56,13 +57,9 @@ public class NotificationEventService extends BaseIntentService {
                 .putExtra(ExtraConstants.EXTRA_EVENT, event);
     }
 
-    public static void startService(Context context, @NonNull MasterEvent event) {
-        Intent intent = getServiceIntent(context, event);
-        context.startService(intent);
-    }
-
     public static PendingIntent getPendingIntent(int requestCode, Context context, @NonNull MasterEvent event) {
-        Intent intent = getServiceIntent(context, event);
+        Intent intent = getServiceIntent(context, event)
+                .setAction(String.valueOf(SystemClock.elapsedRealtime()));
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

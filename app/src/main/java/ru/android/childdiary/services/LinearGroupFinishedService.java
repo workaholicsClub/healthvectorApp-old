@@ -29,11 +29,6 @@ public class LinearGroupFinishedService extends BaseService {
         return new Intent(context, LinearGroupFinishedService.class);
     }
 
-    public static void startService(Context context) {
-        Intent intent = getServiceIntent(context);
-        context.startService(intent);
-    }
-
     public static PendingIntent getPendingIntent(int requestCode, Context context) {
         Intent intent = getServiceIntent(context);
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
