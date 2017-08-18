@@ -316,6 +316,19 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
+    public static int getNotificationLinearGroupRes(@Nullable Child child) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Sex sex = child == null ? null : child.getSex();
+            // TODO заменить иконки
+            return sex == null || sex == Sex.MALE
+                    ? R.drawable.ic_notification_event_pre_lollipop_boy
+                    : R.drawable.ic_notification_event_pre_lollipop_girl;
+        } else {
+            return R.drawable.ic_notification_linear_group;
+        }
+    }
+
+    @DrawableRes
     public static int getNotificationSleepRes(@Nullable Child child) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Sex sex = child == null ? null : child.getSex();
