@@ -358,4 +358,5 @@
     <string name="notification_sound">Мелодия</string>
     <string name="select_sound">Выберите мелодию</string>
     <string name="default_sound">По умолчанию</string>
+    <string name="linear_group_finished_notification_title">Продлить события?</string>
 </resources>

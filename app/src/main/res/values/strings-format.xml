@@ -43,4 +43,5 @@
             %3$s
         ]]>
     </string>
+    <string name="event_title_description">%1$s \u2014 %2$s</string>
 </resources>

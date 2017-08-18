@@ -13,7 +13,6 @@ import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
-import ru.android.childdiary.domain.dictionaries.food.data.Food;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.data.standard.DiaperEvent;
 import ru.android.childdiary.domain.calendar.data.standard.FeedEvent;
@@ -21,6 +20,7 @@ import ru.android.childdiary.domain.calendar.data.standard.OtherEvent;
 import ru.android.childdiary.domain.calendar.data.standard.PumpEvent;
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
 import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
+import ru.android.childdiary.domain.dictionaries.food.data.Food;
 import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -125,6 +125,21 @@ public class EventUtils {
             return null;
         }
         return null;
+    }
+
+    @Nullable
+    public static String getTitleAndDescription(Context context, @NonNull MasterEvent event) {
+        String title = getTitle(context, event);
+        String description = getDescription(context, event);
+        if (title == null && description == null) {
+            return null;
+        } else if (title != null && description == null) {
+            return title;
+        } else if (title == null) {
+            return description;
+        } else {
+            return context.getString(R.string.event_title_description, title, description);
+        }
     }
 
     public static boolean sameEvent(@Nullable MasterEvent event1, @Nullable MasterEvent event2) {

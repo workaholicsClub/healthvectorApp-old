@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 
 import javax.inject.Inject;
 
+import ru.android.childdiary.R;
 import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
@@ -37,11 +38,11 @@ public class LinearGroupNotificationHelper extends BaseNotificationHelper {
         int notificationId = getNotificationId(event);
         Uri soundUri = eventNotification.getSoundUri();
         soundUri = soundUri == null ? RingtoneUtils.getDefaultNotificationUri() : soundUri;
-        String title = EventUtils.getTitle(context, event);
-        String text = EventUtils.getDescription(context, event);
+        String title = context.getString(R.string.linear_group_finished_notification_title);
+        String text = EventUtils.getTitleAndDescription(context, event);
         NotificationCompat.Builder builder = createNotificationBuilder();
         builder.setContentIntent(buildPendingIntent(context, notificationId, event))
-                .setSmallIcon(ResourcesUtils.getNotificationEventRes(event.getChild()))
+                .setSmallIcon(ResourcesUtils.getNotificationLinearGroupRes(event.getChild()))
                 .setContentTitle(title)
                 .setContentText(text)
                 .setWhen(event.getDateTime().toDate().getTime())
