@@ -16,4 +16,5 @@ public class GetEventsRequest {
     LocalDate date;
     @NonNull
     GetEventsFilter filter;
+    boolean getScheduled;
 }

@@ -2,6 +2,7 @@ package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.Set;
@@ -12,6 +13,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.requery.BlockingEntityStore;
 import io.requery.Persistable;
+import io.requery.meta.QueryAttribute;
 import io.requery.query.Expression;
 import io.requery.query.Tuple;
 import io.requery.query.WhereAndOr;
@@ -368,6 +370,8 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
         Child child = request.getChild();
         LocalDate date = request.getDate();
         Set<EventType> eventTypes = request.getFilter().getEventTypes();
+        QueryAttribute<MasterEventEntity, DateTime> dateTimeAttribute = request.isGetScheduled()
+                ? MasterEventEntity.NOTIFY_DATE_TIME : MasterEventEntity.DATE_TIME;
         WhereAndOr<ReactiveResult<Tuple>> select = dataStore.select(EXPRESSIONS)
                 .from(MasterEventEntity.class)
                 .join(ChildEntity.class).on(ChildEntity.ID.eq(MasterEventEntity.CHILD_ID))
@@ -388,8 +392,8 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
                 .leftJoin(ExerciseEntity.class).on(ExerciseEntity.ID.eq(ConcreteExerciseEntity.EXERCISE_ID))
                 .where(MasterEventEntity.EVENT_TYPE.notNull())
                 .and(MasterEventEntity.EVENT_TYPE.in(eventTypes))
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.midnight(date)))
-                .and(MasterEventEntity.DATE_TIME.lessThan(DateUtils.nextDayMidnight(date)));
+                .and(dateTimeAttribute.greaterThanOrEqual(DateUtils.midnight(date)))
+                .and(dateTimeAttribute.lessThan(DateUtils.nextDayMidnight(date)));
 
         if (child.getId() != null) {
             select = select.and(MasterEventEntity.CHILD_ID.eq(child.getId()));

@@ -105,6 +105,7 @@ public class EventScheduleService extends BaseService {
                                             .eventTypes(Arrays.asList(EventType.values()))
                                             .build())
                                     .child(Child.NULL)
+                                    .getScheduled(true)
                                     .build())
                             .map(GetEventsResponse::getEvents)
                             .flatMap(Observable::fromIterable)
