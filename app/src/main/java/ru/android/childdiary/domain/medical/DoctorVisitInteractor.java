@@ -101,7 +101,7 @@ public class DoctorVisitInteractor {
                 doctorVisitRepository.getLastDoctor(),
                 getDefaultRepeatParameters(),
                 Observable.just(DateTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (child, doctor, repeatParameters, dateTime, eventNotification) -> DoctorVisit.builder()
                         .child(child)
                         .doctor(doctor)

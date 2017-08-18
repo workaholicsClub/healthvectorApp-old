@@ -100,7 +100,7 @@ public class MedicineTakingInteractor {
                         .map(Collections::singletonList)
                         .map(this::getDefaultRepeatParameters),
                 Observable.just(DateTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (child, repeatParameters, dateTime, eventNotification) -> MedicineTaking.builder()
                         .child(child)
                         .medicine(null)

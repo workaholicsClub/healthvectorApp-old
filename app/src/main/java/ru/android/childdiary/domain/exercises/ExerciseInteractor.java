@@ -77,7 +77,7 @@ public class ExerciseInteractor {
         return Observable.combineLatest(
                 getDefaultRepeatParameters(),
                 Observable.just(DateTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (repeatParameters, dateTime, eventNotification) -> ConcreteExercise.builder()
                         .child(child)
                         .exercise(exercise)

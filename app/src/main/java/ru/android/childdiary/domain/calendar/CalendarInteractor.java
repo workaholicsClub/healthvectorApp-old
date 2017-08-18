@@ -195,7 +195,7 @@ public class CalendarInteractor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (child, date, time, eventNotification) -> DiaperEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -210,7 +210,7 @@ public class CalendarInteractor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 calendarRepository.getLastFeedType(),
                 calendarRepository.getLastFoodMeasure(),
                 calendarRepository.getLastFood(),
@@ -231,7 +231,7 @@ public class CalendarInteractor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (child, date, time, eventNotification) -> OtherEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -245,7 +245,7 @@ public class CalendarInteractor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (child, date, time, eventNotification) -> PumpEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -260,7 +260,7 @@ public class CalendarInteractor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (child, date, time, eventNotification) -> SleepEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -274,7 +274,7 @@ public class CalendarInteractor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (child, date, time, eventNotification) -> DoctorVisitEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -288,7 +288,7 @@ public class CalendarInteractor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (child, date, time, eventNotification) -> MedicineTakingEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
@@ -302,7 +302,7 @@ public class CalendarInteractor {
                 childRepository.getActiveChildOnce(),
                 getSelectedDateOnce(),
                 Observable.just(LocalTime.now()),
-                calendarRepository.getNotificationSettings(eventType),
+                calendarRepository.getNotificationSettingsOnce(eventType),
                 (child, date, time, eventNotification) -> ExerciseEvent.builder()
                         .child(child)
                         .dateTime(date.toDateTime(time).withSecondOfMinute(0).withMillisOfSecond(0))
