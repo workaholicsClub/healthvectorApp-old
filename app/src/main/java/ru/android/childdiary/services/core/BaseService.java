@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.app.ChildDiaryApplication;
+import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 import ru.android.childdiary.di.ApplicationComponent;
 
 public abstract class BaseService extends Service {
@@ -49,7 +50,12 @@ public abstract class BaseService extends Service {
     public final int onStartCommand(Intent intent, int flags, int startId) {
         logger.debug("onStartCommand: " + intent);
 
-        handleIntent(intent);
+        try {
+            handleIntent(intent);
+        } catch (DowngradeDatabaseException e) {
+            logger.error("Failed to access to db", e);
+            stopSelf();
+        }
 
         return START_STICKY;
     }

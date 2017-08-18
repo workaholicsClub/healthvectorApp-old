@@ -18,7 +18,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 import ru.android.childdiary.data.services.ScheduleHelper;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -92,26 +91,22 @@ public class EventScheduleService extends BaseService {
 
     private void subscribeOnUpdates() {
         unsubscribe(subscription);
-        try {
-            subscription = unsubscribeOnDestroy(
-                    calendarInteractor.getAll(
-                            GetEventsRequest.builder()
-                                    .date(LocalDate.now())
-                                    .filter(GetEventsFilter.builder()
-                                            .eventTypes(Arrays.asList(EventType.values()))
-                                            .build())
-                                    .child(Child.NULL)
-                                    .getScheduled(true)
-                                    .build())
-                            .map(GetEventsResponse::getEvents)
-                            .flatMap(Observable::fromIterable)
-                            .filter(EventScheduleService::isInTheFuture)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(this::handleResult, this::onUnexpectedError));
-        } catch (DowngradeDatabaseException e) {
-            logger.error("Can't subscribe to updates", e);
-        }
+        subscription = unsubscribeOnDestroy(
+                calendarInteractor.getAll(
+                        GetEventsRequest.builder()
+                                .date(LocalDate.now())
+                                .filter(GetEventsFilter.builder()
+                                        .eventTypes(Arrays.asList(EventType.values()))
+                                        .build())
+                                .child(Child.NULL)
+                                .getScheduled(true)
+                                .build())
+                        .map(GetEventsResponse::getEvents)
+                        .flatMap(Observable::fromIterable)
+                        .filter(EventScheduleService::isInTheFuture)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::handleResult, this::onUnexpectedError));
     }
 
     private void handleResult(@NonNull MasterEvent event) {

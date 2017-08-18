@@ -24,7 +24,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
-import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
@@ -121,20 +120,16 @@ public class TimerService extends BaseService {
 
     private void subscribeOnUpdates() {
         unsubscribe(subscription);
-        try {
-            subscription = unsubscribeOnDestroy(
-                    calendarInteractor.getSleepEvents(
-                            GetSleepEventsRequest.builder()
-                                    .child(null)
-                                    .withStartedTimer(true)
-                                    .build())
-                            .map(GetSleepEventsResponse::getEvents)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(this::handleResult, this::onUnexpectedError));
-        } catch (DowngradeDatabaseException e) {
-            logger.error("Can't subscribe to updates", e);
-        }
+        subscription = unsubscribeOnDestroy(
+                calendarInteractor.getSleepEvents(
+                        GetSleepEventsRequest.builder()
+                                .child(null)
+                                .withStartedTimer(true)
+                                .build())
+                        .map(GetSleepEventsResponse::getEvents)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::handleResult, this::onUnexpectedError));
     }
 
     private void stopSleepEventTimer(@NonNull SleepEvent event) {

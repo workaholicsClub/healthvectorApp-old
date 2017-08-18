@@ -44,12 +44,8 @@ import ru.android.childdiary.domain.calendar.data.standard.FeedEvent;
 import ru.android.childdiary.domain.calendar.data.standard.OtherEvent;
 import ru.android.childdiary.domain.calendar.data.standard.PumpEvent;
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
-import ru.android.childdiary.domain.calendar.requests.GetDoctorVisitEventsRequest;
-import ru.android.childdiary.domain.calendar.requests.GetDoctorVisitEventsResponse;
 import ru.android.childdiary.domain.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.calendar.requests.GetEventsResponse;
-import ru.android.childdiary.domain.calendar.requests.GetMedicineTakingEventsRequest;
-import ru.android.childdiary.domain.calendar.requests.GetMedicineTakingEventsResponse;
 import ru.android.childdiary.domain.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.calendar.requests.UpdateDoctorVisitEventRequest;
@@ -93,6 +89,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     private final RxSharedPreferences preferences;
     private final CalendarDbService calendarDbService;
     private final AllEventsDbService allEventsDbService;
+    private final LinearGroupFinishedDbService linearGroupFinishedDbService;
     private final DoctorVisitDbService doctorVisitDbService;
     private final MedicineTakingDbService medicineTakingDbService;
     private final CleanUpDbService cleanUpDbService;
@@ -103,6 +100,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     public CalendarDataRepository(RxSharedPreferences preferences,
                                   CalendarDbService calendarDbService,
                                   AllEventsDbService allEventsDbService,
+                                  LinearGroupFinishedDbService linearGroupFinishedDbService,
                                   DoctorVisitDbService doctorVisitDbService,
                                   MedicineTakingDbService medicineTakingDbService,
                                   CleanUpDbService cleanUpDbService,
@@ -111,6 +109,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
         this.preferences = preferences;
         this.calendarDbService = calendarDbService;
         this.allEventsDbService = allEventsDbService;
+        this.linearGroupFinishedDbService = linearGroupFinishedDbService;
         this.doctorVisitDbService = doctorVisitDbService;
         this.medicineTakingDbService = medicineTakingDbService;
         this.cleanUpDbService = cleanUpDbService;
@@ -226,16 +225,6 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     @Override
     public Observable<GetSleepEventsResponse> getSleepEvents(@NonNull GetSleepEventsRequest request) {
         return calendarDbService.getSleepEvents(request);
-    }
-
-    @Override
-    public Observable<GetDoctorVisitEventsResponse> getDoctorVisitEvents(@NonNull GetDoctorVisitEventsRequest request) {
-        return calendarDbService.getDoctorVisitEvents(request);
-    }
-
-    @Override
-    public Observable<GetMedicineTakingEventsResponse> getMedicineTakingEvents(@NonNull GetMedicineTakingEventsRequest request) {
-        return calendarDbService.getMedicineTakingEvents(request);
     }
 
     @Override
@@ -465,6 +454,11 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
             map.put(TimeUnit.MONTH, Observable.range(1, TimeUtils.MONTHS_IN_YEAR).toList().blockingGet());
             return map;
         });
+    }
+
+    @Override
+    public Observable<List<MasterEvent>> getFinishedLinearGroupEvents() {
+        return linearGroupFinishedDbService.getFinishedLinearGroupEvents();
     }
 
     private static class SoundInfoAdapter implements Preference.Adapter<SoundInfo> {

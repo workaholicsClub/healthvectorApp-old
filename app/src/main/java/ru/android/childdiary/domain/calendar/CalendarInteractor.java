@@ -823,4 +823,8 @@ public class CalendarInteractor {
     public Observable<GetEventsFilter> setSelectedFilterValueObservable(@NonNull GetEventsFilter value) {
         return filterRepository.setSelectedValueObservable(value);
     }
+
+    public Observable<List<MasterEvent>> getFinishedLinearGroupEvents() {
+        return calendarRepository.getFinishedLinearGroupEvents();
+    }
 }

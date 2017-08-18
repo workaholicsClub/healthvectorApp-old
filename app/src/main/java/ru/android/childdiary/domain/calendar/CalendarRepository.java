@@ -23,12 +23,8 @@ import ru.android.childdiary.domain.calendar.data.standard.FeedEvent;
 import ru.android.childdiary.domain.calendar.data.standard.OtherEvent;
 import ru.android.childdiary.domain.calendar.data.standard.PumpEvent;
 import ru.android.childdiary.domain.calendar.data.standard.SleepEvent;
-import ru.android.childdiary.domain.calendar.requests.GetDoctorVisitEventsRequest;
-import ru.android.childdiary.domain.calendar.requests.GetDoctorVisitEventsResponse;
 import ru.android.childdiary.domain.calendar.requests.GetEventsRequest;
 import ru.android.childdiary.domain.calendar.requests.GetEventsResponse;
-import ru.android.childdiary.domain.calendar.requests.GetMedicineTakingEventsRequest;
-import ru.android.childdiary.domain.calendar.requests.GetMedicineTakingEventsResponse;
 import ru.android.childdiary.domain.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.calendar.requests.GetSleepEventsResponse;
 import ru.android.childdiary.domain.calendar.requests.UpdateDoctorVisitEventRequest;
@@ -70,10 +66,6 @@ public interface CalendarRepository {
     Observable<GetEventsResponse> getAll(@NonNull GetEventsRequest request);
 
     Observable<GetSleepEventsResponse> getSleepEvents(@NonNull GetSleepEventsRequest request);
-
-    Observable<GetDoctorVisitEventsResponse> getDoctorVisitEvents(@NonNull GetDoctorVisitEventsRequest request);
-
-    Observable<GetMedicineTakingEventsResponse> getMedicineTakingEvents(@NonNull GetMedicineTakingEventsRequest request);
 
     Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event);
 
@@ -138,4 +130,6 @@ public interface CalendarRepository {
     Observable<List<PeriodicityType>> getPeriodicityList();
 
     Observable<Map<TimeUnit, List<Integer>>> getTimeUnitValues();
+
+    Observable<List<MasterEvent>> getFinishedLinearGroupEvents();
 }
