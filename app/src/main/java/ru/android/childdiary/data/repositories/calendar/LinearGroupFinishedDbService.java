@@ -81,10 +81,14 @@ public class LinearGroupFinishedDbService {
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, doctorVisitEventMapper))
-                .flatMap(Observable::fromIterable)
+                .map(events -> mapDoctorVisitEvents(events, date));
+    }
+
+    private List<DoctorVisitEvent> mapDoctorVisitEvents(@NonNull List<DoctorVisitEvent> events, @NonNull LocalDate date) {
+        return Observable.fromIterable(events)
                 .filter(event -> filter(event, date))
                 .toList()
-                .toObservable();
+                .blockingGet();
     }
 
     private boolean filter(@NonNull DoctorVisitEvent event, @NonNull LocalDate date) {
@@ -111,10 +115,14 @@ public class LinearGroupFinishedDbService {
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, medicineTakingEventMapper))
-                .flatMap(Observable::fromIterable)
+                .map(events -> mapMedicineTakingEvents(events, date));
+    }
+
+    private List<MedicineTakingEvent> mapMedicineTakingEvents(@NonNull List<MedicineTakingEvent> events, @NonNull LocalDate date) {
+        return Observable.fromIterable(events)
                 .filter(event -> filter(event, date))
                 .toList()
-                .toObservable();
+                .blockingGet();
     }
 
     private boolean filter(@NonNull MedicineTakingEvent event, @NonNull LocalDate date) {
@@ -141,10 +149,14 @@ public class LinearGroupFinishedDbService {
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, exerciseEventMapper))
-                .flatMap(Observable::fromIterable)
+                .map(events -> mapExerciseEvents(events, date));
+    }
+
+    private List<ExerciseEvent> mapExerciseEvents(@NonNull List<ExerciseEvent> events, @NonNull LocalDate date) {
+        return Observable.fromIterable(events)
                 .filter(event -> filter(event, date))
                 .toList()
-                .toObservable();
+                .blockingGet();
     }
 
     private boolean filter(@NonNull ExerciseEvent event, @NonNull LocalDate date) {
