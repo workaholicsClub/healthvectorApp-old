@@ -52,13 +52,19 @@ public class NotificationEventService extends BaseIntentService {
         super("NotificationEventService");
     }
 
-    private static Intent getServiceIntent(Context context, @NonNull MasterEvent event) {
+    private static Intent getServiceIntent(Context context,
+                                           @NonNull MasterEvent event,
+                                           boolean isLinearGroupFinished) {
         return new Intent(context, NotificationEventService.class)
-                .putExtra(ExtraConstants.EXTRA_EVENT, event);
+                .putExtra(ExtraConstants.EXTRA_EVENT, event)
+                .putExtra(ExtraConstants.EXTRA_IS_LINEAR_GROUP_FINISHED, isLinearGroupFinished);
     }
 
-    public static PendingIntent getPendingIntent(int requestCode, Context context, @NonNull MasterEvent event) {
-        Intent intent = getServiceIntent(context, event)
+    public static PendingIntent getPendingIntent(int requestCode,
+                                                 Context context,
+                                                 @NonNull MasterEvent event,
+                                                 boolean isLinearGroupFinished) {
+        Intent intent = getServiceIntent(context, event, isLinearGroupFinished)
                 .setAction(String.valueOf(SystemClock.elapsedRealtime()));
         return PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
@@ -74,7 +80,8 @@ public class NotificationEventService extends BaseIntentService {
             return;
         }
         MasterEvent event = (MasterEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
-        logger.debug("notification clicked: " + event);
+        boolean isLinearGroupFinished = intent.getBooleanExtra(ExtraConstants.EXTRA_IS_LINEAR_GROUP_FINISHED, false);
+        logger.debug("notification clicked: " + event + "; linear group finished: " + isLinearGroupFinished);
         event = calendarInteractor.getEventDetail(event).onErrorReturnItem(MasterEvent.NULL).blockingFirst();
         if (event == MasterEvent.NULL) {
             logger.debug("event is already deleted");
@@ -82,20 +89,22 @@ public class NotificationEventService extends BaseIntentService {
             showMain(this, child.getSex());
         } else {
             MasterEvent defaultEvent = calendarInteractor.getDefaultEvent(event).blockingFirst();
-            showEventDetail(this, event, defaultEvent);
+            showEventDetail(this, event, defaultEvent, isLinearGroupFinished);
         }
     }
 
     private void showEventDetail(Context context,
                                  @NonNull MasterEvent event,
-                                 @NonNull MasterEvent defaultEvent) {
-        TaskStackBuilder stackBuilder = getEventDetailStackBuilder(context, event, defaultEvent);
+                                 @NonNull MasterEvent defaultEvent,
+                                 boolean isLinearGroupFinished) {
+        TaskStackBuilder stackBuilder = getEventDetailStackBuilder(context, event, defaultEvent, isLinearGroupFinished);
         stackBuilder.startActivities();
     }
 
     private TaskStackBuilder getEventDetailStackBuilder(Context context,
                                                         @NonNull MasterEvent event,
-                                                        @NonNull MasterEvent defaultEvent) {
+                                                        @NonNull MasterEvent defaultEvent,
+                                                        boolean isLinearGroupFinished) {
         switch (event.getEventType()) {
             case DIAPER:
                 return getEventDetailStackBuilder(
@@ -119,15 +128,15 @@ public class NotificationEventService extends BaseIntentService {
                         SleepEventDetailActivity.class);
             case DOCTOR_VISIT:
                 return getEventDetailStackBuilder(
-                        DoctorVisitEventDetailActivity.getIntent(context, event, (DoctorVisitEvent) defaultEvent),
+                        DoctorVisitEventDetailActivity.getIntent(context, event, (DoctorVisitEvent) defaultEvent, isLinearGroupFinished),
                         DoctorVisitEventDetailActivity.class);
             case MEDICINE_TAKING:
                 return getEventDetailStackBuilder(
-                        MedicineTakingEventDetailActivity.getIntent(context, event, (MedicineTakingEvent) defaultEvent),
+                        MedicineTakingEventDetailActivity.getIntent(context, event, (MedicineTakingEvent) defaultEvent, isLinearGroupFinished),
                         MedicineTakingEventDetailActivity.class);
             case EXERCISE:
                 return getEventDetailStackBuilder(
-                        ExerciseEventDetailActivity.getIntent(context, event, (ExerciseEvent) defaultEvent),
+                        ExerciseEventDetailActivity.getIntent(context, event, (ExerciseEvent) defaultEvent, isLinearGroupFinished),
                         ExerciseEventDetailActivity.class);
             default:
                 throw new IllegalArgumentException("Unsupported event type");

@@ -16,10 +16,10 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
 import ru.android.childdiary.domain.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.exercises.ExerciseInteractor;
-import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
+import ru.android.childdiary.presentation.events.core.PeriodicEventDetailPresenter;
 
 @InjectViewState
-public class ExerciseEventDetailPresenter extends EventDetailPresenter<ExerciseEventDetailView, ExerciseEvent> {
+public class ExerciseEventDetailPresenter extends PeriodicEventDetailPresenter<ExerciseEventDetailView, ExerciseEvent> {
     @Inject
     ExerciseInteractor exerciseInteractor;
 

@@ -60,7 +60,7 @@ public class LinearGroupNotificationHelper extends BaseNotificationHelper {
     private PendingIntent buildPendingIntent(Context context,
                                              int requestCode,
                                              @NonNull MasterEvent event) {
-        return NotificationEventService.getPendingIntent(requestCode, context, event);
+        return NotificationEventService.getPendingIntent(requestCode, context, event, true);
     }
 
     public void hideNotification(@NonNull SleepEvent event) {

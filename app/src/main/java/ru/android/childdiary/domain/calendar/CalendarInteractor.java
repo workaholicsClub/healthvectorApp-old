@@ -24,6 +24,7 @@ import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.calendar.CalendarFilterDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
+import ru.android.childdiary.data.repositories.core.settings.SettingsDataRepository;
 import ru.android.childdiary.data.services.ServiceController;
 import ru.android.childdiary.data.types.Breast;
 import ru.android.childdiary.data.types.DiaperState;
@@ -66,6 +67,7 @@ import ru.android.childdiary.domain.core.ValueRepository;
 import ru.android.childdiary.domain.core.images.ImageType;
 import ru.android.childdiary.domain.core.images.ImagesRepository;
 import ru.android.childdiary.domain.core.requests.DeleteResponse;
+import ru.android.childdiary.domain.core.settings.SettingsRepository;
 import ru.android.childdiary.domain.core.validation.core.Validator;
 import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
 import ru.android.childdiary.domain.exercises.requests.DeleteConcreteExerciseEventsRequest;
@@ -94,6 +96,7 @@ public class CalendarInteractor {
     private final ExerciseEventValidator exerciseEventValidator;
     private final ImagesRepository imagesRepository;
     private final ValueRepository<GetEventsFilter> filterRepository;
+    private final SettingsRepository settingsRepository;
 
     @Inject
     public CalendarInteractor(ServiceController serviceController,
@@ -108,7 +111,8 @@ public class CalendarInteractor {
                               MedicineTakingEventValidator medicineTakingEventValidator,
                               ExerciseEventValidator exerciseEventValidator,
                               ImagesDataRepository imagesRepository,
-                              CalendarFilterDataRepository filterRepository) {
+                              CalendarFilterDataRepository filterRepository,
+                              SettingsDataRepository settingsRepository) {
         this.serviceController = serviceController;
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
@@ -122,6 +126,7 @@ public class CalendarInteractor {
         this.exerciseEventValidator = exerciseEventValidator;
         this.imagesRepository = imagesRepository;
         this.filterRepository = filterRepository;
+        this.settingsRepository = settingsRepository;
     }
 
     public Observable<LocalDate> getSelectedDate() {
@@ -825,6 +830,12 @@ public class CalendarInteractor {
     }
 
     public Observable<List<MasterEvent>> getFinishedLinearGroupEvents() {
-        return calendarRepository.getFinishedLinearGroupEvents();
+        LocalDate dateToCheck = LocalDate.now();
+        return settingsRepository.getLastCheckedDateOnce()
+                .flatMap(lastCheckedDate -> calendarRepository.getFinishedLinearGroupEvents(lastCheckedDate, dateToCheck))
+                .map(events -> {
+                    settingsRepository.setLastCheckedDate(dateToCheck);
+                    return events;
+                });
     }
 }

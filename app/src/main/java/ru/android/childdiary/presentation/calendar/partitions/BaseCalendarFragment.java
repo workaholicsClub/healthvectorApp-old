@@ -283,19 +283,19 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
 
     @Override
     public void navigateToDoctorVisitEvent(@NonNull MasterEvent event, @NonNull DoctorVisitEvent defaultEvent) {
-        Intent intent = DoctorVisitEventDetailActivity.getIntent(getContext(), event, defaultEvent);
+        Intent intent = DoctorVisitEventDetailActivity.getIntent(getContext(), event, defaultEvent, false);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
     public void navigateToMedicineTakingEvent(@NonNull MasterEvent event, @NonNull MedicineTakingEvent defaultEvent) {
-        Intent intent = MedicineTakingEventDetailActivity.getIntent(getContext(), event, defaultEvent);
+        Intent intent = MedicineTakingEventDetailActivity.getIntent(getContext(), event, defaultEvent, false);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 
     @Override
     public void navigateToExerciseEvent(@NonNull MasterEvent event, @NonNull ExerciseEvent defaultEvent) {
-        Intent intent = ExerciseEventDetailActivity.getIntent(getContext(), event, defaultEvent);
+        Intent intent = ExerciseEventDetailActivity.getIntent(getContext(), event, defaultEvent, false);
         startActivityForResult(intent, REQUEST_UPDATE_EVENT);
     }
 

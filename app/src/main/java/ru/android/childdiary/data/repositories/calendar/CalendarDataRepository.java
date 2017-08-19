@@ -457,8 +457,9 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     @Override
-    public Observable<List<MasterEvent>> getFinishedLinearGroupEvents() {
-        return linearGroupFinishedDbService.getFinishedLinearGroupEvents();
+    public Observable<List<MasterEvent>> getFinishedLinearGroupEvents(@NonNull LocalDate lastCheckedDate,
+                                                                      @NonNull LocalDate dateToCheck) {
+        return linearGroupFinishedDbService.getFinishedLinearGroupEvents(lastCheckedDate, dateToCheck);
     }
 
     private static class SoundInfoAdapter implements Preference.Adapter<SoundInfo> {

@@ -89,7 +89,8 @@ public class SleepEventDetailActivity extends EventDetailActivity<EventDetailVie
 
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(this, this);
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
+    public static Intent getIntent(Context context,
+                                   @Nullable MasterEvent masterEvent,
                                    @NonNull SleepEvent defaultEvent) {
         return new Intent(context, SleepEventDetailActivity.class)
                 .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)

@@ -57,7 +57,8 @@ public class DiaperEventDetailActivity extends EventDetailActivity<EventDetailVi
     @BindView(R.id.noteView)
     FieldNoteView noteView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
+    public static Intent getIntent(Context context,
+                                   @Nullable MasterEvent masterEvent,
                                    @NonNull DiaperEvent defaultEvent) {
         return new Intent(context, DiaperEventDetailActivity.class)
                 .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)

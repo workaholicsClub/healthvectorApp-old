@@ -58,7 +58,7 @@ public class EventNotificationHelper extends BaseNotificationHelper {
     private PendingIntent buildPendingIntent(Context context,
                                              int requestCode,
                                              @NonNull MasterEvent event) {
-        return NotificationEventService.getPendingIntent(requestCode, context, event);
+        return NotificationEventService.getPendingIntent(requestCode, context, event, false);
     }
 
     public void hideNotification(@NonNull SleepEvent event) {

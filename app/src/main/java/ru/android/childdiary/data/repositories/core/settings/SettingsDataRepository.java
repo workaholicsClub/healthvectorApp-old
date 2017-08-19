@@ -8,11 +8,14 @@ import android.text.TextUtils;
 import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,6 +31,7 @@ public class SettingsDataRepository implements SettingsRepository {
     private static final String KEY_ACCOUNT_NAME = "account_name";
     private static final String KEY_IS_CLOUD_SHOWN = "is_cloud_shown";
     private static final String KEY_IS_APP_INTRO_SHOWN = "is_app_intro_shown";
+    private static final String KEY_LAST_CHECKED_DATE = "last_checked_date";
 
     private static final LocalTime DEFAULT_START_TIME = new LocalTime(8, 0);
     private static final LocalTime DEFAULT_FINISH_TIME = new LocalTime(22, 0);
@@ -131,6 +135,23 @@ public class SettingsDataRepository implements SettingsRepository {
 
     private boolean shown(boolean shown, boolean showEachTimeValue) {
         return shown && !showEachTimeValue;
+    }
+
+    @Override
+    public Observable<LocalDate> getLastCheckedDate() {
+        return preferences.getLong(KEY_LAST_CHECKED_DATE, LocalDate.now().toDate().getTime())
+                .asObservable()
+                .map(millis -> LocalDate.fromDateFields(new Date(millis)));
+    }
+
+    @Override
+    public void setLastCheckedDate(@NonNull LocalDate date) {
+        preferences.getLong(KEY_START_TIME, LocalDate.now().toDate().getTime()).set(date.toDate().getTime());
+    }
+
+    @Override
+    public Observable<LocalDate> getLastCheckedDateOnce() {
+        return getLastCheckedDate().first(LocalDate.now()).toObservable();
     }
 
     private static class LocalTimeAdapter implements Preference.Adapter<LocalTime> {

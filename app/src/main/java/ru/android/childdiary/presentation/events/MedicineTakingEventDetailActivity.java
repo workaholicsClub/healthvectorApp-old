@@ -42,13 +42,13 @@ import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
-import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.core.PeriodicEventDetailActivity;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class MedicineTakingEventDetailActivity
-        extends EventDetailActivity<MedicineTakingEventDetailView, MedicineTakingEvent>
+        extends PeriodicEventDetailActivity<MedicineTakingEventDetailView, MedicineTakingEvent>
         implements MedicineTakingEventDetailView, MedicineMeasureValueDialogFragment.Listener,
         FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener,
         FieldCheckBoxView.FieldCheckBoxListener {
@@ -84,11 +84,14 @@ public class MedicineTakingEventDetailActivity
     @BindView(R.id.checkBoxView)
     FieldCheckBoxView checkBoxView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
-                                   @NonNull MedicineTakingEvent defaultEvent) {
+    public static Intent getIntent(Context context,
+                                   @Nullable MasterEvent masterEvent,
+                                   @NonNull MedicineTakingEvent defaultEvent,
+                                   boolean isLinearGroupFinished) {
         return new Intent(context, MedicineTakingEventDetailActivity.class)
                 .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)
-                .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent)
+                .putExtra(ExtraConstants.EXTRA_IS_LINEAR_GROUP_FINISHED, isLinearGroupFinished);
     }
 
     @Override

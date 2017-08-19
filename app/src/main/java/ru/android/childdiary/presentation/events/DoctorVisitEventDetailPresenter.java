@@ -22,11 +22,11 @@ import ru.android.childdiary.domain.calendar.validation.CalendarValidationResult
 import ru.android.childdiary.domain.dictionaries.doctors.DoctorInteractor;
 import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.domain.medical.DoctorVisitInteractor;
-import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
+import ru.android.childdiary.presentation.events.core.PeriodicEventDetailPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
-public class DoctorVisitEventDetailPresenter extends EventDetailPresenter<DoctorVisitEventDetailView, DoctorVisitEvent> {
+public class DoctorVisitEventDetailPresenter extends PeriodicEventDetailPresenter<DoctorVisitEventDetailView, DoctorVisitEvent> {
     @Inject
     DoctorInteractor doctorInteractor;
 

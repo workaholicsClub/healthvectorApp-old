@@ -25,4 +25,5 @@ public class ExtraConstants {
     public static final String EXTRA_PICK = PACKAGE_NAME + ".pick";
     public static final String EXTRA_INIT = PACKAGE_NAME + ".init";
     public static final String EXTRA_TIME = PACKAGE_NAME + ".time";
+    public static final String EXTRA_IS_LINEAR_GROUP_FINISHED = PACKAGE_NAME + ".is_linear_group_finished";
 }

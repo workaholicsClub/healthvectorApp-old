@@ -3,6 +3,7 @@ package ru.android.childdiary.domain.core.settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import io.reactivex.Observable;
@@ -44,4 +45,11 @@ public interface SettingsRepository {
     void setIsCloudShown(boolean value);
 
     Observable<Boolean> getIsCloudShownOnce();
+
+    // last checked date -- последняя дата, когда производилась проверка на окончание линейных групп
+    Observable<LocalDate> getLastCheckedDate();
+
+    void setLastCheckedDate(@NonNull LocalDate date);
+
+    Observable<LocalDate> getLastCheckedDateOnce();
 }

@@ -37,14 +37,14 @@ import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
-import ru.android.childdiary.presentation.events.core.EventDetailActivity;
+import ru.android.childdiary.presentation.events.core.PeriodicEventDetailActivity;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class DoctorVisitEventDetailActivity
-        extends EventDetailActivity<DoctorVisitEventDetailView, DoctorVisitEvent>
+        extends PeriodicEventDetailActivity<DoctorVisitEventDetailView, DoctorVisitEvent>
         implements DoctorVisitEventDetailView, FieldNoteWithPhotoView.PhotoListener,
         ImagePickerDialogFragment.Listener, FieldCheckBoxView.FieldCheckBoxListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
@@ -84,11 +84,14 @@ public class DoctorVisitEventDetailActivity
 
     private boolean isValidationStarted;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
-                                   @NonNull DoctorVisitEvent defaultEvent) {
+    public static Intent getIntent(Context context,
+                                   @Nullable MasterEvent masterEvent,
+                                   @NonNull DoctorVisitEvent defaultEvent,
+                                   boolean isLinearGroupFinished) {
         return new Intent(context, DoctorVisitEventDetailActivity.class)
                 .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)
-                .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent);
+                .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent)
+                .putExtra(ExtraConstants.EXTRA_IS_LINEAR_GROUP_FINISHED, isLinearGroupFinished);
     }
 
     @Override

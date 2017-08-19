@@ -8,9 +8,9 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
 import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
-import ru.android.childdiary.presentation.events.core.EventDetailView;
+import ru.android.childdiary.presentation.events.core.PeriodicEventDetailView;
 
-public interface DoctorVisitEventDetailView extends EventDetailView<DoctorVisitEvent> {
+public interface DoctorVisitEventDetailView extends PeriodicEventDetailView<DoctorVisitEvent> {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void setDoctor(@Nullable Doctor doctor);
 

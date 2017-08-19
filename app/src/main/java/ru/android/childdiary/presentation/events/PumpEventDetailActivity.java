@@ -61,7 +61,8 @@ public class PumpEventDetailActivity extends EventDetailActivity<EventDetailView
     @BindView(R.id.noteView)
     FieldNoteView noteView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
+    public static Intent getIntent(Context context,
+                                   @Nullable MasterEvent masterEvent,
                                    @NonNull PumpEvent defaultEvent) {
         return new Intent(context, PumpEventDetailActivity.class)
                 .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)

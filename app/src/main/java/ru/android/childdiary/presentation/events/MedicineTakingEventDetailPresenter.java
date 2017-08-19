@@ -20,11 +20,11 @@ import ru.android.childdiary.domain.dictionaries.medicinemeasure.MedicineMeasure
 import ru.android.childdiary.domain.dictionaries.medicines.MedicineInteractor;
 import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.domain.medical.MedicineTakingInteractor;
-import ru.android.childdiary.presentation.events.core.EventDetailPresenter;
+import ru.android.childdiary.presentation.events.core.PeriodicEventDetailPresenter;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
-public class MedicineTakingEventDetailPresenter extends EventDetailPresenter<MedicineTakingEventDetailView, MedicineTakingEvent> {
+public class MedicineTakingEventDetailPresenter extends PeriodicEventDetailPresenter<MedicineTakingEventDetailView, MedicineTakingEvent> {
     @Inject
     MedicineInteractor medicineInteractor;
 

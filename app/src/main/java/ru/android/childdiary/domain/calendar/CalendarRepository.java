@@ -131,5 +131,6 @@ public interface CalendarRepository {
 
     Observable<Map<TimeUnit, List<Integer>>> getTimeUnitValues();
 
-    Observable<List<MasterEvent>> getFinishedLinearGroupEvents();
+    Observable<List<MasterEvent>> getFinishedLinearGroupEvents(@NonNull LocalDate lastCheckedDate,
+                                                               @NonNull LocalDate dateToCheck);
 }

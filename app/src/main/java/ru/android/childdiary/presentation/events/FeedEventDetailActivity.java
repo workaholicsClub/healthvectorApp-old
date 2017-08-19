@@ -95,7 +95,8 @@ public class FeedEventDetailActivity extends EventDetailActivity<FeedEventDetail
     @BindView(R.id.noteView)
     FieldNoteView noteView;
 
-    public static Intent getIntent(Context context, @Nullable MasterEvent masterEvent,
+    public static Intent getIntent(Context context,
+                                   @Nullable MasterEvent masterEvent,
                                    @NonNull FeedEvent defaultEvent) {
         return new Intent(context, FeedEventDetailActivity.class)
                 .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)
