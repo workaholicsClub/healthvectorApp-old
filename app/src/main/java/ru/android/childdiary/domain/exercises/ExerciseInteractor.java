@@ -6,6 +6,7 @@ import android.text.Editable;
 import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.Collections;
@@ -177,5 +178,11 @@ public class ExerciseInteractor {
                                 .build())
                         .build())
                 .map(concreteExerciseValidator::validate);
+    }
+
+    public Observable<Integer> continueLinearGroup(@NonNull ConcreteExercise concreteExercise,
+                                                   @NonNull LocalDate sinceDate,
+                                                   @NonNull Integer linearGroup) {
+        return exerciseRepository.continueLinearGroup(concreteExercise, sinceDate, linearGroup);
     }
 }

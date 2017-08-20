@@ -52,4 +52,13 @@ public class ExerciseEventDetailPresenter extends PeriodicEventDetailPresenter<E
     protected EventType getEventType() {
         return EventType.EXERCISE;
     }
+
+    @Override
+    protected Observable<Integer> generateEvents(@NonNull ExerciseEvent event) {
+        return exerciseInteractor.continueLinearGroup(
+                event.getConcreteExercise(),
+                event.getDateTime().toLocalDate(),
+                event.getLinearGroup()
+        );
+    }
 }

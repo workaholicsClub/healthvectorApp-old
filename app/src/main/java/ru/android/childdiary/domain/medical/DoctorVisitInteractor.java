@@ -6,6 +6,7 @@ import android.text.Editable;
 import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.Collections;
@@ -274,5 +275,11 @@ public class DoctorVisitInteractor {
                                 .build())
                         .build())
                 .map(doctorVisitValidator::validate);
+    }
+
+    public Observable<Integer> continueLinearGroup(@NonNull DoctorVisit doctorVisit,
+                                                   @NonNull LocalDate sinceDate,
+                                                   @NonNull Integer linearGroup) {
+        return doctorVisitRepository.continueLinearGroup(doctorVisit, sinceDate, linearGroup);
     }
 }

@@ -71,4 +71,13 @@ public class MedicineTakingEventDetailPresenter extends PeriodicEventDetailPrese
                 .first(Medicine.NULL)
                 .blockingGet();
     }
+
+    @Override
+    protected Observable<Integer> generateEvents(@NonNull MedicineTakingEvent event) {
+        return medicineTakingInteractor.continueLinearGroup(
+                event.getMedicineTaking(),
+                event.getDateTime().toLocalDate(),
+                event.getLinearGroup()
+        );
+    }
 }

@@ -16,8 +16,10 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupItem;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.core.data.ContentObject;
+import ru.android.childdiary.domain.core.data.RepeatParametersContainer;
 import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
 import ru.android.childdiary.domain.exercises.data.Exercise;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -25,7 +27,8 @@ import ru.android.childdiary.utils.ObjectUtils;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ExerciseEvent extends MasterEvent implements ContentObject<ExerciseEvent>, LinearGroupItem<ExerciseEvent> {
+public class ExerciseEvent extends MasterEvent implements ContentObject<ExerciseEvent>,
+        LinearGroupItem<ExerciseEvent>, RepeatParametersContainer {
     private static final ExerciseEvent NULL = ExerciseEvent.builder().build();
 
     Long id;
@@ -93,5 +96,10 @@ public class ExerciseEvent extends MasterEvent implements ContentObject<Exercise
     @Nullable
     public Exercise getExercise() {
         return concreteExercise == null ? null : concreteExercise.getExercise();
+    }
+
+    @Override
+    public RepeatParameters getRepeatParameters() {
+        return concreteExercise.getRepeatParameters();
     }
 }

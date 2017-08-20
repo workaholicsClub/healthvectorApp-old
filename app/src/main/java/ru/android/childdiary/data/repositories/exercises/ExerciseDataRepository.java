@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +21,11 @@ import io.reactivex.functions.Function;
 import ru.android.childdiary.data.network.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ProgramsToExercisesMapper;
-import ru.android.childdiary.domain.core.exceptions.TryCountExceededException;
 import ru.android.childdiary.domain.child.data.Child;
-import ru.android.childdiary.domain.exercises.data.Exercise;
+import ru.android.childdiary.domain.core.exceptions.TryCountExceededException;
 import ru.android.childdiary.domain.exercises.ExerciseRepository;
+import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
+import ru.android.childdiary.domain.exercises.data.Exercise;
 import ru.android.childdiary.domain.exercises.requests.UpsertConcreteExerciseRequest;
 import ru.android.childdiary.domain.exercises.requests.UpsertConcreteExerciseResponse;
 import ru.android.childdiary.utils.strings.StringUtils;
@@ -155,5 +157,12 @@ public class ExerciseDataRepository implements ExerciseRepository {
     @Override
     public Observable<UpsertConcreteExerciseResponse> addConcreteExercise(@NonNull UpsertConcreteExerciseRequest request) {
         return exerciseDbService.add(request);
+    }
+
+    @Override
+    public Observable<Integer> continueLinearGroup(@NonNull ConcreteExercise concreteExercise,
+                                                   @NonNull LocalDate sinceDate,
+                                                   @NonNull Integer linearGroup) {
+        return exerciseDbService.continueLinearGroup(concreteExercise, sinceDate, linearGroup);
     }
 }

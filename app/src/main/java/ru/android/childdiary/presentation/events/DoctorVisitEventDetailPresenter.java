@@ -82,4 +82,13 @@ public class DoctorVisitEventDetailPresenter extends PeriodicEventDetailPresente
                 .first(Doctor.NULL)
                 .blockingGet();
     }
+
+    @Override
+    protected Observable<Integer> generateEvents(@NonNull DoctorVisitEvent event) {
+        return doctorVisitInteractor.continueLinearGroup(
+                event.getDoctorVisit(),
+                event.getDateTime().toLocalDate(),
+                event.getLinearGroup()
+        );
+    }
 }

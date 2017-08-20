@@ -15,8 +15,10 @@ import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupItem;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
+import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.core.data.ContentObject;
+import ru.android.childdiary.domain.core.data.RepeatParametersContainer;
 import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.domain.medical.data.DoctorVisit;
 import ru.android.childdiary.utils.ObjectUtils;
@@ -24,7 +26,8 @@ import ru.android.childdiary.utils.ObjectUtils;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DoctorVisitEvent extends MasterEvent implements ContentObject<DoctorVisitEvent>, LinearGroupItem<DoctorVisitEvent> {
+public class DoctorVisitEvent extends MasterEvent implements ContentObject<DoctorVisitEvent>,
+        LinearGroupItem<DoctorVisitEvent>, RepeatParametersContainer {
     private static final DoctorVisitEvent NULL = DoctorVisitEvent.builder().build();
 
     Long id;
@@ -96,5 +99,10 @@ public class DoctorVisitEvent extends MasterEvent implements ContentObject<Docto
         }
 
         return significantFields;
+    }
+
+    @Override
+    public RepeatParameters getRepeatParameters() {
+        return doctorVisit.getRepeatParameters();
     }
 }

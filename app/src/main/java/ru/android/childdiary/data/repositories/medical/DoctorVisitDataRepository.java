@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
+import org.joda.time.LocalDate;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -138,5 +140,12 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
     @Override
     public Observable<CompleteDoctorVisitResponse> completeDoctorVisit(@NonNull CompleteDoctorVisitRequest request) {
         return cleanUpDbService.completeDoctorVisit(request);
+    }
+
+    @Override
+    public Observable<Integer> continueLinearGroup(@NonNull DoctorVisit doctorVisit,
+                                                   @NonNull LocalDate sinceDate,
+                                                   @NonNull Integer linearGroup) {
+        return doctorVisitDbService.continueLinearGroup(doctorVisit, sinceDate, linearGroup);
     }
 }

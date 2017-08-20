@@ -2,6 +2,8 @@ package ru.android.childdiary.domain.medical;
 
 import android.support.annotation.NonNull;
 
+import org.joda.time.LocalDate;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.domain.child.data.Child;
@@ -33,4 +35,8 @@ public interface MedicineTakingRepository {
     Observable<DeleteMedicineTakingEventsResponse> deleteMedicineTakingWithEvents(@NonNull DeleteMedicineTakingEventsRequest request);
 
     Observable<CompleteMedicineTakingResponse> completeMedicineTaking(@NonNull CompleteMedicineTakingRequest request);
+
+    Observable<Integer> continueLinearGroup(@NonNull MedicineTaking medicineTaking,
+                                            @NonNull LocalDate sinceDate,
+                                            @NonNull Integer linearGroup);
 }

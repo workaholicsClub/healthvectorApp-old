@@ -3,6 +3,7 @@ package ru.android.childdiary.domain.medical;
 import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.Collections;
@@ -254,5 +255,11 @@ public class MedicineTakingInteractor {
                                 .build())
                         .build())
                 .map(medicineTakingValidator::validate);
+    }
+
+    public Observable<Integer> continueLinearGroup(@NonNull MedicineTaking medicineTaking,
+                                                   @NonNull LocalDate sinceDate,
+                                                   @NonNull Integer linearGroup) {
+        return medicineTakingRepository.continueLinearGroup(medicineTaking, sinceDate, linearGroup);
     }
 }

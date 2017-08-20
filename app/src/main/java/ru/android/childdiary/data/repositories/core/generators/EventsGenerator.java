@@ -74,7 +74,7 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
         DateTime startDateTime = parameters.getStartDateTime();
         int startIndex = parameters.getStartIndex();
         DateTime finishDateTime = getFinishDateTime(startDateTime, lengthValue);
-        Function<DateTime, DateTime> increment = getIncrementFunction(periodicityType);
+        Function<DateTime, DateTime> increment = getIncrementFunctionDateTime(periodicityType);
 
         startInsertion();
         int count = 0;
@@ -179,7 +179,7 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
         }
     }
 
-    private Function<DateTime, DateTime> getIncrementFunction(@NonNull PeriodicityType periodicityType) {
+    private Function<DateTime, DateTime> getIncrementFunctionDateTime(@NonNull PeriodicityType periodicityType) {
         switch (periodicityType) {
             case DAILY:
                 return x -> x.plusDays(1);
@@ -203,6 +203,86 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
             notifyDateTime = dateTime.minusMinutes(notifyTimeInMinutes);
         }
         return notifyDateTime;
+    }
+
+    // Генерация событий для продления линейной группы
+
+    public int generateEvents(@NonNull From from,
+                              @NonNull LocalDate sinceDate,
+                              @NonNull Integer linearGroup) {
+        try {
+            return generateEventsInternal(from, sinceDate, linearGroup);
+        } catch (EventsGeneratorException e) {
+            throw new RuntimeException("generating events: no events inserted", e);
+        } catch (Exception e) {
+            throw new RuntimeException("generating events: unexpected error", e);
+        }
+    }
+
+    private int generateEventsInternal(@NonNull From from,
+                                       @NonNull LocalDate sinceDate,
+                                       @NonNull Integer linearGroup) throws Exception {
+        RepeatParameters repeatParameters = from.getRepeatParameters();
+        checkRepeatParameters(repeatParameters);
+
+        LinearGroups linearGroups = repeatParameters.getFrequency();
+        checkLinearGroups(linearGroups);
+
+        List<LocalTime> times = linearGroups.getTimes();
+        if (times.size() == 0) {
+            return 0;
+        }
+
+        PeriodicityType periodicityType = repeatParameters.getPeriodicity();
+        checkPeriodicityType(periodicityType);
+
+        LengthValue lengthValue = repeatParameters.getLength();
+        checkLengthValue(lengthValue);
+
+        LocalDate finishDate = getFinishDate(sinceDate, lengthValue);
+        Function<LocalDate, LocalDate> increment = getIncrementFunctionDate(periodicityType);
+
+        LocalTime time = times.get(linearGroup);
+        startInsertion();
+        int count = 0;
+        while (sinceDate.isBefore(finishDate) || sinceDate.isEqual(finishDate)) {
+            sinceDate = increment.apply(sinceDate);
+            createEvent(from, sinceDate.toDateTime(time), linearGroup);
+            ++count;
+            finishInsertion();
+        }
+        logger.debug("generating events: inserted " + count + " events");
+        return count;
+    }
+
+    private LocalDate getFinishDate(@NonNull LocalDate startDate, @NonNull LengthValue lengthValue) {
+        int length = lengthValue.getLength() == null ? 0 : lengthValue.getLength();
+        TimeUnit timeUnit = lengthValue.getTimeUnit();
+        if (timeUnit == null) {
+            throw new EventsGeneratorException("Time unit is null");
+        }
+        switch (timeUnit) {
+            case DAY:
+                return startDate.plusDays(length);
+            case WEEK:
+                return startDate.plusWeeks(length);
+            case MONTH:
+                return startDate.plusMonths(length);
+            default:
+                throw new EventsGeneratorException("Unsupported time unit");
+        }
+    }
+
+    private Function<LocalDate, LocalDate> getIncrementFunctionDate(@NonNull PeriodicityType periodicityType) {
+        switch (periodicityType) {
+            case DAILY:
+                return x -> x.plusDays(1);
+            case WEEKLY:
+                return x -> x.plusWeeks(1);
+            case MONTHLY:
+                return x -> x.plusMonths(1);
+        }
+        throw new EventsGeneratorException("Unsupported periodicity type");
     }
 
     @Value

@@ -2,6 +2,8 @@ package ru.android.childdiary.data.repositories.medical;
 
 import android.support.annotation.NonNull;
 
+import org.joda.time.LocalDate;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -72,5 +74,12 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     @Override
     public Observable<CompleteMedicineTakingResponse> completeMedicineTaking(@NonNull CompleteMedicineTakingRequest request) {
         return cleanUpDbService.completeMedicineTaking(request);
+    }
+
+    @Override
+    public Observable<Integer> continueLinearGroup(@NonNull MedicineTaking medicineTaking,
+                                                   @NonNull LocalDate sinceDate,
+                                                   @NonNull Integer linearGroup) {
+        return medicineTakingDbService.continueLinearGroup(medicineTaking, sinceDate, linearGroup);
     }
 }

@@ -91,7 +91,7 @@ public class DoctorVisitEventDetailActivity
         return new Intent(context, DoctorVisitEventDetailActivity.class)
                 .putExtra(ExtraConstants.EXTRA_MASTER_EVENT, masterEvent)
                 .putExtra(ExtraConstants.EXTRA_DEFAULT_EVENT, defaultEvent)
-                .putExtra(ExtraConstants.EXTRA_IS_LINEAR_GROUP_FINISHED, isLinearGroupFinished);
+                .putExtra(ExtraConstants.EXTRA_LINEAR_GROUP_FINISHED_EVENT, isLinearGroupFinished ? masterEvent : null);
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,7 @@ import ru.android.childdiary.data.db.entities.calendar.ExerciseEventEntity;
 import ru.android.childdiary.data.db.entities.exercises.ConcreteExerciseEntity;
 import ru.android.childdiary.data.db.entities.exercises.ExerciseEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
+import ru.android.childdiary.data.repositories.core.generators.EventsGenerator;
 import ru.android.childdiary.data.repositories.core.generators.ExerciseEventsGenerator;
 import ru.android.childdiary.data.repositories.exercises.mappers.ConcreteExerciseMapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ExerciseMapper;
@@ -40,7 +42,7 @@ public class ExerciseDbService {
     private final Logger logger = LoggerFactory.getLogger(toString());
     private final ReactiveEntityStore<Persistable> dataStore;
     private final BlockingEntityStore<Persistable> blockingEntityStore;
-    private final ExerciseEventsGenerator eventsGenerator;
+    private final EventsGenerator<ConcreteExercise> eventsGenerator;
     private final ExerciseMapper exerciseMapper;
     private final ConcreteExerciseMapper concreteExerciseMapper;
     private final RepeatParametersMapper repeatParametersMapper;
@@ -254,5 +256,13 @@ public class ExerciseDbService {
                     .imageFilesToDelete(imageFilesToDelete)
                     .build();
         }));
+    }
+
+    public Observable<Integer> continueLinearGroup(@NonNull ConcreteExercise concreteExercise,
+                                                   @NonNull LocalDate sinceDate,
+                                                   @NonNull Integer linearGroup) {
+        return Observable.fromCallable(
+                () -> eventsGenerator.generateEvents(concreteExercise, sinceDate, linearGroup)
+        );
     }
 }

@@ -29,6 +29,7 @@ import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
 import ru.android.childdiary.data.db.entities.medical.DoctorVisitEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
 import ru.android.childdiary.data.repositories.core.generators.DoctorVisitEventsGenerator;
+import ru.android.childdiary.data.repositories.core.generators.EventsGenerator;
 import ru.android.childdiary.data.repositories.medical.mappers.DoctorVisitMapper;
 import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.child.data.Child;
@@ -47,7 +48,7 @@ public class DoctorVisitDbService {
     private final Logger logger = LoggerFactory.getLogger(toString());
     private final ReactiveEntityStore<Persistable> dataStore;
     private final BlockingEntityStore<Persistable> blockingEntityStore;
-    private final DoctorVisitEventsGenerator eventsGenerator;
+    private final EventsGenerator<DoctorVisit> eventsGenerator;
     private final DoctorVisitMapper doctorVisitMapper;
     private final RepeatParametersMapper repeatParametersMapper;
 
@@ -229,5 +230,13 @@ public class DoctorVisitDbService {
                     .imageFilesToDelete(imageFilesToDelete)
                     .build();
         }));
+    }
+
+    public Observable<Integer> continueLinearGroup(@NonNull DoctorVisit doctorVisit,
+                                                   @NonNull LocalDate sinceDate,
+                                                   @NonNull Integer linearGroup) {
+        return Observable.fromCallable(
+                () -> eventsGenerator.generateEvents(doctorVisit, sinceDate, linearGroup)
+        );
     }
 }

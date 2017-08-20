@@ -28,6 +28,7 @@ import ru.android.childdiary.data.db.entities.calendar.MedicineTakingEventEntity
 import ru.android.childdiary.data.db.entities.calendar.core.MasterEventEntity;
 import ru.android.childdiary.data.db.entities.medical.MedicineTakingEntity;
 import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParametersMapper;
+import ru.android.childdiary.data.repositories.core.generators.EventsGenerator;
 import ru.android.childdiary.data.repositories.core.generators.MedicineTakingEventsGenerator;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
 import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
@@ -47,7 +48,7 @@ public class MedicineTakingDbService {
     private final Logger logger = LoggerFactory.getLogger(toString());
     private final ReactiveEntityStore<Persistable> dataStore;
     private final BlockingEntityStore<Persistable> blockingEntityStore;
-    private final MedicineTakingEventsGenerator eventsGenerator;
+    private final EventsGenerator<MedicineTaking> eventsGenerator;
     private final MedicineTakingMapper medicineTakingMapper;
     private final RepeatParametersMapper repeatParametersMapper;
 
@@ -229,5 +230,13 @@ public class MedicineTakingDbService {
                     .imageFilesToDelete(imageFilesToDelete)
                     .build();
         }));
+    }
+
+    public Observable<Integer> continueLinearGroup(@NonNull MedicineTaking medicineTaking,
+                                                   @NonNull LocalDate sinceDate,
+                                                   @NonNull Integer linearGroup) {
+        return Observable.fromCallable(
+                () -> eventsGenerator.generateEvents(medicineTaking, sinceDate, linearGroup)
+        );
     }
 }
