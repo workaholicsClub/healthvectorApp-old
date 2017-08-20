@@ -1,7 +1,10 @@
 package ru.android.childdiary.presentation.core.dialogs;
 
 import android.support.annotation.LayoutRes;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -15,6 +18,9 @@ import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 public abstract class BaseLengthValueDialogFragment<T extends BaseLengthValueDialogArguments> extends BaseMvpDialogFragment<T> {
+    @BindView(R.id.textView)
+    TextView textView;
+
     @BindView(R.id.numberPickerLength)
     NumberPicker numberPickerLength;
 
@@ -29,6 +35,9 @@ public abstract class BaseLengthValueDialogFragment<T extends BaseLengthValueDia
 
     @Override
     protected void setupUi() {
+        textView.setVisibility(TextUtils.isEmpty(dialogArguments.getDescription()) ? View.GONE : View.VISIBLE);
+        textView.setText(dialogArguments.getDescription());
+
         LengthValue lengthValue = dialogArguments.getLengthValue();
         if (ObjectUtils.isEmpty(lengthValue)) {
             TimeUnit timeUnit = dialogArguments.getTimeUnits().get(0);

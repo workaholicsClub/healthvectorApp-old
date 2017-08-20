@@ -98,6 +98,7 @@
     <dimen name="medical_item_action_delete_height">64dp</dimen>
     <dimen name="medicine_measure_value_width">100dp</dimen>
     <dimen name="length_value_width">100dp</dimen>
+    <dimen name="length_value_container_width">250dp</dimen>
     <!-- repeat parameters -->
     <dimen name="times_margin">4dp</dimen>
     <dimen name="times_padding">6dp</dimen>

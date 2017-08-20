@@ -22,7 +22,7 @@ public class LengthValueDialogFragment extends BaseLengthValueDialogFragment<Len
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
-                .setTitle(R.string.length)
+                .setTitle(dialogArguments.getTitle())
                 .setPositiveButton(R.string.ok,
                         (dialog, which) -> {
                             hideKeyboardAndClearFocus();

@@ -30,15 +30,23 @@ public abstract class BaseLengthValueDialogArguments extends BaseDialogArguments
     Map<TimeUnit, List<Integer>> timeUnitValues;
     @Nullable
     LengthValue lengthValue;
+    @Nullable
+    String title;
+    @Nullable
+    String description;
 
     public BaseLengthValueDialogArguments(@Nullable Sex sex,
                                           @NonNull Map<TimeUnit, List<Integer>> timeUnitValues,
-                                          @Nullable LengthValue lengthValue) {
+                                          @Nullable LengthValue lengthValue,
+                                          @Nullable String title,
+                                          @Nullable String description) {
         super(sex);
         List<TimeUnit> timeUnits = new ArrayList<>(timeUnitValues.keySet());
         Collections.sort(timeUnits);
         this.timeUnits = Collections.unmodifiableList(timeUnits);
         this.timeUnitValues = CollectionUtils.unmodifiableMap(timeUnitValues);
         this.lengthValue = lengthValue;
+        this.title = title;
+        this.description = description;
     }
 }

@@ -23,7 +23,7 @@ public class MoveEventDialogFragment extends BaseLengthValueDialogFragment<MoveE
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
-                .setTitle(R.string.move_event);
+                .setTitle(dialogArguments.getTitle());
 
         if (dialogArguments.getEvent().getLinearGroup() == null) {
             builder.setPositiveButton(R.string.ok,

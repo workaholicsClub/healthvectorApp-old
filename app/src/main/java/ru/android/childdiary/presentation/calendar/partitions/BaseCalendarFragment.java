@@ -382,6 +382,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
                 MoveEventDialogArguments.builder()
                         .sex(getSex())
                         .event(event)
+                        .title(getString(R.string.move_event))
                         .build());
     }
 

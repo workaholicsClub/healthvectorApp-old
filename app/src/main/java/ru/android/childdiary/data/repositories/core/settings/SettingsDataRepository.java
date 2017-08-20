@@ -146,7 +146,7 @@ public class SettingsDataRepository implements SettingsRepository {
 
     @Override
     public void setLastCheckedDate(@NonNull LocalDate date) {
-        preferences.getLong(KEY_START_TIME, LocalDate.now().toDate().getTime()).set(date.toDate().getTime());
+        preferences.getLong(KEY_LAST_CHECKED_DATE, LocalDate.now().toDate().getTime()).set(date.toDate().getTime());
     }
 
     @Override

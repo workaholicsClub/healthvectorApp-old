@@ -321,8 +321,8 @@ public class ResourcesUtils {
             Sex sex = child == null ? null : child.getSex();
             // TODO заменить иконки
             return sex == null || sex == Sex.MALE
-                    ? R.drawable.ic_notification_event_pre_lollipop_boy
-                    : R.drawable.ic_notification_event_pre_lollipop_girl;
+                    ? R.drawable.ic_notification_linear_group_pre_lollipop_boy
+                    : R.drawable.ic_notification_linear_group_pre_lollipop_girl;
         } else {
             return R.drawable.ic_notification_linear_group;
         }

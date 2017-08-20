@@ -25,7 +25,9 @@ public class LengthValueDialogArguments extends BaseLengthValueDialogArguments {
     @Builder
     public LengthValueDialogArguments(@Nullable Sex sex,
                                       @NonNull Map<TimeUnit, List<Integer>> timeUnitValues,
-                                      @Nullable LengthValue lengthValue) {
-        super(sex, timeUnitValues, lengthValue);
+                                      @Nullable LengthValue lengthValue,
+                                      @Nullable String title,
+                                      @Nullable String description) {
+        super(sex, timeUnitValues, lengthValue, title, description);
     }
 }

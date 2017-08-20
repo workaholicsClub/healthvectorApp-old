@@ -38,8 +38,10 @@ public class MoveEventDialogArguments extends BaseLengthValueDialogArguments {
 
     @Builder
     public MoveEventDialogArguments(@Nullable Sex sex,
-                                    @NonNull MasterEvent event) {
-        super(sex, map, null);
+                                    @NonNull MasterEvent event,
+                                    @Nullable String title,
+                                    @Nullable String description) {
+        super(sex, map, null, title, description);
         this.event = event;
     }
 }

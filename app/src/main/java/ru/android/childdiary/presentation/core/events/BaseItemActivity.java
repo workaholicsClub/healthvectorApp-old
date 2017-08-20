@@ -290,6 +290,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                         .sex(getSex())
                         .timeUnitValues(timeUnitValues)
                         .lengthValue(lengthValue)
+                        .title(getString(R.string.length))
                         .build());
     }
 

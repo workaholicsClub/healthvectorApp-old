@@ -359,4 +359,6 @@
     <string name="select_sound">Выберите мелодию</string>
     <string name="default_sound">По умолчанию</string>
     <string name="linear_group_finished_notification_title">Продлить события?</string>
+    <!-- \n - символ переноса строки -->
+    <string name="linear_group_finished_dialog_description">Завершаются события линейной группы "%s".\n\nПродлить на:</string>
 </resources>
