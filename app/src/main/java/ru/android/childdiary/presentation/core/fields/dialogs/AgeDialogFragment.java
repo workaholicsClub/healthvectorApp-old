@@ -99,8 +99,10 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> hideKeyboardAndClearFocus());
 
-        return builder.setCancelable(false)
-                .create();
+        Dialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
     }
 
     @Override

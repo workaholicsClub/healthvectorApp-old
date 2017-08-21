@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.calendar.CleanUpDbService;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.medical.MedicineTakingRepository;
 import ru.android.childdiary.domain.medical.data.MedicineTaking;
@@ -79,7 +80,8 @@ public class MedicineTakingDataRepository implements MedicineTakingRepository {
     @Override
     public Observable<Integer> continueLinearGroup(@NonNull MedicineTaking medicineTaking,
                                                    @NonNull LocalDate sinceDate,
-                                                   @NonNull Integer linearGroup) {
-        return medicineTakingDbService.continueLinearGroup(medicineTaking, sinceDate, linearGroup);
+                                                   @NonNull Integer linearGroup,
+                                                   @NonNull LengthValue lengthValue) {
+        return medicineTakingDbService.continueLinearGroup(medicineTaking, sinceDate, linearGroup, lengthValue);
     }
 }

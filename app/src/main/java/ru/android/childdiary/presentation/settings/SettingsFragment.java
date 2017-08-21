@@ -38,6 +38,8 @@ import ru.android.childdiary.presentation.core.AppPartitionArguments;
 import ru.android.childdiary.presentation.core.BaseMvpFragment;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
+import ru.android.childdiary.presentation.core.dialogs.AlertDialogArguments;
+import ru.android.childdiary.presentation.core.dialogs.AlertDialogFragment;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.presentation.dictionaries.achievements.AchievementPickerActivity;
 import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
@@ -64,10 +66,12 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 import static android.app.Activity.RESULT_OK;
 
 public class SettingsFragment extends BaseMvpFragment implements SettingsView,
-        IntentSettingsItem.Listener, ProfileGroupSettingsItem.Listener, ProfileSettingsItem.Listener {
+        IntentSettingsItem.Listener, ProfileGroupSettingsItem.Listener, ProfileSettingsItem.Listener,
+        AlertDialogFragment.Listener {
     private static final String TAG_PROGRESS_DIALOG_AUTHORIZE = "TAG_PROGRESS_DIALOG_AUTHORIZE";
     private static final String TAG_PROGRESS_DIALOG_RESTORE = "TAG_PROGRESS_DIALOG_RESTORE";
     private static final String TAG_PROGRESS_DIALOG_BACKUP = "TAG_PROGRESS_DIALOG_BACKUP";
+    private static final String TAG_DIALOG_DATA_RESTORED = "TAG_DIALOG_DATA_RESTORED";
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1001;
@@ -573,7 +577,6 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                 .show();
     }
 
-
     @Override
     public void showRestoreLoading(boolean loading) {
         if (loading) {
@@ -587,13 +590,26 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void restoreSucceeded() {
-        // TODO: переделать на AlertDialogFragment, чтобы при смене конфигурации диалог не терялся
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restore_success_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .setCancelable(false)
-                .show();
+        AlertDialogFragment dialogFragment = new AlertDialogFragment();
+        dialogFragment.showAllowingStateLoss(getChildFragmentManager(), TAG_DIALOG_DATA_RESTORED,
+                AlertDialogArguments.builder()
+                        .message(getString(R.string.restore_success_dialog_text))
+                        .positiveButtonText(getString(R.string.ok))
+                        .cancelable(false)
+                        .build());
+    }
+
+    @Override
+    public void onPositiveButtonClick(String tag) {
+        switch (tag) {
+            case TAG_DIALOG_DATA_RESTORED:
+                presenter.moveNext();
+                break;
+        }
+    }
+
+    @Override
+    public void onNegativeButtonClick(String tag) {
     }
 
     @Override

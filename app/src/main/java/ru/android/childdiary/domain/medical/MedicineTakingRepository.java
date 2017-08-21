@@ -6,6 +6,7 @@ import org.joda.time.LocalDate;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.medical.requests.CompleteMedicineTakingRequest;
@@ -38,5 +39,6 @@ public interface MedicineTakingRepository {
 
     Observable<Integer> continueLinearGroup(@NonNull MedicineTaking medicineTaking,
                                             @NonNull LocalDate sinceDate,
-                                            @NonNull Integer linearGroup);
+                                            @NonNull Integer linearGroup,
+                                            @NonNull LengthValue lengthValue);
 }

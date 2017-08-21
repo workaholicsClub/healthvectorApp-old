@@ -21,6 +21,7 @@ import io.reactivex.functions.Function;
 import ru.android.childdiary.data.network.dto.Programs;
 import ru.android.childdiary.data.repositories.core.mappers.Mapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ProgramsToExercisesMapper;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.core.exceptions.TryCountExceededException;
 import ru.android.childdiary.domain.exercises.ExerciseRepository;
@@ -162,7 +163,8 @@ public class ExerciseDataRepository implements ExerciseRepository {
     @Override
     public Observable<Integer> continueLinearGroup(@NonNull ConcreteExercise concreteExercise,
                                                    @NonNull LocalDate sinceDate,
-                                                   @NonNull Integer linearGroup) {
-        return exerciseDbService.continueLinearGroup(concreteExercise, sinceDate, linearGroup);
+                                                   @NonNull Integer linearGroup,
+                                                   @NonNull LengthValue lengthValue) {
+        return exerciseDbService.continueLinearGroup(concreteExercise, sinceDate, linearGroup, lengthValue);
     }
 }

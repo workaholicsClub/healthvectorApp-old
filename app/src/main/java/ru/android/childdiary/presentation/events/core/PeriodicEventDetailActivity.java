@@ -51,12 +51,13 @@ public abstract class PeriodicEventDetailActivity<V extends PeriodicEventDetailV
                         .timeUnitValues(timeUnitValues)
                         .lengthValue(lengthValue)
                         .description(getString(R.string.linear_group_finished_dialog_description, eventStr))
+                        .cancelable(false)
                         .build());
     }
 
     @Override
     public void onSetLengthValue(String tag, @NonNull LengthValue lengthValue) {
-        getPresenter().continueLinearGroup(linearGroupFinishedEvent);
+        getPresenter().continueLinearGroup(linearGroupFinishedEvent, lengthValue);
     }
 
     @Override

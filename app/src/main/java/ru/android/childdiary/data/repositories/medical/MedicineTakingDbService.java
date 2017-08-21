@@ -31,6 +31,7 @@ import ru.android.childdiary.data.repositories.calendar.mappers.RepeatParameters
 import ru.android.childdiary.data.repositories.core.generators.EventsGenerator;
 import ru.android.childdiary.data.repositories.core.generators.MedicineTakingEventsGenerator;
 import ru.android.childdiary.data.repositories.medical.mappers.MedicineTakingMapper;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
@@ -234,9 +235,10 @@ public class MedicineTakingDbService {
 
     public Observable<Integer> continueLinearGroup(@NonNull MedicineTaking medicineTaking,
                                                    @NonNull LocalDate sinceDate,
-                                                   @NonNull Integer linearGroup) {
+                                                   @NonNull Integer linearGroup,
+                                                   @NonNull LengthValue lengthValue) {
         return Observable.fromCallable(
-                () -> eventsGenerator.generateEvents(medicineTaking, sinceDate, linearGroup)
+                () -> eventsGenerator.generateEvents(medicineTaking, sinceDate, linearGroup, lengthValue)
         );
     }
 }

@@ -33,8 +33,10 @@ public class LengthValueDialogFragment extends BaseLengthValueDialogFragment<Len
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> hideKeyboardAndClearFocus());
 
-        return builder.setCancelable(false)
-                .create();
+        Dialog dialog = builder.create();
+        dialog.setCancelable(dialogArguments.isCancelable());
+        dialog.setCanceledOnTouchOutside(dialogArguments.isCancelable());
+        return dialog;
     }
 
     @Override

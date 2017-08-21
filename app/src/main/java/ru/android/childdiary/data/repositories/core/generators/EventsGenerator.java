@@ -209,9 +209,10 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
 
     public int generateEvents(@NonNull From from,
                               @NonNull LocalDate sinceDate,
-                              @NonNull Integer linearGroup) {
+                              @NonNull Integer linearGroup,
+                              @NonNull LengthValue lengthValue) {
         try {
-            return generateEventsInternal(from, sinceDate, linearGroup);
+            return generateEventsInternal(from, sinceDate, linearGroup, lengthValue);
         } catch (EventsGeneratorException e) {
             throw new RuntimeException("generating events: no events inserted", e);
         } catch (Exception e) {
@@ -221,7 +222,8 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
 
     private int generateEventsInternal(@NonNull From from,
                                        @NonNull LocalDate sinceDate,
-                                       @NonNull Integer linearGroup) throws Exception {
+                                       @NonNull Integer linearGroup,
+                                       @NonNull LengthValue lengthValue) throws Exception {
         RepeatParameters repeatParameters = from.getRepeatParameters();
         checkRepeatParameters(repeatParameters);
 
@@ -236,21 +238,22 @@ public abstract class EventsGenerator<From extends RepeatParametersContainer> {
         PeriodicityType periodicityType = repeatParameters.getPeriodicity();
         checkPeriodicityType(periodicityType);
 
-        LengthValue lengthValue = repeatParameters.getLength();
-        checkLengthValue(lengthValue);
-
         LocalDate finishDate = getFinishDate(sinceDate, lengthValue);
         Function<LocalDate, LocalDate> increment = getIncrementFunctionDate(periodicityType);
 
         LocalTime time = times.get(linearGroup);
         startInsertion();
         int count = 0;
-        while (sinceDate.isBefore(finishDate) || sinceDate.isEqual(finishDate)) {
+        while (true) {
             sinceDate = increment.apply(sinceDate);
+            boolean isFinished = sinceDate.isAfter(finishDate);
+            if (isFinished) {
+                break;
+            }
             createEvent(from, sinceDate.toDateTime(time), linearGroup);
             ++count;
-            finishInsertion();
         }
+        finishInsertion();
         logger.debug("generating events: inserted " + count + " events");
         return count;
     }

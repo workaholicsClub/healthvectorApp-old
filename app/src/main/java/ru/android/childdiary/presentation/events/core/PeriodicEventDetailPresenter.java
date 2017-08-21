@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 
 public abstract class PeriodicEventDetailPresenter<V extends PeriodicEventDetailView<T>, T extends MasterEvent>
@@ -16,10 +17,10 @@ public abstract class PeriodicEventDetailPresenter<V extends PeriodicEventDetail
                 .subscribe(getViewState()::showLengthValueDialog, this::onUnexpectedError));
     }
 
-    public final void continueLinearGroup(@NonNull T event) {
+    public final void continueLinearGroup(@NonNull T event, @NonNull LengthValue lengthValue) {
         getViewState().showGeneratingEvents(true);
         unsubscribeOnDestroy(
-                generateEvents(event)
+                generateEvents(event, lengthValue)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(added -> logger.debug("added: " + added))
@@ -28,5 +29,5 @@ public abstract class PeriodicEventDetailPresenter<V extends PeriodicEventDetail
                         .subscribe(getViewState()::eventsAdded, this::onUnexpectedError));
     }
 
-    protected abstract Observable<Integer> generateEvents(@NonNull T event);
+    protected abstract Observable<Integer> generateEvents(@NonNull T event, @NonNull LengthValue lengthValue);
 }

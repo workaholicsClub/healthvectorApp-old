@@ -59,8 +59,10 @@ public abstract class AddValueDialogFragment<P extends AddValueDialogArguments, 
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> hideKeyboardAndClearFocus());
 
-        AlertDialog dialog = builder.setCancelable(false)
-                .create();
+        AlertDialog dialog = builder.create();
+
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
 
         dialog.setOnShowListener(dialogInterface -> {
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);

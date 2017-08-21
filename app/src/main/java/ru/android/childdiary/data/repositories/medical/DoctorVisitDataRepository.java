@@ -20,6 +20,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.calendar.CleanUpDbService;
 import ru.android.childdiary.data.repositories.dictionaries.core.CrudDbService;
 import ru.android.childdiary.data.repositories.dictionaries.doctors.DoctorDbService;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.domain.medical.DoctorVisitRepository;
@@ -145,7 +146,8 @@ public class DoctorVisitDataRepository implements DoctorVisitRepository {
     @Override
     public Observable<Integer> continueLinearGroup(@NonNull DoctorVisit doctorVisit,
                                                    @NonNull LocalDate sinceDate,
-                                                   @NonNull Integer linearGroup) {
-        return doctorVisitDbService.continueLinearGroup(doctorVisit, sinceDate, linearGroup);
+                                                   @NonNull Integer linearGroup,
+                                                   @NonNull LengthValue lengthValue) {
+        return doctorVisitDbService.continueLinearGroup(doctorVisit, sinceDate, linearGroup, lengthValue);
     }
 }

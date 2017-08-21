@@ -182,7 +182,8 @@ public class ExerciseInteractor {
 
     public Observable<Integer> continueLinearGroup(@NonNull ConcreteExercise concreteExercise,
                                                    @NonNull LocalDate sinceDate,
-                                                   @NonNull Integer linearGroup) {
-        return exerciseRepository.continueLinearGroup(concreteExercise, sinceDate, linearGroup);
+                                                   @NonNull Integer linearGroup,
+                                                   @NonNull LengthValue lengthValue) {
+        return exerciseRepository.continueLinearGroup(concreteExercise, sinceDate, linearGroup, lengthValue);
     }
 }

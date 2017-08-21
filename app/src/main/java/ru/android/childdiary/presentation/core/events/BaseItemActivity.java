@@ -291,6 +291,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                         .timeUnitValues(timeUnitValues)
                         .lengthValue(lengthValue)
                         .title(getString(R.string.length))
+                        .cancelable(true)
                         .build());
     }
 

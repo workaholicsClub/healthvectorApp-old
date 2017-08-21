@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
 import ru.android.childdiary.domain.exercises.data.Exercise;
@@ -29,5 +30,6 @@ public interface ExerciseRepository {
 
     Observable<Integer> continueLinearGroup(@NonNull ConcreteExercise concreteExercise,
                                             @NonNull LocalDate sinceDate,
-                                            @NonNull Integer linearGroup);
+                                            @NonNull Integer linearGroup,
+                                            @NonNull LengthValue lengthValue);
 }

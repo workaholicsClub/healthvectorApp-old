@@ -20,13 +20,16 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.dialogs.AlertDialogArguments;
+import ru.android.childdiary.presentation.core.dialogs.AlertDialogFragment;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class CloudInitialActivity extends BaseMvpActivity implements CloudInitialView {
+public class CloudInitialActivity extends BaseMvpActivity implements CloudInitialView,
+        AlertDialogFragment.Listener {
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1001;
     private static final int REQUEST_AUTHORIZATION = 1002;
@@ -34,6 +37,7 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
 
     private static final String TAG_PROGRESS_DIALOG_AUTHORIZE = "TAG_PROGRESS_DIALOG_AUTHORIZE";
     private static final String TAG_PROGRESS_DIALOG_RESTORE = "TAG_PROGRESS_DIALOG_RESTORE";
+    private static final String TAG_DIALOG_DATA_RESTORED = "TAG_DIALOG_DATA_RESTORED";
 
     @Inject
     AccountChooserPicker accountChooserPicker;
@@ -223,13 +227,26 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
 
     @Override
     public void restoreSucceeded() {
-        // TODO: переделать на AlertDialogFragment, чтобы при смене конфигурации диалог не терялся
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restore_success_dialog_text)
-                .setPositiveButton(R.string.ok,
-                        (dialog, which) -> presenter.moveNext())
-                .setCancelable(false)
-                .show();
+        AlertDialogFragment dialogFragment = new AlertDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DIALOG_DATA_RESTORED,
+                AlertDialogArguments.builder()
+                        .message(getString(R.string.restore_success_dialog_text))
+                        .positiveButtonText(getString(R.string.ok))
+                        .cancelable(false)
+                        .build());
+    }
+
+    @Override
+    public void onPositiveButtonClick(String tag) {
+        switch (tag) {
+            case TAG_DIALOG_DATA_RESTORED:
+                presenter.moveNext();
+                break;
+        }
+    }
+
+    @Override
+    public void onNegativeButtonClick(String tag) {
     }
 
     @Override

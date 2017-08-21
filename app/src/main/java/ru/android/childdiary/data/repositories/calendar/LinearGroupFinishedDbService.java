@@ -58,15 +58,14 @@ public class LinearGroupFinishedDbService {
 
     public Observable<List<MasterEvent>> getFinishedLinearGroupEvents(@NonNull LocalDate lastCheckedDate,
                                                                       @NonNull LocalDate dateToCheck) {
-        logger.debug("last selected date: " + lastCheckedDate + "; date to check: " + dateToCheck);
-        if (lastCheckedDate.isAfter(dateToCheck)) {
+        logger.debug("last checked date: " + lastCheckedDate + "; date to check: " + dateToCheck);
+        int days = Days.daysBetween(lastCheckedDate, dateToCheck).getDays();
+        if (days > 7) {
+            lastCheckedDate = dateToCheck.minusDays(7);
+        } else if (days <= 1) {
             lastCheckedDate = dateToCheck;
-        } else {
-            int days = Days.daysBetween(lastCheckedDate, dateToCheck).getDays();
-            if (days > 7) {
-                lastCheckedDate = dateToCheck.minusDays(7);
-            }
         }
+        logger.debug("first date inclusive: " + lastCheckedDate + "; last date inclusive: " + dateToCheck);
         return Observable.combineLatest(
                 getDoctorVisitEvents(lastCheckedDate, dateToCheck).first(Collections.emptyList()).toObservable(),
                 getMedicineTakingEvents(lastCheckedDate, dateToCheck).first(Collections.emptyList()).toObservable(),

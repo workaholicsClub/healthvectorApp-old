@@ -16,6 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.data.MedicineTakingEvent;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.dictionaries.medicinemeasure.MedicineMeasureInteractor;
 import ru.android.childdiary.domain.dictionaries.medicines.MedicineInteractor;
 import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
@@ -73,11 +74,12 @@ public class MedicineTakingEventDetailPresenter extends PeriodicEventDetailPrese
     }
 
     @Override
-    protected Observable<Integer> generateEvents(@NonNull MedicineTakingEvent event) {
+    protected Observable<Integer> generateEvents(@NonNull MedicineTakingEvent event, @NonNull LengthValue lengthValue) {
         return medicineTakingInteractor.continueLinearGroup(
                 event.getMedicineTaking(),
                 event.getDateTime().toLocalDate(),
-                event.getLinearGroup()
+                event.getLinearGroup(),
+                lengthValue
         );
     }
 }

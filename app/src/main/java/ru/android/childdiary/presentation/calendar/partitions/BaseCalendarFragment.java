@@ -383,6 +383,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
                         .sex(getSex())
                         .event(event)
                         .title(getString(R.string.move_event))
+                        .cancelable(true)
                         .build());
     }
 

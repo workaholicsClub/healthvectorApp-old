@@ -34,12 +34,14 @@ public abstract class BaseLengthValueDialogArguments extends BaseDialogArguments
     String title;
     @Nullable
     String description;
+    boolean cancelable;
 
     public BaseLengthValueDialogArguments(@Nullable Sex sex,
                                           @NonNull Map<TimeUnit, List<Integer>> timeUnitValues,
                                           @Nullable LengthValue lengthValue,
                                           @Nullable String title,
-                                          @Nullable String description) {
+                                          @Nullable String description,
+                                          boolean cancelable) {
         super(sex);
         List<TimeUnit> timeUnits = new ArrayList<>(timeUnitValues.keySet());
         Collections.sort(timeUnits);
@@ -48,5 +50,6 @@ public abstract class BaseLengthValueDialogArguments extends BaseDialogArguments
         this.lengthValue = lengthValue;
         this.title = title;
         this.description = description;
+        this.cancelable = cancelable;
     }
 }

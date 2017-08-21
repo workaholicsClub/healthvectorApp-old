@@ -29,6 +29,7 @@ import ru.android.childdiary.data.repositories.core.generators.EventsGenerator;
 import ru.android.childdiary.data.repositories.core.generators.ExerciseEventsGenerator;
 import ru.android.childdiary.data.repositories.exercises.mappers.ConcreteExerciseMapper;
 import ru.android.childdiary.data.repositories.exercises.mappers.ExerciseMapper;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.calendar.data.core.RepeatParameters;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.exercises.data.ConcreteExercise;
@@ -260,9 +261,10 @@ public class ExerciseDbService {
 
     public Observable<Integer> continueLinearGroup(@NonNull ConcreteExercise concreteExercise,
                                                    @NonNull LocalDate sinceDate,
-                                                   @NonNull Integer linearGroup) {
+                                                   @NonNull Integer linearGroup,
+                                                   @NonNull LengthValue lengthValue) {
         return Observable.fromCallable(
-                () -> eventsGenerator.generateEvents(concreteExercise, sinceDate, linearGroup)
+                () -> eventsGenerator.generateEvents(concreteExercise, sinceDate, linearGroup, lengthValue)
         );
     }
 }

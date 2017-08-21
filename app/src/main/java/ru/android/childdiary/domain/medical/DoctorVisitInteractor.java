@@ -279,7 +279,8 @@ public class DoctorVisitInteractor {
 
     public Observable<Integer> continueLinearGroup(@NonNull DoctorVisit doctorVisit,
                                                    @NonNull LocalDate sinceDate,
-                                                   @NonNull Integer linearGroup) {
-        return doctorVisitRepository.continueLinearGroup(doctorVisit, sinceDate, linearGroup);
+                                                   @NonNull Integer linearGroup,
+                                                   @NonNull LengthValue lengthValue) {
+        return doctorVisitRepository.continueLinearGroup(doctorVisit, sinceDate, linearGroup, lengthValue);
     }
 }

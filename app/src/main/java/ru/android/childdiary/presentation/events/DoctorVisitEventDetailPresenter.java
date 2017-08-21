@@ -18,6 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.data.DoctorVisitEvent;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.dictionaries.doctors.DoctorInteractor;
 import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
@@ -84,11 +85,12 @@ public class DoctorVisitEventDetailPresenter extends PeriodicEventDetailPresente
     }
 
     @Override
-    protected Observable<Integer> generateEvents(@NonNull DoctorVisitEvent event) {
+    protected Observable<Integer> generateEvents(@NonNull DoctorVisitEvent event, @NonNull LengthValue lengthValue) {
         return doctorVisitInteractor.continueLinearGroup(
                 event.getDoctorVisit(),
                 event.getDateTime().toLocalDate(),
-                event.getLinearGroup()
+                event.getLinearGroup(),
+                lengthValue
         );
     }
 }

@@ -14,6 +14,7 @@ import io.reactivex.disposables.Disposable;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.data.ExerciseEvent;
+import ru.android.childdiary.domain.calendar.data.core.LengthValue;
 import ru.android.childdiary.domain.calendar.validation.CalendarValidationResult;
 import ru.android.childdiary.domain.exercises.ExerciseInteractor;
 import ru.android.childdiary.presentation.events.core.PeriodicEventDetailPresenter;
@@ -54,11 +55,12 @@ public class ExerciseEventDetailPresenter extends PeriodicEventDetailPresenter<E
     }
 
     @Override
-    protected Observable<Integer> generateEvents(@NonNull ExerciseEvent event) {
+    protected Observable<Integer> generateEvents(@NonNull ExerciseEvent event, @NonNull LengthValue lengthValue) {
         return exerciseInteractor.continueLinearGroup(
                 event.getConcreteExercise(),
                 event.getDateTime().toLocalDate(),
-                event.getLinearGroup()
+                event.getLinearGroup(),
+                lengthValue
         );
     }
 }

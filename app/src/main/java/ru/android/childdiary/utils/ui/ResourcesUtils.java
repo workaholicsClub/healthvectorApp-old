@@ -319,7 +319,6 @@ public class ResourcesUtils {
     public static int getNotificationLinearGroupRes(@Nullable Child child) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Sex sex = child == null ? null : child.getSex();
-            // TODO заменить иконки
             return sex == null || sex == Sex.MALE
                     ? R.drawable.ic_notification_linear_group_pre_lollipop_boy
                     : R.drawable.ic_notification_linear_group_pre_lollipop_girl;
