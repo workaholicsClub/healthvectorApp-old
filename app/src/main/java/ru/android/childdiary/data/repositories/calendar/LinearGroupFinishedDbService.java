@@ -59,10 +59,11 @@ public class LinearGroupFinishedDbService {
     public Observable<List<MasterEvent>> getFinishedLinearGroupEvents(@NonNull LocalDate lastCheckedDate,
                                                                       @NonNull LocalDate dateToCheck) {
         logger.debug("last checked date: " + lastCheckedDate + "; date to check: " + dateToCheck);
+        lastCheckedDate = lastCheckedDate.plusDays(1);
         int days = Days.daysBetween(lastCheckedDate, dateToCheck).getDays();
-        if (days > 7) {
-            lastCheckedDate = dateToCheck.minusDays(7);
-        } else if (days <= 1) {
+        if (days > 6) {
+            lastCheckedDate = dateToCheck.minusDays(6);
+        } else if (days < 0) {
             lastCheckedDate = dateToCheck;
         }
         logger.debug("first date inclusive: " + lastCheckedDate + "; last date inclusive: " + dateToCheck);
