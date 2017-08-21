@@ -100,18 +100,18 @@ public class LinearGroupFinishedDbService {
     private List<DoctorVisitEvent> mapDoctorVisitEvents(@NonNull List<DoctorVisitEvent> events,
                                                         @NonNull LocalDate afterDate) {
         return Observable.fromIterable(events)
-                .filter(event -> filter(event, afterDate))
+                .filter(this::filter)
                 .toList()
                 .blockingGet();
     }
 
-    private boolean filter(@NonNull DoctorVisitEvent event, @NonNull LocalDate afterDate) {
+    private boolean filter(@NonNull DoctorVisitEvent event) {
         DoctorVisit doctorVisit = event.getDoctorVisit();
         Integer linearGroup = event.getLinearGroup();
         return linearGroup == null ? false : dataStore.count(DoctorVisitEventEntity.class)
                 .join(MasterEventEntity.class).on(DoctorVisitEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .and(MasterEventEntity.EVENT_TYPE.eq(EventType.DOCTOR_VISIT))
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.nextDayMidnight(afterDate)))
+                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.nextDayMidnight(event.getDateTime().toLocalDate())))
                 .and(MasterEventEntity.LINEAR_GROUP.eq(linearGroup))
                 .and(DoctorVisitEventEntity.DOCTOR_VISIT_ID.eq(doctorVisit.getId()))
                 .get()
@@ -136,18 +136,18 @@ public class LinearGroupFinishedDbService {
     private List<MedicineTakingEvent> mapMedicineTakingEvents(@NonNull List<MedicineTakingEvent> events,
                                                               @NonNull LocalDate afterDate) {
         return Observable.fromIterable(events)
-                .filter(event -> filter(event, afterDate))
+                .filter(this::filter)
                 .toList()
                 .blockingGet();
     }
 
-    private boolean filter(@NonNull MedicineTakingEvent event, @NonNull LocalDate afterDate) {
+    private boolean filter(@NonNull MedicineTakingEvent event) {
         MedicineTaking medicineTaking = event.getMedicineTaking();
         Integer linearGroup = event.getLinearGroup();
         return linearGroup == null ? false : dataStore.count(MedicineTakingEventEntity.class)
                 .join(MasterEventEntity.class).on(MedicineTakingEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .and(MasterEventEntity.EVENT_TYPE.eq(EventType.MEDICINE_TAKING))
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.nextDayMidnight(afterDate)))
+                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.nextDayMidnight(event.getDateTime().toLocalDate())))
                 .and(MasterEventEntity.LINEAR_GROUP.eq(linearGroup))
                 .and(MedicineTakingEventEntity.MEDICINE_TAKING_ID.eq(medicineTaking.getId()))
                 .get()
@@ -172,18 +172,18 @@ public class LinearGroupFinishedDbService {
     private List<ExerciseEvent> mapExerciseEvents(@NonNull List<ExerciseEvent> events,
                                                   @NonNull LocalDate afterDate) {
         return Observable.fromIterable(events)
-                .filter(event -> filter(event, afterDate))
+                .filter(this::filter)
                 .toList()
                 .blockingGet();
     }
 
-    private boolean filter(@NonNull ExerciseEvent event, @NonNull LocalDate afterDate) {
+    private boolean filter(@NonNull ExerciseEvent event) {
         ConcreteExercise concreteExercise = event.getConcreteExercise();
         Integer linearGroup = event.getLinearGroup();
         return linearGroup == null ? false : dataStore.count(ExerciseEventEntity.class)
                 .join(MasterEventEntity.class).on(ExerciseEventEntity.MASTER_EVENT_ID.eq(MasterEventEntity.ID))
                 .and(MasterEventEntity.EVENT_TYPE.eq(EventType.EXERCISE))
-                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.nextDayMidnight(afterDate)))
+                .and(MasterEventEntity.DATE_TIME.greaterThanOrEqual(DateUtils.nextDayMidnight(event.getDateTime().toLocalDate())))
                 .and(MasterEventEntity.LINEAR_GROUP.eq(linearGroup))
                 .and(ExerciseEventEntity.CONCRETE_EXERCISE_ID.eq(concreteExercise.getId()))
                 .get()
