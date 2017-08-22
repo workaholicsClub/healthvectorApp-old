@@ -1,5 +1,6 @@
 package ru.android.childdiary.localization;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,12 +42,20 @@ import javax.xml.parsers.ParserConfigurationException;
  * не представляет особого труда перевести его на английский. Для других языков может понадобиться
  * изменять и этот файл (другой порядок слов и т.п.).</li>
  */
-public class CsvConverter {
+public class XmlToCsvConverter {
     private static final String[] INPUT_FILE_NAMES = new String[]{
             "strings.xml", "strings-arrays.xml", "strings-plurals.xml",
             "strings-test-doman.xml", "strings-test-doman-mental.xml", "strings-test-doman-physical.xml",
             "strings-test-newborn.xml", "strings-test-autism.xml", "strings-dictionaries.xml"};
     private static final String OUTPUT_FILE_NAME = "Вектор развития ru-en.csv";
+    private static final String[] COMMENTS = new String[]{
+            "Примечания для переводчика:",
+            "1. Не изменять содержимое столбца A.",
+            "2. Не удалять пустые строки.",
+            "3. Не изменять значения столбца C. При необходимости добавить комментарий добавить его в столбец E.",
+            "4. В комментариях указаны значения и смысл параметров, специальных символов.",
+            "5. Текст на английском языке должен содержать те же параметры, что и текст на русском языке. Но в тексте на английском языке порядок параметров может отличаться в соответствии с грамматикой языка.",
+            "6. При изменении значений столбца B помечать их цветом."};
 
     @Test
     public void convert() {
@@ -55,6 +64,15 @@ public class CsvConverter {
         for (String fileName : INPUT_FILE_NAMES) {
             List<Row> rows = readXml(fileName);
             resultRows.addAll(rows);
+        }
+        Assert.assertTrue(resultRows.size() > COMMENTS.length);
+        for (int i = 0; i < COMMENTS.length; ++i) {
+            Row row = resultRows.get(i);
+            Assert.assertTrue(row.getColumnsCount() < 5);
+            for (int j = row.getColumnsCount(); j < 5; ++j) {
+                resultRows.get(i).addColumns((String) null);
+            }
+            resultRows.get(i).addColumns(COMMENTS[i]);
         }
         writeCsv(OUTPUT_FILE_NAME, resultRows);
     }
@@ -147,9 +165,7 @@ public class CsvConverter {
         Element element = (Element) node;
         String key = element.getAttribute("name");
         String value = element.getTextContent();
-        if (value.startsWith("\"") && value.endsWith("\"")) {
-            value = value.substring(1, value.length() - 1);
-        }
+        value = preprocess(value);
         rows.add(addComment(new Row(key, value), comment));
     }
 
@@ -164,9 +180,7 @@ public class CsvConverter {
             if (childNode.getNodeType() == Node.ELEMENT_NODE && "item".equals(childNode.getNodeName())) {
                 Element childElement = (Element) childNode;
                 String value = childElement.getTextContent();
-                if (value.startsWith("\"") && value.endsWith("\"")) {
-                    value = value.substring(1, value.length() - 1);
-                }
+                value = preprocess(value);
                 rows.add(addComment(new Row("item", value), comment));
                 comment = null;
             } else if (childNode.getNodeType() == Node.COMMENT_NODE) {
@@ -187,15 +201,23 @@ public class CsvConverter {
                 Element childElement = (Element) childNode;
                 String quantity = childElement.getAttribute("quantity");
                 String value = childElement.getTextContent();
-                if (value.startsWith("\"") && value.endsWith("\"")) {
-                    value = value.substring(1, value.length() - 1);
-                }
+                value = preprocess(value);
                 rows.add(addComment(new Row(quantity, value), comment));
                 comment = null;
             } else if (childNode.getNodeType() == Node.COMMENT_NODE) {
                 comment = getComment(childNode);
             }
         }
+    }
+
+    private String preprocess(String value) {
+        if (value.startsWith("\"") && value.endsWith("\"")) {
+            value = value.substring(1, value.length() - 1);
+        }
+        value = value.replace("<", "&lt;");
+        value = value.replace(">", "&gt;");
+        value = value.replace("…", "&#8230;");
+        return value;
     }
 
     private static class Row {
@@ -207,6 +229,10 @@ public class CsvConverter {
 
         public void addColumns(String... strings) {
             columns.addAll(Arrays.asList(strings));
+        }
+
+        public int getColumnsCount() {
+            return columns.size();
         }
 
         @Override
