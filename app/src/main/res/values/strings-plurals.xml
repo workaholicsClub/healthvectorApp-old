@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- // TODO: заменить на английские значения -->
+    <!-- two, other - добавить при необходимости -->
+    <!-- %d - число -->
     <plurals name="numberOfYears">
+        <!-- форма для ед. числа, например, "1 год" -->
         <item quantity="one">%d год</item>
+        <!-- форма для для числительных 2, 3, 4, например, "4 года" -->
         <item quantity="few">%d года</item>
+        <!-- форма для остальных числительных, например, "11 лет" -->
         <item quantity="other">%d лет</item>
+        <!-- форма для остальных числительных, например, "11 лет" -->
         <item quantity="many">%d лет</item>
+        <!-- форма для нуля, например, "0 лет" -->
         <item quantity="zero">%d лет</item>
     </plurals>
+    <!-- %d - число -->
     <plurals name="numberOfMonths">
         <item quantity="one">%d месяц</item>
         <item quantity="few">%d месяца</item>
@@ -14,6 +23,7 @@
         <item quantity="many">%d месяцев</item>
         <item quantity="zero">%d месяцев</item>
     </plurals>
+    <!-- %d - число -->
     <plurals name="numberOfWeeks">
         <item quantity="one">%d неделя</item>
         <item quantity="few">%d недели</item>
@@ -21,6 +31,7 @@
         <item quantity="many">%d недель</item>
         <item quantity="zero">%d недель</item>
     </plurals>
+    <!-- %d - число -->
     <plurals name="numberOfDays">
         <item quantity="one">%d день</item>
         <item quantity="few">%d дня</item>
@@ -28,6 +39,7 @@
         <item quantity="many">%d дней</item>
         <item quantity="zero">%d дней</item>
     </plurals>
+    <!-- %d - число -->
     <plurals name="numberOfHours">
         <item quantity="one">%d час</item>
         <item quantity="few">%d часа</item>
@@ -35,6 +47,7 @@
         <item quantity="many">%d часов</item>
         <item quantity="zero">%d часов</item>
     </plurals>
+    <!-- %d - число -->
     <plurals name="numberOfMinutes">
         <item quantity="one">%d минута</item>
         <item quantity="few">%d минуты</item>
@@ -84,6 +97,7 @@
         <item quantity="many">минут</item>
         <item quantity="zero">минут</item>
     </plurals>
+    <!-- %d - число -->
     <plurals name="numberOfTimesInADay">
         <item quantity="one">%d раз в день</item>
         <item quantity="few">%d раза в день</item>
@@ -91,11 +105,20 @@
         <item quantity="many">%d раз в день</item>
         <item quantity="zero">%d раз в день</item>
     </plurals>
+    <!-- %d - число -->
     <plurals name="numberOfAddedEvents">
         <item quantity="one">Добавлено %d событие</item>
         <item quantity="few">Добавлено %d события</item>
         <item quantity="other">Добавлено %d событий</item>
         <item quantity="many">Добавлено %d событий</item>
         <item quantity="zero">Добавлено %d событий</item>
+    </plurals>
+    <!-- %d - число -->
+    <plurals name="numberOfPoints">
+        <item quantity="one">%d балл</item>
+        <item quantity="few">%d балла</item>
+        <item quantity="other">%d баллов</item>
+        <item quantity="many">%d баллов</item>
+        <item quantity="zero">%d баллов</item>
     </plurals>
 </resources>

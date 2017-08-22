@@ -46,7 +46,7 @@
     <string name="failed_to_create_file_for_camera">Не удалось создать файл для фотографии</string>
     <string name="failed_to_create_file_for_crop">Не удалось создать файл для обработки</string>
     <string name="failed_to_select_image">Не удалось загрузить выбранное изображение</string>
-    <string name="failed_to_crop_image">При обработке изобарженяия произошла ошибка</string>
+    <string name="failed_to_crop_image">При обработке изображения произошла ошибка</string>
     <string name="failed_to_save_result_file">При сохранении файла произошла ошибка</string>
     <string name="crop_image_title">Обрезать фото</string>
     <string name="event_diaper">Смена подгузника</string>
@@ -360,5 +360,5 @@
     <string name="default_sound">По умолчанию</string>
     <string name="linear_group_finished_notification_title">Продлить события?</string>
     <!-- \n - символ переноса строки -->
-    <string name="linear_group_finished_dialog_description">Завершаются события линейной группы "%s".\n\nПродлить на:</string>
+    <string name="linear_group_finished_dialog_description">Завершаются события линейной группы %s.\n\nПродлить на:</string>
 </resources>
