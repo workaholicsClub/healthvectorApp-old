@@ -43,7 +43,6 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
-        textViewIntention.setText(R.string.no_achievements);
     }
 
     @Override
@@ -55,7 +54,7 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
         List<ConcreteAchievement> concreteAchievements = state.getConcreteAchievements();
         adapter.setItems(concreteAchievements);
-        adapter.setFabController(child.getId() == null ? null : fabController, isSelected());
+        adapter.setFabController(child.getId() == null ? null : fabController);
         recyclerView.setVisibility(concreteAchievements.isEmpty() ? View.GONE : View.VISIBLE);
 
         textViewIntention.setVisibility(concreteAchievements.isEmpty() ? View.VISIBLE : View.GONE);
@@ -97,5 +96,11 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     @Override
     public void edit(ConcreteAchievement item) {
         presenter.edit(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.closeAllItems(); // для одинакового поведения с Мед. данными
     }
 }

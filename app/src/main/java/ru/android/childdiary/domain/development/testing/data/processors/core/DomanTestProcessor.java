@@ -65,18 +65,16 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
     }
 
     @Override
-    public Boolean goToNextQuestion() {
+    public void goToNextQuestion() {
         Boolean answer = answers.get(index);
         if (answer == null) {
             throw new IllegalStateException("Don't skip questions!");
         }
-        Boolean forward = null;
         if (answer) {
             if (lastAnswer == null || lastAnswer) {
                 // ответили Да, предыдущий ответ был Да ИЛИ не было ответа
                 stage = index;
                 ++index;
-                forward = true;
             } else {
                 // ответили Да, предыдущий ответ был Нет
                 stage = index;
@@ -91,11 +89,9 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
                 // ответили Нет, предыдущий ответ был Нет ИЛИ не было ответа
                 stage = index > 0 ? index - 1 : 0;
                 --index;
-                forward = false;
             }
         }
         lastAnswer = answer;
-        return forward;
     }
 
     @Nullable

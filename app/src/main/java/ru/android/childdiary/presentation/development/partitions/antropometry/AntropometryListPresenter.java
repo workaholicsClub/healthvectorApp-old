@@ -10,10 +10,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.child.ChildInteractor;
-import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
+import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.development.antropometry.AntropometryInteractor;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryPresenter;
 
 @InjectViewState
@@ -94,6 +94,17 @@ public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<Ant
                                         getViewState().noChartData();
                                     }
                                 },
+                                this::onUnexpectedError));
+    }
+
+    public void addAntropometry() {
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .flatMap(child -> antropometryInteractor.getDefaultAntropometry(child))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                antropometry -> getViewState().navigateToAntropometryAdd(antropometry.getChild(), antropometry),
                                 this::onUnexpectedError));
     }
 }

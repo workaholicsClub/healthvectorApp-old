@@ -25,6 +25,18 @@
             <a href=\"%3$s\">%4$s</a>
         ]]>
     </string>
+    <string name="nothing_found_format">
+        <![CDATA[
+            %1$s
+            <br /><br />
+            <a href=\"%2$s\">%3$s</a>
+        ]]>
+    </string>
+    <string name="link_format">
+        <![CDATA[
+            <a href=\"%1$s\">%2$s</a>
+        ]]>
+    </string>
     <string name="doman_result_text_format">
         <![CDATA[
             %1$s

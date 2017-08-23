@@ -15,12 +15,12 @@ import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.development.testing.TestingInteractor;
+import ru.android.childdiary.domain.development.testing.data.TestFactory;
 import ru.android.childdiary.domain.development.testing.data.TestResult;
 import ru.android.childdiary.domain.development.testing.data.interpreters.core.TestInterpreter;
 import ru.android.childdiary.domain.development.testing.data.processors.core.BaseTestProcessor;
 import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessor;
-import ru.android.childdiary.domain.development.testing.data.TestFactory;
 import ru.android.childdiary.domain.development.testing.data.processors.core.TestParameters;
 import ru.android.childdiary.domain.development.testing.data.tests.core.DomanTest;
 import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
@@ -81,7 +81,6 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                     .test(test)
                     .parameter(getDomanParameter())
                     .question(testProcessor.getCurrentQuestion())
-                    .forward(true)
                     .build());
         }
     }
@@ -103,7 +102,6 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                 .test(test)
                 .parameter(getDomanParameter())
                 .question(testProcessor.getCurrentQuestion())
-                .forward(true)
                 .build());
     }
 
@@ -179,7 +177,7 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
     }
 
     private void goToNextQuestion() {
-        Boolean forward = testProcessor.goToNextQuestion();
+        testProcessor.goToNextQuestion();
         if (testProcessor.isFinished()) {
             TestInterpreter interpreter = testFactory.createTestInterpreter(testProcessor);
             String text = interpreter.interpret();
@@ -199,7 +197,6 @@ public class TestingPresenter extends BasePresenter<TestingView> implements Test
                     .test(test)
                     .parameter(getDomanParameter())
                     .question(testProcessor.getCurrentQuestion())
-                    .forward(forward)
                     .build());
         }
     }

@@ -3,6 +3,7 @@
     <integer name="max_length_field_note">2000</integer>
     <integer name="max_length_medicine_measure_value_amount">8</integer>
     <integer name="max_length_name_small">10</integer>
+    <integer name="max_length_name_medium">20</integer>
     <integer name="max_length_name">100</integer>
     <!-- animations -->
     <integer name="fragment_enter_exit_animation_duration">@android:integer/config_longAnimTime

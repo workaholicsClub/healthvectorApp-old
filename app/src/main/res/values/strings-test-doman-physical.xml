@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="test_doman_physical_name">Стадии моторного развития по Доману</string>
+    <string name="test_doman_physical_name">Доман: стадии моторного развития</string>
     <string name="physical_mobility">Подвижность</string>
     <string name="physical_speech">Речь</string>
     <string name="physical_manual">Подвижность пальцев рук</string>

@@ -31,4 +31,7 @@ public interface AntropometryListView extends BaseDevelopmentDiaryView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void confirmDelete(@NonNull Antropometry antropometry);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToAntropometryAdd(@NonNull Child child, @NonNull Antropometry defaultAntropometry);
 }

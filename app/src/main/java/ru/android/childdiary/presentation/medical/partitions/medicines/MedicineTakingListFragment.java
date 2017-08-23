@@ -23,16 +23,20 @@ import ru.android.childdiary.domain.medical.data.MedicineTaking;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingActionListener;
 import ru.android.childdiary.presentation.medical.adapters.medicines.MedicineTakingAdapter;
+import ru.android.childdiary.presentation.medical.add.visits.AddMedicineTakingActivity;
 import ru.android.childdiary.presentation.medical.edit.visits.EditMedicineTakingActivity;
 import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
 import ru.android.childdiary.presentation.medical.filter.adapters.ChipsAdapter;
 import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogArguments;
 import ru.android.childdiary.presentation.medical.filter.medicines.MedicineTakingFilterDialogFragment;
 import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
+import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class MedicineTakingListFragment extends BaseMedicalDataFragment
-        implements MedicineTakingListView, MedicineTakingActionListener {
+        implements MedicineTakingListView, MedicineTakingActionListener, HtmlUtils.OnLinkClickListener {
+    private static final String LINK_ADD = "add";
+
     @Getter
     @InjectPresenter
     MedicineTakingListPresenter presenter;
@@ -52,7 +56,10 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
-        textViewIntention.setText(R.string.add_medicine_taking);
+        String text = getString(R.string.link_format,
+                LINK_ADD,
+                getString(R.string.add_medicine_taking));
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
@@ -93,7 +100,7 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
 
         List<MedicineTaking> medicineTakingList = medicineTakingListState.getMedicineTakingList();
         adapter.setItems(medicineTakingList);
-        adapter.setFabController(child.getId() == null ? null : fabController, true);
+        adapter.setFabController(child.getId() == null ? null : fabController);
         recyclerView.setVisibility(medicineTakingList.isEmpty() ? View.GONE : View.VISIBLE);
 
         List<Chips> chips = medicineTakingListState.getChips();
@@ -101,7 +108,14 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         recyclerViewChips.setVisibility(chips.isEmpty() ? View.GONE : View.VISIBLE);
 
         textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
-        textViewIntention.setText(chips.isEmpty() ? R.string.add_medicine_taking : R.string.nothing_found);
+        if (chips.isEmpty()) {
+            String text = getString(R.string.link_format,
+                    LINK_ADD,
+                    getString(R.string.add_medicine_taking));
+            HtmlUtils.setupClickableLinks(textViewIntention, text, this);
+        } else {
+            textViewIntention.setText(R.string.nothing_found);
+        }
 
         line.setVisibility(medicineTakingList.isEmpty() && !chips.isEmpty() ? View.VISIBLE : View.GONE);
     }
@@ -149,5 +163,21 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
     @Override
     public void edit(MedicineTaking item) {
         presenter.editMedicineTaking(item);
+    }
+
+    @Override
+    public void onLinkClick(String url) {
+        if (LINK_ADD.equals(url)) {
+            presenter.addMedicineTaking();
+        }
+    }
+
+    @Override
+    public void navigateToMedicineTakingAdd(@NonNull MedicineTaking defaultMedicineTaking,
+                                            @Nullable LocalTime startTime,
+                                            @Nullable LocalTime finishTime) {
+        Intent intent = AddMedicineTakingActivity.getIntent(getContext(), defaultMedicineTaking,
+                startTime, finishTime);
+        startActivity(intent);
     }
 }

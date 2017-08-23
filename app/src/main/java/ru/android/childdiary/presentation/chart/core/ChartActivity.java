@@ -58,7 +58,7 @@ public abstract class ChartActivity extends BaseMvpActivity implements ViewPager
         }
         viewPager.setAdapter(pagesAdapter);
         viewPager.setCurrentItem(selectedPage, false);
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(chartFragments.size() - 1);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         WidgetsUtils.setupTabLayoutFont(tabLayout);

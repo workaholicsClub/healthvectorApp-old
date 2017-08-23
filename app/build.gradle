@@ -40,6 +40,7 @@ android {
         resValue "string", "font_path_splash", "fonts/Proxima-Nova-Semibold.otf"
 
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
         debug {

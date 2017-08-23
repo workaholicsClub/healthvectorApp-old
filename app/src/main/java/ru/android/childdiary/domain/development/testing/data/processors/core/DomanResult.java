@@ -25,8 +25,10 @@ public class DomanResult {
     int stage;
     @Nullable
     LocalDate domanDate;
-    @NonNull
+    @Nullable
     Double percents;
+    @Nullable
+    StageType stageType;
 
     @Builder
     public DomanResult(@NonNull LocalDate birthDate,
@@ -37,12 +39,31 @@ public class DomanResult {
         this.date = date;
         this.stage = stage;
         this.domanDate = domanDate;
-        percents = calculatePercents();
+        percents = domanDate == null ? null : calculatePercents(birthDate, domanDate, stage);
+        stageType = domanDate == null ? null : calculateStageType(birthDate, domanDate, stage);
     }
 
-    private double calculatePercents() {
-        LocalDate toDate = domanDate == null ? date : domanDate;
-        double months = DomanTestProcessorUtils.getMonths(birthDate, toDate);
+    private static StageType calculateStageType(@NonNull LocalDate birthDate,
+                                                @NonNull LocalDate domanDate,
+                                                int stage) {
+        double months = DomanTestProcessorUtils.getMonths(birthDate, domanDate);
+        DomanTestProcessorUtils.Range advancedRange = ADVANCED_RANGES[stage];
+        DomanTestProcessorUtils.Range normalRange = NORMAL_RANGES[stage];
+        DomanTestProcessorUtils.Range slowRange = SLOW_RANGES[stage];
+        double percents;
+        if (months < advancedRange.getTo()) {
+            return StageType.ADVANCED;
+        } else if (months < normalRange.getTo()) {
+            return StageType.NORMAL;
+        } else {
+            return StageType.SLOW;
+        }
+    }
+
+    private static double calculatePercents(@NonNull LocalDate birthDate,
+                                            @NonNull LocalDate domanDate,
+                                            int stage) {
+        double months = DomanTestProcessorUtils.getMonths(birthDate, domanDate);
         DomanTestProcessorUtils.Range advancedRange = ADVANCED_RANGES[stage];
         DomanTestProcessorUtils.Range normalRange = NORMAL_RANGES[stage];
         DomanTestProcessorUtils.Range slowRange = SLOW_RANGES[stage];
@@ -56,5 +77,9 @@ public class DomanResult {
         }
         percents = 100 - percents;
         return percents;
+    }
+
+    public enum StageType {
+        ADVANCED, NORMAL, SLOW
     }
 }

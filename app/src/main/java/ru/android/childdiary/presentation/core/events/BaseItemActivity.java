@@ -268,7 +268,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
             return;
         }
         if (medicineMeasureList.isEmpty()) {
-            Intent intent = MedicineMeasureAddActivity.getIntent(this, getSex());
+            Intent intent = MedicineMeasureAddActivity.getIntent(this, getSex(), null);
             startActivityForResult(intent, REQUEST_MEDICINE_MEASURE_ADD);
             return;
         }

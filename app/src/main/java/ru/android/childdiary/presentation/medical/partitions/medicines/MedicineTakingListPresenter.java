@@ -182,4 +182,24 @@ public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<Medici
                 .subscribe(filter -> {
                 }, this::onUnexpectedError));
     }
+
+    public void addMedicineTaking() {
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        medicineTakingInteractor.getDefaultMedicineTaking(),
+                        medicineTakingInteractor.getStartTimeOnce(),
+                        medicineTakingInteractor.getFinishTimeOnce(),
+                        (defaultMedicineTaking, startTime, finishTime) -> MedicineTakingParameters.builder()
+                                .defaultMedicineTaking(defaultMedicineTaking)
+                                .startTime(startTime)
+                                .finishTime(finishTime)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(parameters -> getViewState().navigateToMedicineTakingAdd(
+                                parameters.getDefaultMedicineTaking(),
+                                parameters.getStartTime(),
+                                parameters.getFinishTime()),
+                                this::onUnexpectedError));
+    }
 }

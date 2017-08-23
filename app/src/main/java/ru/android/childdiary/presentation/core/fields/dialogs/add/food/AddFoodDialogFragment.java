@@ -23,7 +23,7 @@ public class AddFoodDialogFragment
 
     @Override
     protected int getMaxLength() {
-        return getResources().getInteger(R.integer.max_length_name_small);
+        return getResources().getInteger(R.integer.max_length_name_medium);
     }
 
     @Override

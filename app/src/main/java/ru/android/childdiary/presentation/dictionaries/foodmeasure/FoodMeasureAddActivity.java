@@ -28,9 +28,10 @@ public class FoodMeasureAddActivity extends BaseAddActivity<FoodMeasure, FoodMea
     @InjectPresenter
     FoodMeasureAddPresenter presenter;
 
-    public static Intent getIntent(Context context, @Nullable Sex sex) {
+    public static Intent getIntent(Context context, @Nullable Sex sex, @Nullable String defaultText) {
         return new Intent(context, FoodMeasureAddActivity.class)
-                .putExtra(ExtraConstants.EXTRA_SEX, sex);
+                .putExtra(ExtraConstants.EXTRA_SEX, sex)
+                .putExtra(ExtraConstants.EXTRA_TEXT, defaultText);
     }
 
     @Override

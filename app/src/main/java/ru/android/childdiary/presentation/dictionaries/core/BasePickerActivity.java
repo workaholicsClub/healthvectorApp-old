@@ -19,6 +19,7 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.List;
 
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
@@ -31,11 +32,23 @@ import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.ItemActionListener;
 import ru.android.childdiary.presentation.core.bindings.RxSearchView;
 import ru.android.childdiary.presentation.core.bindings.SearchViewQueryTextEvent;
+import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public abstract class BasePickerActivity<T extends Serializable, V extends BasePickerView<T>> extends BaseMvpActivity
-        implements BasePickerView<T>, ItemActionListener<T>, FabController {
+        implements BasePickerView<T>, ItemActionListener<T>, FabController, HtmlUtils.OnLinkClickListener {
+    private static final String LINK_ADD = "add";
+
+    @BindInt(R.integer.max_length_name)
+    protected int maxLengthName;
+
+    @BindInt(R.integer.max_length_name_medium)
+    protected int maxLengthNameMedium;
+
+    @BindInt(R.integer.max_length_name_small)
+    protected int maxLengthNameSmall;
+
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
@@ -50,6 +63,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
 
     private BaseRecyclerViewAdapter<T, ? extends BaseRecyclerViewHolder<T>> adapter;
     private boolean pick;
+    private String defaultText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,8 +108,13 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
 
     @OnClick(R.id.fab)
     void onFabClick() {
+        startAddActivity();
+    }
+
+    private void startAddActivity() {
         Intent intent = new Intent(this, getAddActivityClass());
         intent.putExtra(ExtraConstants.EXTRA_SEX, getSex());
+        intent.putExtra(ExtraConstants.EXTRA_TEXT, defaultText);
         startActivity(intent);
     }
 
@@ -105,13 +124,14 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        WidgetsUtils.setupSearchView(searchView);
+        WidgetsUtils.setupSearchView(searchView, getMaxLength());
         unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(RxSearchView.queryTextChangeEvents(searchView)));
         return true;
     }
 
     @Override
     public void processSearchEvent(@NonNull SearchViewQueryTextEvent event) {
+        defaultText = event.getQueryText().toString();
         if (event.isSubmitted()) {
             hideKeyboardAndClearFocus(event.getView());
         }
@@ -123,7 +143,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
 
         progressBar.setVisibility(View.GONE);
         textViewIntention.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
-        textViewIntention.setText(getIntentionText(isFiltering));
+        setupTextViewIntention(isFiltering);
         recyclerView.setVisibility(list.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
@@ -165,5 +185,26 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
 
     protected abstract BaseRecyclerViewAdapter<T, ? extends BaseRecyclerViewHolder<T>> createAdapter();
 
-    protected abstract String getIntentionText(boolean isFiltering);
+    private void setupTextViewIntention(boolean isFiltering) {
+        String text = isFiltering
+                ? getString(R.string.nothing_found_format,
+                getString(R.string.nothing_found),
+                LINK_ADD,
+                getIntentionText())
+                : getString(R.string.link_format,
+                LINK_ADD,
+                getIntentionText());
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this);
+    }
+
+    protected abstract int getMaxLength();
+
+    protected abstract String getIntentionText();
+
+    @Override
+    public void onLinkClick(String url) {
+        if (LINK_ADD.equals(url)) {
+            startAddActivity();
+        }
+    }
 }

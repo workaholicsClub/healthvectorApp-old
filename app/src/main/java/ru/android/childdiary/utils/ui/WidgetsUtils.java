@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SearchView;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,7 @@ public class WidgetsUtils {
         }
     }
 
-    public static void setupSearchView(SearchView searchView) {
+    public static void setupSearchView(SearchView searchView, int maxLength) {
         @IdRes int resId;
         ImageView imageView;
         Context context = searchView.getContext();
@@ -105,5 +106,6 @@ public class WidgetsUtils {
         textView.setTextAppearance(context, R.style.SearchTextAppearance);
         textView.setTypeface(FontUtils.getTypefaceRegular(context));
         textView.setHintTextColor(ContextCompat.getColor(context, R.color.white_transparent));
+        textView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
     }
 }

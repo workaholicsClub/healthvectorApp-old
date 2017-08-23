@@ -21,6 +21,7 @@ import butterknife.OnClick;
 import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
+import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -43,6 +44,11 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        if (savedInstanceState == null) {
+            String defaultText = getIntent().getStringExtra(ExtraConstants.EXTRA_TEXT);
+            autoCompleteView.setText(defaultText);
+        }
 
         setupEditTextView(autoCompleteView);
 
@@ -122,7 +128,6 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
     public void nameValidated(boolean valid) {
         autoCompleteView.validated(valid);
     }
-
 
     @Override
     public void onBackPressed() {

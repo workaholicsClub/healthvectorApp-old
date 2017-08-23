@@ -23,6 +23,7 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.utils.IntentUtils;
 
 public class WebBrowserActivity extends BaseMvpActivity {
     @BindView(R.id.webView)
@@ -79,7 +80,7 @@ public class WebBrowserActivity extends BaseMvpActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         title = getIntent().getStringExtra(ExtraConstants.EXTRA_TITLE);
         url = getIntent().getStringExtra(ExtraConstants.EXTRA_URL);
 
@@ -154,22 +155,10 @@ public class WebBrowserActivity extends BaseMvpActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_open_in_web_browser:
-                startBrowser(this, url);
+                IntentUtils.startWebBrowser(this, url);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void startBrowser(Context context, String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        if (intent.resolveActivity(context.getPackageManager()) != null) {
-            logger.debug("starting web browser");
-            startActivity(intent);
-        } else {
-            logger.error("not found app to open intent: " + intent);
-            showToast(getString(R.string.browser_not_available));
         }
     }
 }

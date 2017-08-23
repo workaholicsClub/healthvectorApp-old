@@ -23,16 +23,20 @@ import ru.android.childdiary.domain.medical.data.DoctorVisit;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitActionListener;
 import ru.android.childdiary.presentation.medical.adapters.visits.DoctorVisitAdapter;
+import ru.android.childdiary.presentation.medical.add.medicines.AddDoctorVisitActivity;
 import ru.android.childdiary.presentation.medical.edit.medicines.EditDoctorVisitActivity;
 import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
 import ru.android.childdiary.presentation.medical.filter.adapters.ChipsAdapter;
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogArguments;
 import ru.android.childdiary.presentation.medical.filter.visits.DoctorVisitFilterDialogFragment;
 import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
+import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class DoctorVisitsFragment extends BaseMedicalDataFragment
-        implements DoctorVisitsView, DoctorVisitActionListener {
+        implements DoctorVisitsView, DoctorVisitActionListener, HtmlUtils.OnLinkClickListener {
+    private static final String LINK_ADD = "add";
+
     @Getter
     @InjectPresenter
     DoctorVisitsPresenter presenter;
@@ -52,7 +56,10 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
-        textViewIntention.setText(R.string.add_doctor_visit);
+        String text = getString(R.string.link_format,
+                LINK_ADD,
+                getString(R.string.add_doctor_visit));
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
@@ -93,7 +100,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
 
         List<DoctorVisit> doctorVisits = doctorVisitsState.getDoctorVisits();
         adapter.setItems(doctorVisits);
-        adapter.setFabController(child.getId() == null ? null : fabController, true);
+        adapter.setFabController(child.getId() == null ? null : fabController);
         recyclerView.setVisibility(doctorVisits.isEmpty() ? View.GONE : View.VISIBLE);
 
         List<Chips> chips = doctorVisitsState.getChips();
@@ -101,7 +108,14 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         recyclerViewChips.setVisibility(chips.isEmpty() ? View.GONE : View.VISIBLE);
 
         textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
-        textViewIntention.setText(chips.isEmpty() ? R.string.add_doctor_visit : R.string.nothing_found);
+        if (chips.isEmpty()) {
+            String text = getString(R.string.link_format,
+                    LINK_ADD,
+                    getString(R.string.add_doctor_visit));
+            HtmlUtils.setupClickableLinks(textViewIntention, text, this);
+        } else {
+            textViewIntention.setText(R.string.nothing_found);
+        }
 
         line.setVisibility(doctorVisits.isEmpty() && !chips.isEmpty() ? View.VISIBLE : View.GONE);
     }
@@ -149,5 +163,21 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
     @Override
     public void edit(DoctorVisit item) {
         presenter.editDoctorVisit(item);
+    }
+
+    @Override
+    public void onLinkClick(String url) {
+        if (LINK_ADD.equals(url)) {
+            presenter.addDoctorVisit();
+        }
+    }
+
+    @Override
+    public void navigateToDoctorVisitAdd(@NonNull DoctorVisit defaultDoctorVisit,
+                                         @Nullable LocalTime startTime,
+                                         @Nullable LocalTime finishTime) {
+        Intent intent = AddDoctorVisitActivity.getIntent(getContext(), defaultDoctorVisit,
+                startTime, finishTime);
+        startActivity(intent);
     }
 }

@@ -186,4 +186,24 @@ public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisits
                 .subscribe(filter -> {
                 }, this::onUnexpectedError));
     }
+
+    public void addDoctorVisit() {
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        doctorVisitInteractor.getDefaultDoctorVisit(),
+                        doctorVisitInteractor.getStartTimeOnce(),
+                        doctorVisitInteractor.getFinishTimeOnce(),
+                        (defaultDoctorVisit, startTime, finishTime) -> DoctorVisitParameters.builder()
+                                .defaultDoctorVisit(defaultDoctorVisit)
+                                .startTime(startTime)
+                                .finishTime(finishTime)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(parameters -> getViewState().navigateToDoctorVisitAdd(
+                                parameters.getDefaultDoctorVisit(),
+                                parameters.getStartTime(),
+                                parameters.getFinishTime()),
+                                this::onUnexpectedError));
+    }
 }

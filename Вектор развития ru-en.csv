@@ -64,7 +64,6 @@
 "validate_event_pump_fill_right_amount";"Введите количество сцеженного молока для правой груди";
 "validate_event_sleep_timer_already_started";"Таймер сна уже запущен";
 "validate_start_finish_time";"Время окончания не может быть меньше, чем время начала события";
-"validate_doctor_visit_doctor_empty";"Выберите специализацию врача";
 "validate_medicine_taking_medicine_empty";"Выберите лекарство";
 "validate_repeat_parameters_periodicity_empty";"Выберите периодичность";
 "validate_repeat_parameters_length_empty";"Введите длительность";
@@ -123,7 +122,7 @@
 "menu_rotate";"Повернуть";
 "doctor_visits";"Визиты к врачу";
 "medicines";"Лекарства";
-"doctors";"Специализации";
+"doctors";"Врачи";
 "achievements";"Достижения";
 "development_tab_title_testing";"Тестирование";
 "development_tab_title_antropometry_list";"Рост/Вес";
@@ -137,13 +136,9 @@
 "note_with_photo";"Введите описание";
 "medicine_measure";"Дозировка";
 "finish";"Завершить";
-"add_medicine_taking_title";"Добавить рецепт";
-"add_doctor_visit_title";"Добавить визит к врачу";
 "edit_medicine_taking_title";"Рецепт";
-"add_medicine_title";"Добавить лекарство";
 "medicines_title";"Список лекарств";
-"add_doctor_title";"Добавить специализацию";
-"doctors_title";"Список специализаций";
+"doctors_title";"Список врачей";
 "achievements_title";"Список достижений";
 "search";"Поиск";
 "frequency_once";"Однократно";
@@ -170,8 +165,8 @@
 "default_doctor_name";"Педиатр";
 "delete_photo_confirmation_dialog_title";"Удалить фото?";
 "need_to_fill_not_or_photo";"Для выполнения события добавьте к событию описание или фотографию";
-"add_doctor_visit";"Добавьте визит к врачу";
-"add_medicine_taking";"Добавьте рецепт";
+"add_doctor_visit";"Добавить визит к врачу";
+"add_medicine_taking";"Добавить рецепт";
 "delete_event_confirmation_dialog_title";"Удалить событие?";
 "delete_doctor_visit_confirmation_dialog_title";"Удалить визит к врачу?";
 "delete_medicine_taking_confirmation_dialog_title";"Удалить рецепт?";
@@ -256,7 +251,7 @@
 "deletion_restricted_doctor";"Данная специализация привязана к событиям или визитам";
 "start_testing";"Начать тестирование";
 "stop_testing_confirm_dialog_title";"Прервать тестирование?";
-"parameter";"Параметр";
+"parameter";"Тип исследования";
 "age";"Возраст";
 "validation_no_age";"Введите возраст";
 "date_already_used_dialog_text";"Вы уже проходили тестирование %1$s по параметру \""%2$s\"". Выберите другую дату или другой параметр тестирования.";"%1$s - строка, дата тестирования (число-месяц-год), %2$s - строка, параметр тестирования";
@@ -264,8 +259,8 @@
 "test_chart_mental_tab";"Сенсорное";
 "delete_test_result_dialog_title";"Удалить результаты тестирования?";
 "no_doman_test_data";"Пройдите тестирование по методу Гленна Домана";
-"no_antropometry_data";"Добавьте показатели роста и веса";
-"no_achievements";"Добавьте достижения";
+"add_antropometry";"Добавить показатели роста и веса";
+"add_antropometry_intention";"Добавьте показатели роста и веса";
 "doman_chart_y_title";"Уровень";
 "doman_chart_x_title";"Стадия";
 "height";"Рост";
@@ -284,9 +279,9 @@
 "no_child_specified_for_testing_dialog_title";"Результаты тестирования не будут сохранены";
 "no_child_specified_for_testing_dialog_text";"Чтобы сохранить результаты тестирования, добавьте профиль ребенка.";
 "continue_without_profile";"Продолжить без профиля";
-"add_doctor_intention";"Добавьте специализацию";
-"add_medicine_intention";"Добавьте лекарство";
-"add_achievement_intention";"Добавьте достижение";
+"add_doctor";"Добавить специализацию";
+"add_medicine";"Добавить лекарство";
+"add_achievement";"Добавить достижение";
 "validation_antropometry_invalid_height";"Некорректное значение роста";
 "validation_antropometry_invalid_weight";"Некорректное значение веса";
 "achievement";"Достижение";
@@ -294,12 +289,9 @@
 "fill_achievement_date";"Укажите дату достижения";
 "child_profile";"Профиль ребенка";
 "add_food";"Добавить прикорм";
-"add_achievement";"Добавить достижение";
 "add_measure_unit";"Добавить единицу измерения";
 "delete_food";"Удалить прикорм?";
 "delete_measure_unit";"Удалить единицу измерения?";
-"intention_add_food";"Добавьте прикорм";
-"intention_add_measure_unit";"Добавьте единицу измерения";
 "deletion_restricted_food";"Данный прикорм привязан к событиям";
 "deletion_restricted_food_measure";"Данная единица измерения привязана к событиям";
 "deletion_restricted_medicine_measure";"Данная единица измерения привязана к событиям или рецептам";
@@ -385,7 +377,7 @@
 "item";"Примитивная кора";
 "item";"Сложная кора";
 "strings-test-doman-mental.xml";
-"test_doman_mental_name";"Стадии сенсорного развития по Доману";
+"test_doman_mental_name";"Доман: стадии сенсорного развития";
 "mental_vision";"Зрение";
 "mental_audition";"Слух";
 "mental_sensitivity";"Осязание";
@@ -414,7 +406,7 @@
 "item";"Способность определять характеристики предметов с помощью тактильности";
 "item";"Тактильная идентификация предметов";
 "strings-test-doman-physical.xml";
-"test_doman_physical_name";"Стадии моторного развития по Доману";
+"test_doman_physical_name";"Доман: стадии моторного развития";
 "physical_mobility";"Подвижность";
 "physical_speech";"Речь";
 "physical_manual";"Подвижность пальцев рук";

@@ -28,20 +28,16 @@ public class TestingQuestionArguments extends AppPartitionArguments {
     DomanTestParameter parameter;
     @NonNull
     Question question;
-    @Nullable
-    Boolean forward;
 
     @Builder(builderMethodName = "testingQuestionBuilder")
     public TestingQuestionArguments(@NonNull Child child,
                                     @NonNull LocalDate selectedDate,
                                     @NonNull Test test,
                                     @Nullable DomanTestParameter parameter,
-                                    @NonNull Question question,
-                                    @Nullable Boolean forward) {
+                                    @NonNull Question question) {
         super(child, selectedDate);
         this.test = test;
         this.parameter = parameter;
         this.question = question;
-        this.forward = forward;
     }
 }

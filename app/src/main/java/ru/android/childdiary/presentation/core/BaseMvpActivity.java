@@ -303,7 +303,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
         }
     }
 
-    protected final void showToast(String text) {
+    public final void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 

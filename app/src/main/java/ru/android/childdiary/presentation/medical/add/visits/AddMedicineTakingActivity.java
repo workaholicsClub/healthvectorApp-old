@@ -102,7 +102,7 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarTitle(R.string.add_medicine_taking_title);
+        setupToolbarTitle(R.string.add_medicine_taking);
     }
 
     @Override

@@ -75,8 +75,12 @@ public class DoctorPickerActivity extends BasePickerActivity<Doctor, DoctorPicke
     }
 
     @Override
-    protected String getIntentionText(boolean isFiltering) {
-        return (isFiltering ? getString(R.string.nothing_found) + "\n\n" : "")
-                + getString(R.string.add_doctor_intention);
+    protected int getMaxLength() {
+        return maxLengthName;
+    }
+
+    @Override
+    protected String getIntentionText() {
+        return getString(R.string.add_doctor);
     }
 }

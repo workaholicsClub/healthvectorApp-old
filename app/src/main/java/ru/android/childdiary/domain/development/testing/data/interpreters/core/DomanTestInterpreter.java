@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
 
-import org.joda.time.LocalDate;
-
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -13,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import ru.android.childdiary.R;
+import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessor;
 import ru.android.childdiary.domain.development.testing.data.tests.core.DomanTest;
 
@@ -21,12 +20,14 @@ import ru.android.childdiary.domain.development.testing.data.tests.core.DomanTes
 public abstract class DomanTestInterpreter<T extends DomanTest, TP extends DomanTestProcessor<T>>
         extends BaseTestInterpreter<T, TP> {
     private final List<String> stageTitles, stageDescriptions;
+    private final DomanResult domanResult;
 
     protected DomanTestInterpreter(Context context,
                                    @NonNull TP testProcessor) {
         super(context, testProcessor);
         stageTitles = getStageTitles();
         stageDescriptions = getStageDescriptions();
+        domanResult = testProcessor.getDomanResult();
     }
 
     private List<String> getStageTitles() {
@@ -49,29 +50,32 @@ public abstract class DomanTestInterpreter<T extends DomanTest, TP extends Doman
     @Override
     public String interpret() {
         String format = context.getString(R.string.doman_result_text_format);
-        int stage = testProcessor.getResult();
+        int stage = domanResult.getStage();
         return String.format(format,
                 getStageTitle(stage),
                 getStageDescription(stage),
-                getStageType(testProcessor.getInitialStage(), stage, testProcessor.getDomanDate()));
+                getStageType(domanResult.getStageType()));
     }
 
     @Override
     public String interpretShort() {
-        int stage = testProcessor.getResult();
+        int stage = domanResult.getStage();
         return getStageTitle(stage);
     }
 
-    private String getStageType(int initialStage, int stage, @Nullable LocalDate domanDate) {
-        if (domanDate == null) {
+    private String getStageType(@Nullable DomanResult.StageType stageType) {
+        if (stageType == null) {
             return context.getString(R.string.doman_stage_slow);
         }
-        if (initialStage == stage) {
-            return context.getString(R.string.doman_stage_normal);
-        } else if (initialStage < stage) {
-            return context.getString(R.string.doman_stage_advanced);
+        switch (stageType) {
+            case ADVANCED:
+                return context.getString(R.string.doman_stage_advanced);
+            case NORMAL:
+                return context.getString(R.string.doman_stage_normal);
+            case SLOW:
+                return context.getString(R.string.doman_stage_slow);
         }
-        return context.getString(R.string.doman_stage_slow);
+        throw new IllegalStateException("Unsupported stage type");
     }
 
     @Nullable

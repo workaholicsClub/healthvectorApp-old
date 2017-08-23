@@ -14,6 +14,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
+import ru.android.childdiary.presentation.help.contacts.ContactUsActivity;
 import ru.android.childdiary.presentation.onboarding.AppIntroActivity;
 import ru.android.childdiary.presentation.settings.adapters.SettingsAdapter;
 import ru.android.childdiary.presentation.settings.adapters.items.BaseSettingsItem;
@@ -69,6 +70,13 @@ public class HelpFragment extends AppPartitionFragment implements HelpView,
                 .listener(this)
                 .enabled(true)
                 .build());
+        items.add(IntentSettingsItem.builder()
+                .id(Intention.CONTACT_US.ordinal())
+                .title(getString(R.string.contact_us))
+                .iconRes(R.drawable.ic_contact_us)
+                .listener(this)
+                .enabled(true)
+                .build());
         return items;
     }
 
@@ -80,12 +88,15 @@ public class HelpFragment extends AppPartitionFragment implements HelpView,
                 Intent intent = AppIntroActivity.getIntent(getContext(), false);
                 startActivity(intent);
                 break;
+            case CONTACT_US:
+                startActivity(ContactUsActivity.getIntent(getContext(), getSex()));
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported intention");
         }
     }
 
     private enum Intention {
-        ONBOARDING
+        ONBOARDING, CONTACT_US
     }
 }

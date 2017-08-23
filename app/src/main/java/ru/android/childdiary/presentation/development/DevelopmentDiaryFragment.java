@@ -79,12 +79,12 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 0).get();
         selectedPage = selectedPage == null ? 0 : selectedPage;
         pagesAdapter = new PagesAdapter(getChildFragmentManager());
-        pagesAdapter.addFragment(putArguments(new ConcreteAchievementsFragment()), getString(R.string.achievements));
         pagesAdapter.addFragment(putArguments(new TestResultsFragment()), getString(R.string.development_tab_title_testing));
+        pagesAdapter.addFragment(putArguments(new ConcreteAchievementsFragment()), getString(R.string.achievements));
         pagesAdapter.addFragment(putArguments(new AntropometryListFragment()), getString(R.string.development_tab_title_antropometry_list));
         viewPager.setAdapter(pagesAdapter);
         viewPager.setCurrentItem(selectedPage, false);
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         WidgetsUtils.setupTabLayoutFont(tabLayout);
@@ -139,10 +139,10 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
             return null;
         }
         for (Fragment fragment : fragments) {
-            if (position == 0 && fragment instanceof ConcreteAchievementsFragment) {
-                return (ConcreteAchievementsFragment) fragment;
-            } else if (position == 1 && fragment instanceof TestResultsFragment) {
+            if (position == 0 && fragment instanceof TestResultsFragment) {
                 return (TestResultsFragment) fragment;
+            } else if (position == 1 && fragment instanceof ConcreteAchievementsFragment) {
+                return (ConcreteAchievementsFragment) fragment;
             } else if (position == 2 && fragment instanceof AntropometryListFragment) {
                 return (AntropometryListFragment) fragment;
             }
@@ -205,7 +205,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     void onFabClick() {
         int selectedPage = viewPager.getCurrentItem();
         switch (selectedPage) {
-            case 0:
+            case 1:
                 presenter.addAchievement();
                 break;
             case 2:
@@ -216,7 +216,10 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
 
     @Override
     public void showFab() {
-        fab.show();
+        int position = viewPager.getCurrentItem();
+        if (position == 1 || position == 2) {
+            fab.show();
+        }
     }
 
     @Override

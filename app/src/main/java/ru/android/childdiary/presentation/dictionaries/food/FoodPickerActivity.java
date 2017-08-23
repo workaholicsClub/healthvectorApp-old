@@ -75,8 +75,12 @@ public class FoodPickerActivity extends BasePickerActivity<Food, FoodPickerView>
     }
 
     @Override
-    protected String getIntentionText(boolean isFiltering) {
-        return (isFiltering ? getString(R.string.nothing_found) + "\n\n" : "")
-                + getString(R.string.intention_add_food);
+    protected int getMaxLength() {
+        return maxLengthNameMedium;
+    }
+
+    @Override
+    protected String getIntentionText() {
+        return getString(R.string.add_food);
     }
 }

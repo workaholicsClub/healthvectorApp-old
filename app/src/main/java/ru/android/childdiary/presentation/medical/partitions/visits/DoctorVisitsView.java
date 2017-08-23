@@ -33,4 +33,9 @@ public interface DoctorVisitsView extends BaseMedicalDataView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteConnectedEventsOrNot(@NonNull DoctorVisit doctorVisit);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToDoctorVisitAdd(@NonNull DoctorVisit defaultDoctorVisit,
+                                  @Nullable LocalTime startTime,
+                                  @Nullable LocalTime finishTime);
 }

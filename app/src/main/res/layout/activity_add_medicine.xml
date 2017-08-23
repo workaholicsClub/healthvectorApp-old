@@ -15,5 +15,5 @@
         app:fieldHideIfEmpty="true"
         app:fieldHint="@string/enter_medicine_name"
         app:fieldIcon="@drawable/ic_medicine"
-        app:fieldMaxLength="@integer/max_length_name_small" />
+        app:fieldMaxLength="@integer/max_length_name" />
 </LinearLayout>

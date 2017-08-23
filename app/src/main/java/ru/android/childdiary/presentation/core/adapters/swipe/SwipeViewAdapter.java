@@ -46,8 +46,8 @@ public abstract class SwipeViewAdapter<
         swipeManager.closeAllItems();
     }
 
-    public void setFabController(@Nullable FabController fabController, boolean isActive) {
-        swipeManager.setFabController(fabController, isActive);
+    public void setFabController(@Nullable FabController fabController) {
+        swipeManager.setFabController(fabController);
     }
 
     public void updateFabState() {

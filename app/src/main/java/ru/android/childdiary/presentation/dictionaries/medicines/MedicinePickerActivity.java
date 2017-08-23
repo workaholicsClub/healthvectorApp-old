@@ -75,8 +75,12 @@ public class MedicinePickerActivity extends BasePickerActivity<Medicine, Medicin
     }
 
     @Override
-    protected String getIntentionText(boolean isFiltering) {
-        return (isFiltering ? getString(R.string.nothing_found) + "\n\n" : "")
-                + getString(R.string.add_medicine_intention);
+    protected int getMaxLength() {
+        return maxLengthName;
+    }
+
+    @Override
+    protected String getIntentionText() {
+        return getString(R.string.add_medicine);
     }
 }

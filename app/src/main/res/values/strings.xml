@@ -41,7 +41,8 @@
     <string name="request_get_accounts_permission_title">Запрос на получение аккаунта</string>
     <string name="request_get_accounts_permission_text">Необходимо для создания резервной копии данных приложения в Google Drive.</string>
     <string name="camera_not_available">Камера не доступна</string>
-    <string name="browser_not_available">Браузер не доступен</string>
+    <string name="web_browser_not_available">Браузер не найден</string>
+    <string name="email_client_not_available">Почтовый клиент не найден</string>
     <string name="select_image">Выберите изображение</string>
     <string name="failed_to_create_file_for_camera">Не удалось создать файл для фотографии</string>
     <string name="failed_to_create_file_for_crop">Не удалось создать файл для обработки</string>
@@ -67,7 +68,6 @@
     <string name="validate_event_pump_fill_right_amount">Введите количество сцеженного молока для правой груди</string>
     <string name="validate_event_sleep_timer_already_started">Таймер сна уже запущен</string>
     <string name="validate_start_finish_time">Время окончания не может быть меньше, чем время начала события</string>
-    <string name="validate_doctor_visit_doctor_empty">Выберите специализацию врача</string>
     <string name="validate_medicine_taking_medicine_empty">Выберите лекарство</string>
     <string name="validate_repeat_parameters_periodicity_empty">Выберите периодичность</string>
     <string name="validate_repeat_parameters_length_empty">Введите длительность</string>
@@ -133,7 +133,7 @@
     <string name="menu_rotate">Повернуть</string>
     <string name="doctor_visits">Визиты к врачу</string>
     <string name="medicines">Лекарства</string>
-    <string name="doctors">Специализации</string>
+    <string name="doctors">Врачи</string>
     <string name="achievements">Достижения</string>
     <string name="development_tab_title_testing">Тестирование</string>
     <string name="development_tab_title_antropometry_list">Рост/Вес</string>
@@ -147,13 +147,9 @@
     <string name="note_with_photo">Введите описание</string>
     <string name="medicine_measure">Дозировка</string>
     <string name="finish">Завершить</string>
-    <string name="add_medicine_taking_title">Добавить рецепт</string>
-    <string name="add_doctor_visit_title">Добавить визит к врачу</string>
     <string name="edit_medicine_taking_title">Рецепт</string>
-    <string name="add_medicine_title">Добавить лекарство</string>
     <string name="medicines_title">Список лекарств</string>
-    <string name="add_doctor_title">Добавить специализацию</string>
-    <string name="doctors_title">Список специализаций</string>
+    <string name="doctors_title">Список врачей</string>
     <string name="achievements_title">Список достижений</string>
     <string name="search">Поиск</string>
     <string name="frequency_once">Однократно</string>
@@ -186,8 +182,8 @@
     <string name="default_doctor_name">Педиатр</string>
     <string name="delete_photo_confirmation_dialog_title">Удалить фото?</string>
     <string name="need_to_fill_not_or_photo">Для выполнения события добавьте к событию описание или фотографию</string>
-    <string name="add_doctor_visit">Добавьте визит к врачу</string>
-    <string name="add_medicine_taking">Добавьте рецепт</string>
+    <string name="add_doctor_visit">Добавить визит к врачу</string>
+    <string name="add_medicine_taking">Добавить рецепт</string>
     <string name="delete_event_confirmation_dialog_title">Удалить событие?</string>
     <string name="delete_doctor_visit_confirmation_dialog_title">Удалить визит к врачу?</string>
     <string name="delete_medicine_taking_confirmation_dialog_title">Удалить рецепт?</string>
@@ -280,7 +276,7 @@
     <string name="deletion_restricted_doctor">Данная специализация привязана к событиям или визитам</string>
     <string name="start_testing">Начать тестирование</string>
     <string name="stop_testing_confirm_dialog_title">Прервать тестирование?</string>
-    <string name="parameter">Параметр</string>
+    <string name="parameter">Тип исследования</string>
     <string name="age">Возраст</string>
     <string name="validation_no_age">Введите возраст</string>
     <!-- %1$s - строка, дата тестирования (число-месяц-год), %2$s - строка, параметр тестирования -->
@@ -289,8 +285,8 @@
     <string name="test_chart_mental_tab">Сенсорное</string>
     <string name="delete_test_result_dialog_title">Удалить результаты тестирования?</string>
     <string name="no_doman_test_data">Пройдите тестирование по методу Гленна Домана</string>
-    <string name="no_antropometry_data">Добавьте показатели роста и веса</string>
-    <string name="no_achievements">Добавьте достижения</string>
+    <string name="add_antropometry">Добавить показатели роста и веса</string>
+    <string name="add_antropometry_intention">Добавьте показатели роста и веса</string>
     <string name="doman_chart_y_title">Уровень</string>
     <string name="doman_chart_x_title">Стадия</string>
     <string name="height">Рост</string>
@@ -309,9 +305,9 @@
     <string name="no_child_specified_for_testing_dialog_title">Результаты тестирования не будут сохранены</string>
     <string name="no_child_specified_for_testing_dialog_text">Чтобы сохранить результаты тестирования, добавьте профиль ребенка.</string>
     <string name="continue_without_profile">Продолжить без профиля</string>
-    <string name="add_doctor_intention">Добавьте специализацию</string>
-    <string name="add_medicine_intention">Добавьте лекарство</string>
-    <string name="add_achievement_intention">Добавьте достижение</string>
+    <string name="add_doctor">Добавить специализацию</string>
+    <string name="add_medicine">Добавить лекарство</string>
+    <string name="add_achievement">Добавить достижение</string>
     <string name="validation_antropometry_invalid_height">Некорректное значение роста</string>
     <string name="validation_antropometry_invalid_weight">Некорректное значение веса</string>
     <string name="achievement">Достижение</string>
@@ -319,12 +315,9 @@
     <string name="fill_achievement_date">Укажите дату достижения</string>
     <string name="child_profile">Профиль ребенка</string>
     <string name="add_food">Добавить прикорм</string>
-    <string name="add_achievement">Добавить достижение</string>
     <string name="add_measure_unit">Добавить единицу измерения</string>
     <string name="delete_food">Удалить прикорм?</string>
     <string name="delete_measure_unit">Удалить единицу измерения?</string>
-    <string name="intention_add_food">Добавьте прикорм</string>
-    <string name="intention_add_measure_unit">Добавьте единицу измерения</string>
     <string name="deletion_restricted_food">Данный прикорм привязан к событиям</string>
     <string name="deletion_restricted_food_measure">Данная единица измерения привязана к событиям</string>
     <string name="deletion_restricted_medicine_measure">Данная единица измерения привязана к событиям или рецептам</string>
@@ -349,4 +342,5 @@
     <string name="linear_group_finished_notification_title">Продлить события?</string>
     <!-- \n - символ переноса строки -->
     <string name="linear_group_finished_dialog_description">Завершаются события линейной группы %s.\n\nПродлить на:</string>
+    <string name="contact_us">Свяжитесь с нами</string>
 </resources>

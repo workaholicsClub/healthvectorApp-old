@@ -75,8 +75,12 @@ public class MedicineMeasurePickerActivity extends BasePickerActivity<MedicineMe
     }
 
     @Override
-    protected String getIntentionText(boolean isFiltering) {
-        return (isFiltering ? getString(R.string.nothing_found) + "\n\n" : "")
-                + getString(R.string.intention_add_measure_unit);
+    protected int getMaxLength() {
+        return maxLengthNameSmall;
+    }
+
+    @Override
+    protected String getIntentionText() {
+        return getString(R.string.add_measure_unit);
     }
 }

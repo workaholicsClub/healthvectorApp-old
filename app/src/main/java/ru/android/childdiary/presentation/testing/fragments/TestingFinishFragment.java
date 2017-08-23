@@ -1,8 +1,6 @@
 package ru.android.childdiary.presentation.testing.fragments;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -27,6 +25,7 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView;
 import ru.android.childdiary.presentation.testing.TestingController;
 import ru.android.childdiary.utils.HtmlUtils;
+import ru.android.childdiary.utils.IntentUtils;
 import ru.android.childdiary.utils.strings.TestUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
@@ -153,18 +152,6 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
 
     @Override
     public void onLinkClick(String url) {
-        startBrowser(getContext(), url);
-    }
-
-    private void startBrowser(Context context, String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        if (intent.resolveActivity(context.getPackageManager()) != null) {
-            logger.debug("starting web browser");
-            startActivity(intent);
-        } else {
-            logger.error("not found app to open intent: " + intent);
-            showToast(getString(R.string.browser_not_available));
-        }
+        IntentUtils.startWebBrowser((BaseMvpActivity) getActivity(), url);
     }
 }

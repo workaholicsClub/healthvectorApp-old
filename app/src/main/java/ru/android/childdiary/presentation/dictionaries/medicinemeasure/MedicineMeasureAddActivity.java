@@ -28,9 +28,10 @@ public class MedicineMeasureAddActivity extends BaseAddActivity<MedicineMeasure,
     @InjectPresenter
     MedicineMeasureAddPresenter presenter;
 
-    public static Intent getIntent(Context context, @Nullable Sex sex) {
+    public static Intent getIntent(Context context, @Nullable Sex sex, @Nullable String defaultText) {
         return new Intent(context, MedicineMeasureAddActivity.class)
-                .putExtra(ExtraConstants.EXTRA_SEX, sex);
+                .putExtra(ExtraConstants.EXTRA_SEX, sex)
+                .putExtra(ExtraConstants.EXTRA_TEXT, defaultText);
     }
 
     @Override

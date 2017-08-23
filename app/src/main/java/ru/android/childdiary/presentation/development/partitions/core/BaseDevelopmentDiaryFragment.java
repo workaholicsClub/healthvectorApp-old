@@ -13,7 +13,6 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
-import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 
 public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiaryView> extends AppPartitionFragment
         implements BaseDevelopmentDiaryView {
@@ -60,9 +59,5 @@ public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiar
     public void onDetach() {
         super.onDetach();
         fabController = null;
-    }
-
-    protected final boolean isSelected() {
-        return ((DevelopmentDiaryFragment) getParentFragment()).getSelectedPage() == this;
     }
 }

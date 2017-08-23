@@ -28,9 +28,10 @@ public class AchievementAddActivity extends BaseAddActivity<Achievement, Achieve
     @InjectPresenter
     AchievementAddPresenter presenter;
 
-    public static Intent getIntent(Context context, @Nullable Sex sex) {
+    public static Intent getIntent(Context context, @Nullable Sex sex, @Nullable String defaultText) {
         return new Intent(context, AchievementAddActivity.class)
-                .putExtra(ExtraConstants.EXTRA_SEX, sex);
+                .putExtra(ExtraConstants.EXTRA_SEX, sex)
+                .putExtra(ExtraConstants.EXTRA_TEXT, defaultText);
     }
 
     @Override

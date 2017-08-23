@@ -276,6 +276,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.settings.notifications.NotificationsActivity" />
         </activity>
+        <activity
+            android:name=".presentation.help.contacts.ContactUsActivity"
+            android:parentActivityName=".presentation.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.main.MainActivity" />
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

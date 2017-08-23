@@ -20,17 +20,18 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.dictionaries.food.data.Food;
 import ru.android.childdiary.presentation.core.ExtraConstants;
-import ru.android.childdiary.presentation.medical.adapters.core.StringFilteredAdapter;
 import ru.android.childdiary.presentation.dictionaries.core.BaseAddActivity;
+import ru.android.childdiary.presentation.medical.adapters.core.StringFilteredAdapter;
 
 public class FoodAddActivity extends BaseAddActivity<Food, FoodAddView> implements FoodAddView {
     @Getter
     @InjectPresenter
     FoodAddPresenter presenter;
 
-    public static Intent getIntent(Context context, @Nullable Sex sex) {
+    public static Intent getIntent(Context context, @Nullable Sex sex, @Nullable String defaultText) {
         return new Intent(context, FoodAddActivity.class)
-                .putExtra(ExtraConstants.EXTRA_SEX, sex);
+                .putExtra(ExtraConstants.EXTRA_SEX, sex)
+                .putExtra(ExtraConstants.EXTRA_TEXT, defaultText);
     }
 
     @Override

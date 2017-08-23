@@ -96,6 +96,7 @@
         android:layout_marginLeft="@dimen/base_margin"
         android:layout_marginRight="@dimen/base_margin"
         android:layout_marginTop="@dimen/profile_margin_vertical"
+        android:gravity="center"
         android:text="@string/birth_date_and_time"
         android:textAppearance="@style/PlaceholderTextAppearance" />
 
@@ -156,6 +157,7 @@
         android:layout_marginLeft="@dimen/base_margin"
         android:layout_marginRight="@dimen/base_margin"
         android:layout_marginTop="@dimen/profile_margin_vertical"
+        android:gravity="center"
         android:text="@string/birth_height_and_weight"
         android:textAppearance="@style/PlaceholderTextAppearance" />
 

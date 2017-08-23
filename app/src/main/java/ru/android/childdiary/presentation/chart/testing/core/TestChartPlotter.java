@@ -207,6 +207,9 @@ public class TestChartPlotter implements ChartPlotter {
         List<Entry> lineEntries = new ArrayList<>();
         for (int i = 0; i < results.size(); ++i) {
             DomanResult result = results.get(i);
+            if (result.getPercents() == null) {
+                continue;
+            }
             float yVal = (float) result.getPercents().doubleValue();
             Entry lineEntry = new TestLineEntry(i, yVal,
                     TestLineEntryUtils.getIcon(context, testParameter, false),

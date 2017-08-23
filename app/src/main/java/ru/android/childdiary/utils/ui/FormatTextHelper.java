@@ -1,6 +1,7 @@
 package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -37,6 +38,7 @@ public class FormatTextHelper {
         @ColorInt int color = ContextCompat.getColor(context, R.color.primary_text);
         String primaryTextColor = String.format("#%08X", color);
         String primaryTextFont = context.getString(R.string.font_path_regular);
+        String linkColor = String.format("#%08X", Color.BLUE);
         justifiedTextFormat = "<html>\n" +
                 "<style type=\"text/css\">\n" +
                 "@font-face {\n" +
@@ -49,6 +51,7 @@ public class FormatTextHelper {
                 "    font-size: " + PRIMARY_TEXT_SIZE + "px;\n" +
                 "}\n" +
                 ".tab { text-indent: " + indent + "px; }\n" +
+                "a { color: " + linkColor + "; text-decoration: underline }\n" +
                 "</style>\n" +
                 "<body>\n" +
                 "%s\n" +

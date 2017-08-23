@@ -33,4 +33,9 @@ public interface MedicineTakingListView extends BaseMedicalDataView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteConnectedEventsOrNot(@NonNull MedicineTaking medicineTaking);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToMedicineTakingAdd(@NonNull MedicineTaking defaultMedicineTaking,
+                                     @Nullable LocalTime startTime,
+                                     @Nullable LocalTime finishTime);
 }

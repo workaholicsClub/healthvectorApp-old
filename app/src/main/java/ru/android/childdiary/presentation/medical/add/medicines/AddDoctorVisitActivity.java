@@ -105,7 +105,7 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarTitle(R.string.add_doctor_visit_title);
+        setupToolbarTitle(R.string.add_doctor_visit);
     }
 
     @Override

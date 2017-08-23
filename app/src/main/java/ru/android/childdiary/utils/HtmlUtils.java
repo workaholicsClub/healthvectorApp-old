@@ -1,9 +1,11 @@
 package ru.android.childdiary.utils;
 
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
@@ -47,6 +49,12 @@ public class HtmlUtils {
                 if (onLinkClickListener != null) {
                     onLinkClickListener.onLinkClick(urlSpan.getURL());
                 }
+            }
+
+            @Override
+            public void updateDrawState(TextPaint textPaint) {
+                textPaint.setColor(Color.BLUE);
+                textPaint.setUnderlineText(true);
             }
         };
         spannableStringBuilder.setSpan(clickable, start, end, flags);

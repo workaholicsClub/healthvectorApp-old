@@ -44,7 +44,7 @@ public abstract class AntropometryChartFragment extends ChartFragment<Antropomet
 
     @Override
     protected String getIntentionText() {
-        return getContext().getString(R.string.no_antropometry_data);
+        return getContext().getString(R.string.add_antropometry_intention);
     }
 
     @Override

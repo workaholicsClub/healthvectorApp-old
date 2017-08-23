@@ -19,13 +19,18 @@ import ru.android.childdiary.presentation.chart.antropometry.AntropometryChartAc
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.development.partitions.antropometry.adapters.AntropometryActionListener;
 import ru.android.childdiary.presentation.development.partitions.antropometry.adapters.AntropometryAdapter;
+import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.antropometry.edit.EditAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.partitions.core.ChartContainer;
+import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<AntropometryListView>
-        implements AntropometryListView, ChartContainer, AntropometryActionListener {
+        implements AntropometryListView, ChartContainer, AntropometryActionListener,
+        HtmlUtils.OnLinkClickListener {
+    private static final String LINK_ADD = "add";
+
     @Getter
     @InjectPresenter
     AntropometryListPresenter presenter;
@@ -45,7 +50,10 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
-        textViewIntention.setText(R.string.no_antropometry_data);
+        String text = getString(R.string.link_format,
+                LINK_ADD,
+                getString(R.string.add_antropometry));
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this);
     }
 
     @Override
@@ -57,7 +65,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
 
         List<Antropometry> antropometryList = state.getAntropometryList();
         adapter.setItems(antropometryList);
-        adapter.setFabController(child.getId() == null ? null : fabController, isSelected());
+        adapter.setFabController(child.getId() == null ? null : fabController);
         recyclerView.setVisibility(antropometryList.isEmpty() ? View.GONE : View.VISIBLE);
 
         textViewIntention.setVisibility(antropometryList.isEmpty() ? View.VISIBLE : View.GONE);
@@ -82,7 +90,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
 
     @Override
     public void noChartData() {
-        showToast(getString(R.string.no_antropometry_data));
+        showToast(getString(R.string.add_antropometry_intention));
     }
 
     @Override
@@ -112,5 +120,24 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     @Override
     public void edit(Antropometry item) {
         presenter.edit(item);
+    }
+
+    @Override
+    public void onLinkClick(String url) {
+        if (LINK_ADD.equals(url)) {
+            presenter.addAntropometry();
+        }
+    }
+
+    @Override
+    public void navigateToAntropometryAdd(@NonNull Child child, @NonNull Antropometry antropometry) {
+        Intent intent = AddAntropometryActivity.getIntent(getContext(), child, antropometry);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.closeAllItems(); // для одинакового поведения с Мед. данными
     }
 }

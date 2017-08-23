@@ -15,5 +15,5 @@
         app:fieldHideIfEmpty="true"
         app:fieldHint="@string/enter_food_name"
         app:fieldIcon="@drawable/ic_food"
-        app:fieldMaxLength="@integer/max_length_name_small" />
+        app:fieldMaxLength="@integer/max_length_name_medium" />
 </LinearLayout>

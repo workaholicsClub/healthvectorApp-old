@@ -83,8 +83,12 @@ public class AchievementPickerActivity extends BasePickerActivity<Achievement, A
     }
 
     @Override
-    protected String getIntentionText(boolean isFiltering) {
-        return (isFiltering ? getString(R.string.nothing_found) + "\n\n" : "")
-                + getString(R.string.add_achievement_intention);
+    protected int getMaxLength() {
+        return maxLengthName;
+    }
+
+    @Override
+    protected String getIntentionText() {
+        return getString(R.string.add_achievement);
     }
 }
