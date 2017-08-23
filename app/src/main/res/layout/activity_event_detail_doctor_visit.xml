@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:fieldHideIfEmpty="false"
-        app:fieldHint="@string/doctor_visit_title_hint"
+        app:fieldHint="@string/enter_visit_name"
         app:fieldIcon="@drawable/ic_name"
         app:fieldMaxLength="@integer/max_length_name" />
 

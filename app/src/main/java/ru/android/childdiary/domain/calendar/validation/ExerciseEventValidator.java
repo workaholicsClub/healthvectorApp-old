@@ -30,7 +30,7 @@ public class ExerciseEventValidator extends Validator<ExerciseEvent, CalendarVal
 
         result = new CalendarValidationResult(CalendarFieldType.EXERCISE_EVENT_NAME);
         if (TextUtils.isEmpty(event.getName())) {
-            result.addMessage(context.getString(R.string.validate_concrete_exercise_name_empty));
+            result.addMessage(context.getString(R.string.enter_exercise_name));
         }
         results.add(result);
 

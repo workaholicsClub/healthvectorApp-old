@@ -79,7 +79,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         Integer selectedPage = preferences.getInteger(KEY_SELECTED_PAGE, 0).get();
         selectedPage = selectedPage == null ? 0 : selectedPage;
         pagesAdapter = new PagesAdapter(getChildFragmentManager());
-        pagesAdapter.addFragment(putArguments(new ConcreteAchievementsFragment()), getString(R.string.development_tab_title_achievements));
+        pagesAdapter.addFragment(putArguments(new ConcreteAchievementsFragment()), getString(R.string.achievements));
         pagesAdapter.addFragment(putArguments(new TestResultsFragment()), getString(R.string.development_tab_title_testing));
         pagesAdapter.addFragment(putArguments(new AntropometryListFragment()), getString(R.string.development_tab_title_antropometry_list));
         viewPager.setAdapter(pagesAdapter);

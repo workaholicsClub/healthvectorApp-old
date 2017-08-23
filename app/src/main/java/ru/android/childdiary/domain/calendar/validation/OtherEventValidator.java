@@ -32,7 +32,7 @@ public class OtherEventValidator extends Validator<OtherEvent, CalendarValidatio
 
         result = new CalendarValidationResult(CalendarFieldType.OTHER_EVENT_NAME);
         if (TextUtils.isEmpty(event.getName())) {
-            result.addMessage(context.getString(R.string.validate_event_other_title_empty));
+            result.addMessage(context.getString(R.string.enter_event_name));
         }
         results.add(result);
 

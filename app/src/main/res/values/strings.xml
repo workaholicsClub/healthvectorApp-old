@@ -53,8 +53,8 @@
     <string name="event_sleep">Сон</string>
     <string name="event_feed">Кормление</string>
     <string name="event_pump">Сцеживание</string>
-    <string name="event_other">Другое</string>
-    <string name="event_doctor_visit">Визит к врачу</string>
+    <string name="other">Другое</string>
+    <string name="doctor_visit">Визит к врачу</string>
     <string name="event_medicine_taking">Прием лекарств</string>
     <string name="validate_child_name_empty">Введите имя ребенка</string>
     <string name="validate_child_sex_empty">Выберите пол ребенка</string>
@@ -66,10 +66,7 @@
     <string name="validate_event_pump_fill_left_amount">Введите количество сцеженного молока для левой груди</string>
     <string name="validate_event_pump_fill_right_amount">Введите количество сцеженного молока для правой груди</string>
     <string name="validate_event_sleep_timer_already_started">Таймер сна уже запущен</string>
-    <string name="validate_event_other_title_empty">Введите название события</string>
     <string name="validate_start_finish_time">Время окончания не может быть меньше, чем время начала события</string>
-    <string name="validate_doctor_visit_name_empty">Введите название визита</string>
-    <string name="validate_concrete_exercise_name_empty">Введите название занятия</string>
     <string name="validate_doctor_visit_doctor_empty">Выберите специализацию врача</string>
     <string name="validate_medicine_taking_medicine_empty">Выберите лекарство</string>
     <string name="validate_repeat_parameters_periodicity_empty">Выберите периодичность</string>
@@ -90,12 +87,8 @@
     <string name="diaper_state_dry">Сухой</string>
     <string name="diaper_state_mixed">Смешанный</string>
     <string name="diaper_state_wet">Мокрый</string>
-    <string name="feed_type_breast_milk">Грудь</string>
     <string name="feed_type_pumped_milk">Сцеженное</string>
     <string name="feed_type_milk_formula">Смесь</string>
-    <string name="feed_type_food">Прикорм</string>
-    <string name="food_measure_other">Другое</string>
-    <string name="food_other">Другое</string>
     <string name="notify_time">Оповещение</string>
     <string name="diaper_state">Состояние подгузника</string>
     <string name="note">Примечание</string>
@@ -111,7 +104,6 @@
     <string name="notify_time_dialog_title">Оповещение за</string>
     <!-- %s - строка, дни-часы-минуты, например, "За 4 д. 2 ч. 1 мин." -->
     <string name="notify_time_text">За %s</string>
-    <string name="no_value">Нет</string>
     <string name="enter_measure_name">Введите единицу измерения</string>
     <string name="enter_food_name">Введите название прикорма</string>
     <!-- %s - строка, имя ребенка, например, "Егор спит" -->
@@ -128,9 +120,9 @@
     <string name="hours_short">%d ч.</string>
     <!-- %d - число, количество минут -->
     <string name="minutes_short">%d мин.</string>
-    <string name="other_event_title_hint">Введите название события</string>
-    <string name="doctor_visit_title_hint">Введите название визита</string>
-    <string name="exercise_title_hint">Введите название занятия</string>
+    <string name="enter_event_name">Введите название события</string>
+    <string name="enter_visit_name">Введите название визита</string>
+    <string name="enter_exercise_name">Введите название занятия</string>
     <string name="event_is_done">Выполнено</string>
     <string name="save_changes_dialog_title">Сохранить изменения?</string>
     <string name="start_timer">СТАРТ</string>
@@ -139,12 +131,10 @@
     <string name="menu_chart">График</string>
     <string name="menu_filter">Фильтр</string>
     <string name="menu_rotate">Повернуть</string>
-    <string name="menu_save">Сохранить</string>
     <string name="doctor_visits">Визиты к врачу</string>
     <string name="medicines">Лекарства</string>
     <string name="doctors">Специализации</string>
     <string name="achievements">Достижения</string>
-    <string name="development_tab_title_achievements">Достижения</string>
     <string name="development_tab_title_testing">Тестирование</string>
     <string name="development_tab_title_antropometry_list">Рост/Вес</string>
     <string name="medicine">Лекарство</string>
@@ -160,14 +150,12 @@
     <string name="add_medicine_taking_title">Добавить рецепт</string>
     <string name="add_doctor_visit_title">Добавить визит к врачу</string>
     <string name="edit_medicine_taking_title">Рецепт</string>
-    <string name="edit_doctor_visit_title">Визит к врачу</string>
     <string name="add_medicine_title">Добавить лекарство</string>
     <string name="medicines_title">Список лекарств</string>
     <string name="add_doctor_title">Добавить специализацию</string>
     <string name="doctors_title">Список специализаций</string>
     <string name="achievements_title">Список достижений</string>
     <string name="search">Поиск</string>
-    <string name="medicine_measure_value_dialog_title">Дозировка</string>
     <string name="frequency_once">Однократно</string>
     <string name="periodicity_daily">Ежедневно</string>
     <string name="periodicity_weekly">Еженедельно</string>
@@ -257,17 +245,19 @@
     <string name="settings_setup_notification">Настроить уведомление</string>
     <string name="settings_data_control">Управление данными</string>
     <string name="settings_account">Аккаунт Google Drive</string>
-    <string name="settings_backup_data">Сохранить данные</string>
-    <string name="settings_restore_data">Восстановить данные</string>
     <string name="settings_additional">Дополнительные настройки</string>
     <string name="settings_day_length">Продолжительность дня</string>
     <string name="measure_units">Единицы измерения</string>
     <string name="food">Прикорм</string>
     <string name="authorize">Войти</string>
     <string name="authorize_account">Войти в аккаунт</string>
+    <!-- Восстановить в значении "загрузить резервную копию данных из облачного хранилища" -->
     <string name="restore">Восстановить</string>
+    <!-- ignoreDuplicates Сохранить в значении "сделать бэкап данных в облачное хранилище" -->
     <string name="backup">Сохранить</string>
+    <!-- Восстановить данные в значении "загрузить резервную копию данных из облачного хранилища" -->
     <string name="restore_data">Восстановить данные</string>
+    <!-- Сохранить данные в значении "сделать бэкап данных в облачное хранилище" -->
     <string name="backup_data">Сохранить данные</string>
     <string name="authorize_account_to_restore_data">Для восстановления данных необходимо авторизоваться в Google Drive</string>
     <string name="authorize_account_to_backup_data">Для сохранения данных необходимо авторизоваться в Google Drive</string>
@@ -276,11 +266,10 @@
     <string name="restore_data_in_process">Идет восстановление данных</string>
     <string name="backup_data_in_process">Идет сохранение данных</string>
     <string name="please_wait_til_the_end">Пожалуйста, дождитесь окончания операции</string>
-    <string name="security_error_dialog_title">Ошибка авторизации</string>
+    <string name="authorization_error">Ошибка авторизации</string>
     <string name="security_error_dialog_text">Попробуйте позже или воспользуйтесь другим аккаунтом.</string>
     <string name="notification_title_play_services">Не доступны Google Play Services</string>
     <string name="notification_text_play_services">Установите Google Play Services для создания резервной копии данных</string>
-    <string name="notification_title_authorization">Ошибка авторизации</string>
     <string name="notification_text_authorization_recoverable">Авторизуйте приложение в Google Drive для создания резервной копии данных</string>
     <string name="notification_text_authorization_unrecoverable">Попробуйте позже</string>
     <string name="notification_title_network">Отсутствует Интернет</string>
@@ -290,7 +279,6 @@
     <string name="deletion_restricted_medicine">Данное лекарство привязано к событиям или рецептам</string>
     <string name="deletion_restricted_doctor">Данная специализация привязана к событиям или визитам</string>
     <string name="start_testing">Начать тестирование</string>
-    <string name="stop_testing">Завершить</string>
     <string name="stop_testing_confirm_dialog_title">Прервать тестирование?</string>
     <string name="parameter">Параметр</string>
     <string name="age">Возраст</string>

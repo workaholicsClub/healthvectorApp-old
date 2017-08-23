@@ -81,7 +81,7 @@ public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<Me
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
-                .setTitle(R.string.medicine_measure_value_dialog_title)
+                .setTitle(R.string.medicine_measure)
                 .setPositiveButton(R.string.ok,
                         (dialog, which) -> {
                             hideKeyboardAndClearFocus();

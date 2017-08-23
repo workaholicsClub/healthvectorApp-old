@@ -33,7 +33,7 @@ public class DoctorVisitValidator extends EventValidator<DoctorVisit> {
 
         result = new EventValidationResult(EventFieldType.DOCTOR_VISIT_NAME);
         if (TextUtils.isEmpty(doctorVisit.getName())) {
-            result.addMessage(context.getString(R.string.validate_doctor_visit_name_empty));
+            result.addMessage(context.getString(R.string.enter_visit_name));
         }
         results.add(result);
 

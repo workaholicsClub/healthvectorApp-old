@@ -1,124 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- // TODO: заменить на английские значения -->
-    <!-- two, other - добавить при необходимости -->
-    <!-- %d - число -->
-    <plurals name="numberOfYears">
-        <!-- форма для ед. числа, например, "1 год" -->
-        <item quantity="one">%d год</item>
-        <!-- форма для для числительных 2, 3, 4, например, "4 года" -->
-        <item quantity="few">%d года</item>
-        <!-- форма для остальных числительных, например, "11 лет" -->
-        <item quantity="other">%d лет</item>
-        <!-- форма для остальных числительных, например, "11 лет" -->
-        <item quantity="many">%d лет</item>
-        <!-- форма для нуля, например, "0 лет" -->
-        <item quantity="zero">%d лет</item>
-    </plurals>
-    <!-- %d - число -->
-    <plurals name="numberOfMonths">
-        <item quantity="one">%d месяц</item>
-        <item quantity="few">%d месяца</item>
-        <item quantity="other">%d месяцев</item>
-        <item quantity="many">%d месяцев</item>
-        <item quantity="zero">%d месяцев</item>
-    </plurals>
-    <!-- %d - число -->
-    <plurals name="numberOfWeeks">
-        <item quantity="one">%d неделя</item>
-        <item quantity="few">%d недели</item>
-        <item quantity="other">%d недель</item>
-        <item quantity="many">%d недель</item>
-        <item quantity="zero">%d недель</item>
-    </plurals>
-    <!-- %d - число -->
-    <plurals name="numberOfDays">
-        <item quantity="one">%d день</item>
-        <item quantity="few">%d дня</item>
-        <item quantity="other">%d дней</item>
-        <item quantity="many">%d дней</item>
-        <item quantity="zero">%d дней</item>
-    </plurals>
-    <!-- %d - число -->
-    <plurals name="numberOfHours">
-        <item quantity="one">%d час</item>
-        <item quantity="few">%d часа</item>
-        <item quantity="other">%d часов</item>
-        <item quantity="many">%d часов</item>
-        <item quantity="zero">%d часов</item>
-    </plurals>
-    <!-- %d - число -->
-    <plurals name="numberOfMinutes">
-        <item quantity="one">%d минута</item>
-        <item quantity="few">%d минуты</item>
-        <item quantity="other">%d минут</item>
-        <item quantity="many">%d минут</item>
-        <item quantity="zero">%d минут</item>
-    </plurals>
-    <plurals name="timeUnitNumberOfYears">
-        <item quantity="one">год</item>
-        <item quantity="few">года</item>
-        <item quantity="other">лет</item>
-        <item quantity="many">лет</item>
-        <item quantity="zero">лет</item>
-    </plurals>
-    <plurals name="timeUnitNumberOfMonths">
-        <item quantity="one">месяц</item>
-        <item quantity="few">месяца</item>
-        <item quantity="other">месяцев</item>
-        <item quantity="many">месяцев</item>
-        <item quantity="zero">месяцев</item>
-    </plurals>
-    <plurals name="timeUnitNumberOfWeeks">
-        <item quantity="one">неделя</item>
-        <item quantity="few">недели</item>
-        <item quantity="other">недель</item>
-        <item quantity="many">недель</item>
-        <item quantity="zero">недель</item>
-    </plurals>
-    <plurals name="timeUnitNumberOfDays">
-        <item quantity="one">день</item>
-        <item quantity="few">дня</item>
-        <item quantity="other">дней</item>
-        <item quantity="many">дней</item>
-        <item quantity="zero">дней</item>
-    </plurals>
-    <plurals name="timeUnitNumberOfHours">
-        <item quantity="one">час</item>
-        <item quantity="few">часа</item>
-        <item quantity="other">часов</item>
-        <item quantity="many">часов</item>
-        <item quantity="zero">часов</item>
-    </plurals>
-    <plurals name="timeUnitNumberOfMinutes">
-        <item quantity="one">минута</item>
-        <item quantity="few">минуты</item>
-        <item quantity="other">минут</item>
-        <item quantity="many">минут</item>
-        <item quantity="zero">минут</item>
-    </plurals>
-    <!-- %d - число -->
+    <!-- // TODO: values должно содержать английские значения, values-ru - значения на русском -->
+    <!-- %d - число; для английского языка множественные формы надо продублировать -->
     <plurals name="numberOfTimesInADay">
+        <!-- форма для ед. числа, например, "1 раз в день" -->
         <item quantity="one">%d раз в день</item>
+        <!-- форма для для числительных 2, 3, 4, например, "4 раза в день" -->
         <item quantity="few">%d раза в день</item>
+        <!-- для языков, в которых числительные не имеют особой формы (как в английском языке) -->
         <item quantity="other">%d раз в день</item>
+        <!-- форма для числительных 11-99, например, "11 раз в день" -->
         <item quantity="many">%d раз в день</item>
+        <!-- форма для нуля, например, "0 раз в день" -->
         <item quantity="zero">%d раз в день</item>
     </plurals>
-    <!-- %d - число -->
+    <!-- %d - число; для английского языка множественные формы надо продублировать -->
     <plurals name="numberOfAddedEvents">
+        <!-- форма для ед. числа, например, "Добавлено 1 событие" -->
         <item quantity="one">Добавлено %d событие</item>
+        <!-- форма для для числительных 2, 3, 4, например, "Добавлено 4 события" -->
         <item quantity="few">Добавлено %d события</item>
+        <!-- для языков, в которых числительные не имеют особой формы (как в английском языке) -->
         <item quantity="other">Добавлено %d событий</item>
+        <!-- форма для числительных 11-99, например, "Добавлено 11 событий" -->
         <item quantity="many">Добавлено %d событий</item>
+        <!-- форма для нуля, например, "Добавлено 0 событий" -->
         <item quantity="zero">Добавлено %d событий</item>
     </plurals>
-    <!-- %d - число -->
+    <!-- %d - число; для английского языка множественные формы надо продублировать -->
     <plurals name="numberOfPoints">
+        <!-- форма для ед. числа, например, "1 балл" -->
         <item quantity="one">%d балл</item>
+        <!-- форма для для числительных 2, 3, 4, например, "4 балла" -->
         <item quantity="few">%d балла</item>
+        <!-- для языков, в которых числительные не имеют особой формы (как в английском языке) -->
         <item quantity="other">%d баллов</item>
+        <!-- форма для числительных 11-99, например, "11 баллов" -->
         <item quantity="many">%d баллов</item>
+        <!-- форма для нуля, например, "0 баллов" -->
         <item quantity="zero">%d баллов</item>
     </plurals>
 </resources>

@@ -97,7 +97,7 @@ public class EventUtils {
             } else if (feedType == FOOD) {
                 Food food = feedEvent.getFood();
                 return food == null || food.getName() == null
-                        ? context.getString(R.string.feed_type_food) : food.getName();
+                        ? context.getString(R.string.food) : food.getName();
             } else {
                 return StringUtils.feedType(context, feedType);
             }

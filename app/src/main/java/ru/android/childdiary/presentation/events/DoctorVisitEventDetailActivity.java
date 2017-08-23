@@ -156,7 +156,7 @@ public class DoctorVisitEventDetailActivity
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarLogo(ResourcesUtils.getDoctorVisitLogoRes(getSex()));
-        setupToolbarTitle(R.string.event_doctor_visit);
+        setupToolbarTitle(R.string.doctor_visit);
     }
 
     @Override

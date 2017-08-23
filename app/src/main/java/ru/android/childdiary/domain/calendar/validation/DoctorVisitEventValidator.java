@@ -31,7 +31,7 @@ public class DoctorVisitEventValidator extends Validator<DoctorVisitEvent, Calen
 
         result = new CalendarValidationResult(CalendarFieldType.DOCTOR_VISIT_EVENT_NAME);
         if (TextUtils.isEmpty(event.getName())) {
-            result.addMessage(context.getString(R.string.validate_doctor_visit_name_empty));
+            result.addMessage(context.getString(R.string.enter_visit_name));
         }
         results.add(result);
 

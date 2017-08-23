@@ -10,6 +10,6 @@
         android:layout_marginLeft="@dimen/base_margin"
         android:layout_marginRight="@dimen/base_margin"
         android:layout_marginTop="@dimen/button_margin_vertical"
-        android:text="@string/stop_testing"
+        android:text="@string/finish"
         android:textAllCaps="false" />
 </merge>

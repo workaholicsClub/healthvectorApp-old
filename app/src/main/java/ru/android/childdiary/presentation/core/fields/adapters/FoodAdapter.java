@@ -29,7 +29,7 @@ public class FoodAdapter extends SpinnerItemAdapter<Food, FoodAdapter.ViewHolder
         @Override
         protected String getTextForValue(Context context, @NonNull Food item) {
             return item == Food.NULL
-                    ? context.getString(R.string.food_other)
+                    ? context.getString(R.string.other)
                     : item.getName();
         }
     }

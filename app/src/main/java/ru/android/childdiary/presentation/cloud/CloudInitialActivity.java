@@ -167,7 +167,7 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     @Override
     public void securityError() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(R.string.security_error_dialog_title)
+                .setTitle(R.string.authorization_error)
                 .setMessage(R.string.security_error_dialog_text)
                 .setPositiveButton(R.string.try_again,
                         (dialog, which) -> presenter.continueAfterErrorResolved())

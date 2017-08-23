@@ -137,7 +137,7 @@ public class CloudService extends BaseService {
             Intent intent = ((UserRecoverableAuthIOException) throwable).getIntent();
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
             cloudNotificationHelper.showBackupErrorNotification(
-                    getString(R.string.notification_title_authorization),
+                    getString(R.string.authorization_error),
                     getString(R.string.notification_text_authorization_recoverable),
                     pendingIntent);
             return true;
@@ -151,7 +151,7 @@ public class CloudService extends BaseService {
         } else if (throwable instanceof SecurityException) {
             PendingIntent pendingIntent = getPendingIntent(0, this);
             cloudNotificationHelper.showBackupErrorNotification(
-                    getString(R.string.notification_title_authorization),
+                    getString(R.string.authorization_error),
                     getString(R.string.notification_text_authorization_unrecoverable),
                     pendingIntent);
             return true;

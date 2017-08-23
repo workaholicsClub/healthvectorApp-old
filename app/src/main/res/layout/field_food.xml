@@ -19,7 +19,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="@string/feed_type_food"
+        android:text="@string/food"
         android:textAppearance="@style/SecondaryTextAppearance"
         tools:ignore="Deprecated" />
 

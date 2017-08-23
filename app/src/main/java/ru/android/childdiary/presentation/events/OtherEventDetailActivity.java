@@ -135,7 +135,7 @@ public class OtherEventDetailActivity extends EventDetailActivity<OtherEventDeta
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarLogo(ResourcesUtils.getOtherEventLogoRes(getSex()));
-        setupToolbarTitle(R.string.event_other);
+        setupToolbarTitle(R.string.other);
     }
 
     @Override

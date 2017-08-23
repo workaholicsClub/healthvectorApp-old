@@ -278,14 +278,14 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         items.add(accountItem);
         items.add(IntentSettingsItem.builder()
                 .id(Intention.BACKUP.ordinal())
-                .title(getString(R.string.settings_backup_data))
+                .title(getString(R.string.backup_data))
                 .iconRes(R.drawable.ic_settings_backup_data)
                 .listener(this)
                 .enabled(true)
                 .build());
         items.add(IntentSettingsItem.builder()
                 .id(Intention.RESTORE.ordinal())
-                .title(getString(R.string.settings_restore_data))
+                .title(getString(R.string.restore_data))
                 .iconRes(R.drawable.ic_settings_restore_data)
                 .listener(this)
                 .enabled(true)
@@ -530,7 +530,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Override
     public void securityError() {
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setTitle(R.string.security_error_dialog_title)
+                .setTitle(R.string.authorization_error)
                 .setMessage(R.string.security_error_dialog_text)
                 .setPositiveButton(R.string.try_again,
                         (dialog, which) -> presenter.continueAfterErrorResolved())

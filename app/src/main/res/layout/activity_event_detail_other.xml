@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:fieldHideIfEmpty="false"
-            app:fieldHint="@string/other_event_title_hint"
+            app:fieldHint="@string/enter_event_name"
             app:fieldIcon="@drawable/ic_other_event_name"
             app:fieldMaxLength="@integer/max_length_name" />
 

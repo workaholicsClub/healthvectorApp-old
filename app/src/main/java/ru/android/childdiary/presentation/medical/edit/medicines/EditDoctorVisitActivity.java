@@ -101,7 +101,7 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
     @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
-        setupToolbarTitle(R.string.edit_doctor_visit_title);
+        setupToolbarTitle(R.string.doctor_visit);
     }
 
     @Override

@@ -136,7 +136,7 @@ public class XmlToCsvConverter {
     }
 
     private void processNodes(NodeList nodes, List<Row> rows) {
-        String comment = null;
+        Comment comment = null;
         for (int i = 0; i < nodes.getLength(); ++i) {
             Node node = nodes.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE && "string".equals(node.getNodeName())) {
@@ -154,31 +154,33 @@ public class XmlToCsvConverter {
         }
     }
 
-    private String getComment(Node node) {
-        return node.getTextContent();
+    private Comment getComment(Node node) {
+        return new Comment(node.getTextContent());
     }
 
-    private Row addComment(Row row, String comment) {
+    private Row addComment(Row row, Comment comment) {
         if (comment != null && !comment.isEmpty()) {
-            row.addColumns(comment);
+            row.addColumns(comment.getText());
         }
         return row;
     }
 
-    private void processStringNode(Node node, List<Row> rows, String comment) {
+    private void processStringNode(Node node, List<Row> rows, Comment comment) {
         Element element = (Element) node;
         String key = element.getAttribute("name");
         String value = element.getTextContent();
         value = preprocess(value);
         if (values.contains(value)) {
-            System.err.println("duplicate: key = '" + key + "'; value = '" + value + "'");
+            if (comment == null || !comment.isIgnoreDuplicates()) {
+                System.err.println("duplicate: key = '" + key + "'; value = '" + value + "'");
+            }
         } else {
             values.add(value);
         }
         rows.add(addComment(new Row(key, value), comment));
     }
 
-    private void processStringArrayNode(Node node, List<Row> rows, String comment) {
+    private void processStringArrayNode(Node node, List<Row> rows, Comment comment) {
         Element element = (Element) node;
         String key = element.getAttribute("name");
         rows.add(addComment(new Row(key, null), comment));
@@ -198,7 +200,7 @@ public class XmlToCsvConverter {
         }
     }
 
-    private void processPluralNode(Node node, List<Row> rows, String comment) {
+    private void processPluralNode(Node node, List<Row> rows, Comment comment) {
         Element element = (Element) node;
         String key = element.getAttribute("name");
         rows.add(addComment(new Row(key, null), comment));
@@ -257,6 +259,35 @@ public class XmlToCsvConverter {
             }
             sb.append("\n");
             return sb.toString();
+        }
+    }
+
+    private static class Comment {
+        private static final String IGNORE_DUPLICATES = "ignoreDuplicates";
+
+        private final boolean ignoreDuplicates;
+        private final String text;
+
+        public Comment(String text) {
+            if (text == null) {
+                ignoreDuplicates = false;
+                this.text = null;
+            } else {
+                ignoreDuplicates = text.contains(IGNORE_DUPLICATES);
+                this.text = text.replace(IGNORE_DUPLICATES, "").trim();
+            }
+        }
+
+        public boolean isIgnoreDuplicates() {
+            return ignoreDuplicates;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public boolean isEmpty() {
+            return text == null || text.isEmpty();
         }
     }
 }

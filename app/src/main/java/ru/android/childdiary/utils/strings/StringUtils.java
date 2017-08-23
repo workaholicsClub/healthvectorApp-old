@@ -41,9 +41,9 @@ public class StringUtils {
             case PUMP:
                 return context.getString(R.string.event_pump);
             case OTHER:
-                return context.getString(R.string.event_other);
+                return context.getString(R.string.other);
             case DOCTOR_VISIT:
-                return context.getString(R.string.event_doctor_visit);
+                return context.getString(R.string.doctor_visit);
             case MEDICINE_TAKING:
                 return context.getString(R.string.event_medicine_taking);
             case EXERCISE:
@@ -114,13 +114,13 @@ public class StringUtils {
         }
         switch (feedType) {
             case BREAST_MILK:
-                return context.getString(R.string.feed_type_breast_milk);
+                return context.getString(R.string.breast);
             case PUMPED_MILK:
                 return context.getString(R.string.feed_type_pumped_milk);
             case MILK_FORMULA:
                 return context.getString(R.string.feed_type_milk_formula);
             case FOOD:
-                return context.getString(R.string.feed_type_food);
+                return context.getString(R.string.food);
             default:
                 return null;
         }
@@ -170,7 +170,7 @@ public class StringUtils {
     @Nullable
     public static String periodicity(Context context, @Nullable PeriodicityType type) {
         if (type == null) {
-            return context.getString(R.string.no_value);
+            return context.getString(R.string.no);
         }
         switch (type) {
             case DAILY:
@@ -180,14 +180,14 @@ public class StringUtils {
             case MONTHLY:
                 return context.getString(R.string.periodicity_monthly);
         }
-        return context.getString(R.string.no_value);
+        return context.getString(R.string.no);
     }
 
     @Nullable
     public static String lengthValue(Context context,
                                      @Nullable LengthValue lengthValue) {
         return lengthValue == null
-                ? context.getString(R.string.no_value)
+                ? context.getString(R.string.no)
                 : lengthValue(context, lengthValue.getLength(), lengthValue.getTimeUnit());
     }
 
@@ -196,7 +196,7 @@ public class StringUtils {
                                       @Nullable Integer length,
                                       @Nullable TimeUnit timeUnit) {
         if (length == null || timeUnit == null) {
-            return context.getString(R.string.no_value);
+            return context.getString(R.string.no);
         }
         switch (timeUnit) {
             case MINUTE:
@@ -212,7 +212,7 @@ public class StringUtils {
             case YEAR:
                 return context.getResources().getQuantityString(R.plurals.numberOfYears, length, length);
         }
-        return context.getString(R.string.no_value);
+        return context.getString(R.string.no);
     }
 
     @Nullable
