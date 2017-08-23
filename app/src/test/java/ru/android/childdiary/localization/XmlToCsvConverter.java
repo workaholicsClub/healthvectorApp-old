@@ -17,7 +17,9 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -56,6 +58,8 @@ public class XmlToCsvConverter {
             "4. В комментариях указаны значения и смысл параметров, специальных символов.",
             "5. Текст на английском языке должен содержать те же параметры, что и текст на русском языке. Но в тексте на английском языке порядок параметров может отличаться в соответствии с грамматикой языка.",
             "6. При изменении значений столбца B помечать их цветом."};
+
+    private final Set<String> values = new HashSet<>();
 
     @Test
     public void convert() {
@@ -166,6 +170,11 @@ public class XmlToCsvConverter {
         String key = element.getAttribute("name");
         String value = element.getTextContent();
         value = preprocess(value);
+        if (values.contains(value)) {
+            System.err.println("duplicate: key = '" + key + "'; value = '" + value + "'");
+        } else {
+            values.add(value);
+        }
         rows.add(addComment(new Row(key, value), comment));
     }
 
