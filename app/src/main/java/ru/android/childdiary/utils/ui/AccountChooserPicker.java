@@ -38,7 +38,7 @@ public class AccountChooserPicker {
     }
 
     private Intent getIntent(@Nullable String selectedAccountName) {
-        // TODO: можно использовать другое API (например, GoogleAccountCredential.newChooseAccountIntent())
+        // можно использовать другое API (например, GoogleAccountCredential.newChooseAccountIntent())
         // ИЛИ создать кастомный диалог, если поведение/дизайн этого не устраивают
         Account selectedAccount = getSelectedAccount(selectedAccountName);
         Intent intent;

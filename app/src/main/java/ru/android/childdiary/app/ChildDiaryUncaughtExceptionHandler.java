@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import ru.android.childdiary.utils.DeviceUtils;
 
@@ -37,9 +39,16 @@ public class ChildDiaryUncaughtExceptionHandler implements Thread.UncaughtExcept
     }
 
     private boolean isOutOfMemory(Throwable throwable) {
-        // TODO: check exception stack trace contains substring "OutOfMemoryError"
         return throwable.getClass() == OutOfMemoryError.class
-                || (throwable.getCause() != null && throwable.getCause().getClass() == OutOfMemoryError.class);
+                || (throwable.getCause() != null && throwable.getCause().getClass() == OutOfMemoryError.class)
+                || checkStackTrace(throwable);
+    }
+
+    private boolean checkStackTrace(Throwable throwable) {
+        StringWriter stringWriter = new StringWriter();
+        throwable.printStackTrace(new PrintWriter(stringWriter));
+        String stackTraceStr = stringWriter.toString();
+        return stackTraceStr.contains(OutOfMemoryError.class.getSimpleName());
     }
 
     private void dumpHprof() {

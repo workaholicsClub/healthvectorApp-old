@@ -12,8 +12,11 @@ import android.view.View;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-// TODO: использовать этот класс вместо стандартных AlertDialog, чтобы сохранять диалог при пересоздании окна (при необходимости)
-// добавить недостающую функциональность (например, событие при нажатии Назад и т.п.) при необходимости
+/**
+ * Использовать этот класс вместо стандартных AlertDialog, чтобы сохранять диалог при пересоздании
+ * окна (при необходимости). Добавить недостающую функциональность (например, обработку события
+ * нажатия Назад и т.п.) при необходимости.
+ */
 public class AlertDialogFragment extends BaseMvpDialogFragment<AlertDialogArguments> {
     @Nullable
     private Listener listener;

@@ -74,11 +74,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void onFinished(@NonNull Parameters parameters) {
         if (parameters.isShowAppIntro()) {
-            // TODO: called on ui thread
+            // called on ui thread
             settingsInteractor.setIsAppIntroShown(true);
             getViewState().navigateToAppIntro(parameters.getSex());
         } else if (parameters.isShowCloud()) {
-            // TODO: called on ui thread
+            // called on ui thread
             settingsInteractor.setIsCloudShown(true);
             getViewState().navigateToCloud(parameters.getSex());
         } else {

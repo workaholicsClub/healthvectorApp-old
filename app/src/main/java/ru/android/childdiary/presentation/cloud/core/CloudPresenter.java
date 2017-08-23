@@ -93,7 +93,7 @@ public abstract class CloudPresenter<T extends CloudView> extends BasePresenter<
     }
 
     public void accountChosen(@Nullable String accountName) {
-        // TODO: called on ui thread
+        // called on ui thread
         settingsInteractor.setAccountName(accountName);
         checkIsBackupAvailable();
     }

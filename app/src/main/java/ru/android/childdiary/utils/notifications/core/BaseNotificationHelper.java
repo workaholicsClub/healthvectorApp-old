@@ -8,7 +8,6 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 public abstract class BaseNotificationHelper {
-    // TODO: what values?
     private static final String CHANNEL_ID = "default";
     private static final String CHANNEL_NAME = "CEV";
     private static final String CHANNEL_DESCRIPTION = "CEV application";

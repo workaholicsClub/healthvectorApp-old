@@ -25,7 +25,7 @@ public class AccountService extends BaseService {
     private final OnAccountsUpdateListener accountsUpdateListener = new OnAccountsUpdateListener() {
         @Override
         public void onAccountsUpdated(Account[] accounts) {
-            // TODO: called on ui thread
+            // called on ui thread
             logger.debug("onAccountsUpdated: " + Arrays.toString(accounts));
 
             if (accounts == null) {

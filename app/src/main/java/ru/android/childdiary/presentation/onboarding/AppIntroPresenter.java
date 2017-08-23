@@ -56,7 +56,7 @@ public class AppIntroPresenter extends BasePresenter<AppIntroView> {
 
     private void onFinished(@NonNull Parameters parameters) {
         if (parameters.isShowCloud()) {
-            // TODO: called on ui thread
+            // called on ui thread
             settingsInteractor.setIsCloudShown(true);
             getViewState().navigateToCloud(parameters.getSex());
         } else {
