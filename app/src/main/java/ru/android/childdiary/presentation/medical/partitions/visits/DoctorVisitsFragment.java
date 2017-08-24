@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.medical.partitions.visits;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,7 +60,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         String text = getString(R.string.link_format,
                 LINK_ADD,
                 getString(R.string.add_doctor_visit));
-        HtmlUtils.setupClickableLinks(textViewIntention, text, this);
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
@@ -112,7 +113,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
             String text = getString(R.string.link_format,
                     LINK_ADD,
                     getString(R.string.add_doctor_visit));
-            HtmlUtils.setupClickableLinks(textViewIntention, text, this);
+            HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
         } else {
             textViewIntention.setText(R.string.nothing_found);
         }

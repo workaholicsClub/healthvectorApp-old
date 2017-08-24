@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.development.partitions.antropometry;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,7 +54,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         String text = getString(R.string.link_format,
                 LINK_ADD,
                 getString(R.string.add_antropometry));
-        HtmlUtils.setupClickableLinks(textViewIntention, text, this);
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
     }
 
     @Override

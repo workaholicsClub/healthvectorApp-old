@@ -1,6 +1,7 @@
 package ru.android.childdiary.utils;
 
 import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -27,11 +28,18 @@ public class HtmlUtils {
     public static void setupClickableLinks(TextView textView,
                                            String html,
                                            @Nullable OnLinkClickListener onLinkClickListener) {
+        setupClickableLinks(textView, html, onLinkClickListener, Color.BLUE);
+    }
+
+    public static void setupClickableLinks(TextView textView,
+                                           String html,
+                                           @Nullable OnLinkClickListener onLinkClickListener,
+                                           @ColorInt int linkColor) {
         CharSequence text = fromHtml(html);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
         URLSpan[] urlSpans = spannableStringBuilder.getSpans(0, text.length(), URLSpan.class);
         for (URLSpan urlSpan : urlSpans) {
-            makeLinkClickable(spannableStringBuilder, urlSpan, onLinkClickListener);
+            makeLinkClickable(spannableStringBuilder, urlSpan, onLinkClickListener, linkColor);
         }
         textView.setText(spannableStringBuilder);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -39,7 +47,8 @@ public class HtmlUtils {
 
     private static void makeLinkClickable(SpannableStringBuilder spannableStringBuilder,
                                           URLSpan urlSpan,
-                                          @Nullable OnLinkClickListener onLinkClickListener) {
+                                          @Nullable OnLinkClickListener onLinkClickListener,
+                                          @ColorInt int linkColor) {
         int start = spannableStringBuilder.getSpanStart(urlSpan);
         int end = spannableStringBuilder.getSpanEnd(urlSpan);
         int flags = spannableStringBuilder.getSpanFlags(urlSpan);
@@ -53,7 +62,7 @@ public class HtmlUtils {
 
             @Override
             public void updateDrawState(TextPaint textPaint) {
-                textPaint.setColor(Color.BLUE);
+                textPaint.setColor(linkColor);
                 textPaint.setUnderlineText(true);
             }
         };

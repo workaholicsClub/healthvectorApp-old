@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -194,7 +195,7 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
                 : getString(R.string.link_format,
                 LINK_ADD,
                 getIntentionText());
-        HtmlUtils.setupClickableLinks(textViewIntention, text, this);
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(this, R.color.intention_text));
     }
 
     protected abstract int getMaxLength();
