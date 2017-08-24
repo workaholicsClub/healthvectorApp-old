@@ -38,7 +38,8 @@
 "request_get_accounts_permission_title";"Запрос на получение аккаунта";
 "request_get_accounts_permission_text";"Необходимо для создания резервной копии данных приложения в Google Drive.";
 "camera_not_available";"Камера не доступна";
-"browser_not_available";"Браузер не доступен";
+"web_browser_not_available";"Браузер не найден";
+"email_client_not_available";"Почтовый клиент не найден";
 "select_image";"Выберите изображение";
 "failed_to_create_file_for_camera";"Не удалось создать файл для фотографии";
 "failed_to_create_file_for_crop";"Не удалось создать файл для обработки";
@@ -314,6 +315,9 @@
 "default_sound";"По умолчанию";
 "linear_group_finished_notification_title";"Продлить события?";
 "linear_group_finished_dialog_description";"Завершаются события линейной группы %s.\n\nПродлить на:";"\n - символ переноса строки";
+"contact_us";"Свяжитесь с нами";
+"site_format";"Сайт: %s";"%s - строка, ссылка на сайт";
+"email_format";"Эл. почта: %s";"%s - строка, ссылка на эл. почту";
 "strings-arrays.xml";
 "nominative_month_names";"";
 "item";"Январь";
