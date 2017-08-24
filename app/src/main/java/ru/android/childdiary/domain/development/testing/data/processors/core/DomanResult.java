@@ -49,8 +49,6 @@ public class DomanResult {
         double months = DomanTestProcessorUtils.getMonths(birthDate, domanDate);
         DomanTestProcessorUtils.Range advancedRange = ADVANCED_RANGES[stage];
         DomanTestProcessorUtils.Range normalRange = NORMAL_RANGES[stage];
-        DomanTestProcessorUtils.Range slowRange = SLOW_RANGES[stage];
-        double percents;
         if (months < advancedRange.getTo()) {
             return StageType.ADVANCED;
         } else if (months < normalRange.getTo()) {

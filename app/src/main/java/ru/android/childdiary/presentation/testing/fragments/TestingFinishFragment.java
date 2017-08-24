@@ -152,6 +152,6 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
 
     @Override
     public void onLinkClick(String url) {
-        IntentUtils.startWebBrowser((BaseMvpActivity) getActivity(), url);
+        IntentUtils.startWebBrowser(getContext(), url);
     }
 }
