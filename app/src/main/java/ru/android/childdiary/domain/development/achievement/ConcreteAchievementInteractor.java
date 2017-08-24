@@ -121,6 +121,9 @@ public class ConcreteAchievementInteractor {
 
     private LocalDate getDefaultDate(@NonNull Child child) {
         LocalDate today = LocalDate.now();
+        if (child.getBirthDate() == null) {
+            return today;
+        }
         if (today.isBefore(child.getBirthDate())) {
             return child.getBirthDate();
         }

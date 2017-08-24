@@ -66,7 +66,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
 
         List<Antropometry> antropometryList = state.getAntropometryList();
         adapter.setItems(antropometryList);
-        adapter.setFabController(child.getId() == null ? null : fabController);
+        adapter.setFabController(fabController);
         recyclerView.setVisibility(antropometryList.isEmpty() ? View.GONE : View.VISIBLE);
 
         textViewIntention.setVisibility(antropometryList.isEmpty() ? View.VISIBLE : View.GONE);

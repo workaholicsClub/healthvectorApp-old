@@ -27,4 +27,7 @@ public interface CalendarView extends AppPartitionView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToSleepEventAdd(@NonNull SleepEvent defaultEvent);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void noChildSpecified();
 }

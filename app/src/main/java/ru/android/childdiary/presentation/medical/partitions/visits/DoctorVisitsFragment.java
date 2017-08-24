@@ -101,7 +101,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
 
         List<DoctorVisit> doctorVisits = doctorVisitsState.getDoctorVisits();
         adapter.setItems(doctorVisits);
-        adapter.setFabController(child.getId() == null ? null : fabController);
+        adapter.setFabController(fabController);
         recyclerView.setVisibility(doctorVisits.isEmpty() ? View.GONE : View.VISIBLE);
 
         List<Chips> chips = doctorVisitsState.getChips();

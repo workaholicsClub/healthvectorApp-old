@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.development.partitions.achievements;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,12 +19,16 @@ import ru.android.childdiary.domain.development.achievement.data.ConcreteAchieve
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementActionListener;
 import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementAdapter;
+import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.achievements.edit.EditConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
+import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<ConcreteAchievementsView>
-        implements ConcreteAchievementsView, ConcreteAchievementActionListener {
+        implements ConcreteAchievementsView, ConcreteAchievementActionListener, HtmlUtils.OnLinkClickListener {
+    private static final String LINK_ADD = "add";
+
     @Getter
     @InjectPresenter
     ConcreteAchievementsPresenter presenter;
@@ -43,6 +48,10 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
         recyclerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
+        String text = getString(R.string.link_format,
+                LINK_ADD,
+                getString(R.string.add_achievement));
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
     }
 
     @Override
@@ -54,7 +63,7 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
         List<ConcreteAchievement> concreteAchievements = state.getConcreteAchievements();
         adapter.setItems(concreteAchievements);
-        adapter.setFabController(child.getId() == null ? null : fabController);
+        adapter.setFabController(fabController);
         recyclerView.setVisibility(concreteAchievements.isEmpty() ? View.GONE : View.VISIBLE);
 
         textViewIntention.setVisibility(concreteAchievements.isEmpty() ? View.VISIBLE : View.GONE);
@@ -96,6 +105,24 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     @Override
     public void edit(ConcreteAchievement item) {
         presenter.edit(item);
+    }
+
+    @Override
+    public void onLinkClick(String url) {
+        if (LINK_ADD.equals(url)) {
+            presenter.addConcreteAchievement();
+        }
+    }
+
+    @Override
+    public void navigateToConcreteAchievementAdd(@NonNull Child child, @NonNull ConcreteAchievement defaultConcreteAchievement) {
+        Intent intent = AddConcreteAchievementActivity.getIntent(getContext(), child, defaultConcreteAchievement);
+        startActivity(intent);
+    }
+
+    @Override
+    public void noChildSpecified() {
+        showToast(getString(R.string.intention_add_child_profile));
     }
 
     @Override

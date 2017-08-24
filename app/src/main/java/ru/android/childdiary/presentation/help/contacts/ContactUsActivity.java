@@ -40,9 +40,9 @@ public class ContactUsActivity extends BaseMvpActivity implements HtmlUtils.OnLi
         setContentView(R.layout.activity_contact_us);
 
         site = getString(R.string.site);
-        String siteStr = getString(R.string.link_format, site, site);
+        String siteStr = getString(R.string.site_format, getString(R.string.link_format, site, site));
         email = getString(R.string.email);
-        String emailStr = getString(R.string.link_format, email, email);
+        String emailStr = getString(R.string.email_format, getString(R.string.link_format, email, email));
         HtmlUtils.setupClickableLinks(textViewSite, siteStr, this);
         HtmlUtils.setupClickableLinks(textViewEmail, emailStr, this);
     }

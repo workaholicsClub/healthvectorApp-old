@@ -13,6 +13,7 @@ import ru.android.childdiary.data.repositories.core.exceptions.RestrictDeleteExc
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.child.ChildInteractor;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.requests.ChildResponse;
 import ru.android.childdiary.domain.development.achievement.ConcreteAchievementInteractor;
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.development.achievement.requests.DeleteConcreteAchievementRequest;
@@ -90,5 +91,24 @@ public class ConcreteAchievementsPresenter extends BaseDevelopmentDiaryPresenter
         } else {
             super.onUnexpectedError(e);
         }
+    }
+
+    public void addConcreteAchievement() {
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .flatMap(child -> concreteAchievementInteractor.getDefaultConcreteAchievement(child)
+                                .map(item -> new ChildResponse<>(child, item)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                response -> {
+                                    if (response.getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                        return;
+                                    }
+                                    ConcreteAchievement concreteAchievement = response.getResponse();
+                                    getViewState().navigateToConcreteAchievementAdd(concreteAchievement.getChild(), concreteAchievement);
+                                },
+                                this::onUnexpectedError));
     }
 }

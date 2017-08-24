@@ -22,4 +22,7 @@ public interface MedicalDataView extends AppPartitionView {
     void navigateToDoctorVisitAdd(@NonNull DoctorVisit defaultDoctorVisit,
                                   @Nullable LocalTime startTime,
                                   @Nullable LocalTime finishTime);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void noChildSpecified();
 }

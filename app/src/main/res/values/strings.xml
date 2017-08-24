@@ -343,4 +343,8 @@
     <!-- \n - символ переноса строки -->
     <string name="linear_group_finished_dialog_description">Завершаются события линейной группы %s.\n\nПродлить на:</string>
     <string name="contact_us">Свяжитесь с нами</string>
+    <!-- %s - строка, ссылка на сайт -->
+    <string name="site_format">Сайт: %s</string>
+    <!-- %s - строка, ссылка на эл. почту -->
+    <string name="email_format">Эл. почта: %s</string>
 </resources>

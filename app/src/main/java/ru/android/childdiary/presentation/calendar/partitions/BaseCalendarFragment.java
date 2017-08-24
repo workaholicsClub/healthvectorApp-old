@@ -247,7 +247,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
         updateEventsTitle(calendarState.getDate());
 
         eventAdapter.setItems(calendarState.getEvents());
-        eventAdapter.setFabController(calendarState.getChild().getId() == null ? null : fabController);
+        eventAdapter.setFabController(fabController);
         recyclerViewEvents.setVisibility(calendarState.getEvents().isEmpty() ? View.GONE : View.VISIBLE);
     }
 

@@ -5,6 +5,7 @@ import com.arellomobile.mvp.InjectViewState;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
+import ru.android.childdiary.domain.core.requests.ChildResponse;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
 @InjectViewState
@@ -15,37 +16,92 @@ public class CalendarPresenter extends AppPartitionPresenter<CalendarView> {
     }
 
     public void addDiaperEvent() {
-        unsubscribeOnDestroy(calendarInteractor.getDefaultDiaperEvent()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToDiaperEventAdd, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .flatMap(child -> calendarInteractor.getDefaultDiaperEvent()
+                                .map(item -> new ChildResponse<>(child, item)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                response -> {
+                                    if (response.getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                        return;
+                                    }
+                                    getViewState().navigateToDiaperEventAdd(response.getResponse());
+                                },
+                                this::onUnexpectedError));
     }
 
     public void addSleepEvent() {
-        unsubscribeOnDestroy(calendarInteractor.getDefaultSleepEvent()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToSleepEventAdd, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .flatMap(child -> calendarInteractor.getDefaultSleepEvent()
+                                .map(item -> new ChildResponse<>(child, item)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                response -> {
+                                    if (response.getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                        return;
+                                    }
+                                    getViewState().navigateToSleepEventAdd(response.getResponse());
+                                },
+                                this::onUnexpectedError));
     }
 
     public void addFeedEvent() {
-        unsubscribeOnDestroy(calendarInteractor.getDefaultFeedEvent()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToFeedEventAdd, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .flatMap(child -> calendarInteractor.getDefaultFeedEvent()
+                                .map(item -> new ChildResponse<>(child, item)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                response -> {
+                                    if (response.getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                        return;
+                                    }
+                                    getViewState().navigateToFeedEventAdd(response.getResponse());
+                                },
+                                this::onUnexpectedError));
     }
 
     public void addPumpEvent() {
-        unsubscribeOnDestroy(calendarInteractor.getDefaultPumpEvent()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToPumpEventAdd, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .flatMap(child -> calendarInteractor.getDefaultPumpEvent()
+                                .map(item -> new ChildResponse<>(child, item)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                response -> {
+                                    if (response.getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                        return;
+                                    }
+                                    getViewState().navigateToPumpEventAdd(response.getResponse());
+                                },
+                                this::onUnexpectedError));
     }
 
     public void addOtherEvent() {
-        unsubscribeOnDestroy(calendarInteractor.getDefaultOtherEvent()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::navigateToOtherEventAdd, this::onUnexpectedError));
+        unsubscribeOnDestroy(
+                childInteractor.getActiveChildOnce()
+                        .flatMap(child -> calendarInteractor.getDefaultOtherEvent()
+                                .map(item -> new ChildResponse<>(child, item)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                response -> {
+                                    if (response.getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                        return;
+                                    }
+                                    getViewState().navigateToOtherEventAdd(response.getResponse());
+                                },
+                                this::onUnexpectedError));
     }
 }

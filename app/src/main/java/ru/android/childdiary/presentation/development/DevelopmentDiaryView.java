@@ -12,8 +12,11 @@ import ru.android.childdiary.presentation.core.AppPartitionView;
 
 public interface DevelopmentDiaryView extends AppPartitionView {
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void navigateToAchievementAdd(@NonNull Child child, @NonNull ConcreteAchievement defaultConcreteAchievement);
+    void navigateToConcreteAchievementAdd(@NonNull Child child, @NonNull ConcreteAchievement defaultConcreteAchievement);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToAntropometryAdd(@NonNull Child child, @NonNull Antropometry defaultAntropometry);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void noChildSpecified();
 }

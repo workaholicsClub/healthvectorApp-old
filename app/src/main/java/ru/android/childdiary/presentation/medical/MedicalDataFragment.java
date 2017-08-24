@@ -196,6 +196,11 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
         startActivity(intent);
     }
 
+    @Override
+    public void noChildSpecified() {
+        showToast(getString(R.string.intention_add_child_profile));
+    }
+
     @OnClick(R.id.fab)
     void onFabClick() {
         int selectedPage = viewPager.getCurrentItem();

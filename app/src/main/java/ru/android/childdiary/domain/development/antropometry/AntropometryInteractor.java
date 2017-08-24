@@ -14,8 +14,8 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDataRepository;
-import ru.android.childdiary.domain.core.requests.HasDataResponse;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.requests.HasDataResponse;
 import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.domain.development.antropometry.data.AntropometryPoint;
 import ru.android.childdiary.domain.development.antropometry.requests.AntropometryListRequest;
@@ -203,8 +203,11 @@ public class AntropometryInteractor {
     }
 
     private LocalDate getDefaultDate(@NonNull Child child) {
-        LocalDate minDate = child.getBirthDate().plusDays(1);
         LocalDate today = LocalDate.now();
+        if (child.getBirthDate() == null) {
+            return today;
+        }
+        LocalDate minDate = child.getBirthDate().plusDays(1);
         if (today.isBefore(minDate)) {
             return minDate;
         }

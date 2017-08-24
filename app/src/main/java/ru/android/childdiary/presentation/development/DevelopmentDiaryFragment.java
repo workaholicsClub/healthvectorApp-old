@@ -190,7 +190,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     }
 
     @Override
-    public void navigateToAchievementAdd(@NonNull Child child, @NonNull ConcreteAchievement defaultConcreteAchievement) {
+    public void navigateToConcreteAchievementAdd(@NonNull Child child, @NonNull ConcreteAchievement defaultConcreteAchievement) {
         Intent intent = AddConcreteAchievementActivity.getIntent(getContext(), child, defaultConcreteAchievement);
         startActivity(intent);
     }
@@ -201,12 +201,17 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         startActivity(intent);
     }
 
+    @Override
+    public void noChildSpecified() {
+        showToast(getString(R.string.intention_add_child_profile));
+    }
+
     @OnClick(R.id.fab)
     void onFabClick() {
         int selectedPage = viewPager.getCurrentItem();
         switch (selectedPage) {
             case 1:
-                presenter.addAchievement();
+                presenter.addConcreteAchievement();
                 break;
             case 2:
                 presenter.addAntropometry();

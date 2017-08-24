@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.child.ChildInteractor;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.requests.ChildResponse;
 import ru.android.childdiary.domain.development.antropometry.AntropometryInteractor;
 import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryPresenter;
@@ -100,11 +101,19 @@ public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<Ant
     public void addAntropometry() {
         unsubscribeOnDestroy(
                 childInteractor.getActiveChildOnce()
-                        .flatMap(child -> antropometryInteractor.getDefaultAntropometry(child))
+                        .flatMap(child -> antropometryInteractor.getDefaultAntropometry(child)
+                                .map(item -> new ChildResponse<>(child, item)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                antropometry -> getViewState().navigateToAntropometryAdd(antropometry.getChild(), antropometry),
+                                response -> {
+                                    if (response.getChild().getId() == null) {
+                                        getViewState().noChildSpecified();
+                                        return;
+                                    }
+                                    Antropometry antropometry = response.getResponse();
+                                    getViewState().navigateToAntropometryAdd(antropometry.getChild(), antropometry);
+                                },
                                 this::onUnexpectedError));
     }
 }

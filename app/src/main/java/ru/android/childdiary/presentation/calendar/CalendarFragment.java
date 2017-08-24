@@ -31,12 +31,12 @@ import ru.android.childdiary.presentation.calendar.partitions.WeekFragment;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
+import ru.android.childdiary.presentation.core.widgets.FabToolbar;
 import ru.android.childdiary.presentation.events.DiaperEventDetailActivity;
 import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
-import ru.android.childdiary.presentation.core.widgets.FabToolbar;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -279,6 +279,11 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     public void navigateToSleepEventAdd(@NonNull SleepEvent defaultEvent) {
         Intent intent = SleepEventDetailActivity.getIntent(getContext(), null, defaultEvent);
         startActivityForResult(intent, REQUEST_ADD_EVENT);
+    }
+
+    @Override
+    public void noChildSpecified() {
+        showToast(getString(R.string.intention_add_child_profile));
     }
 
     @Override
