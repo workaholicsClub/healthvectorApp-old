@@ -26,6 +26,7 @@ import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
+import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListener, EventActionListener> {
     private static final double ALPHA_INCREASING_COEF = 1.5;
@@ -83,6 +84,7 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
         textViewTime.setText(DateUtils.time(context, item.getDateTime()));
         textViewTitle.setText(EventUtils.getTitle(context, item));
         textViewDescription.setText(EventUtils.getDescription(context, item));
+        WidgetsUtils.hideIfEmpty(textViewDescription);
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
