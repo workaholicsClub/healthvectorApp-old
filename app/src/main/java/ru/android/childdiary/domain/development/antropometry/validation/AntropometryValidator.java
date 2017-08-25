@@ -14,8 +14,8 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.repositories.development.antropometry.AntropometryDataRepository;
 import ru.android.childdiary.domain.core.validation.core.ValidationException;
 import ru.android.childdiary.domain.core.validation.core.Validator;
-import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.domain.development.antropometry.AntropometryRepository;
+import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.domain.development.antropometry.requests.AntropometryListRequest;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -34,6 +34,30 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
 
     @Override
     public List<AntropometryValidationResult> validate(@NonNull Antropometry antropometry) {
+        List<AntropometryValidationResult> results = validateOnUi(antropometry);
+
+        if (antropometry.getChild() != null && antropometry.getChild().getId() != null) {
+            boolean isUnique = antropometryRepository.getAntropometryList(AntropometryListRequest.builder()
+                    .child(antropometry.getChild())
+                    .build())
+                    .first(Collections.emptyList())
+                    .flatMapObservable(Observable::fromIterable)
+                    .filter(a -> ObjectUtils.equals(a.getDate(), antropometry.getDate())
+                            && !ObjectUtils.equals(a.getId(), antropometry.getId()))
+                    .count()
+                    .map(count -> count == 0)
+                    .blockingGet();
+            if (!isUnique) {
+                AntropometryValidationResult result = new AntropometryValidationResult(AntropometryFieldType.DATE);
+                result.addMessage(context.getString(R.string.validation_antropometry_date_not_unique));
+                results.add(result);
+            }
+        }
+
+        return results;
+    }
+
+    public List<AntropometryValidationResult> validateOnUi(@NonNull Antropometry antropometry) {
         List<AntropometryValidationResult> results = new ArrayList<>();
 
         AntropometryValidationResult result;
@@ -58,24 +82,6 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
             result.addMessage(context.getString(R.string.validation_antropometry_invalid_weight));
         }
         results.add(result);
-
-        if (antropometry.getChild() != null && antropometry.getChild().getId() != null
-                && antropometry.getId() == null) {
-            boolean isUnique = antropometryRepository.getAntropometryList(AntropometryListRequest.builder()
-                    .child(antropometry.getChild())
-                    .build())
-                    .first(Collections.emptyList())
-                    .flatMapObservable(Observable::fromIterable)
-                    .filter(a -> ObjectUtils.equals(a.getDate(), antropometry.getDate()))
-                    .count()
-                    .map(count -> count == 0)
-                    .blockingGet();
-            if (!isUnique) {
-                result = new AntropometryValidationResult(AntropometryFieldType.DATE);
-                result.addMessage(context.getString(R.string.validation_antropometry_date_not_unique));
-                results.add(result);
-            }
-        }
 
         return results;
     }

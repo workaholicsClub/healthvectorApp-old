@@ -62,8 +62,12 @@ public class AntropometryInteractor {
         return Observable.combineLatest(
                 heightObservable,
                 weightObservable,
-                (heightEvent, weightEvent) -> ObjectUtils.isPositive(heightEvent.getValue())
-                        || ObjectUtils.isPositive(weightEvent.getValue()))
+                (heightEvent, weightEvent) -> Antropometry.builder()
+                        .height(heightEvent.getValue())
+                        .weight(weightEvent.getValue())
+                        .build())
+                .map(antropometryValidator::validateOnUi)
+                .map(antropometryValidator::isValid)
                 .distinctUntilChanged();
     }
 
@@ -77,7 +81,7 @@ public class AntropometryInteractor {
                         .height(heightEvent.getValue())
                         .weight(weightEvent.getValue())
                         .build())
-                .map(antropometryValidator::validate);
+                .map(antropometryValidator::validateOnUi);
     }
 
     public Observable<List<AntropometryPoint>> getWeights(@NonNull Child child) {
