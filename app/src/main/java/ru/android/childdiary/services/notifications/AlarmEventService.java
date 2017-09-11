@@ -53,6 +53,9 @@ public class AlarmEventService extends BaseIntentService {
         DateTime now = DateTime.now();
         MasterEvent event = (MasterEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
         logger.debug("alarm fired: " + event);
+        if (event == null) {
+            return;
+        }
         event = calendarInteractor.getEventDetail(event).onErrorReturnItem(MasterEvent.NULL).blockingFirst();
         if (event == MasterEvent.NULL) {
             logger.debug("event is already deleted");

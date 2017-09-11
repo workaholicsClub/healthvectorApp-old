@@ -80,6 +80,10 @@ public class NotificationEventService extends BaseIntentService {
             return;
         }
         MasterEvent event = (MasterEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
+        logger.debug("notification clicked: " + event);
+        if (event == null) {
+            return;
+        }
         boolean isLinearGroupFinished = intent.getBooleanExtra(ExtraConstants.EXTRA_IS_LINEAR_GROUP_FINISHED, false);
         logger.debug("notification clicked: " + event + "; linear group finished: " + isLinearGroupFinished);
         event = calendarInteractor.getEventDetail(event).onErrorReturnItem(MasterEvent.NULL).blockingFirst();
