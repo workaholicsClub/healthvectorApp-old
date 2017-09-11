@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.profile;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -30,14 +29,11 @@ import android.widget.TextView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindDimen;
@@ -52,11 +48,13 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
-import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
-import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.core.widgets.RegExpInputFilter;
 import ru.android.childdiary.presentation.profile.adapters.SexAdapter;
+import ru.android.childdiary.presentation.profile.dialogs.DatePickerDialogArguments;
+import ru.android.childdiary.presentation.profile.dialogs.DatePickerDialogFragment;
+import ru.android.childdiary.presentation.profile.dialogs.TimePickerDialogArguments;
+import ru.android.childdiary.presentation.profile.dialogs.TimePickerDialogFragment;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.strings.DoubleUtils;
@@ -69,7 +67,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditView,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ImagePickerDialogFragment.Listener,
+        DatePickerDialogFragment.Listener, TimePickerDialogFragment.Listener, ImagePickerDialogFragment.Listener,
         AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
@@ -322,28 +320,29 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     @OnClick(R.id.textViewDateWrapper)
     void onDateClick() {
         LocalDate birthDate = editedChild.getBirthDate();
-        DatePickerDialog dpd = CustomDatePickerDialog.create(this, this, birthDate, getSex(),
-                null, LocalDate.now());
-        dpd.show(getFragmentManager(), TAG_DATE_PICKER);
+        DatePickerDialogFragment dialogFragment = new DatePickerDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_DATE_PICKER,
+                DatePickerDialogArguments.builder()
+                        .sex(getSex())
+                        .title(getString(R.string.birth_date))
+                        .date(birthDate)
+                        .minDate(null)
+                        .maxDate(LocalDate.now())
+                        .build());
         hideKeyboardAndClearFocus();
     }
 
     @OnClick(R.id.textViewTimeWrapper)
     void onTimeClick() {
         LocalTime birthTime = editedChild.getBirthTime();
-        TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, birthTime, getSex());
-        tpd.show(getFragmentManager(), TAG_TIME_PICKER);
+        TimePickerDialogFragment dialogFragment = new TimePickerDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_TIME_PICKER,
+                TimePickerDialogArguments.builder()
+                        .sex(getSex())
+                        .title(getString(R.string.birth_time))
+                        .time(birthTime)
+                        .build());
         hideKeyboardAndClearFocus();
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (fragment instanceof TimePickerDialog) {
-            ((TimePickerDialog) fragment).setOnTimeSetListener(this);
-        } else if (fragment instanceof DatePickerDialog) {
-            ((DatePickerDialog) fragment).setOnDateSetListener(this);
-        }
     }
 
     @Override
@@ -353,18 +352,14 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
     }
 
     @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, monthOfYear, dayOfMonth);
-        LocalDate birthDate = LocalDate.fromCalendarFields(calendar);
-        updateChild(editedChild.toBuilder().birthDate(birthDate).build());
+    public void onDatePick(String tag, @NonNull LocalDate date) {
+        updateChild(editedChild.toBuilder().birthDate(date).build());
         setupDate();
     }
 
     @Override
-    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        LocalTime birthTime = new LocalTime(hourOfDay, minute);
-        updateChild(editedChild.toBuilder().birthTime(birthTime).build());
+    public void onTimePick(String tag, @NonNull LocalTime time) {
+        updateChild(editedChild.toBuilder().birthTime(time).build());
         setupTime();
     }
 

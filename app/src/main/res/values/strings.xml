@@ -20,6 +20,8 @@
     <string name="sex">Пол</string>
     <string name="child_name">Имя ребенка</string>
     <string name="birth_date_and_time">Дата и время рождения</string>
+    <string name="birth_date">Дата рождения</string>
+    <string name="birth_time">Время рождения</string>
     <string name="date">Дата</string>
     <string name="time">Время</string>
     <string name="birth_height_and_weight">Рост и вес при рождении</string>

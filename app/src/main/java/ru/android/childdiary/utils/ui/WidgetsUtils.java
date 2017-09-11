@@ -1,7 +1,9 @@
 package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
@@ -14,14 +16,21 @@ import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.yalantis.ucrop.UCrop;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Field;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -29,6 +38,8 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 
 public class WidgetsUtils {
+    private static final Logger logger = LoggerFactory.getLogger(WidgetsUtils.class);
+
     public static void setupTextView(TextView textView, boolean enabled) {
         @ColorRes int colorRes = enabled ? R.color.primary_text : R.color.placeholder_text;
         @ColorInt int color = ContextCompat.getColor(textView.getContext(), colorRes);
@@ -107,5 +118,41 @@ public class WidgetsUtils {
         textView.setTypeface(FontUtils.getTypefaceRegular(context));
         textView.setHintTextColor(ContextCompat.getColor(context, R.color.white_transparent));
         textView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
+    }
+
+    public static void applyStyling(TimePicker timePicker, @ColorInt int color) {
+        setNumberPickerDividerColor(timePicker, "hour", color);
+        setNumberPickerDividerColor(timePicker, "minute", color);
+        setNumberPickerDividerColor(timePicker, "amPm", color);
+    }
+
+    public static void applyStyling(DatePicker datePicker, @ColorInt int color) {
+        setNumberPickerDividerColor(datePicker, "month", color);
+        setNumberPickerDividerColor(datePicker, "day", color);
+        setNumberPickerDividerColor(datePicker, "year", color);
+    }
+
+    private static void setNumberPickerDividerColor(View view, String id, @ColorInt int color) {
+        int monthNumberPickerId = Resources.getSystem().getIdentifier(id, "id", "android");
+        NumberPicker numberPicker = view.findViewById(monthNumberPickerId);
+        if (numberPicker == null) {
+            logger.warn("failed to setup number picker divider color: number picker with id '" + id + "' not found");
+            return;
+        }
+        setNumberPickerDividerColor(numberPicker, color);
+    }
+
+    private static void setNumberPickerDividerColor(@NonNull NumberPicker numberPicker, @ColorInt int color) {
+        try {
+            for (int i = 0; i < numberPicker.getChildCount(); ++i) {
+                Field dividerField = numberPicker.getClass().getDeclaredField("mSelectionDivider");
+                dividerField.setAccessible(true);
+                ColorDrawable colorDrawable = new ColorDrawable(color);
+                dividerField.set(numberPicker, colorDrawable);
+            }
+            numberPicker.invalidate();
+        } catch (Exception e) {
+            logger.warn("failed to setup number picker divider color", e);
+        }
     }
 }
