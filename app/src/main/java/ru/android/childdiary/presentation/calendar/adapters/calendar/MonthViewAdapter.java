@@ -26,6 +26,7 @@ public class MonthViewAdapter extends CalendarViewAdapter {
 
     @Override
     protected void initCalendar(@NonNull LocalDate date) {
+        super.initCalendar(date);
         this.year = date.getYear();
         this.month = date.getMonthOfYear();
         dates.clear();

@@ -24,6 +24,7 @@ public class WeekViewAdapter extends CalendarViewAdapter {
 
     @Override
     protected void initCalendar(@NonNull LocalDate date) {
+        super.initCalendar(date);
         dates.clear();
 
         int trailing = indexOfDayOfWeek(date);

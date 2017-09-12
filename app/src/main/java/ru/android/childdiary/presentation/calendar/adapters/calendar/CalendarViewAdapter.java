@@ -1,48 +1,41 @@
 package ru.android.childdiary.presentation.calendar.adapters.calendar;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.view.View;
 
 import org.joda.time.LocalDate;
 
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
-import io.reactivex.Observable;
 import lombok.Getter;
 import lombok.NonNull;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.adapters.BaseTwoTypesAdapter;
+import ru.android.childdiary.utils.strings.DateUtils;
 
 public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekViewHolder, String, DayOfMonthViewHolder, LocalDate> {
     public static final int DAYS_IN_WEEK = 7;
-    private static final List<String> DAY_OF_WEEK_LIST;
-    private static final List<Integer> DAY_OF_WEEK_INDEXES;
-
-    static {
-        String[] dayOfWeekArray = new DateFormatSymbols().getShortWeekdays();
-        List<String> dayOfWeekList = Observable.fromArray(dayOfWeekArray).map(String::toUpperCase).toList().blockingGet();
-        DAY_OF_WEEK_LIST = Collections.unmodifiableList(dayOfWeekList);
-        DAY_OF_WEEK_INDEXES = Collections.unmodifiableList(Calendar.getInstance().getFirstDayOfWeek() == Calendar.SUNDAY
-                ? Arrays.asList(Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY)
-                : Arrays.asList(Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY));
-    }
 
     protected final List<LocalDate> dates = new ArrayList<>();
+
     @Getter
     protected LocalDate selectedDate = LocalDate.now();
+
     @Getter
     protected Sex sex;
+
     @Getter
     private boolean isSelected;
+
     private OnSelectedDateChanged onSelectedDateChanged;
+    private String[] weekdaysNames;
+    private int[] weekdaysIndexes;
 
     public CalendarViewAdapter(Context context, OnSelectedDateChanged onSelectedDateChanged) {
         super(context);
@@ -50,19 +43,41 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
         initCalendar(selectedDate);
     }
 
-    protected static int indexOfDayOfWeek(LocalDate date) {
+    protected final int indexOfDayOfWeek(LocalDate date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date.toDate());
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         int i = 0;
-        while (i < DAYS_IN_WEEK && DAY_OF_WEEK_INDEXES.get(i) != dayOfWeek) {
+        while (i < DAYS_IN_WEEK && weekdaysIndexes[i] != dayOfWeek) {
             ++i;
         }
-
         return i;
     }
 
-    protected abstract void initCalendar(@NonNull LocalDate date);
+    private void initWeekdaysInfo() {
+        boolean isSundayFirstDayOfWeek = Calendar.getInstance().getFirstDayOfWeek() == Calendar.SUNDAY;
+        weekdaysNames = DateUtils.weekdayShortNames(getContext());
+        if (isSundayFirstDayOfWeek) {
+            String[] newWeekdaysNames = new String[weekdaysNames.length];
+            System.arraycopy(weekdaysNames, 0, newWeekdaysNames, 1, weekdaysNames.length - 1);
+            newWeekdaysNames[0] = weekdaysNames[weekdaysNames.length - 1];
+            weekdaysNames = newWeekdaysNames;
+        }
+        weekdaysIndexes = isSundayFirstDayOfWeek
+                ? new int[]{
+                Calendar.SUNDAY,
+                Calendar.MONDAY,
+                Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY}
+                : new int[]{
+                Calendar.MONDAY,
+                Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY,
+                Calendar.SUNDAY};
+    }
+
+    @CallSuper
+    protected void initCalendar(@NonNull LocalDate date) {
+        initWeekdaysInfo();
+    }
 
     public final void setSelectedDate(@NonNull LocalDate value) {
         setSelectedDate(value, true);
@@ -105,7 +120,7 @@ public abstract class CalendarViewAdapter extends BaseTwoTypesAdapter<DayOfWeekV
 
     @Override
     protected String getFirstTypeItem(int position) {
-        return DAY_OF_WEEK_LIST.get(DAY_OF_WEEK_INDEXES.get(position));
+        return weekdaysNames[position];
     }
 
     @Override
