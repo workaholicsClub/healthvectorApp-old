@@ -10,7 +10,7 @@
     <string name="test_autism_medium">Moderate risk</string>
     <string name="test_autism_low">Low risk</string>
     <string-array name="test_autism_description_paragraphs">
-        <item>M-CHAT-R has as high detection rate of autism spectrum disorders (ASD) as possible. However, there is also a high hisk of false positive.</item>
+        <item>M-CHAT-R has as high detection rate of autism spectrum disorders (ASD) as possible. However, there is also a high risk of false positive.</item>
         <item>Counting algorithm: a "No" for all questions except 2, 5 and 12, points to the risk of ASD. A "Yes" for questions 2, 5 and 12 points to the risk of ASD.</item>
         <item>Please, answer the following questions about your child. When answering, rely on how the child behaves usually. If you have occasionally noticed this kind of behaviour but it’s not habitual, answer "No". The test is designed to detect children who require thorough diagnostics of development complications, including diagnosing autism symptoms.</item>
     </string-array>

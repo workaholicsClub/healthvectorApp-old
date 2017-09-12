@@ -7,7 +7,7 @@
         <item>meat mash</item>
     </string-array>
     <string-array name="food_measure">
-        <item>gramms</item>
+        <item>grams</item>
         <item>milliliters</item>
     </string-array>
     <string-array name="doctor">
@@ -41,7 +41,7 @@
         <item>Nephrologist</item>
         <item>Oculist</item>
         <item>Oncologist</item>
-        <item>Orthopedist/traumatologist</item>
+        <item>Orthopedist/Traumatologist</item>
         <item>Orthopedist</item>
         <item>Osteopath</item>
         <item>Ophthalmologist</item>
@@ -69,7 +69,7 @@
         <item>Endocrinologist</item>
         <item>Epileptologist</item>
         <item>Neonatologist</item>
-        <item>Pediatritian/neonatologist</item>
+        <item>Pediatritian/Neonatologist</item>
         <item>Pediatritian</item>
         <item>Perinatologist</item>
         <item>Teacher of the deaf and hard of hearing</item>
