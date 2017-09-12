@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="food">
+        <item>Porridge</item>
+        <item>Mashed vegetables</item>
+        <item>Mashed fruit</item>
+        <item>meat mash</item>
+    </string-array>
+    <string-array name="food_measure">
+        <item>gramms</item>
+        <item>milliliters</item>
+    </string-array>
+    <string-array name="doctor">
+        <item>Otolaryngologist</item>
+        <item>Allergologist-immunologist</item>
+        <item>Allergologist</item>
+        <item>Andrologist</item>
+        <item>Arythmologist</item>
+        <item>Vertebrologist</item>
+        <item>Virusologist</item>
+        <item>Gastroenterologist</item>
+        <item>Hematologist</item>
+        <item>Hepatologist</item>
+        <item>Gynecologist-endocrinologist</item>
+        <item>Gynecologist</item>
+        <item>Homeopath</item>
+        <item>Dermatologist</item>
+        <item>Dentist</item>
+        <item>Immunologist</item>
+        <item>Infectiologist</item>
+        <item>Cardiologist</item>
+        <item>Cardiorheumatologist</item>
+        <item>Cosmetologist</item>
+        <item>Logopedist</item>
+        <item>Mammologist</item>
+        <item>Massagist</item>
+        <item>Micrologist</item>
+        <item>Neurologist</item>
+        <item>Neuropathist</item>
+        <item>Neurosurgeon</item>
+        <item>Nephrologist</item>
+        <item>Oculist</item>
+        <item>Oncologist</item>
+        <item>Orthopedist/traumatologist</item>
+        <item>Orthopedist</item>
+        <item>Osteopath</item>
+        <item>Ophthalmologist</item>
+        <item>Parasitologist</item>
+        <item>Proctologist</item>
+        <item>Psychiatrist</item>
+        <item>Psycologist</item>
+        <item>Psychotherapist</item>
+        <item>Pulmonologist</item>
+        <item>Rheumatologist</item>
+        <item>Reflexologist</item>
+        <item>Vascular surgeon</item>
+        <item>Surgeon dentist</item>
+        <item>Dentist</item>
+        <item>Surdologist</item>
+        <item>Traumatologist</item>
+        <item>Urologist</item>
+        <item>Physiatrist</item>
+        <item>Phlebologist</item>
+        <item>Phoniatrist</item>
+        <item>Phthisiologist</item>
+        <item>Surgeon orthopedist</item>
+        <item>Surgeon urologist</item>
+        <item>Surgeon</item>
+        <item>Endocrinologist</item>
+        <item>Epileptologist</item>
+        <item>Neonatologist</item>
+        <item>Pediatritian/neonatologist</item>
+        <item>Pediatritian</item>
+        <item>Perinatologist</item>
+        <item>Teacher of the deaf and hard of hearing</item>
+        <item>Pediatrician phthisiologist</item>
+    </string-array>
+    <string-array name="medicine">
+        <item>Absorbent carbon</item>
+        <item>Nurofen</item>
+        <item>Ibuprofen</item>
+        <item>Iodine</item>
+        <item>Smecta</item>
+        <item>Miramistin</item>
+        <item>Albucid</item>
+        <item>Furacilin</item>
+        <item>Alcohol solution of furacilin</item>
+        <item>Isofra</item>
+        <item>Aqualor</item>
+        <item>Flemoclav</item>
+        <item>Co-amoxiclav</item>
+        <item>Riboxin</item>
+        <item>Vetoron</item>
+        <item>Almagel</item>
+        <item>Creon</item>
+        <item>Vibrocil</item>
+        <item>Nasivin</item>
+        <item>Naftisin</item>
+        <item>Suprastin</item>
+        <item>Fenistil (gel)</item>
+        <item>Viferon (suppositories)</item>
+        <item>Paracetamol</item>
+        <item>Espumisan</item>
+        <item>Linex</item>
+    </string-array>
+    <string-array name="medicine_measure">
+        <item>mg</item>
+        <item>ml</item>
+        <item>pce/pcs</item>
+        <item>ea</item>
+        <item>measuring spoon</item>
+        <item>tsp</item>
+        <item>tbsp</item>
+        <item>cm3</item>
+        <item>shot</item>
+    </string-array>
+    <string-array name="achievement">
+        <item>Babbles</item>
+        <item>Examines their hand</item>
+        <item>Sits with their head straight</item>
+        <item>Laughs</item>
+        <item>Turns over</item>
+        <item>Turns around themselves</item>
+        <item>Lifts themselves leaning on arms</item>
+        <item>Grabs a rattle</item>
+        <item>Turns when they hear a sound</item>
+        <item>Turns when they hear a voice</item>
+        <item>Eats on their own</item>
+        <item>Sits without support</item>
+        <item>Pronounces separate syllables</item>
+        <item>Piles up raisins</item>
+        <item>Plays with blocks</item>
+        <item>Imitates speech</item>
+        <item>Hold out their hand</item>
+        <item>Grabs a thread</item>
+        <item>Stands holding onto something</item>
+        <item>Combines syllables</item>
+        <item>Tries to stand up</item>
+        <item>Sits down</item>
+        <item>Clatters their heels against each other</item>
+        <item>Mumbles</item>
+        <item>Plays patty-cake</item>
+        <item>Stands up for a few seconds</item>
+        <item>Calls mom or dad</item>
+        <item>Stands on their own</item>
+        <item>Bends and straightens themselves</item>
+        <item>Walks on their own</item>
+        <item>Walks backwards</item>
+        <item>Drinks from a cup</item>
+        <item>Uses a spoon and a fork</item>
+        <item>Runs</item>
+        <item>Walks up the stairs</item>
+        <item>Takes off clothes</item>
+        <item>Builds a block tower</item>
+        <item>Brushes their teeth with the help of an adult</item>
+        <item>Throws a ball</item>
+        <item>Speaks partly intelligibly</item>
+        <item>Draws a vertical line</item>
+        <item>Washes and wipes their hands</item>
+        <item>Puts on clothes</item>
+        <item>Hops</item>
+        <item>Speaks intelligibly</item>
+    </string-array>
+</resources>

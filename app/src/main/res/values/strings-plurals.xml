@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- // TODO: values должно содержать английские значения, values-ru - значения на русском -->
     <!-- %d - число; для английского языка множественные формы надо продублировать -->
     <plurals name="numberOfTimesInADay">
         <!-- форма для ед. числа, например, "1 раз в день" -->
-        <item quantity="one">%d раз в день</item>
+        <item quantity="one">%d time per day</item>
         <!-- форма для для числительных 2, 3, 4, например, "4 раза в день" -->
-        <item quantity="few">%d раза в день</item>
+        <item quantity="few">%d times per day</item>
         <!-- для языков, в которых числительные не имеют особой формы (как в английском языке) -->
-        <item quantity="other">%d раз в день</item>
+        <item quantity="other">%d times per day</item>
         <!-- форма для числительных 11-99, например, "11 раз в день" -->
-        <item quantity="many">%d раз в день</item>
+        <item quantity="many">%d times per day</item>
         <!-- форма для нуля, например, "0 раз в день" -->
-        <item quantity="zero">%d раз в день</item>
+        <item quantity="zero">%d times per day</item>
     </plurals>
     <!-- %d - число; для английского языка множественные формы надо продублировать -->
     <plurals name="numberOfAddedEvents">
         <!-- форма для ед. числа, например, "Добавлено 1 событие" -->
-        <item quantity="one">Добавлено %d событие</item>
+        <item quantity="one">Added %d event</item>
         <!-- форма для для числительных 2, 3, 4, например, "Добавлено 4 события" -->
-        <item quantity="few">Добавлено %d события</item>
+        <item quantity="few">Added %d events</item>
         <!-- для языков, в которых числительные не имеют особой формы (как в английском языке) -->
-        <item quantity="other">Добавлено %d событий</item>
+        <item quantity="other">Added %d events</item>
         <!-- форма для числительных 11-99, например, "Добавлено 11 событий" -->
-        <item quantity="many">Добавлено %d событий</item>
+        <item quantity="many">Added %d events</item>
         <!-- форма для нуля, например, "Добавлено 0 событий" -->
-        <item quantity="zero">Добавлено %d событий</item>
+        <item quantity="zero">Added %d events</item>
     </plurals>
     <!-- %d - число; для английского языка множественные формы надо продублировать -->
     <plurals name="numberOfPoints">
         <!-- форма для ед. числа, например, "1 балл" -->
-        <item quantity="one">%d балл</item>
+        <item quantity="one">%d point</item>
         <!-- форма для для числительных 2, 3, 4, например, "4 балла" -->
-        <item quantity="few">%d балла</item>
+        <item quantity="few">%d points</item>
         <!-- для языков, в которых числительные не имеют особой формы (как в английском языке) -->
-        <item quantity="other">%d баллов</item>
+        <item quantity="other">%d points</item>
         <!-- форма для числительных 11-99, например, "11 баллов" -->
-        <item quantity="many">%d баллов</item>
+        <item quantity="many">%d points</item>
         <!-- форма для нуля, например, "0 баллов" -->
-        <item quantity="zero">%d баллов</item>
+        <item quantity="zero">%d points</item>
     </plurals>
 </resources>

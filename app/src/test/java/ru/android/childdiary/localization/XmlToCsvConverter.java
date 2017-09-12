@@ -52,12 +52,12 @@ public class XmlToCsvConverter {
     private static final String OUTPUT_FILE_NAME = "Вектор развития ru-en.csv";
     private static final String[] COMMENTS = new String[]{
             "Примечания для переводчика:",
-            "1. Не изменять содержимое столбца A.",
+            "1. Не изменять содержимое столбцов A, C, E, F.",
             "2. Не удалять пустые строки.",
-            "3. Не изменять значения столбца C. При необходимости добавить комментарий добавить его в столбец E.",
-            "4. В комментариях указаны значения и смысл параметров, специальных символов.",
-            "5. Текст на английском языке должен содержать те же параметры, что и текст на русском языке. Но в тексте на английском языке порядок параметров может отличаться в соответствии с грамматикой языка.",
-            "6. При изменении значений столбца B помечать их цветом."};
+            "3. В комментариях указаны значения и смысл параметров, специальных символов.",
+            "4. Текст на английском языке должен содержать те же параметры, что и текст на русском языке. Но в тексте на английском языке порядок параметров может отличаться в соответствии с грамматикой языка.",
+            "5. При изменении значений столбца B помечать их цветом."};
+// TODO: Добавить примечание про знаки пунктуации, заглавные буквы.
 
     private final Set<String> values = new HashSet<>();
 
@@ -76,7 +76,7 @@ public class XmlToCsvConverter {
             for (int j = row.getColumnsCount(); j < 5; ++j) {
                 resultRows.get(i).addColumns((String) null);
             }
-            resultRows.get(i).addColumns(COMMENTS[i]);
+            resultRows.get(i).addColumns(null, COMMENTS[i]);
         }
         writeCsv(OUTPUT_FILE_NAME, resultRows);
     }
@@ -198,6 +198,7 @@ public class XmlToCsvConverter {
                 comment = getComment(childNode);
             }
         }
+        rows.add(new Row(key, null));
     }
 
     private void processPluralNode(Node node, List<Row> rows, Comment comment) {
@@ -219,6 +220,7 @@ public class XmlToCsvConverter {
                 comment = getComment(childNode);
             }
         }
+        rows.add(new Row(key, null));
     }
 
     private String preprocess(String value) {
@@ -227,7 +229,6 @@ public class XmlToCsvConverter {
         }
         value = value.replace("<", "&lt;");
         value = value.replace(">", "&gt;");
-        value = value.replace("…", "&#8230;");
         return value;
     }
 
@@ -274,7 +275,7 @@ public class XmlToCsvConverter {
                 this.text = null;
             } else {
                 ignoreDuplicates = text.contains(IGNORE_DUPLICATES);
-                this.text = text.replace(IGNORE_DUPLICATES, "").trim();
+                this.text = text.trim();
             }
         }
 
