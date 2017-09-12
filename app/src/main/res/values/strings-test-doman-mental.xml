@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="test_doman_mental_name">Доман: стадии сенсорного развития</string>
-    <string name="mental_vision">Зрение</string>
-    <string name="mental_audition">Слух</string>
-    <string name="mental_sensitivity">Осязание</string>
+    <string name="test_doman_mental_name">Doman: sensory development stages</string>
+    <string name="mental_vision">Vision</string>
+    <string name="mental_audition">Hearing</string>
+    <string name="mental_sensitivity">Sense of touch</string>
     <string-array name="mental_vision_stages">
-        <item>Световой рефлекс</item>
-        <item>Контурное восприятие</item>
-        <item>Различение деталей в пределах конфигурации</item>
-        <item>Конвергенция зрения, приводящее к простому пониманию глубины</item>
-        <item>Нахождение различий у похожих, но разных простых визуальных символов</item>
-        <item>Идентификация визуальных символов и букв на основе приобретённого опыта</item>
-        <item>Чтение с полным пониманием</item>
+        <item>Do your child’s pupils constrict when you shine a flashlight in his eyes?</item>
+        <item>Does your child follow a person’s movements or a beam of light in the dark with his eyes?</item>
+        <item>How many familiar objects can your child identify within his reach (on the floor, in the play-pen, in the room)?</item>
+        <item>Do your child’s eyes properly align with each other in the daytime? Any signs of strabismus (cross-eye) unrelated to his condition like being tired, sick or anxious?</item>
+        <item>Can your child differentiate between symbols of the same type (e.g. differences between letters or numbers)?</item>
+        <item>Does your child know letters and numbers?</item>
+        <item>Does the child have any difficulty reading? Can they explain what they have just read?</item>
     </string-array>
     <string-array name="mental_audition_stages">
-        <item>Рефлекс вздрагивания</item>
-        <item>Защитная реакция на угрожающие звуки</item>
-        <item>Оценка значащих звуков</item>
-        <item>Понимание двух слов</item>
-        <item>Понимание 10—25 слов и двух-трёх фраз</item>
-        <item>Понимание 2000 слов и простых предложений</item>
-        <item>Понимание полного словаря и правильных предложений</item>
+        <item>Does your child flinch at an unexpected or shrill sounds?</item>
+        <item>Does your child react to loud threatening sounds? A normal reaction would be based on Moro reflex (grabbing or hugging).</item>
+        <item>Does the child react to meaningful sounds (e.g. by grinning or smiling at a pleasant tone, reacting to doorbell or household noises)?</item>
+        <item>Can the child understand two words?</item>
+        <item>Can the child understand 10 to 25 words and two or three phrases?</item>
+        <item>Can the child understand about 2000 words and simple sentences?</item>
+        <item>Does the child understand being spoken to using the vocabulary appropriate for his age?</item>
     </string-array>
     <string-array name="mental_sensitivity_stages">
-        <item>Рефлекс Бабинского</item>
-        <item>Оценка жизненно важных ощущений</item>
-        <item>Оценка гностических ощущений</item>
-        <item>Тактильное понимание объёмности предметов, которые кажутся плоскими</item>
-        <item>Тактильная дифференциация похожих, но разных предметов</item>
-        <item>Способность определять характеристики предметов с помощью тактильности</item>
-        <item>Тактильная идентификация предметов</item>
+        <item>Does the child show Babinski response? Run a thumbnail along the sole from heel to toes: if yes, toes should fan out in response to the stimulation.</item>
+        <item>Does the child react to external stimuli? The child should show immediate response to pain in any part of their body, differentiate between hot and cold. Their reaction should be appropriate.</item>
+        <item>Does the child give a proper response to the cold, wetness and discomfort (wet diapers, tight shoes)?</item>
+        <item>Does the child identify an object as three-dimensional by touching it (e.g. a block on the table seems flat but if you hold it in your hands you realize that it has volume)?</item>
+        <item>Does your child recognize familiar objects when they tough them? This can be tested using a block and a ball of the same size and material. First let the child touch one object, name it and show it to them, then the other, then give the objects to the child one after another, then in the end show both the ball and the block and ask what the child had just touched. If the child choses correctly, the score is perfect.</item>
+        <item>Can the child characterize how an object feels (rough, smooth, soft)?</item>
+        <item>The child can recognize various items by touch (e.g. tell heads and tails of a coin by touching it) equally with both hands?</item>
     </string-array>
 </resources>

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="stage">%d стадия развития</string>
-    <string name="doman_stage_advanced">Опережающее развитие</string>
-    <string name="doman_stage_normal">Нормальное развитие</string>
-    <string name="doman_stage_slow">Замедленное развитие</string>
+    <string name="stage">%d stage of development</string>
+    <string name="doman_stage_advanced">Advance development</string>
+    <string name="doman_stage_normal">Normal development</string>
+    <string name="doman_stage_slow">Retarded development</string>
     <string-array name="test_doman_description_paragraphs">
-        <item>Тест на соответствие календарного возраста ребенка соответствующей стадии моторного и сенсорного развития, с определенными временными рамками по методике Гленна Домана.</item>
-        <item>Тест состоит из двух разделов: моторное развитие и сенсорное развитие. Каждый из разделов состоит из 7 стадий развития мозга с определенными временными рамками и 3 параметров в каждой стадии.</item>
+        <item>Test to match chronological age of a child to corresponding stage of sensory-motor development with certain time frame using the Glenn Doman method.</item>
+        <item>Test is divided into 2 sections: sensory development and motor development. Each section consists of 7 stages of brain development with a certain time frames and 3 parameters in each stages.</item>
     </string-array>
     <string-array name="stage_descriptions">
-        <item>Ранний ствол мозга и спинной мозг</item>
-        <item>Ствол мозга и ранние подкорковые области</item>
-        <item>Средний мозг и подкорковые области</item>
-        <item>Начальная кора</item>
-        <item>Ранняя кора</item>
-        <item>Примитивная кора</item>
-        <item>Сложная кора</item>
+        <item>Early brain stem and spinal cord</item>
+        <item>Brain stem and early subcortical area</item>
+        <item>Midbrain and subcortical area</item>
+        <item>Initial cortex</item>
+        <item>Early cortex</item>
+        <item>Primitive cortex</item>
+        <item>Complex cortex</item>
     </string-array>
 </resources>

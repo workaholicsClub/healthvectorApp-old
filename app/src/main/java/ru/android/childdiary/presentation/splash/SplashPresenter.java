@@ -65,7 +65,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     .subscribe(this::onFinished, this::onUnexpectedError));
         } catch (DowngradeDatabaseException e) {
             onUnexpectedError(e);
-            // TODO: при появлении новых версий БД необходимо обрабатывать исключение из onDowngrade,
+            // ВАЖНО: при появлении новых версий БД необходимо обрабатывать исключение из onDowngrade,
             // показывая пользователю сообщение о необходимости обновления приложения из Google Play Market;
             // ситуация с onDowngrade становится возможной, т.к. пользователь может загрузить бэкап
             // из облачного хранилища с более новой версией БД из приложения старой версии

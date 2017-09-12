@@ -57,7 +57,6 @@ public class XmlToCsvConverter {
             "3. В комментариях указаны значения и смысл параметров, специальных символов.",
             "4. Текст на английском языке должен содержать те же параметры, что и текст на русском языке. Но в тексте на английском языке порядок параметров может отличаться в соответствии с грамматикой языка.",
             "5. При изменении значений столбца B помечать их цветом."};
-// TODO: Добавить примечание про знаки пунктуации, заглавные буквы.
 
     private final Set<String> values = new HashSet<>();
 
@@ -82,7 +81,7 @@ public class XmlToCsvConverter {
     }
 
     private String getResourcesParentPath() {
-        return new File(".").getAbsolutePath() + "\\app\\src\\main\\res\\values\\";
+        return new File(".").getAbsolutePath() + "\\app\\src\\main\\res\\values-ru\\";
     }
 
     private void writeCsv(String fileName, List<Row> rows) {

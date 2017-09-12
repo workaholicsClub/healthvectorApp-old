@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="test_autism_name">Тест на аутизм</string>
-    <string name="test_autism_finish_text_high">Высокий риск. Количество баллов 8—20. Допустимо пропустить этап дополнительного пошагового интервью и немедленно обратиться за диагностикой и оценкой необходимости раннего вмешательства.</string>
-    <string name="test_autism_finish_text_medium">Средний риск. Количество баллов 3—7. Используйте дополнительное пошаговое интервью (второй этап MCHAT-R/F) для получения дополнительной информации об ответах, указывающих на риск РАС. Если количество баллов M-CHAT-R/F составляет 2 и выше, то результат тестирования положительный. Рекомендованные действия: обратиться за диагностикой и оценкой необходимости раннего вмешательства. Если количество баллов этапа дополнительного пошагового интервью составляет 0—1, то результат тестирования отрицательный. Никаких дополнительных действий не требуется, если наблюдение не выявляет риск РАС. Ребенок должен быть повторно обследован на будущих профилактических осмотрах.</string>
-    <string name="test_autism_finish_text_low">Низкий риск. Количество баллов 0—2. Если ребенок младше 24 месяцев, то проведите повторное тестирование по достижению им 2 лет. Никаких дополнительных действий не требуется, если наблюдение не выявляет риск РАС.</string>
+    <string name="test_autism_name">Test for autism</string>
+    <string name="test_autism_finish_text_high">High risk. Total score 8—20. Skip the additional step-by-step questionnaire and turn to a specialist immediately for consulting and further decision on whether or not early intervention is necessary.</string>
+    <string name="test_autism_finish_text_medium">Moderate risk. Total score 3—7. Complete additional step-by-step questionnaire (second stage MCHAT-R/F) to get more information about answers pointing to ASD risks. Recommended course of action is to turn to a specialist for consulting and further decision on whether or not early intervention is necessary. If the examination reveals no ASD symptoms, no further actions are necessary. The child should be re-examined in the future.</string>
+    <string name="test_autism_finish_text_low">Low risk. Total score 0—2. If the child is under 24 months, test them again after the age of 2. If the test reveals no ASD symptoms, no further actions are necessary.</string>
     <!-- &lt;a href=\"http://mchatscreen.com/wp-content/uploads/2016/12/M-CHAT-R_F_Russian_v2.pdf\"&gt;ссылке&lt;/a&gt; - ссылка в тексте -->
-    <string name="test_autism_finish_text">Для того, чтобы тестирование было максимально точным, следует произвести дополнительное пошаговое интервью (M-CHAT-R/F). Материалы можно скачать по &lt;a href=\"http://mchatscreen.com/wp-content/uploads/2016/12/M-CHAT-R_F_Russian_v2.pdf\"&gt;ссылке&lt;/a&gt;.</string>
-    <string name="test_autism_high">Высокий риск</string>
-    <string name="test_autism_medium">Средний риск</string>
-    <string name="test_autism_low">Низкий риск</string>
+    <string name="test_autism_finish_text">In order for the test to be as precise as possible, you should complete an additional step-by-step questionnaire (M-CHAT-R/F). You can download the files at &lt;a href=\"http://mchatscreen.com/wp-content/uploads/2016/12/M-CHAT-R_F_Russian_v2.pdf\"&gt;link&lt;/a&gt;.</string>
+    <string name="test_autism_high">High risk</string>
+    <string name="test_autism_medium">Moderate risk</string>
+    <string name="test_autism_low">Low risk</string>
     <string-array name="test_autism_description_paragraphs">
-        <item>M-CHAT-R выявляет настолько большое количество случаев расстройств аутического спектра (РАС), насколько это возможно. Существует высокая доля ложноположительных результатов.</item>
-        <item>Алгоритм подсчета: ответ «Нет» по всем пунктам, за исключением 2, 5 и 12, указывает на риск РАС. Ответ «Да» для пунктов 2, 5 и 12 указывает на риск РАС.</item>
-        <item>Пожалуйста, ответьте на вопросы о вашем ребенке. При ответах учитывайте, как обычно ведет себя ребенок. Если вы замечали у него такое поведение несколько раз, но обычно он так себя не ведет, ответьте «Нет».</item>
+        <item>M-CHAT-R has as high detection rate of autism spectrum disorders (ASD) as possible. However, there is also a high hisk of false positive.</item>
+        <item>Counting algorithm: a "No" for all questions except 2, 5 and 12, points to the risk of ASD. A "Yes" for questions 2, 5 and 12 points to the risk of ASD.</item>
+        <item>Please, answer the following questions about your child. When answering, rely on how the child behaves usually. If you have occasionally noticed this kind of behaviour but it’s not habitual, answer "No". The test is designed to detect children who require thorough diagnostics of development complications, including diagnosing autism symptoms.</item>
     </string-array>
     <string-array name="test_autism">
-        <item>Если вы показываете на что-то на другом конце комнаты, ребенок смотрит на это? Пример: если вы показываете на игрушку или животное, ребенок смотрит на них?</item>
-        <item>Вы когда-либо предполагали, что ваш ребенок может быть глухим?</item>
-        <item>Ваш ребенок играет в воображаемые или сюжетно-ролевые игры? Пример: притворяется, что пьет из пустой чашки, изображает, что говорит по телефону, понарошку кормит куклу или плюшевую игрушку?</item>
-        <item>Вашему ребенку нравится забираться на предметы? Пример: мебель, строения на игровой площадке, лестницы.</item>
-        <item>Ваш ребенок делает необычные движения пальцами перед глазами? Пример: ребенок шевелит пальцами около глаз?</item>
-        <item>Ваш ребенок указывает пальцем, чтобы попросить что-то или получить помощь? Пример: указывает пальцем на лакомство или игрушку, до которой не может дотянуться.</item>
-        <item>Ваш ребенок указывает пальцем на что-то интересное, чтобы обратить на это Ваше внимание? Пример: указывает пальцем на самолет в небе или на большой грузовик на дороге.</item>
-        <item>Ваш ребенок интересуется другими детьми? Пример: ребенок наблюдает за другими детьми, улыбается им, идет к ним?</item>
-        <item>Ребенок показывает вам предметы, принося их или держа их около вас, просто чтобы поделиться, а не попросить помощь? Пример: показывает цветок, мягкую игрушку или игрушечный грузовик.</item>
-        <item>Ваш ребенок отзывается, когда вы зовете по имени? Пример: ребенок оглядывается на вас, говорит или лепечет, прекращает то, что делает, когда вы зовете его по имени?</item>
-        <item>Когда вы улыбаетесь ребенку, он улыбается в ответ?</item>
-        <item>Ваш ребенок расстраивается от бытовых звуков? Пример: он кричит или плачет от таких звуков, как шум пылесоса или громкая музыка?</item>
-        <item>Ваш ребенок умеет ходить?</item>
-        <item>Ребенок смотрит вам в глаза, когда вы говорите с ним, играете или одеваете?</item>
-        <item>Ребенок пытается копировать то, что вы делаете? Пример: машет рукой при прощании, хлопает в ладоши, издает смешные звуки вам в ответ.</item>
-        <item>Если вы оборачиваетесь, чтобы на что-то взглянуть, ребенок оглядывается вокруг, чтобы увидеть то, на что вы смотрите?</item>
-        <item>Ребенок пытается обратить на себя ваш взгляд? Пример: ребенок смотрит на вас, ожидая похвалу, или говорит «смотри», или «посмотри на меня».</item>
-        <item>Ребенок понимает, когда вы говорите ему что-то сделать? Пример: если вы не сделаете указательных движений, то ребенок сможет понять «положи книгу на стул» или «принеси мне одеяло»?</item>
-        <item>Если происходит что-то необычное, то ребенок смотрит на ваше лицо, чтобы понять, как вы к этому относитесь? Пример: если он услышит странный или забавный звук или увидит новую игрушку, то он посмотрит на ваше лицо?</item>
-        <item>Вашему ребенку нравится двигательная активность? Пример: когда кружат или подбрасывают на коленях.</item>
+        <item>When you point at something in the opposite end of the room, does the child look at it? E.g. when you point at a toy or an animal, does the child look at it?</item>
+        <item>Have you ever suspected your child being deaf?</item>
+        <item>Does your child play imagine or role-play games? E.g. pretend they are drinking out of an empty cup, talking on the phone, feeding a doll or a stuffed toy?</item>
+        <item>Does your child like climbing on objects? E.g. furniture, structures on the playground, stairs or ladders.</item>
+        <item>Does your child make weird finger movements in front of their eyes? E.g. moving their fingers near the eyes.</item>
+        <item>Does your child point their finger at something to ask for it or get help? E.g. pointing at a treat or a toy they can’t reach.</item>
+        <item>Does your child point their finger at something of interest to draw your attention to it? E.g. pointing a finger at a plane in the sky or a big truck on the road.</item>
+        <item>Does your child show interest in other children? E.g. watching other children, smiling at them, trying to approach them?</item>
+        <item>Does your child pick up items and bring them to show you? E.g. showing you a flower, a stuffed toy or a toy truck.</item>
+        <item>Does your child respond when you call their name? Like look back at you, speak or babble, stop doing whatever they are doing at the moment?</item>
+        <item>Does your child smile back when you smile at him?</item>
+        <item>Does household noise upset your child? E.g. they cry or scream when they hear a vacuum cleaner or loud music.</item>
+        <item>Can your child walk?</item>
+        <item>Does the child look you in the eyes when you are talking to them, dressing them or playing with them?</item>
+        <item>Does the child try to copy what you are doing? E.g. waving their hand when saying goodbye, clapping their hands, making funny noises when you are doing it.</item>
+        <item>If you turn around to look at something, does your child start looking around to see what you are looking at?</item>
+        <item>Does the child try to make you look at them? E.g. the child looks at you waiting to be praised, or says "look" or "look at me".</item>
+        <item>Does the child understand being told to do something? E.g. if you don’t point at anything, does your child understand phrases like "put the book on the chair" or "bring me the blanket"?</item>
+        <item>When something unusual happens, does the child look at your face to see how you react to it? E.g. if they hear a strange or funny nose or see a new toy, will they look at your face?</item>
+        <item>Does your child like activities like being pushed on a swing or rocked on the knees?</item>
     </string-array>
 </resources>

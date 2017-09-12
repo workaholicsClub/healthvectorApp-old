@@ -6,7 +6,6 @@ import io.requery.Key;
 import io.requery.Persistable;
 import io.requery.Table;
 
-// TODO: translation table
 @Table(name = "food_measure")
 @Entity(name = "FoodMeasureEntity")
 public interface FoodMeasureData extends Persistable {

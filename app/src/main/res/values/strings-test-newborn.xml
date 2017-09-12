@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="test_newborn_name">Тест новорожденного на риск ДЦП</string>
-    <string name="test_newborn_description">Каждый ответ «Да» означает риск церебрального паралича</string>
-    <string name="test_newborn_result_good">Риск церебрального паралича не обнаружен</string>
-    <string name="test_newborn_short_result_bad">Есть риск</string>
-    <string name="test_newborn_short_result_good">Нет риска</string>
+    <string name="test_newborn_name">Newborn test for cerebral palsy (CP)</string>
+    <string name="test_newborn_description">Signs of potential cerebral palsy can be detected within the first months of life. Thorough observation of the baby can help detect the symptoms soon enough to treat them. Each "Yes" means you child displays a symptom of CP.</string>
+    <string name="test_newborn_result_good">No risk of CP found</string>
+    <string name="test_newborn_short_result_bad">Risk of CP found</string>
+    <string name="test_newborn_short_result_good">No risk of CP found</string>
     <string-array name="test_newborn_result_bad_paragraphs">
-        <item>Риск церебрального паралича</item>
-        <item>Обратитесь за консультацией к врачу</item>
+        <item>Risk of CP found</item>
+        <item>You should consult a doctor</item>
     </string-array>
     <string-array name="test_newborn">
-        <item>Лежа на спине ребенок скован? Есть повышение мышечного тонуса?</item>
-        <item>Лежа на спине ребенок удерживает позу эмбриона?</item>
-        <item>Лежа на спине ребенок сохраняет сгибательную позу при пеленании, купании?</item>
-        <item>Лежа на спине руки ребенка согнуты и приведены к туловищу?</item>
-        <item>Лежа на спине ребенок сопротивляется разгибанию и сгибанию конечностей?</item>
-        <item>Ребенок, лежа на спине, стремится к перекресту ног на уровне голеней?</item>
-        <item>Ребенок лежит с разогнутыми во всех суставах конечностями? Поддерживает позу лягушки?</item>
-        <item>У ребенка снижена спонтанная двигательная активность?</item>
-        <item>При вытягивании за руки, голова ребенка запрокинута назад и не подтягивается вслед за руками и туловищем?</item>
-        <item>Ребенок активно сопротивляется разгибанию рук?</item>
-        <item>Разгибание рук резко снижено?</item>
-        <item>Одна рука ребенка разогнута больше второй?</item>
-        <item>В положении на животе ребенку трудно повернуть голову в сторону? Он протестует против этой позы?</item>
-        <item>Лежа на животе конечности разогнуты (поза лягушки)?</item>
-        <item>При удержании ребенка в воздухе лицом вниз руки согнуты, голова опущена?</item>
-        <item>Руки и ноги свисают, как плети?</item>
-        <item>Ребенок не удерживает позу?</item>
-        <item>Поставленный на опору, ребенок резко разгибает ноги, запрокидывает голову?</item>
-        <item>Крик ребенка тихий, слабый? Пронзительный, болезненный? Есть отдельные вскрикивания?</item>
-        <item>Вместо крика гримаса на лице?</item>
-        <item>К концу 1 месяца у ребенка нет зрительного и слухового сосредоточения?</item>
-        <item>У ребенка нет «ротового внимания»?</item>
-        <item>У ребенка выражение лица хмурое, недовольное?</item>
-        <item>Ребенок не любит, когда его пеленают, осматривают?</item>
-        <item>Ребенок много и беспричинно кричит? Сонлив сверх обычного режима?</item>
+        <item>Does the child seem stiff when lying on the back? Is there any increase muscle tone?</item>
+        <item>Does your child maintain a fetal position when lying on the back?</item>
+        <item>Does your child’s arms and back remain bent during bathing or changing diapers?</item>
+        <item>Does your child keep their arms bent and close to the body when lying on the back?</item>
+        <item>Does your child resist flexion of the limbs when lying on the back?</item>
+        <item>Does your child tend to cross their legs in the shin area?</item>
+        <item>Does the child lie with all limbs unbent? Can the child maintain a frog-like position?</item>
+        <item>Does your child display decreased spontaneous activity?</item>
+        <item>When you stretch your child by the arms, does your child tilt their head back without stretching it with the rest of the body?</item>
+        <item>Does the child actively resist unbending their arms?</item>
+        <item>Is there a drastic decrease in flexing capability?</item>
+        <item>Is one arm unbent at a greater angle than the other?</item>
+        <item>Does the child have difficulty turning their head to the side? Does the child protest against being put in this position?</item>
+        <item>Does the child keep their limbs unbent when lying on the stomach (frog-like pose)?</item>
+        <item>When you hold the child in the air face down, are their arms bent? Is their head lowered?</item>
+        <item>When held vertically, do the child’s arms and legs hang loosely?</item>
+        <item>Does the child fail to maintain a position?</item>
+        <item>When put on something vertically, does the child suddenly bend their legs or tilt their head back?</item>
+        <item>Does the child’s cry sound quiet or weak? Sheer or painful? Are there any single outcries?</item>
+        <item>Does the child grimace instead of crying?</item>
+        <item>Does the child lack visual and auditory concentration by the time they reach 1 month?</item>
+        <item>Does the child lack "mouth attention"? (When a child half-opens their mouth as if trying to respond to the adult’s speech. When spoken to kindly, the child can respond by a brief first smile.)</item>
+        <item>Does your child frown or seem unhappy?</item>
+        <item>Does the child hate changing diapers or being examined?</item>
+        <item>Does the child cry a lot for no good reason? Is the child excessively sleepy?</item>
     </string-array>
 </resources>

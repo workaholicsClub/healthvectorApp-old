@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="test_doman_physical_name">Доман: стадии моторного развития</string>
-    <string name="physical_mobility">Подвижность</string>
-    <string name="physical_speech">Речь</string>
-    <string name="physical_manual">Подвижность пальцев рук</string>
+    <string name="test_doman_physical_name">Doman: stages of motor skills development</string>
+    <string name="physical_mobility">Mobility</string>
+    <string name="physical_speech">Speech</string>
+    <string name="physical_manual">Finger mobility</string>
     <string-array name="physical_mobility_stages">
-        <item>Движение рук и ног без перемещения туловища</item>
-        <item>Ползание на животе в положении «лицом вниз», выливающееся в перекрёстное ползание на животе</item>
-        <item>Ползание на руках и коленях, выливающееся в перекрёстное ползание на четвереньках</item>
-        <item>Ходьба, при которой руки используются в первичной роли баланса, обычно на высоте плеча или выше</item>
-        <item>Ходьба, при которой руки свободны от первичной роли баланса</item>
-        <item>Ходьба и бег по перекрёстной модели в полной мере</item>
-        <item>Использование ноги в приобретённой опытным путём роли в постоянной связи с доминирующим полушарием</item>
+        <item>Does the child move their arms and legs without moving their body?</item>
+        <item>Does the child crawl on their stomach face down, moving to cross-crawling (when the right foot moves together with the left arm and vice versa, creating clear and synchronized movements)?</item>
+        <item>Does the child crawl on arms and knees moving to cross-crawling on all fours (when arms and legs are synchronized)?</item>
+        <item>Does the child walk around with their arms lifted up to shoulders or higher for balance?</item>
+        <item>Does the child walk around with their arms hanging loose without using them for balance?</item>
+        <item>Can the child cross-walk or run without difficulty?</item>
+        <item>Can the child balance on one leg or play with a ball hitting it with their leg?</item>
     </string-array>
     <string-array name="physical_speech_stages">
-        <item>Крик новорожденного и плач</item>
-        <item>Жизненно важный плач в ответ на угрозу жизни</item>
-        <item>Создание значащих звуков</item>
-        <item>Два слова речи, используемые спонтанно и осознанно</item>
-        <item>От 10 до 25 слов речи и фразы из двух слов</item>
-        <item>2000 слов речи и короткие предложения</item>
-        <item>Полный словарь и правильное построение предложений</item>
+        <item>Does the newborn scream and cry?</item>
+        <item>Does the child cry in response to danger or threat?</item>
+        <item>Does the child audibly express their needs, e.g. wanting to eat, drink or sleep?</item>
+        <item>Does the child use two words (consciously or spontaneously)?</item>
+        <item>Does the child use 10 to 25 words and two-word phrases?</item>
+        <item>Does the child use about 2000 words and short sentences?</item>
+        <item>Does the child have an extensive vocabulary and structure sentences correctly (considering their age)?</item>
     </string-array>
     <string-array name="physical_manual_stages">
-        <item>Хватательный рефлекс</item>
-        <item>Жизненно важное отпускание, разжимание пальцев</item>
-        <item>Цепкое хватание</item>
-        <item>Корковая противопозиция на одной из рук</item>
-        <item>Корковая противопозиция двусторонняя и одновременная</item>
-        <item>Функционирование обеих рук, при этом одна рука использует приобретённый опыт</item>
-        <item>Использование руки для письма в постоянной связи с доминирующим полушарием</item>
+        <item>Does the child grab (squeeze) an item when you put it in their palm?</item>
+        <item>Can the child let go of a dangerous item? Does the child loosen the grip if the item is cold, hot or prickly?</item>
+        <item>Can the child lift an item with either hand? In this case the child often uses four fingers pressed against their palm without using the thumb.</item>
+        <item>Can the child lift items by picking them with the thumb and the index finger of one hand (like crumps from a surface)?</item>
+        <item>Can the child lift items by picking them with the thumb and the index finger of both hands?</item>
+        <item>Does the child have full command of both hands (can unscrew a bottle or a jar cap) with one hand being dominant?</item>
+        <item>Can the child write on their own (using the dominant hand)?</item>
     </string-array>
 </resources>

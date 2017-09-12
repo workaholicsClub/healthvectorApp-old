@@ -1,164 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="food">
-        <item>Каша</item>
-        <item>Овощное пюре</item>
-        <item>Фруктовое пюре</item>
-        <item>Мясное пюре</item>
+        <item>Porridge</item>
+        <item>Mashed vegetables</item>
+        <item>Mashed fruit</item>
+        <item>meat mash</item>
     </string-array>
     <string-array name="food_measure">
-        <item>граммы</item>
-        <item>миллилитры</item>
+        <item>gramms</item>
+        <item>milliliters</item>
     </string-array>
     <string-array name="doctor">
-        <item>ЛОР</item>
-        <item>Аллерголог-иммунолог</item>
-        <item>Аллерголог</item>
-        <item>Андролог</item>
-        <item>Аритмолог</item>
-        <item>Вертебролог</item>
-        <item>Вирусолог</item>
-        <item>Гастроэнтеролог</item>
-        <item>Гематолог</item>
-        <item>Гепатолог</item>
-        <item>Гинеколог-эндокринолог</item>
-        <item>Гинеколог</item>
-        <item>Гомеопат</item>
-        <item>Дерматолог</item>
-        <item>Зубной врач</item>
-        <item>Иммунолог</item>
-        <item>Инфекционист</item>
-        <item>Кардиолог</item>
-        <item>Кардиоревматолог</item>
-        <item>Косметолог</item>
-        <item>Логопед</item>
-        <item>Маммолог</item>
-        <item>Массажист</item>
-        <item>Миколог</item>
-        <item>Невролог</item>
-        <item>Невропатолог</item>
-        <item>Нейрохирург</item>
-        <item>Нефролог</item>
-        <item>Окулист</item>
-        <item>Онколог</item>
-        <item>Ортопед-травматолог</item>
-        <item>Ортопед</item>
-        <item>Остеопат</item>
-        <item>Офтальмолог</item>
-        <item>Паразитолог</item>
-        <item>Проктолог</item>
-        <item>Психиатр</item>
-        <item>Психолог</item>
-        <item>Психотерапевт</item>
-        <item>Пульмонолог</item>
-        <item>Ревматолог</item>
-        <item>Рефлексотерапевт</item>
-        <item>Сосудистый хирург</item>
-        <item>Стоматолог-хирург</item>
-        <item>Стоматолог</item>
-        <item>Сурдолог</item>
-        <item>Травматолог</item>
-        <item>Уролог</item>
-        <item>Физиотерапевт</item>
-        <item>Флеболог</item>
-        <item>Фониатр</item>
-        <item>Фтизиатр</item>
-        <item>Хирург-ортопед</item>
-        <item>Хирург-уролог</item>
-        <item>Хирург</item>
-        <item>Эндокринолог</item>
-        <item>Эпилептолог</item>
-        <item>Неонатолог</item>
-        <item>Педиатр-неонатолог</item>
-        <item>Педиатр</item>
-        <item>Перинатолог</item>
-        <item>Сурдопедагог</item>
-        <item>Фтизиопедиатр</item>
+        <item>Otolaryngologist</item>
+        <item>Allergologist-immunologist</item>
+        <item>Allergologist</item>
+        <item>Andrologist</item>
+        <item>Arythmologist</item>
+        <item>Vertebrologist</item>
+        <item>Virusologist</item>
+        <item>Gastroenterologist</item>
+        <item>Hematologist</item>
+        <item>Hepatologist</item>
+        <item>Gynecologist-endocrinologist</item>
+        <item>Gynecologist</item>
+        <item>Homeopath</item>
+        <item>Dermatologist</item>
+        <item>Dentist</item>
+        <item>Immunologist</item>
+        <item>Infectiologist</item>
+        <item>Cardiologist</item>
+        <item>Cardiorheumatologist</item>
+        <item>Cosmetologist</item>
+        <item>Logopedist</item>
+        <item>Mammologist</item>
+        <item>Massagist</item>
+        <item>Micrologist</item>
+        <item>Neurologist</item>
+        <item>Neuropathist</item>
+        <item>Neurosurgeon</item>
+        <item>Nephrologist</item>
+        <item>Oculist</item>
+        <item>Oncologist</item>
+        <item>Orthopedist/traumatologist</item>
+        <item>Orthopedist</item>
+        <item>Osteopath</item>
+        <item>Ophthalmologist</item>
+        <item>Parasitologist</item>
+        <item>Proctologist</item>
+        <item>Psychiatrist</item>
+        <item>Psycologist</item>
+        <item>Psychotherapist</item>
+        <item>Pulmonologist</item>
+        <item>Rheumatologist</item>
+        <item>Reflexologist</item>
+        <item>Vascular surgeon</item>
+        <item>Surgeon dentist</item>
+        <item>Dentist</item>
+        <item>Surdologist</item>
+        <item>Traumatologist</item>
+        <item>Urologist</item>
+        <item>Physiatrist</item>
+        <item>Phlebologist</item>
+        <item>Phoniatrist</item>
+        <item>Phthisiologist</item>
+        <item>Surgeon orthopedist</item>
+        <item>Surgeon urologist</item>
+        <item>Surgeon</item>
+        <item>Endocrinologist</item>
+        <item>Epileptologist</item>
+        <item>Neonatologist</item>
+        <item>Pediatritian/neonatologist</item>
+        <item>Pediatritian</item>
+        <item>Perinatologist</item>
+        <item>Teacher of the deaf and hard of hearing</item>
+        <item>Pediatrician phthisiologist</item>
     </string-array>
     <string-array name="medicine">
-        <item>Активированный уголь</item>
-        <item>Нурофен</item>
-        <item>Ибупрофен</item>
-        <item>Йод</item>
-        <item>Смекта</item>
-        <item>Мирамистин</item>
-        <item>Альбуцид</item>
-        <item>Фурацилин (таблетки)</item>
-        <item>Фурацилиновый спирт</item>
-        <item>Изофра</item>
-        <item>Аквалор</item>
-        <item>Флемоклав</item>
-        <item>Амоксиклав</item>
-        <item>Рибоксин</item>
-        <item>Веторон</item>
-        <item>Алмагель</item>
-        <item>Креон</item>
-        <item>Виброцил</item>
-        <item>Називин</item>
-        <item>Нафтизин</item>
-        <item>Супрастин</item>
-        <item>Фенистил (гель)</item>
-        <item>Виферон (свечи)</item>
-        <item>Парацетамол</item>
-        <item>Эспумизан</item>
-        <item>Линекс</item>
+        <item>Absorbent carbon</item>
+        <item>Nurofen</item>
+        <item>Ibuprofen</item>
+        <item>Iodine</item>
+        <item>Smecta</item>
+        <item>Miramistin</item>
+        <item>Albucid</item>
+        <item>Furacilin</item>
+        <item>Alcohol solution of furacilin</item>
+        <item>Isofra</item>
+        <item>Aqualor</item>
+        <item>Flemoclav</item>
+        <item>Co-amoxiclav</item>
+        <item>Riboxin</item>
+        <item>Vetoron</item>
+        <item>Almagel</item>
+        <item>Creon</item>
+        <item>Vibrocil</item>
+        <item>Nasivin</item>
+        <item>Naftisin</item>
+        <item>Suprastin</item>
+        <item>Fenistil (gel)</item>
+        <item>Viferon (suppositories)</item>
+        <item>Paracetamol</item>
+        <item>Espumisan</item>
+        <item>Linex</item>
     </string-array>
     <string-array name="medicine_measure">
-        <item>мг</item>
-        <item>мл</item>
-        <item>шт.</item>
-        <item>ед.</item>
-        <item>мерн. лож.</item>
-        <item>ч. лож.</item>
-        <item>ст. лож.</item>
-        <item>куб. см</item>
-        <item>впрыск</item>
+        <item>mg</item>
+        <item>ml</item>
+        <item>pce/pcs</item>
+        <item>ea</item>
+        <item>measuring spoon</item>
+        <item>tsp</item>
+        <item>tbsp</item>
+        <item>cm3</item>
+        <item>shot</item>
     </string-array>
     <string-array name="achievement">
-        <item>Гулит</item>
-        <item>Рассматривает свою руку</item>
-        <item>Сидит, держа голову прямо</item>
-        <item>Смеется</item>
-        <item>Переворачивается</item>
-        <item>Поворачивается вокруг себя</item>
-        <item>Приподнимается, опираясь на руки</item>
-        <item>Хватает погремушку</item>
-        <item>Поворачивается на звук</item>
-        <item>Поворачивается на голос</item>
-        <item>Самостоятельно кушает</item>
-        <item>Сидит без поддержки</item>
-        <item>Произносит отдельные слоги</item>
-        <item>Собирает изюм в кучку</item>
-        <item>Складывает Кубики</item>
-        <item>Имитирует звуки речи</item>
-        <item>Протягивает руку</item>
-        <item>Хватает нитку</item>
-        <item>Стоит, держась за что-нибудь</item>
-        <item>Объединяет слоги</item>
-        <item>Пытается встать</item>
-        <item>Садится</item>
-        <item>Стучит каблуками друг об друга</item>
-        <item>Бормочет</item>
-        <item>Играет в ладушки</item>
-        <item>Стоит несколько секунд</item>
-        <item>Зовет маму, папу</item>
-        <item>Стоит самостоятельно</item>
-        <item>Наклоняется и выпрямляется</item>
-        <item>Ходит самостоятельно</item>
-        <item>Шагает задом наперед</item>
-        <item>Пьет из чашки</item>
-        <item>Пользуется ложкой и вилкой</item>
-        <item>Бегает</item>
-        <item>Поднимается по лестнице</item>
-        <item>Снимает одежду</item>
-        <item>Строит башню из кубиков</item>
-        <item>Чистит зубы с помощью взрослого</item>
-        <item>Подбрасывает мяч</item>
-        <item>Говорит частично понятно</item>
-        <item>Проводит вертикальную линию</item>
-        <item>Моет и вытирает руки</item>
-        <item>Одевается</item>
-        <item>Подпрыгивает</item>
-        <item>Говорит внятно</item>
+        <item>Babbles</item>
+        <item>Examines their hand</item>
+        <item>Sits with their head straight</item>
+        <item>Laughs</item>
+        <item>Turns over</item>
+        <item>Turns around themselves</item>
+        <item>Lifts themselves leaning on arms</item>
+        <item>Grabs a rattle</item>
+        <item>Turns when they hear a sound</item>
+        <item>Turns when they hear a voice</item>
+        <item>Eats on their own</item>
+        <item>Sits without support</item>
+        <item>Pronounces separate syllables</item>
+        <item>Piles up raisins</item>
+        <item>Plays with blocks</item>
+        <item>Imitates speech</item>
+        <item>Hold out their hand</item>
+        <item>Grabs a thread</item>
+        <item>Stands holding onto something</item>
+        <item>Combines syllables</item>
+        <item>Tries to stand up</item>
+        <item>Sits down</item>
+        <item>Clatters their heels against each other</item>
+        <item>Mumbles</item>
+        <item>Plays patty-cake</item>
+        <item>Stands up for a few seconds</item>
+        <item>Calls mom or dad</item>
+        <item>Stands on their own</item>
+        <item>Bends and straightens themselves</item>
+        <item>Walks on their own</item>
+        <item>Walks backwards</item>
+        <item>Drinks from a cup</item>
+        <item>Uses a spoon and a fork</item>
+        <item>Runs</item>
+        <item>Walks up the stairs</item>
+        <item>Takes off clothes</item>
+        <item>Builds a block tower</item>
+        <item>Brushes their teeth with the help of an adult</item>
+        <item>Throws a ball</item>
+        <item>Speaks partly intelligibly</item>
+        <item>Draws a vertical line</item>
+        <item>Washes and wipes their hands</item>
+        <item>Puts on clothes</item>
+        <item>Hops</item>
+        <item>Speaks intelligibly</item>
     </string-array>
 </resources>

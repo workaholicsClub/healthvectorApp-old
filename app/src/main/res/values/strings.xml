@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Vector of development</string>
+    <string name="app_name">Development Vector</string>
     <!-- \n - символ переноса строки -->
-    <string name="app_name_splash">Vector\nof development</string>
+    <string name="app_name_splash">Development\nVector</string>
     <string name="drawer_item_calendar">Calendar</string>
     <string name="drawer_item_development_diary">Development diary</string>
     <string name="drawer_item_exercises">Exercises</string>

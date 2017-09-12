@@ -60,7 +60,6 @@ public class CustomDatabaseSource extends DatabaseSource {
         logger.debug("onCreate");
         super.onCreate(db);
 
-        // TODO: translation tables
         logger.debug("onCreate: start inserting");
         fillTableWithValues(db, R.array.food, FoodEntity.$TYPE.getName(), FoodEntity.NAME.getName());
         fillTableWithValues(db, R.array.food_measure, FoodMeasureEntity.$TYPE.getName(), FoodMeasureEntity.NAME.getName());
