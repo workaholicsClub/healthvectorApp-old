@@ -16,6 +16,6 @@ public class AchievementInteractor extends BaseDictionaryInteractor<Achievement>
 
     @Override
     protected Achievement buildItem(String name) {
-        return Achievement.builder().name(name).build();
+        return Achievement.builder().nameUser(name).build();
     }
 }

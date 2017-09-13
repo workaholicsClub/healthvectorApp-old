@@ -16,6 +16,6 @@ public class FoodMeasureInteractor extends BaseDictionaryInteractor<FoodMeasure>
 
     @Override
     protected FoodMeasure buildItem(String name) {
-        return FoodMeasure.builder().name(name).build();
+        return FoodMeasure.builder().nameUser(name).build();
     }
 }

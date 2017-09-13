@@ -13,5 +13,9 @@ public interface FoodMeasureData extends Persistable {
     @Generated
     Long getId();
 
-    String getName();
+    String getNameEn();
+
+    String getNameRu();
+
+    String getNameUser();
 }

@@ -19,9 +19,9 @@ public class AchievementMapper implements EntityMapper<AchievementData, Achievem
     public Achievement mapToPlainObject(@NonNull AchievementData achievementData) {
         return Achievement.builder()
                 .id(achievementData.getId())
-                .name(achievementData.getName())
-                .isPredefined(achievementData.isPredefined())
-                .orderNumber(achievementData.getOrderNumber())
+                .nameEn(achievementData.getNameEn())
+                .nameRu(achievementData.getNameRu())
+                .nameUser(achievementData.getNameUser())
                 .build();
     }
 
@@ -39,8 +39,8 @@ public class AchievementMapper implements EntityMapper<AchievementData, Achievem
 
     @Override
     public void fillNonReferencedFields(@NonNull AchievementEntity to, @NonNull Achievement from) {
-        to.setName(from.getName());
-        to.setPredefined(from.getIsPredefined());
-        to.setOrderNumber(from.getOrderNumber());
+        to.setNameEn(from.getNameEn());
+        to.setNameRu(from.getNameRu());
+        to.setNameUser(from.getNameUser());
     }
 }

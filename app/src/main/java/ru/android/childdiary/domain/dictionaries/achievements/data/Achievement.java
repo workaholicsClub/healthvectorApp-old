@@ -7,20 +7,21 @@ import java.io.Serializable;
 import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.domain.core.data.ContentObject;
+import ru.android.childdiary.domain.dictionaries.core.DictionaryItem;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
 @Builder
-public class Achievement implements Serializable, ContentObject<Achievement> {
+public class Achievement implements Serializable, ContentObject<Achievement>, DictionaryItem {
     public static final Achievement NULL = Achievement.builder().build();
 
     Long id;
 
-    String name;
+    String nameEn, nameRu, nameUser;
 
-    Boolean isPredefined;
-
-    Integer orderNumber;
+    public String getName() {
+        return DictionaryItem.getLocalizedName(this);
+    }
 
     @Override
     public boolean isContentEmpty() {
@@ -29,7 +30,9 @@ public class Achievement implements Serializable, ContentObject<Achievement> {
 
     @Override
     public boolean isContentEqual(@NonNull Achievement other) {
-        return ObjectUtils.equals(getId(), other.getId())
-                && ObjectUtils.contentEquals(getName(), other.getName());
+        return ObjectUtils.equals(id, other.id)
+                && ObjectUtils.contentEquals(nameEn, other.nameEn)
+                && ObjectUtils.contentEquals(nameRu, other.nameRu)
+                && ObjectUtils.contentEquals(nameUser, other.nameUser);
     }
 }

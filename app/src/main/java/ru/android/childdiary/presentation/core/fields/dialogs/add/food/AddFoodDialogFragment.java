@@ -33,7 +33,7 @@ public class AddFoodDialogFragment
 
     @Override
     protected Food buildItem(@NonNull String name) {
-        return Food.builder().name(name).build();
+        return Food.builder().nameUser(name).build();
     }
 
     @Override

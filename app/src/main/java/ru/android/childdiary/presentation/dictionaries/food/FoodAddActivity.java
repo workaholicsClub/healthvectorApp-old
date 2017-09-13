@@ -54,7 +54,7 @@ public class FoodAddActivity extends BaseAddActivity<Food, FoodAddView> implemen
     @Override
     protected Food buildItem() {
         String text = autoCompleteView.getText();
-        return Food.builder().name(text).build();
+        return Food.builder().nameUser(text).build();
     }
 
     @Override

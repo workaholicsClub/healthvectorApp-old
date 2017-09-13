@@ -54,7 +54,7 @@ public class DoctorAddActivity extends BaseAddActivity<Doctor, DoctorAddView> im
     @Override
     protected Doctor buildItem() {
         String text = autoCompleteView.getText();
-        return Doctor.builder().name(text).build();
+        return Doctor.builder().nameUser(text).build();
     }
 
     @Override

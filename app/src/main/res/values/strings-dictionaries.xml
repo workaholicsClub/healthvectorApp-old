@@ -4,7 +4,7 @@
         <item>Porridge</item>
         <item>Mashed vegetables</item>
         <item>Mashed fruit</item>
-        <item>meat mash</item>
+        <item>Meat mash</item>
     </string-array>
     <string-array name="food_measure">
         <item>grams</item>

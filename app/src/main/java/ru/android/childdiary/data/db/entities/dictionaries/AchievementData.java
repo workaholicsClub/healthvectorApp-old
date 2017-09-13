@@ -13,9 +13,9 @@ public interface AchievementData extends Persistable {
     @Generated
     Long getId();
 
-    String getName();
+    String getNameEn();
 
-    Boolean isPredefined();
+    String getNameRu();
 
-    Integer getOrderNumber();
+    String getNameUser();
 }

@@ -54,7 +54,7 @@ public class MedicineAddActivity extends BaseAddActivity<Medicine, MedicineAddVi
     @Override
     protected Medicine buildItem() {
         String text = autoCompleteView.getText();
-        return Medicine.builder().name(text).build();
+        return Medicine.builder().nameUser(text).build();
     }
 
     @Override

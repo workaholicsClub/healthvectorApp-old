@@ -52,8 +52,8 @@ public class ChildDbService {
     public Observable<Child> add(@NonNull Child child) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             Child result = DbUtils.insert(blockingEntityStore, child, childMapper);
+            // TODO insert predefined achievements
             List<AchievementEntity> achievementEntities = blockingEntityStore.select(AchievementEntity.class)
-                    .where(AchievementEntity.PREDEFINED.eq(true))
                     .get()
                     .toList();
             for (AchievementEntity achievementEntity : achievementEntities) {
@@ -67,7 +67,6 @@ public class ChildDbService {
                         .note(null)
                         .imageFileName(null)
                         .isPredefined(true)
-                        .orderNumber(achievement.getOrderNumber())
                         .build();
                 DbUtils.insert(blockingEntityStore, concreteAchievement, concreteAchievementMapper);
             }

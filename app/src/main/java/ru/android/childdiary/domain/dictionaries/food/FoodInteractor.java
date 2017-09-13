@@ -16,6 +16,6 @@ public class FoodInteractor extends BaseDictionaryInteractor<Food> {
 
     @Override
     protected Food buildItem(String name) {
-        return Food.builder().name(name).build();
+        return Food.builder().nameUser(name).build();
     }
 }

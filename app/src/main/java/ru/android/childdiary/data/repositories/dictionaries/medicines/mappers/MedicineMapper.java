@@ -19,7 +19,9 @@ public class MedicineMapper implements EntityMapper<MedicineData, MedicineEntity
     public Medicine mapToPlainObject(@NonNull MedicineData medicineData) {
         return Medicine.builder()
                 .id(medicineData.getId())
-                .name(medicineData.getName())
+                .nameEn(medicineData.getNameEn())
+                .nameRu(medicineData.getNameRu())
+                .nameUser(medicineData.getNameUser())
                 .build();
     }
 
@@ -38,6 +40,8 @@ public class MedicineMapper implements EntityMapper<MedicineData, MedicineEntity
 
     @Override
     public void fillNonReferencedFields(@NonNull MedicineEntity to, @NonNull Medicine from) {
-        to.setName(from.getName());
+        to.setNameEn(from.getNameEn());
+        to.setNameRu(from.getNameRu());
+        to.setNameUser(from.getNameUser());
     }
 }

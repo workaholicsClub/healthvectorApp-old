@@ -30,7 +30,7 @@ public class DoctorDbService extends BaseCrudDbService<Doctor> {
     @Override
     public Observable<List<Doctor>> getAll() {
         return dataStore.select(DoctorEntity.class)
-                .orderBy(DoctorEntity.NAME, DoctorEntity.ID)
+                .orderBy(DoctorEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, doctorMapper));

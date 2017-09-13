@@ -19,7 +19,9 @@ public class FoodMapper implements EntityMapper<FoodData, FoodEntity, Food> {
     public Food mapToPlainObject(@NonNull FoodData foodData) {
         return Food.builder()
                 .id(foodData.getId())
-                .name(foodData.getName())
+                .nameEn(foodData.getNameEn())
+                .nameRu(foodData.getNameRu())
+                .nameUser(foodData.getNameUser())
                 .build();
     }
 
@@ -38,6 +40,8 @@ public class FoodMapper implements EntityMapper<FoodData, FoodEntity, Food> {
 
     @Override
     public void fillNonReferencedFields(@NonNull FoodEntity to, @NonNull Food from) {
-        to.setName(from.getName());
+        to.setNameEn(from.getNameEn());
+        to.setNameRu(from.getNameRu());
+        to.setNameUser(from.getNameUser());
     }
 }

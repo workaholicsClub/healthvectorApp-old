@@ -54,7 +54,7 @@ public class AchievementAddActivity extends BaseAddActivity<Achievement, Achieve
     @Override
     protected Achievement buildItem() {
         String text = autoCompleteView.getText();
-        return Achievement.builder().name(text).build();
+        return Achievement.builder().nameUser(text).build();
     }
 
     @Override

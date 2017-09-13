@@ -8,8 +8,8 @@ import java.io.Serializable;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -33,8 +33,6 @@ public class ConcreteAchievement implements Serializable, ContentObject<Concrete
     String imageFileName;
 
     Boolean isPredefined;
-
-    Integer orderNumber;
 
     @Override
     public boolean isContentEmpty() {

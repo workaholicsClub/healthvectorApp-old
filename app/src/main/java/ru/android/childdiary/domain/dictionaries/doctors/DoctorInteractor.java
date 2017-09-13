@@ -16,6 +16,6 @@ public class DoctorInteractor extends BaseDictionaryInteractor<Doctor> {
 
     @Override
     protected Doctor buildItem(String name) {
-        return Doctor.builder().name(name).build();
+        return Doctor.builder().nameUser(name).build();
     }
 }

@@ -12,11 +12,9 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.dictionaries.AchievementEntity;
-import ru.android.childdiary.data.repositories.core.exceptions.RestrictDeleteException;
 import ru.android.childdiary.data.repositories.dictionaries.achievements.mappers.AchievementMapper;
 import ru.android.childdiary.data.repositories.dictionaries.core.BaseCrudDbService;
 import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
-import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class AchievementDbService extends BaseCrudDbService<Achievement> {
@@ -32,7 +30,7 @@ public class AchievementDbService extends BaseCrudDbService<Achievement> {
     @Override
     public Observable<List<Achievement>> getAll() {
         return dataStore.select(AchievementEntity.class)
-                .orderBy(AchievementEntity.PREDEFINED.desc(), AchievementEntity.ORDER_NUMBER, AchievementEntity.NAME, AchievementEntity.ID)
+                .orderBy(AchievementEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, achievementMapper));
@@ -50,9 +48,6 @@ public class AchievementDbService extends BaseCrudDbService<Achievement> {
 
     @Override
     public Observable<Achievement> delete(@NonNull Achievement achievement) {
-        if (ObjectUtils.isTrue(achievement.getIsPredefined())) {
-            return Observable.error(new RestrictDeleteException("Can't remove predefined achievement"));
-        }
         return DbUtils.deleteObservable(blockingEntityStore, AchievementEntity.class, achievement, achievement.getId());
     }
 }

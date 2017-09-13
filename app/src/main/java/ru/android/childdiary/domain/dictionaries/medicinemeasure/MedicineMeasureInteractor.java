@@ -16,6 +16,6 @@ public class MedicineMeasureInteractor extends BaseDictionaryInteractor<Medicine
 
     @Override
     protected MedicineMeasure buildItem(String name) {
-        return MedicineMeasure.builder().name(name).build();
+        return MedicineMeasure.builder().nameUser(name).build();
     }
 }

@@ -44,7 +44,6 @@ public class ConcreteAchievementMapper implements EntityMapper<ConcreteAchieveme
                 .note(concreteAchievementData.getNote())
                 .imageFileName(concreteAchievementData.getImageFileName())
                 .isPredefined(concreteAchievementData.isPredefined())
-                .orderNumber(concreteAchievementData.getOrderNumber())
                 .build();
     }
 
@@ -77,6 +76,5 @@ public class ConcreteAchievementMapper implements EntityMapper<ConcreteAchieveme
         to.setNote(from.getNote());
         to.setImageFileName(from.getImageFileName());
         to.setPredefined(from.getIsPredefined());
-        to.setOrderNumber(from.getOrderNumber());
     }
 }

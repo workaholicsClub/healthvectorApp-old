@@ -81,7 +81,9 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     private static final String FEED_EVENT_ENTITY_FEED_TYPE = "FEED_EVENT_ENTITY_FEED_TYPE";
     private static final String FEED_EVENT_ENTITY_BREAST = "FEED_EVENT_ENTITY_BREAST";
     // food
-    private static final String FOOD_ENTITY_NAME = "FOOD_ENTITY_NAME";
+    private static final String FOOD_ENTITY_NAME_EN = "FOOD_ENTITY_NAME_EN";
+    private static final String FOOD_ENTITY_NAME_RU = "FOOD_ENTITY_NAME_RU";
+    private static final String FOOD_ENTITY_NAME_USER = "FOOD_ENTITY_NAME_USER";
     // other event
     private static final String OTHER_EVENT_ENTITY_ID = "OTHER_EVENT_ENTITY_ID";
     private static final String OTHER_EVENT_ENTITY_NAME = "OTHER_EVENT_ENTITY_NAME";
@@ -99,14 +101,18 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     // doctor visit
     private static final String DOCTOR_VISIT_ENTITY_ID = "DOCTOR_VISIT_ENTITY_ID";
     // doctor
-    private static final String DOCTOR_ENTITY_NAME = "DOCTOR_ENTITY_NAME";
+    private static final String DOCTOR_ENTITY_NAME_EN = "DOCTOR_ENTITY_NAME_EN";
+    private static final String DOCTOR_ENTITY_NAME_RU = "DOCTOR_ENTITY_NAME_RU";
+    private static final String DOCTOR_ENTITY_NAME_USER = "DOCTOR_ENTITY_NAME_USER";
     // medicine taking event
     private static final String MEDICINE_TAKING_EVENT_ENTITY_ID = "MEDICINE_TAKING_EVENT_ENTITY_ID";
     private static final String MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME = "MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME";
     // medicine taking
     private static final String MEDICINE_TAKING_ENTITY_ID = "MEDICINE_TAKING_ENTITY_ID";
     // medicine
-    private static final String MEDICINE_ENTITY_NAME = "MEDICINE_ENTITY_NAME";
+    private static final String MEDICINE_ENTITY_NAME_EN = "MEDICINE_ENTITY_NAME_EN";
+    private static final String MEDICINE_ENTITY_NAME_RU = "MEDICINE_ENTITY_NAME_RU";
+    private static final String MEDICINE_ENTITY_NAME_USER = "MEDICINE_ENTITY_NAME_USER";
     // exercise event
     private static final String EXERCISE_EVENT_ENTITY_ID = "EXERCISE_EVENT_ENTITY_ID";
     private static final String EXERCISE_EVENT_ENTITY_NAME = "EXERCISE_EVENT_ENTITY_NAME";
@@ -136,7 +142,9 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
             FeedEventEntity.FEED_TYPE.as(FEED_EVENT_ENTITY_FEED_TYPE),
             FeedEventEntity.BREAST.as(FEED_EVENT_ENTITY_BREAST),
             // food
-            FoodEntity.NAME.as(FOOD_ENTITY_NAME),
+            FoodEntity.NAME_EN.as(FOOD_ENTITY_NAME_EN),
+            FoodEntity.NAME_RU.as(FOOD_ENTITY_NAME_RU),
+            FoodEntity.NAME_USER.as(FOOD_ENTITY_NAME_USER),
             // other event
             OtherEventEntity.ID.as(OTHER_EVENT_ENTITY_ID),
             OtherEventEntity.NAME.as(OTHER_EVENT_ENTITY_NAME),
@@ -154,14 +162,18 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
             // doctor visit
             DoctorVisitEntity.ID.as(DOCTOR_VISIT_ENTITY_ID),
             // doctor
-            DoctorEntity.NAME.as(DOCTOR_ENTITY_NAME),
+            DoctorEntity.NAME_EN.as(DOCTOR_ENTITY_NAME_EN),
+            DoctorEntity.NAME_RU.as(DOCTOR_ENTITY_NAME_RU),
+            DoctorEntity.NAME_USER.as(DOCTOR_ENTITY_NAME_USER),
             // medicine taking event
             MedicineTakingEventEntity.ID.as(MEDICINE_TAKING_EVENT_ENTITY_ID),
             MedicineTakingEventEntity.IMAGE_FILE_NAME.as(MEDICINE_TAKING_EVENT_ENTITY_IMAGE_FILE_NAME),
             // medicine taking
             MedicineTakingEntity.ID.as(MEDICINE_TAKING_ENTITY_ID),
             // medicine
-            MedicineEntity.NAME.as(MEDICINE_ENTITY_NAME),
+            MedicineEntity.NAME_EN.as(MEDICINE_ENTITY_NAME_EN),
+            MedicineEntity.NAME_RU.as(MEDICINE_ENTITY_NAME_RU),
+            MedicineEntity.NAME_USER.as(MEDICINE_ENTITY_NAME_USER),
             // exercise event
             ExerciseEventEntity.ID.as(EXERCISE_EVENT_ENTITY_ID),
             ExerciseEventEntity.NAME.as(EXERCISE_EVENT_ENTITY_NAME),
@@ -221,7 +233,9 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static Food mapToFood(@NonNull Tuple data) {
         return Food.builder()
-                .name(data.get(FoodEntity.NAME.as(FOOD_ENTITY_NAME)))
+                .nameEn(data.get(FoodEntity.NAME_EN.as(FOOD_ENTITY_NAME_EN)))
+                .nameRu(data.get(FoodEntity.NAME_RU.as(FOOD_ENTITY_NAME_RU)))
+                .nameUser(data.get(FoodEntity.NAME_USER.as(FOOD_ENTITY_NAME_USER)))
                 .build();
     }
 
@@ -301,7 +315,9 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static Doctor mapToDoctor(@NonNull Tuple data) {
         return Doctor.builder()
-                .name(data.get(DoctorEntity.NAME.as(DOCTOR_ENTITY_NAME)))
+                .nameEn(data.get(DoctorEntity.NAME_EN.as(DOCTOR_ENTITY_NAME_EN)))
+                .nameRu(data.get(DoctorEntity.NAME_RU.as(DOCTOR_ENTITY_NAME_RU)))
+                .nameUser(data.get(DoctorEntity.NAME_USER.as(DOCTOR_ENTITY_NAME_USER)))
                 .build();
     }
 
@@ -331,7 +347,9 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static Medicine mapToMedicine(@NonNull Tuple data) {
         return Medicine.builder()
-                .name(data.get(MedicineEntity.NAME.as(MEDICINE_ENTITY_NAME)))
+                .nameEn(data.get(MedicineEntity.NAME_EN.as(MEDICINE_ENTITY_NAME_EN)))
+                .nameRu(data.get(MedicineEntity.NAME_RU.as(MEDICINE_ENTITY_NAME_RU)))
+                .nameUser(data.get(MedicineEntity.NAME_USER.as(MEDICINE_ENTITY_NAME_USER)))
                 .build();
     }
 
