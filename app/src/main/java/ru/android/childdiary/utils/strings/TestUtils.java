@@ -9,7 +9,6 @@ import java.util.List;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
-import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.development.testing.data.TestFactory;
 import ru.android.childdiary.domain.development.testing.data.TestResult;
 import ru.android.childdiary.domain.development.testing.data.interpreters.core.TestInterpreter;
@@ -17,44 +16,8 @@ import ru.android.childdiary.domain.development.testing.data.processors.core.Bas
 import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.domain.development.testing.data.tests.core.DomanTest;
 import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
-import ru.android.childdiary.utils.ui.FormatTextHelper;
 
 public class TestUtils {
-    @Nullable
-    public static String getTestName(Context context, @Nullable TestType testType) {
-        if (testType == null) {
-            return null;
-        }
-        switch (testType) {
-            case DOMAN_MENTAL:
-                return context.getString(R.string.test_doman_mental_name);
-            case DOMAN_PHYSICAL:
-                return context.getString(R.string.test_doman_physical_name);
-            case AUTISM:
-                return context.getString(R.string.test_autism_name);
-            case NEWBORN:
-                return context.getString(R.string.test_newborn_name);
-        }
-        return null;
-    }
-
-    @Nullable
-    public static String getTestDescription(Context context, @Nullable TestType testType) {
-        if (testType == null) {
-            return null;
-        }
-        switch (testType) {
-            case DOMAN_PHYSICAL:
-            case DOMAN_MENTAL:
-                return FormatTextHelper.getParagraphsWithJustifyAlignment(context, R.array.test_doman_description_paragraphs);
-            case AUTISM:
-                return FormatTextHelper.getParagraphsWithJustifyAlignment(context, R.array.test_autism_description_paragraphs);
-            case NEWBORN:
-                return FormatTextHelper.getParagraphWithJustifyAlignment(context, R.string.test_newborn_description);
-        }
-        return null;
-    }
-
     @Nullable
     public static String toString(Context context, @Nullable DomanTestParameter testParameter) {
         if (testParameter == null) {

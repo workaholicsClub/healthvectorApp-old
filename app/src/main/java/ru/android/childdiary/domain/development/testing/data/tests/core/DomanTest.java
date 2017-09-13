@@ -24,10 +24,12 @@ public abstract class DomanTest extends Test {
     Map<DomanTestParameter, List<Question>> questions;
 
     public DomanTest(@NonNull TestType testType,
-                     @NonNull String name,
-                     @NonNull String description,
+                     @NonNull String nameEn,
+                     @NonNull String nameRu,
+                     @NonNull String descriptionEn,
+                     @NonNull String descriptionRu,
                      @NonNull Map<DomanTestParameter, List<Question>> questions) {
-        super(testType, name, description);
+        super(testType, nameEn, nameRu, descriptionEn, descriptionRu);
         this.questions = CollectionUtils.unmodifiableMap(questions);
     }
 

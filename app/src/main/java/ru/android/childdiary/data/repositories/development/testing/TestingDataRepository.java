@@ -1,6 +1,7 @@
 package ru.android.childdiary.data.repositories.development.testing;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.data.types.TestType;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.LocalizationUtils;
 import ru.android.childdiary.domain.development.testing.TestingRepository;
 import ru.android.childdiary.domain.development.testing.data.TestResult;
 import ru.android.childdiary.domain.development.testing.data.tests.AutismTest;
@@ -32,11 +34,12 @@ import ru.android.childdiary.domain.development.testing.data.tests.NewbornTest;
 import ru.android.childdiary.domain.development.testing.data.tests.core.Question;
 import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
 import ru.android.childdiary.domain.development.testing.requests.TestResultsRequest;
-import ru.android.childdiary.utils.strings.TestUtils;
 import ru.android.childdiary.utils.ui.FormatTextHelper;
 
 @Singleton
 public class TestingDataRepository implements TestingRepository {
+    private static final String LANGUAGE_EN = "en", LANGUAGE_RU = "ru";
+
     private static final String KEY_PHYSICAL_PARAMETER = "physical_parameter";
     private static final String KEY_MENTAL_PARAMETER = "mental_parameter";
 
@@ -67,31 +70,89 @@ public class TestingDataRepository implements TestingRepository {
         if (testType == null) {
             return null;
         }
+        Container<String>
+                nameEn = new Container<>(),
+                nameRu = new Container<>(),
+                descriptionEn = new Container<>(),
+                descriptionRu = new Container<>();
+        LocalizationUtils.fillFromResources(context, LANGUAGE_EN,
+                resources -> {
+                    nameEn.put(getTestName(resources, testType));
+                    descriptionEn.put(getTestDescription(resources, testType));
+                });
+        LocalizationUtils.fillFromResources(context, LANGUAGE_RU,
+                resources -> {
+                    nameRu.put(getTestName(resources, testType));
+                    descriptionRu.put(getTestName(resources, testType));
+                });
         switch (testType) {
             case DOMAN_PHYSICAL:
                 return DomanPhysicalTest.builder()
-                        .name(TestUtils.getTestName(context, testType))
-                        .description(TestUtils.getTestDescription(context, testType))
+                        .nameEn(nameEn.get())
+                        .nameRu(nameRu.get())
+                        .descriptionEn(descriptionEn.get())
+                        .descriptionRu(descriptionRu.get())
                         .questions(getDomanPhysicalQuestions())
                         .build();
             case DOMAN_MENTAL:
                 return DomanMentalTest.builder()
-                        .name(TestUtils.getTestName(context, testType))
-                        .description(TestUtils.getTestDescription(context, testType))
+                        .nameEn(nameEn.get())
+                        .nameRu(nameRu.get())
+                        .descriptionEn(descriptionEn.get())
+                        .descriptionRu(descriptionRu.get())
                         .questions(getDomanMentalQuestions())
                         .build();
             case AUTISM:
                 return AutismTest.builder()
-                        .name(TestUtils.getTestName(context, testType))
-                        .description(TestUtils.getTestDescription(context, testType))
-                        .questions(getQuestions(R.array.test_autism, true))
+                        .nameEn(nameEn.get())
+                        .nameRu(nameRu.get())
+                        .descriptionEn(descriptionEn.get())
+                        .descriptionRu(descriptionRu.get())
+                        .questions(getAutismQuestions())
                         .build();
             case NEWBORN:
                 return NewbornTest.builder()
-                        .name(TestUtils.getTestName(context, testType))
-                        .description(TestUtils.getTestDescription(context, testType))
-                        .questions(getQuestions(R.array.test_newborn, true))
+                        .nameEn(nameEn.get())
+                        .nameRu(nameRu.get())
+                        .descriptionEn(descriptionEn.get())
+                        .descriptionRu(descriptionRu.get())
+                        .questions(getNewbornQuestions())
                         .build();
+        }
+        return null;
+    }
+
+    @Nullable
+    private String getTestName(Resources resources, @Nullable TestType testType) {
+        if (testType == null) {
+            return null;
+        }
+        switch (testType) {
+            case DOMAN_MENTAL:
+                return resources.getString(R.string.test_doman_mental_name);
+            case DOMAN_PHYSICAL:
+                return resources.getString(R.string.test_doman_physical_name);
+            case AUTISM:
+                return resources.getString(R.string.test_autism_name);
+            case NEWBORN:
+                return resources.getString(R.string.test_newborn_name);
+        }
+        return null;
+    }
+
+    @Nullable
+    private String getTestDescription(Resources resources, @Nullable TestType testType) {
+        if (testType == null) {
+            return null;
+        }
+        switch (testType) {
+            case DOMAN_PHYSICAL:
+            case DOMAN_MENTAL:
+                return FormatTextHelper.getParagraphsWithJustifyAlignment(resources.getStringArray(R.array.test_doman_description_paragraphs));
+            case AUTISM:
+                return FormatTextHelper.getParagraphsWithJustifyAlignment(resources.getStringArray(R.array.test_autism_description_paragraphs));
+            case NEWBORN:
+                return FormatTextHelper.getParagraphWithJustifyAlignment(resources.getString(R.string.test_newborn_description));
         }
         return null;
     }
@@ -120,16 +181,30 @@ public class TestingDataRepository implements TestingRepository {
         return map;
     }
 
-    private List<Question> getQuestions(@ArrayRes int id, boolean withNumbers) {
-        String[] strings = context.getResources().getStringArray(id);
-        int count = strings.length;
-        return Observable.zip(
-                Observable.range(0, count),
-                Observable.fromArray(strings),
-                (i, text) -> formatQuestionText(i, count, text, withNumbers))
-                .map(text -> Question.builder().text(text).build())
-                .toList()
-                .blockingGet();
+    private List<Question> getAutismQuestions() {
+        return getQuestions(R.array.test_autism, true);
+    }
+
+    private List<Question> getNewbornQuestions() {
+        return getQuestions(R.array.test_newborn, true);
+    }
+
+    private List<Question> getQuestions(@ArrayRes int arrayId, boolean withNumbers) {
+        Container<String[]> stringsEn = new Container<>(), stringsRu = new Container<>();
+        LocalizationUtils.fillFromResources(context, LANGUAGE_EN, resources ->
+                stringsEn.put(resources.getStringArray(arrayId)));
+        LocalizationUtils.fillFromResources(context, LANGUAGE_RU, resources ->
+                stringsRu.put(resources.getStringArray(arrayId)));
+
+        List<Question> questions = new ArrayList<>();
+        int count = Math.min(stringsEn.get().length, stringsRu.get().length);
+        for (int i = 0; i < count; ++i) {
+            String textEn = stringsEn.get()[i], textRu = stringsRu.get()[i];
+            textEn = formatQuestionText(i, count, textEn, withNumbers);
+            textRu = formatQuestionText(i, count, textRu, withNumbers);
+            questions.add(Question.builder().textEn(textEn).textRu(textRu).build());
+        }
+        return questions;
     }
 
     private String formatQuestionText(int i, int count, String text, boolean withNumbers) {
@@ -243,5 +318,17 @@ public class TestingDataRepository implements TestingRepository {
                     throw new IllegalStateException("Unsupported test type");
             }
         });
+    }
+
+    private static class Container<T> {
+        T object;
+
+        public void put(T object) {
+            this.object = object;
+        }
+
+        public T get() {
+            return object;
+        }
     }
 }

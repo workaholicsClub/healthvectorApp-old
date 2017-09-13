@@ -28,10 +28,12 @@ public class DomanMentalTest extends DomanTest {
     };
 
     @Builder
-    public DomanMentalTest(@NonNull String name,
-                           @NonNull String description,
+    public DomanMentalTest(@NonNull String nameEn,
+                           @NonNull String nameRu,
+                           @NonNull String descriptionEn,
+                           @NonNull String descriptionRu,
                            @NonNull Map<DomanTestParameter, List<Question>> questions) {
-        super(TestType.DOMAN_MENTAL, name, description, questions);
+        super(TestType.DOMAN_MENTAL, nameEn, nameRu, descriptionEn, descriptionRu, questions);
     }
 
     @Override

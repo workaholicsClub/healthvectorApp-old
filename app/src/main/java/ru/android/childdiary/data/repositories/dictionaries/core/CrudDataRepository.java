@@ -27,8 +27,7 @@ public abstract class CrudDataRepository<T extends DictionaryItem> implements Cr
     }
 
     private List<T> sort(@NonNull List<T> list) {
-        Collections.sort(list, (item1, item2) -> DictionaryItem.getLocalizedName(item1)
-                .compareTo(DictionaryItem.getLocalizedName(item2)));
+        Collections.sort(list, (item1, item2) -> item1.getName().compareTo(item2.getName()));
         return list;
     }
 

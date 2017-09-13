@@ -2,11 +2,9 @@ package ru.android.childdiary.utils.ui;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.ArrayRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.webkit.WebView;
@@ -68,46 +66,33 @@ public class FormatTextHelper {
         webView.loadDataWithBaseURL(BASE_URL, text, "text/html", "utf-8", "about:blank");
     }
 
-    public static String getParagraphsWithJustifyAlignment(Context context, @ArrayRes int stringArrayId) {
-        return getParagraphs(context, stringArrayId, FormatTextHelper::getParagraphWithJustifyAlignment);
+    public static String getParagraphsWithJustifyAlignment(String[] strings) {
+        return getParagraphs(strings, FormatTextHelper::getParagraphWithJustifyAlignment);
     }
 
-    public static String getParagraphsWithCenterAlignment(Context context, @ArrayRes int stringArrayId) {
-        return getParagraphs(context, stringArrayId, FormatTextHelper::getParagraphWithCenterAlignment);
+    public static String getParagraphsWithCenterAlignment(String[] strings) {
+        return getParagraphs(strings, FormatTextHelper::getParagraphWithCenterAlignment);
     }
 
-    public static String getParagraphsWithLeftAlignment(Context context, @ArrayRes int stringArrayId) {
-        return getParagraphs(context, stringArrayId, FormatTextHelper::getParagraphWithLeftAlignment);
+    public static String getParagraphsWithLeftAlignment(String[] strings) {
+        return getParagraphs(strings, FormatTextHelper::getParagraphWithLeftAlignment);
     }
 
-    private static String getParagraphs(Context context,
-                                        @ArrayRes int stringArrayId,
+    private static String getParagraphs(String[] strings,
                                         @NonNull Function<String, String> mapper) {
-        List<String> strings = Observable.fromArray(context.getResources().getStringArray(stringArrayId))
+        List<String> list = Observable.fromArray(strings)
                 .map(mapper)
                 .toList()
                 .blockingGet();
-        return TextUtils.join("", strings);
-    }
-
-    public static String getParagraphWithJustifyAlignment(Context context, @StringRes int stringId) {
-        return getParagraphWithJustifyAlignment(context.getString(stringId));
+        return TextUtils.join("", list);
     }
 
     public static String getParagraphWithJustifyAlignment(String text) {
         return String.format(PARAGRAPH_FORMAT_JUSTIFY, text);
     }
 
-    public static String getParagraphWithCenterAlignment(Context context, @StringRes int stringId) {
-        return getParagraphWithCenterAlignment(context.getString(stringId));
-    }
-
     public static String getParagraphWithCenterAlignment(String text) {
         return String.format(PARAGRAPH_FORMAT_CENTER, text);
-    }
-
-    public static String getParagraphWithLeftAlignment(Context context, @StringRes int stringId) {
-        return getParagraphWithLeftAlignment(context.getString(stringId));
     }
 
     public static String getParagraphWithLeftAlignment(String text) {

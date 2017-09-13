@@ -47,7 +47,7 @@ public class AutismTestInterpreter extends BaseTestInterpreter<AutismTest, Autis
     private String getAutismFinishText(@StringRes int stringId, int count) {
         String countStr = context.getResources().getQuantityString(R.plurals.numberOfPoints, count, count);
         return FormatTextHelper.getParagraphWithCenterAlignment(countStr)
-                + FormatTextHelper.getParagraphWithJustifyAlignment(context, stringId)
-                + FormatTextHelper.getParagraphWithJustifyAlignment(context, R.string.test_autism_finish_text);
+                + FormatTextHelper.getParagraphWithJustifyAlignment(context.getString(stringId))
+                + FormatTextHelper.getParagraphWithJustifyAlignment(context.getString(R.string.test_autism_finish_text));
     }
 }

@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import java.io.Serializable;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.Value;
 import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.domain.dictionaries.core.DictionaryItem;
@@ -12,16 +14,14 @@ import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
 @Builder
-public class Doctor implements Serializable, ContentObject<Doctor>, DictionaryItem {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class Doctor extends DictionaryItem implements Serializable, ContentObject<Doctor> {
     public static final Doctor NULL = Doctor.builder().build();
 
     Long id;
 
     String nameEn, nameRu, nameUser;
-
-    public String getName() {
-        return DictionaryItem.getLocalizedName(this);
-    }
 
     @Override
     public boolean isContentEmpty() {

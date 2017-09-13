@@ -21,8 +21,8 @@ public class NewbornTestInterpreter extends BaseTestInterpreter<NewbornTest, New
     public String interpret() {
         int count = testProcessor.getResult();
         return count == 0
-                ? FormatTextHelper.getParagraphWithCenterAlignment(context, R.string.test_newborn_result_good)
-                : FormatTextHelper.getParagraphsWithCenterAlignment(context, R.array.test_newborn_result_bad_paragraphs);
+                ? FormatTextHelper.getParagraphWithCenterAlignment(context.getString(R.string.test_newborn_result_good))
+                : FormatTextHelper.getParagraphsWithCenterAlignment(context.getResources().getStringArray(R.array.test_newborn_result_bad_paragraphs));
     }
 
     @Override

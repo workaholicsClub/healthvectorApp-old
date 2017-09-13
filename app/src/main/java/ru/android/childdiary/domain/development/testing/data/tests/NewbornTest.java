@@ -16,9 +16,11 @@ import ru.android.childdiary.domain.development.testing.data.tests.core.SimpleTe
 @ToString(callSuper = true)
 public class NewbornTest extends SimpleTest {
     @Builder
-    public NewbornTest(@NonNull String name,
-                       @NonNull String description,
+    public NewbornTest(@NonNull String nameEn,
+                       @NonNull String nameRu,
+                       @NonNull String descriptionEn,
+                       @NonNull String descriptionRu,
                        @NonNull List<Question> questions) {
-        super(TestType.NEWBORN, name, description, questions);
+        super(TestType.NEWBORN, nameEn, nameRu, descriptionEn, descriptionRu, questions);
     }
 }

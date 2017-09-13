@@ -20,10 +20,12 @@ public class SimpleTest extends Test {
     List<Question> questions;
 
     public SimpleTest(@NonNull TestType testType,
-                      @NonNull String name,
-                      @NonNull String description,
+                      @NonNull String nameEn,
+                      @NonNull String nameRu,
+                      @NonNull String descriptionEn,
+                      @NonNull String descriptionRu,
                       @NonNull List<Question> questions) {
-        super(testType, name, description);
+        super(testType, nameEn, nameRu, descriptionEn, descriptionRu);
         this.questions = Collections.unmodifiableList(questions);
     }
 }

@@ -28,10 +28,12 @@ public class DomanPhysicalTest extends DomanTest {
     };
 
     @Builder
-    public DomanPhysicalTest(@NonNull String name,
-                             @NonNull String description,
+    public DomanPhysicalTest(@NonNull String nameEn,
+                             @NonNull String nameRu,
+                             @NonNull String descriptionEn,
+                             @NonNull String descriptionRu,
                              @NonNull Map<DomanTestParameter, List<Question>> questions) {
-        super(TestType.DOMAN_PHYSICAL, name, description, questions);
+        super(TestType.DOMAN_PHYSICAL, nameEn, nameRu, descriptionEn, descriptionRu, questions);
     }
 
     @Override

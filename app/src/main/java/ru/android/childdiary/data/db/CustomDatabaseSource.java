@@ -1,17 +1,12 @@
 package ru.android.childdiary.data.db;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Locale;
 
 import io.requery.android.sqlite.DatabaseSource;
 import io.requery.meta.EntityModel;
@@ -26,6 +21,7 @@ import ru.android.childdiary.data.db.entities.dictionaries.FoodMeasureEntity;
 import ru.android.childdiary.data.db.entities.dictionaries.MedicineEntity;
 import ru.android.childdiary.data.db.entities.dictionaries.MedicineMeasureEntity;
 import ru.android.childdiary.data.db.exceptions.DowngradeDatabaseException;
+import ru.android.childdiary.domain.core.LocalizationUtils;
 
 public class CustomDatabaseSource extends DatabaseSource {
     private final Logger logger = LoggerFactory.getLogger(toString());
@@ -64,12 +60,11 @@ public class CustomDatabaseSource extends DatabaseSource {
         logger.debug("onCreate");
         super.onCreate(db);
 
-
         Dictionaries dictionaries = new Dictionaries();
         int i = 0;
         for (String language : Dictionaries.LANGUAGES) {
             int index = i;
-            fillFromResources(language, resources -> dictionaries.fillFromResources(index, resources));
+            LocalizationUtils.fillFromResources(context, language, resources -> dictionaries.fillFromResources(index, resources));
             ++i;
         }
 
@@ -81,33 +76,6 @@ public class CustomDatabaseSource extends DatabaseSource {
         fillTableWithValues(db, MedicineMeasureEntity.$TYPE.getName(), Dictionaries.MEDICINE_MEASURE_COLUMNS, dictionaries.medicineMeasureNames);
         fillTableWithValues(db, AchievementEntity.$TYPE.getName(), Dictionaries.ACHIEVEMENT_COLUMNS, dictionaries.achievementNames);
         logger.debug("onCreate: finish inserting");
-    }
-
-    private void fillFromResources(String language, Callback callback) {
-        Locale locale = new Locale(language);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            Configuration configuration = new Configuration(context.getResources().getConfiguration());
-            configuration.setLocale(locale);
-            Resources resources = context.createConfigurationContext(configuration).getResources();
-
-            callback.resourcesReady(resources);
-        } else {
-            Resources resources = context.getResources();
-            Configuration configuration = resources.getConfiguration();
-            //noinspection deprecation
-            Locale savedLocale = configuration.locale;
-            //noinspection deprecation
-            configuration.locale = locale;
-            //noinspection deprecation
-            resources.updateConfiguration(configuration, null);
-
-            callback.resourcesReady(resources);
-
-            //noinspection deprecation
-            configuration.locale = savedLocale;
-            //noinspection deprecation
-            resources.updateConfiguration(configuration, null);
-        }
     }
 
     private void fillTableWithValues(SQLiteDatabase db, String table, String[] columns, String[][] names) {
@@ -142,9 +110,5 @@ public class CustomDatabaseSource extends DatabaseSource {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         logger.debug("onDowngrade: oldVersion = " + oldVersion + "; newVersion = " + newVersion);
         throw new DowngradeDatabaseException("Can't downgrade database from version " + oldVersion + " to " + newVersion);
-    }
-
-    private interface Callback {
-        void resourcesReady(Resources resources);
     }
 }

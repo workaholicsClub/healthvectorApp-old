@@ -33,7 +33,7 @@ class Dictionaries {
         foodMeasureNames[languageIndex] = resources.getStringArray(R.array.food_measure);
         doctorNames[languageIndex] = resources.getStringArray(R.array.doctor);
         medicineNames[languageIndex] = resources.getStringArray(R.array.medicine);
-        medicineMeasureNames[languageIndex] = resources.getStringArray(R.array.achievement);
+        medicineMeasureNames[languageIndex] = resources.getStringArray(R.array.medicine_measure);
         achievementNames[languageIndex] = resources.getStringArray(R.array.achievement);
     }
 }

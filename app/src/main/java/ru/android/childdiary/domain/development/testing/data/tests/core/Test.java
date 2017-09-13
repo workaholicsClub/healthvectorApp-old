@@ -10,6 +10,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.android.childdiary.data.types.TestType;
+import ru.android.childdiary.domain.core.LocalizationUtils;
 
 @ToString
 @EqualsAndHashCode
@@ -20,7 +21,15 @@ public abstract class Test implements Serializable {
     @NonNull
     TestType testType;
     @NonNull
-    String name;
+    String nameEn, nameRu;
     @NonNull
-    String description;
+    String descriptionEn, descriptionRu;
+
+    public String getName() {
+        return LocalizationUtils.getLocalizedName(null, nameEn, nameRu);
+    }
+
+    public String getDescription() {
+        return LocalizationUtils.getLocalizedName(null, descriptionEn, descriptionRu);
+    }
 }

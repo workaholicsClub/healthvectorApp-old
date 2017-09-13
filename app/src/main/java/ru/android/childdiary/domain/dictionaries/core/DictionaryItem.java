@@ -1,22 +1,15 @@
 package ru.android.childdiary.domain.dictionaries.core;
 
-import java.util.Locale;
+import ru.android.childdiary.domain.core.LocalizationUtils;
 
-public interface DictionaryItem {
-    static String getLocalizedName(DictionaryItem object) {
-        if (object.getNameUser() != null) {
-            return object.getNameUser();
-        }
-        boolean isRu = Locale.getDefault().getLanguage().equals(new Locale("ru").getLanguage());
-        if (isRu) {
-            return object.getNameRu();
-        }
-        return object.getNameEn();
+public abstract class DictionaryItem {
+    public String getName() {
+        return LocalizationUtils.getLocalizedName(getNameUser(), getNameEn(), getNameRu());
     }
 
-    String getNameEn();
+    public abstract String getNameEn();
 
-    String getNameRu();
+    public abstract String getNameRu();
 
-    String getNameUser();
+    public abstract String getNameUser();
 }
