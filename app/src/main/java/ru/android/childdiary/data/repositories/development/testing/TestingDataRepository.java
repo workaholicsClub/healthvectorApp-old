@@ -83,7 +83,7 @@ public class TestingDataRepository implements TestingRepository {
         LocalizationUtils.fillFromResources(context, LANGUAGE_RU,
                 resources -> {
                     nameRu.put(getTestName(resources, testType));
-                    descriptionRu.put(getTestName(resources, testType));
+                    descriptionRu.put(getTestDescription(resources, testType));
                 });
         switch (testType) {
             case DOMAN_PHYSICAL:
@@ -190,27 +190,36 @@ public class TestingDataRepository implements TestingRepository {
     }
 
     private List<Question> getQuestions(@ArrayRes int arrayId, boolean withNumbers) {
-        Container<String[]> stringsEn = new Container<>(), stringsRu = new Container<>();
-        LocalizationUtils.fillFromResources(context, LANGUAGE_EN, resources ->
-                stringsEn.put(resources.getStringArray(arrayId)));
-        LocalizationUtils.fillFromResources(context, LANGUAGE_RU, resources ->
-                stringsRu.put(resources.getStringArray(arrayId)));
+        Container<String>
+                numberFromCountFormatEn = new Container<>(),
+                numberFromCountFormatRu = new Container<>();
+        Container<String[]>
+                stringsEn = new Container<>(),
+                stringsRu = new Container<>();
+        LocalizationUtils.fillFromResources(context, LANGUAGE_EN, resources -> {
+            stringsEn.put(resources.getStringArray(arrayId));
+            numberFromCountFormatEn.put(resources.getString(R.string.question_format));
+        });
+        LocalizationUtils.fillFromResources(context, LANGUAGE_RU, resources -> {
+            stringsRu.put(resources.getStringArray(arrayId));
+            numberFromCountFormatRu.put(resources.getString(R.string.question_format));
+        });
 
         List<Question> questions = new ArrayList<>();
         int count = Math.min(stringsEn.get().length, stringsRu.get().length);
         for (int i = 0; i < count; ++i) {
             String textEn = stringsEn.get()[i], textRu = stringsRu.get()[i];
-            textEn = formatQuestionText(i, count, textEn, withNumbers);
-            textRu = formatQuestionText(i, count, textRu, withNumbers);
+            textEn = formatQuestionText(numberFromCountFormatEn.get(), i, count, textEn, withNumbers);
+            textRu = formatQuestionText(numberFromCountFormatRu.get(), i, count, textRu, withNumbers);
             questions.add(Question.builder().textEn(textEn).textRu(textRu).build());
         }
         return questions;
     }
 
-    private String formatQuestionText(int i, int count, String text, boolean withNumbers) {
+    private String formatQuestionText(String numberFromCountFormat, int i, int count, String text, boolean withNumbers) {
         text = FormatTextHelper.getParagraphWithJustifyAlignment(text);
         if (withNumbers) {
-            String numberStr = context.getString(R.string.question_format, i + 1, count);
+            String numberStr = String.format(numberFromCountFormat, i + 1, count);
             return FormatTextHelper.getParagraphWithLeftAlignment(numberStr)
                     + text;
         }

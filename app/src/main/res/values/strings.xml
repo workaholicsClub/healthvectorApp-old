@@ -199,7 +199,7 @@
     <!-- %s - строка, дата по (число-месяц-год) -->
     <string name="chips_to_date">to %s</string>
     <string name="no_data_to_filter">No data to filter</string>
-    <string name="nothing_found">Noting was found</string>
+    <string name="nothing_found">Nothing was found</string>
     <string name="ask_update_linear_group">Update all events?</string>
     <string name="update_one_event">Update one event</string>
     <string name="update_linear_group">Update all events</string>
@@ -338,7 +338,7 @@
     <string name="default_sound">By default</string>
     <string name="linear_group_finished_notification_title">Extend events?</string>
     <!-- \n - символ переноса строки -->
-    <string name="linear_group_finished_dialog_description">events of the linear group come to the end %s.\n\nExtend for</string>
+    <string name="linear_group_finished_dialog_description">Events of the linear group come to the end %s.\n\nExtend for</string>
     <string name="contact_us">Contact us</string>
     <!-- %s - строка, ссылка на сайт -->
     <string name="site_format">Site: %s</string>
