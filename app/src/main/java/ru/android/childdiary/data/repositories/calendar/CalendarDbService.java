@@ -1,6 +1,7 @@
 package ru.android.childdiary.data.repositories.calendar;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.joda.time.DateTime;
@@ -116,64 +117,96 @@ public class CalendarDbService extends EventsDbService {
     }
 
     public Observable<DiaperEvent> getDiaperEventDetail(@NonNull MasterEvent event) {
+        return getDiaperEventDetail(event.getMasterEventId());
+    }
+
+    public Observable<FeedEvent> getFeedEventDetail(@NonNull MasterEvent event) {
+        return getFeedEventDetail(event.getMasterEventId());
+    }
+
+    public Observable<OtherEvent> getOtherEventDetail(@NonNull MasterEvent event) {
+        return getOtherEventDetail(event.getMasterEventId());
+    }
+
+    public Observable<PumpEvent> getPumpEventDetail(@NonNull MasterEvent event) {
+        return getPumpEventDetail(event.getMasterEventId());
+    }
+
+    public Observable<SleepEvent> getSleepEventDetail(@NonNull MasterEvent event) {
+        return getSleepEventDetail(event.getMasterEventId());
+    }
+
+    public Observable<DoctorVisitEvent> getDoctorVisitEventDetail(@NonNull MasterEvent event) {
+        return getDoctorVisitEventDetail(event.getMasterEventId());
+    }
+
+    public Observable<MedicineTakingEvent> getMedicineTakingEventDetail(@NonNull MasterEvent event) {
+        return getMedicineTakingEventDetail(event.getMasterEventId());
+    }
+
+    public Observable<ExerciseEvent> getExerciseEventDetail(@NonNull MasterEvent event) {
+        return getExerciseEventDetail(event.getMasterEventId());
+    }
+
+    public Observable<DiaperEvent> getDiaperEventDetail(@Nullable Long eventId) {
         return dataStore.select(DiaperEventEntity.class)
-                .where(DiaperEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .where(DiaperEventEntity.MASTER_EVENT_ID.eq(eventId))
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, diaperEventMapper));
     }
 
-    public Observable<FeedEvent> getFeedEventDetail(@NonNull MasterEvent event) {
+    public Observable<FeedEvent> getFeedEventDetail(@Nullable Long eventId) {
         return dataStore.select(FeedEventEntity.class)
-                .where(FeedEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .where(FeedEventEntity.MASTER_EVENT_ID.eq(eventId))
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, feedEventMapper));
     }
 
-    public Observable<OtherEvent> getOtherEventDetail(@NonNull MasterEvent event) {
+    public Observable<OtherEvent> getOtherEventDetail(@Nullable Long eventId) {
         return dataStore.select(OtherEventEntity.class)
-                .where(OtherEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .where(OtherEventEntity.MASTER_EVENT_ID.eq(eventId))
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, otherEventMapper));
     }
 
-    public Observable<PumpEvent> getPumpEventDetail(@NonNull MasterEvent event) {
+    public Observable<PumpEvent> getPumpEventDetail(@Nullable Long eventId) {
         return dataStore.select(PumpEventEntity.class)
-                .where(PumpEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .where(PumpEventEntity.MASTER_EVENT_ID.eq(eventId))
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, pumpEventMapper));
     }
 
-    public Observable<SleepEvent> getSleepEventDetail(@NonNull MasterEvent event) {
+    public Observable<SleepEvent> getSleepEventDetail(@Nullable Long eventId) {
         return dataStore.select(SleepEventEntity.class)
-                .where(SleepEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .where(SleepEventEntity.MASTER_EVENT_ID.eq(eventId))
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, sleepEventMapper));
     }
 
-    public Observable<DoctorVisitEvent> getDoctorVisitEventDetail(@NonNull MasterEvent event) {
+    public Observable<DoctorVisitEvent> getDoctorVisitEventDetail(@Nullable Long eventId) {
         return dataStore.select(DoctorVisitEventEntity.class)
-                .where(DoctorVisitEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .where(DoctorVisitEventEntity.MASTER_EVENT_ID.eq(eventId))
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, doctorVisitEventMapper));
     }
 
-    public Observable<MedicineTakingEvent> getMedicineTakingEventDetail(@NonNull MasterEvent event) {
+    public Observable<MedicineTakingEvent> getMedicineTakingEventDetail(@Nullable Long eventId) {
         return dataStore.select(MedicineTakingEventEntity.class)
-                .where(MedicineTakingEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .where(MedicineTakingEventEntity.MASTER_EVENT_ID.eq(eventId))
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, medicineTakingEventMapper));
     }
 
-    public Observable<ExerciseEvent> getExerciseEventDetail(@NonNull MasterEvent event) {
+    public Observable<ExerciseEvent> getExerciseEventDetail(@Nullable Long eventId) {
         return dataStore.select(ExerciseEventEntity.class)
-                .where(ExerciseEventEntity.MASTER_EVENT_ID.eq(event.getMasterEventId()))
+                .where(ExerciseEventEntity.MASTER_EVENT_ID.eq(eventId))
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToObservable(reactiveResult, exerciseEventMapper));

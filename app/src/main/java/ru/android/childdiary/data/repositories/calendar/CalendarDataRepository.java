@@ -268,6 +268,46 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     }
 
     @Override
+    public Observable<DiaperEvent> getDiaperEventDetail(long eventId) {
+        return calendarDbService.getDiaperEventDetail(eventId);
+    }
+
+    @Override
+    public Observable<FeedEvent> getFeedEventDetail(long eventId) {
+        return calendarDbService.getFeedEventDetail(eventId);
+    }
+
+    @Override
+    public Observable<OtherEvent> getOtherEventDetail(long eventId) {
+        return calendarDbService.getOtherEventDetail(eventId);
+    }
+
+    @Override
+    public Observable<PumpEvent> getPumpEventDetail(long eventId) {
+        return calendarDbService.getPumpEventDetail(eventId);
+    }
+
+    @Override
+    public Observable<SleepEvent> getSleepEventDetail(long eventId) {
+        return calendarDbService.getSleepEventDetail(eventId);
+    }
+
+    @Override
+    public Observable<DoctorVisitEvent> getDoctorVisitEventDetail(long eventId) {
+        return calendarDbService.getDoctorVisitEventDetail(eventId);
+    }
+
+    @Override
+    public Observable<MedicineTakingEvent> getMedicineTakingEventDetail(long eventId) {
+        return calendarDbService.getMedicineTakingEventDetail(eventId);
+    }
+
+    @Override
+    public Observable<ExerciseEvent> getExerciseEventDetail(long eventId) {
+        return calendarDbService.getExerciseEventDetail(eventId);
+    }
+
+    @Override
     public Observable<DiaperEvent> add(@NonNull DiaperEvent event) {
         return calendarDbService.add(event);
     }

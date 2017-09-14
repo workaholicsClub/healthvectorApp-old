@@ -83,6 +83,22 @@ public interface CalendarRepository {
 
     Observable<ExerciseEvent> getExerciseEventDetail(@NonNull MasterEvent event);
 
+    Observable<DiaperEvent> getDiaperEventDetail(long eventId);
+
+    Observable<FeedEvent> getFeedEventDetail(long eventId);
+
+    Observable<OtherEvent> getOtherEventDetail(long eventId);
+
+    Observable<PumpEvent> getPumpEventDetail(long eventId);
+
+    Observable<SleepEvent> getSleepEventDetail(long eventId);
+
+    Observable<DoctorVisitEvent> getDoctorVisitEventDetail(long eventId);
+
+    Observable<MedicineTakingEvent> getMedicineTakingEventDetail(long eventId);
+
+    Observable<ExerciseEvent> getExerciseEventDetail(long eventId);
+
     Observable<DiaperEvent> add(@NonNull DiaperEvent event);
 
     Observable<FeedEvent> add(@NonNull FeedEvent event);

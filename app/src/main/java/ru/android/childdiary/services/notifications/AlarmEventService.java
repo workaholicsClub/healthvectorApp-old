@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.CalendarInteractor;
 import ru.android.childdiary.domain.calendar.data.core.EventNotification;
@@ -32,7 +33,8 @@ public class AlarmEventService extends BaseIntentService {
 
     private static Intent getServiceIntent(Context context, @NonNull MasterEvent event) {
         return new Intent(context, AlarmEventService.class)
-                .putExtra(ExtraConstants.EXTRA_EVENT, event);
+                .putExtra(ExtraConstants.EXTRA_EVENT_ID, event.getMasterEventId().longValue())
+                .putExtra(ExtraConstants.EXTRA_EVENT_TYPE, event.getEventType().ordinal());
     }
 
     public static PendingIntent getPendingIntent(int requestCode, Context context, @NonNull MasterEvent event) {
@@ -51,12 +53,14 @@ public class AlarmEventService extends BaseIntentService {
             return;
         }
         DateTime now = DateTime.now();
-        MasterEvent event = (MasterEvent) intent.getSerializableExtra(ExtraConstants.EXTRA_EVENT);
-        logger.debug("alarm fired: " + event);
-        if (event == null) {
+        long eventId = intent.getLongExtra(ExtraConstants.EXTRA_EVENT_ID, -1);
+        int eventTypeIndex = intent.getIntExtra(ExtraConstants.EXTRA_EVENT_TYPE, -1);
+        logger.debug("alarm fired: event id=" + eventId + ", event type index=" + eventTypeIndex);
+        if (eventId == -1 || eventTypeIndex < 0 || eventTypeIndex >= EventType.values().length) {
             return;
         }
-        event = calendarInteractor.getEventDetail(event).onErrorReturnItem(MasterEvent.NULL).blockingFirst();
+        EventType eventType = EventType.values()[eventTypeIndex];
+        MasterEvent event = calendarInteractor.getEventDetail(eventId, eventType).onErrorReturnItem(MasterEvent.NULL).blockingFirst();
         if (event == MasterEvent.NULL) {
             logger.debug("event is already deleted");
         } else {

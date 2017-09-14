@@ -346,6 +346,28 @@ public class CalendarInteractor {
     }
 
     @SuppressWarnings("unchecked")
+    public <T extends MasterEvent> Observable<T> getEventDetail(long eventId, @NonNull EventType eventType) {
+        if (eventType == EventType.DIAPER) {
+            return (Observable<T>) calendarRepository.getDiaperEventDetail(eventId);
+        } else if (eventType == EventType.FEED) {
+            return (Observable<T>) calendarRepository.getFeedEventDetail(eventId);
+        } else if (eventType == EventType.OTHER) {
+            return (Observable<T>) calendarRepository.getOtherEventDetail(eventId);
+        } else if (eventType == EventType.PUMP) {
+            return (Observable<T>) calendarRepository.getPumpEventDetail(eventId);
+        } else if (eventType == EventType.SLEEP) {
+            return (Observable<T>) calendarRepository.getSleepEventDetail(eventId);
+        } else if (eventType == EventType.DOCTOR_VISIT) {
+            return (Observable<T>) calendarRepository.getDoctorVisitEventDetail(eventId);
+        } else if (eventType == EventType.MEDICINE_TAKING) {
+            return (Observable<T>) calendarRepository.getMedicineTakingEventDetail(eventId);
+        } else if (eventType == EventType.EXERCISE) {
+            return (Observable<T>) calendarRepository.getExerciseEventDetail(eventId);
+        }
+        throw new IllegalArgumentException("Unsupported event type");
+    }
+
+    @SuppressWarnings("unchecked")
     public <T extends MasterEvent> Observable<T> getEventDetailOnce(@NonNull MasterEvent event) {
         return (Observable<T>) getEventDetail(event).firstOrError().toObservable();
     }
