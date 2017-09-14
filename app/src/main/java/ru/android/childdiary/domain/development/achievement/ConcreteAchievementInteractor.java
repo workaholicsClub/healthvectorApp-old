@@ -93,7 +93,7 @@ public class ConcreteAchievementInteractor {
                 .map(Editable::toString)
                 .map(String::trim)
                 .map(name -> ConcreteAchievement.builder()
-                        .name(name)
+                        .nameUser(name)
                         .build())
                 .map(concreteAchievementValidator::validate)
                 .map(concreteAchievementValidator::isValid)
@@ -107,7 +107,7 @@ public class ConcreteAchievementInteractor {
                 .map(Editable::toString)
                 .map(String::trim)
                 .map(name -> ConcreteAchievement.builder()
-                        .name(name)
+                        .nameUser(name)
                         .build())
                 .map(concreteAchievementValidator::validate);
     }

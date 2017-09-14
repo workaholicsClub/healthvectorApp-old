@@ -15,7 +15,7 @@ import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CalendarDataRepository;
 import ru.android.childdiary.data.repositories.child.ChildDataRepository;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
-import ru.android.childdiary.domain.core.requests.DeleteResponse;
+import ru.android.childdiary.data.repositories.dictionaries.achievements.AchievementDataRepository;
 import ru.android.childdiary.domain.calendar.CalendarRepository;
 import ru.android.childdiary.domain.calendar.requests.GetSleepEventsRequest;
 import ru.android.childdiary.domain.calendar.requests.GetSleepEventsResponse;
@@ -26,22 +26,26 @@ import ru.android.childdiary.domain.child.validation.ChildValidationResult;
 import ru.android.childdiary.domain.child.validation.ChildValidator;
 import ru.android.childdiary.domain.core.images.ImageType;
 import ru.android.childdiary.domain.core.images.ImagesRepository;
+import ru.android.childdiary.domain.core.requests.DeleteResponse;
 
 public class ChildInteractor {
     private final Logger logger = LoggerFactory.getLogger(toString());
 
     private final ChildRepository childRepository;
     private final CalendarRepository calendarRepository;
+    private final AchievementDataRepository achievementDataRepository;
     private final ChildValidator childValidator;
     private final ImagesRepository imagesRepository;
 
     @Inject
     public ChildInteractor(ChildDataRepository childRepository,
                            CalendarDataRepository calendarRepository,
+                           AchievementDataRepository achievementDataRepository,
                            ChildValidator childValidator,
                            ImagesDataRepository imagesRepository) {
         this.childRepository = childRepository;
         this.calendarRepository = calendarRepository;
+        this.achievementDataRepository = achievementDataRepository;
         this.childValidator = childValidator;
         this.imagesRepository = imagesRepository;
     }
@@ -69,7 +73,7 @@ public class ChildInteractor {
     public Observable<Child> add(@NonNull Child item) {
         return childValidator.validateObservable(item)
                 .flatMap(this::createImageFile)
-                .flatMap(childRepository::add)
+                .flatMap(child -> childRepository.add(child, achievementDataRepository.generatePredefinedConcreteAchievements(child)))
                 .flatMap(this::setActiveChildObservable);
     }
 

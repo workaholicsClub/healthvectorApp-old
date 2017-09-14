@@ -158,12 +158,14 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
     }
 
     private ConcreteAchievement buildConcreteAchievement(@NonNull ConcreteAchievement.ConcreteAchievementBuilder builder) {
-        return builder
-                .name(achievementNameView.getText())
+        if (!builder.build().getIsPredefined()) {
+            builder.nameUser(achievementNameView.getText());
+        }
+        builder
                 .date(dateView.getValue())
                 .note(noteWithPhotoView.getText())
-                .imageFileName(noteWithPhotoView.getImageFileName())
-                .build();
+                .imageFileName(noteWithPhotoView.getImageFileName());
+        return builder.build();
     }
 
     @Override

@@ -2,6 +2,7 @@ package ru.android.childdiary.data.repositories.child;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,13 +14,11 @@ import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import ru.android.childdiary.data.db.DbUtils;
 import ru.android.childdiary.data.db.entities.child.ChildEntity;
-import ru.android.childdiary.data.db.entities.dictionaries.AchievementEntity;
+import ru.android.childdiary.data.db.entities.development.ConcreteAchievementEntity;
 import ru.android.childdiary.data.repositories.child.mappers.ChildMapper;
 import ru.android.childdiary.data.repositories.development.achievement.mappers.ConcreteAchievementMapper;
-import ru.android.childdiary.data.repositories.dictionaries.achievements.mappers.AchievementMapper;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
-import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 
 @Singleton
 public class ChildDbService {
@@ -27,18 +26,15 @@ public class ChildDbService {
     private final BlockingEntityStore<Persistable> blockingEntityStore;
     private final ChildMapper childMapper;
     private final ConcreteAchievementMapper concreteAchievementMapper;
-    private final AchievementMapper achievementMapper;
 
     @Inject
     public ChildDbService(ReactiveEntityStore<Persistable> dataStore,
                           ChildMapper childMapper,
-                          ConcreteAchievementMapper concreteAchievementMapper,
-                          AchievementMapper achievementMapper) {
+                          ConcreteAchievementMapper concreteAchievementMapper) {
         this.dataStore = dataStore;
         this.blockingEntityStore = dataStore.toBlocking();
         this.childMapper = childMapper;
         this.concreteAchievementMapper = concreteAchievementMapper;
-        this.achievementMapper = achievementMapper;
     }
 
     public Observable<List<Child>> getAll() {
@@ -49,27 +45,15 @@ public class ChildDbService {
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, childMapper));
     }
 
-    public Observable<Child> add(@NonNull Child child) {
+    public Observable<Child> add(@NonNull Child child, @NonNull List<ConcreteAchievement> concreteAchievements) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
             Child result = DbUtils.insert(blockingEntityStore, child, childMapper);
-            // TODO insert predefined achievements
-            List<AchievementEntity> achievementEntities = blockingEntityStore.select(AchievementEntity.class)
-                    .get()
-                    .toList();
-            for (AchievementEntity achievementEntity : achievementEntities) {
-                Achievement achievement = achievementMapper.mapToPlainObject(achievementEntity);
-                ConcreteAchievement concreteAchievement = ConcreteAchievement.builder()
-                        .id(null)
-                        .child(result)
-                        .achievement(achievement)
-                        .name(achievement.getName())
-                        .date(null)
-                        .note(null)
-                        .imageFileName(null)
-                        .isPredefined(true)
-                        .build();
-                DbUtils.insert(blockingEntityStore, concreteAchievement, concreteAchievementMapper);
+            List<ConcreteAchievementEntity> concreteAchievementEntities = new ArrayList<>();
+            for (ConcreteAchievement concreteAchievement : concreteAchievements) {
+                ConcreteAchievementEntity concreteAchievementEntity = concreteAchievementMapper.mapToEntity(blockingEntityStore, concreteAchievement);
+                concreteAchievementEntities.add(concreteAchievementEntity);
             }
+            blockingEntityStore.insert(concreteAchievementEntities);
             return result;
         }));
     }

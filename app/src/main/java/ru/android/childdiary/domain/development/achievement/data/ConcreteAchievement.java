@@ -8,9 +8,10 @@ import java.io.Serializable;
 
 import lombok.Builder;
 import lombok.Value;
+import ru.android.childdiary.data.types.AchievementType;
 import ru.android.childdiary.domain.child.data.Child;
+import ru.android.childdiary.domain.core.LocalizationUtils;
 import ru.android.childdiary.domain.core.data.ContentObject;
-import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Value
@@ -22,9 +23,9 @@ public class ConcreteAchievement implements Serializable, ContentObject<Concrete
 
     Child child;
 
-    Achievement achievement;
+    AchievementType achievementType;
 
-    String name;
+    String nameEn, nameRu, nameUser;
 
     LocalDate date;
 
@@ -34,6 +35,13 @@ public class ConcreteAchievement implements Serializable, ContentObject<Concrete
 
     Boolean isPredefined;
 
+    // fromAge, toAge -- возраст ребенка в месяцах
+    Double fromAge, toAge;
+
+    public String getName() {
+        return LocalizationUtils.getLocalizedName(nameUser, nameEn, nameRu);
+    }
+
     @Override
     public boolean isContentEmpty() {
         return isContentEqual(NULL);
@@ -41,7 +49,7 @@ public class ConcreteAchievement implements Serializable, ContentObject<Concrete
 
     @Override
     public boolean isContentEqual(@NonNull ConcreteAchievement other) {
-        return ObjectUtils.contentEquals(getAchievement(), other.getAchievement())
+        return getAchievementType() == other.getAchievementType()
                 && ObjectUtils.contentEquals(getName(), other.getName())
                 && ObjectUtils.equals(getDate(), other.getDate())
                 && ObjectUtils.contentEquals(getNote(), other.getNote())

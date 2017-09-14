@@ -8,6 +8,7 @@ import io.reactivex.Observable;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.child.requests.DeleteChildResponse;
+import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 
 public interface ChildRepository {
     Observable<Child> getActiveChild();
@@ -20,7 +21,7 @@ public interface ChildRepository {
 
     Observable<List<Child>> getAll();
 
-    Observable<Child> add(@NonNull Child child);
+    Observable<Child> add(@NonNull Child child, @NonNull List<ConcreteAchievement> concreteAchievements);
 
     Observable<Child> update(@NonNull Child child);
 

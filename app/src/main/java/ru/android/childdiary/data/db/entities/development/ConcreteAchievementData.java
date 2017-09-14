@@ -8,10 +8,9 @@ import io.requery.Generated;
 import io.requery.Key;
 import io.requery.ManyToOne;
 import io.requery.Persistable;
-import io.requery.ReferentialAction;
 import io.requery.Table;
 import ru.android.childdiary.data.db.entities.child.ChildData;
-import ru.android.childdiary.data.db.entities.dictionaries.AchievementData;
+import ru.android.childdiary.data.types.AchievementType;
 
 @Table(name = "concrete_achievement")
 @Entity(name = "ConcreteAchievementEntity")
@@ -24,11 +23,13 @@ public interface ConcreteAchievementData extends Persistable {
     @ManyToOne
     ChildData getChild();
 
-    @ForeignKey(delete = ReferentialAction.RESTRICT)
-    @ManyToOne
-    AchievementData getAchievement();
+    AchievementType getAchievementType();
 
-    String getName();
+    String getNameEn();
+
+    String getNameRu();
+
+    String getNameUser();
 
     LocalDate getConcreteAchievementDate();
 
@@ -38,5 +39,7 @@ public interface ConcreteAchievementData extends Persistable {
 
     Boolean isPredefined();
 
-    Integer getOrderNumber();
+    Double getFromAge();
+
+    Double getToAge();
 }

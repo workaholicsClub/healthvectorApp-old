@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hearing_and_vision">Hearing and vision</string>
+    <string name="gross_motor_skills">Gross motor skills</string>
+    <string name="fine_motor_skills">Fine motor skills</string>
+    <string name="social_development">Social development</string>
+    <string name="speech_development">Development of own speech and speech comprehension</string>
+    <string name="self_dependence_skills">Skills related to taking care of themselves</string>
+    <array name="achievements">
+        <item>@array/hearing_and_vision__1__</item>
+        <item>@array/hearing_and_vision__2__</item>
+        <item>@array/hearing_and_vision__3__</item>
+        <item>@array/hearing_and_vision__4__</item>
+        <item>@array/hearing_and_vision__5__</item>
+        <item>@array/hearing_and_vision__6__</item>
+        <item>@array/hearing_and_vision__7__</item>
+        <item>@array/hearing_and_vision__8__</item>
+        <item>@array/hearing_and_vision__9__</item>
+        <item>@array/hearing_and_vision__10__</item>
+        <item>@array/hearing_and_vision__11__</item>
+        <item>@array/hearing_and_vision__12__</item>
+        <item>@array/gross_motor_skills__1__</item>
+        <item>@array/gross_motor_skills__2__</item>
+        <item>@array/gross_motor_skills__3__</item>
+        <item>@array/gross_motor_skills__4__</item>
+        <item>@array/gross_motor_skills__5__</item>
+        <item>@array/gross_motor_skills__6__</item>
+        <item>@array/gross_motor_skills__7__</item>
+        <item>@array/gross_motor_skills__8__</item>
+        <item>@array/gross_motor_skills__9__</item>
+        <item>@array/gross_motor_skills__10__</item>
+        <item>@array/gross_motor_skills__11__</item>
+        <item>@array/gross_motor_skills__12__</item>
+        <item>@array/gross_motor_skills__12__18</item>
+        <item>@array/gross_motor_skills__18__24</item>
+        <item>@array/fine_motor_skills__1__</item>
+        <item>@array/fine_motor_skills__2__</item>
+        <item>@array/fine_motor_skills__3__</item>
+        <item>@array/fine_motor_skills__4__</item>
+        <item>@array/fine_motor_skills__5__</item>
+        <item>@array/fine_motor_skills__6__</item>
+        <item>@array/fine_motor_skills__7__</item>
+        <item>@array/fine_motor_skills__8__</item>
+        <item>@array/fine_motor_skills__9__</item>
+        <item>@array/fine_motor_skills__10__</item>
+        <item>@array/fine_motor_skills__11__</item>
+        <item>@array/fine_motor_skills__12__</item>
+        <item>@array/fine_motor_skills__12__18</item>
+        <item>@array/fine_motor_skills__18__24</item>
+        <item>@array/fine_motor_skills__24__30</item>
+        <item>@array/fine_motor_skills__30__36</item>
+        <item>@array/social_development__1__</item>
+        <item>@array/social_development__2__</item>
+        <item>@array/social_development__3__</item>
+        <item>@array/social_development__4__</item>
+        <item>@array/social_development__5__</item>
+        <item>@array/social_development__6__</item>
+        <item>@array/social_development__7__</item>
+        <item>@array/social_development__8__</item>
+        <item>@array/social_development__9__</item>
+        <item>@array/social_development__10__</item>
+        <item>@array/social_development__11__</item>
+        <item>@array/social_development__12__</item>
+        <item>@array/social_development__12__18</item>
+        <item>@array/social_development__18__24</item>
+        <item>@array/social_development__24__30</item>
+        <item>@array/social_development__30__36</item>
+        <item>@array/speech_development__1__</item>
+        <item>@array/speech_development__1_5__</item>
+        <item>@array/speech_development__2__</item>
+        <item>@array/speech_development__3__</item>
+        <item>@array/speech_development__4__</item>
+        <item>@array/speech_development__5__</item>
+        <item>@array/speech_development__6__</item>
+        <item>@array/speech_development__7__</item>
+        <item>@array/speech_development__8__</item>
+        <item>@array/speech_development__9__</item>
+        <item>@array/speech_development__10__</item>
+        <item>@array/speech_development__11__</item>
+        <item>@array/speech_development__12__</item>
+        <item>@array/speech_development__12__18</item>
+        <item>@array/speech_development__18__24</item>
+        <item>@array/speech_development__24__30</item>
+        <item>@array/speech_development__30__36</item>
+        <item>@array/self_dependence_skills__3__</item>
+        <item>@array/self_dependence_skills__4__5</item>
+        <item>@array/self_dependence_skills__6__</item>
+        <item>@array/self_dependence_skills__7__</item>
+        <item>@array/self_dependence_skills__8__</item>
+        <item>@array/self_dependence_skills__9__</item>
+        <item>@array/self_dependence_skills__10__</item>
+        <item>@array/self_dependence_skills__11__</item>
+        <item>@array/self_dependence_skills__12__</item>
+        <item>@array/self_dependence_skills__12__18</item>
+        <item>@array/self_dependence_skills__18__24</item>
+        <item>@array/self_dependence_skills__24__30</item>
+        <item>@array/self_dependence_skills__30__36</item>
+    </array>
+    <string-array name="hearing_and_vision__1__">
+        <item>Opens their eyes wide, wakes up or flinches when hearing a sound.</item>
+        <item>Looks for the source of a sound.</item>
+        <item>Gets scared or cries when hearing a loud and sudden sound.</item>
+        <item>Reacts to a voice by moving arms and legs actively or on the opposite becomes still and silent.</item>
+        <item>Keeps their eyes on an adult’s face.</item>
+        <item>Stares at a toy in front of them.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__2__">
+        <item>Looks the mother in the eyes when she feeds them.</item>
+        <item>Follows an object’s movements with their eyes.</item>
+        <item>Imitates an adult’s facial expressions.</item>
+        <item>Recognizes their mother’s voice.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__3__">
+        <item>Recognizes adults they already know.</item>
+        <item>Vocalizes their emotions.</item>
+        <item>Looks at a toy put in their hands.</item>
+        <item>Looks at their fingers and moves them.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__4__">
+        <item>Turns their head at the sound (left or right).</item>
+        <item>Reacts to their name, turns around.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__5__">
+        <item>Looks at their hands, puts them together symmetrically.</item>
+        <item>Listens attentively to sounds.</item>
+        <item>Stops crying when their hear music or their mother singing.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__6__">
+        <item>Reacts to sounds within no less than a three meter radius.</item>
+        <item>Watches moving objects attentively, examines toys.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__7__">
+        <item>Defines the source of a sound below and from the side.</item>
+        <item>Has binocular vision.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__8__">
+        <item>Notices small objects.</item>
+        <item>Listens to the adult’s talk.</item>
+        <item>Becomes still when they hear an unfamiliar sound.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__9__">
+        <item>Defines the source of a sound from any direction. Reacts to sounds within no less than a 4.5 meter radius.</item>
+        <item>Examines the toys they hold in their hands, hits them against each other.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__10__">
+        <item>Actively tries to imitate sounds and syllable groups, reacts to changes in the speaker’s tone.</item>
+        <item>Continuously stares at the speaker’s face.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__11__">
+        <item>Starts to understand simple commands ("give", "put").</item>
+        <item>Knows and reacts to some household sounds  — sound of the car, dog’s bark, phone ring.</item>
+        <item>When asked, can show at least one part of a doll’s body (face).</item>
+        <item>Is interested in their reflection in the mirror.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__12__">
+        <item>Hearing is close to that of an adult: reacts to various sources of sound, defines their location.</item>
+        <item>Reacts to sounds within 6 meters.</item>
+        <item>Looks at the pictures in books.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__1__">
+        <item>Is able to briefly lift their head by the end of the first month.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__2__">
+        <item>When lying on the back, lifts their head and briefly holds it.</item>
+        <item>When lying on the back, jerks their legs.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__3__">
+        <item>When lying on stomach, leans on arms and lifts their head at right angle and hold it for more than a minute.</item>
+        <item>When sitting or being put vertically holds their head straight.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__4__">
+        <item>When lying on stomach, lifts their head and shoulders.</item>
+        <item>When lying on stomach, can turn over using your help.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__5__">
+        <item>When lying on the back, lifts their arms and legs.</item>
+        <item>Can roll over from one side to another and flip from back to front.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__6__">
+        <item>Sits leaning on something.</item>
+        <item>Holds their mother’s fingers tight when she lifts them to sit up.</item>
+        <item>When lying on stomach, leans on one arm and reaches for an object they want with the other.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__7__">
+        <item>Flips from back to front.</item>
+        <item>When lying on the back, pull their legs close and plays with them.</item>
+        <item>Sits unsteadily, leaning forward.</item>
+        <item>Can stand for a short time when held by the arms.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__8__">
+        <item>Sits steadily. Can sit without support leaning on the arms.</item>
+        <item>Crawls backwards like a seal.</item>
+        <item>Is trying to stand on their own holding onto something. Stands holding onto something.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__9__">
+        <item>Crawls forward and about themselves on their stomach.</item>
+        <item>Sits steadily.</item>
+        <item>Gets up on their own holding onto something. Makes several steps if they are being supported.</item>
+        <item>Lifts one leg.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__10__">
+        <item>Crawls back and forth on all fours.</item>
+        <item>Stands almost without support.</item>
+        <item>Can sit on the floor when standing.</item>
+        <item>Stands up holding onto something.</item>
+        <item>Makes walking movements.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__11__">
+        <item>Crawls on all fourth in all directions.</item>
+        <item>Walks sideways holding onto something.</item>
+        <item>Makes 1 or 2 steps with your help.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__12__">
+        <item>Sits steadily on their own.</item>
+        <item>Can make several steps holding the mother’s hand.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__12__18">
+        <item>Walks on their own.</item>
+        <item>Kicks a ball.</item>
+        <item>Runs steadily, doesn’t fall down, dodges corners and stops suddenly.</item>
+        <item>Climbs and sits on a chair.</item>
+        <item>Climbs structures on the playground.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__18__24">
+        <item>Climbs up and down a ladder or stairs, putting one foot after the other on each step.</item>
+        <item>Climbs a slide on their own and rides it.</item>
+        <item>Keeps their balance and leg coordination in active games (running, climbing, jumping)</item>
+    </string-array>
+    <string-array name="gross_motor_skills__24__30">
+        <item>Jumps down a step with both legs.</item>
+        <item>Plays ball with other children, can throw a ball and catch it at least every second time.</item>
+        <item>Can stand on one leg for several seconds without support.</item>
+        <item>When standing, can jump over small objects.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__30__36">
+        <item>Pedals a tricycle.</item>
+        <item>Can stand on one leg steadily without support.</item>
+        <item>Can jump over obstacles when running.</item>
+        <item>Can tumble forward.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__1__">
+        <item>Has a good grabbing reflex.</item>
+        <item>The fists are clenched.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__2__">
+        <item>Reaches for a toy but can’t grab it.</item>
+        <item>The palms are half-open.</item>
+        <item>Shakes a rattle when you give it to them.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__3__">
+        <item>Reaches their toy and hits it but still can’t grab it.</item>
+        <item>Examines their fingers and moves them.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__4__">
+        <item>Plays with their hands.</item>
+        <item>Puts their hands together symmetrically in front of them.</item>
+        <item>Grabs an object when they reach it. Tries to put it in their mouth.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__5__">
+        <item>Reaches for a moving object and tries to grab it.</item>
+        <item>Picks a toy with one hand, then with the other and examines it.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__6__">
+        <item>Holds a bottle.</item>
+        <item>Shifts a toy from one hand to the other. Shakes it, feels it with their hands, hits it on the table.</item>
+        <item>Reaches for a second toy and grabs it, but drops the first one.</item>
+        <item>Grabs items with an index finger and a thumb.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__7__">
+        <item>Can play with two toys at the same time.</item>
+        <item>Holds a cookie.</item>
+        <item>Can hold a toy only with their fingers (not the palm).</item>
+    </string-array>
+    <string-array name="fine_motor_skills__8__">
+        <item>Can pull off a sock.</item>
+        <item>Plays patty-cake.</item>
+        <item>Points at an object with their finger.</item>
+        <item>Puts one toy away when they want to take another.</item>
+        <item>Learns to pick up items with their thumb, index and middle finger (cortical opposition)</item>
+    </string-array>
+    <string-array name="fine_motor_skills__9__">
+        <item>Throws toys intentionally.</item>
+        <item>Picks up toys or blocks from a box.</item>
+        <item>Eats with their fingers.</item>
+        <item>Starts to learn pincer grip (with a thumb and an index finger)</item>
+    </string-array>
+    <string-array name="fine_motor_skills__10__">
+        <item>Hits objects against each other.</item>
+        <item>Rolls a ball on the floor.</item>
+        <item>Grabs a spoon by its long part.</item>
+        <item>Picks up a cup with both hands.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__11__">
+        <item>Points at an object of interest with their finger.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__12__">
+        <item>Claps their hands.</item>
+        <item>Can hold a pencil, scribbles with it.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__12__18">
+        <item>Prefers their leading hand.</item>
+        <item>Scribbles with a piece of chalk or a pencil.</item>
+        <item>Flips pages of a children’s book (one by one).</item>
+        <item>Can screw and unscrew bottle and jar caps.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__18__24">
+        <item>Scribbles in circles.</item>
+        <item>Builds towers out of five and more blocks.</item>
+        <item>Holds a piece of chalk with several fingers like an adult.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__24__30">
+        <item>Tries to cut things with small scissors.</item>
+        <item>Builds towers out of eight and more blocks.</item>
+        <item>Draws vertical and horizontal lines.</item>
+        <item>Builds block structures (simple houses, bridges).</item>
+    </string-array>
+    <string-array name="fine_motor_skills__30__36">
+        <item>Draws a full circle, two lines crossing.</item>
+        <item>Pieces together a jigsaw puzzle.</item>
+    </string-array>
+    <string-array name="social_development__1__">
+        <item>Makes it clear that they are hungry, in pain or unhappy by crying.</item>
+        <item>Calms down when being picked up, talked to kindly or breastfed.</item>
+    </string-array>
+    <string-array name="social_development__2__">
+        <item>Smiles back at you.</item>
+    </string-array>
+    <string-array name="social_development__3__">
+        <item>Actively moves arms and legs, laughs when being kindly spoken to.</item>
+        <item>Recognizes adults they already know.</item>
+        <item>Watches moving people.</item>
+    </string-array>
+    <string-array name="social_development__4__">
+        <item>Examines themselves in the mirror.</item>
+        <item>Turns around when they hear their name.</item>
+        <item>Cries when left alone.</item>
+        <item>Laughs out loudly when amused by an adult.</item>
+        <item>Is happy when being played with.</item>
+    </string-array>
+    <string-array name="social_development__5__">
+        <item>Recognizes adults they know and reaches out for them.</item>
+        <item>Laughs when parents make faces.</item>
+        <item>Stops crying when spoken to.</item>
+        <item>Turns to the speaker.</item>
+    </string-array>
+    <string-array name="social_development__6__">
+        <item>Is alerted by strangers.</item>
+        <item>Cries when their toys are takes away.</item>
+        <item>Reaches out when they want to be picked up.</item>
+    </string-array>
+    <string-array name="social_development__7__">
+        <item>Shows their parents their love by clinging to them.</item>
+        <item>Can tell the difference between kind and angry tone and facial expressions.</item>
+        <item>Plays hide-and-seek with a handkerchief.</item>
+    </string-array>
+    <string-array name="social_development__8__">
+        <item>Cries when mother or father leave.</item>
+        <item>Watches adults.</item>
+    </string-array>
+    <string-array name="social_development__9__">
+        <item>Cries or gets angry when being told off.</item>
+        <item>Gets their first preferences.</item>
+        <item>Laughs when they see someone close to them.</item>
+    </string-array>
+    <string-array name="social_development__10__">
+        <item>Understand being said goodbye to.</item>
+        <item>Hugs their mother.</item>
+        <item>Starts to understand being praised.</item>
+    </string-array>
+    <string-array name="social_development__11__">
+        <item>Imitates their parents’ actions (bye-bye, no-no).</item>
+        <item>Stops doing what they have been told off for.</item>
+    </string-array>
+    <string-array name="social_development__12__">
+        <item>Keeps doing things that make their mother laugh.</item>
+        <item>Kisses their parents.</item>
+        <item>Likes watching themselves in the mirror, smiles at their reflection, plays with it.</item>
+    </string-array>
+    <string-array name="social_development__12__18">
+        <item>Asks for help.</item>
+        <item>Starts helping around the house.</item>
+        <item>Plays with other children.</item>
+    </string-array>
+    <string-array name="social_development__18__24">
+        <item>Sometimes says no when being pestered.</item>
+        <item>Usually behaves correctly when reproved.</item>
+        <item>Shows affection towards other children.</item>
+        <item>Puts their favorite toy to sleep with them.</item>
+        <item>Feels empathy towards other children, tries to help and comfort them.</item>
+    </string-array>
+    <string-array name="social_development__24__30">
+        <item>Expresses their complaints in words.</item>
+        <item>Says hi.</item>
+        <item>Says "look" when they want to draw your attention.</item>
+        <item>Plays active games with other children.</item>
+        <item>Offers help.</item>
+    </string-array>
+    <string-array name="social_development__30__36">
+        <item>Apologizes when they do something bad.</item>
+        <item>Usually follows instructions when playing with other children and waits for their turn.</item>
+    </string-array>
+    <string-array name="speech_development__1__">
+        <item>Vocalizes feeling discomfort by crying.</item>
+        <item>Makes sounds like "ah, eh, ooh" by the end of the first month.</item>
+    </string-array>
+    <string-array name="speech_development__1_5__">
+        <item>Babbles.</item>
+    </string-array>
+    <string-array name="speech_development__2__">
+        <item>Makes more spontaneous sounds.</item>
+        <item>"Cooes" when being spoken to.</item>
+    </string-array>
+    <string-array name="speech_development__3__">
+        <item>Can make three different sounds.</item>
+        <item>Gives out different types of cries, like showing hunger, pain or being tired.</item>
+    </string-array>
+    <string-array name="speech_development__4__">
+        <item>Cooes and squeaks trying to draw attention.</item>
+        <item>Is happy when they make sounds.</item>
+        <item>Laughs loudly when being spoken to.</item>
+    </string-array>
+    <string-array name="speech_development__5__">
+        <item>Talks to themselves clearly separating syllables.</item>
+    </string-array>
+    <string-array name="speech_development__6__">
+        <item>Cooes, babbles, makes happy sounds.</item>
+    </string-array>
+    <string-array name="speech_development__7__">
+        <item>Babbles syllables like "la", "wa", "ma", "ba", "na".</item>
+        <item>Tries to draw attention with particular sounds.</item>
+    </string-array>
+    <string-array name="speech_development__8__">
+        <item>Repeats syllables "ma-ma", "pa-pa", "ta-ta".</item>
+        <item>Imitates various sounds.</item>
+    </string-array>
+    <string-array name="speech_development__9__">
+        <item>Can pronounce up to eight different syllables (unintelligibly).</item>
+    </string-array>
+    <string-array name="speech_development__10__">
+        <item>Babbling gets more varied.</item>
+        <item>Can say "mama" and "papa".</item>
+        <item>Repeats sounds after adults.</item>
+        <item>Reacts to their name and "give me".</item>
+    </string-array>
+    <string-array name="speech_development__11__">
+        <item>Says the first meaningful word.</item>
+        <item>Understands the notion of "you can’t do that".</item>
+    </string-array>
+    <string-array name="speech_development__12__">
+        <item>Says two meaningful words (in the "child speak").</item>
+        <item>When being told "bring me a toy" goes to look for it, find it and brings it.</item>
+    </string-array>
+    <string-array name="speech_development__12__18">
+        <item>Can say at least two words apart from "mama" and "papa".</item>
+        <item>Can answer "what does the kitty/doggy say?"</item>
+        <item>Uses at least five words for different objects.</item>
+        <item>Can show a mouth, a nose, arms and legs when asked to.</item>
+        <item>Knows prepositions "on" and "with".</item>
+        <item>Understands two-stage instructions like "go to your room and bring me…"</item>
+        <item>Understands at least three prepositions of place, like "in", "on", "under", "at", "next to".</item>
+    </string-array>
+    <string-array name="speech_development__18__24">
+        <item>Knows several familiar objects in a picture book.</item>
+        <item>Uses no less than ten words.</item>
+        <item>Answers "yes" or "no" correctly when asked simple questions.</item>
+        <item>Says "bad" or "donwanna" if they don’t like an object.</item>
+        <item>Understands "up" and "down", "one" (gives only one item when asked to), "all".</item>
+        <item>Can show one color when you name it.</item>
+    </string-array>
+    <string-array name="speech_development__24__30">
+        <item>Asks "more", "one more".</item>
+        <item>Says "don’t", "donwanna" etc.</item>
+        <item>Uses at least one of the following: "I", "you", "he", "she", "it", "me".</item>
+        <item>Can speak in two, three-word sentences or more.</item>
+        <item>Can describe what is going on in a picture.</item>
+        <item>Says "my" or "mine" about their things.</item>
+        <item>Uses past tense like "The car fell down".</item>
+        <item>Can say their name.</item>
+        <item>Shows or names the bigger of two objects.</item>
+        <item>Understands no less than 6 words describing location, like "in", "over", "on", "under", "at", "next to", "above", "below", "higher", "lower".</item>
+        <item>Can tell other children’s gender correctly (boy or girl).</item>
+    </string-array>
+    <string-array name="speech_development__30__36">
+        <item>Asks questions starting with "what", "where", "why", "when", "how".</item>
+        <item>Uses nouns in different cases (other than nominative).</item>
+        <item>Uses plural and future tense.</item>
+        <item>Uses words "good" and "bad".</item>
+        <item>Can answer questions like "What are cookies for?"</item>
+        <item>Knows their age.</item>
+        <item>Uses words like "quick" and "quickly", "slow" and "slowly".</item>
+        <item>Talks about what is going to happen.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__3__">
+        <item>Drinks from a spoon and opens their mouth when they see it.</item>
+        <item>Can eat from a spoon.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__4__5">
+        <item>Holds a bottle with both hands when sucking on it.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__6__">
+        <item>Can take off their hat.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__7__">
+        <item>Holds a cookie in their hand and bites on it.</item>
+        <item>Can put the bottle to their mouth on their own.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__8__">
+        <item>Drinks from a cup.</item>
+        <item>Can eat small bits of food on their own.</item>
+        <item>Can pull off a sock.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__9__">
+        <item>Eats with their fingers.</item>
+        <item>When getting dressed, puts their arms into the sleeves on their own.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__10__">
+        <item>Picks up a cup with both hands.</item>
+        <item>Grabs a spoon by its long part.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__11__">
+        <item>Tries to drink from a cup on their own.</item>
+        <item>Eats a dry toast on their own.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__12__">
+        <item>Drinks from a cup on their own.</item>
+        <item>Tries to eat with a spoon on their own.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__12__18">
+        <item>Takes off shoes and socks.</item>
+        <item>Uses a small bucket or other container to carry things.</item>
+        <item>Turns the handle and pulls the door when opening it.</item>
+        <item>Wipes spilled liquid with a cloth or a sponge.</item>
+        <item>Gives an empty plate to the mother or the father.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__18__24">
+        <item>Can take off an unbuttoned shirt on their own.</item>
+        <item>Can unzip things.</item>
+        <item>Washes and wipes their hands.</item>
+        <item>Eats with a spoon and a fork almost without spilling.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__24__30">
+        <item>Can wash their face and brush their teeth on their own.</item>
+        <item>Can pour a liquid into a cup without spilling.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__30__36">
+        <item>Can put on a shirt on their own.</item>
+        <item>Can bathe almost without assistance.</item>
+        <item>Puts on shoes correctly (left shoe — left foot, right shoe — right foot).</item>
+    </string-array>
+</resources>

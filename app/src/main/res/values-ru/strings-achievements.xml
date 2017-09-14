@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hearing_and_vision">Слух и зрение</string>
+    <string name="gross_motor_skills">Крупная моторика</string>
+    <string name="fine_motor_skills">Мелкая моторика</string>
+    <string name="social_development">Социальное развитие</string>
+    <string name="speech_development">Развитие собственной речи и понимания речи</string>
+    <string name="self_dependence_skills">Навыки самообслуживания</string>
+    <string-array name="hearing_and_vision__1__">
+        <item>Широко раскрывает глазки, просыпается, вздрагивает, услышав звук.</item>
+        <item>Ищет взглядом источник звука.</item>
+        <item>Пугается, плачет, услышав громкий и неожиданный звук.</item>
+        <item>Реагирует на голос, активно двигая ручками и ножками или наоборот: замирает, замолкает.</item>
+        <item>Удерживает взгляд на лице взрослого.</item>
+        <item>Внимательно смотрит на находящуюся перед ним игрушку.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__2__">
+        <item>Смотрит в глаза мамы во время кормления.</item>
+        <item>Следит взглядом за движением предмета.</item>
+        <item>Имитирует мимику взрослого.</item>
+        <item>Узнает голос мамы.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__3__">
+        <item>Узнает знакомых взрослых.</item>
+        <item>Голосом выражает свои эмоции.</item>
+        <item>Смотрит на вложенную в руку игрушку.</item>
+        <item>Рассматривает свои пальчики и двигает ими.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__4__">
+        <item>Поворачивает голову в сторону источника звука (вправо, влево).</item>
+        <item>Реагирует на свое имя, поворачивается.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__5__">
+        <item>Смотрит на свои ручки, соединяет их по средней линии.</item>
+        <item>Прислушивается к звукам.</item>
+        <item>Прекращает плакать, когда слышит музыку или пение мамы.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__6__">
+        <item>Реагирует на звуки, издаваемые на расстоянии не менее 3 метров.</item>
+        <item>Внимательно наблюдает за движущимися предметами, рассматривает игрушки.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__7__">
+        <item>Определяет, где находится источник звука, издаваемый сбоку и снизу.</item>
+        <item>Сформировано бинокулярное зрение.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__8__">
+        <item>Замечает мелкие предметы.</item>
+        <item>Прислушивается к разговору взрослых.</item>
+        <item>Замирает, услышав незнакомый звук.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__9__">
+        <item>Определяет, где находится источник звука, издаваемый с любой стороны. Реагирует на звуки, которые издаются на расстоянии не менее 4,5 метров.</item>
+        <item>Рассматривает игрушки, которые держит в обеих руках, ударяет игрушками друг об друга.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__10__">
+        <item>Пытается активно имитировать звуки и цепочки слогов, реагирует на смену интонации говорящего.</item>
+        <item>На долгое время задерживает взгляд на лице говорящего взрослого.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__11__">
+        <item>Начинает понимать простые бытовые инструкции ("дай", "отнеси").</item>
+        <item>Знает и реагирует на некоторые бытовые звуки — шум машины, лай собаки, звонок телефона.</item>
+        <item>По просьбе взрослого может показать у куклы хотя бы одну часть тела (лица).</item>
+        <item>Проявляет интерес к своему изображению в зеркале.</item>
+    </string-array>
+    <string-array name="hearing_and_vision__12__">
+        <item>Развитие слуха достигает порогов слуха взрослого: реагирует на различные источники звука, определяет их местоположение.</item>
+        <item>Реагирует на звуки, издаваемые на расстоянии 6 метров.</item>
+        <item>Рассматривает картинки в книжках. </item>
+    </string-array>
+    <string-array name="gross_motor_skills__1__">
+        <item>К концу месяца может ненадолго поднимать голову. </item>
+    </string-array>
+    <string-array name="gross_motor_skills__2__">
+        <item>Лежа на животе, поднимает голову и короткое время удерживает ее.</item>
+        <item>Лежа на спине, дрыгает ножками.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__3__">
+        <item>Лежа на животе, опирается на ручки и поднимает голову под углом 90 градусов, может удержать ее в таком положении более минуты.</item>
+        <item>В вертикальном или сидячем положении удерживает голову прямо.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__4__">
+        <item>Лежа на животе, поднимает голову и плечи.</item>
+        <item>С вашей помощью может перевернуться с живота на спинку.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__5__">
+        <item>Лежа на спине поднимает ручки и ножки.</item>
+        <item>Может перекатываться с живота на спину, с боку на бок.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__6__">
+        <item>Сидит с опорой.</item>
+        <item>Крепко держится за пальцы мамы, когда она пытается подтянуть его в сидячее положение.</item>
+        <item>Лежа на животе, опирается на ручку, при этом другой рукой тянется за интересующим его предметом.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__7__">
+        <item>Переворачивается со спины на живот.</item>
+        <item>Лежа на спинке, подтягивает ножки и играет с ними.</item>
+        <item>Сидит, но неуверенно, наклоняясь вперед.</item>
+        <item>Когда держат за руки, может стоять на ножках непродолжительное время.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__8__">
+        <item>Сидит, удерживает равновесие. Может сидеть без поддержки, опираясь на ручки.</item>
+        <item>Ползает как тюлень назад.</item>
+        <item>Пытается встать у опоры и стоять самостоятельно (поднимается в положение стоя). Стоит с поддержкой.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__9__">
+        <item>Ползает по-пластунски вперед и вокруг своей оси.</item>
+        <item>Уверенно сидит.</item>
+        <item>Встает сам при поддержке. Делает несколько шагов, если его поддерживают.</item>
+        <item>Поднимает одну ножку.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__10__">
+        <item>Ползает на четвереньках вперед и назад.</item>
+        <item>Стоит почти без поддержки.</item>
+        <item>Садится на пол из положения стоя.</item>
+        <item>Держится за опору, встает на ножки.</item>
+        <item>Делает шаговые движения.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__11__">
+        <item>Ползает на четвереньках во всех направлениях.</item>
+        <item>Ходит боком, держась за опору.</item>
+        <item>Делает 1—2 шага с вашей помощью.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__12__">
+        <item>Уверенно самостоятельно сидит.</item>
+        <item>Держась за мамину руку, делает несколько шагов.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__12__18">
+        <item>Ходит самостоятельно.</item>
+        <item>Бьет ногой по мячу.</item>
+        <item>Бегает уверенно, не падает, огибая углы и резко останавливаясь.</item>
+        <item>Вскарабкивается и садится на стул.</item>
+        <item>Лазает по сооружениям на детской площадке.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__18__24">
+        <item>Уверенно поднимается и спускается по лестнице, ставя ноги поочередно на каждую ступеньку. </item>
+        <item>Самостоятельно влезает по лестнице на горку и съезжает с нее.</item>
+        <item>Сохраняет равновесие и координацию в подвижных играх (бег, лазанье, прыжки).</item>
+    </string-array>
+    <string-array name="gross_motor_skills__24__30">
+        <item>Прыгает со ступенек двумя ногами вместе.</item>
+        <item>Играет в мяч с другими детьми, бросает мяч и ловит, по крайней мере, в половине случаев.</item>
+        <item>Стоит на одной ноге несколько секунд без поддержки.</item>
+        <item>Из положения стоя перепрыгивает через невысокие предметы.</item>
+    </string-array>
+    <string-array name="gross_motor_skills__30__36">
+        <item>Едет на трехколесном велосипеде, нажимая на педали.</item>
+        <item>Уверенно стоит на одной ноге без поддержки.</item>
+        <item>На бегу перепрыгивает через препятствия.</item>
+        <item>Делает кувырок вперед. </item>
+    </string-array>
+    <string-array name="fine_motor_skills__1__">
+        <item>Активный хватательный рефлекс.</item>
+        <item>Ладошка сжата в кулачок.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__2__">
+        <item>Тянет ручки к игрушке, но не может дотянуться и схватить ее.</item>
+        <item>Ладошка полураскрыта.</item>
+        <item>Трясет вложенной в руку погремушкой.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__3__">
+        <item>Дотягивается до игрушки и ударяет по ней, но все еще не может ухватить ее.</item>
+        <item>Рассматривает свои пальчики и двигает ими.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__4__">
+        <item>Играет со своими ручками.</item>
+        <item>Соединяет ручки по средней линии перед собой.</item>
+        <item>Хватает предмет, дотянувшись до него. Тянет игрушки в рот.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__5__">
+        <item>Протягивает руки и старается схватить движущийся предмет.</item>
+        <item>Берет игрушку одной рукой, затем другой и изучает ее.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__6__">
+        <item>Держит в руках бутылочку.</item>
+        <item>Перекладывает игрушку из руки в руку. Трясет, ощупывает ее, бьет ею по столу.</item>
+        <item>Тянется ко второй игрушке и хватает ее, при этом роняет первую игрушку.</item>
+        <item>Захватывает предметы указательным и большим пальчиками.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__7__">
+        <item>Может играть с двумя игрушками одновременно.</item>
+        <item>Держит в руке печенье.</item>
+        <item>Может держать игрушку только пальчиками, а не всей ладошкой.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__8__">
+        <item>Умеет стаскивать носок с ноги.</item>
+        <item>Играет в ладушки.</item>
+        <item>Показывает пальчиком на предмет.</item>
+        <item>Откладывает игрушку в одну сторону, если хочет взять в руку другую.</item>
+        <item>Учится брать предметы большим, указательным и средним пальчиками (пинцетный захват).</item>
+    </string-array>
+    <string-array name="fine_motor_skills__9__">
+        <item>Намеренно бросает игрушки.</item>
+        <item>Вытаскивает кубики или игрушки из коробки.</item>
+        <item>Ест пальчиками.</item>
+        <item>Начинает осваивать щипковый захват (захват большим и указательным пальчиками).</item>
+    </string-array>
+    <string-array name="fine_motor_skills__10__">
+        <item>Ударяет предметами друг о друга.</item>
+        <item>Катает мяч по полу.</item>
+        <item>Берет ложку за ручку.</item>
+        <item>Поднимает чашку двумя руками.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__11__">
+        <item>Показывает рукой на интересующий его предмет (указательный жест).</item>
+    </string-array>
+    <string-array name="fine_motor_skills__12__">
+        <item>Хлопает в ладоши. </item>
+        <item>Может удержать в руке карандаш, чиркает карандашом.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__12__18">
+        <item>Предпочитает действовать ведущей рукой.</item>
+        <item>Чертит каракули мелком или карандашом.</item>
+        <item>Перелистывает страницы детской книжки (по одной).</item>
+        <item>Отвинчивает и завинчивает крышки банок и бутылок.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__18__24">
+        <item>Чертит каракули круговыми движениями.</item>
+        <item>Строит башни из пяти и более кубиков.</item>
+        <item>Держит мелок несколькими пальцами, почти как взрослый.</item>
+    </string-array>
+    <string-array name="fine_motor_skills__24__30">
+        <item>Пытается резать маленькими ножницами.</item>
+        <item>Строит башни из восьми и более кубиков.</item>
+        <item>Рисует вертикальные и горизонтальные линии.</item>
+        <item>Делает постройки из кубиков (простой дом, мост).</item>
+    </string-array>
+    <string-array name="fine_motor_skills__30__36">
+        <item>Рисует полный круг, две пересекающиеся линии.</item>
+        <item>Кладет на место фрагменты складной картинки.</item>
+    </string-array>
+    <string-array name="social_development__1__">
+        <item>Криком и плачем сообщает о том, что проголодался, что ему больно, о своем недовольстве.</item>
+        <item>Успокаивается, когда берут на руки, ласково разговаривают, кормят грудью.</item>
+    </string-array>
+    <string-array name="social_development__2__">
+        <item>Улыбается в ответ на вашу улыбку.</item>
+    </string-array>
+    <string-array name="social_development__3__">
+        <item>Активно двигает ручками и ножками, смеется, когда с ним ласково разговаривают (комплекс оживления).</item>
+        <item>Узнает знакомых взрослых.</item>
+        <item>Следит взглядом за движущимися людьми.</item>
+    </string-array>
+    <string-array name="social_development__4__">
+        <item>Рассматривает себя в зеркале.</item>
+        <item>Услышав свое имя, поворачивается.</item>
+        <item>Плачет, когда остается в одиночестве.</item>
+        <item>Громко смеется, когда взрослый забавляет его.</item>
+        <item>Радуется, когда с ним играют.</item>
+    </string-array>
+    <string-array name="social_development__5__">
+        <item>Узнает знакомых взрослых и протягивает к ним ручки.</item>
+        <item>Смеется, когда родители строят рожицы.</item>
+        <item>Перестает плакать, когда с ним разговаривают.</item>
+        <item>Поворачивается в сторону говорящего.</item>
+    </string-array>
+    <string-array name="social_development__6__">
+        <item>Незнакомцы вызывают настороженность.</item>
+        <item>Плачет, когда забирают игрушку.</item>
+        <item>Протягивает руки, чтобы его взяли на руки.</item>
+    </string-array>
+    <string-array name="social_development__7__">
+        <item>Показывает родителям любовь, прижимаясь к ним.</item>
+        <item>Различает ласковую и строгую интонации и выражения лица.</item>
+        <item>Играет "в прятки" с платком.</item>
+    </string-array>
+    <string-array name="social_development__8__">
+        <item>Плачет, когда мама или папа уходят.</item>
+        <item>Наблюдает за взрослыми.</item>
+    </string-array>
+    <string-array name="social_development__9__">
+        <item>Плачет или сердится, если его ругают.</item>
+        <item>Появляются первые предпочтения.</item>
+        <item>Смеется, увидев близкого взрослого.</item>
+    </string-array>
+    <string-array name="social_development__10__">
+        <item>Понимает, когда взрослый прощается с ним.</item>
+        <item>Обнимает маму.</item>
+        <item>Начинает понимать, когда его хвалят.</item>
+    </string-array>
+    <string-array name="social_development__11__">
+        <item>Подражает действиям родителей (пока-пока, но-но-но).</item>
+        <item>Прерывает действие, за которое его поругали.</item>
+    </string-array>
+    <string-array name="social_development__12__">
+        <item>Повторяет действия и движения, вызывающие смех мамы.</item>
+        <item>Целует родителей.</item>
+        <item>С удовольствием изучает себя в зеркале, улыбается своему отражению, играет с ним.</item>
+    </string-array>
+    <string-array name="social_development__12__18">
+        <item>Просит содействия в чем-либо.</item>
+        <item>Начинает помогать в домашних делах.</item>
+        <item>Играет вместе с другими детьми.</item>
+    </string-array>
+    <string-array name="social_development__18__24">
+        <item>Иногда говорит нет, если пристают.</item>
+        <item>Обычно правильно реагирует на замечания.</item>
+        <item>Проявляет привязанность к другим детям.</item>
+        <item>Укладывает спать рядом с собой любимую игрушку.</item>
+        <item>Сочувствует другим детям, старается помочь и утешить.</item>
+    </string-array>
+    <string-array name="social_development__24__30">
+        <item>Выражает жалобы словами.</item>
+        <item>Здоровается.</item>
+        <item>Говорит: "Посмотри", желая привлечь внимание.</item>
+        <item>Играет в активные игры с другими детьми.</item>
+        <item>Предлагает свою помощь другим.</item>
+    </string-array>
+    <string-array name="social_development__30__36">
+        <item>Извиняется, сделав что-нибудь нехорошее.</item>
+        <item>Обычно выполняет указания во время игры с другими малышами и ждет своей очереди.</item>
+    </string-array>
+    <string-array name="speech_development__1__">
+        <item>Криком и плачем сообщает о неприятных ощущениях.</item>
+        <item>К концу месяца издает звуки типа "ах", "эх", "ух".</item>
+    </string-array>
+    <string-array name="speech_development__1_5__">
+        <item>Гулит.</item>
+    </string-array>
+    <string-array name="speech_development__2__">
+        <item>Усиливает спонтанное звукообразование.</item>
+        <item>"Воркует", когда с ним разговаривают.</item>
+    </string-array>
+    <string-array name="speech_development__3__">
+        <item>Может издавать три различных звука.</item>
+        <item>Появляются различные типы крика, отражающие голод, боль, усталость.</item>
+    </string-array>
+    <string-array name="speech_development__4__">
+        <item>Воркует и пищит, пытаясь привлечь внимание.</item>
+        <item>Радуется, когда издает звуки.</item>
+        <item>Громко смеется, когда к нему обращаются.</item>
+    </string-array>
+    <string-array name="speech_development__5__">
+        <item>Болтает сам с собой, четко разделяя слоги.</item>
+    </string-array>
+    <string-array name="speech_development__6__">
+        <item>Воркует, лепечет, издаёт радостные крики.</item>
+    </string-array>
+    <string-array name="speech_development__7__">
+        <item>Лепечет слоги "ла", "ва", "ма", "ба", "на".</item>
+        <item>Стремится привлечь внимания определёнными звуками.</item>
+    </string-array>
+    <string-array name="speech_development__8__">
+        <item>Повторяет слоги "ма-ма", "па-па", "та-та".</item>
+        <item>Подражает различным звукам.</item>
+    </string-array>
+    <string-array name="speech_development__9__">
+        <item>Невнятно произносит до восьми различных слогов.</item>
+    </string-array>
+    <string-array name="speech_development__10__">
+        <item>Лепет становится разнообразнее.</item>
+        <item>Говорит "мама" и "папа".</item>
+        <item>Повторяет звуки за взрослым.</item>
+        <item>Реагирует на свое имя и на просьбу "дай мне".</item>
+    </string-array>
+    <string-array name="speech_development__11__">
+        <item>Произносит первое осмысленное слово.</item>
+        <item>Понимает запрет.</item>
+    </string-array>
+    <string-array name="speech_development__12__">
+        <item>Говорит два осмысленных слова на "детском языке".</item>
+        <item>На просьбу "принеси мне игрушку" ищет, находит и приносит.</item>
+    </string-array>
+    <string-array name="speech_development__12__18">
+        <item>Говорит на менее двух слов, помимо "мама" и "папа".</item>
+        <item>Отвечает на вопрос: "Как говорит собачка, киска?"</item>
+        <item>Употребляет, по крайней мере, пять слов для обозначения различных предметов.</item>
+        <item>По просьбе взрослых показывает нос, рот, руки или ноги.</item>
+        <item>Знает предлог "на" и "с".</item>
+        <item>Выполняет указания, состоящие из двух частей, например: "Пойди к себе в комнату и принеси мне…"</item>
+        <item>Понимает значение, по крайней мере, трех из предлогов, указывающих положение предметов: "в", "на", "под", "у", "возле".</item>
+    </string-array>
+    <string-array name="speech_development__18__24">
+        <item>Называет несколько знакомых предметов в книжке с картинками.</item>
+        <item>Употребляет не менее десяти слов.</item>
+        <item>Правильно отвечает "да" или "нет" в ответ на простые вопросы.</item>
+        <item>Если предмет не нравится, говорит о нем: "Плохой", "Кака" и т.п.</item>
+        <item>Понимает значение слов "вверх" и "вниз", "один" (дает по просьбе именно один предмет), "все".</item>
+        <item>Определяет один цвет по названию.</item>
+    </string-array>
+    <string-array name="speech_development__24__30">
+        <item>Просит : "Еще", "Еще один".</item>
+        <item>Говорит "не надо", "не буду" и т.д.</item>
+        <item>Употребляет, по крайней мере, одно из следующих слов: "я", "ты", "он", "она", "оно", "мне", "меня". </item>
+        <item>Говорит предложениями из двух, трех и более слов.</item>
+        <item>Описывает действие, изображенное на картинке.</item>
+        <item>Говорит о своих вещах: "мой", "моя", "моё".</item>
+        <item>Употребляет глаголы в прошедшем времени, например: "Машинка упала".</item>
+        <item>Проговаривает свое имя.</item>
+        <item>Показывает или называет больший из двух предметов.</item>
+        <item>Понимает не менее 6 слов, указывающих положение предметов: "в", "над", "на", "под", "у", "возле", "сверху", "снизу", "выше", "ниже".</item>
+        <item>Правильно определяет пол других детей (мальчик или девочка).</item>
+    </string-array>
+    <string-array name="speech_development__30__36">
+        <item>Задает вопросы, начинающиеся со слов "что", "где", "почему", "когда", "как".</item>
+        <item>Использует существительные не только в именительном падеже.</item>
+        <item>Употребляет слова во множественном числе (окончание -и или -ы), глаголы в будущем времени.</item>
+        <item>Использует слова "хороший" и "плохой".</item>
+        <item>Отвечает на вопросы типа: "Что делают с печеньем?"</item>
+        <item>Знает свой возраст.</item>
+        <item>Правильно употребляет слова "быстро", "быстрый", "медленно", "медленный".</item>
+        <item>Говорит о том, что должно произойти.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__3__">
+        <item>Пьет с ложечки и открывает рот, увидев ее.</item>
+        <item>Умеет есть с ложки.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__4__5">
+        <item>Когда сосет из бутылочки, держит ее обеими руками.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__6__">
+        <item>Может снять шапку.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__7__">
+        <item>Держит в руке и кусает печенье.</item>
+        <item>Сам подносит бутылку ко рту.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__8__">
+        <item>Пьет из чашки.</item>
+        <item>Самостоятельно ест небольшие кусочки пищи.</item>
+        <item>Умеет стаскивать носок с ноги.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__9__">
+        <item>Ест пальчиками.</item>
+        <item>Помогает одеваться, просовывая руки в рукава.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__10__">
+        <item>Поднимает чашку двумя руками.</item>
+        <item>Берет ложку за ручку.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__11__">
+        <item>Пытается самостоятельно пить из чашки.</item>
+        <item>Самостоятельно ест сухарик.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__12__">
+        <item>Самостоятельно пьет из чашки.</item>
+        <item>Пробует самостоятельно есть ложкой.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__12__18">
+        <item>Снимает туфли и носки.</item>
+        <item>Пользуется маленьким ведерком или емкостью для переноски вещей.</item>
+        <item>Открывая дверь, поворачивает ручку и тянет.</item>
+        <item>Вытирает пролитую жидкость тряпкой или губкой.</item>
+        <item>Подает маме или папе пустую тарелку.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__18__24">
+        <item>Самостоятельно снимает расстегнутую рубашку.</item>
+        <item>Расстёгивает молнии.</item>
+        <item>Моет и вытирает руки.</item>
+        <item>Ест вилкой и ложкой, почти не разливая.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__24__30">
+        <item>Сам умывает лицо и чистит зубы.</item>
+        <item>Наливает жидкость в чашку, не проливая.</item>
+    </string-array>
+    <string-array name="self_dependence_skills__30__36">
+        <item>Надевает рубашку самостоятельно.</item>
+        <item>Моется в ванне почти без помощи.</item>
+        <item>Правильно надевает туфли (правую — на правую ногу, левую — на левую).</item>
+    </string-array>
+</resources>

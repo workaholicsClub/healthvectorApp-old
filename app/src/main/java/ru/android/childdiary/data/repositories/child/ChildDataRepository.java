@@ -11,10 +11,11 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.calendar.CleanUpDbService;
-import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.child.ChildRepository;
+import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.child.requests.DeleteChildResponse;
+import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
@@ -74,8 +75,8 @@ public class ChildDataRepository implements ChildRepository {
     }
 
     @Override
-    public Observable<Child> add(@NonNull Child child) {
-        return childDbService.add(child);
+    public Observable<Child> add(@NonNull Child child, @NonNull List<ConcreteAchievement> concreteAchievements) {
+        return childDbService.add(child, concreteAchievements);
     }
 
     @Override

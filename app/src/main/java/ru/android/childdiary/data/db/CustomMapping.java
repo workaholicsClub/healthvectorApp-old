@@ -2,6 +2,7 @@ package ru.android.childdiary.data.db;
 
 import io.requery.android.DefaultMapping;
 import io.requery.sql.Platform;
+import ru.android.childdiary.data.db.converters.AchievementTypeEnumConverter;
 import ru.android.childdiary.data.db.converters.BreastEnumConverter;
 import ru.android.childdiary.data.db.converters.DiaperStateEnumConverter;
 import ru.android.childdiary.data.db.converters.EventTypeEnumConverter;
@@ -19,6 +20,7 @@ import ru.android.childdiary.data.db.converters.TimeUnitEnumConverter;
 public class CustomMapping extends DefaultMapping {
     public CustomMapping(Platform platform) {
         super(platform);
+        addConverter(new AchievementTypeEnumConverter());
         addConverter(new BreastEnumConverter());
         addConverter(new DiaperStateEnumConverter());
         addConverter(new EventTypeEnumConverter());

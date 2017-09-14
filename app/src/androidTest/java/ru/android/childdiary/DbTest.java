@@ -96,7 +96,7 @@ public class DbTest {
                 medicineMapper, medicineMeasureMapper, repeatParametersMapper);
         AchievementMapper achievementMapper = new AchievementMapper();
         ConcreteAchievementMapper concreteAchievementMapper = new ConcreteAchievementMapper(childMapper, achievementMapper);
-        childDbService = new ChildDbService(dataStore, childMapper, concreteAchievementMapper, achievementMapper);
+        childDbService = new ChildDbService(dataStore, childMapper, concreteAchievementMapper);
         cleanUpDbService = new CleanUpDbService(dataStore, doctorVisitMapper, medicineTakingMapper);
         antropometryDbService = new AntropometryDbService(dataStore, antropometryMapper);
     }
@@ -179,7 +179,7 @@ public class DbTest {
 
     private Child add(Child item) {
         List<Child> inserted = new ArrayList<>();
-        childDbService.add(item)
+        childDbService.add(item, Collections.emptyList())
                 .doOnNext(this::logOnNextInsert)
                 .doOnNext(inserted::add)
                 .doOnError(this::logOnErrorInsert)
