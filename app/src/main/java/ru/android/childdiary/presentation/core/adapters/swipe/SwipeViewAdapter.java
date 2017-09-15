@@ -14,7 +14,7 @@ public abstract class SwipeViewAdapter<
         SL extends SwipeActionListener<VH>,
         IL extends ItemActionListener<T>>
         extends BaseRecyclerViewAdapter<T, VH>
-        implements SwipeActionListener<VH> {
+        implements SwipeActionListener<VH>, SwipeController {
     protected final IL itemActionListener;
     private final SwipeManager swipeManager;
 
@@ -42,14 +42,17 @@ public abstract class SwipeViewAdapter<
         swipeManager.closeAllItems();
     }
 
+    @Override
     public void closeAllItems() {
         swipeManager.closeAllItems();
     }
 
+    @Override
     public void setFabController(@Nullable FabController fabController) {
         swipeManager.setFabController(fabController);
     }
 
+    @Override
     public void updateFabState() {
         swipeManager.updateFabState();
     }

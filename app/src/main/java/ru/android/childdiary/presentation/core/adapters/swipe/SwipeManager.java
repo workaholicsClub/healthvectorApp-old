@@ -9,21 +9,23 @@ import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.Getter;
 import lombok.val;
 
-final class SwipeManager {
+public final class SwipeManager implements SwipeController {
     private static final int INVALID_POSITION = -1;
     private final Set<WeakReference<SwipeLayout>> shownLayouts = new HashSet<>();
     private final Set<Integer> openedOrOpeningPositions = new HashSet<>();
     @Nullable
     private FabController fabController;
+    @Getter
     private int openPosition = INVALID_POSITION;
 
     public SwipeManager(@Nullable FabController fabController) {
         this.fabController = fabController;
     }
 
-    public void bindViewHolder(SwipeViewHolder viewHolder, int position) {
+    public void bindViewHolder(SwipeLayoutContainer viewHolder, int position) {
         SwipeLayout swipeLayout = viewHolder.getSwipeLayout();
         ValueBox valueBox;
         if (swipeLayout.getTag() == null) {
@@ -54,6 +56,7 @@ final class SwipeManager {
         }
     }
 
+    @Override
     public void closeAllItems() {
         openPosition = INVALID_POSITION;
         openedOrOpeningPositions.clear();
@@ -69,6 +72,7 @@ final class SwipeManager {
         showFabIfPossible();
     }
 
+    @Override
     public void setFabController(@Nullable FabController fabController) {
         if (this.fabController != null && fabController == null) {
             this.fabController.hideFabBar();
@@ -77,6 +81,7 @@ final class SwipeManager {
         updateFabState();
     }
 
+    @Override
     public void updateFabState() {
         if (hasOpenedItems()) {
             hideFab();

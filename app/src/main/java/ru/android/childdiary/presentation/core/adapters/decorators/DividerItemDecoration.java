@@ -18,11 +18,15 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private final boolean useFooter;
 
     public DividerItemDecoration(Context context, BaseRecyclerViewAdapter adapter) {
+        this(context, adapter.paintDividers(), adapter.useFooter());
+    }
+
+    public DividerItemDecoration(Context context, boolean paintDividers, boolean useFooter) {
         this.divider = ContextCompat.getDrawable(context, R.drawable.divider);
         this.dividerPadding = context.getResources().getDimensionPixelSize(R.dimen.divider_padding);
         this.extraPadding = context.getResources().getDimensionPixelSize(R.dimen.base_margin);
-        this.paintDividers = adapter.paintDividers();
-        this.useFooter = adapter.useFooter();
+        this.paintDividers = paintDividers;
+        this.useFooter = useFooter;
     }
 
     @Override

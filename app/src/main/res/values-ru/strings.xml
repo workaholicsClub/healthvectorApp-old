@@ -309,7 +309,6 @@
     <string name="validation_antropometry_invalid_weight">Некорректное значение веса</string>
     <string name="achievement">Достижение</string>
     <string name="comment">Комментарий</string>
-    <string name="fill_achievement_date">Укажите дату достижения</string>
     <string name="child_profile">Профиль ребенка</string>
     <string name="add_food">Добавить прикорм</string>
     <string name="add_measure_unit">Добавить единицу измерения</string>

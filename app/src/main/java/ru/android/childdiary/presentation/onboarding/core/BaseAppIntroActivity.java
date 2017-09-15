@@ -91,7 +91,7 @@ public abstract class BaseAppIntroActivity extends BaseMvpActivity {
     }
 
     private void updateDotIndicators() {
-        for (int i = 0; i < dotIndicators.size(); i++) {
+        for (int i = 0; i < dotIndicators.size(); ++i) {
             boolean isCurrent = i == currentlySelectedItem;
             @DrawableRes int drawableId = isCurrent ? R.drawable.dot_indicator_selected : R.drawable.dot_indicator_normal;
             Drawable drawable = ContextCompat.getDrawable(this, drawableId);

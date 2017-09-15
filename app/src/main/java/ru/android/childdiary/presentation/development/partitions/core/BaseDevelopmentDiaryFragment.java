@@ -12,7 +12,7 @@ import butterknife.BindView;
 import ru.android.childdiary.R;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
-import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
+import ru.android.childdiary.presentation.core.adapters.swipe.SwipeController;
 
 public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiaryView> extends AppPartitionFragment
         implements BaseDevelopmentDiaryView {
@@ -31,20 +31,14 @@ public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiar
     @Nullable
     protected FabController fabController;
 
-    public abstract SwipeViewAdapter getAdapter();
-
     protected abstract BaseDevelopmentDiaryPresenter<V> getPresenter();
+
+    public abstract SwipeController getAdapter();
 
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {
         return R.layout.fragment_app_partition_with_list;
-    }
-
-    @Override
-    protected void themeChanged() {
-        super.themeChanged();
-        getAdapter().setSex(getSex());
     }
 
     @Override

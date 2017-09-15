@@ -10,23 +10,28 @@ import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Observable;
 import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.AchievementType;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
-import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementActionListener;
+import ru.android.childdiary.presentation.development.partitions.achievements.adapters.AchievementGroup;
 import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementAdapter;
+import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementItemActionListener;
 import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.achievements.edit.EditConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 import ru.android.childdiary.utils.HtmlUtils;
+import ru.android.childdiary.utils.strings.AchievementUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<ConcreteAchievementsView>
-        implements ConcreteAchievementsView, ConcreteAchievementActionListener, HtmlUtils.OnLinkClickListener {
+        implements ConcreteAchievementsView, HtmlUtils.OnLinkClickListener, ConcreteAchievementItemActionListener {
     private static final String LINK_ADD = "add";
 
     @Getter
@@ -34,15 +39,15 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     ConcreteAchievementsPresenter presenter;
 
     @Getter
-    ConcreteAchievementAdapter adapter;
+    private ConcreteAchievementAdapter adapter;
 
     @Override
     protected void setupUi() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new ConcreteAchievementAdapter(getContext(), this, fabController);
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), adapter);
+        adapter = new ConcreteAchievementAdapter(getContext(), Collections.emptyList(), this, fabController);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), true, true);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
@@ -55,6 +60,12 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     }
 
     @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        adapter.setSex(getSex());
+    }
+
+    @Override
     public void showConcreteAchievementsState(@NonNull ConcreteAchievementsState state) {
         progressBar.setVisibility(View.GONE);
 
@@ -62,8 +73,18 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
         showChild(child);
 
         List<ConcreteAchievement> concreteAchievements = state.getConcreteAchievements();
-        adapter.setItems(concreteAchievements);
-        adapter.setFabController(fabController);
+        List<AchievementGroup> groups = Observable.fromArray(AchievementType.values())
+                .map(achievementType -> {
+                    List<ConcreteAchievement> children = Observable.fromIterable(concreteAchievements)
+                            .filter(concreteAchievement -> concreteAchievement.getAchievementType() == achievementType)
+                            .toList()
+                            .blockingGet();
+                    return new AchievementGroup(AchievementUtils.toString(getContext(), achievementType), children);
+                })
+                .toList()
+                .blockingGet();
+        adapter = new ConcreteAchievementAdapter(getContext(), groups, this, fabController);
+        recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(concreteAchievements.isEmpty() ? View.GONE : View.VISIBLE);
 
         textViewIntention.setVisibility(concreteAchievements.isEmpty() ? View.VISIBLE : View.GONE);

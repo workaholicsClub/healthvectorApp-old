@@ -16,6 +16,7 @@
     <string name="calendar_selected_date_format">%1$d %2$s</string>
     <string name="medicine_measure_format">%1$s %2$s</string>
     <string name="two_values">%1$s • %2$s</string>
+    <string name="from_value_to_value">%1$s — %2$s</string>
     <string name="no_exercises_format">
         <![CDATA[
             %1$s

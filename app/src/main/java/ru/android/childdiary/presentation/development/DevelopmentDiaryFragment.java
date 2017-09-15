@@ -27,7 +27,7 @@ import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.PagesAdapter;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
-import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
+import ru.android.childdiary.presentation.core.adapters.swipe.SwipeController;
 import ru.android.childdiary.presentation.development.partitions.achievements.ConcreteAchievementsFragment;
 import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListFragment;
@@ -107,7 +107,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     }
 
     private void updateSwipeLayouts(int position) {
-        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        SwipeController adapter = getSwipeViewAdapter(position);
         if (adapter != null) {
             adapter.updateFabState();
         } else {
@@ -116,7 +116,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     }
 
     private void closeAllItems(int position) {
-        SwipeViewAdapter adapter = getSwipeViewAdapter(position);
+        SwipeController adapter = getSwipeViewAdapter(position);
         if (adapter != null) {
             adapter.closeAllItems();
         } else {
@@ -125,7 +125,7 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
     }
 
     @Nullable
-    private SwipeViewAdapter getSwipeViewAdapter(int position) {
+    private SwipeController getSwipeViewAdapter(int position) {
         AppPartitionFragment fragment = getSelectedPage(position);
         return fragment instanceof BaseDevelopmentDiaryFragment
                 ? ((BaseDevelopmentDiaryFragment) fragment).getAdapter()

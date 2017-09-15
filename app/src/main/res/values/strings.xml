@@ -309,7 +309,6 @@
     <string name="validation_antropometry_invalid_weight">Incorrect weight</string>
     <string name="achievement">Achievement</string>
     <string name="comment">Comment</string>
-    <string name="fill_achievement_date">Add date of achievement</string>
     <string name="child_profile">Child’s profile</string>
     <string name="add_food">Add food</string>
     <string name="add_measure_unit">Add measure unit</string>

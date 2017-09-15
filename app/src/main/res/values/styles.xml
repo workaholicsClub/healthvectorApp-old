@@ -147,6 +147,10 @@
         <item name="fontPath">@string/font_path_regular</item>
     </style>
 
+    <style name="ItemTitleTextAppearance.Bold">
+        <item name="fontPath">@string/font_path_bold</item>
+    </style>
+
     <style name="ItemDescriptionTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">@dimen/text_size_medium</item>

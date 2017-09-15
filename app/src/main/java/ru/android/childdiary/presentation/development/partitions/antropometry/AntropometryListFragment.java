@@ -37,7 +37,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     AntropometryListPresenter presenter;
 
     @Getter
-    AntropometryAdapter adapter;
+    private AntropometryAdapter adapter;
 
     @Override
     protected void setupUi() {
@@ -55,6 +55,12 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
                 LINK_ADD,
                 getString(R.string.add_antropometry));
         HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+    }
+
+    @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        adapter.setSex(getSex());
     }
 
     @Override
