@@ -73,7 +73,7 @@ public class ChildInteractor {
     public Observable<Child> add(@NonNull Child item) {
         return childValidator.validateObservable(item)
                 .flatMap(this::createImageFile)
-                .flatMap(child -> childRepository.add(child, achievementDataRepository.generatePredefinedConcreteAchievements(child)))
+                .flatMap(child -> childRepository.add(child, achievementDataRepository.generatePredefinedConcreteAchievements()))
                 .flatMap(this::setActiveChildObservable);
     }
 

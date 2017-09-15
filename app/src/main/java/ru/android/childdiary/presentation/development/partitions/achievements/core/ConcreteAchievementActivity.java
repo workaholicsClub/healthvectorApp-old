@@ -158,7 +158,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
     }
 
     private ConcreteAchievement buildConcreteAchievement(@NonNull ConcreteAchievement.ConcreteAchievementBuilder builder) {
-        if (!builder.build().getIsPredefined()) {
+        if (ObjectUtils.isFalse(builder.build().getIsPredefined())) {
             builder.nameUser(achievementNameView.getText());
         }
         builder

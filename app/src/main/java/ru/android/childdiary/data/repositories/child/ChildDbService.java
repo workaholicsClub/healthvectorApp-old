@@ -50,6 +50,7 @@ public class ChildDbService {
             Child result = DbUtils.insert(blockingEntityStore, child, childMapper);
             List<ConcreteAchievementEntity> concreteAchievementEntities = new ArrayList<>();
             for (ConcreteAchievement concreteAchievement : concreteAchievements) {
+                concreteAchievement = concreteAchievement.toBuilder().child(result).build();
                 ConcreteAchievementEntity concreteAchievementEntity = concreteAchievementMapper.mapToEntity(blockingEntityStore, concreteAchievement);
                 concreteAchievementEntities.add(concreteAchievementEntity);
             }

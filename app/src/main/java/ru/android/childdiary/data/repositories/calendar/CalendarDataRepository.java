@@ -74,7 +74,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
     private static final String KEY_NOTIFICATION_SOUND_INFO_PREFIX = "notification_sound_info_";
     private static final String KEY_DONT_NOTIFY_PREFIX = "dont_notify_";
     private static final String KEY_VIBRATION_PREFIX = "vibration_";
-    private static final Map<EventType, Integer> defaultNotifyTimeValues = new HashMap<EventType, Integer>() {{
+    private static final Map<EventType, Integer> DEFAULT_NOTIFY_TIME_VALUES = new HashMap<EventType, Integer>() {{
         put(EventType.DIAPER, 5);
         put(EventType.FEED, 30);
         put(EventType.OTHER, 10);
@@ -436,12 +436,12 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
 
     private Observable<Integer> getNotifyTimeInMinutes(@NonNull EventType eventType) {
         String key = KEY_NOTIFY_TIME_PREFIX + eventType;
-        int defaultValue = defaultNotifyTimeValues.get(eventType);
+        int defaultValue = DEFAULT_NOTIFY_TIME_VALUES.get(eventType);
         return preferences.getInteger(key, defaultValue).asObservable();
     }
 
     private Observable<Integer> getNotifyTimeInMinutesOnce(@NonNull EventType eventType) {
-        int defaultValue = defaultNotifyTimeValues.get(eventType);
+        int defaultValue = DEFAULT_NOTIFY_TIME_VALUES.get(eventType);
         return getNotifyTimeInMinutes(eventType).first(defaultValue).toObservable();
     }
 
