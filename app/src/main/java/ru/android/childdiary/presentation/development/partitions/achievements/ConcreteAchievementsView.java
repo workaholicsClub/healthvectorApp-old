@@ -24,9 +24,6 @@ public interface ConcreteAchievementsView extends BaseDevelopmentDiaryView {
     void confirmDelete(@NonNull ConcreteAchievement concreteAchievement);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void deletionRestrictedAchievement();
-
-    @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToConcreteAchievementAdd(@NonNull Child child, @NonNull ConcreteAchievement defaultConcreteAchievement);
 
     @StateStrategyType(OneExecutionStateStrategy.class)

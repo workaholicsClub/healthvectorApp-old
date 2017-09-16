@@ -3,6 +3,8 @@ package ru.android.childdiary.presentation.development.partitions.achievements.e
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -30,6 +32,8 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
     protected final LayoutInflater inflater;
     private final ExpandableList expandableList;
     private final ExpandCollapseController expandCollapseController;
+    @Nullable
+    private RecyclerView recyclerView;
 
     @Setter
     private OnGroupClickListener onGroupClickListener;
@@ -151,6 +155,9 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
                 groupExpandCollapseListener.onGroupExpanded(getGroups().get(groupIndex));
             }
         }
+        if (recyclerView != null) {
+            new Handler().post(() -> recyclerView.invalidateItemDecorations());
+        }
     }
 
     /**
@@ -173,6 +180,9 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
                 int groupIndex = expandableList.getUnflattenedPosition(positionStart - 1).groupPos;
                 groupExpandCollapseListener.onGroupCollapsed(getGroups().get(groupIndex));
             }
+        }
+        if (recyclerView != null) {
+            new Handler().post(() -> recyclerView.invalidateItemDecorations());
         }
     }
 
@@ -222,6 +232,15 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
         return expandCollapseController.isGroupExpanded(group);
     }
 
+    public boolean[] getExpandedGroupIndexes() {
+        return expandableList.expandedGroupIndexes;
+    }
+
+    public void setExpandedGroupIndexes(boolean[] indexes) {
+        expandableList.expandedGroupIndexes = indexes;
+        notifyDataSetChanged();
+    }
+
     /**
      * Stores the expanded state map across state loss.
      * <p>
@@ -231,12 +250,11 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
      * This will make sure to add the expanded state map as an extra to the
      * instance state bundle to be used in {@link #onRestoreInstanceState(Bundle)}.
      *
-     * @param savedInstanceState The {@code Bundle} into which to store the
-     *                           expanded state map
+     * @param outState The {@code Bundle} into which to store the
+     *                 expanded state map
      */
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // TODO useless?
-        savedInstanceState.putBooleanArray(KEY_EXPAND_STATE_MAP, expandableList.expandedGroupIndexes);
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBooleanArray(KEY_EXPAND_STATE_MAP, expandableList.expandedGroupIndexes);
     }
 
     /**
@@ -310,6 +328,18 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
      * @param group        The {@link ExpandableGroup} to be used to bind data to this {@link GVH}
      */
     public abstract void onBindGroupViewHolder(GVH holder, int flatPosition, ExpandableGroup group);
+
+    @Override
+    public final void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public final void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
+    }
 
     private static class FooterViewHolder extends RecyclerView.ViewHolder {
         public FooterViewHolder(View itemView) {

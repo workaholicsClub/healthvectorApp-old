@@ -29,7 +29,7 @@ public abstract class AddValueDialogFragment<P extends AddValueDialogArguments, 
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(getMaxLength())});
 
         editText.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);

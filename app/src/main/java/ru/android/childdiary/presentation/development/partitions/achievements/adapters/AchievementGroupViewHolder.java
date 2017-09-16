@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.development.partitions.achievements.a
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,15 +29,11 @@ public class AchievementGroupViewHolder extends GroupViewHolder {
 
     @Override
     public void expand() {
-        super.expand();
-        imageView.clearAnimation();
-        ViewCompat.animate(imageView).rotation(180).start();
+        imageView.setImageResource(R.drawable.arrow_up_black);
     }
 
     @Override
     public void collapse() {
-        super.collapse();
-        imageView.clearAnimation();
-        ViewCompat.animate(imageView).rotation(0).start();
+        imageView.setImageResource(R.drawable.arrow_down_black);
     }
 }

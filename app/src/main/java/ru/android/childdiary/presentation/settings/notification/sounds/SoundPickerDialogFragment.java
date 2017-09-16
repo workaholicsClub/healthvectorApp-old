@@ -43,7 +43,7 @@ public class SoundPickerDialogFragment extends BaseMvpDialogFragment<SoundPicker
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
     }
 
     @NonNull

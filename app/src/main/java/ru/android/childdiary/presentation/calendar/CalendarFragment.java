@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.calendar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -74,7 +75,7 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         setupViewPager();
         hideFabBar();
     }

@@ -71,7 +71,7 @@ public class TestingQuestionFragment extends AppPartitionFragment {
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test, parameter));
         justifiedTextView.setText(question.getText());
     }

@@ -48,7 +48,7 @@ public class ParameterDialogFragment extends BaseMvpDialogFragment<ParameterDial
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         DomanTestParameter[] parameters = getParameters();
         parameterView.setValues(parameters);
         parameterView.setVisibility(parameters == null || parameters.length == 0 ? View.GONE : View.VISIBLE);

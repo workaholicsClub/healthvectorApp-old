@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 import ru.android.childdiary.R;
@@ -16,6 +17,10 @@ abstract class SpinnerItemAdapter<T, VH extends SpinnerItemViewHolder<T>> extend
 
     public SpinnerItemAdapter(Context context, @NonNull List<T> items) {
         super(context, items);
+    }
+
+    public SpinnerItemAdapter(Context context, @NonNull T[] items) {
+        super(context, Arrays.asList(items));
     }
 
     @Override

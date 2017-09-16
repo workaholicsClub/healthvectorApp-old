@@ -8,7 +8,8 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:overScrollMode="never" />
 
     <include layout="@layout/view_list_stuff" />
 </FrameLayout>

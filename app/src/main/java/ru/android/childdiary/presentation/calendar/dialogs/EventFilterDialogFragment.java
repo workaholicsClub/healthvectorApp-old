@@ -33,7 +33,7 @@ public class EventFilterDialogFragment extends BaseMvpDialogFragment<EventFilter
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
     }
 
     @NonNull

@@ -98,6 +98,7 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        logger.debug("onSaveInstanceState");
         Icepick.saveInstanceState(this, outState);
     }
 

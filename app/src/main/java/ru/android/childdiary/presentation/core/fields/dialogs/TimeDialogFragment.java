@@ -54,7 +54,7 @@ public class TimeDialogFragment extends BaseMvpDialogFragment<TimeDialogArgument
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         TimeUtils.Time time = TimeUtils.splitMinutes(dialogArguments.getMinutes()).build();
 
         numberPickerDays.setMinValue(0);

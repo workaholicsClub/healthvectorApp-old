@@ -32,7 +32,7 @@ public class DatePickerDialogFragment extends BaseMvpDialogFragment<DatePickerDi
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         LocalDate date = dialogArguments.getDate();
         Calendar calendar = Calendar.getInstance();
         if (date != null) {

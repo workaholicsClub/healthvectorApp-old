@@ -40,13 +40,13 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
     @Override
     public final void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setupUi();
+        setupUi(savedInstanceState);
         themeChanged();
         showSelectedDate(selectedDate);
         showChild(child);
     }
 
-    protected abstract void setupUi();
+    protected abstract void setupUi(@Nullable Bundle savedInstanceState);
 
     @CallSuper
     protected void themeChanged() {

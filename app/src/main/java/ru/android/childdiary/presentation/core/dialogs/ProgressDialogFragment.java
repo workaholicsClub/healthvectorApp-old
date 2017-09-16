@@ -33,7 +33,7 @@ public class ProgressDialogFragment extends BaseMvpDialogFragment<ProgressDialog
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         Typeface typeface = FontUtils.getTypefaceRegular(getContext());
         title.setText(dialogArguments.getTitle());
         message.setText(dialogArguments.getMessage());

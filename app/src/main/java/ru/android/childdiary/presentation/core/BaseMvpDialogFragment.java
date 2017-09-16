@@ -75,7 +75,7 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
 
             ButterKnife.bind(this, view);
 
-            setupUi();
+            setupUi(savedInstanceState);
         }
 
         return createDialog(view, savedInstanceState);
@@ -84,6 +84,7 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        logger.debug("onSaveInstanceState");
         Icepick.saveInstanceState(this, outState);
     }
 
@@ -119,7 +120,7 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
     @LayoutRes
     protected abstract int getLayoutResourceId();
 
-    protected abstract void setupUi();
+    protected abstract void setupUi(@Nullable Bundle savedInstanceState);
 
     @NonNull
     protected abstract Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState);

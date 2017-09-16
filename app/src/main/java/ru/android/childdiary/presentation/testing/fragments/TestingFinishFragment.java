@@ -107,7 +107,7 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test, parameter));
         if (justifiedTextView != null) {
             justifiedTextView.setText(text);

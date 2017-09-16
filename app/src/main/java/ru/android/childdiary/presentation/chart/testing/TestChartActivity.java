@@ -74,7 +74,7 @@ public class TestChartActivity extends ChartActivity {
             return;
         }
         if (fragment.getTestType() == testType) {
-            setupToolbarTitle(TestUtils.toString(this, parameter));
+            setupToolbarTitle(TestUtils.testParameter(this, parameter));
         }
     }
 

@@ -63,7 +63,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
     }
 
     @NonNull

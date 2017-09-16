@@ -69,18 +69,7 @@ public class EditConcreteAchievementActivity extends ConcreteAchievementActivity
     }
 
     @Override
-    public void deletionRestrictedAchievement() {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restrict_delete_achievement_message)
-                .setPositiveButton(R.string.ok, null)
-                .show();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (ObjectUtils.isTrue(getItem().getIsPredefined())) {
-            return super.onCreateOptionsMenu(menu);
-        }
         removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.delete, menu);

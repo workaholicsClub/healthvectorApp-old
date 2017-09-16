@@ -19,7 +19,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewTests"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
 
             <include
                 android:id="@+id/line"
@@ -28,7 +29,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewTestResults"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </FrameLayout>

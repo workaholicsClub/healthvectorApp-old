@@ -17,6 +17,11 @@
         app:fieldIcon="@drawable/ic_name"
         app:fieldMaxLength="@integer/max_length_name" />
 
+    <ru.android.childdiary.presentation.core.fields.widgets.FieldAchievementTypeView
+        android:id="@+id/achievementTypeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
         android:id="@+id/dateView"
         android:layout_width="match_parent"

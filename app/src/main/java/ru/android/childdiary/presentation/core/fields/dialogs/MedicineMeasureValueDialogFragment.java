@@ -38,7 +38,7 @@ public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<Me
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         editText.setOnKeyboardHiddenListener(this::hideKeyboardAndClearFocus);
 
         editText.setOnFocusChangeListener((v, hasFocus) -> {

@@ -59,7 +59,7 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         dateFromView.setTitle(getString(R.string.filter_from_date));
         dateToView.setTitle(getString(R.string.filter_to_date));
 

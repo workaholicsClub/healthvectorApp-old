@@ -28,7 +28,7 @@ public class AlertDialogFragment extends BaseMvpDialogFragment<AlertDialogArgume
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
     }
 
     @NonNull

@@ -1,7 +1,9 @@
 package ru.android.childdiary.presentation.development.partitions.antropometry;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,7 +42,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     private AntropometryAdapter adapter;
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 

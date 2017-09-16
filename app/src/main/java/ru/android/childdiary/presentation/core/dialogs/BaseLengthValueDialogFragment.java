@@ -1,6 +1,8 @@
 package ru.android.childdiary.presentation.core.dialogs;
 
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -34,7 +36,7 @@ public abstract class BaseLengthValueDialogFragment<T extends BaseLengthValueDia
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         textView.setVisibility(TextUtils.isEmpty(dialogArguments.getDescription()) ? View.GONE : View.VISIBLE);
         textView.setText(dialogArguments.getDescription());
 

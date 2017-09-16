@@ -7,11 +7,10 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/soundIcon"
         android:layout_width="@dimen/field_icon_size"
         android:layout_height="@dimen/field_icon_size"
         android:scaleType="center"
-        android:src="@drawable/ic_sound" />
+        android:src="@drawable/ic_brain" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,7 +18,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="@string/notification_sound"
+        android:text="@string/category"
         android:textAppearance="@style/SecondaryTextAppearance"
         tools:ignore="Deprecated" />
 

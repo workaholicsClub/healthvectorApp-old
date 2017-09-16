@@ -321,7 +321,6 @@
     <string name="onboarding">Demo screens</string>
     <string name="day_start">Beginning of the day</string>
     <string name="day_finish">End of the day</string>
-    <string name="restrict_delete_achievement_message">Failed to remove obligatory achievements</string>
     <string name="intention_add_child_profile">Add child’s profile</string>
     <string name="app_intro_calendar">Plan your time and follow the child development</string>
     <string name="app_intro_achievements">Save important events of child development</string>
@@ -343,4 +342,5 @@
     <string name="site_format">Site: %s</string>
     <!-- %s - строка, ссылка на эл. почту -->
     <string name="email_format">E-mail: %s</string>
+    <string name="category">Category</string>
 </resources>

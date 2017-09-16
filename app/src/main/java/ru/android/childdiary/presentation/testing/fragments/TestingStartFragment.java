@@ -59,7 +59,7 @@ public class TestingStartFragment extends AppPartitionFragment {
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         justifiedTextView.setText(test.getDescription());
     }
 

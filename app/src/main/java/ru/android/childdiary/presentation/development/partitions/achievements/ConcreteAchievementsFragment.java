@@ -1,22 +1,29 @@
 package ru.android.childdiary.presentation.development.partitions.achievements;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.AchievementType;
+import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
@@ -27,12 +34,15 @@ import ru.android.childdiary.presentation.development.partitions.achievements.ad
 import ru.android.childdiary.presentation.development.partitions.achievements.edit.EditConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 import ru.android.childdiary.utils.HtmlUtils;
-import ru.android.childdiary.utils.strings.AchievementUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<ConcreteAchievementsView>
         implements ConcreteAchievementsView, HtmlUtils.OnLinkClickListener, ConcreteAchievementItemActionListener {
     private static final String LINK_ADD = "add";
+
+    @Inject
+    RxSharedPreferences preferences;
 
     @Getter
     @InjectPresenter
@@ -40,13 +50,23 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
     @Getter
     private ConcreteAchievementAdapter adapter;
+    private Bundle savedState;
+    private boolean paused;
 
     @Override
-    protected void setupUi() {
+    protected void injectFragment(ApplicationComponent component) {
+        component.inject(this);
+    }
+
+    @Override
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
         adapter = new ConcreteAchievementAdapter(getContext(), Collections.emptyList(), this, fabController);
+        adapter.setSex(getSex());
+        adapter.onRestoreInstanceState(savedInstanceState);
+        savedState = savedInstanceState;
         RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), true, true);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
@@ -57,6 +77,12 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
                 LINK_ADD,
                 getString(R.string.add_achievement));
         HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        adapter.onSaveInstanceState(outState);
     }
 
     @Override
@@ -79,11 +105,21 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
                             .filter(concreteAchievement -> concreteAchievement.getAchievementType() == achievementType)
                             .toList()
                             .blockingGet();
-                    return new AchievementGroup(AchievementUtils.toString(getContext(), achievementType), children);
+                    return new AchievementGroup(StringUtils.achievementType(getContext(), achievementType), children);
                 })
                 .toList()
                 .blockingGet();
         adapter = new ConcreteAchievementAdapter(getContext(), groups, this, fabController);
+        adapter.setSex(getSex());
+        if (paused) {
+            boolean[] indexes = readIndexes();
+            if (indexes != null) {
+                adapter.setExpandedGroupIndexes(indexes);
+            }
+            paused = false;
+        } else {
+            adapter.onRestoreInstanceState(savedState);
+        }
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(concreteAchievements.isEmpty() ? View.GONE : View.VISIBLE);
 
@@ -107,14 +143,6 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
                 .setPositiveButton(R.string.delete,
                         (dialog, which) -> presenter.forceDelete(concreteAchievement))
                 .setNegativeButton(R.string.cancel, null)
-                .show();
-    }
-
-    @Override
-    public void deletionRestrictedAchievement() {
-        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.restrict_delete_achievement_message)
-                .setPositiveButton(R.string.ok, null)
                 .show();
     }
 
@@ -150,5 +178,36 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     public void onResume() {
         super.onResume();
         adapter.closeAllItems(); // для одинакового поведения с Мед. данными
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveIndexes();
+        paused = true;
+    }
+
+    private void saveIndexes() {
+        boolean[] indexes = adapter.getExpandedGroupIndexes();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < indexes.length; ++i) {
+            sb.append(indexes[i]);
+            sb.append(i == indexes.length - 1 ? "" : ",");
+        }
+        preferences.getString("sdf").set(sb.toString());
+    }
+
+    private boolean[] readIndexes() {
+        String s = preferences.getString("sdf").get();
+        if (TextUtils.isEmpty(s)) {
+            return null;
+        }
+        String[] parts = s.split(",");
+        boolean[] indexes = new boolean[parts.length];
+        for (int i = 0; i < parts.length; ++i) {
+            boolean b = Boolean.parseBoolean(parts[i]);
+            indexes[i] = b;
+        }
+        return indexes;
     }
 }

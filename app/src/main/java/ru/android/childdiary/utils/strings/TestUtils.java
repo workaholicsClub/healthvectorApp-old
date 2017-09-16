@@ -19,7 +19,7 @@ import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
 
 public class TestUtils {
     @Nullable
-    public static String toString(Context context, @Nullable DomanTestParameter testParameter) {
+    public static String testParameter(Context context, @Nullable DomanTestParameter testParameter) {
         if (testParameter == null) {
             return null;
         }
@@ -42,7 +42,7 @@ public class TestUtils {
 
     public static String getTestTitle(Context context, @NonNull Test test, @Nullable DomanTestParameter testParameter) {
         if (test instanceof DomanTest) {
-            return toString(context, testParameter);
+            return testParameter(context, testParameter);
         }
         return test.getName();
     }

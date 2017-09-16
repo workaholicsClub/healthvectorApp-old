@@ -32,7 +32,7 @@ public class TimePickerDialogFragment extends BaseMvpDialogFragment<TimePickerDi
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         LocalTime time = dialogArguments.getTime();
         if (time == null) {
             time = LocalTime.now();

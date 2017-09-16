@@ -1,6 +1,8 @@
 package ru.android.childdiary.presentation.medical.filter.medicines;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -23,8 +25,8 @@ public class MedicineTakingFilterDialogFragment
     MedicineTakingFilterPresenter presenter;
 
     @Override
-    protected void setupUi() {
-        super.setupUi();
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
+        super.setupUi(savedInstanceState);
 
         textViewByDoctor.setVisibility(View.GONE);
         doctorTokenCompleteTextView.setVisibility(View.GONE);

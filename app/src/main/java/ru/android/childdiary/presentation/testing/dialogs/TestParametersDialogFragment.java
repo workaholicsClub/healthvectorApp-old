@@ -79,7 +79,7 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         dateView.setValue(LocalDate.now());
         updateAge();
         dateView.setFieldDialogListener(view -> {
@@ -175,7 +175,7 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
                                 @NonNull TestType testType,
                                 @NonNull TestParameters testParameters) {
         String dateStr = DateUtils.date(getContext(), date);
-        String parameterStr = TestUtils.toString(getContext(), testParameters.getParameter());
+        String parameterStr = TestUtils.testParameter(getContext(), testParameters.getParameter());
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setMessage(getString(R.string.date_already_used_dialog_text, dateStr, parameterStr))
                 .setPositiveButton(R.string.ok, null)

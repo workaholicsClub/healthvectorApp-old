@@ -24,6 +24,7 @@ import ru.android.childdiary.presentation.core.fields.dialogs.add.foodmeasure.Ad
 import ru.android.childdiary.presentation.core.images.ImagePickerPresenter;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.DevelopmentDiaryPresenter;
+import ru.android.childdiary.presentation.development.partitions.achievements.ConcreteAchievementsFragment;
 import ru.android.childdiary.presentation.development.partitions.achievements.ConcreteAchievementsPresenter;
 import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementPresenter;
@@ -349,6 +350,8 @@ public interface ApplicationComponent {
     void inject(MedicalDataFragment fragment);
 
     void inject(DevelopmentDiaryFragment fragment);
+
+    void inject(ConcreteAchievementsFragment fragment);
 
     void inject(SettingsFragment fragment);
 

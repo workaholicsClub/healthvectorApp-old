@@ -8,10 +8,10 @@
         <item>Do your child’s pupils constrict when you shine a flashlight in his eyes?</item>
         <item>Does your child follow a person’s movements or a beam of light in the dark with his eyes?</item>
         <item>How many familiar objects can your child identify within his reach (on the floor, in the play-pen, in the room)?</item>
-        <item>Do your child’s eyes properly align with each other in the daytime? Any signs of strabismus (cross-eye) unrelated to his condition like being tired, sick or anxious?</item>
+        <item>Do your child’s eyes properly align with each other in the daytime unrelated to his condition like being tired, sick or anxious (cross-eye)?</item>
         <item>Can your child differentiate between symbols of the same type (e.g. differences between letters or numbers)?</item>
         <item>Does your child know letters and numbers?</item>
-        <item>Does the child have any difficulty reading? Can they explain what they have just read?</item>
+        <item>The child doesn’t have any difficulty reading and they explain what they have just read.</item>
     </string-array>
     <string-array name="mental_audition_stages">
         <item>Does your child flinch at an unexpected or shrill sounds?</item>

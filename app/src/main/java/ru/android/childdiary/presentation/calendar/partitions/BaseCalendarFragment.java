@@ -3,6 +3,7 @@ package ru.android.childdiary.presentation.calendar.partitions;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -96,7 +97,7 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
     private TimerServiceConnection timerServiceConnection = new TimerServiceConnection(getContext(), this);
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         if (calendarHeader != null) {
             calendarTitle = calendarHeader.findViewById(R.id.title);
             calendarHeader.findViewById(R.id.left).setOnClickListener(v -> moveLeft());

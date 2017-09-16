@@ -36,6 +36,6 @@ public class FieldDomanTestParameterView extends FieldRadioView<DomanTestParamet
     @Nullable
     @Override
     protected String getTextForValue(@Nullable DomanTestParameter value) {
-        return TestUtils.toString(getContext(), value);
+        return TestUtils.testParameter(getContext(), value);
     }
 }

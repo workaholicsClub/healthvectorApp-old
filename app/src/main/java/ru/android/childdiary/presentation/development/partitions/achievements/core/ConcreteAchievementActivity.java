@@ -26,14 +26,17 @@ import io.reactivex.Observable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.AchievementType;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldAchievementTypeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
+import ru.android.childdiary.presentation.core.fields.widgets.FieldSpinnerView;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
@@ -45,7 +48,8 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementView> extends BaseMvpActivity
         implements ConcreteAchievementView, DatePickerDialog.OnDateSetListener,
-        FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener {
+        FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener,
+        FieldSpinnerView.FieldSpinnerListener<AchievementType> {
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
 
@@ -54,6 +58,9 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
 
     @BindView(R.id.achievementNameView)
     protected FieldEditTextWithImageAutocompleteView achievementNameView;
+
+    @BindView(R.id.achievementTypeView)
+    protected FieldAchievementTypeView achievementTypeView;
 
     @BindView(R.id.dateView)
     protected FieldDateView dateView;
@@ -73,6 +80,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        achievementTypeView.setFieldSpinnerListener(this);
         setupEditTextView(achievementNameView);
         setupEditTextView(noteWithPhotoView);
         dateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(),
@@ -144,10 +152,16 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         dateView.setValue(date);
     }
 
+    @Override
+    public void onSpinnerItemClick(FieldSpinnerView view, AchievementType item) {
+        achievementTypeView.setValue(item);
+    }
+
     protected abstract ConcreteAchievementPresenter<V> getPresenter();
 
     protected void showConcreteAchievement(@NonNull ConcreteAchievement concreteAchievement) {
         achievementNameView.setText(concreteAchievement.getName());
+        achievementTypeView.setValue(concreteAchievement.getAchievementType());
         dateView.setValue(concreteAchievement.getDate());
         noteWithPhotoView.setText(concreteAchievement.getNote());
         noteWithPhotoView.setImageFileName(concreteAchievement.getImageFileName());
@@ -162,6 +176,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
             builder.nameUser(achievementNameView.getText());
         }
         builder
+                .achievementType(achievementTypeView.getValue())
                 .date(dateView.getValue())
                 .note(noteWithPhotoView.getText())
                 .imageFileName(noteWithPhotoView.getImageFileName());

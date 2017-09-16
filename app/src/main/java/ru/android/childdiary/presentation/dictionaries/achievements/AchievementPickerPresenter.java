@@ -8,7 +8,6 @@ import com.arellomobile.mvp.InjectViewState;
 import javax.inject.Inject;
 
 import lombok.Getter;
-import ru.android.childdiary.data.repositories.core.exceptions.RestrictDeleteException;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.dictionaries.achievements.AchievementInteractor;
 import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
@@ -29,14 +28,5 @@ public class AchievementPickerPresenter extends BasePickerPresenter<Achievement,
     @Override
     protected boolean filter(@NonNull Achievement item, @Nullable String filter) {
         return StringUtils.starts(item.getName(), filter, true);
-    }
-
-    @Override
-    public void onUnexpectedError(Throwable e) {
-        if (e instanceof RestrictDeleteException) {
-            getViewState().deletionRestrictedAchievement();
-        } else {
-            super.onUnexpectedError(e);
-        }
     }
 }

@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.medical.partitions.visits;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -46,7 +47,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
     private DoctorVisitAdapter adapter;
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 

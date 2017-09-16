@@ -2,6 +2,7 @@ package ru.android.childdiary.presentation.medical;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -71,7 +72,7 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         setupViewPager();
         hideFabBar();
     }

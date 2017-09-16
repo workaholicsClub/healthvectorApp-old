@@ -44,7 +44,7 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
     }
 
     @Override
-    protected void setupUi() {
+    protected void setupUi(@Nullable Bundle savedInstanceState) {
         int years = dialogArguments.getAge() == null ? 0 : dialogArguments.getAge().getYearsPart();
         int months = dialogArguments.getAge() == null ? 0 : dialogArguments.getAge().getMonthsPart();
 
