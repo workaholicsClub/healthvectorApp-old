@@ -36,11 +36,12 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldAchievementTy
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldSpinnerView;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
+import ru.android.childdiary.presentation.development.partitions.achievements.dialogs.AchievementTypeDialogArguments;
+import ru.android.childdiary.presentation.development.partitions.achievements.dialogs.AchievementTypeDialogFragment;
 import ru.android.childdiary.presentation.medical.adapters.core.StringFilteredAdapter;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -49,9 +50,10 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementView> extends BaseMvpActivity
         implements ConcreteAchievementView, DatePickerDialog.OnDateSetListener,
         FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener,
-        FieldSpinnerView.FieldSpinnerListener<AchievementType> {
+        AchievementTypeDialogFragment.Listener {
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
+    private static final String TAG_ACHIEVEMENT_TYPE_PICKER = "ACHIEVEMENT_TYPE_PICKER";
 
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
@@ -80,7 +82,16 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        achievementTypeView.setFieldSpinnerListener(this);
+        achievementTypeView.setFieldDialogListener(view -> {
+            AchievementTypeDialogFragment dialogFragment = new AchievementTypeDialogFragment();
+            dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_ACHIEVEMENT_TYPE_PICKER,
+                    AchievementTypeDialogArguments.builder()
+                            .sex(getSex())
+                            .achievementType(achievementTypeView.getValue() == null
+                                    ? AchievementType.HEARING_AND_VISION
+                                    : achievementTypeView.getValue())
+                            .build());
+        });
         setupEditTextView(achievementNameView);
         setupEditTextView(noteWithPhotoView);
         dateView.setFieldDialogListener(v -> showDatePicker(TAG_DATE_PICKER, dateView.getValue(),
@@ -153,8 +164,8 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
     }
 
     @Override
-    public void onSpinnerItemClick(FieldSpinnerView view, AchievementType item) {
-        achievementTypeView.setValue(item);
+    public void onAchievementTypeSet(@NonNull AchievementType achievementType) {
+        achievementTypeView.setValue(achievementType);
     }
 
     protected abstract ConcreteAchievementPresenter<V> getPresenter();

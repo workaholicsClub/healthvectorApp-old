@@ -75,8 +75,10 @@ public abstract class FieldRadioView<T extends Enum<T>> extends LinearLayout imp
         texts.clear();
         radios.clear();
         removeAllViews();
-        View child = inflate(getContext(), getTitleLayoutResourceId(), null);
-        addView(child);
+        if (getTitleLayoutResourceId() != 0) {
+            View child = inflate(getContext(), getTitleLayoutResourceId(), null);
+            addView(child);
+        }
         T[] items = getItems();
         for (T value : items) {
             setupRadioItem(value);
