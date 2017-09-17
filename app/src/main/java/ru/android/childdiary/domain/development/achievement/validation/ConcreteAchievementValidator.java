@@ -26,11 +26,19 @@ public class ConcreteAchievementValidator extends Validator<ConcreteAchievement,
     public List<AchievementValidationResult> validate(@NonNull ConcreteAchievement concreteAchievement) {
         List<AchievementValidationResult> results = new ArrayList<>();
 
-        AchievementValidationResult result = new AchievementValidationResult(AchievementFieldType.CONCRETE_ACHIEVEMENT_NAME);
+        AchievementValidationResult result;
+
+        result = new AchievementValidationResult(AchievementFieldType.CONCRETE_ACHIEVEMENT_NAME);
         if (TextUtils.isEmpty(concreteAchievement.getName())) {
             result.addMessage(context.getString(R.string.enter_concrete_achievement_name));
         }
         results.add(result);
+
+        if (concreteAchievement.getAchievementType() == null) {
+            result = new AchievementValidationResult(null);
+            result.addMessage(context.getString(R.string.select_category));
+            results.add(result);
+        }
 
         return results;
     }

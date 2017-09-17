@@ -32,13 +32,16 @@ import ru.android.childdiary.presentation.development.partitions.achievements.ad
 import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementItemActionListener;
 import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.achievements.edit.EditConcreteAchievementActivity;
+import ru.android.childdiary.presentation.development.partitions.achievements.expandablerecyclerview.listeners.GroupExpandCollapseListener;
+import ru.android.childdiary.presentation.development.partitions.achievements.expandablerecyclerview.models.ExpandableGroup;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.strings.StringUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<ConcreteAchievementsView>
-        implements ConcreteAchievementsView, HtmlUtils.OnLinkClickListener, ConcreteAchievementItemActionListener {
+        implements ConcreteAchievementsView, HtmlUtils.OnLinkClickListener,
+        ConcreteAchievementItemActionListener, GroupExpandCollapseListener {
     private static final String LINK_ADD = "add";
 
     @Inject
@@ -51,7 +54,7 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     @Getter
     private ConcreteAchievementAdapter adapter;
     private Bundle savedState;
-    private boolean paused;
+    private boolean firstTime = true;
 
     @Override
     protected void injectFragment(ApplicationComponent component) {
@@ -64,6 +67,7 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
         recyclerView.setLayoutManager(layoutManager);
 
         adapter = new ConcreteAchievementAdapter(getContext(), Collections.emptyList(), this, fabController);
+        adapter.setGroupExpandCollapseListener(this);
         adapter.setSex(getSex());
         adapter.onRestoreInstanceState(savedInstanceState);
         savedState = savedInstanceState;
@@ -100,25 +104,24 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
         List<ConcreteAchievement> concreteAchievements = state.getConcreteAchievements();
         List<AchievementGroup> groups = Observable.fromArray(AchievementType.values())
-                .map(achievementType -> {
-                    List<ConcreteAchievement> children = Observable.fromIterable(concreteAchievements)
-                            .filter(concreteAchievement -> concreteAchievement.getAchievementType() == achievementType)
-                            .toList()
-                            .blockingGet();
-                    return new AchievementGroup(StringUtils.achievementType(getContext(), achievementType), children);
-                })
+                .flatMapSingle(achievementType -> Observable.fromIterable(concreteAchievements)
+                        .filter(concreteAchievement -> concreteAchievement.getAchievementType() == achievementType)
+                        .toList()
+                        .map(children -> new AchievementGroup(StringUtils.achievementType(getContext(), achievementType), children)))
+                .filter(achievementGroup -> achievementGroup.getItemCount() > 0)
                 .toList()
                 .blockingGet();
         adapter = new ConcreteAchievementAdapter(getContext(), groups, this, fabController);
+        adapter.setGroupExpandCollapseListener(this);
         adapter.setSex(getSex());
-        if (paused) {
+        if (firstTime) {
+            adapter.onRestoreInstanceState(savedState);
+            firstTime = false;
+        } else {
             boolean[] indexes = readIndexes();
             if (indexes != null) {
                 adapter.setExpandedGroupIndexes(indexes);
             }
-            paused = false;
-        } else {
-            adapter.onRestoreInstanceState(savedState);
         }
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(concreteAchievements.isEmpty() ? View.GONE : View.VISIBLE);
@@ -175,16 +178,19 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        adapter.closeAllItems(); // для одинакового поведения с Мед. данными
+    public void onGroupExpanded(ExpandableGroup group) {
+        saveIndexes();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onGroupCollapsed(ExpandableGroup group) {
         saveIndexes();
-        paused = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.closeAllItems(); // для одинакового поведения с Мед. данными
     }
 
     private void saveIndexes() {

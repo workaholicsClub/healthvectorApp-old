@@ -17,6 +17,7 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 import ru.android.childdiary.presentation.development.partitions.achievements.core.ConcreteAchievementActivity;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
@@ -46,7 +47,8 @@ public class AddConcreteAchievementActivity extends ConcreteAchievementActivity<
         buttonAdd.setVisibility(View.VISIBLE);
 
         unsubscribeOnDestroy(getPresenter().listenForDoneButtonUpdate(
-                achievementNameView.textObservable()
+                achievementNameView.textObservable(),
+                RxFieldValueView.valueChangeEvents(achievementTypeView)
         ));
     }
 

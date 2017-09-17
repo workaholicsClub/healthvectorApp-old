@@ -2,6 +2,7 @@ package ru.android.childdiary.data.repositories.development.achievement;
 
 import android.support.annotation.NonNull;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import ru.android.childdiary.domain.development.achievement.requests.DeleteConcr
 import ru.android.childdiary.domain.development.achievement.requests.DeleteConcreteAchievementResponse;
 import ru.android.childdiary.domain.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.development.achievement.requests.UpsertConcreteAchievementResponse;
+import ru.android.childdiary.utils.ObjectUtils;
 
 @Singleton
 public class ConcreteAchievementDataRepository implements ConcreteAchievementRepository {
@@ -27,7 +29,27 @@ public class ConcreteAchievementDataRepository implements ConcreteAchievementRep
 
     @Override
     public Observable<List<ConcreteAchievement>> getConcreteAchievements(@NonNull Child child) {
-        return concreteAchievementDbService.getConcreteAchievements(child);
+        return concreteAchievementDbService.getConcreteAchievements(child)
+                .map(this::sort);
+    }
+
+    private List<ConcreteAchievement> sort(@NonNull List<ConcreteAchievement> list) {
+        Collections.sort(list, (item1, item2) -> {
+            int result;
+            if (item1.getDate() == null && item2.getDate() == null) {
+                result = ObjectUtils.compare(item1.getFromAge(), item2.getFromAge());
+                if (result == 0) {
+                    result = ObjectUtils.compare(item1.getToAge(), item2.getToAge());
+                }
+            } else {
+                result = ObjectUtils.compare(item1.getDate(), item2.getDate());
+            }
+            if (result == 0) {
+                return item1.getName().compareTo(item2.getName());
+            }
+            return result;
+        });
+        return list;
     }
 
     @Override

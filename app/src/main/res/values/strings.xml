@@ -343,4 +343,5 @@
     <!-- %s - строка, ссылка на эл. почту -->
     <string name="email_format">E-mail: %s</string>
     <string name="category">Category</string>
+    <string name="select_category">Select category</string>
 </resources>

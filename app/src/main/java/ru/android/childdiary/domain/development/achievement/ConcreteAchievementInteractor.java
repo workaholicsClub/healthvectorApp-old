@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import ru.android.childdiary.data.repositories.core.images.ImagesDataRepository;
 import ru.android.childdiary.data.repositories.development.achievement.ConcreteAchievementDataRepository;
+import ru.android.childdiary.data.types.AchievementType;
 import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.core.images.ImageType;
 import ru.android.childdiary.domain.core.images.ImagesRepository;
@@ -25,6 +26,7 @@ import ru.android.childdiary.domain.development.achievement.requests.UpsertConcr
 import ru.android.childdiary.domain.development.achievement.requests.UpsertConcreteAchievementResponse;
 import ru.android.childdiary.domain.development.achievement.validation.AchievementValidationResult;
 import ru.android.childdiary.domain.development.achievement.validation.ConcreteAchievementValidator;
+import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 
 public class ConcreteAchievementInteractor {
     private final ConcreteAchievementRepository concreteAchievementRepository;
@@ -87,29 +89,37 @@ public class ConcreteAchievementInteractor {
     }
 
     public Observable<Boolean> controlDoneButton(
-            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
-        return nameObservable
-                .map(TextViewAfterTextChangeEvent::editable)
-                .map(Editable::toString)
-                .map(String::trim)
-                .map(name -> ConcreteAchievement.builder()
+            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable,
+            @NonNull FieldValueChangeEventsObservable<AchievementType> achievementTypeObservable) {
+        return Observable.combineLatest(
+                nameObservable
+                        .map(TextViewAfterTextChangeEvent::editable)
+                        .map(Editable::toString)
+                        .map(String::trim),
+                achievementTypeObservable,
+                (name, achievementTypeEvent) -> ConcreteAchievement.builder()
                         .nameUser(name)
+                        .achievementType(achievementTypeEvent.getValue())
                         .build())
-                .map(concreteAchievementValidator::validate)
+                .map(concreteAchievementValidator::validateOnUi)
                 .map(concreteAchievementValidator::isValid)
                 .distinctUntilChanged();
     }
 
     public Observable<List<AchievementValidationResult>> controlFields(
-            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
-        return nameObservable
-                .map(TextViewAfterTextChangeEvent::editable)
-                .map(Editable::toString)
-                .map(String::trim)
-                .map(name -> ConcreteAchievement.builder()
+            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable,
+            @NonNull FieldValueChangeEventsObservable<AchievementType> achievementTypeObservable) {
+        return Observable.combineLatest(
+                nameObservable
+                        .map(TextViewAfterTextChangeEvent::editable)
+                        .map(Editable::toString)
+                        .map(String::trim),
+                achievementTypeObservable,
+                (name, achievementTypeEvent) -> ConcreteAchievement.builder()
                         .nameUser(name)
+                        .achievementType(achievementTypeEvent.getValue())
                         .build())
-                .map(concreteAchievementValidator::validate);
+                .map(concreteAchievementValidator::validateOnUi);
     }
 
     public Observable<ConcreteAchievement> getDefaultConcreteAchievement(@NonNull Child child) {

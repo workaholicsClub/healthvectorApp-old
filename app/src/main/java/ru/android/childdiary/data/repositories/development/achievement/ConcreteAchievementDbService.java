@@ -44,7 +44,7 @@ public class ConcreteAchievementDbService {
         return dataStore.select(ConcreteAchievementEntity.class)
                 .where(ConcreteAchievementEntity.CHILD_ID.eq(child.getId()))
                 .orderBy(ConcreteAchievementEntity.CONCRETE_ACHIEVEMENT_DATE.desc(),
-                        ConcreteAchievementEntity.PREDEFINED.desc(), ConcreteAchievementEntity.ID) // TODO sort order
+                        ConcreteAchievementEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, concreteAchievementMapper))

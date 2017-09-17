@@ -122,7 +122,7 @@ public class ChildInteractor {
     }
 
     public Observable<List<ChildValidationResult>> controlFields(@NonNull Observable<Child> childObservable) {
-        return childObservable.map(childValidator::validate);
+        return childObservable.map(childValidator::validateOnUi);
     }
 
     private Observable<Child> createImageFile(@NonNull Child child) {

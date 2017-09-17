@@ -228,7 +228,7 @@ public class MedicineTakingInteractor {
                                 .length(lengthValueEvent.getValue())
                                 .build())
                         .build())
-                .map(medicineTakingValidator::validate)
+                .map(medicineTakingValidator::validateOnUi)
                 .map(medicineTakingValidator::isValid)
                 .distinctUntilChanged();
     }
@@ -254,7 +254,7 @@ public class MedicineTakingInteractor {
                                 .length(lengthValueEvent.getValue())
                                 .build())
                         .build())
-                .map(medicineTakingValidator::validate);
+                .map(medicineTakingValidator::validateOnUi);
     }
 
     public Observable<Integer> continueLinearGroup(@NonNull MedicineTaking medicineTaking,

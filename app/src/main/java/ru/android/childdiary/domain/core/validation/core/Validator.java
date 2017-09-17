@@ -28,6 +28,10 @@ public abstract class Validator<T, VR extends ValidationResult> {
 
     public abstract List<VR> validate(@NonNull T item);
 
+    public List<VR> validateOnUi(@NonNull T item) {
+        return validate(item);
+    }
+
     protected abstract ValidationException createException(@NonNull List<VR> results);
 
     protected T fix(@NonNull T item) {

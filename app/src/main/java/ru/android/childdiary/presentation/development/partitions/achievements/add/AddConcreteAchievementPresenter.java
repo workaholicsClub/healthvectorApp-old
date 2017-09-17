@@ -9,10 +9,12 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import ru.android.childdiary.data.types.AchievementType;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.development.achievement.requests.UpsertConcreteAchievementRequest;
 import ru.android.childdiary.domain.development.achievement.requests.UpsertConcreteAchievementResponse;
+import ru.android.childdiary.presentation.core.bindings.FieldValueChangeEventsObservable;
 import ru.android.childdiary.presentation.development.partitions.achievements.core.ConcreteAchievementPresenter;
 
 @InjectViewState
@@ -34,9 +36,10 @@ public class AddConcreteAchievementPresenter extends ConcreteAchievementPresente
     }
 
     public Disposable listenForDoneButtonUpdate(
-            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable) {
+            @NonNull Observable<TextViewAfterTextChangeEvent> nameObservable,
+            @NonNull FieldValueChangeEventsObservable<AchievementType> achievementTypeObservable) {
         return concreteAchievementInteractor.controlDoneButton(
-                nameObservable)
+                nameObservable, achievementTypeObservable)
                 .subscribe(getViewState()::setButtonDoneEnabled, this::onUnexpectedError);
     }
 }

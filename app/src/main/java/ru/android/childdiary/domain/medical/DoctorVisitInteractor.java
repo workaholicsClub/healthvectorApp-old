@@ -242,7 +242,7 @@ public class DoctorVisitInteractor {
                                 .length(lengthValueEvent.getValue())
                                 .build())
                         .build())
-                .map(doctorVisitValidator::validate)
+                .map(doctorVisitValidator::validateOnUi)
                 .map(doctorVisitValidator::isValid)
                 .distinctUntilChanged();
     }
@@ -274,7 +274,7 @@ public class DoctorVisitInteractor {
                                 .length(lengthValueEvent.getValue())
                                 .build())
                         .build())
-                .map(doctorVisitValidator::validate);
+                .map(doctorVisitValidator::validateOnUi);
     }
 
     public Observable<Integer> continueLinearGroup(@NonNull DoctorVisit doctorVisit,

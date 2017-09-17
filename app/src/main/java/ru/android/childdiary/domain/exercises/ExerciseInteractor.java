@@ -150,7 +150,7 @@ public class ExerciseInteractor {
                                 .length(lengthValueEvent.getValue())
                                 .build())
                         .build())
-                .map(concreteExerciseValidator::validate)
+                .map(concreteExerciseValidator::validateOnUi)
                 .map(concreteExerciseValidator::isValid)
                 .distinctUntilChanged();
     }
@@ -177,7 +177,7 @@ public class ExerciseInteractor {
                                 .length(lengthValueEvent.getValue())
                                 .build())
                         .build())
-                .map(concreteExerciseValidator::validate);
+                .map(concreteExerciseValidator::validateOnUi);
     }
 
     public Observable<Integer> continueLinearGroup(@NonNull ConcreteExercise concreteExercise,

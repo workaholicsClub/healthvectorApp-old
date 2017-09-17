@@ -32,6 +32,7 @@ import ru.android.childdiary.domain.development.achievement.data.ConcreteAchieve
 import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
+import ru.android.childdiary.presentation.core.bindings.RxFieldValueView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldAchievementTypeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView;
@@ -83,6 +84,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         setContentView(R.layout.activity_details);
 
         achievementTypeView.setFieldDialogListener(view -> {
+            hideKeyboardAndClearFocus(achievementNameView);
             AchievementTypeDialogFragment dialogFragment = new AchievementTypeDialogFragment();
             dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_ACHIEVEMENT_TYPE_PICKER,
                     AchievementTypeDialogArguments.builder()
@@ -209,7 +211,8 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         if (!isValidationStarted) {
             isValidationStarted = true;
             unsubscribeOnDestroy(getPresenter().listenForFieldsUpdate(
-                    achievementNameView.textObservable()
+                    achievementNameView.textObservable(),
+                    RxFieldValueView.valueChangeEvents(achievementTypeView)
             ));
         }
     }

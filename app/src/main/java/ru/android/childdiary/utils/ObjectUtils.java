@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import ru.android.childdiary.domain.core.data.ContentObject;
 
@@ -53,5 +54,31 @@ public class ObjectUtils {
         return isEmpty(object1)
                 ? isEmpty(object2)
                 : object2 != null && object1.isContentEqual((T) object2);
+    }
+
+    public static int compare(@Nullable LocalDate date1, @Nullable LocalDate date2) {
+        if (date1 == null && date2 == null) {
+            return 0;
+        }
+        if (date1 == null) {
+            return -1;
+        }
+        if (date2 == null) {
+            return 1;
+        }
+        return date1.compareTo(date2);
+    }
+
+    public static int compare(@Nullable Double d1, @Nullable Double d2) {
+        if (d1 == null && d2 == null) {
+            return 0;
+        }
+        if (d1 == null) {
+            return -1;
+        }
+        if (d2 == null) {
+            return 1;
+        }
+        return d1.compareTo(d2);
     }
 }

@@ -57,6 +57,7 @@ public class AntropometryValidator extends Validator<Antropometry, AntropometryV
         return results;
     }
 
+    @Override
     public List<AntropometryValidationResult> validateOnUi(@NonNull Antropometry antropometry) {
         List<AntropometryValidationResult> results = new ArrayList<>();
 

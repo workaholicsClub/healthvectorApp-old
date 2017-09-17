@@ -53,6 +53,7 @@ public abstract class DictionaryValidator<T> extends Validator<T, DictionaryVali
         return results;
     }
 
+    @Override
     public List<DictionaryValidationResult> validateOnUi(@NonNull T item) {
         List<DictionaryValidationResult> results = new ArrayList<>();
 
