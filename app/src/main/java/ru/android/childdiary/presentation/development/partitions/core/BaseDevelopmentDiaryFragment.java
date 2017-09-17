@@ -35,6 +35,8 @@ public abstract class BaseDevelopmentDiaryFragment<V extends BaseDevelopmentDiar
 
     public abstract SwipeController getAdapter();
 
+    public abstract void addItem();
+
     @Override
     @LayoutRes
     protected int getLayoutResourceId() {

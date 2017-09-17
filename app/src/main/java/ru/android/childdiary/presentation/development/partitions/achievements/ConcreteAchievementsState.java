@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import ru.android.childdiary.domain.child.data.Child;
-import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
+import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementItem;
 
 @Value
 @Builder
@@ -14,5 +14,5 @@ public class ConcreteAchievementsState {
     @NonNull
     Child child;
     @NonNull
-    List<ConcreteAchievement> concreteAchievements;
+    List<ConcreteAchievementItem> concreteAchievements;
 }

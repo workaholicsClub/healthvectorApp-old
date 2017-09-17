@@ -84,6 +84,18 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        logger.debug("onActivityResult");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        logger.debug("onStart");
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         logger.debug("onResume");
@@ -100,6 +112,12 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
         super.onSaveInstanceState(outState);
         logger.debug("onSaveInstanceState");
         Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        logger.debug("onStop");
     }
 
     @Override

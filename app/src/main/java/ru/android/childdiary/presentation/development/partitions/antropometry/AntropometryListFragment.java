@@ -139,6 +139,11 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     }
 
     @Override
+    public void addItem() {
+        presenter.addAntropometry();
+    }
+
+    @Override
     public void navigateToAntropometryAdd(@NonNull Child child, @NonNull Antropometry antropometry) {
         Intent intent = AddAntropometryActivity.getIntent(getContext(), child, antropometry);
         startActivity(intent);

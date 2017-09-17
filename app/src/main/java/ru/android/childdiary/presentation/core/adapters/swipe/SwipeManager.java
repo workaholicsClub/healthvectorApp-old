@@ -27,6 +27,9 @@ public final class SwipeManager implements SwipeController {
 
     public void bindViewHolder(SwipeLayoutContainer viewHolder, int position) {
         SwipeLayout swipeLayout = viewHolder.getSwipeLayout();
+        if (swipeLayout == null) {
+            return;
+        }
         ValueBox valueBox;
         if (swipeLayout.getTag() == null) {
             valueBox = new ValueBox();

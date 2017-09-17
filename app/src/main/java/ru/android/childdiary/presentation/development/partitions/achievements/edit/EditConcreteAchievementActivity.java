@@ -50,6 +50,7 @@ public class EditConcreteAchievementActivity extends ConcreteAchievementActivity
 
     @Override
     public void updated(@NonNull ConcreteAchievement concreteAchievement) {
+        setResult(RESULT_OK, new Intent().putExtra(ExtraConstants.EXTRA_ITEM, concreteAchievement));
         finish();
     }
 

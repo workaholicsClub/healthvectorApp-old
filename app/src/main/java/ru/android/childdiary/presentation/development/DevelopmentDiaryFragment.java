@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.development;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -23,16 +22,12 @@ import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.child.data.Child;
-import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
-import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
 import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.PagesAdapter;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeController;
 import ru.android.childdiary.presentation.development.partitions.achievements.ConcreteAchievementsFragment;
-import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.antropometry.AntropometryListFragment;
-import ru.android.childdiary.presentation.development.partitions.antropometry.add.AddAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.partitions.testing.TestResultsFragment;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -190,33 +185,11 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
         }
     }
 
-    @Override
-    public void navigateToConcreteAchievementAdd(@NonNull Child child, @NonNull ConcreteAchievement defaultConcreteAchievement) {
-        Intent intent = AddConcreteAchievementActivity.getIntent(getContext(), child, defaultConcreteAchievement);
-        startActivity(intent);
-    }
-
-    @Override
-    public void navigateToAntropometryAdd(@NonNull Child child, @NonNull Antropometry antropometry) {
-        Intent intent = AddAntropometryActivity.getIntent(getContext(), child, antropometry);
-        startActivity(intent);
-    }
-
-    @Override
-    public void noChildSpecified() {
-        showToast(getString(R.string.intention_add_child_profile));
-    }
-
     @OnClick(R.id.fab)
     void onFabClick() {
-        int selectedPage = viewPager.getCurrentItem();
-        switch (selectedPage) {
-            case 1:
-                presenter.addConcreteAchievement();
-                break;
-            case 2:
-                presenter.addAntropometry();
-                break;
+        AppPartitionFragment fragment = getSelectedPage();
+        if (fragment instanceof BaseDevelopmentDiaryFragment) {
+            ((BaseDevelopmentDiaryFragment) fragment).addItem();
         }
     }
 

@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.development.partitions.achievements.adapters;
 
-interface ConcreteAchievementSwipeActionListener {
-    void delete(ConcreteAchievementViewHolder viewHolder);
+import ru.android.childdiary.presentation.core.adapters.swipe.SwipeActionListener;
+
+interface ConcreteAchievementSwipeActionListener extends SwipeActionListener<ConcreteAchievementViewHolder> {
 }

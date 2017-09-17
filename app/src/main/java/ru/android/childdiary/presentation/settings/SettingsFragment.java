@@ -155,7 +155,8 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         super.onResume();
         getActivity().invalidateOptionsMenu();
         if (isFirstTime) {
-            new Handler().post(() -> recyclerView.getLayoutManager().scrollToPosition(0));
+            new Handler().post(() -> ((LinearLayoutManager) recyclerView.getLayoutManager())
+                    .scrollToPositionWithOffset(0, 0));
             isFirstTime = false;
         }
     }

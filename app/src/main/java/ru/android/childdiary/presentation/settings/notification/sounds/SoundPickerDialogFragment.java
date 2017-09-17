@@ -103,7 +103,8 @@ public class SoundPickerDialogFragment extends BaseMvpDialogFragment<SoundPicker
     @Override
     public void onResume() {
         super.onResume();
-        new Handler().post(() -> recyclerView.getLayoutManager().scrollToPosition(selectedPosition));
+        new Handler().post(() -> ((LinearLayoutManager) recyclerView.getLayoutManager())
+                .scrollToPositionWithOffset(selectedPosition, 0));
     }
 
     @Override

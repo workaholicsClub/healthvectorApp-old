@@ -68,6 +68,7 @@ public class AddConcreteAchievementActivity extends ConcreteAchievementActivity<
 
     @Override
     public void added(@NonNull ConcreteAchievement concreteAchievement) {
+        setResult(RESULT_OK, new Intent().putExtra(ExtraConstants.EXTRA_ITEM, concreteAchievement));
         finish();
     }
 

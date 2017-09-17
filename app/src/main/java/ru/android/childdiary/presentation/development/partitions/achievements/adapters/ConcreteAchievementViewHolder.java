@@ -12,60 +12,83 @@ import com.daimajia.swipe.SwipeLayout;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 import lombok.Getter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.AchievementType;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
-import ru.android.childdiary.presentation.core.adapters.swipe.SwipeLayoutContainer;
-import ru.android.childdiary.presentation.development.partitions.achievements.expandablerecyclerview.viewholders.ChildViewHolder;
+import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewHolder;
 import ru.android.childdiary.utils.strings.DateUtils;
+import ru.android.childdiary.utils.strings.StringUtils;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class ConcreteAchievementViewHolder extends ChildViewHolder implements SwipeLayoutContainer {
-    private final ConcreteAchievementItemActionListener itemActionListener;
-    private final ConcreteAchievementSwipeActionListener swipeActionListener;
-
+class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchievementItem, ConcreteAchievementSwipeActionListener, ConcreteAchievementItemActionListener> {
+    // concrete achievement declarations
+    @Nullable
     @Getter
     @BindView(R.id.swipeLayout)
     SwipeLayout swipeLayout;
 
+    @Nullable
     @BindView(R.id.bottomView)
     View bottomView;
 
+    @Nullable
     @BindView(R.id.actionDelete)
     ImageView imageViewDelete;
 
+    @Nullable
     @BindView(R.id.textViewDate)
     TextView textViewDate;
 
+    @Nullable
     @BindView(R.id.textViewConcreteAchievement)
     TextView textViewConcreteAchievement;
 
+    @Nullable
     @BindView(R.id.imageView)
     ImageView imageView;
 
     @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
 
-    @Getter
-    private ConcreteAchievement concreteAchievement;
+    // achievement type declarations
+    @Nullable
+    @BindView(R.id.textView)
+    TextView textView;
+
+    @Nullable
+    @BindView(R.id.imageViewArrow)
+    ImageView imageViewArrow;
 
     public ConcreteAchievementViewHolder(View itemView,
                                          @NonNull ConcreteAchievementItemActionListener itemActionListener,
                                          @NonNull ConcreteAchievementSwipeActionListener swipeActionListener) {
-        super(itemView);
-        ButterKnife.bind(this, itemView);
-        this.itemActionListener = itemActionListener;
-        this.swipeActionListener = swipeActionListener;
+        super(itemView, itemActionListener, swipeActionListener);
     }
 
-    public void bind(Context context, @Nullable Sex sex, @NonNull ConcreteAchievement concreteAchievement) {
-        this.concreteAchievement = concreteAchievement;
+    @Override
+    protected void bind(Context context, @Nullable Sex sex) {
+        if (getItem().isGroup()) {
+            setupGroup(context, sex);
+        } else {
+            setupChild(context, sex);
+        }
+    }
 
+    private void setupGroup(Context context, @Nullable Sex sex) {
+        AchievementType achievementType = getItem().getAchievementType();
+        textView.setText(StringUtils.achievementType(context, achievementType));
+        imageViewArrow.setImageResource(getItem().isExpanded()
+                ? R.drawable.arrow_up_black : R.drawable.arrow_down_black);
+    }
+
+    private void setupChild(Context context, @Nullable Sex sex) {
+        ConcreteAchievement concreteAchievement = getItem().getConcreteAchievement();
         String valueStr;
 
         if (concreteAchievement.getDate() == null) {
@@ -102,9 +125,10 @@ public class ConcreteAchievementViewHolder extends ChildViewHolder implements Sw
 
     @OnClick(R.id.contentView)
     void onContentViewClick() {
-        itemActionListener.edit(concreteAchievement);
+        itemActionListener.edit(getItem());
     }
 
+    @Optional
     @OnClick(R.id.actionDelete)
     void onDeleteClick() {
         swipeActionListener.delete(this);
