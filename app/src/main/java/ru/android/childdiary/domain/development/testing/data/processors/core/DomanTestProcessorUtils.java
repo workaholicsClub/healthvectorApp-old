@@ -1,11 +1,5 @@
 package ru.android.childdiary.domain.development.testing.data.processors.core;
 
-import android.support.annotation.NonNull;
-
-import org.joda.time.Days;
-import org.joda.time.LocalDate;
-import org.joda.time.Months;
-
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
@@ -40,21 +34,6 @@ class DomanTestProcessorUtils {
     private static final double[] AVERAGES = new double[]{
             1, 2.5, 7, 12, 18, 36, 72
     };
-
-    static double getMonths(@NonNull LocalDate birthDate, @NonNull LocalDate date) {
-        if (birthDate.isAfter(date)) {
-            return 0;
-        }
-        int months = Months.monthsBetween(birthDate, date).getMonths();
-        int days = Days.daysBetween(birthDate.plusMonths(months), date).getDays();
-        double part = days / 30.0;
-        if (part < 0) {
-            part = 0;
-        } else if (part > 1) {
-            part = 1;
-        }
-        return months + part;
-    }
 
     static int getIndex(double months) {
         int length = AVERAGES.length;

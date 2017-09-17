@@ -7,6 +7,7 @@ import org.joda.time.LocalDate;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 import static ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessorUtils.ADVANCED_RANGES;
 import static ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessorUtils.NORMAL_RANGES;
@@ -46,7 +47,7 @@ public class DomanResult {
     private static StageType calculateStageType(@NonNull LocalDate birthDate,
                                                 @NonNull LocalDate domanDate,
                                                 int stage) {
-        double months = DomanTestProcessorUtils.getMonths(birthDate, domanDate);
+        double months = TimeUtils.getMonths(birthDate, domanDate);
         DomanTestProcessorUtils.Range advancedRange = ADVANCED_RANGES[stage];
         DomanTestProcessorUtils.Range normalRange = NORMAL_RANGES[stage];
         if (months < advancedRange.getTo()) {
@@ -61,7 +62,7 @@ public class DomanResult {
     private static double calculatePercents(@NonNull LocalDate birthDate,
                                             @NonNull LocalDate domanDate,
                                             int stage) {
-        double months = DomanTestProcessorUtils.getMonths(birthDate, domanDate);
+        double months = TimeUtils.getMonths(birthDate, domanDate);
         DomanTestProcessorUtils.Range advancedRange = ADVANCED_RANGES[stage];
         DomanTestProcessorUtils.Range normalRange = NORMAL_RANGES[stage];
         DomanTestProcessorUtils.Range slowRange = SLOW_RANGES[stage];

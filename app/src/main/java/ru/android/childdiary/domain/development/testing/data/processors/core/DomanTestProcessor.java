@@ -15,6 +15,7 @@ import lombok.ToString;
 import ru.android.childdiary.data.types.DomanTestParameter;
 import ru.android.childdiary.domain.development.testing.data.tests.core.DomanTest;
 import ru.android.childdiary.domain.development.testing.data.tests.core.Question;
+import ru.android.childdiary.utils.strings.TimeUtils;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -54,7 +55,7 @@ public abstract class DomanTestProcessor<T extends DomanTest> extends BaseTestPr
             answers.add(null);
         }
 
-        double months = DomanTestProcessorUtils.getMonths(birthDate, date);
+        double months = TimeUtils.getMonths(birthDate, date);
         index = DomanTestProcessorUtils.getIndex(months);
         initialStage = index;
     }

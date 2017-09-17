@@ -36,7 +36,10 @@ public class ConcreteAchievementItem {
         if (isGroup() && concreteAchievementItem.isGroup()) {
             return achievementType == concreteAchievementItem.achievementType;
         }
+        //noinspection SimplifiableIfStatement
         if (isChild() && concreteAchievementItem.isChild()) {
+            assert concreteAchievement != null;
+            assert concreteAchievementItem.concreteAchievement != null;
             return ObjectUtils.equals(concreteAchievement.getId(), concreteAchievementItem.concreteAchievement.getId());
         }
         return false;

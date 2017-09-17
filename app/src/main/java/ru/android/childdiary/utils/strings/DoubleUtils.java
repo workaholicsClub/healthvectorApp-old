@@ -94,4 +94,8 @@ public class DoubleUtils {
     public static String submultipleUnitFormat(Double d) {
         return d == null ? null : SUBMULTIPLE_UNIT_FORMAT.get().format(d);
     }
+
+    public static String submultipleUnitFormat(double d) {
+        return SUBMULTIPLE_UNIT_FORMAT.get().format(d);
+    }
 }

@@ -82,6 +82,8 @@ class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchievementI
 
     private void setupGroup(Context context, @Nullable Sex sex) {
         AchievementType achievementType = getItem().getAchievementType();
+        assert textView != null;
+        assert imageViewArrow != null;
         textView.setText(StringUtils.achievementType(context, achievementType));
         imageViewArrow.setImageResource(getItem().isExpanded()
                 ? R.drawable.arrow_up_black : R.drawable.arrow_down_black);
@@ -92,15 +94,13 @@ class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchievementI
         String valueStr;
 
         if (concreteAchievement.getDate() == null) {
-            int fromMonths = concreteAchievement.getFromAge().intValue();// TODO double 1.5 months
-            TimeUtils.Age fromAge = TimeUtils.Age.builder().months(fromMonths).build();
-            String fromAgeStr = TimeUtils.age(context, fromAge);
+            double fromMonths = concreteAchievement.getFromAge();
+            String fromAgeStr = TimeUtils.age(context, fromMonths);
             if (concreteAchievement.getToAge() == null) {
                 valueStr = fromAgeStr;
             } else {
-                int toMonths = concreteAchievement.getToAge().intValue();// TODO double
-                TimeUtils.Age toAge = TimeUtils.Age.builder().months(toMonths).build();
-                String toAgeStr = TimeUtils.age(context, toAge);
+                double toMonths = concreteAchievement.getToAge();
+                String toAgeStr = TimeUtils.age(context, toMonths);
                 valueStr = context.getString(R.string.from_value_to_value, fromAgeStr, toAgeStr);
             }
         } else {
@@ -110,6 +110,11 @@ class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchievementI
             valueStr = context.getString(R.string.two_values, dateStr, ageStr);
         }
 
+        assert textViewDate != null;
+        assert textViewConcreteAchievement != null;
+        assert imageView != null;
+        assert imageViewDelete != null;
+        assert swipeLayout != null;
         textViewDate.setText(valueStr);
         textViewConcreteAchievement.setText(concreteAchievement.getName());
         Drawable photo = ResourcesUtils.getPhotoDrawable(context, concreteAchievement.getImageFileName());

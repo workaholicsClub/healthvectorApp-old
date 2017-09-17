@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 import org.joda.time.Minutes;
@@ -52,12 +53,38 @@ public class TimeUtils {
         return Age.builder().months(months).build();
     }
 
+    public static double getMonths(@NonNull Child child) {
+        return getMonths(child.getBirthDate(), LocalDate.now());
+    }
+
+    public static double getMonths(@NonNull LocalDate birthDate, @NonNull LocalDate date) {
+        if (birthDate.isAfter(date)) {
+            return 0;
+        }
+        int months = Months.monthsBetween(birthDate, date).getMonths();
+        int days = Days.daysBetween(birthDate.plusMonths(months), date).getDays();
+        double part = days / 30.0;
+        if (part < 0) {
+            part = 0;
+        } else if (part > 1) {
+            part = 1;
+        }
+        return months + part;
+    }
+
     @Nullable
     public static String age(Context context, @Nullable Age age) {
         return age == null ? null : age(context, age.getMonths(), true);
     }
 
-    @Nullable
+    public static String age(Context context, double months) {
+        int intMonths = (int) months;
+        String intMonthsStr = String.valueOf(intMonths);
+        String doubleMonthsStr = DoubleUtils.submultipleUnitFormat(months);
+        String ageStr = age(context, intMonths, true);
+        return ageStr.replace(intMonthsStr, doubleMonthsStr);
+    }
+
     private static String age(Context context, int months, boolean shortMonths) {
         int years = months / MONTHS_IN_YEAR;
         months = months % MONTHS_IN_YEAR;
