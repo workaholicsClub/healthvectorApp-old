@@ -12,6 +12,7 @@ import com.daimajia.swipe.SwipeLayout;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.OnClick;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.development.testing.data.TestResult;
@@ -24,6 +25,7 @@ import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
 public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResultSwipeActionListener, TestResultActionListener> {
+    @Getter
     @BindView(R.id.swipeLayout)
     SwipeLayout swipeLayout;
 
@@ -68,11 +70,6 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);
-    }
-
-    @Override
-    public SwipeLayout getSwipeLayout() {
-        return swipeLayout;
     }
 
     @OnClick(R.id.contentView)

@@ -12,6 +12,7 @@ import com.daimajia.swipe.SwipeLayout;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.OnClick;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.adapters.swipe.ItemActionListener;
@@ -24,6 +25,7 @@ public abstract class BaseItemViewHolder<T,
         SL extends SwipeActionListener<? extends SwipeViewHolder<T, SL, IL>>,
         IL extends ItemActionListener<T>>
         extends SwipeViewHolder<T, SL, IL> {
+    @Getter
     @BindView(R.id.swipeLayout)
     SwipeLayout swipeLayout;
 
@@ -57,11 +59,6 @@ public abstract class BaseItemViewHolder<T,
 
     @Nullable
     protected abstract String getTextForValue(Context context, T item);
-
-    @Override
-    public SwipeLayout getSwipeLayout() {
-        return swipeLayout;
-    }
 
     @OnClick(R.id.contentView)
     void onContentViewClick() {

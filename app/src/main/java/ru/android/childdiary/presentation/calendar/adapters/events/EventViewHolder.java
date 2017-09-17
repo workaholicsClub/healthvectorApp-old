@@ -17,6 +17,7 @@ import com.daimajia.swipe.SwipeLayout;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.OnClick;
+import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.Sex;
@@ -32,6 +33,7 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     private static final double ALPHA_INCREASING_COEF = 1.5;
     private static final int FADE_DURATION_MS = 500;
 
+    @Getter
     @BindView(R.id.swipeLayout)
     SwipeLayout swipeLayout;
 
@@ -123,11 +125,6 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
 
     private Drawable getActionsViewBackgroundDrawable(@ColorInt int color) {
         return ResourcesUtils.getShape(color, corner);
-    }
-
-    @Override
-    public SwipeLayout getSwipeLayout() {
-        return swipeLayout;
     }
 
     @OnClick(R.id.eventView)
