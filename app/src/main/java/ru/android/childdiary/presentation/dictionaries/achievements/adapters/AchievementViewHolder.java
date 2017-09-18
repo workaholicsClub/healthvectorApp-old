@@ -9,6 +9,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.dictionaries.achievements.data.Achievement;
 import ru.android.childdiary.presentation.dictionaries.core.BaseItemViewHolder;
 
@@ -19,9 +20,10 @@ public class AchievementViewHolder extends BaseItemViewHolder<Achievement,
     TextView textView;
 
     public AchievementViewHolder(View itemView,
+                                 @Nullable Sex sex,
                                  @NonNull AchievementActionListener itemActionListener,
                                  @NonNull AchievementSwipeActionListener swipeActionListener) {
-        super(itemView, itemActionListener, swipeActionListener);
+        super(itemView, sex, itemActionListener, swipeActionListener);
     }
 
     @Nullable

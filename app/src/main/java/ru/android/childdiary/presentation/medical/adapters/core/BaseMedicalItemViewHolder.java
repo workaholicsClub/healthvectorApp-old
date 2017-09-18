@@ -51,10 +51,21 @@ public abstract class BaseMedicalItemViewHolder<T,
     @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
 
+    @Nullable
+    private Sex sex;
+
     public BaseMedicalItemViewHolder(View itemView,
+                                     @Nullable Sex sex,
                                      @NonNull IL itemActionListener,
                                      @NonNull SL swipeActionListener) {
         super(itemView, itemActionListener, swipeActionListener);
+        this.sex = sex;
+        setupBackgrounds(itemView.getContext());
+    }
+
+    private void setupBackgrounds(Context context) {
+        //noinspection deprecation
+        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
     }
 
     @Override
@@ -78,8 +89,10 @@ public abstract class BaseMedicalItemViewHolder<T,
         WidgetsUtils.strikeTextView(textViewTitle, isDone);
         WidgetsUtils.strikeTextView(textViewDescription, isDone);
 
-        //noinspection deprecation
-        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
+        if (sex != this.sex) {
+            this.sex = sex;
+            setupBackgrounds(context);
+        }
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);

@@ -65,10 +65,25 @@ class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchievementI
     @BindView(R.id.imageViewArrow)
     ImageView imageViewArrow;
 
+    @Nullable
+    private Sex sex;
+
     public ConcreteAchievementViewHolder(View itemView,
+                                         @Nullable Sex sex,
+                                         boolean isChild,
                                          @NonNull ConcreteAchievementItemActionListener itemActionListener,
                                          @NonNull ConcreteAchievementSwipeActionListener swipeActionListener) {
         super(itemView, itemActionListener, swipeActionListener);
+        this.sex = sex;
+        if (isChild) {
+            setupBackgrounds(itemView.getContext());
+        }
+    }
+
+    private void setupBackgrounds(Context context) {
+        assert imageViewDelete != null;
+        //noinspection deprecation
+        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
     }
 
     @Override
@@ -113,7 +128,6 @@ class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchievementI
         assert textViewDate != null;
         assert textViewConcreteAchievement != null;
         assert imageView != null;
-        assert imageViewDelete != null;
         assert swipeLayout != null;
         textViewDate.setText(valueStr);
         textViewConcreteAchievement.setText(concreteAchievement.getName());
@@ -121,8 +135,10 @@ class ConcreteAchievementViewHolder extends SwipeViewHolder<ConcreteAchievementI
         imageView.setImageDrawable(photo);
         imageView.setVisibility(photo == null ? View.GONE : View.VISIBLE);
 
-        //noinspection deprecation
-        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
+        if (sex != this.sex) {
+            this.sex = sex;
+            setupBackgrounds(context);
+        }
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);

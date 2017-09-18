@@ -41,10 +41,10 @@ public class ConcreteAchievementAdapter extends SwipeViewAdapter<
         switch (viewType) {
             case GROUP:
                 v = inflater.inflate(R.layout.achievement_type_item, parent, false);
-                return new ConcreteAchievementViewHolder(v, itemActionListener, this);
+                return new ConcreteAchievementViewHolder(v, sex, false, itemActionListener, this);
             case CHILD:
                 v = inflater.inflate(R.layout.concrete_achievement_item, parent, false);
-                return new ConcreteAchievementViewHolder(v, itemActionListener, this);
+                return new ConcreteAchievementViewHolder(v, sex, true, itemActionListener, this);
             default:
                 throw new IllegalArgumentException("Unsupported concrete achievement item type");
         }

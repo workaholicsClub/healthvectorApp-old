@@ -7,15 +7,17 @@ import android.view.View;
 
 import butterknife.OnClick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.medical.data.DoctorVisit;
 import ru.android.childdiary.presentation.medical.adapters.core.BaseMedicalItemViewHolder;
 import ru.android.childdiary.utils.strings.DateUtils;
 
 class DoctorVisitViewHolder extends BaseMedicalItemViewHolder<DoctorVisit, DoctorVisitSwipeActionListener, DoctorVisitActionListener> {
     public DoctorVisitViewHolder(View itemView,
+                                 @Nullable Sex sex,
                                  @NonNull DoctorVisitActionListener itemActionListener,
                                  @NonNull DoctorVisitSwipeActionListener swipeActionListener) {
-        super(itemView, itemActionListener, swipeActionListener);
+        super(itemView, sex, itemActionListener, swipeActionListener);
     }
 
     @Override

@@ -40,6 +40,7 @@ public class EventFilterDialogFragment extends BaseMvpDialogFragment<EventFilter
     @Override
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
         RecyclerView recyclerView = new RecyclerView(getContext());
+        recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         EventFilterAdapter adapter = new EventFilterAdapter(getContext(), dialogArguments.getSelectedItems());

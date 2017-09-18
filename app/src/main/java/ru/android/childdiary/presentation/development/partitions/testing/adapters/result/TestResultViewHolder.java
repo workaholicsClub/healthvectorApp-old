@@ -47,10 +47,21 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
     @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
 
+    @Nullable
+    private Sex sex;
+
     public TestResultViewHolder(View itemView,
+                                @Nullable Sex sex,
                                 @NonNull TestResultActionListener itemActionListener,
                                 @NonNull TestResultSwipeActionListener swipeActionListener) {
         super(itemView, itemActionListener, swipeActionListener);
+        this.sex = sex;
+        setupBackgrounds(itemView.getContext());
+    }
+
+    private void setupBackgrounds(Context context) {
+        //noinspection deprecation
+        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
     }
 
     @Override
@@ -65,8 +76,10 @@ public class TestResultViewHolder extends SwipeViewHolder<TestResult, TestResult
         textViewDescription.setText(TestUtils.getTestResultShort(context, item));
         WidgetsUtils.hideIfEmpty(textViewDescription);
 
-        //noinspection deprecation
-        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
+        if (sex != this.sex) {
+            this.sex = sex;
+            setupBackgrounds(context);
+        }
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);

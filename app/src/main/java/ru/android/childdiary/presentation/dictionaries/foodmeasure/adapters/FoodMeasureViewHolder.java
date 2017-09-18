@@ -9,6 +9,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.dictionaries.foodmeasure.data.FoodMeasure;
 import ru.android.childdiary.presentation.dictionaries.core.BaseItemViewHolder;
 
@@ -19,9 +20,10 @@ public class FoodMeasureViewHolder extends BaseItemViewHolder<FoodMeasure,
     TextView textView;
 
     public FoodMeasureViewHolder(View itemView,
+                                 @Nullable Sex sex,
                                  @NonNull FoodMeasureActionListener itemActionListener,
                                  @NonNull FoodMeasureSwipeActionListener swipeActionListener) {
-        super(itemView, itemActionListener, swipeActionListener);
+        super(itemView, sex, itemActionListener, swipeActionListener);
     }
 
     @Nullable

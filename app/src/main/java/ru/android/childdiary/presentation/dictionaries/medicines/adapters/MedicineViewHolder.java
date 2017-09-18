@@ -9,6 +9,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.dictionaries.medicines.data.Medicine;
 import ru.android.childdiary.presentation.dictionaries.core.BaseItemViewHolder;
 
@@ -19,9 +20,10 @@ public class MedicineViewHolder extends BaseItemViewHolder<Medicine,
     TextView textView;
 
     public MedicineViewHolder(View itemView,
+                              @Nullable Sex sex,
                               @NonNull MedicineActionListener itemActionListener,
                               @NonNull MedicineSwipeActionListener swipeActionListener) {
-        super(itemView, itemActionListener, swipeActionListener);
+        super(itemView, sex, itemActionListener, swipeActionListener);
     }
 
     @Nullable

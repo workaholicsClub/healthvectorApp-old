@@ -65,6 +65,7 @@ public class SoundPickerDialogFragment extends BaseMvpDialogFragment<SoundPicker
         }
 
         recyclerView = new RecyclerView(getContext());
+        recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         SoundInfoAdapter adapter = new SoundInfoAdapter(getContext(), selectedPosition, this);

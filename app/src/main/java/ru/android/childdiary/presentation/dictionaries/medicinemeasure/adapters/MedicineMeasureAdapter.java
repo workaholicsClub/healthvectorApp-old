@@ -26,7 +26,7 @@ public class MedicineMeasureAdapter extends SwipeViewAdapter<
     @Override
     protected MedicineMeasureViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.picker_item, parent, false);
-        return new MedicineMeasureViewHolder(v, itemActionListener, this);
+        return new MedicineMeasureViewHolder(v, sex, itemActionListener, this);
     }
 
     @Override

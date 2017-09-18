@@ -36,7 +36,7 @@ public class EventAdapter extends SwipeViewAdapter<
     @Override
     protected EventViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.event_item, parent, false);
-        return new EventViewHolder(v, itemActionListener, this, sex, EventType.values()[viewType]);
+        return new EventViewHolder(v, sex, EventType.values()[viewType], itemActionListener, this);
     }
 
     @Override

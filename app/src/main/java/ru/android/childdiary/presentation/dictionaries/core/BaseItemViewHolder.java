@@ -41,17 +41,31 @@ public abstract class BaseItemViewHolder<T,
     @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
 
+    @Nullable
+    private Sex sex;
+
     public BaseItemViewHolder(View itemView,
+                              @Nullable Sex sex,
                               @NonNull IL itemActionListener,
                               @NonNull SL swipeActionListener) {
         super(itemView, itemActionListener, swipeActionListener);
+        this.sex = sex;
+        setupBackgrounds(itemView.getContext());
+    }
+
+    private void setupBackgrounds(Context context) {
+        //noinspection deprecation
+        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
     }
 
     @Override
     protected void bind(Context context, @Nullable Sex sex) {
         textView.setText(getTextForValue(context, item));
-        //noinspection deprecation
-        imageViewDelete.setBackgroundDrawable(ResourcesUtils.getShape(ThemeUtils.getColorAccent(context, sex), corner));
+
+        if (sex != this.sex) {
+            this.sex = sex;
+            setupBackgrounds(context);
+        }
 
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, bottomView);

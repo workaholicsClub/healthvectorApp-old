@@ -75,10 +75,10 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     private EventType eventType;
 
     public EventViewHolder(View itemView,
-                           @NonNull EventActionListener itemActionListener,
-                           @NonNull EventSwipeActionListener swipeActionListener,
                            @Nullable Sex sex,
-                           @NonNull EventType eventType) {
+                           @NonNull EventType eventType,
+                           @NonNull EventActionListener itemActionListener,
+                           @NonNull EventSwipeActionListener swipeActionListener) {
         super(itemView, itemActionListener, swipeActionListener);
         this.sex = sex;
         this.eventType = eventType;
