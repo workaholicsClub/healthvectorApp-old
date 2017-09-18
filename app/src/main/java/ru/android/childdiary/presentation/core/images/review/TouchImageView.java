@@ -821,7 +821,7 @@ public class TouchImageView extends AppCompatImageView {
 
     /**
      * Gesture Listener detects a single click or long click and passes that on
-     * to the view's onGroupClickListener.
+     * to the view's listener.
      *
      * @author Ortiz
      */
@@ -1032,7 +1032,7 @@ public class TouchImageView extends AppCompatImageView {
             setImageMatrix(matrix);
 
             //
-            // OnTouchImageViewListener is set: double tap runnable updates onGroupClickListener
+            // OnTouchImageViewListener is set: double tap runnable updates listener
             // with every frame.
             //
             if (touchImageViewListener != null) {
@@ -1140,7 +1140,7 @@ public class TouchImageView extends AppCompatImageView {
         @Override
         public void run() {
             //
-            // OnTouchImageViewListener is set: TouchImageView onGroupClickListener has been flung by user.
+            // OnTouchImageViewListener is set: TouchImageView listener has been flung by user.
             // Listener runnable updated with each frame of fling animation.
             //
             if (touchImageViewListener != null) {

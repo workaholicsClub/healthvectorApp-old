@@ -9,16 +9,14 @@ import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Getter;
 import lombok.val;
 
-public final class SwipeManager implements SwipeController {
+final class SwipeManager implements SwipeController {
     private static final int INVALID_POSITION = -1;
     private final Set<WeakReference<SwipeLayout>> shownLayouts = new HashSet<>();
     private final Set<Integer> openedOrOpeningPositions = new HashSet<>();
     @Nullable
     private FabController fabController;
-    @Getter
     private int openPosition = INVALID_POSITION;
 
     public SwipeManager(@Nullable FabController fabController) {
