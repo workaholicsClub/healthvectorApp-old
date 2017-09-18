@@ -30,7 +30,7 @@ public class EventFilterAdapter extends BaseRecyclerViewAdapter<EventType, Event
     }
 
     @Override
-    protected void bindUserViewHolder(EventFilterViewHolder viewHolder, int position) {
+    protected final void bindUserViewHolder(EventFilterViewHolder viewHolder, int position) {
         super.bindUserViewHolder(viewHolder, position);
         boolean selected = selectedItems.contains(items.get(position));
         viewHolder.setSelected(selected);

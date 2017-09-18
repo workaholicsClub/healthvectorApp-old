@@ -1,6 +1,7 @@
 package ru.android.childdiary.presentation.core.adapters.recycler;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,6 +20,7 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
         ButterKnife.bind(this, itemView);
     }
 
+    @CallSuper
     public void bind(Context context, @Nullable Sex sex, T item, int position) {
         this.item = item;
         this.position = position;

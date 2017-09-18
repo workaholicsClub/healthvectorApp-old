@@ -50,6 +50,9 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
     @CallSuper
     public void setItems(@NonNull List<T> items) {
         if (this.items.isEmpty()) {
+            if (items.isEmpty()) {
+                return;
+            }
             this.items.clear();
             this.items.addAll(items);
             notifyDataSetChanged();

@@ -36,7 +36,7 @@ public class SoundInfoAdapter extends BaseRecyclerViewAdapter<SoundInfo, SoundIn
     }
 
     @Override
-    protected void bindUserViewHolder(SoundInfoViewHolder viewHolder, int position) {
+    protected final void bindUserViewHolder(SoundInfoViewHolder viewHolder, int position) {
         super.bindUserViewHolder(viewHolder, position);
         boolean selected = selectedItemPosition == position;
         viewHolder.setSelected(selected, sex);
