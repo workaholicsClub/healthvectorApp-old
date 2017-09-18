@@ -70,19 +70,36 @@ class EventViewHolder extends SwipeViewHolder<MasterEvent, EventSwipeActionListe
     @BindDimen(R.dimen.event_row_corner_radius)
     float corner;
 
-    public EventViewHolder(View itemView, @NonNull EventActionListener itemActionListener, @NonNull EventSwipeActionListener swipeActionListener) {
+    @Nullable
+    private Sex sex;
+    private EventType eventType;
+
+    public EventViewHolder(View itemView,
+                           @NonNull EventActionListener itemActionListener,
+                           @NonNull EventSwipeActionListener swipeActionListener,
+                           @Nullable Sex sex,
+                           @NonNull EventType eventType) {
         super(itemView, itemActionListener, swipeActionListener);
+        this.sex = sex;
+        this.eventType = eventType;
+        setupBackgrounds(itemView.getContext());
+    }
+
+    private void setupBackgrounds(Context context) {
+        //noinspection deprecation
+        eventView.setBackgroundDrawable(
+                getEventViewBackgroundDrawable(ResourcesUtils.getEventColor(context, sex, eventType)));
+        //noinspection deprecation
+        actionsView.setBackgroundDrawable(
+                getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
     }
 
     @Override
     protected void bind(Context context, @Nullable Sex sex) {
-        //noinspection deprecation
-        eventView.setBackgroundDrawable(
-                getEventViewBackgroundDrawable(ResourcesUtils.getEventColor(context, sex, item)));
-        //noinspection deprecation
-        actionsView.setBackgroundDrawable(
-                getActionsViewBackgroundDrawable(ThemeUtils.getColorAccent(context, sex)));
-
+        if (this.sex != sex) {
+            this.sex = sex;
+            setupBackgrounds(context);
+        }
         textViewTime.setText(DateUtils.time(context, item.getDateTime()));
         textViewTitle.setText(EventUtils.getTitle(context, item));
         textViewDescription.setText(EventUtils.getDescription(context, item));

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
@@ -23,14 +24,19 @@ public class EventAdapter extends SwipeViewAdapter<
     }
 
     @Override
-    protected EventViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
-        View v = inflater.inflate(R.layout.event_item, parent, false);
-        return new EventViewHolder(v, itemActionListener, this);
+    public boolean areItemsTheSame(MasterEvent oldItem, MasterEvent newItem) {
+        return EventUtils.sameEvent(oldItem, newItem);
     }
 
     @Override
-    public boolean areItemsTheSame(MasterEvent oldItem, MasterEvent newItem) {
-        return EventUtils.sameEvent(oldItem, newItem);
+    protected int getUserViewType(int position) {
+        return items.get(position).getEventType().ordinal();
+    }
+
+    @Override
+    protected EventViewHolder createUserViewHolder(ViewGroup parent, int viewType) {
+        View v = inflater.inflate(R.layout.event_item, parent, false);
+        return new EventViewHolder(v, itemActionListener, this, sex, EventType.values()[viewType]);
     }
 
     @Override

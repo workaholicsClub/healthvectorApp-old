@@ -16,9 +16,9 @@ import android.text.TextUtils;
 import java.io.File;
 
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.EventType;
 import ru.android.childdiary.data.types.FeedType;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.domain.calendar.data.core.MasterEvent;
 import ru.android.childdiary.domain.child.data.Child;
 
 public class ResourcesUtils {
@@ -106,17 +106,13 @@ public class ResourcesUtils {
     }
 
     @ColorInt
-    public static int getEventColor(Context context, @Nullable Sex sex, @NonNull MasterEvent event) {
-        return ContextCompat.getColor(context, getEventColorRes(sex, event));
+    public static int getEventColor(Context context, @Nullable Sex sex, @NonNull EventType eventType) {
+        return ContextCompat.getColor(context, getEventColorRes(sex, eventType));
     }
 
     @ColorRes
-    private static int getEventColorRes(@Nullable Sex sex, @NonNull MasterEvent event) {
-        if (event.getEventType() == null) {
-            return R.color.white;
-        }
-
-        switch (event.getEventType()) {
+    private static int getEventColorRes(@Nullable Sex sex, @NonNull EventType eventType) {
+        switch (eventType) {
             case DIAPER:
                 return sex == null || sex == Sex.MALE
                         ? R.color.event_diaper_row_background_boy
@@ -150,7 +146,7 @@ public class ResourcesUtils {
                         ? R.color.event_exercise_row_background_boy
                         : R.color.event_exercise_row_background_girl;
             default:
-                return R.color.white;
+                return R.color.gray_background;
         }
     }
 
