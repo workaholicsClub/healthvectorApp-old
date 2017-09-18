@@ -45,7 +45,12 @@ public class EditConcreteAchievementActivity extends ConcreteAchievementActivity
         super.onCreate(savedInstanceState);
         buttonAdd.setVisibility(View.GONE);
 
-        achievementNameView.setReadOnly(ObjectUtils.isTrue(getItem().getIsPredefined()));
+        boolean isPredefined = ObjectUtils.isTrue(getItem().getIsPredefined());
+        if (isPredefined) {
+            achievementNameView.setReadOnly(true);
+            achievementNameView.removeInputFilters();
+            achievementNameView.setText(getItem().getName());
+        }
     }
 
     @Override

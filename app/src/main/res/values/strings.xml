@@ -174,9 +174,9 @@
     <string name="complete_without_deletion">Complete without deleting</string>
     <string name="complete_and_delete_events">Delete future events</string>
     <string name="please_wait">Please wait…</string>
-    <string name="events_generating">Processing event’s creation…</string>
-    <string name="events_deleting">Processing event’s deleting…</string>
-    <string name="events_updating">Processing event’s updating…</string>
+    <string name="events_generating">Processing events creation…</string>
+    <string name="events_deleting">Processing events deleting…</string>
+    <string name="events_updating">Processing events updating…</string>
     <string name="default_doctor_name">Pediatrician</string>
     <string name="delete_photo_confirmation_dialog_title">Delete picture?</string>
     <string name="need_to_fill_not_or_photo">To complete event please add description or picture</string>

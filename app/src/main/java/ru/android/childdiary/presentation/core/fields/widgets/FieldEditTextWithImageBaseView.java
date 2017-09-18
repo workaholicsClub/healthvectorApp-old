@@ -121,6 +121,10 @@ public abstract class FieldEditTextWithImageBaseView extends FieldEditTextView i
         getEditText().setEnabled(!readOnly);
     }
 
+    public void removeInputFilters() {
+        getEditText().setFilters(new InputFilter[0]);
+    }
+
     @LayoutRes
     protected abstract int getLayoutResourceId();
 
