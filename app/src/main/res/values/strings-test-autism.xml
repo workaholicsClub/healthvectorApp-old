@@ -11,8 +11,8 @@
     <string name="test_autism_low">Low risk</string>
     <string-array name="test_autism_description_paragraphs">
         <item>M-CHAT-R has as high detection rate of autism spectrum disorders (ASD) as possible. However, there is also a high risk of false positive.</item>
-        <item>Counting algorithm: a "No" for all questions except 2, 5 and 12, points to the risk of ASD. A "Yes" for questions 2, 5 and 12 points to the risk of ASD.</item>
-        <item>Please, answer the following questions about your child. When answering, rely on how the child behaves usually. If you have occasionally noticed this kind of behaviour but it’s not habitual, answer "No". The test is designed to detect children who require thorough diagnostics of development complications, including diagnosing autism symptoms.</item>
+        <item>Counting algorithm: a \"No\" for all questions except 2, 5 and 12, points to the risk of ASD. A \"Yes\" for questions 2, 5 and 12 points to the risk of ASD.</item>
+        <item>Please, answer the following questions about your child. When answering, rely on how the child behaves usually. If you have occasionally noticed this kind of behaviour but it’s not habitual, answer \"No\". The test is designed to detect children who require thorough diagnostics of development complications, including diagnosing autism symptoms.</item>
     </string-array>
     <string-array name="test_autism">
         <item>When you point at something in the opposite end of the room, does the child look at it? E.g. when you point at a toy or an animal, does the child look at it?</item>
@@ -31,8 +31,8 @@
         <item>Does the child look you in the eyes when you are talking to them, dressing them or playing with them?</item>
         <item>Does the child try to copy what you are doing? E.g. waving their hand when saying goodbye, clapping their hands, making funny noises when you are doing it.</item>
         <item>If you turn around to look at something, does your child start looking around to see what you are looking at?</item>
-        <item>Does the child try to make you look at them? E.g. the child looks at you waiting to be praised, or says "look" or "look at me".</item>
-        <item>Does the child understand being told to do something? E.g. if you don’t point at anything, does your child understand phrases like "put the book on the chair" or "bring me the blanket"?</item>
+        <item>Does the child try to make you look at them? E.g. the child looks at you waiting to be praised, or says \"look\" or \"look at me\".</item>
+        <item>Does the child understand being told to do something? E.g. if you don’t point at anything, does your child understand phrases like \"put the book on the chair\" or \"bring me the blanket\"?</item>
         <item>When something unusual happens, does the child look at your face to see how you react to it? E.g. if they hear a strange or funny nose or see a new toy, will they look at your face?</item>
         <item>Does your child like activities like being pushed on a swing or rocked on the knees?</item>
     </string-array>

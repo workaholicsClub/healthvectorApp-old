@@ -57,7 +57,7 @@
         <item>Continuously stares at the speaker’s face.</item>
     </string-array>
     <string-array name="hearing_and_vision__11__">
-        <item>Starts to understand simple commands ("give", "put").</item>
+        <item>Starts to understand simple commands (\"give\", \"put\").</item>
         <item>Knows and reacts to some household sounds  — sound of the car, dog’s bark, phone ring.</item>
         <item>When asked, can show at least one part of a doll’s body (face).</item>
         <item>Is interested in their reflection in the mirror.</item>
@@ -301,7 +301,7 @@
     <string-array name="social_development__24__30">
         <item>Expresses their complaints in words.</item>
         <item>Says hi.</item>
-        <item>Says "look" when they want to draw your attention.</item>
+        <item>Says \"look\" when they want to draw your attention.</item>
         <item>Plays active games with other children.</item>
         <item>Offers help.</item>
     </string-array>
@@ -311,14 +311,14 @@
     </string-array>
     <string-array name="speech_development__1__">
         <item>Vocalizes feeling discomfort by crying.</item>
-        <item>Makes sounds like "ah, eh, ooh" by the end of the first month.</item>
+        <item>Makes sounds like \"ah\", \"eh\", \"ooh\" by the end of the first month.</item>
     </string-array>
     <string-array name="speech_development__1_5__">
         <item>Babbles.</item>
     </string-array>
     <string-array name="speech_development__2__">
         <item>Makes more spontaneous sounds.</item>
-        <item>"Cooes" when being spoken to.</item>
+        <item>\"Cooes\" when being spoken to.</item>
     </string-array>
     <string-array name="speech_development__3__">
         <item>Can make three different sounds.</item>
@@ -336,11 +336,11 @@
         <item>Cooes, babbles, makes happy sounds.</item>
     </string-array>
     <string-array name="speech_development__7__">
-        <item>Babbles syllables like "la", "wa", "ma", "ba", "na".</item>
+        <item>Babbles syllables like \"la\", \"wa\", \"ma\", \"ba\", \"na\".</item>
         <item>Tries to draw attention with particular sounds.</item>
     </string-array>
     <string-array name="speech_development__8__">
-        <item>Repeats syllables "ma-ma", "pa-pa", "ta-ta".</item>
+        <item>Repeats syllables \"ma-ma\", \"pa-pa\", \"ta-ta\".</item>
         <item>Imitates various sounds.</item>
     </string-array>
     <string-array name="speech_development__9__">
@@ -348,56 +348,56 @@
     </string-array>
     <string-array name="speech_development__10__">
         <item>Babbling gets more varied.</item>
-        <item>Can say "mama" and "papa".</item>
+        <item>Can say \"mama\" and \"papa\".</item>
         <item>Repeats sounds after adults.</item>
-        <item>Reacts to their name and "give me".</item>
+        <item>Reacts to their name and \"give me\".</item>
     </string-array>
     <string-array name="speech_development__11__">
         <item>Says the first meaningful word.</item>
-        <item>Understands the notion of "you can’t do that".</item>
+        <item>Understands the notion of \"you can’t do that\".</item>
     </string-array>
     <string-array name="speech_development__12__">
-        <item>Says two meaningful words (in the "child speak").</item>
-        <item>When being told "bring me a toy" goes to look for it, find it and brings it.</item>
+        <item>Says two meaningful words (in the \"child speak\").</item>
+        <item>When being told \"bring me a toy\" goes to look for it, find it and brings it.</item>
     </string-array>
     <string-array name="speech_development__12__18">
-        <item>Can say at least two words apart from "mama" and "papa".</item>
-        <item>Can answer "what does the kitty/doggy say?"</item>
+        <item>Can say at least two words apart from \"mama\" and \"papa\".</item>
+        <item>Can answer \"what does the kitty/doggy say?\"</item>
         <item>Uses at least five words for different objects.</item>
         <item>Can show a mouth, a nose, arms and legs when asked to.</item>
-        <item>Knows prepositions "on" and "with".</item>
-        <item>Understands two-stage instructions like "go to your room and bring me…"</item>
-        <item>Understands at least three prepositions of place, like "in", "on", "under", "at", "next to".</item>
+        <item>Knows prepositions \"on\" and \"with\".</item>
+        <item>Understands two-stage instructions like \"go to your room and bring me…\"</item>
+        <item>Understands at least three prepositions of place, like \"in\", \"on\", \"under\", \"at\", \"next to\".</item>
     </string-array>
     <string-array name="speech_development__18__24">
         <item>Knows several familiar objects in a picture book.</item>
         <item>Uses no less than ten words.</item>
-        <item>Answers "yes" or "no" correctly when asked simple questions.</item>
-        <item>Says "bad" or "donwanna" if they don’t like an object.</item>
-        <item>Understands "up" and "down", "one" (gives only one item when asked to), "all".</item>
+        <item>Answers \"yes\" or \"no\" correctly when asked simple questions.</item>
+        <item>Says \"bad\" or \"donwanna\" if they don’t like an object.</item>
+        <item>Understands \"up\" and \"down\", \"one\" (gives only one item when asked to), \"all\".</item>
         <item>Can show one color when you name it.</item>
     </string-array>
     <string-array name="speech_development__24__30">
-        <item>Asks "more", "one more".</item>
-        <item>Says "don’t", "donwanna" etc.</item>
-        <item>Uses at least one of the following: "I", "you", "he", "she", "it", "me".</item>
+        <item>Asks \"more\", \"one more\".</item>
+        <item>Says \"don’t\", \"donwanna\" etc.</item>
+        <item>Uses at least one of the following: \"I\", \"you\", \"he\", \"she\", \"it\", \"me\".</item>
         <item>Can speak in two, three-word sentences or more.</item>
         <item>Can describe what is going on in a picture.</item>
-        <item>Says "my" or "mine" about their things.</item>
-        <item>Uses past tense like "The car fell down".</item>
+        <item>Says \"my\" or \"mine\" about their things.</item>
+        <item>Uses past tense like \"The car fell down\".</item>
         <item>Can say their name.</item>
         <item>Shows or names the bigger of two objects.</item>
-        <item>Understands no less than 6 words describing location, like "in", "over", "on", "under", "at", "next to", "above", "below", "higher", "lower".</item>
+        <item>Understands no less than 6 words describing location, like \"in\", \"over\", \"on\", \"under\", \"at\", \"next to\", \"above\", \"below\", \"higher\", \"lower\".</item>
         <item>Can tell other children’s gender correctly (boy or girl).</item>
     </string-array>
     <string-array name="speech_development__30__36">
-        <item>Asks questions starting with "what", "where", "why", "when", "how".</item>
+        <item>Asks questions starting with \"what\", \"where\", \"why", \"when\", \"how\".</item>
         <item>Uses nouns in different cases (other than nominative).</item>
         <item>Uses plural and future tense.</item>
-        <item>Uses words "good" and "bad".</item>
-        <item>Can answer questions like "What are cookies for?"</item>
+        <item>Uses words \"good\" and \"bad\".</item>
+        <item>Can answer questions like \"What are cookies for?\"</item>
         <item>Knows their age.</item>
-        <item>Uses words like "quick" and "quickly", "slow" and "slowly".</item>
+        <item>Uses words like \"quick\" and \"quickly\", \"slow\" and \"slowly\".</item>
         <item>Talks about what is going to happen.</item>
     </string-array>
     <string-array name="self_dependence_skills__3__">

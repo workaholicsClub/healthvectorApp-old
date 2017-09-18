@@ -252,7 +252,9 @@ public class XmlToCsvConverter {
             for (int i = 0; i < columns.size(); ++i) {
                 sb.append("\"");
                 if (columns.get(i) != null) {
-                    sb.append(columns.get(i).replace("\"", "\"\""));
+                    sb.append(columns.get(i)
+                            .replace("\"", "\"\"")
+                            .replace("\\\"\"", "\"\""));
                 }
                 sb.append("\"");
                 sb.append(";");

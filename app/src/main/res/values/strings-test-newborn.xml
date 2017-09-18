@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="test_newborn_name">Newborn test for cerebral palsy (CP)</string>
-    <string name="test_newborn_description">Signs of potential cerebral palsy can be detected within the first months of life. Thorough observation of the baby can help detect the symptoms soon enough to treat them. Each "Yes" means you child displays a symptom of CP.</string>
+    <string name="test_newborn_description">Signs of potential cerebral palsy can be detected within the first months of life. Thorough observation of the baby can help detect the symptoms soon enough to treat them. Each \"Yes\" means you child displays a symptom of CP.</string>
     <string name="test_newborn_result_good">No risk of CP found</string>
     <string name="test_newborn_short_result_bad">Risk of CP found</string>
     <string name="test_newborn_short_result_good">No risk of CP found</string>
@@ -31,7 +31,7 @@
         <item>Does the child’s cry sound quiet or weak? Sheer or painful? Are there any single outcries?</item>
         <item>Does the child grimace instead of crying?</item>
         <item>Does the child lack visual and auditory concentration by the time they reach 1 month?</item>
-        <item>Does the child lack "mouth attention"? (When a child half-opens their mouth as if trying to respond to the adult’s speech. When spoken to kindly, the child can respond by a brief first smile.)</item>
+        <item>Does the child lack \"mouth attention\"? (When a child half-opens their mouth as if trying to respond to the adult’s speech. When spoken to kindly, the child can respond by a brief first smile.)</item>
         <item>Does your child frown or seem unhappy?</item>
         <item>Does the child hate changing diapers or being examined?</item>
         <item>Does the child cry a lot for no good reason? Is the child excessively sleepy?</item>
