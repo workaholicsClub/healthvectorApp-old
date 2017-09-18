@@ -113,7 +113,7 @@ public class AchievementDataRepository extends CrudDataRepository<Achievement> {
                 new AchievementGroup(24.0, 30.0, R.array.speech_development__24__30, 24.0, 36.0),
                 new AchievementGroup(30.0, 36.0, R.array.speech_development__30__36, 30.0, null)));
         put(AchievementType.SELF_DEPENDENCE_SKILLS, Arrays.asList(
-                new AchievementGroup(3.0, null, R.array.self_dependence_skills__3__, 3.0, 6.0),
+                new AchievementGroup(3.0, null, R.array.self_dependence_skills__3__, 0.0, 6.0),
                 new AchievementGroup(4.0, 5.0, R.array.self_dependence_skills__4__5, 4.0, 7.0),
                 new AchievementGroup(6.0, null, R.array.self_dependence_skills__6__, 6.0, 8.0),
                 new AchievementGroup(7.0, null, R.array.self_dependence_skills__7__, 7.0, 9.0),
