@@ -24,7 +24,7 @@ android {
         applicationId "ru.android.childdiary"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 55
+        versionCode 56
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
