@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import java.util.Locale;
 
@@ -15,6 +16,20 @@ public class LocalizationUtils {
         }
         boolean isRu = Locale.getDefault().getLanguage().equals(new Locale("ru").getLanguage());
         if (isRu) {
+            return stringRu;
+        }
+        return stringEn;
+    }
+
+    public static String getLocalizedName(String stringEn, String stringRu) {
+        boolean isRu = Locale.getDefault().getLanguage().equals(new Locale("ru").getLanguage());
+        if (isRu) {
+            if (TextUtils.isEmpty(stringRu)) {
+                return stringEn;
+            }
+            return stringRu;
+        }
+        if (TextUtils.isEmpty(stringEn)) {
             return stringRu;
         }
         return stringEn;

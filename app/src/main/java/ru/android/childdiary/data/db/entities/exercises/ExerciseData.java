@@ -17,9 +17,13 @@ public interface ExerciseData extends Persistable {
 
     String getCode();
 
-    String getName();
+    String getNameEn();
 
-    String getDescription();
+    String getNameRu();
+
+    String getDescriptionEn();
+
+    String getDescriptionRu();
 
     Integer getOrderNumber();
 }

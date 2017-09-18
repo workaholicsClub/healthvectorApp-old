@@ -30,9 +30,7 @@ public class Medicine extends DictionaryItem implements Serializable, ContentObj
 
     @Override
     public boolean isContentEqual(@NonNull Medicine other) {
-        return ObjectUtils.equals(id, other.id)
-                && ObjectUtils.contentEquals(nameEn, other.nameEn)
-                && ObjectUtils.contentEquals(nameRu, other.nameRu)
-                && ObjectUtils.contentEquals(nameUser, other.nameUser);
+        return ObjectUtils.equals(getId(), other.getId())
+                && ObjectUtils.contentEquals(getName(), other.getName());
     }
 }

@@ -21,8 +21,10 @@ public class ExerciseMapper implements EntityMapper<ExerciseData, ExerciseEntity
                 .id(exerciseData.getId())
                 .serverId(exerciseData.getServerId())
                 .code(exerciseData.getCode())
-                .name(exerciseData.getName())
-                .description(exerciseData.getDescription())
+                .nameEn(exerciseData.getNameEn())
+                .nameRu(exerciseData.getNameRu())
+                .descriptionEn(exerciseData.getDescriptionEn())
+                .descriptionRu(exerciseData.getDescriptionRu())
                 .build();
     }
 
@@ -42,7 +44,9 @@ public class ExerciseMapper implements EntityMapper<ExerciseData, ExerciseEntity
     public void fillNonReferencedFields(@NonNull ExerciseEntity to, @NonNull Exercise from) {
         to.setServerId(from.getServerId());
         to.setCode(from.getCode());
-        to.setName(from.getName());
-        to.setDescription(from.getDescription());
+        to.setNameEn(from.getNameEn());
+        to.setNameRu(from.getNameRu());
+        to.setDescriptionEn(from.getDescriptionEn());
+        to.setDescriptionRu(from.getDescriptionRu());
     }
 }

@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import lombok.Builder;
 import lombok.Value;
+import ru.android.childdiary.domain.core.LocalizationUtils;
 import ru.android.childdiary.domain.core.data.ContentObject;
 import ru.android.childdiary.utils.ObjectUtils;
 
@@ -20,11 +21,19 @@ public class Exercise implements Serializable, ContentObject<Exercise> {
 
     String code;
 
-    String name;
+    String nameEn, nameRu;
 
-    String description;
+    String descriptionEn, descriptionRu;
 
     boolean exported;
+
+    public String getName() {
+        return LocalizationUtils.getLocalizedName(nameEn, nameRu);
+    }
+
+    public String getDescription() {
+        return LocalizationUtils.getLocalizedName(descriptionEn, descriptionRu);
+    }
 
     @Override
     public boolean isContentEmpty() {

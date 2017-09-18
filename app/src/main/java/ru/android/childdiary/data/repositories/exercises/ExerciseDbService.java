@@ -72,7 +72,7 @@ public class ExerciseDbService {
 
     public Observable<List<Exercise>> getExercises() {
         return dataStore.select(ExerciseEntity.class)
-                .orderBy(ExerciseEntity.ORDER_NUMBER, ExerciseEntity.NAME, ExerciseEntity.ID)
+                .orderBy(ExerciseEntity.ORDER_NUMBER, ExerciseEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, exerciseMapper));
@@ -80,7 +80,7 @@ public class ExerciseDbService {
 
     public Observable<List<Exercise>> getExercises(@NonNull Child child) {
         return dataStore.select(ExerciseEntity.class)
-                .orderBy(ExerciseEntity.ORDER_NUMBER, ExerciseEntity.NAME, ExerciseEntity.ID)
+                .orderBy(ExerciseEntity.ORDER_NUMBER, ExerciseEntity.ID)
                 .get()
                 .observableResult()
                 .flatMap(reactiveResult -> DbUtils.mapReactiveResultToListObservable(reactiveResult, exerciseMapper))
@@ -115,6 +115,11 @@ public class ExerciseDbService {
             // удаленные на сервере объекты не удаляем локально; либо нужна проверка, что на них никто больше не ссылается
             // принимаем, что уникальность объектов, приходящих с сервера гарантируется атрибутом SERVER_ID
 
+            // TODO Локализация занятий. Если формат занятий с сервера будет аналогичным текущему формату,
+            // то надо "смержить" список exercises, объединить в один объект те занятия, server id
+            // которых совпадает, дополнить локализации друг друга. Если локализация уже была добавлена в текущем списке,
+            // игнорировать. Уникальными считать занятия по server id и language code.
+
             int i = 0;
 
             for (Exercise exercise : exercises) {
@@ -141,10 +146,9 @@ public class ExerciseDbService {
             }
 
             List<ExerciseEntity> exerciseEntities = blockingEntityStore.select(ExerciseEntity.class)
-                    .orderBy(ExerciseEntity.ORDER_NUMBER, ExerciseEntity.NAME, ExerciseEntity.ID)
+                    .orderBy(ExerciseEntity.ORDER_NUMBER, ExerciseEntity.ID)
                     .get().toList();
             return exerciseEntities;
-
         }));
     }
 

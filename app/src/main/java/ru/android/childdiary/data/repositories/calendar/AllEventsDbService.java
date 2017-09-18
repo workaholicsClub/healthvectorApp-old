@@ -120,7 +120,8 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
     // concrete exercise
     private static final String CONCRETE_EXERCISE_ENTITY_ID = "CONCRETE_EXERCISE_ENTITY_ID";
     // exercise
-    private static final String EXERCISE_ENTITY_NAME = "EXERCISE_ENTITY_NAME";
+    private static final String EXERCISE_ENTITY_NAME_EN = "EXERCISE_ENTITY_NAME_EN";
+    private static final String EXERCISE_ENTITY_NAME_RU = "EXERCISE_ENTITY_NAME_RU";
 
     private final static Expression[] EXPRESSIONS = new Expression[]{
             // master event
@@ -181,7 +182,8 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
             // concrete exercise
             ConcreteExerciseEntity.ID.as(CONCRETE_EXERCISE_ENTITY_ID),
             // exercise
-            ExerciseEntity.NAME.as(EXERCISE_ENTITY_NAME)
+            ExerciseEntity.NAME_EN.as(EXERCISE_ENTITY_NAME_EN),
+            ExerciseEntity.NAME_RU.as(EXERCISE_ENTITY_NAME_RU)
     };
 
     private final ReactiveEntityStore<Persistable> dataStore;
@@ -380,7 +382,8 @@ public class AllEventsDbService implements EntityMapper<Tuple, Tuple, MasterEven
 
     private static Exercise mapToExercise(@NonNull Tuple data) {
         return Exercise.builder()
-                .name(data.get(ExerciseEntity.NAME.as(EXERCISE_ENTITY_NAME)))
+                .nameEn(data.get(ExerciseEntity.NAME_EN.as(EXERCISE_ENTITY_NAME_EN)))
+                .nameRu(data.get(ExerciseEntity.NAME_RU.as(EXERCISE_ENTITY_NAME_RU)))
                 .build();
     }
 
