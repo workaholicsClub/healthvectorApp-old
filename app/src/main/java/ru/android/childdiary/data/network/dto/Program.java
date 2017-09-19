@@ -13,13 +13,15 @@ import lombok.ToString;
 @Getter
 @Root(name = "Программа")
 public class Program {
+    private static final String LANGUAGE_EN = "en", LANGUAGE_RU = "ru";
+
     @Attribute(name = "lang")
     String languageCode;
 
     @Element(name = "ИД")
     Long serverId;
 
-    @Element(name = "Код")
+    @Element(name = "Код", required = false)
     String code;
 
     @Element(name = "Наименование")
@@ -27,4 +29,12 @@ public class Program {
 
     @Element(name = "Краткое_описание")
     String description;
+
+    public boolean isEn() {
+        return LANGUAGE_EN.equals(languageCode);
+    }
+
+    public boolean isRu() {
+        return LANGUAGE_RU.equals(languageCode);
+    }
 }
