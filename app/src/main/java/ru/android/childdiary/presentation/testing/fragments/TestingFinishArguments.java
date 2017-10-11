@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class TestingFinishArguments extends AppPartitionArguments {
         this.text = text;
         this.results = result == null
                 ? Collections.emptyList()
-                : TestUtils.filterResults(Collections.singletonList(result));
+                : new ArrayList<>(TestUtils.filterResults(Collections.singletonList(result)));
         this.invalidResults = invalidResults;
         this.isInTestMode = isInTestMode;
     }

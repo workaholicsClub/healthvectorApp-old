@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 
+import java.io.Serializable;
+
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
@@ -14,7 +16,7 @@ import static ru.android.childdiary.domain.development.testing.data.processors.c
 import static ru.android.childdiary.domain.development.testing.data.processors.core.DomanTestProcessorUtils.SLOW_RANGES;
 
 @Value
-public class DomanResult {
+public class DomanResult implements Serializable {
     public static final double ADVANCED = 100f / 3f;
     public static final double NORMAL = 100f / 3f;
     public static final double SLOW = 100f / 3f;
