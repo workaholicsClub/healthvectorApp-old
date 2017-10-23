@@ -22,13 +22,21 @@ public class TimePickerDialogArguments extends BaseDialogArguments {
     String title;
     @Nullable
     LocalTime time;
+    @Nullable
+    LocalTime minTime;
+    @Nullable
+    LocalTime maxTime;
 
     @Builder
     public TimePickerDialogArguments(@Nullable Sex sex,
                                      @Nullable String title,
-                                     @Nullable LocalTime time) {
+                                     @Nullable LocalTime time,
+                                     @Nullable LocalTime minTime,
+                                     @Nullable LocalTime maxTime) {
         super(sex);
         this.title = title;
         this.time = time;
+        this.minTime = minTime;
+        this.maxTime = maxTime;
     }
 }

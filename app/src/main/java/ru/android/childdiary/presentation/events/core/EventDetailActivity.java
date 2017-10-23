@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -35,7 +34,8 @@ import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.dialogs.TimeDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
-import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
+import ru.android.childdiary.presentation.profile.dialogs.TimePickerDialogArguments;
+import ru.android.childdiary.presentation.profile.dialogs.TimePickerDialogFragment;
 import ru.android.childdiary.utils.strings.EventUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -45,8 +45,8 @@ import static android.view.View.VISIBLE;
 
 public abstract class EventDetailActivity<V extends EventDetailView<T>, T extends MasterEvent & ContentObject<T> & LinearGroupItem<T>>
         extends BaseMvpActivity
-        implements EventDetailView<T>, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
-        TimeDialogFragment.Listener {
+        implements EventDetailView<T>, TimeDialogFragment.Listener,
+        DatePickerDialog.OnDateSetListener, TimePickerDialogFragment.Listener {
     private static final String TAG_PROGRESS_DIALOG_DELETING_EVENTS = "TAG_PROGRESS_DIALOG_DELETING_EVENTS";
     private static final String TAG_PROGRESS_DIALOG_UPDATING_EVENTS = "TAG_PROGRESS_DIALOG_UPDATING_EVENTS";
 
@@ -254,9 +254,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
-        if (fragment instanceof TimePickerDialog) {
-            ((TimePickerDialog) fragment).setOnTimeSetListener(this);
-        } else if (fragment instanceof DatePickerDialog) {
+        if (fragment instanceof DatePickerDialog) {
             ((DatePickerDialog) fragment).setOnDateSetListener(this);
         }
     }
@@ -280,14 +278,18 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     protected void showTimePicker(String tag, @Nullable LocalTime time) {
-        TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, time, getSex());
-        tpd.show(getFragmentManager(), tag);
+        TimePickerDialogFragment dialogFragment = new TimePickerDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), tag,
+                TimePickerDialogArguments.builder()
+                        .sex(getSex())
+                        .title(getString(R.string.time))
+                        .time(time)
+                        .build());
     }
 
     @Override
-    public final void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        LocalTime time = new LocalTime(hourOfDay, minute);
-        setTime(view.getTag(), time);
+    public void onTimePick(String tag, @NonNull LocalTime time) {
+        setTime(tag, time);
     }
 
     protected void setTime(String tag, LocalTime time) {

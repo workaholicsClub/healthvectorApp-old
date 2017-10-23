@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.settings.daylength;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.LocalTime;
 
@@ -26,11 +24,12 @@ import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDayTimeView;
-import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
+import ru.android.childdiary.presentation.profile.dialogs.TimePickerDialogArguments;
+import ru.android.childdiary.presentation.profile.dialogs.TimePickerDialogFragment;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
-public class DayLengthActivity extends BaseMvpActivity implements DayLengthView, TimePickerDialog.OnTimeSetListener {
+public class DayLengthActivity extends BaseMvpActivity implements DayLengthView, TimePickerDialogFragment.Listener {
     private static final String TAG_TIME_PICKER_START = "TIME_PICKER_START";
     private static final String TAG_TIME_PICKER_FINISH = "TIME_PICKER_FINISH";
 
@@ -65,11 +64,11 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
         buttonAdd.setText(R.string.save);
         dayStartTimeView.setFieldDialogListener(v -> {
             LocalTime maxTime = dayFinishTimeView.getValue().minusHours(1);
-            showTimePicker(TAG_TIME_PICKER_START, dayStartTimeView.getValue(), null, maxTime);
+            showTimePicker(TAG_TIME_PICKER_START, getString(R.string.day_start), dayStartTimeView.getValue(), null, maxTime);
         });
         dayFinishTimeView.setFieldDialogListener(v -> {
             LocalTime minTime = dayStartTimeView.getValue().plusHours(1);
-            showTimePicker(TAG_TIME_PICKER_FINISH, dayFinishTimeView.getValue(), minTime, null);
+            showTimePicker(TAG_TIME_PICKER_FINISH, getString(R.string.day_finish), dayFinishTimeView.getValue(), minTime, null);
         });
     }
 
@@ -93,24 +92,24 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
         buttonAdd.setBackgroundResource(ResourcesUtils.getButtonBackgroundRes(getSex(), true));
     }
 
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (fragment instanceof TimePickerDialog) {
-            ((TimePickerDialog) fragment).setOnTimeSetListener(this);
-        }
-    }
-
-    private void showTimePicker(String tag, @Nullable LocalTime time,
+    private void showTimePicker(String tag,
+                                @Nullable String title,
+                                @Nullable LocalTime time,
                                 @Nullable LocalTime minTime, @Nullable LocalTime maxTime) {
-        TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, time, getSex(), minTime, maxTime);
-        tpd.show(getFragmentManager(), tag);
+        TimePickerDialogFragment dialogFragment = new TimePickerDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), tag,
+                TimePickerDialogArguments.builder()
+                        .sex(getSex())
+                        .title(title)
+                        .time(time)
+                        .minTime(minTime)
+                        .maxTime(maxTime)
+                        .build());
     }
 
     @Override
-    public final void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        LocalTime time = new LocalTime(hourOfDay, minute);
-        switch (view.getTag()) {
+    public void onTimePick(String tag, @NonNull LocalTime time) {
+        switch (tag) {
             case TAG_TIME_PICKER_START:
                 dayStartTimeView.setValue(time);
                 break;

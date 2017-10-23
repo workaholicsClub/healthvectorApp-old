@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -56,17 +55,18 @@ import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
 import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
-import ru.android.childdiary.presentation.core.widgets.CustomTimePickerDialog;
 import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
 import ru.android.childdiary.presentation.dictionaries.medicinemeasure.MedicineMeasureAddActivity;
 import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
+import ru.android.childdiary.presentation.profile.dialogs.TimePickerDialogArguments;
+import ru.android.childdiary.presentation.profile.dialogs.TimePickerDialogFragment;
 import ru.android.childdiary.utils.strings.TimeUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Serializable>
         extends BaseMvpActivity implements BaseItemView<T>,
-        FieldCheckBoxView.FieldCheckBoxListener,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, TimeDialogFragment.Listener,
+        FieldCheckBoxView.FieldCheckBoxListener, TimeDialogFragment.Listener,
+        DatePickerDialog.OnDateSetListener, TimePickerDialogFragment.Listener,
         MedicineMeasureValueDialogFragment.Listener, LengthValueDialogFragment.Listener,
         FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener {
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
@@ -327,9 +327,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
-        if (fragment instanceof TimePickerDialog) {
-            ((TimePickerDialog) fragment).setOnTimeSetListener(this);
-        } else if (fragment instanceof DatePickerDialog) {
+        if (fragment instanceof DatePickerDialog) {
             ((DatePickerDialog) fragment).setOnDateSetListener(this);
         }
     }
@@ -358,14 +356,18 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     protected void showTimePicker(String tag, @Nullable LocalTime time) {
-        TimePickerDialog tpd = CustomTimePickerDialog.create(this, this, time, getSex());
-        tpd.show(getFragmentManager(), tag);
+        TimePickerDialogFragment dialogFragment = new TimePickerDialogFragment();
+        dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), tag,
+                TimePickerDialogArguments.builder()
+                        .sex(getSex())
+                        .title(getString(R.string.time))
+                        .time(time)
+                        .build());
     }
 
     @Override
-    public final void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        LocalTime time = new LocalTime(hourOfDay, minute);
-        setTime(view.getTag(), time);
+    public void onTimePick(String tag, @NonNull LocalTime time) {
+        setTime(tag, time);
     }
 
     private void setTime(String tag, LocalTime time) {
