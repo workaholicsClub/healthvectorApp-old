@@ -11,10 +11,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
-import ru.android.childdiary.domain.core.exceptions.TryCountExceededException;
 import ru.android.childdiary.domain.child.data.Child;
-import ru.android.childdiary.domain.exercises.data.Exercise;
+import ru.android.childdiary.domain.core.exceptions.TryCountExceededException;
 import ru.android.childdiary.domain.exercises.ExerciseInteractor;
+import ru.android.childdiary.domain.exercises.data.Exercise;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
 
 @InjectViewState
@@ -118,5 +118,9 @@ public class ExercisesPresenter extends AppPartitionPresenter<ExercisesView> {
                                     onUnexpectedError(throwable);
                                 })
         );
+    }
+
+    public void addProfile() {
+        getViewState().navigateToProfileAdd();
     }
 }

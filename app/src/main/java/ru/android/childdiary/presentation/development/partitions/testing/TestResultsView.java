@@ -42,4 +42,7 @@ public interface TestResultsView extends AppPartitionView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void deleted(@NonNull TestResult testResult);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToProfileAdd();
 }

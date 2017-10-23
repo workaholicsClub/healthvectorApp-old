@@ -31,6 +31,7 @@ import ru.android.childdiary.presentation.development.partitions.testing.adapter
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.result.TestResultAdapter;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestAdapter;
 import ru.android.childdiary.presentation.development.partitions.testing.adapters.test.TestClickListener;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.testing.TestResultActivity;
 import ru.android.childdiary.presentation.testing.TestingActivity;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -121,7 +122,11 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
 
     @Override
     public void noChildSpecified() {
-        showToast(getString(R.string.intention_add_child_profile));
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.add_profile_to_continue)
+                .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override
@@ -165,5 +170,11 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
     @Override
     public void showChart() {
         presenter.showChart();
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), null);
+        startActivity(intent);
     }
 }

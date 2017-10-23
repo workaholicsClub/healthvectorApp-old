@@ -85,4 +85,8 @@ public class MedicalDataPresenter extends AppPartitionPresenter<MedicalDataView>
                                 },
                                 this::onUnexpectedError));
     }
+
+    public void addProfile() {
+        getViewState().navigateToProfileAdd();
+    }
 }

@@ -183,4 +183,8 @@ public class ConcreteAchievementsPresenter extends BaseDevelopmentDiaryPresenter
                                 },
                                 this::onUnexpectedError));
     }
+
+    public void addProfile() {
+        getViewState().navigateToProfileAdd();
+    }
 }

@@ -359,4 +359,8 @@ public class BaseCalendarPresenter extends BasePresenter<BaseCalendarView> {
                         .subscribe(selectedFilter -> {
                         }, this::onUnexpectedError));
     }
+
+    public void addProfile() {
+        getViewState().navigateToProfileAdd();
+    }
 }

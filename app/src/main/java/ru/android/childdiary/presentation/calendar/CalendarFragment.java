@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
@@ -38,6 +39,7 @@ import ru.android.childdiary.presentation.events.FeedEventDetailActivity;
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -284,7 +286,11 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
 
     @Override
     public void noChildSpecified() {
-        showToast(getString(R.string.intention_add_child_profile));
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.add_profile_to_continue)
+                .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override
@@ -305,5 +311,11 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     @Override
     public void hideFabBar() {
         fabToolbar.hideFabBar();
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), null);
+        startActivity(intent);
     }
 }

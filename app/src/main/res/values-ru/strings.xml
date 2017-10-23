@@ -11,6 +11,7 @@
     <string name="help">Помощь</string>
     <string name="profile">Профиль</string>
     <string name="add_profile">Добавить профиль</string>
+    <string name="add_profile_to_continue">Для продолжения работы добавьте профиль ребенка</string>
     <string name="edit">Редактировать</string>
     <string name="delete_child">Удалить профиль</string>
     <!-- %s - строка, имя ребенка -->

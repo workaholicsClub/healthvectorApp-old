@@ -25,4 +25,7 @@ public interface MedicalDataView extends AppPartitionView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void noChildSpecified();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToProfileAdd();
 }

@@ -27,6 +27,7 @@ import ru.android.childdiary.presentation.development.partitions.achievements.ad
 import ru.android.childdiary.presentation.development.partitions.achievements.add.AddConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.achievements.edit.EditConcreteAchievementActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -173,12 +174,22 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
     @Override
     public void noChildSpecified() {
-        showToast(getString(R.string.intention_add_child_profile));
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.add_profile_to_continue)
+                .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         adapter.closeAllItems(); // для одинакового поведения с Мед. данными
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), null);
+        startActivity(intent);
     }
 }

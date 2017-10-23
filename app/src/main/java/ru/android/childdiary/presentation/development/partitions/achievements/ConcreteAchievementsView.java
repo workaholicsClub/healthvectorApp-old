@@ -28,4 +28,7 @@ public interface ConcreteAchievementsView extends BaseDevelopmentDiaryView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void noChildSpecified();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToProfileAdd();
 }

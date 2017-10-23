@@ -6,6 +6,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -29,7 +30,9 @@ import ru.android.childdiary.presentation.core.AppPartitionFragment;
 import ru.android.childdiary.presentation.core.adapters.decorators.DividerItemDecoration;
 import ru.android.childdiary.presentation.exercises.adapters.ExerciseAdapter;
 import ru.android.childdiary.presentation.exercises.adapters.ExerciseClickListener;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.utils.HtmlUtils;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public class ExercisesFragment extends AppPartitionFragment implements ExercisesView,
         ExerciseClickListener, HtmlUtils.OnLinkClickListener {
@@ -158,7 +161,11 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
 
     @Override
     public void noChildSpecified() {
-        showToast(getString(R.string.intention_add_child_profile));
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.add_profile_to_continue)
+                .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override
@@ -176,5 +183,11 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         if (LINK_TRY_AGAIN.equals(url)) {
             presenter.tryToLoadDataFromNetwork();
         }
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), null);
+        startActivity(intent);
     }
 }

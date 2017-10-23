@@ -104,4 +104,8 @@ public class CalendarPresenter extends AppPartitionPresenter<CalendarView> {
                                 },
                                 this::onUnexpectedError));
     }
+
+    public void addProfile() {
+        getViewState().navigateToProfileAdd();
+    }
 }

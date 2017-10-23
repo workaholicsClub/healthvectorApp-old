@@ -68,4 +68,7 @@ public interface BaseCalendarView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void noChildSpecified();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToProfileAdd();
 }

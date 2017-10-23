@@ -116,4 +116,8 @@ public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<Ant
                                 },
                                 this::onUnexpectedError));
     }
+
+    public void addProfile() {
+        getViewState().navigateToProfileAdd();
+    }
 }

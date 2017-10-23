@@ -15,4 +15,7 @@ public interface BaseMedicalDataView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showNoDataToFilter();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToProfileAdd();
 }

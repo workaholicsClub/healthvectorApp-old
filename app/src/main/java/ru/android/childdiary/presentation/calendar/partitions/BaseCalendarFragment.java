@@ -52,6 +52,7 @@ import ru.android.childdiary.presentation.events.MedicineTakingEventDetailActivi
 import ru.android.childdiary.presentation.events.OtherEventDetailActivity;
 import ru.android.childdiary.presentation.events.PumpEventDetailActivity;
 import ru.android.childdiary.presentation.events.SleepEventDetailActivity;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.services.TimerServiceConnection;
 import ru.android.childdiary.services.TimerServiceListener;
 import ru.android.childdiary.utils.strings.DateUtils;
@@ -363,7 +364,11 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
 
     @Override
     public void noChildSpecified() {
-        showToast(getString(R.string.intention_add_child_profile));
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.add_profile_to_continue)
+                .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override
@@ -406,5 +411,11 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
     @Override
     public void done(MasterEvent event) {
         presenter.done(event);
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), null);
+        startActivity(intent);
     }
 }

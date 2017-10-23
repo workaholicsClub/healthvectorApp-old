@@ -26,6 +26,7 @@ import ru.android.childdiary.presentation.development.partitions.antropometry.ad
 import ru.android.childdiary.presentation.development.partitions.antropometry.edit.EditAntropometryActivity;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryFragment;
 import ru.android.childdiary.presentation.development.partitions.core.ChartContainer;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -94,7 +95,11 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
 
     @Override
     public void noChildSpecified() {
-        showToast(getString(R.string.intention_add_child_profile));
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.add_profile_to_continue)
+                .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override
@@ -153,5 +158,11 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     public void onResume() {
         super.onResume();
         adapter.closeAllItems(); // для одинакового поведения с Мед. данными
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), null);
+        startActivity(intent);
     }
 }

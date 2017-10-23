@@ -1,8 +1,10 @@
 package ru.android.childdiary.presentation.medical.partitions.core;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +18,8 @@ import ru.android.childdiary.presentation.core.adapters.swipe.FabController;
 import ru.android.childdiary.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
 import ru.android.childdiary.presentation.medical.filter.adapters.ChipsAdapter;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
+import ru.android.childdiary.utils.ui.ThemeUtils;
 
 public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> extends AppPartitionFragment
         implements BaseMedicalDataView, ChipsAdapter.ChipsDeleteClickListener {
@@ -91,7 +95,11 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
 
     @Override
     public void noChildSpecified() {
-        showToast(getString(R.string.intention_add_child_profile));
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.add_profile_to_continue)
+                .setPositiveButton(R.string.add, (dialog, which) -> getPresenter().addProfile())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override
@@ -105,5 +113,11 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
         if (result) {
             getPresenter().setFilter(chipsAdapter.getItems());
         }
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), null);
+        startActivity(intent);
     }
 }

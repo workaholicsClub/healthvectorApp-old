@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
@@ -36,6 +37,7 @@ import ru.android.childdiary.presentation.medical.add.visits.AddMedicineTakingAc
 import ru.android.childdiary.presentation.medical.partitions.core.BaseMedicalDataFragment;
 import ru.android.childdiary.presentation.medical.partitions.medicines.MedicineTakingListFragment;
 import ru.android.childdiary.presentation.medical.partitions.visits.DoctorVisitsFragment;
+import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -199,7 +201,11 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
 
     @Override
     public void noChildSpecified() {
-        showToast(getString(R.string.intention_add_child_profile));
+        new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(R.string.add_profile_to_continue)
+                .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @OnClick(R.id.fab)
@@ -232,5 +238,11 @@ public class MedicalDataFragment extends AppPartitionFragment implements Medical
     @Override
     public void hideFabBar() {
         fab.hide();
+    }
+
+    @Override
+    public void navigateToProfileAdd() {
+        Intent intent = ProfileEditActivity.getIntent(getContext(), null);
+        startActivity(intent);
     }
 }

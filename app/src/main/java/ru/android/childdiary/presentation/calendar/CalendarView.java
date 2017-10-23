@@ -30,4 +30,7 @@ public interface CalendarView extends AppPartitionView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void noChildSpecified();
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void navigateToProfileAdd();
 }
