@@ -134,6 +134,9 @@ android {
             buildConfigField "boolean", "COPY_BACKUP_TO_EXTERNAL_STORAGE", "false"
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 def renameArtifact(variant, defaultConfig) {
