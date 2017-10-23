@@ -465,7 +465,7 @@ public class CalendarDataRepository extends ValueDataRepository<LocalDate> imple
 
     private Observable<Boolean> getVibration(@NonNull EventType eventType) {
         String key = KEY_VIBRATION_PREFIX + eventType;
-        return preferences.getBoolean(key, false).asObservable();
+        return preferences.getBoolean(key, true).asObservable();
     }
 
     private Observable<Boolean> getVibrationOnce(@NonNull EventType eventType) {
