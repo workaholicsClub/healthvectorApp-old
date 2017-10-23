@@ -17,18 +17,11 @@
         android:orientation="vertical"
         android:paddingTop="@dimen/field_margin_base">
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldTextViewWithImageView
-            android:id="@+id/exerciseNameView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:fieldIcon="@drawable/ic_exercise_name" />
-
         <ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView
             android:id="@+id/exerciseDescriptionView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fieldIcon="@drawable/ic_exercise_description"
-            app:fieldShowIcon="true" />
+            app:fieldShowIcon="false" />
     </LinearLayout>
 
     <Button

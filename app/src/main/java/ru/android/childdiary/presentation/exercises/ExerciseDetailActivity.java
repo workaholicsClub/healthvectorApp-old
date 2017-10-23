@@ -23,16 +23,12 @@ import ru.android.childdiary.domain.exercises.data.Exercise;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView;
-import ru.android.childdiary.presentation.core.fields.widgets.FieldTextViewWithImageView;
 import ru.android.childdiary.utils.HtmlUtils;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 
 public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseDetailView,
         HtmlUtils.OnLinkClickListener {
     private static final int REQUEST_ADD_CONCRETE_EXERCISE = 1;
-
-    @BindView(R.id.exerciseNameView)
-    FieldTextViewWithImageView exerciseNameView;
 
     @BindView(R.id.exerciseDescriptionView)
     FieldJustifiedTextView exerciseDescriptionView;
@@ -104,7 +100,7 @@ public class ExerciseDetailActivity extends BaseMvpActivity implements ExerciseD
         Child child = state.getChild();
         buttonAdd.setVisibility(child.getId() == null ? View.GONE : View.VISIBLE);
         Exercise exercise = state.getExercise();
-        exerciseNameView.setText(exercise.getName());
+        setupToolbarTitle(exercise.getName());
         exerciseDescriptionView.setText(exercise.getDescription());
     }
 
