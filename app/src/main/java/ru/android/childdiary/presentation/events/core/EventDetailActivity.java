@@ -230,14 +230,6 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     @Override
-    public void showNeedToFillNoteOrPhoto() {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.need_to_fill_not_or_photo)
-                .setPositiveButton(R.string.ok, null)
-                .show();
-    }
-
-    @Override
     public void showDeletingEvents(boolean loading) {
         if (loading) {
             showProgress(TAG_PROGRESS_DIALOG_DELETING_EVENTS,
@@ -372,9 +364,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     }
 
     private void processContentEquals(@NonNull T event, @NonNull T editedEvent) {
-        if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
-            showNeedToFillNoteOrPhoto();
-        } else if (EventUtils.isDone(editedEvent) == EventUtils.isDone(event)) {
+        if (EventUtils.isDone(editedEvent) == EventUtils.isDone(event)) {
             finish();
         } else {
             getPresenter().updateEvent(editedEvent, true);
@@ -395,13 +385,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.save_changes_dialog_title)
                 .setPositiveButton(R.string.save,
-                        (dialog, which) -> {
-                            if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
-                                showNeedToFillNoteOrPhoto();
-                            } else {
-                                getPresenter().updateEvent(editedEvent, true);
-                            }
-                        })
+                        (dialog, which) -> getPresenter().updateEvent(editedEvent, true))
                 .setNegativeButton(R.string.cancel,
                         (dialog, which) -> finish())
                 .show();
@@ -411,21 +395,9 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.ask_update_linear_group)
                 .setPositiveButton(R.string.update_one_event,
-                        (dialog, which) -> {
-                            if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
-                                showNeedToFillNoteOrPhoto();
-                            } else {
-                                getPresenter().updateEvent(editedEvent, true);
-                            }
-                        })
+                        (dialog, which) -> getPresenter().updateEvent(editedEvent, true))
                 .setNegativeButton(R.string.update_linear_group,
-                        (dialog, which) -> {
-                            if (EventUtils.isDone(editedEvent) && EventUtils.needToFillNoteOrPhoto(editedEvent)) {
-                                showNeedToFillNoteOrPhoto();
-                            } else {
-                                getPresenter().updateLinearGroup(editedEvent, fields, true);
-                            }
-                        })
+                        (dialog, which) -> getPresenter().updateLinearGroup(editedEvent, fields, true))
                 .setNeutralButton(R.string.cancel,
                         (dialog, which) -> finish())
                 .show();

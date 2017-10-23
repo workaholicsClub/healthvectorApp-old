@@ -180,7 +180,6 @@
     <string name="events_updating">Идет обновление событий…</string>
     <string name="default_doctor_name">Педиатр</string>
     <string name="delete_photo_confirmation_dialog_title">Удалить фото?</string>
-    <string name="need_to_fill_not_or_photo">Для выполнения события добавьте к событию описание или фотографию</string>
     <string name="add_doctor_visit">Добавить визит к врачу</string>
     <string name="add_medicine_taking">Добавить рецепт</string>
     <string name="delete_event_confirmation_dialog_title">Удалить событие?</string>

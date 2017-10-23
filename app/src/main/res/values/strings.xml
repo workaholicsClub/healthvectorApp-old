@@ -180,7 +180,6 @@
     <string name="events_updating">Processing events updating…</string>
     <string name="default_doctor_name">Pediatrician</string>
     <string name="delete_photo_confirmation_dialog_title">Delete picture?</string>
-    <string name="need_to_fill_not_or_photo">To complete event please add description or picture</string>
     <string name="add_doctor_visit">Add visit to doctor</string>
     <string name="add_medicine_taking">Add prescription</string>
     <string name="delete_event_confirmation_dialog_title">Delete event?</string>

@@ -40,9 +40,6 @@ public interface EventDetailView<T extends MasterEvent> extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event);
 
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void showNeedToFillNoteOrPhoto();
-
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showDeletingEvents(boolean loading);
 

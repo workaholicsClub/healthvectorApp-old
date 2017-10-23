@@ -39,19 +39,6 @@ public class EventUtils {
                 || eventType == EventType.EXERCISE;
     }
 
-    public static boolean needToFillNoteOrPhoto(@NonNull MasterEvent event) {
-        if (event instanceof DoctorVisitEvent) {
-            DoctorVisitEvent doctorVisitEvent = (DoctorVisitEvent) event;
-            return TextUtils.isEmpty(doctorVisitEvent.getNote())
-                    && TextUtils.isEmpty(doctorVisitEvent.getImageFileName());
-        } else if (event instanceof ExerciseEvent) {
-            ExerciseEvent exerciseEvent = (ExerciseEvent) event;
-            return TextUtils.isEmpty(exerciseEvent.getNote())
-                    && TextUtils.isEmpty(exerciseEvent.getImageFileName());
-        }
-        return false;
-    }
-
     public static boolean isDone(@NonNull MasterEvent event) {
         return ObjectUtils.isTrue(event.getIsDone());
     }

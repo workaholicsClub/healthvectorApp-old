@@ -54,9 +54,6 @@ public interface BaseCalendarView extends BaseView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event);
 
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void showNeedToFillNoteOrPhoto(@NonNull MasterEvent event);
-
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showDeletingEvents(boolean loading);
 

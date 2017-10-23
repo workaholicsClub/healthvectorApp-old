@@ -115,18 +115,8 @@ public abstract class EventDetailPresenter<V extends EventDetailView<T>, T exten
     }
 
     public void done(@NonNull T event) {
-        boolean willBeUndone = EventUtils.isDone(event);
-        if (willBeUndone) {
-            // можно развыполнить, не делаем проверок
-            switchDone(false);
-        } else {
-            // проверяем, можно ли выполнить событие
-            if (EventUtils.needToFillNoteOrPhoto(event)) {
-                getViewState().showNeedToFillNoteOrPhoto();
-            } else {
-                switchDone(true);
-            }
-        }
+        boolean isDone = EventUtils.isDone(event);
+        switchDone(!isDone);
     }
 
     private void switchDone(boolean done) {
