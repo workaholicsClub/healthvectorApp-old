@@ -30,4 +30,5 @@ public class ExtraConstants {
     public static final String EXTRA_LINEAR_GROUP_FINISHED_EVENT = PACKAGE_NAME + ".linear_group_finished_event";
     public static final String EXTRA_IS_LINEAR_GROUP_FINISHED = PACKAGE_NAME + ".is_linear_group_finished";
     public static final String EXTRA_TEXT = PACKAGE_NAME + ".text";
+    public static final String EXTRA_READ_ONLY = PACKAGE_NAME + ".read_only";
 }

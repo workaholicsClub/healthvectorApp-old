@@ -253,7 +253,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
 
     @Override
     public void requestPhotoReview() {
-        Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName(), getSex());
+        Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName(), getSex(), false);
         startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 

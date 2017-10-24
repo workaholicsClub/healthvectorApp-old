@@ -259,7 +259,7 @@ public class ExerciseEventDetailActivity
 
     @Override
     public void requestPhotoReview() {
-        Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName(), getSex());
+        Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName(), getSex(), false);
         startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 

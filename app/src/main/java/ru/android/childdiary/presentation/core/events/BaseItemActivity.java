@@ -53,7 +53,6 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParamet
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogArguments;
 import ru.android.childdiary.presentation.core.images.ImagePickerDialogFragment;
-import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.presentation.core.widgets.CustomDatePickerDialog;
 import ru.android.childdiary.presentation.dictionaries.doctors.DoctorPickerActivity;
 import ru.android.childdiary.presentation.dictionaries.medicinemeasure.MedicineMeasureAddActivity;
@@ -69,6 +68,8 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         DatePickerDialog.OnDateSetListener, TimePickerDialogFragment.Listener,
         MedicineMeasureValueDialogFragment.Listener, LengthValueDialogFragment.Listener,
         FieldNoteWithPhotoView.PhotoListener, ImagePickerDialogFragment.Listener {
+    protected static final int REQUEST_IMAGE_REVIEW = 4;
+
     private static final String TAG_TIME_PICKER = "TIME_PICKER";
     private static final String TAG_DATE_PICKER = "DATE_PICKER";
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
@@ -81,7 +82,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     private static final int REQUEST_DOCTOR = 1;
     private static final int REQUEST_MEDICINE = 2;
     private static final int REQUEST_MEDICINE_MEASURE_ADD = 3;
-    private static final int REQUEST_IMAGE_REVIEW = 4;
 
     protected T defaultItem;
 
@@ -427,15 +427,6 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
                         .showDeleteItem(false)
                         .showCircleFrame(false)
                         .build());
-    }
-
-    @Override
-    public void requestPhotoReview() {
-        if (getNoteWithPhotoView() == null) {
-            return;
-        }
-        Intent intent = ImageReviewActivity.getIntent(this, getNoteWithPhotoView().getImageFileName(), getSex());
-        startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 
     @Override

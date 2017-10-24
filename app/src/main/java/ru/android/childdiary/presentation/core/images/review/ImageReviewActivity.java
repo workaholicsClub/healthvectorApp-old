@@ -24,10 +24,14 @@ public class ImageReviewActivity extends BaseMvpActivity {
     @BindView(R.id.imageView)
     ImageView imageView;
 
-    public static Intent getIntent(Context context, String relativePath, @Nullable Sex sex) {
+    private boolean readOnly;
+
+    public static Intent getIntent(Context context, String relativePath, @Nullable Sex sex,
+                                   boolean readOnly) {
         return new Intent(context, ImageReviewActivity.class)
                 .putExtra(ExtraConstants.EXTRA_RELATIVE_PATH, relativePath)
-                .putExtra(ExtraConstants.EXTRA_SEX, sex);
+                .putExtra(ExtraConstants.EXTRA_SEX, sex)
+                .putExtra(ExtraConstants.EXTRA_READ_ONLY, readOnly);
     }
 
     @Override
@@ -40,6 +44,7 @@ public class ImageReviewActivity extends BaseMvpActivity {
         setContentView(R.layout.activity_image_view);
         String relativePath = getIntent().getStringExtra(ExtraConstants.EXTRA_RELATIVE_PATH);
         imageView.setImageDrawable(ResourcesUtils.getPhotoDrawable(this, relativePath));
+        readOnly = getIntent().getBooleanExtra(ExtraConstants.EXTRA_READ_ONLY, false);
     }
 
     @Override
@@ -51,6 +56,9 @@ public class ImageReviewActivity extends BaseMvpActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (readOnly) {
+            return super.onCreateOptionsMenu(menu);
+        }
         removeToolbarMargin();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.delete, menu);
@@ -59,6 +67,9 @@ public class ImageReviewActivity extends BaseMvpActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (readOnly) {
+            return super.onOptionsItemSelected(item);
+        }
         switch (item.getItemId()) {
             case R.id.menu_delete:
                 new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))

@@ -39,6 +39,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhoto
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.DateUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -286,5 +287,18 @@ public class EditDoctorVisitActivity extends BaseEditItemActivity<EditDoctorVisi
                 .setNegativeButton(R.string.complete_and_delete_events,
                         (dialog, which) -> getPresenter().completeAndDeleteFromDate(doctorVisit, dateTime))
                 .show();
+    }
+
+    @Override
+    public void requestPhotoReview() {
+        if (getNoteWithPhotoView() == null) {
+            return;
+        }
+        boolean exported = ObjectUtils.isTrue(item.getIsExported());
+        Intent intent = ImageReviewActivity.getIntent(this,
+                getNoteWithPhotoView().getImageFileName(),
+                getSex(),
+                exported);
+        startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 }

@@ -38,6 +38,7 @@ import ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhoto
 import ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldRepeatParametersView;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView;
+import ru.android.childdiary.presentation.core.images.review.ImageReviewActivity;
 import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.ui.WidgetsUtils;
 
@@ -250,5 +251,14 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
                 repeatParametersView.periodicityTypeObservable(),
                 repeatParametersView.lengthValueObservable()
         ));
+    }
+
+    @Override
+    public void requestPhotoReview() {
+        if (getNoteWithPhotoView() == null) {
+            return;
+        }
+        Intent intent = ImageReviewActivity.getIntent(this, getNoteWithPhotoView().getImageFileName(), getSex(), false);
+        startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 }

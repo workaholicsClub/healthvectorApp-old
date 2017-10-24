@@ -223,4 +223,8 @@ public class AddConcreteExerciseActivity extends BaseAddItemActivity<AddConcrete
                 repeatParametersView.lengthValueObservable()
         ));
     }
+
+    @Override
+    public void requestPhotoReview() {
+    }
 }
