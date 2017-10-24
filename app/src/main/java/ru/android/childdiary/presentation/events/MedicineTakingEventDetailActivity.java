@@ -59,6 +59,7 @@ public class MedicineTakingEventDetailActivity
     private static final String TAG_MEDICINE_MEASURE_VALUE_DIALOG = "TAG_MEDICINE_MEASURE_VALUE_DIALOG";
 
     private static final int REQUEST_MEDICINE = 1;
+    private static final int REQUEST_IMAGE_REVIEW = 2;
 
     @InjectPresenter
     MedicineTakingEventDetailPresenter presenter;
@@ -136,6 +137,10 @@ public class MedicineTakingEventDetailActivity
                 medicineView.setValue(medicine);
             } else {
                 getPresenter().checkValue(medicineView.getValue());
+            }
+        } else if (requestCode == REQUEST_IMAGE_REVIEW) {
+            if (resultCode == RESULT_OK) {
+                noteWithPhotoView.setImageFileName(null);
             }
         }
     }
@@ -269,7 +274,7 @@ public class MedicineTakingEventDetailActivity
     @Override
     public void requestPhotoReview() {
         Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName());
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 
     @Override

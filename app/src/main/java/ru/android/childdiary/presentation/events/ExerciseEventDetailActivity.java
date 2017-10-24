@@ -50,6 +50,8 @@ public class ExerciseEventDetailActivity
     private static final String TAG_DURATION_DIALOG = "TAG_DURATION_DIALOG";
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
+    private static final int REQUEST_IMAGE_REVIEW = 1;
+
     @InjectPresenter
     ExerciseEventDetailPresenter presenter;
 
@@ -124,6 +126,16 @@ public class ExerciseEventDetailActivity
         });
         setupEditTextView(noteWithPhotoView);
         noteWithPhotoView.setPhotoListener(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_REVIEW) {
+            if (resultCode == RESULT_OK) {
+                noteWithPhotoView.setImageFileName(null);
+            }
+        }
     }
 
     @Override
@@ -247,7 +259,7 @@ public class ExerciseEventDetailActivity
     @Override
     public void requestPhotoReview() {
         Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName());
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 
     @Override

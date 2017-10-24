@@ -81,6 +81,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     private static final int REQUEST_DOCTOR = 1;
     private static final int REQUEST_MEDICINE = 2;
     private static final int REQUEST_MEDICINE_MEASURE_ADD = 3;
+    private static final int REQUEST_IMAGE_REVIEW = 4;
 
     protected T defaultItem;
 
@@ -185,6 +186,12 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         } else if (requestCode == REQUEST_MEDICINE_MEASURE_ADD) {
             if (resultCode == RESULT_OK) {
                 getPresenter().requestMedicineMeasureValueDialog();
+            }
+        } else if (requestCode == REQUEST_IMAGE_REVIEW) {
+            if (resultCode == RESULT_OK) {
+                if (getNoteWithPhotoView() != null) {
+                    getNoteWithPhotoView().setImageFileName(null);
+                }
             }
         }
     }
@@ -428,7 +435,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
             return;
         }
         Intent intent = ImageReviewActivity.getIntent(this, getNoteWithPhotoView().getImageFileName());
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 
     @Override

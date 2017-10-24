@@ -54,6 +54,7 @@ public class DoctorVisitEventDetailActivity
     private static final String TAG_NOTIFY_TIME_DIALOG = "TAG_NOTIFY_TIME_DIALOG";
 
     private static final int REQUEST_DOCTOR = 1;
+    private static final int REQUEST_IMAGE_REVIEW = 2;
 
     @InjectPresenter
     DoctorVisitEventDetailPresenter presenter;
@@ -148,6 +149,10 @@ public class DoctorVisitEventDetailActivity
                 doctorView.setValue(doctor);
             } else {
                 getPresenter().checkValue(doctorView.getValue());
+            }
+        } else if (requestCode == REQUEST_IMAGE_REVIEW) {
+            if (resultCode == RESULT_OK) {
+                noteWithPhotoView.setImageFileName(null);
             }
         }
     }
@@ -281,7 +286,7 @@ public class DoctorVisitEventDetailActivity
     @Override
     public void requestPhotoReview() {
         Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName());
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 
     @Override

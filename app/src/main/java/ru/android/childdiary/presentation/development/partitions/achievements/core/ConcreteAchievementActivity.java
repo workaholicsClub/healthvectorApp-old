@@ -56,6 +56,8 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
     private static final String TAG_IMAGE_PICKER = "IMAGE_PICKER";
     private static final String TAG_ACHIEVEMENT_TYPE_PICKER = "ACHIEVEMENT_TYPE_PICKER";
 
+    private static final int REQUEST_IMAGE_REVIEW = 1;
+
     @BindView(R.id.buttonAdd)
     protected Button buttonAdd;
 
@@ -104,6 +106,16 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         if (savedInstanceState == null) {
             getPresenter().init(child);
             showConcreteAchievement(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_REVIEW) {
+            if (resultCode == RESULT_OK) {
+                noteWithPhotoView.setImageFileName(null);
+            }
         }
     }
 
@@ -241,7 +253,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
     @Override
     public void requestPhotoReview() {
         Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName());
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 
     @Override

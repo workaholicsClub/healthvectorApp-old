@@ -344,4 +344,5 @@
     <string name="email_format">E-mail: %s</string>
     <string name="category">Category</string>
     <string name="select_category">Select category</string>
+    <string name="image_review">Photo</string>
 </resources>
