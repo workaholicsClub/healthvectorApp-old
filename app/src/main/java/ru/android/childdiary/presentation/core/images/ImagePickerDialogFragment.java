@@ -226,7 +226,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
         options.setCompressionQuality(90);
         options.setHideBottomControls(true);
-        options.setFreeStyleCropEnabled(false);
+        options.setFreeStyleCropEnabled(!dialogArguments.isShowCircleFrame());
         options.setAllowedGestures(UCropActivity.ALL, UCropActivity.ALL, UCropActivity.ALL);
         options.setCropGridColumnCount(0);
         options.setCropGridRowCount(0);
