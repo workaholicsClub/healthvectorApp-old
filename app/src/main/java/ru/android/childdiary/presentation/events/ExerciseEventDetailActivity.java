@@ -149,6 +149,7 @@ public class ExerciseEventDetailActivity
     protected void themeChanged() {
         super.themeChanged();
         setupToolbarLogo(ResourcesUtils.getExerciseLogoRes(getSex()));
+        noteWithPhotoView.setSex(getSex());
     }
 
     @Override

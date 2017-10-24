@@ -11,7 +11,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -26,6 +25,7 @@ import io.reactivex.disposables.Disposable;
 import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
 import ru.android.childdiary.presentation.core.widgets.OnKeyboardHiddenListener;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
@@ -43,7 +43,7 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
     ImageView imageView;
 
     @BindView(R.id.buttonDeletePhoto)
-    Button buttonDeletePhoto;
+    View buttonDeletePhoto;
 
     @Nullable
     @Getter
@@ -52,6 +52,9 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
     @Nullable
     @Setter
     private PhotoListener photoListener;
+
+    @Nullable
+    private Sex sex;
 
     private String hint;
 
@@ -175,6 +178,13 @@ public class FieldNoteWithPhotoView extends FieldEditTextView implements FieldRe
         }
         editText.setEnabled(!readOnly);
         buttonDeletePhoto.setVisibility(readOnly ? GONE : VISIBLE);
+    }
+
+    public void setSex(@Nullable Sex sex) {
+        if (this.sex != sex) {
+            this.sex = sex;
+            buttonDeletePhoto.setBackgroundResource(ResourcesUtils.getCircleButtonRes(sex));
+        }
     }
 
     public interface PhotoListener {

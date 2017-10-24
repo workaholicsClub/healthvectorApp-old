@@ -156,6 +156,7 @@ public class MedicineTakingEventDetailActivity
     protected void themeChanged() {
         super.themeChanged();
         setupToolbarLogo(ResourcesUtils.getMedicineTakingLogoRes(getSex()));
+        noteWithPhotoView.setSex(getSex());
     }
 
     @Override

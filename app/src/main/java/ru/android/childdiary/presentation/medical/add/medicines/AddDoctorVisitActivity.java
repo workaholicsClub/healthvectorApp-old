@@ -103,6 +103,12 @@ public class AddDoctorVisitActivity extends BaseAddItemActivity<AddDoctorVisitVi
     }
 
     @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        noteWithPhotoView.setSex(getSex());
+    }
+
+    @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.add_doctor_visit);

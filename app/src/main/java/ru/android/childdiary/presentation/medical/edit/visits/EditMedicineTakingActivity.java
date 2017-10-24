@@ -97,6 +97,12 @@ public class EditMedicineTakingActivity extends BaseEditItemActivity<EditMedicin
     }
 
     @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        noteWithPhotoView.setSex(getSex());
+    }
+
+    @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.edit_medicine_taking_title);

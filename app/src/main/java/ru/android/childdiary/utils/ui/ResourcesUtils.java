@@ -151,6 +151,13 @@ public class ResourcesUtils {
     }
 
     @DrawableRes
+    public static int getCircleButtonRes(@Nullable Sex sex) {
+        return sex == null || sex == Sex.MALE
+                ? R.drawable.button_circle_background_boy
+                : R.drawable.button_circle_background_girl;
+    }
+
+    @DrawableRes
     public static int getDiaperEventLogoRes(@Nullable Sex sex) {
         return sex == null || sex == Sex.MALE
                 ? R.drawable.toolbar_logo_diaper_boy

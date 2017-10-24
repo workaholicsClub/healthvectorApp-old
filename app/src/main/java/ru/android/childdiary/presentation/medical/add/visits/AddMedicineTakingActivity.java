@@ -100,6 +100,12 @@ public class AddMedicineTakingActivity extends BaseAddItemActivity<AddMedicineTa
     }
 
     @Override
+    protected void themeChanged() {
+        super.themeChanged();
+        noteWithPhotoView.setSex(getSex());
+    }
+
+    @Override
     protected void setupToolbar(Toolbar toolbar) {
         super.setupToolbar(toolbar);
         setupToolbarTitle(R.string.add_medicine_taking);

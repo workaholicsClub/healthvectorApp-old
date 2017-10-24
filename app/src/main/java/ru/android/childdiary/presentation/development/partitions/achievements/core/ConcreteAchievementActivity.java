@@ -145,6 +145,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
         super.themeChanged();
         setupToolbarLogo(ResourcesUtils.getChildIconForToolbar(this, child));
         setupToolbarTitle(child.getName());
+        noteWithPhotoView.setSex(getSex());
     }
 
     @Override

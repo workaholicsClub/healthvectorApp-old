@@ -106,6 +106,7 @@
     <dimen name="image_wrapper_size">60dp</dimen>
     <dimen name="image_size">48dp</dimen>
     <dimen name="image_delete_button_size">20dp</dimen>
+    <dimen name="image_delete_size">12dp</dimen>
     <!-- medical data filtering -->
     <dimen name="token_item_padding_horizontal">12dp</dimen>
     <dimen name="token_item_radius">16dp</dimen>

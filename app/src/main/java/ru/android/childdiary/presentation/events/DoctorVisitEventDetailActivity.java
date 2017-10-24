@@ -168,6 +168,7 @@ public class DoctorVisitEventDetailActivity
     protected void themeChanged() {
         super.themeChanged();
         setupToolbarLogo(ResourcesUtils.getDoctorVisitLogoRes(getSex()));
+        noteWithPhotoView.setSex(getSex());
     }
 
     @Override
