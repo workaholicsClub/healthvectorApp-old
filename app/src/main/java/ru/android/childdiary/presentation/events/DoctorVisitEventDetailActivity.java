@@ -285,7 +285,7 @@ public class DoctorVisitEventDetailActivity
 
     @Override
     public void requestPhotoReview() {
-        Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName());
+        Intent intent = ImageReviewActivity.getIntent(this, noteWithPhotoView.getImageFileName(), getSex());
         startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 

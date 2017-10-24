@@ -434,7 +434,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
         if (getNoteWithPhotoView() == null) {
             return;
         }
-        Intent intent = ImageReviewActivity.getIntent(this, getNoteWithPhotoView().getImageFileName());
+        Intent intent = ImageReviewActivity.getIntent(this, getNoteWithPhotoView().getImageFileName(), getSex());
         startActivityForResult(intent, REQUEST_IMAGE_REVIEW);
     }
 

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import butterknife.BindView;
 import ru.android.childdiary.R;
+import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.presentation.core.BaseMvpActivity;
 import ru.android.childdiary.presentation.core.ExtraConstants;
@@ -23,9 +24,10 @@ public class ImageReviewActivity extends BaseMvpActivity {
     @BindView(R.id.imageView)
     ImageView imageView;
 
-    public static Intent getIntent(Context context, String relativePath) {
+    public static Intent getIntent(Context context, String relativePath, @Nullable Sex sex) {
         return new Intent(context, ImageReviewActivity.class)
-                .putExtra(ExtraConstants.EXTRA_RELATIVE_PATH, relativePath);
+                .putExtra(ExtraConstants.EXTRA_RELATIVE_PATH, relativePath)
+                .putExtra(ExtraConstants.EXTRA_SEX, sex);
     }
 
     @Override
