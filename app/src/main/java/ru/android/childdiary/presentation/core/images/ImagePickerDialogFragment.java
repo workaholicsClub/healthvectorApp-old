@@ -218,10 +218,8 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
 
     @Override
     public void startCrop(@NonNull Uri sourceUri, @NonNull File destinationFile) {
-        UCrop uCrop = UCrop.of(sourceUri, Uri.fromFile(destinationFile));
-
-        uCrop = dialogArguments.isShowCircleFrame()
-                ? uCrop.withAspectRatio(1, 1) : uCrop.withAspectRatio(0, 0);
+        UCrop uCrop = UCrop.of(sourceUri, Uri.fromFile(destinationFile))
+                .withAspectRatio(1, 1);
 
         UCrop.Options options = new UCrop.Options();
 
