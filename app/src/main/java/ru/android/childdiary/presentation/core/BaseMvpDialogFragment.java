@@ -129,7 +129,6 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
-
     @Override
     public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
