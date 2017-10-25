@@ -20,8 +20,6 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public BasePresenter() {
-        super();
-
         ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
         injectPresenter(component);
     }
