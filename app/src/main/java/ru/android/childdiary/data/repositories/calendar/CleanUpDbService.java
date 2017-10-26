@@ -33,6 +33,8 @@ import ru.android.childdiary.domain.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.child.requests.DeleteChildResponse;
 import ru.android.childdiary.domain.exercises.requests.DeleteConcreteExerciseEventsRequest;
 import ru.android.childdiary.domain.exercises.requests.DeleteConcreteExerciseEventsResponse;
+import ru.android.childdiary.domain.medical.data.DoctorVisit;
+import ru.android.childdiary.domain.medical.data.MedicineTaking;
 import ru.android.childdiary.domain.medical.requests.CompleteDoctorVisitRequest;
 import ru.android.childdiary.domain.medical.requests.CompleteDoctorVisitResponse;
 import ru.android.childdiary.domain.medical.requests.CompleteMedicineTakingRequest;
@@ -187,18 +189,29 @@ public class CleanUpDbService extends EventsDbService {
 
     public Observable<CompleteDoctorVisitResponse> completeDoctorVisit(@NonNull CompleteDoctorVisitRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            Long id = getDoctorVisitId(request.getDoctorVisit());
+            DoctorVisit doctorVisit = request.getDoctorVisit();
+            Long id = getDoctorVisitId(doctorVisit);
             DoctorVisitEntity doctorVisitEntity = findDoctorVisitEntity(id);
-            doctorVisitEntity.setFinishDateTime(request.getDateTime());
-            blockingEntityStore.update(doctorVisitEntity);
-            int count = 0;
+
             List<String> imageFilesToDelete = new ArrayList<>();
+            if (!TextUtils.isEmpty(doctorVisitEntity.getImageFileName())
+                    && !doctorVisitEntity.getImageFileName().equals(doctorVisit.getImageFileName())) {
+                imageFilesToDelete.add(doctorVisitEntity.getImageFileName());
+            }
+
+            doctorVisitEntity.setFinishDateTime(request.getDateTime());
+            doctorVisitEntity.setImageFileName(doctorVisit.getImageFileName());
+            doctorVisitEntity.setNote(doctorVisit.getNote());
+            blockingEntityStore.update(doctorVisitEntity);
+
+            int count = 0;
             if (request.isDelete()) {
                 val events = getDoctorVisitEvents(id, request.getDateTime());
                 count = events.size();
                 imageFilesToDelete.addAll(getImageFileNamesDoctorVisitEvents(events));
                 deleteDoctorVisitEvents(events);
             }
+
             return CompleteDoctorVisitResponse.builder()
                     .request(request)
                     .count(count)
@@ -209,18 +222,29 @@ public class CleanUpDbService extends EventsDbService {
 
     public Observable<CompleteMedicineTakingResponse> completeMedicineTaking(@NonNull CompleteMedicineTakingRequest request) {
         return Observable.fromCallable(() -> blockingEntityStore.runInTransaction(() -> {
-            Long id = getMedicineTakingId(request.getMedicineTaking());
+            MedicineTaking medicineTaking = request.getMedicineTaking();
+            Long id = getMedicineTakingId(medicineTaking);
             MedicineTakingEntity medicineTakingEntity = findMedicineTakingEntity(id);
-            medicineTakingEntity.setFinishDateTime(request.getDateTime());
-            blockingEntityStore.update(medicineTakingEntity);
-            int count = 0;
+
             List<String> imageFilesToDelete = new ArrayList<>();
+            if (!TextUtils.isEmpty(medicineTakingEntity.getImageFileName())
+                    && !medicineTakingEntity.getImageFileName().equals(medicineTaking.getImageFileName())) {
+                imageFilesToDelete.add(medicineTakingEntity.getImageFileName());
+            }
+
+            medicineTakingEntity.setFinishDateTime(request.getDateTime());
+            medicineTakingEntity.setImageFileName(medicineTaking.getImageFileName());
+            medicineTakingEntity.setNote(medicineTaking.getNote());
+            blockingEntityStore.update(medicineTakingEntity);
+
+            int count = 0;
             if (request.isDelete()) {
                 val events = getMedicineTakingEvents(id, request.getDateTime());
                 count = events.size();
                 imageFilesToDelete.addAll(getImageFileNamesMedicineTakingEvents(events));
                 deleteMedicineTakingEvents(events);
             }
+
             return CompleteMedicineTakingResponse.builder()
                     .request(request)
                     .count(count)

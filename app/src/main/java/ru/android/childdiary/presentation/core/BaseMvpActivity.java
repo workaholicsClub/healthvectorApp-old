@@ -313,7 +313,6 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

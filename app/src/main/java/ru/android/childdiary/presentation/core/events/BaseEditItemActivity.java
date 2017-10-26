@@ -50,6 +50,7 @@ public abstract class BaseEditItemActivity<V extends BaseEditItemView<T>, T exte
 
     @OnClick(R.id.buttonAdd)
     void onButtonFinishClick() {
+        T item = build();
         getPresenter().complete(item);
     }
 
