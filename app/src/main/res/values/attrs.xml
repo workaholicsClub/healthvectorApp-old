@@ -8,7 +8,7 @@
         <attr name="fieldShowIcon" format="boolean" />
         <attr name="fieldText" format="string" />
     </declare-styleable>
-    <declare-styleable name="FieldEditTextWithImageView">
+    <declare-styleable name="FieldEditTextWithImageBaseView">
         <attr name="fieldIcon" />
         <attr name="fieldHint" />
         <attr name="fieldMaxLength" />

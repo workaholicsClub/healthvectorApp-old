@@ -55,12 +55,12 @@ public abstract class FieldEditTextWithImageBaseView extends FieldEditTextView i
     protected void init(@Nullable AttributeSet attrs) {
         inflate(getContext(), getLayoutResourceId(), this);
         if (attrs != null) {
-            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldEditTextWithImageView, 0, 0);
+            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.FieldEditTextWithImageBaseView, 0, 0);
             try {
-                icon = ta.getDrawable(R.styleable.FieldEditTextWithImageView_fieldIcon);
-                hint = ta.getString(R.styleable.FieldEditTextWithImageView_fieldHint);
-                maxLength = ta.getInt(R.styleable.FieldEditTextWithImageView_fieldMaxLength, 0);
-                hideIfEmpty = ta.getBoolean(R.styleable.FieldEditTextWithImageView_fieldHideIfEmpty, false);
+                icon = ta.getDrawable(R.styleable.FieldEditTextWithImageBaseView_fieldIcon);
+                hint = ta.getString(R.styleable.FieldEditTextWithImageBaseView_fieldHint);
+                maxLength = ta.getInt(R.styleable.FieldEditTextWithImageBaseView_fieldMaxLength, 0);
+                hideIfEmpty = ta.getBoolean(R.styleable.FieldEditTextWithImageBaseView_fieldHideIfEmpty, false);
             } finally {
                 ta.recycle();
             }
