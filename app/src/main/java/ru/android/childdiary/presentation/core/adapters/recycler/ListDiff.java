@@ -1,4 +1,4 @@
-package ru.android.childdiary.presentation.core.adapters.swipe;
+package ru.android.childdiary.presentation.core.adapters.recycler;
 
 import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
@@ -6,7 +6,7 @@ import android.support.v7.util.DiffUtil;
 import java.util.Collections;
 import java.util.List;
 
-public class ListDiff<T> extends DiffUtil.Callback {
+class ListDiff<T> extends DiffUtil.Callback {
     private final List<T> oldItems;
     private final List<T> newItems;
     @Nullable

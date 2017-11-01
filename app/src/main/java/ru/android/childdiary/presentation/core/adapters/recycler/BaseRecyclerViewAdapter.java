@@ -16,7 +16,6 @@ import java.util.List;
 
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
-import ru.android.childdiary.presentation.core.adapters.swipe.ListDiff;
 
 public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHolder<T>>
         extends RecyclerView.Adapter<BaseRecyclerViewHolder<T>> implements ListDiff.Callback<T> {
@@ -25,9 +24,9 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewHold
 
     protected final Context context;
     protected final LayoutInflater inflater;
+    protected final List<T> items = new ArrayList<>();
     @Nullable
     protected Sex sex;
-    protected List<T> items = new ArrayList<>();
     @Nullable
     private RecyclerView recyclerView;
 
