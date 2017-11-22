@@ -14,6 +14,8 @@ import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
+import java.io.Serializable;
+
 import lombok.Builder;
 import lombok.Value;
 import ru.android.childdiary.R;
@@ -267,7 +269,7 @@ public class TimeUtils {
 
     @Value
     @Builder
-    public static class Age {
+    public static class Age implements Serializable {
         int months;
 
         public int getYearsPart() {
