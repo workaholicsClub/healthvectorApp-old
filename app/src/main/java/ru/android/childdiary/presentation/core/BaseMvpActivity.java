@@ -178,7 +178,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
         toolbarTitle.setText(titleRes);
     }
 
-    protected final void addToolbarMargin() {
+    private void addToolbarMargin() {
         Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) toolbarTitle.getLayoutParams();
         layoutParams.rightMargin = margin;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

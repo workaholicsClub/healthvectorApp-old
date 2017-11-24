@@ -48,7 +48,7 @@ public final class Optional<T> {
 
     @Nullable
     public T orNull() {
-        return value == null ? null : value;
+        return value;
     }
 
     @Override
