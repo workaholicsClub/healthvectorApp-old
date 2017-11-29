@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="@style/MaterialDrawerTheme.Light">
+    <style name="AppTheme" parent="MaterialDrawerTheme.Light">
         <item name="colorPrimary">#607D8B</item>
         <item name="colorPrimaryDark">#455A64</item>
         <item name="colorAccent">#90A4AE</item>
