@@ -54,7 +54,6 @@ import ru.android.childdiary.presentation.core.permissions.PermissionHelper;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.utils.KeyboardUtils;
 import ru.android.childdiary.utils.log.LogSystem;
-import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -105,7 +104,6 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        ConfigUtils.setupOrientation(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
         if (savedInstanceState == null) {
             sex = (Sex) getIntent().getSerializableExtra(ExtraConstants.EXTRA_SEX);

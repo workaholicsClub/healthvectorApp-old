@@ -19,7 +19,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import ru.android.childdiary.R;
-import ru.android.childdiary.utils.ui.ConfigUtils;
 import ru.android.childdiary.utils.ui.FontUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -47,7 +46,6 @@ public class CropActivity extends UCropActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ConfigUtils.setupOrientation(this);
         super.onCreate(savedInstanceState);
 
         final Toolbar toolbar = findViewById(com.yalantis.ucrop.R.id.toolbar);

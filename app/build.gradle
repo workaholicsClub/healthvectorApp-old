@@ -68,6 +68,7 @@ android {
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
 
             manifestPlaceholders += [fabricApiKey: "9a8fc272c5361d9a35b084ac9b0e810d8a453b93"]
+            manifestPlaceholders += [screenOrientation: "unspecified"]
 
             // logging
             buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "true"
@@ -93,6 +94,7 @@ android {
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
 
             manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
+            manifestPlaceholders += [screenOrientation: "portrait"]
 
             // logging
             buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "true"
@@ -118,6 +120,7 @@ android {
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
 
             manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
+            manifestPlaceholders += [screenOrientation: "portrait"]
 
             // logging
             buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "false"

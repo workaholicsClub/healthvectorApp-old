@@ -25,20 +25,30 @@
 
         <activity
             android:name=".presentation.main.MainActivity"
-            android:exported="true" />
-        <activity android:name=".presentation.splash.SplashActivity">
+            android:exported="true"
+            android:screenOrientation="${screenOrientation}" />
+        <activity
+            android:name=".presentation.splash.SplashActivity"
+            android:screenOrientation="${screenOrientation}">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.onboarding.AppIntroActivity" />
-        <activity android:name=".presentation.cloud.CloudInitialActivity" />
-        <activity android:name=".presentation.cloud.CloudOperationActivity" />
+        <activity
+            android:name=".presentation.onboarding.AppIntroActivity"
+            android:screenOrientation="${screenOrientation}" />
+        <activity
+            android:name=".presentation.cloud.CloudInitialActivity"
+            android:screenOrientation="${screenOrientation}" />
+        <activity
+            android:name=".presentation.cloud.CloudOperationActivity"
+            android:screenOrientation="${screenOrientation}" />
         <activity
             android:name=".presentation.profile.ProfileEditActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -47,6 +57,7 @@
         <activity
             android:name=".presentation.events.DiaperEventDetailActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -55,6 +66,7 @@
         <activity
             android:name=".presentation.events.FeedEventDetailActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -63,6 +75,7 @@
         <activity
             android:name=".presentation.events.OtherEventDetailActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -71,6 +84,7 @@
         <activity
             android:name=".presentation.events.PumpEventDetailActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -80,6 +94,7 @@
             android:name=".presentation.events.SleepEventDetailActivity"
             android:exported="true"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -89,6 +104,7 @@
             android:name=".presentation.events.DoctorVisitEventDetailActivity"
             android:exported="true"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -98,6 +114,7 @@
             android:name=".presentation.events.ExerciseEventDetailActivity"
             android:exported="true"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -107,6 +124,7 @@
             android:name=".presentation.events.MedicineTakingEventDetailActivity"
             android:exported="true"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -115,6 +133,7 @@
         <activity
             android:name=".presentation.medical.add.medicines.AddDoctorVisitActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -123,6 +142,7 @@
         <activity
             android:name=".presentation.medical.add.visits.AddMedicineTakingActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -131,6 +151,7 @@
         <activity
             android:name=".presentation.medical.edit.medicines.EditDoctorVisitActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -139,6 +160,7 @@
         <activity
             android:name=".presentation.medical.edit.visits.EditMedicineTakingActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -146,45 +168,62 @@
         </activity>
         <activity
             android:name=".presentation.dictionaries.doctors.DoctorAddActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.doctors.DoctorPickerActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.medicines.MedicineAddActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.medicines.MedicinePickerActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.medicinemeasure.MedicineMeasureAddActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.medicinemeasure.MedicineMeasurePickerActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.food.FoodAddActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.food.FoodPickerActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.foodmeasure.FoodMeasureAddActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.foodmeasure.FoodMeasurePickerActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.achievements.AchievementAddActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".presentation.dictionaries.achievements.AchievementPickerActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".presentation.core.images.crop.CropActivity" />
-        <activity android:name=".presentation.core.images.review.ImageReviewActivity" />
+        <activity
+            android:name=".presentation.core.images.crop.CropActivity"
+            android:screenOrientation="${screenOrientation}" />
+        <activity
+            android:name=".presentation.core.images.review.ImageReviewActivity"
+            android:screenOrientation="${screenOrientation}" />
         <activity
             android:name=".presentation.exercises.ExerciseDetailActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -192,32 +231,39 @@
         </activity>
         <activity
             android:name=".presentation.exercises.AddConcreteExerciseActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".presentation.exercises.WebBrowserActivity" />
+        <activity
+            android:name=".presentation.exercises.WebBrowserActivity"
+            android:screenOrientation="${screenOrientation}" />
         <activity
             android:name=".presentation.testing.TestingActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.testing.TestResultActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.chart.testing.TestChartActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.chart.antropometry.AntropometryChartActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
@@ -225,6 +271,7 @@
         <activity
             android:name=".presentation.development.partitions.antropometry.add.AddAntropometryActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -232,7 +279,8 @@
         </activity>
         <activity
             android:name=".presentation.development.partitions.antropometry.edit.EditAntropometryActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
@@ -240,6 +288,7 @@
         <activity
             android:name=".presentation.development.partitions.achievements.add.AddConcreteAchievementActivity"
             android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -247,35 +296,40 @@
         </activity>
         <activity
             android:name=".presentation.development.partitions.achievements.edit.EditConcreteAchievementActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.settings.daylength.DayLengthActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.settings.notifications.NotificationsActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
         </activity>
         <activity
             android:name=".presentation.settings.notification.NotificationActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.settings.notifications.NotificationsActivity" />
         </activity>
         <activity
             android:name=".presentation.help.contacts.ContactUsActivity"
-            android:parentActivityName=".presentation.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity"
+            android:screenOrientation="${screenOrientation}">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.main.MainActivity" />
