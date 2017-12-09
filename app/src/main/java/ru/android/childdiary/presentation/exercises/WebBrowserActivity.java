@@ -33,6 +33,7 @@ public class WebBrowserActivity extends BaseMvpActivity {
         @SuppressWarnings("deprecation")
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            logger.debug("shouldOverrideUrlLoading: url = " + url);
             if (URLUtil.isNetworkUrl(url)) {
                 return false;
             }
@@ -96,10 +97,8 @@ public class WebBrowserActivity extends BaseMvpActivity {
         webView.getSettings().setDatabaseEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
 
-        WebChromeClient client = new WebChromeClient();
-        webView.setWebChromeClient(client);
-
         webView.setWebViewClient(webViewClient);
+        webView.setWebChromeClient(new WebChromeClient());
 
         if (savedInstanceState == null) {
             logger.debug("open url: " + url);
