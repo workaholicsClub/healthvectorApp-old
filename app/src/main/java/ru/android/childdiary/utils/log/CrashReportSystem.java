@@ -3,13 +3,18 @@ package ru.android.childdiary.utils.log;
 import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 
 import io.fabric.sdk.android.Fabric;
+import ru.android.childdiary.BuildConfig;
 
 class CrashReportSystem {
     public static void init(Context appContext) {
         // Crashlytics or Firebase initialization
-        Fabric.with(appContext, new Crashlytics());
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().disabled(!BuildConfig.ENABLE_CRASHLYTICS).build())
+                .build();
+        Fabric.with(appContext, crashlyticsKit);
     }
 
     public static void report(Throwable throwable) {

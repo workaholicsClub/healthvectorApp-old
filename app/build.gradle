@@ -67,21 +67,22 @@ android {
             minifyEnabled false
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
 
-            manifestPlaceholders += [fabricApiKey: "9a8fc272c5361d9a35b084ac9b0e810d8a453b93"]
+            ext.enableCrashlytics = false
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
+            manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
             manifestPlaceholders += [screenOrientation: "unspecified"]
 
             // logging
             buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "true"
             buildConfigField "boolean", "PRINT_LOGS_TO_LOGCAT", "true"
-            buildConfigField "boolean", "DUMP_OUT_OF_MEMORY", "true"
             buildConfigField "boolean", "PRINT_HTTP_LOGS", "true"
             buildConfigField "boolean", "PRINT_DB_LOGS", "true"
+            buildConfigField "boolean", "DUMP_OUT_OF_MEMORY", "true"
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
             // other
-            buildConfigField "boolean", "ENABLE_CONFIGURATION_CHANGE", "true"
+            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
             buildConfigField "boolean", "SHOW_APP_INTRO_ON_EACH_START", "false"
-            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
             buildConfigField "boolean", "COPY_BACKUP_TO_EXTERNAL_STORAGE", "true"
         }
         qa {
@@ -93,21 +94,22 @@ android {
             minifyEnabled true
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
 
+            ext.enableCrashlytics = true
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
             manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
             manifestPlaceholders += [screenOrientation: "portrait"]
 
             // logging
             buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "true"
             buildConfigField "boolean", "PRINT_LOGS_TO_LOGCAT", "true"
-            buildConfigField "boolean", "DUMP_OUT_OF_MEMORY", "true"
             buildConfigField "boolean", "PRINT_HTTP_LOGS", "true"
             buildConfigField "boolean", "PRINT_DB_LOGS", "true"
+            buildConfigField "boolean", "DUMP_OUT_OF_MEMORY", "true"
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "true"
             // other
-            buildConfigField "boolean", "ENABLE_CONFIGURATION_CHANGE", "false"
+            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
             buildConfigField "boolean", "SHOW_APP_INTRO_ON_EACH_START", "false"
-            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
             buildConfigField "boolean", "COPY_BACKUP_TO_EXTERNAL_STORAGE", "true"
         }
         release {
@@ -119,21 +121,22 @@ android {
             minifyEnabled true
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
 
+            ext.enableCrashlytics = true
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
             manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
             manifestPlaceholders += [screenOrientation: "portrait"]
 
             // logging
             buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "false"
             buildConfigField "boolean", "PRINT_LOGS_TO_LOGCAT", "false"
-            buildConfigField "boolean", "DUMP_OUT_OF_MEMORY", "false"
             buildConfigField "boolean", "PRINT_HTTP_LOGS", "false"
             buildConfigField "boolean", "PRINT_DB_LOGS", "false"
+            buildConfigField "boolean", "DUMP_OUT_OF_MEMORY", "false"
             buildConfigField "boolean", "SHOW_ERROR_DIALOGS", "false"
             // other
-            buildConfigField "boolean", "ENABLE_CONFIGURATION_CHANGE", "false"
+            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
             buildConfigField "boolean", "SHOW_CLOUD_ON_EACH_START", "false"
             buildConfigField "boolean", "SHOW_APP_INTRO_ON_EACH_START", "false"
-            buildConfigField "boolean", "USE_FAKE_INTERCEPTOR", "false"
             buildConfigField "boolean", "COPY_BACKUP_TO_EXTERNAL_STORAGE", "false"
         }
     }
