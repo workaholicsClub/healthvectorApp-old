@@ -10,7 +10,7 @@
     android:paddingStart="@dimen/chips_item_padding_left"
     android:paddingTop="@dimen/chips_item_padding_top">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="@dimen/token_item_height"
         android:background="@drawable/token_item_background"
@@ -20,19 +20,23 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingEnd="36dp"
             android:paddingLeft="@dimen/token_item_padding_horizontal"
-            android:paddingRight="@dimen/token_item_padding_horizontal"
+            android:paddingRight="36dp"
+            android:paddingStart="@dimen/token_item_padding_horizontal"
+            android:singleLine="true"
             android:textAppearance="@style/TokenItemTextAppearance" />
 
         <ImageView
             android:id="@+id/actionChipsDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/textView"
-            android:layout_toRightOf="@+id/textView"
+            android:layout_gravity="end"
             android:scaleType="center"
             android:src="@drawable/ic_chips_delete" />
-    </RelativeLayout>
+    </FrameLayout>
 </FrameLayout>

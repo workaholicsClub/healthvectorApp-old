@@ -1,58 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootView"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/alert_dialog_padding_top">
+    android:fadeScrollbars="false">
 
-    <include layout="@layout/request_focus_view_dummy" />
-
-    <TableLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/base_margin"
-        android:layout_marginRight="@dimen/base_margin">
+        android:orientation="vertical"
+        android:paddingTop="@dimen/alert_dialog_padding_top">
 
-        <TableRow>
+        <include layout="@layout/request_focus_view_dummy" />
 
-            <TextView
-                android:id="@+id/yearsHeader"
-                android:layout_width="@dimen/age_dialog_header_width_years"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/time_dialog_column_space"
-                android:layout_marginRight="@dimen/time_dialog_column_space"
-                android:gravity="center"
-                android:textAppearance="@style/SecondaryTextAppearance" />
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/base_margin"
+            android:layout_marginRight="@dimen/base_margin">
 
-            <TextView
-                android:id="@+id/monthsHeader"
-                android:layout_width="@dimen/age_dialog_header_width_months"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textAppearance="@style/SecondaryTextAppearance" />
-        </TableRow>
+            <TableRow>
 
-        <TableRow>
+                <TextView
+                    android:id="@+id/yearsHeader"
+                    android:layout_width="@dimen/age_dialog_header_width_years"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/time_dialog_column_space"
+                    android:layout_marginRight="@dimen/time_dialog_column_space"
+                    android:gravity="center"
+                    android:textAppearance="@style/SecondaryTextAppearance" />
 
-            <NumberPicker
-                android:id="@+id/numberPickerYears"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/time_dialog_column_space"
-                android:layout_marginRight="@dimen/time_dialog_column_space"
-                android:textAppearance="@style/PrimaryTextAppearance" />
+                <TextView
+                    android:id="@+id/monthsHeader"
+                    android:layout_width="@dimen/age_dialog_header_width_months"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textAppearance="@style/SecondaryTextAppearance" />
+            </TableRow>
 
-            <NumberPicker
-                android:id="@+id/numberPickerMonths"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAppearance="@style/PrimaryTextAppearance" />
-        </TableRow>
-    </TableLayout>
-</LinearLayout>
+            <TableRow>
+
+                <NumberPicker
+                    android:id="@+id/numberPickerYears"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/time_dialog_column_space"
+                    android:layout_marginRight="@dimen/time_dialog_column_space"
+                    android:textAppearance="@style/PrimaryTextAppearance" />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerMonths"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/PrimaryTextAppearance" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+</ScrollView>

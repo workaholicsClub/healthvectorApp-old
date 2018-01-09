@@ -33,7 +33,7 @@ public class NotificationPresenter extends BasePresenter<NotificationView> {
 
     public void save(@NonNull EventNotification eventNotification) {
         unsubscribeOnDestroy(
-                calendarInteractor.getNotificationSettings(eventNotification.getEventType())
+                calendarInteractor.getNotificationSettingsOnce(eventNotification.getEventType())
                         .map(eventNotification::equals)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

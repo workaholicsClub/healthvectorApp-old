@@ -12,8 +12,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/token_item_background"
-        android:gravity="center"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
         android:paddingLeft="@dimen/token_item_padding_horizontal"
         android:paddingRight="@dimen/token_item_padding_horizontal"
+        android:singleLine="true"
         android:textAppearance="@style/TokenItemTextAppearance" />
 </FrameLayout>

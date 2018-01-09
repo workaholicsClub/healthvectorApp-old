@@ -6,13 +6,14 @@ import com.tokenautocomplete.FilteredArrayAdapter;
 
 import java.util.List;
 
+import ru.android.childdiary.R;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 public class StringFilteredAdapter extends FilteredArrayAdapter<String> {
     private final FilterType filterType;
 
     public StringFilteredAdapter(Context context, List<String> strings, FilterType filterType) {
-        super(context, android.R.layout.simple_list_item_1, strings);
+        super(context, R.layout.auto_complete_item, strings);
         this.filterType = filterType;
     }
 

@@ -11,12 +11,13 @@ import com.tokenautocomplete.FilteredArrayAdapter;
 
 import java.util.List;
 
+import ru.android.childdiary.R;
 import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.utils.strings.StringUtils;
 
 public class DoctorFilteredAdapter extends FilteredArrayAdapter<Doctor> {
     public DoctorFilteredAdapter(Context context, List<Doctor> doctors) {
-        super(context, android.R.layout.simple_list_item_1, doctors);
+        super(context, R.layout.auto_complete_item, doctors);
     }
 
     @Override

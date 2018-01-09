@@ -27,28 +27,12 @@
 
         <Button
             android:id="@+id/buttonYes"
-            style="@style/ButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginBottom="@dimen/button_margin_vertical"
-            android:layout_marginLeft="@dimen/base_margin"
-            android:layout_marginRight="@dimen/base_margin"
-            android:layout_marginTop="@dimen/button_margin_vertical"
-            android:layout_weight="1"
-            android:text="@string/yes"
-            android:textAllCaps="false" />
+            style="@style/ButtonStyle.Weight"
+            android:text="@string/yes" />
 
         <Button
             android:id="@+id/buttonNo"
-            style="@style/ButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginBottom="@dimen/button_margin_vertical"
-            android:layout_marginLeft="@dimen/base_margin"
-            android:layout_marginRight="@dimen/base_margin"
-            android:layout_marginTop="@dimen/button_margin_vertical"
-            android:layout_weight="1"
-            android:text="@string/no"
-            android:textAllCaps="false" />
+            style="@style/ButtonStyle.Weight"
+            android:text="@string/no" />
     </LinearLayout>
 </LinearLayout>
