@@ -14,13 +14,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:orientation="vertical">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewChips"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:overScrollMode="never"
                 android:paddingLeft="@dimen/chips_recycler_view_padding"
                 android:paddingRight="@dimen/chips_recycler_view_padding"
@@ -29,15 +29,45 @@
             <View
                 android:id="@+id/line"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/base_margin" />
+                android:layout_height="@dimen/base_margin"
+                android:background="@color/white" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:overScrollMode="never" />
+
+            <TextView
+                android:id="@+id/textViewNothingFound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/base_margin"
+                android:text="@string/nothing_found"
+                android:textAppearance="@style/IntentionTextAppearance" />
+
+            <include
+                android:id="@+id/footer"
+                layout="@layout/view_footer" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <include layout="@layout/view_list_stuff" />
+    <TextView
+        android:id="@+id/textViewIntention"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="@dimen/base_margin"
+        android:textAppearance="@style/IntentionTextAppearance" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/base_margin" />
 </FrameLayout>

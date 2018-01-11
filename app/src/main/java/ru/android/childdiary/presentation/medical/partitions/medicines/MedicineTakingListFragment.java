@@ -56,12 +56,13 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
-        imageView.setVisibility(View.GONE);
+        footer.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         String text = getString(R.string.link_format,
                 LINK_ADD,
                 getString(R.string.add_medicine_taking));
         HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+        textViewNothingFound.setVisibility(View.GONE);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
@@ -108,15 +109,19 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         List<Chips> chips = medicineTakingListState.getChips();
         chipsAdapter.setItems(chips);
         recyclerViewChips.setVisibility(chips.isEmpty() ? View.GONE : View.VISIBLE);
+        footer.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
 
-        textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
         if (chips.isEmpty()) {
+            textViewNothingFound.setVisibility(View.GONE);
             String text = getString(R.string.link_format,
                     LINK_ADD,
                     getString(R.string.add_medicine_taking));
             HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+            textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
         } else {
-            textViewIntention.setText(R.string.nothing_found);
+            textViewNothingFound.setVisibility(View.VISIBLE);
+            textViewIntention.setText(null);
+            textViewIntention.setVisibility(View.GONE);
         }
 
         line.setVisibility(medicineTakingList.isEmpty() && !chips.isEmpty() ? View.VISIBLE : View.GONE);

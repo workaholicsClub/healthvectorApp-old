@@ -56,12 +56,13 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
-        imageView.setVisibility(View.GONE);
+        footer.setVisibility(View.GONE);
         textViewIntention.setVisibility(View.GONE);
         String text = getString(R.string.link_format,
                 LINK_ADD,
                 getString(R.string.add_doctor_visit));
         HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+        textViewNothingFound.setVisibility(View.GONE);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
@@ -104,6 +105,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
         adapter.setItems(doctorVisits);
         adapter.setFabController(fabController);
         recyclerView.setVisibility(doctorVisits.isEmpty() ? View.GONE : View.VISIBLE);
+        footer.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
 
         List<Chips> chips = doctorVisitsState.getChips();
         chipsAdapter.setItems(chips);
@@ -111,12 +113,16 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
 
         textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
         if (chips.isEmpty()) {
+            textViewNothingFound.setVisibility(View.GONE);
             String text = getString(R.string.link_format,
                     LINK_ADD,
-                    getString(R.string.add_doctor_visit));
+                    getString(R.string.add_medicine_taking));
             HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+            textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
         } else {
-            textViewIntention.setText(R.string.nothing_found);
+            textViewNothingFound.setVisibility(View.VISIBLE);
+            textViewIntention.setText(null);
+            textViewIntention.setVisibility(View.GONE);
         }
 
         line.setVisibility(doctorVisits.isEmpty() && !chips.isEmpty() ? View.VISIBLE : View.GONE);

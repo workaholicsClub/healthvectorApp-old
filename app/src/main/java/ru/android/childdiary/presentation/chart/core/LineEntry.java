@@ -6,12 +6,10 @@ import android.support.annotation.Nullable;
 
 import com.github.mikephil.charting.data.Entry;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString
 public abstract class LineEntry<T extends LineEntryInfo> extends Entry {
     @Nullable
     private final Drawable normalIcon, selectedIcon;
