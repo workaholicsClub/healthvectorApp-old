@@ -618,7 +618,30 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             return;
         }
 
+        processed = openRootPartition();
+        if (processed) {
+            return;
+        }
+
         finish();
+    }
+
+    private boolean openRootPartition() {
+        if (selectedPartition == null) {
+            return false;
+        }
+        switch (selectedPartition) {
+            case CALENDAR:
+                return false;
+            case DEVELOPMENT_DIARY:
+            case EXERCISES:
+            case MEDICAL_DATA:
+            case SETTINGS:
+            case HELP:
+                openAppPartition(AppPartition.CALENDAR);
+                return true;
+        }
+        return false;
     }
 
     @Override
