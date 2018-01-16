@@ -19,7 +19,13 @@ public interface BasePickerView<T> extends BaseView {
     void showList(@NonNull List<T> list, boolean isFiltering);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void itemDeleted(@NonNull T item);
+    void navigateTo(@NonNull T item);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void deleted(@NonNull T item);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void confirmDelete(@NonNull T item);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void deletionRestricted();

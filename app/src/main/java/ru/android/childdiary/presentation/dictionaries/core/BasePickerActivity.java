@@ -5,8 +5,10 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -149,15 +151,35 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     }
 
     @Override
-    public void itemDeleted(@NonNull T item) {
+    public final void navigateTo(@NonNull T item) {
+        Intent data = new Intent().putExtra(ExtraConstants.EXTRA_ITEM, item);
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     @Override
-    public void edit(T item) {
+    public final void deleted(@NonNull T item) {
+    }
+
+    @Override
+    public final void confirmDelete(@NonNull T item) {
+        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
+                .setMessage(getDeleteConfirmationStringId())
+                .setPositiveButton(R.string.delete,
+                        (dialog, which) -> getPresenter().forceDelete(item))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
+    public final void delete(T item) {
+        getPresenter().delete(item);
+    }
+
+    @Override
+    public final void edit(T item) {
         if (pick) {
-            Intent data = new Intent().putExtra(ExtraConstants.EXTRA_ITEM, item);
-            setResult(RESULT_OK, data);
-            finish();
+            getPresenter().edit(item);
         }
     }
 
@@ -201,6 +223,9 @@ public abstract class BasePickerActivity<T extends Serializable, V extends BaseP
     protected abstract int getMaxLength();
 
     protected abstract String getIntentionText();
+
+    @StringRes
+    protected abstract int getDeleteConfirmationStringId();
 
     @Override
     public void onLinkClick(String url) {

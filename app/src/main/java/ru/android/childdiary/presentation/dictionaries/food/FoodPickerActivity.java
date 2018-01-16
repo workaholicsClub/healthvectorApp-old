@@ -47,16 +47,6 @@ public class FoodPickerActivity extends BasePickerActivity<Food, FoodPickerView>
     }
 
     @Override
-    public void delete(Food food) {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.delete_food)
-                .setPositiveButton(R.string.delete,
-                        (dialog, which) -> getPresenter().deleteItem(food))
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-    }
-
-    @Override
     public void deletionRestricted() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.deletion_restricted_food)
@@ -82,5 +72,10 @@ public class FoodPickerActivity extends BasePickerActivity<Food, FoodPickerView>
     @Override
     protected String getIntentionText() {
         return getString(R.string.add_food);
+    }
+
+    @Override
+    protected int getDeleteConfirmationStringId() {
+        return R.string.delete_food;
     }
 }

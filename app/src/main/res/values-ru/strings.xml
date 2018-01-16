@@ -177,6 +177,7 @@
     <string name="please_wait">Пожалуйста, подождите…</string>
     <string name="events_generating">Идет создание событий…</string>
     <string name="events_deleting">Идет удаление событий…</string>
+    <string name="profile_deleting">Идет удаление профиля…</string>
     <string name="events_updating">Идет обновление событий…</string>
     <string name="default_doctor_name">Педиатр</string>
     <string name="delete_photo_confirmation_dialog_title">Удалить фото?</string>

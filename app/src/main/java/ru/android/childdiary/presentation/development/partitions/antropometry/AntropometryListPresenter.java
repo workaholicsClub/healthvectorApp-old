@@ -15,16 +15,16 @@ import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.core.requests.ChildResponse;
 import ru.android.childdiary.domain.development.antropometry.AntropometryInteractor;
 import ru.android.childdiary.domain.development.antropometry.data.Antropometry;
+import ru.android.childdiary.presentation.core.adapters.DeletedItemsManager;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryPresenter;
 
 @InjectViewState
 public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<AntropometryListView> {
     @Inject
     ChildInteractor childInteractor;
-
     @Inject
     AntropometryInteractor antropometryInteractor;
-
+    private DeletedItemsManager<Antropometry> deletedItemsManager = new DeletedItemsManager<>();
     private Disposable subscription;
 
     @Override
@@ -56,6 +56,9 @@ public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<Ant
     }
 
     public void edit(@NonNull Antropometry antropometry) {
+        if (deletedItemsManager.check(antropometry)) {
+            return;
+        }
         unsubscribeOnDestroy(
                 childInteractor.getActiveChildOnce()
                         .subscribeOn(Schedulers.io())
@@ -66,10 +69,16 @@ public class AntropometryListPresenter extends BaseDevelopmentDiaryPresenter<Ant
     }
 
     public void delete(@NonNull Antropometry antropometry) {
+        if (deletedItemsManager.check(antropometry)) {
+            return;
+        }
         getViewState().confirmDelete(antropometry);
     }
 
     public void forceDelete(@NonNull Antropometry antropometry) {
+        if (deletedItemsManager.checkAndAdd(antropometry)) {
+            return;
+        }
         unsubscribeOnDestroy(
                 antropometryInteractor.delete(antropometry)
                         .subscribeOn(Schedulers.io())

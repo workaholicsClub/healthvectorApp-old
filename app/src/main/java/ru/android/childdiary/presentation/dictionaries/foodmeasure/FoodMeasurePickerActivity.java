@@ -47,16 +47,6 @@ public class FoodMeasurePickerActivity extends BasePickerActivity<FoodMeasure, F
     }
 
     @Override
-    public void delete(FoodMeasure foodMeasure) {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.delete_measure_unit)
-                .setPositiveButton(R.string.delete,
-                        (dialog, which) -> getPresenter().deleteItem(foodMeasure))
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-    }
-
-    @Override
     public void deletionRestricted() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.deletion_restricted_food_measure)
@@ -82,5 +72,10 @@ public class FoodMeasurePickerActivity extends BasePickerActivity<FoodMeasure, F
     @Override
     protected String getIntentionText() {
         return getString(R.string.add_measure_unit);
+    }
+
+    @Override
+    protected int getDeleteConfirmationStringId() {
+        return R.string.delete_measure_unit;
     }
 }

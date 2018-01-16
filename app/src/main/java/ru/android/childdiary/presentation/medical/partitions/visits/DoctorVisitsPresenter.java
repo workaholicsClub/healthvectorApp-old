@@ -26,6 +26,7 @@ import ru.android.childdiary.domain.medical.requests.DeleteDoctorVisitEventsRequ
 import ru.android.childdiary.domain.medical.requests.DeleteDoctorVisitRequest;
 import ru.android.childdiary.domain.medical.requests.GetDoctorVisitsRequest;
 import ru.android.childdiary.domain.medical.requests.GetDoctorVisitsResponse;
+import ru.android.childdiary.presentation.core.adapters.DeletedItemsManager;
 import ru.android.childdiary.presentation.medical.DoctorVisitParameters;
 import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
 import ru.android.childdiary.presentation.medical.filter.adapters.ChipsUtils;
@@ -35,6 +36,8 @@ import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisitsView> {
+    private final DeletedItemsManager<DoctorVisit> deletedItemsManager = new DeletedItemsManager<>();
+
     @Inject
     ChildInteractor childInteractor;
 
@@ -120,6 +123,9 @@ public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisits
     }
 
     public void editDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        if (deletedItemsManager.check(doctorVisit)) {
+            return;
+        }
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         doctorVisitInteractor.getDefaultDoctorVisit(),
@@ -141,6 +147,9 @@ public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisits
     }
 
     public void delete(@NonNull DoctorVisit doctorVisit) {
+        if (deletedItemsManager.check(doctorVisit)) {
+            return;
+        }
         if (ObjectUtils.isTrue(doctorVisit.getIsExported())) {
             unsubscribeOnDestroy(doctorVisitInteractor.hasConnectedEvents(doctorVisit)
                     .subscribeOn(Schedulers.io())
@@ -158,6 +167,9 @@ public class DoctorVisitsPresenter extends BaseMedicalDataPresenter<DoctorVisits
     }
 
     public void deleteDoctorVisit(@NonNull DoctorVisit doctorVisit) {
+        if (deletedItemsManager.checkAndAdd(doctorVisit)) {
+            return;
+        }
         unsubscribeOnDestroy(doctorVisitInteractor.deleteDoctorVisit(DeleteDoctorVisitRequest.builder()
                 .doctorVisit(doctorVisit)
                 .build())

@@ -47,16 +47,6 @@ public class MedicineMeasurePickerActivity extends BasePickerActivity<MedicineMe
     }
 
     @Override
-    public void delete(MedicineMeasure medicineMeasure) {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.delete_measure_unit)
-                .setPositiveButton(R.string.delete,
-                        (dialog, which) -> getPresenter().deleteItem(medicineMeasure))
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-    }
-
-    @Override
     public void deletionRestricted() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.deletion_restricted_medicine_measure)
@@ -82,5 +72,10 @@ public class MedicineMeasurePickerActivity extends BasePickerActivity<MedicineMe
     @Override
     protected String getIntentionText() {
         return getString(R.string.add_measure_unit);
+    }
+
+    @Override
+    protected int getDeleteConfirmationStringId() {
+        return R.string.delete_measure_unit;
     }
 }

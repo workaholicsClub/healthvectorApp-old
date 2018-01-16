@@ -15,10 +15,13 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import ru.android.childdiary.domain.dictionaries.core.DictionaryInteractor;
 import ru.android.childdiary.presentation.core.BasePresenter;
+import ru.android.childdiary.presentation.core.adapters.DeletedItemsManager;
 import ru.android.childdiary.presentation.core.bindings.SearchViewQueryTextChangeEventsObservable;
 import ru.android.childdiary.presentation.core.bindings.SearchViewQueryTextEvent;
 
 public abstract class BasePickerPresenter<T, V extends BasePickerView<T>> extends BasePresenter<V> {
+    private final DeletedItemsManager<T> deletedItemsManager = new DeletedItemsManager<>();
+
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
@@ -63,12 +66,29 @@ public abstract class BasePickerPresenter<T, V extends BasePickerView<T>> extend
         return Observable.fromIterable(list).filter(t -> filter(t, filter)).toList().blockingGet();
     }
 
-    public final void deleteItem(@NonNull T item) {
+    public final void edit(@NonNull T item) {
+        if (deletedItemsManager.check(item)) {
+            return;
+        }
+        getViewState().navigateTo(item);
+    }
+
+    public final void delete(@NonNull T item) {
+        if (deletedItemsManager.check(item)) {
+            return;
+        }
+        getViewState().confirmDelete(item);
+    }
+
+    public final void forceDelete(@NonNull T item) {
+        if (deletedItemsManager.checkAndAdd(item)) {
+            return;
+        }
         unsubscribeOnDestroy(getInteractor().delete(item)
                 .doOnError(throwable -> logger.error("failed to delete", throwable))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::itemDeleted, throwable -> getViewState().deletionRestricted()));
+                .subscribe(getViewState()::deleted, throwable -> getViewState().deletionRestricted()));
     }
 
     protected abstract DictionaryInteractor<T> getInteractor();

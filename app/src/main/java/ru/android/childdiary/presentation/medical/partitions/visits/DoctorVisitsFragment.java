@@ -116,7 +116,7 @@ public class DoctorVisitsFragment extends BaseMedicalDataFragment
             textViewNothingFound.setVisibility(View.GONE);
             String text = getString(R.string.link_format,
                     LINK_ADD,
-                    getString(R.string.add_medicine_taking));
+                    getString(R.string.add_doctor_visit));
             HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
             textViewIntention.setVisibility(doctorVisits.isEmpty() ? View.VISIBLE : View.GONE);
         } else {

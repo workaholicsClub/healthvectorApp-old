@@ -13,8 +13,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.calendar.CalendarInteractor;
-import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.child.ChildInteractor;
+import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.child.requests.DeleteChildResponse;
 import ru.android.childdiary.presentation.core.AppPartitionArguments;
@@ -90,12 +90,15 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void forceDeleteChild(@NonNull Child child) {
+        getViewState().showDeletingProfile(true);
         unsubscribeOnDestroy(childInteractor.delete(DeleteChildRequest.builder().child(child).build())
                 .map(DeleteChildResponse::getRequest)
                 .map(DeleteChildRequest::getChild)
                 .doOnNext(deletedChild -> logger.debug("child deleted: " + deletedChild))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(response -> getViewState().showDeletingProfile(false))
+                .doOnError(throwable -> getViewState().showDeletingProfile(false))
                 .subscribe(getViewState()::childDeleted, this::onUnexpectedError));
     }
 

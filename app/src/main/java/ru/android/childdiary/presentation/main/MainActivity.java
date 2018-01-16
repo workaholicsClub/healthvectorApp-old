@@ -78,6 +78,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         CloseMenuButtonClickListener,
         View.OnClickListener,
         FabController {
+    private static final String TAG_PROGRESS_DIALOG_DELETING_PROFILE = "TAG_PROGRESS_DIALOG_DELETING_PROFILE";
+
     private static final int PROFILE_SETTINGS_EDIT = 1;
     private static final int PROFILE_SETTINGS_ADD = 2;
     private static final int PROFILE_SETTINGS_DELETE = 3;
@@ -205,6 +207,17 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         }
         if (notify && drawer != null) {
             drawer.getAdapter().notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void showDeletingProfile(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_DELETING_PROFILE,
+                    getString(R.string.please_wait),
+                    getString(R.string.profile_deleting));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_DELETING_PROFILE);
         }
     }
 

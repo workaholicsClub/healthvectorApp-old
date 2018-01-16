@@ -25,6 +25,7 @@ import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingEventsR
 import ru.android.childdiary.domain.medical.requests.DeleteMedicineTakingRequest;
 import ru.android.childdiary.domain.medical.requests.GetMedicineTakingListRequest;
 import ru.android.childdiary.domain.medical.requests.GetMedicineTakingListResponse;
+import ru.android.childdiary.presentation.core.adapters.DeletedItemsManager;
 import ru.android.childdiary.presentation.medical.MedicineTakingParameters;
 import ru.android.childdiary.presentation.medical.filter.adapters.Chips;
 import ru.android.childdiary.presentation.medical.filter.adapters.ChipsUtils;
@@ -34,6 +35,8 @@ import ru.android.childdiary.utils.ObjectUtils;
 
 @InjectViewState
 public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<MedicineTakingListView> {
+    private final DeletedItemsManager<MedicineTaking> deletedItemsManager = new DeletedItemsManager<>();
+
     @Inject
     MedicineInteractor medicineInteractor;
 
@@ -116,6 +119,9 @@ public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<Medici
     }
 
     public void editMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        if (deletedItemsManager.check(medicineTaking)) {
+            return;
+        }
         unsubscribeOnDestroy(
                 Observable.combineLatest(
                         medicineTakingInteractor.getDefaultMedicineTaking(),
@@ -137,6 +143,9 @@ public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<Medici
     }
 
     public void delete(@NonNull MedicineTaking medicineTaking) {
+        if (deletedItemsManager.check(medicineTaking)) {
+            return;
+        }
         if (ObjectUtils.isTrue(medicineTaking.getIsExported())) {
             unsubscribeOnDestroy(medicineTakingInteractor.hasConnectedEvents(medicineTaking)
                     .subscribeOn(Schedulers.io())
@@ -154,6 +163,9 @@ public class MedicineTakingListPresenter extends BaseMedicalDataPresenter<Medici
     }
 
     public void deleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        if (deletedItemsManager.checkAndAdd(medicineTaking)) {
+            return;
+        }
         unsubscribeOnDestroy(medicineTakingInteractor.deleteMedicineTaking(DeleteMedicineTakingRequest.builder()
                 .medicineTaking(medicineTaking)
                 .build())

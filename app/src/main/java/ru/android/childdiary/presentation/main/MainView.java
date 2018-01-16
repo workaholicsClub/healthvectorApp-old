@@ -14,6 +14,9 @@ import ru.android.childdiary.presentation.core.BaseView;
 
 public interface MainView extends BaseView {
     @StateStrategyType(AddToEndSingleStrategy.class)
+    void showDeletingProfile(boolean loading);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void showChildList(@NonNull List<Child> childList);
 
     @StateStrategyType(AddToEndSingleStrategy.class)

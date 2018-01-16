@@ -47,16 +47,6 @@ public class DoctorPickerActivity extends BasePickerActivity<Doctor, DoctorPicke
     }
 
     @Override
-    public void delete(Doctor doctor) {
-        new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
-                .setMessage(R.string.delete_doctor_confirmation_dialog_title)
-                .setPositiveButton(R.string.delete,
-                        (dialog, which) -> getPresenter().deleteItem(doctor))
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-    }
-
-    @Override
     public void deletionRestricted() {
         new AlertDialog.Builder(this, ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.deletion_restricted_doctor)
@@ -82,5 +72,10 @@ public class DoctorPickerActivity extends BasePickerActivity<Doctor, DoctorPicke
     @Override
     protected String getIntentionText() {
         return getString(R.string.add_doctor);
+    }
+
+    @Override
+    protected int getDeleteConfirmationStringId() {
+        return R.string.delete_doctor_confirmation_dialog_title;
     }
 }

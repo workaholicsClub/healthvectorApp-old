@@ -18,12 +18,13 @@ import ru.android.childdiary.domain.development.testing.data.TestResult;
 import ru.android.childdiary.domain.development.testing.data.tests.core.Test;
 import ru.android.childdiary.domain.development.testing.requests.TestResultsRequest;
 import ru.android.childdiary.presentation.core.AppPartitionPresenter;
+import ru.android.childdiary.presentation.core.adapters.DeletedItemsManager;
 
 @InjectViewState
 public class TestResultsPresenter extends AppPartitionPresenter<TestResultsView> {
     @Inject
     TestingInteractor testingInteractor;
-
+    private DeletedItemsManager<TestResult> deletedItemsManager = new DeletedItemsManager<>();
     private Disposable testResultsSubscription;
 
     @Override
@@ -81,21 +82,30 @@ public class TestResultsPresenter extends AppPartitionPresenter<TestResultsView>
                                 this::onUnexpectedError));
     }
 
+    public void reviewTestResult(@NonNull TestResult testResult) {
+        if (deletedItemsManager.check(testResult)) {
+            return;
+        }
+        getViewState().navigateToTestResult(testResult);
+    }
+
     public void deleteTestResult(@NonNull TestResult testResult) {
+        if (deletedItemsManager.check(testResult)) {
+            return;
+        }
         getViewState().confirmDeletion(testResult);
     }
 
     public void deletionConfirmed(@NonNull TestResult testResult) {
+        if (deletedItemsManager.checkAndAdd(testResult)) {
+            return;
+        }
         unsubscribeOnDestroy(
                 testingInteractor.delete(testResult)
                         .doOnNext(deletedTestResult -> logger.debug("deleted: " + deletedTestResult))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(getViewState()::deleted, this::onUnexpectedError));
-    }
-
-    public void reviewTestResult(@NonNull TestResult testResult) {
-        getViewState().navigateToTestResult(testResult);
     }
 
     public void showChart() {

@@ -23,11 +23,14 @@ import ru.android.childdiary.domain.development.achievement.ConcreteAchievementI
 import ru.android.childdiary.domain.development.achievement.data.ConcreteAchievement;
 import ru.android.childdiary.domain.development.achievement.requests.DeleteConcreteAchievementRequest;
 import ru.android.childdiary.domain.development.achievement.requests.DeleteConcreteAchievementResponse;
+import ru.android.childdiary.presentation.core.adapters.DeletedItemsManager;
 import ru.android.childdiary.presentation.development.partitions.achievements.adapters.ConcreteAchievementItem;
 import ru.android.childdiary.presentation.development.partitions.core.BaseDevelopmentDiaryPresenter;
 
 @InjectViewState
 public class ConcreteAchievementsPresenter extends BaseDevelopmentDiaryPresenter<ConcreteAchievementsView> {
+    private final DeletedItemsManager<ConcreteAchievement> deletedItemsManager = new DeletedItemsManager<>();
+
     @Inject
     ChildInteractor childInteractor;
 
@@ -140,6 +143,9 @@ public class ConcreteAchievementsPresenter extends BaseDevelopmentDiaryPresenter
     }
 
     public void edit(@NonNull ConcreteAchievement concreteAchievement) {
+        if (deletedItemsManager.check(concreteAchievement)) {
+            return;
+        }
         unsubscribeOnDestroy(
                 childInteractor.getActiveChildOnce()
                         .subscribeOn(Schedulers.io())
@@ -150,10 +156,16 @@ public class ConcreteAchievementsPresenter extends BaseDevelopmentDiaryPresenter
     }
 
     public void delete(@NonNull ConcreteAchievement concreteAchievement) {
+        if (deletedItemsManager.check(concreteAchievement)) {
+            return;
+        }
         getViewState().confirmDelete(concreteAchievement);
     }
 
     public void forceDelete(@NonNull ConcreteAchievement concreteAchievement) {
+        if (deletedItemsManager.checkAndAdd(concreteAchievement)) {
+            return;
+        }
         unsubscribeOnDestroy(
                 concreteAchievementInteractor.delete(DeleteConcreteAchievementRequest.builder()
                         .concreteAchievement(concreteAchievement)
