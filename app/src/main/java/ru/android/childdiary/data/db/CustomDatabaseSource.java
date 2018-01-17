@@ -87,9 +87,12 @@ public class CustomDatabaseSource extends DatabaseSource {
             }
         }
         for (int i = 0; i < count; ++i) {
-            String valuesStr = "";
+            StringBuilder valuesStr = new StringBuilder();
             for (int j = 0; j < names.length; ++j) {
-                valuesStr += "'" + names[j][i] + "'" + (j == names.length - 1 ? "" : ",");
+                valuesStr.append("'")
+                        .append(names[j][i])
+                        .append("'")
+                        .append(j == names.length - 1 ? "" : ",");
             }
             db.execSQL("insert into " + table + " (" + columnStr + ") values (" + valuesStr + ");");
         }

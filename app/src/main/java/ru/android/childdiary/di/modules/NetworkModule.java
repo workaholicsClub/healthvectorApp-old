@@ -23,6 +23,7 @@ public class NetworkModule {
     private static final String API_BASE_URL = "https://healthvector.ru/";
     private static final long TIMEOUT_IN_SECONDS = 15;
 
+    @SuppressWarnings("ConstantConditions")
     @Nullable
     private static Interceptor getLoggingInterceptor() {
         if (BuildConfig.PRINT_HTTP_LOGS) {

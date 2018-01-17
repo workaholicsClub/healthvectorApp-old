@@ -13,7 +13,7 @@ class CrashReportSystemAppender extends UnsynchronizedAppenderBase<ILoggingEvent
 
     @Override
     public void start() {
-        if (encoder == null || encoder.getLayout() == null) {
+        if (encoder.getLayout() == null) {
             addError("No layout set for the appender " + toString());
             return;
         }

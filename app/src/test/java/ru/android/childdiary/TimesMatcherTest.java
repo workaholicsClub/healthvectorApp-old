@@ -30,11 +30,12 @@ public class TimesMatcherTest {
     };
 
     private static String join(List<String> strings) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < strings.size(); ++i) {
-            result += strings.get(i) + (i == strings.size() - 1 ? "" : ", ");
+            result.append(strings.get(i))
+                    .append(i == strings.size() - 1 ? "" : ", ");
         }
-        return result;
+        return result.toString();
     }
 
     @Test

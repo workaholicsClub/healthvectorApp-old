@@ -896,8 +896,9 @@ public class TouchImageView extends AppCompatImageView {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         last.set(curr);
-                        if (fling != null)
+                        if (fling != null) {
                             fling.cancelFling();
+                        }
                         setState(State.DRAG);
                         break;
 

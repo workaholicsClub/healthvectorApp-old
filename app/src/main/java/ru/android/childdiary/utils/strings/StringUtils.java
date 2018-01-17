@@ -168,7 +168,6 @@ public class StringUtils {
         return context.getResources().getQuantityString(R.plurals.numberOfTimesInADay, number, number);
     }
 
-    @Nullable
     public static String periodicity(Context context, @Nullable PeriodicityType type) {
         if (type == null) {
             return context.getString(R.string.no);
@@ -192,7 +191,6 @@ public class StringUtils {
                 : lengthValue(context, lengthValue.getLength(), lengthValue.getTimeUnit());
     }
 
-    @Nullable
     private static String lengthValue(Context context,
                                       @Nullable Integer length,
                                       @Nullable TimeUnit timeUnit) {

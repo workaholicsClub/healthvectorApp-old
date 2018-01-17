@@ -11,6 +11,7 @@ public class Preconditions {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean checkMainThread(Observer<?> observer) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             observer.onError(new IllegalStateException(

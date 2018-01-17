@@ -6,9 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ru.android.childdiary.presentation.splash.SplashActivity;
 
 public class AppRestartUtils {
+    private static final Logger logger = LoggerFactory.getLogger(AppRestartUtils.class);
+
     public static void scheduleAppStartAndExit(Context context) {
         Intent intent = SplashActivity.getIntent(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -16,9 +21,12 @@ public class AppRestartUtils {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) {
-            return;
+            logger.error("alarm manager is null");
+        } else {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 500, pendingIntent);
         }
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 500, pendingIntent);
+
+        logger.debug("do exit from app");
 
         // the better way to close all database connections
         // перед вызовом этого метода все активити уже закрыты

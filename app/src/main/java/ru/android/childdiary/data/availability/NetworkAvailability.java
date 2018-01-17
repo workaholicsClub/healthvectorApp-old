@@ -19,6 +19,9 @@ public class NetworkAvailability {
 
     private boolean getNetworkAvailabilityResult() {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager == null) {
+            return false;
+        }
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
