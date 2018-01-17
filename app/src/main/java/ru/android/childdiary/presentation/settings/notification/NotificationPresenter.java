@@ -25,7 +25,7 @@ public class NotificationPresenter extends BasePresenter<NotificationView> {
     }
 
     public void init(@NonNull EventType eventType) {
-        unsubscribeOnDestroy(calendarInteractor.getNotificationSettings(eventType)
+        unsubscribeOnDestroy(calendarInteractor.getNotificationSettingsOnce(eventType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showNotificationSettings, this::onUnexpectedError));

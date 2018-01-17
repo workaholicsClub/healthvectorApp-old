@@ -25,10 +25,7 @@ public class DayLengthPresenter extends BasePresenter<DayLengthView> {
         applicationComponent.inject(this);
     }
 
-    @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
-
+    public void init() {
         unsubscribeOnDestroy(settingsInteractor.getStartTimeOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

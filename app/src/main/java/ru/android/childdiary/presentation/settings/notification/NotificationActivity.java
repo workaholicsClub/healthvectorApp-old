@@ -85,12 +85,17 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        buttonAdd.setText(R.string.save);
-
-        eventType = (EventType) getIntent().getSerializableExtra(ExtraConstants.EXTRA_TYPE);
-        presenter.init(eventType);
-        eventTypeNameView.setText(StringUtils.eventType(this, eventType));
+        EventNotification eventNotification = savedInstanceState == null ? null : (EventNotification) savedInstanceState
+                .getSerializable(ExtraConstants.EXTRA_EVENT_NOTIFICATION);
+        eventType = eventNotification == null ? (EventType) getIntent()
+                .getSerializableExtra(ExtraConstants.EXTRA_TYPE) : eventNotification.getEventType();
         checkBoxViewDontNotify.setFieldCheckBoxListener(this);
+        if (savedInstanceState == null || eventNotification == null) {
+            presenter.init(eventType);
+        } else {
+            showNotificationSettings(eventNotification);
+        }
+        eventTypeNameView.setText(StringUtils.eventType(this, eventType));
         notifyTimeView.setFieldDialogListener(v -> {
             TimeDialogFragment dialogFragment = new TimeDialogFragment();
             dialogFragment.showAllowingStateLoss(getSupportFragmentManager(), TAG_NOTIFY_TIME_DIALOG,
@@ -104,6 +109,13 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
                             .build());
         });
         soundInfoView.setFieldDialogListener(v -> requestPermissionAndPickSound());
+        buttonAdd.setText(R.string.save);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(ExtraConstants.EXTRA_EVENT_NOTIFICATION, buildEventNotification());
     }
 
     private void requestPermissionAndPickSound() {

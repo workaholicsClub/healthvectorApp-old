@@ -10,7 +10,7 @@ import ru.android.childdiary.domain.calendar.data.core.EventNotification;
 import ru.android.childdiary.presentation.core.BaseView;
 
 public interface NotificationView extends BaseView {
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showNotificationSettings(@NonNull EventNotification eventNotification);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
