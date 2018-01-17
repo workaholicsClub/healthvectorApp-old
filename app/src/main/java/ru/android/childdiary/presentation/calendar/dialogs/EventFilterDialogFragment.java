@@ -50,6 +50,7 @@ public class EventFilterDialogFragment extends BaseMvpDialogFragment<EventFilter
         adapter.setItems(Arrays.asList(EventType.DIAPER, EventType.SLEEP, EventType.FEED, EventType.PUMP,
                 EventType.EXERCISE, EventType.MEDICINE_TAKING, EventType.DOCTOR_VISIT, EventType.OTHER));
 
+        @SuppressWarnings("ConstantConditions")
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(recyclerView)
                 .setTitle(R.string.menu_filter)

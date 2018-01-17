@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.calendar.partitions;
 
-import android.content.Context;
 import android.support.annotation.LayoutRes;
 
 import ru.android.childdiary.R;
@@ -26,11 +25,10 @@ public class MonthFragment extends BaseCalendarFragment<MonthViewAdapter> {
 
     @Override
     protected String getCalendarTitleText(MonthViewAdapter adapter) {
-        Context context = getContext();
         int month = adapter.getMonth();
         int year = adapter.getYear();
-        String monthString = DateUtils.monthNominativeName(context, month);
-        String text = context.getString(R.string.calendar_month_title, monthString, year);
+        String monthString = DateUtils.monthNominativeName(getContext(), month);
+        String text = getString(R.string.calendar_month_title, monthString, year);
         return text;
     }
 

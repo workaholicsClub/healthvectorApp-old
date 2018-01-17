@@ -46,6 +46,7 @@ public class ProgressDialogFragment extends BaseMvpDialogFragment<ProgressDialog
     @NonNull
     @Override
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
+        @SuppressWarnings("ConstantConditions")
         Dialog dialog = new Dialog(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex())) {
             @Override
             public void onBackPressed() {

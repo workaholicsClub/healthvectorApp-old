@@ -57,7 +57,8 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
 
     @Nullable
     @Override
-    public final View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public final View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                                   @Nullable Bundle savedInstanceState) {
         logger.debug("onCreateView");
         init(savedInstanceState);
         return inflater.inflate(getLayoutResourceId(), container, false);
@@ -72,7 +73,7 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
     protected abstract int getLayoutResourceId();
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
     }
@@ -137,6 +138,10 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
     public void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
         if (BuildConfig.SHOW_ERROR_DIALOGS) {
+            if (getContext() == null) {
+                logger.error("context is null");
+                return;
+            }
             new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                     .setMessage(e.toString())
                     .setPositiveButton(R.string.ok, null)
@@ -155,10 +160,18 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
     }
 
     public void showProgress(String tag, String title, String message) {
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         ((BaseMvpActivity) getActivity()).showProgress(tag, title, message);
     }
 
     public void hideProgress(String tag) {
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         ((BaseMvpActivity) getActivity()).hideProgress(tag);
     }
 
@@ -179,12 +192,20 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         getActivity().overridePendingTransition(0, 0);
     }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         getActivity().overridePendingTransition(0, 0);
     }
 }

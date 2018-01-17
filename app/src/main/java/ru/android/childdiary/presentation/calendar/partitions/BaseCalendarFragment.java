@@ -201,10 +201,9 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
     }
 
     private void updateEventsTitle(LocalDate selectedDate) {
-        Context context = getContext();
         int day = selectedDate.getDayOfMonth();
-        String monthName = DateUtils.monthGenitiveName(context, selectedDate.getMonthOfYear());
-        String text = context.getString(R.string.calendar_selected_date_format, day, monthName);
+        String monthName = DateUtils.monthGenitiveName(getContext(), selectedDate.getMonthOfYear());
+        String text = getString(R.string.calendar_selected_date_format, day, monthName);
         eventsTitle.setText(text);
     }
 
@@ -303,6 +302,10 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
 
     @Override
     public void confirmDeleteOneEvent(@NonNull MasterEvent event) {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_event_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
@@ -313,6 +316,10 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
 
     @Override
     public void askDeleteOneEventOrLinerGroup(@NonNull MasterEvent event) {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_one_event_or_linear_group)
                 .setPositiveButton(R.string.delete_one_event,
@@ -355,6 +362,10 @@ public abstract class BaseCalendarFragment<Adapter extends CalendarViewAdapter>
 
     @Override
     public void noChildSpecified() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.add_profile_to_continue)
                 .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())

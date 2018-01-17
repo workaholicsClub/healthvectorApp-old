@@ -22,29 +22,34 @@ import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.domain.child.data.Child;
 
 public class ResourcesUtils {
+    @Nullable
     public static Drawable getChildIconForToolbar(Context context, @NonNull Child child) {
         return getChildIcon(context, child,
                 ContextCompat.getDrawable(context, R.drawable.ic_placeholder_toolbar));
     }
 
+    @Nullable
     public static Drawable getChildIconForAccountHeader(Context context, @NonNull Child child) {
         return getChildIcon(context, child,
                 ContextCompat.getDrawable(context, R.drawable.ic_placeholder_account_header));
     }
 
+    @Nullable
     public static Drawable getChildIconForSettings(Context context, @NonNull Child child) {
         return getChildIcon(context, child,
                 ContextCompat.getDrawable(context, R.drawable.ic_placeholder_account_header));
     }
 
+    @Nullable
     public static Drawable getChildIconForProfile(Context context, @NonNull Child child) {
         return getChildIcon(context, child,
                 ContextCompat.getDrawable(context, R.color.white));
     }
 
+    @Nullable
     private static Drawable getChildIcon(Context context,
                                          @NonNull Child child,
-                                         @NonNull Drawable placeholder) {
+                                         @Nullable Drawable placeholder) {
         return getPhotoDrawable(context, child.getImageFileName(), placeholder);
     }
 

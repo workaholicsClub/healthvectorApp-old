@@ -98,6 +98,10 @@ public abstract class BaseMedicalDataFragment<V extends BaseMedicalDataView> ext
 
     @Override
     public void noChildSpecified() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.add_profile_to_continue)
                 .setPositiveButton(R.string.add, (dialog, which) -> getPresenter().addProfile())

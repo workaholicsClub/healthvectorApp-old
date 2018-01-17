@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +13,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.List;
 
+import butterknife.BindColor;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.child.data.Child;
@@ -39,6 +39,9 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
     @InjectPresenter
     AntropometryListPresenter presenter;
 
+    @BindColor(R.color.intention_text)
+    int intentionTextColor;
+
     @Getter
     private AntropometryAdapter adapter;
 
@@ -57,7 +60,7 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
         String text = getString(R.string.link_format,
                 LINK_ADD,
                 getString(R.string.add_antropometry));
-        HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this, intentionTextColor);
     }
 
     @Override
@@ -95,6 +98,10 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
 
     @Override
     public void noChildSpecified() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.add_profile_to_continue)
                 .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())
@@ -113,6 +120,10 @@ public class AntropometryListFragment extends BaseDevelopmentDiaryFragment<Antro
 
     @Override
     public void confirmDelete(@NonNull Antropometry antropometry) {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.delete_antropometry_dialog_title)
                 .setPositiveButton(R.string.delete,

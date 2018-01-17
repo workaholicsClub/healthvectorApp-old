@@ -286,6 +286,10 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
 
     @Override
     public void noChildSpecified() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.add_profile_to_continue)
                 .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())

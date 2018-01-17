@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +17,7 @@ import org.joda.time.LocalTime;
 
 import java.util.List;
 
+import butterknife.BindColor;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.child.data.Child;
@@ -43,6 +43,9 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
     @InjectPresenter
     MedicineTakingListPresenter presenter;
 
+    @BindColor(R.color.intention_text)
+    int intentionTextColor;
+
     @Getter
     private MedicineTakingAdapter adapter;
 
@@ -61,7 +64,7 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
         String text = getString(R.string.link_format,
                 LINK_ADD,
                 getString(R.string.add_medicine_taking));
-        HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this, intentionTextColor);
         textViewNothingFound.setVisibility(View.GONE);
 
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
@@ -116,7 +119,7 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
             String text = getString(R.string.link_format,
                     LINK_ADD,
                     getString(R.string.add_medicine_taking));
-            HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+            HtmlUtils.setupClickableLinks(textViewIntention, text, this, intentionTextColor);
             textViewIntention.setVisibility(medicineTakingList.isEmpty() ? View.VISIBLE : View.GONE);
         } else {
             textViewNothingFound.setVisibility(View.VISIBLE);
@@ -143,6 +146,10 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
 
     @Override
     public void confirmDeleteMedicineTaking(@NonNull MedicineTaking medicineTaking) {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.delete_medicine_taking_confirmation_dialog_title)
                 .setPositiveButton(R.string.delete,
@@ -153,6 +160,10 @@ public class MedicineTakingListFragment extends BaseMedicalDataFragment
 
     @Override
     public void askDeleteConnectedEventsOrNot(@NonNull MedicineTaking medicineTaking) {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.ask_delete_medicine_taking_connected_events_or_not)
                 .setPositiveButton(R.string.delete_only_medicine_taking,

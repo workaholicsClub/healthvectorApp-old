@@ -84,6 +84,7 @@ public class AgeDialogFragment extends BaseMvpDialogFragment<AgeDialogArguments>
     @NonNull
     @Override
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
+        @SuppressWarnings("ConstantConditions")
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(dialogArguments.getTitle())

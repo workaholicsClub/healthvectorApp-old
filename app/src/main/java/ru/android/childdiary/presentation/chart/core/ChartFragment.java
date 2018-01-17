@@ -52,7 +52,8 @@ public abstract class ChartFragment<S extends ChartState, P extends ChartPresent
     @Override
     protected void init(@Nullable Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        child = (Child) getArguments().getSerializable(ExtraConstants.EXTRA_CHILD);
+        child = getArguments() == null ? null
+                : (Child) getArguments().getSerializable(ExtraConstants.EXTRA_CHILD);
         if (child == null) {
             logger.error("no child provided");
             return;
@@ -102,7 +103,7 @@ public abstract class ChartFragment<S extends ChartState, P extends ChartPresent
     protected abstract String getYTitle();
 
     protected final boolean isSelected() {
-        return ((ChartActivity) getActivity()).getSelectedPage() == this;
+        return getActivity() != null && ((ChartActivity) getActivity()).getSelectedPage() == this;
     }
 
     public void setSelected() {

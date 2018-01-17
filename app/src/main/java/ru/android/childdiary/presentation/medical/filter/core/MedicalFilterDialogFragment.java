@@ -67,6 +67,10 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
         dateToView.setValue(dialogArguments.getToDate());
 
         dateFromView.setFieldDialogListener(view -> {
+            if (getActivity() == null) {
+                logger.error("activity is null");
+                return;
+            }
             hideKeyboardAndClearFocus();
             LocalDate date = dateFromView.getValue();
             LocalDate maxDate = dateToView.getValue();
@@ -75,6 +79,10 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
             dpd.show(getActivity().getFragmentManager(), TAG_DIALOG_FROM_DATE);
         });
         dateToView.setFieldDialogListener(view -> {
+            if (getActivity() == null) {
+                logger.error("activity is null");
+                return;
+            }
             hideKeyboardAndClearFocus();
             LocalDate date = dateToView.getValue();
             LocalDate minDate = dateFromView.getValue();
@@ -91,6 +99,7 @@ public abstract class MedicalFilterDialogFragment<T extends Serializable, A exte
     @NonNull
     @Override
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
+        @SuppressWarnings("ConstantConditions")
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setTitle(R.string.menu_filter)

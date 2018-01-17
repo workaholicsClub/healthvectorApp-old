@@ -58,6 +58,10 @@ public abstract class DomanChartFragment extends ChartFragment<DomanChartState, 
     }
 
     private void warnAboutInvalidResults() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.birthday_changed)
                 .setPositiveButton(R.string.ok, null)
@@ -84,7 +88,7 @@ public abstract class DomanChartFragment extends ChartFragment<DomanChartState, 
 
     @Override
     protected String getIntentionText() {
-        return getContext().getString(R.string.no_doman_test_data);
+        return getString(R.string.no_doman_test_data);
     }
 
     @Override
@@ -114,6 +118,10 @@ public abstract class DomanChartFragment extends ChartFragment<DomanChartState, 
     }
 
     private void updateTitle() {
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         ((TestChartActivity) getActivity()).updateTitle(state.getTestType(), state.getTestParameter());
     }
 }

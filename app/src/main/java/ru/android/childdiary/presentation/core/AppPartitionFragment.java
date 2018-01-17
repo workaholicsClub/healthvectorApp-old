@@ -27,7 +27,8 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        AppPartitionArguments arguments = (AppPartitionArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
+        AppPartitionArguments arguments = getArguments() == null ? null
+                : (AppPartitionArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
         if (arguments == null) {
             logger.error("no arguments provided");
             return;
@@ -87,6 +88,10 @@ public abstract class AppPartitionFragment extends BaseMvpFragment implements Ap
     @Override
     public void onResume() {
         super.onResume();
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         getActivity().invalidateOptionsMenu();
     }
 }

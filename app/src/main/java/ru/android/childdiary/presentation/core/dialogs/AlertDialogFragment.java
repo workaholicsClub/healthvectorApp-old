@@ -34,6 +34,7 @@ public class AlertDialogFragment extends BaseMvpDialogFragment<AlertDialogArgume
     @NonNull
     @Override
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
+        @SuppressWarnings("ConstantConditions")
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setTitle(dialogArguments.getTitle())
                 .setMessage(dialogArguments.getMessage())

@@ -1,6 +1,5 @@
 package ru.android.childdiary.presentation.calendar.partitions;
 
-import android.content.Context;
 import android.support.annotation.LayoutRes;
 
 import org.joda.time.LocalDate;
@@ -28,11 +27,10 @@ public class DayFragment extends BaseCalendarFragment<DayViewAdapter> {
 
     @Override
     protected String getCalendarTitleText(DayViewAdapter adapter) {
-        Context context = getContext();
         LocalDate selectedDate = adapter.getSelectedDate();
         int day = selectedDate.getDayOfMonth();
-        String monthName = DateUtils.monthGenitiveName(context, selectedDate.getMonthOfYear());
-        String text = context.getString(R.string.calendar_selected_date_format, day, monthName);
+        String monthName = DateUtils.monthGenitiveName(getContext(), selectedDate.getMonthOfYear());
+        String text = getString(R.string.calendar_selected_date_format, day, monthName);
         return text;
     }
 

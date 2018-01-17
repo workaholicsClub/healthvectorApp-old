@@ -122,6 +122,10 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
 
     @Override
     public void noChildSpecified() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.add_profile_to_continue)
                 .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())
@@ -136,6 +140,10 @@ public class TestResultsFragment extends AppPartitionFragment implements TestRes
 
     @Override
     public void confirmDeletion(@NonNull TestResult testResult) {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.delete_test_result_dialog_title)
                 .setPositiveButton(R.string.delete,

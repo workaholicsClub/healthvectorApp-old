@@ -83,6 +83,10 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
         dateView.setValue(LocalDate.now());
         updateAge();
         dateView.setFieldDialogListener(view -> {
+            if (getActivity() == null) {
+                logger.error("activity is null");
+                return;
+            }
             LocalDate date = dateView.getValue();
             LocalDate birthDate = dialogArguments.getChild().getBirthDate();
             LocalDate minDate = null, maxDate = null;
@@ -131,6 +135,7 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
     @NonNull
     @Override
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
+        @SuppressWarnings("ConstantConditions")
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(view)
                 .setPositiveButton(R.string.ok, null)
@@ -176,6 +181,10 @@ public class TestParametersDialogFragment extends BaseMvpDialogFragment<TestPara
                                 @NonNull TestParameters testParameters) {
         String dateStr = DateUtils.date(getContext(), date);
         String parameterStr = TestUtils.testParameter(getContext(), testParameters.getParameter());
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setMessage(getString(R.string.date_already_used_dialog_text, dateStr, parameterStr))
                 .setPositiveButton(R.string.ok, null)

@@ -34,12 +34,12 @@ public class WeekFragment extends BaseCalendarFragment<WeekViewAdapter> {
         String text;
         if (firstDayOfWeek.getMonthOfYear() == lastDayOfWeek.getMonthOfYear()) {
             String monthString = DateUtils.monthGenitiveName(context, firstDayOfWeek.getMonthOfYear());
-            text = context.getString(R.string.calendar_week_title_one_month,
+            text = getString(R.string.calendar_week_title_one_month,
                     firstDayOfWeek.getDayOfMonth(), lastDayOfWeek.getDayOfMonth(), monthString);
         } else {
             String firstDayMonthString = DateUtils.monthGenitiveName(context, firstDayOfWeek.getMonthOfYear());
             String lastDayMonthString = DateUtils.monthGenitiveName(context, lastDayOfWeek.getMonthOfYear());
-            text = context.getString(R.string.calendar_week_title_two_month,
+            text = getString(R.string.calendar_week_title_two_month,
                     firstDayOfWeek.getDayOfMonth(), firstDayMonthString,
                     lastDayOfWeek.getDayOfMonth(), lastDayMonthString);
         }

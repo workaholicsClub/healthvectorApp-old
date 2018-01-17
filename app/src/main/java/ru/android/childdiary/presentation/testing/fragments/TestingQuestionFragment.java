@@ -60,7 +60,8 @@ public class TestingQuestionFragment extends AppPartitionFragment {
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        TestingQuestionArguments arguments = (TestingQuestionArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
+        TestingQuestionArguments arguments = getArguments() == null ? null
+                : (TestingQuestionArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
         if (arguments == null) {
             logger.error("no arguments provided");
             return;
@@ -72,8 +73,12 @@ public class TestingQuestionFragment extends AppPartitionFragment {
 
     @Override
     protected void setupUi(@Nullable Bundle savedInstanceState) {
-        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test, parameter));
         justifiedTextView.setText(question.getText());
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
+        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test, parameter));
     }
 
     @Override

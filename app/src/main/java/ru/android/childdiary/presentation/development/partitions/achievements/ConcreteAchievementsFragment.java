@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +14,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.List;
 
+import butterknife.BindColor;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.child.data.Child;
@@ -46,6 +46,9 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
     @InjectPresenter
     ConcreteAchievementsPresenter presenter;
 
+    @BindColor(R.color.intention_text)
+    int intentionTextColor;
+
     @Getter
     private ConcreteAchievementAdapter adapter;
     private ConcreteAchievement changedItem;
@@ -65,7 +68,7 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
         String text = getString(R.string.link_format,
                 LINK_ADD,
                 getString(R.string.add_achievement));
-        HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this, intentionTextColor);
     }
 
     @Override
@@ -130,6 +133,10 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
     @Override
     public void confirmDelete(@NonNull ConcreteAchievement concreteAchievement) {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.delete_achievement_dialog_title)
                 .setPositiveButton(R.string.delete,
@@ -174,6 +181,10 @@ public class ConcreteAchievementsFragment extends BaseDevelopmentDiaryFragment<C
 
     @Override
     public void noChildSpecified() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.add_profile_to_continue)
                 .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())

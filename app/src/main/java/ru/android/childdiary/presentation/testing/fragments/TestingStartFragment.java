@@ -50,7 +50,8 @@ public class TestingStartFragment extends AppPartitionFragment {
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        TestingStartArguments arguments = (TestingStartArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
+        TestingStartArguments arguments = getArguments() == null ? null
+                : (TestingStartArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
         if (arguments == null) {
             logger.error("no arguments provided");
             return;

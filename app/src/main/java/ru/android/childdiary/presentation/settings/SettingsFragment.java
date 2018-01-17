@@ -116,7 +116,8 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        AppPartitionArguments arguments = (AppPartitionArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
+        AppPartitionArguments arguments = getArguments() == null ? null
+                : (AppPartitionArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
         if (arguments == null) {
             logger.error("no arguments provided");
             return;
@@ -152,12 +153,16 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().invalidateOptionsMenu();
         if (isFirstTime) {
             new Handler().post(() -> ((LinearLayoutManager) recyclerView.getLayoutManager())
                     .scrollToPositionWithOffset(0, 0));
             isFirstTime = false;
         }
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -204,6 +209,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void showDeleteChildConfirmation(@NonNull Child child) {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(getString(R.string.delete_child_confirmation_dialog_title, child.getName()))
                 .setMessage(R.string.delete_child_confirmation_dialog_text)
@@ -409,6 +418,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         Intent intent = CloudOperationActivity.getIntent(getContext(),
                 CloudOperationType.BACKUP, getSex());
         startActivity(intent);
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         getActivity().finish();
     }
 
@@ -416,6 +429,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         Intent intent = CloudOperationActivity.getIntent(getContext(),
                 CloudOperationType.RESTORE, getSex());
         startActivity(intent);
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         getActivity().finish();
     }
 
@@ -502,6 +519,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
                     REQUEST_GOOGLE_PLAY_SERVICES);
             dialog.show();
         } else {
+            if (getContext() == null) {
+                logger.error("context is null");
+                return;
+            }
             new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                     .setMessage(R.string.user_unrecoverable_error_dialog_text)
                     .setPositiveButton(R.string.ok,
@@ -517,6 +538,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void connectionUnavailable() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.bind_account_connection_unavailable_dialog_title)
                 .setMessage(R.string.bind_account_connection_unavailable_dialog_text)
@@ -529,6 +554,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void securityError() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setTitle(R.string.authorization_error)
                 .setMessage(R.string.security_error_dialog_text)
@@ -553,6 +582,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Override
     public void checkBackupAvailabilitySucceeded(boolean isBackupAvailable) {
         if (isBackupAvailable) {
+            if (getContext() == null) {
+                logger.error("context is null");
+                return;
+            }
             new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                     .setTitle(R.string.found_backup_dialog_title)
                     .setMessage(R.string.found_backup_dialog_text)
@@ -568,6 +601,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void failedToCheckBackupAvailability() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.google_drive_error_dialog_text)
                 .setPositiveButton(R.string.try_again,
@@ -615,6 +652,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void failedToRestore() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.restore_error_dialog_text)
                 .setPositiveButton(R.string.ok,
@@ -624,6 +665,10 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void noBackupFound() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.no_backup_found)
                 .setPositiveButton(R.string.ok,
@@ -652,8 +697,12 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
 
     @Override
     public void restartApp() {
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         getActivity().finish();
-        AppRestartUtils.scheduleAppStartAndExit(getContext());
+        AppRestartUtils.scheduleAppStartAndExit(getActivity());
     }
 
     private enum Intention {

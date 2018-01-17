@@ -64,6 +64,9 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
     @Override
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        if (getArguments() == null) {
+            throw new IllegalArgumentException("fragment arguments not specified");
+        }
         //noinspection unchecked
         dialogArguments = (T) getArguments().getSerializable(ExtraConstants.EXTRA_DIALOG_ARGUMENTS);
         Icepick.restoreInstanceState(this, savedInstanceState);
@@ -92,6 +95,10 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
     public void onUnexpectedError(Throwable e) {
         LogSystem.report(logger, "unexpected error", e);
         if (BuildConfig.SHOW_ERROR_DIALOGS) {
+            if (getContext() == null) {
+                logger.error("context is null");
+                return;
+            }
             new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                     .setMessage(e.toString())
                     .setPositiveButton(R.string.ok, null)
@@ -146,12 +153,20 @@ public abstract class BaseMvpDialogFragment<T extends BaseDialogArguments> exten
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         getActivity().overridePendingTransition(0, 0);
     }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
         getActivity().overridePendingTransition(0, 0);
     }
 }

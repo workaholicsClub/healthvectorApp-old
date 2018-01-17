@@ -93,6 +93,10 @@ public class DevelopmentDiaryFragment extends AppPartitionFragment implements De
             public void onPageSelected(int position) {
                 preferences.getInteger(KEY_SELECTED_PAGE).set(position);
                 updateSwipeLayouts(position);
+                if (getActivity() == null) {
+                    logger.error("activity is null");
+                    return;
+                }
                 getActivity().invalidateOptionsMenu();
             }
 

@@ -94,7 +94,8 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        TestingFinishArguments arguments = (TestingFinishArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
+        TestingFinishArguments arguments = getArguments() == null ? null
+                : (TestingFinishArguments) getArguments().getSerializable(ExtraConstants.EXTRA_APP_PARTITION_ARGUMENTS);
         if (arguments == null) {
             logger.error("no arguments provided");
             return;
@@ -108,7 +109,6 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
 
     @Override
     protected void setupUi(@Nullable Bundle savedInstanceState) {
-        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test, parameter));
         if (justifiedTextView != null) {
             justifiedTextView.setText(text);
             justifiedTextView.setOnLinkClickListener(this);
@@ -135,6 +135,11 @@ public class TestingFinishFragment extends AppPartitionFragment implements HtmlU
             legendView.setVisibility(results.isEmpty() ? View.INVISIBLE : View.VISIBLE);
         }
         buttonStopTesting.setVisibility(isInTestMode ? View.VISIBLE : View.GONE);
+        if (getActivity() == null) {
+            logger.error("activity is null");
+            return;
+        }
+        ((BaseMvpActivity) getActivity()).setupToolbarTitle(TestUtils.getTestTitle(getContext(), test, parameter));
     }
 
     @Override

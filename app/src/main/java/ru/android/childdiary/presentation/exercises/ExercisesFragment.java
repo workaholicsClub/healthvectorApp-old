@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +19,7 @@ import org.joda.time.LocalTime;
 
 import java.util.List;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import icepick.State;
 import lombok.Getter;
@@ -56,6 +56,9 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
     @InjectPresenter
     ExercisesPresenter presenter;
 
+    @BindColor(R.color.intention_text)
+    int intentionTextColor;
+
     @Getter
     private ExerciseAdapter adapter;
 
@@ -85,7 +88,7 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
         String tryAgain = getString(R.string.try_again);
         String text = getString(R.string.no_exercises_format,
                 noExercises, checkNetworkConnection, LINK_TRY_AGAIN, tryAgain);
-        HtmlUtils.setupClickableLinks(textViewIntention, text, this, ContextCompat.getColor(getContext(), R.color.intention_text));
+        HtmlUtils.setupClickableLinks(textViewIntention, text, this, intentionTextColor);
 
         // setup progress
         if (loading) {
@@ -161,6 +164,10 @@ public class ExercisesFragment extends AppPartitionFragment implements Exercises
 
     @Override
     public void noChildSpecified() {
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(getSex()))
                 .setMessage(R.string.add_profile_to_continue)
                 .setPositiveButton(R.string.add, (dialog, which) -> presenter.addProfile())

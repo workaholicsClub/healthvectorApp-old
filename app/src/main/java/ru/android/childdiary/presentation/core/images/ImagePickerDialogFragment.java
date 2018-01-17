@@ -69,6 +69,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
     @NonNull
     @Override
     protected Dialog createDialog(@Nullable View view, @Nullable Bundle savedInstanceState) {
+        @SuppressWarnings("ConstantConditions")
         Dialog dialog = new Dialog(getContext(), getTheme());
         if (dialog.getWindow() != null) {
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -237,6 +238,10 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
 
         uCrop.withOptions(options);
 
+        if (getContext() == null) {
+            logger.error("context is null");
+            return;
+        }
         Intent intent = uCrop.getIntent(getContext());
         intent.setClass(getContext(), CropActivity.class);
         startActivityForResult(intent, REQUEST_CROP_IMAGE);
@@ -250,7 +255,7 @@ public class ImagePickerDialogFragment extends BaseMvpDialogFragment<ImagePicker
     @Override
     public void startCamera(@NonNull File file) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+        if (getContext() != null && intent.resolveActivity(getContext().getPackageManager()) != null) {
             capturedImageFileUri = FileProvider.getUriForFile(getContext(),
                     getString(R.string.file_provider_authorities), file);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageFileUri);

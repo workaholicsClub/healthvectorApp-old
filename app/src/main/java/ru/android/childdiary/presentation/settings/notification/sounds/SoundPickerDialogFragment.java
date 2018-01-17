@@ -74,6 +74,7 @@ public class SoundPickerDialogFragment extends BaseMvpDialogFragment<SoundPicker
         adapter.setSex(dialogArguments.getSex());
         adapter.setItems(sounds);
 
+        @SuppressWarnings("ConstantConditions")
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), ThemeUtils.getThemeDialogRes(dialogArguments.getSex()))
                 .setView(recyclerView)
                 .setTitle(R.string.select_sound)

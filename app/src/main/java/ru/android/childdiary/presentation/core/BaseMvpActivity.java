@@ -153,7 +153,7 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
         toolbarTitle.setText(R.string.app_name);
     }
 
-    public final void setupToolbarLogo(@NonNull Drawable drawable) {
+    public final void setupToolbarLogo(@Nullable Drawable drawable) {
         toolbarLogo.setVisibility(View.VISIBLE);
         toolbarLogo.setImageDrawable(drawable);
     }
