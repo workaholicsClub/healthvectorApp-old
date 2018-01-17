@@ -283,6 +283,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @Override
     public void navigateToProfileEdit(@NonNull Child child) {
         if (child == Child.NULL) {
+            navigateToProfileAdd();
             return;
         }
         Intent intent = ProfileEditActivity.getIntent(this, child);
