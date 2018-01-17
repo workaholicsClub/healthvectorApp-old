@@ -47,8 +47,6 @@ import ru.android.childdiary.presentation.dictionaries.food.FoodPickerActivity;
 import ru.android.childdiary.presentation.dictionaries.foodmeasure.FoodMeasurePickerActivity;
 import ru.android.childdiary.presentation.dictionaries.medicinemeasure.MedicineMeasurePickerActivity;
 import ru.android.childdiary.presentation.dictionaries.medicines.MedicinePickerActivity;
-import ru.android.childdiary.presentation.main.AppPartition;
-import ru.android.childdiary.presentation.main.MainActivity;
 import ru.android.childdiary.presentation.profile.ProfileEditActivity;
 import ru.android.childdiary.presentation.settings.adapters.SettingsAdapter;
 import ru.android.childdiary.presentation.settings.adapters.items.BaseSettingsItem;
@@ -59,6 +57,7 @@ import ru.android.childdiary.presentation.settings.adapters.items.ProfileGroupSe
 import ru.android.childdiary.presentation.settings.adapters.items.ProfileSettingsItem;
 import ru.android.childdiary.presentation.settings.daylength.DayLengthActivity;
 import ru.android.childdiary.presentation.settings.notifications.NotificationsActivity;
+import ru.android.childdiary.utils.AppRestartUtils;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -654,7 +653,7 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
     @Override
     public void restartApp() {
         getActivity().finish();
-        MainActivity.scheduleAppStartAndExit(getContext(), AppPartition.SETTINGS);
+        AppRestartUtils.scheduleAppStartAndExit(getContext());
     }
 
     private enum Intention {

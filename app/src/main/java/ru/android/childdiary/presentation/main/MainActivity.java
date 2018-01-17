@@ -1,11 +1,8 @@
 package ru.android.childdiary.presentation.main;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -140,20 +137,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     private static AppPartition readAppPartition(@NonNull Intent intent) {
         int index = intent.getIntExtra(ExtraConstants.EXTRA_APP_PARTITION, 0);
         return AppPartition.values()[index];
-    }
-
-    public static void scheduleAppStartAndExit(Context context,
-                                               @NonNull AppPartition appPartition) {
-        Intent intent = MainActivity.getIntent(context, appPartition, null);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 500, pendingIntent);
-
-        // the better way to close all database connections
-        // перед вызовом этого метода все активити уже закрыты
-        System.exit(0);
     }
 
     private static IProfile mapToProfile(Context context, @NonNull Child child) {

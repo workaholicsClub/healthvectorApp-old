@@ -25,6 +25,7 @@ import ru.android.childdiary.presentation.core.dialogs.AlertDialogFragment;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
+import ru.android.childdiary.utils.AppRestartUtils;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -293,7 +294,7 @@ public class CloudInitialActivity extends BaseMvpActivity implements CloudInitia
     @Override
     public void restartApp() {
         finish();
-        MainActivity.scheduleAppStartAndExit(this, AppPartition.CALENDAR);
+        AppRestartUtils.scheduleAppStartAndExit(this);
     }
 
     @Override

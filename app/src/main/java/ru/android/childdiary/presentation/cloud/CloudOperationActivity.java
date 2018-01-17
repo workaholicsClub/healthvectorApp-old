@@ -36,6 +36,7 @@ import ru.android.childdiary.presentation.core.ExtraConstants;
 import ru.android.childdiary.presentation.core.permissions.RequestPermissionInfo;
 import ru.android.childdiary.presentation.main.AppPartition;
 import ru.android.childdiary.presentation.main.MainActivity;
+import ru.android.childdiary.utils.AppRestartUtils;
 import ru.android.childdiary.utils.ui.AccountChooserPicker;
 import ru.android.childdiary.utils.ui.ResourcesUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
@@ -385,7 +386,7 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
     @Override
     public void restartApp() {
         finish();
-        MainActivity.scheduleAppStartAndExit(this, AppPartition.SETTINGS);
+        AppRestartUtils.scheduleAppStartAndExit(this);
     }
 
     @Override

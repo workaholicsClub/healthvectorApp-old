@@ -1,5 +1,6 @@
 package ru.android.childdiary.presentation.splash;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,10 @@ import ru.android.childdiary.presentation.onboarding.AppIntroActivity;
 public class SplashActivity extends BaseMvpActivity implements SplashView {
     @InjectPresenter
     SplashPresenter presenter;
+
+    public static Intent getIntent(Context context) {
+        return new Intent(context, SplashActivity.class);
+    }
 
     @Override
     protected void injectActivity(ApplicationComponent applicationComponent) {
