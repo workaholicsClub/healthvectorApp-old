@@ -182,10 +182,10 @@ dependencies {
     implementation "com.jakewharton.rxbinding2:rxbinding:2.0.0"
 
     // TODO поднять версию до 1.4.2+, когда выйдет исправление https://github.com/requery/requery/issues/708
-    // TODO надо рефакторить код, чтобы поднять версию
-    def requeryVersion = '1.3.2'
+    def requeryVersion = '1.4.0'
     implementation "io.requery:requery:$requeryVersion"
     //noinspection GradleDependency
+    implementation "io.requery:requery-android:$requeryVersion"
     annotationProcessor "io.requery:requery-processor:$requeryVersion"
 
     def retrofitVersion = '2.3.0'
