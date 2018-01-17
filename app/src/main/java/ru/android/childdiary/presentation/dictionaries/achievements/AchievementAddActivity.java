@@ -63,6 +63,6 @@ public class AchievementAddActivity extends BaseAddActivity<Achievement, Achieve
                 .filter(item -> !TextUtils.isEmpty(item.getName()))
                 .map(Achievement::getName)
                 .toList()
-                .blockingGet(), StringFilteredAdapter.FilterType.STARTS);
+                .blockingGet(), StringFilteredAdapter.FilterType.CONTAINS);
     }
 }

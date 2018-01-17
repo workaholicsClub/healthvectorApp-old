@@ -27,6 +27,6 @@ public class AchievementPickerPresenter extends BasePickerPresenter<Achievement,
 
     @Override
     protected boolean filter(@NonNull Achievement item, @Nullable String filter) {
-        return StringUtils.starts(item.getName(), filter, true);
+        return StringUtils.contains(item.getName(), filter, true);
     }
 }

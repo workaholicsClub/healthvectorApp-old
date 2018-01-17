@@ -215,7 +215,7 @@ public abstract class ConcreteAchievementActivity<V extends ConcreteAchievementV
                 .filter(item -> !TextUtils.isEmpty(item.getName()))
                 .map(Achievement::getName)
                 .toList()
-                .blockingGet(), StringFilteredAdapter.FilterType.STARTS);
+                .blockingGet(), StringFilteredAdapter.FilterType.CONTAINS);
         achievementNameView.setFilteredAdapter(adapter);
     }
 
