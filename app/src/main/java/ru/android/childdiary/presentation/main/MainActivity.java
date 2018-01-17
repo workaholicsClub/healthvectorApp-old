@@ -73,6 +73,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         Drawer.OnDrawerItemClickListener,
         Drawer.OnDrawerListener,
         AccountHeader.OnAccountHeaderProfileImageListener,
+        AccountHeader.OnAccountHeaderSelectionViewClickListener,
         AdapterView.OnItemClickListener,
         PopupWindow.OnDismissListener,
         CloseMenuButtonClickListener,
@@ -298,6 +299,9 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public void navigateToProfileEdit(@NonNull Child child) {
+        if (child == Child.NULL) {
+            return;
+        }
         Intent intent = ProfileEditActivity.getIntent(this, child);
         startActivity(intent);
     }
@@ -401,6 +405,12 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @Override
     public boolean onProfileImageLongClick(View view, IProfile profile, boolean current) {
         return false;
+    }
+
+    @Override
+    public boolean onClick(View view, IProfile profile) {
+        presenter.editChild();
+        return true;
     }
 
     @Override
@@ -569,6 +579,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         accountHeader = new CustomAccountHeaderBuilder()
                 .withActivity(this)
                 .withCompactStyle(true)
+                .withOnAccountHeaderSelectionViewClickListener(this)
                 .withOnAccountHeaderProfileImageListener(this)
                 .withAccountHeader(R.layout.account_header)
                 .withHeightRes(R.dimen.account_header_height)
