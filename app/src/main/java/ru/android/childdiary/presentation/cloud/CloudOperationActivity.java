@@ -341,7 +341,8 @@ public class CloudOperationActivity extends BaseMvpActivity implements CloudOper
 
     @Override
     public void restoreSucceeded() {
-        updateOperationDoneView(getString(R.string.restore_success_dialog_text), null);
+        updateOperationDoneView(getString(R.string.restore_success_dialog_text),
+                getString(R.string.restore_success_dialog_text_app_will_be_restarted));
         showState(CloudOperationState.FINISHED);
     }
 

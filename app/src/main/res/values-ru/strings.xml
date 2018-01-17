@@ -231,6 +231,7 @@
     <string name="no_backup_found">Резервная копия не найдена</string>
     <string name="google_drive_error_dialog_text">Не удалось подключиться к Google Drive</string>
     <string name="restore_success_dialog_text">Данные восстановлены</string>
+    <string name="restore_success_dialog_text_app_will_be_restarted">Приложение будет перезапущено</string>
     <string name="restore_error_dialog_text">При восстановлении данных произошла ошибка</string>
     <string name="backup_success_dialog_text">Данные сохранены</string>
     <string name="backup_error_dialog_text">При сохранении данных произошла ошибка</string>

@@ -594,7 +594,8 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         AlertDialogFragment dialogFragment = new AlertDialogFragment();
         dialogFragment.showAllowingStateLoss(getChildFragmentManager(), TAG_DIALOG_DATA_RESTORED,
                 AlertDialogArguments.builder()
-                        .message(getString(R.string.restore_success_dialog_text))
+                        .title(getString(R.string.restore_success_dialog_text))
+                        .message(getString(R.string.restore_success_dialog_text_app_will_be_restarted))
                         .positiveButtonText(getString(R.string.ok))
                         .cancelable(false)
                         .build());

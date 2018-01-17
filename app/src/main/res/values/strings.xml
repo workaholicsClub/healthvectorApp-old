@@ -231,6 +231,7 @@
     <string name="no_backup_found">Backup copy is not found</string>
     <string name="google_drive_error_dialog_text">Failed to connect to Google Drive</string>
     <string name="restore_success_dialog_text">Data is restored</string>
+    <string name="restore_success_dialog_text_app_will_be_restarted">App will be restarted</string>
     <string name="restore_error_dialog_text">Failed to restore data</string>
     <string name="backup_success_dialog_text">Data saved</string>
     <string name="backup_error_dialog_text">Failed to save data</string>
