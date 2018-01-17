@@ -18,6 +18,7 @@ import org.joda.time.LocalTime;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import icepick.State;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
@@ -45,6 +46,10 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
     @BindView(R.id.dayFinishTimeView)
     FieldDayTimeView dayFinishTimeView;
 
+    @Nullable
+    @State
+    LocalTime startTime, finishTime;
+
     private ViewGroup detailsView;
 
     public static Intent getIntent(Context context, @Nullable Sex sex) {
@@ -63,13 +68,19 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
         setContentView(R.layout.activity_details);
         buttonAdd.setText(R.string.save);
         dayStartTimeView.setFieldDialogListener(v -> {
-            LocalTime maxTime = dayFinishTimeView.getValue().minusHours(1);
-            showTimePicker(TAG_TIME_PICKER_START, getString(R.string.day_start), dayStartTimeView.getValue(), null, maxTime);
+            LocalTime maxTime = finishTime == null ? null : finishTime.minusHours(1);
+            showTimePicker(TAG_TIME_PICKER_START, getString(R.string.day_start),
+                    startTime, null, maxTime);
         });
         dayFinishTimeView.setFieldDialogListener(v -> {
-            LocalTime minTime = dayStartTimeView.getValue().plusHours(1);
-            showTimePicker(TAG_TIME_PICKER_FINISH, getString(R.string.day_finish), dayFinishTimeView.getValue(), minTime, null);
+            LocalTime minTime = startTime == null ? null : startTime.plusHours(1);
+            showTimePicker(TAG_TIME_PICKER_FINISH, getString(R.string.day_finish),
+                    finishTime, minTime, null);
         });
+        if (savedInstanceState != null) {
+            dayStartTimeView.setValue(startTime);
+            dayFinishTimeView.setValue(finishTime);
+        }
     }
 
     @Override
@@ -111,9 +122,11 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
     public void onTimePick(String tag, @NonNull LocalTime time) {
         switch (tag) {
             case TAG_TIME_PICKER_START:
+                startTime = time;
                 dayStartTimeView.setValue(time);
                 break;
             case TAG_TIME_PICKER_FINISH:
+                finishTime = time;
                 dayFinishTimeView.setValue(time);
                 break;
         }
@@ -121,11 +134,13 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
 
     @Override
     public void showStartTime(@NonNull LocalTime time) {
+        startTime = time;
         dayStartTimeView.setValue(time);
     }
 
     @Override
     public void showFinishTime(@NonNull LocalTime time) {
+        finishTime = time;
         dayFinishTimeView.setValue(time);
     }
 
@@ -147,7 +162,7 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
 
     @OnClick(R.id.buttonAdd)
     void onSaveClick() {
-        presenter.forceSave(dayStartTimeView.getValue(), dayFinishTimeView.getValue());
+        presenter.forceSave(startTime, finishTime);
     }
 
     @Override
@@ -165,6 +180,6 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
     }
 
     private void saveChangesOrExit() {
-        presenter.save(dayStartTimeView.getValue(), dayFinishTimeView.getValue());
+        presenter.save(startTime, finishTime);
     }
 }

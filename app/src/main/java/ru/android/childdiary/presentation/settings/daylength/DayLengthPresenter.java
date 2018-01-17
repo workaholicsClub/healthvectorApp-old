@@ -29,12 +29,12 @@ public class DayLengthPresenter extends BasePresenter<DayLengthView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        unsubscribeOnDestroy(settingsInteractor.getStartTime()
+        unsubscribeOnDestroy(settingsInteractor.getStartTimeOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showStartTime, this::onUnexpectedError));
 
-        unsubscribeOnDestroy(settingsInteractor.getFinishTime()
+        unsubscribeOnDestroy(settingsInteractor.getFinishTimeOnce()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::showFinishTime, this::onUnexpectedError));
