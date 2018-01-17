@@ -7,8 +7,6 @@ import com.jakewharton.rxbinding2.InitialValueObservable;
 import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
 
-import static com.jakewharton.rxbinding2.internal.Preconditions.checkMainThread;
-
 public final class SearchViewQueryTextChangeEventsObservable
         extends InitialValueObservable<SearchViewQueryTextEvent> {
     private final SearchView view;
@@ -19,7 +17,7 @@ public final class SearchViewQueryTextChangeEventsObservable
 
     @Override
     protected void subscribeListener(Observer<? super SearchViewQueryTextEvent> observer) {
-        if (!checkMainThread(observer)) {
+        if (!Preconditions.checkMainThread(observer)) {
             return;
         }
         Listener listener = new Listener(view, observer);

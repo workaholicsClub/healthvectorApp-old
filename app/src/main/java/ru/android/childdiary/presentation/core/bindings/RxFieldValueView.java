@@ -3,8 +3,6 @@ package ru.android.childdiary.presentation.core.bindings;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
-import static com.jakewharton.rxbinding2.internal.Preconditions.checkNotNull;
-
 public final class RxFieldValueView {
     private RxFieldValueView() {
         throw new AssertionError("No instances.");
@@ -14,7 +12,7 @@ public final class RxFieldValueView {
     @NonNull
     public static <T> FieldValueChangeEventsObservable<T> valueChangeEvents(
             @NonNull FieldValueView<T> view) {
-        checkNotNull(view, "view == null");
+        Preconditions.checkNotNull(view, "view == null");
         return new FieldValueChangeEventsObservable<>(view);
     }
 }
