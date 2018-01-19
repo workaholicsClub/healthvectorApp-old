@@ -2,7 +2,6 @@ package ru.android.childdiary.presentation.settings.notification;
 
 import android.support.annotation.NonNull;
 
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
