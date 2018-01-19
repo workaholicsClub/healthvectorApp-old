@@ -9,6 +9,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
 
+import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.development.antropometry.data.AntropometryPoint;
 import ru.android.childdiary.presentation.chart.core.ValueFormatter;
@@ -21,7 +22,7 @@ class AntropometryMarkerView extends MarkerView {
 
     public AntropometryMarkerView(Context context, ValueFormatter valueFormatter) {
         super(context, R.layout.marker_view);
-        textView = findViewById(R.id.textView);
+        textView = ButterKnife.findById(this, R.id.textView);
         this.valueFormatter = valueFormatter;
     }
 

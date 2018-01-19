@@ -17,6 +17,7 @@ import android.widget.Button;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.EventType;
@@ -157,7 +158,7 @@ public class NotificationActivity extends BaseMvpActivity implements Notificatio
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        detailsView = findViewById(R.id.detailsView);
+        detailsView = ButterKnife.findById(this, R.id.detailsView);
         inflater.inflate(R.layout.activity_notification, detailsView);
     }
 

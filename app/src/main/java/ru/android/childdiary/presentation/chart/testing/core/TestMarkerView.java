@@ -8,6 +8,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
 
+import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.development.testing.data.processors.core.DomanResult;
 import ru.android.childdiary.utils.strings.DateUtils;
@@ -18,7 +19,7 @@ class TestMarkerView extends MarkerView {
 
     public TestMarkerView(Context context) {
         super(context, R.layout.marker_view);
-        textView = findViewById(R.id.textView);
+        textView = ButterKnife.findById(this, R.id.textView);
     }
 
     @Override

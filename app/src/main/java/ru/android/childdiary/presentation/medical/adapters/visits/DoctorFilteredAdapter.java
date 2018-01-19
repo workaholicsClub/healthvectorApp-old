@@ -11,6 +11,7 @@ import com.tokenautocomplete.FilteredArrayAdapter;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.dictionaries.doctors.data.Doctor;
 import ru.android.childdiary.utils.strings.StringUtils;
@@ -32,7 +33,7 @@ public class DoctorFilteredAdapter extends FilteredArrayAdapter<Doctor> {
 
         Doctor doctor = getItem(position);
 
-        TextView textView = view.findViewById(android.R.id.text1);
+        TextView textView = ButterKnife.findById(view, android.R.id.text1);
         textView.setText(doctor == null ? null : doctor.getName());
 
         return view;

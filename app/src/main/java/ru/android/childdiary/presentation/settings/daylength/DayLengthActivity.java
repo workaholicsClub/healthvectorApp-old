@@ -17,6 +17,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import org.joda.time.LocalTime;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
 import ru.android.childdiary.R;
@@ -88,7 +89,7 @@ public class DayLengthActivity extends BaseMvpActivity implements DayLengthView,
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        detailsView = findViewById(R.id.detailsView);
+        detailsView = ButterKnife.findById(this, R.id.detailsView);
         inflater.inflate(R.layout.activity_day_length, detailsView);
     }
 

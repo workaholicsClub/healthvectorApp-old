@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupFieldType;
 import ru.android.childdiary.domain.calendar.data.core.LinearGroupItem;
@@ -93,7 +94,7 @@ public abstract class EventDetailActivity<V extends EventDetailView<T>, T extend
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        detailsView = findViewById(R.id.detailsView);
+        detailsView = ButterKnife.findById(this, R.id.detailsView);
         inflater.inflate(getContentLayoutResourceId(), detailsView);
     }
 

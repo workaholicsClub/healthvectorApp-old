@@ -17,6 +17,7 @@ import com.tokenautocomplete.FilteredArrayAdapter;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
 import ru.android.childdiary.R;
@@ -58,7 +59,7 @@ public abstract class BaseAddActivity<T, V extends BaseAddView<T>> extends BaseM
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        detailsView = findViewById(R.id.detailsView);
+        detailsView = ButterKnife.findById(this, R.id.detailsView);
         inflater.inflate(getContentLayoutResourceId(), detailsView);
     }
 

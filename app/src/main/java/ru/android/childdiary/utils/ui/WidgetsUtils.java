@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 
+import butterknife.ButterKnife;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.presentation.core.fields.widgets.FieldDateView;
@@ -100,19 +101,19 @@ public class WidgetsUtils {
         Context context = searchView.getContext();
 
         resId = android.support.v7.appcompat.R.id.search_button;
-        imageView = searchView.findViewById(resId);
+        imageView = ButterKnife.findById(searchView, resId);
         if (imageView != null) {
             imageView.setImageResource(R.drawable.toolbar_action_search);
         }
 
         resId = android.support.v7.appcompat.R.id.search_close_btn;
-        imageView = searchView.findViewById(resId);
+        imageView = ButterKnife.findById(searchView, resId);
         if (imageView != null) {
             imageView.setImageResource(R.drawable.toolbar_action_close);
         }
 
         resId = android.support.v7.appcompat.R.id.search_src_text;
-        TextView textView = searchView.findViewById(resId);
+        TextView textView = ButterKnife.findById(searchView, resId);
         //noinspection deprecation
         textView.setTextAppearance(context, R.style.SearchTextAppearance);
         textView.setTypeface(FontUtils.getTypefaceRegular(context));
@@ -134,7 +135,7 @@ public class WidgetsUtils {
 
     private static void setNumberPickerDividerColor(View view, String id, @ColorInt int color) {
         int monthNumberPickerId = Resources.getSystem().getIdentifier(id, "id", "android");
-        NumberPicker numberPicker = view.findViewById(monthNumberPickerId);
+        NumberPicker numberPicker = ButterKnife.findById(view, monthNumberPickerId);
         if (numberPicker == null) {
             logger.warn("failed to setup number picker divider color: number picker with id '" + id + "' not found");
             return;

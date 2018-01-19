@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
 import lombok.Getter;
 import lombok.Setter;
 import ru.android.childdiary.R;
@@ -52,21 +53,21 @@ public class FieldBreastFeedDurationView extends LinearLayout implements View.On
 
         View viewDuration = inflate(getContext(), R.layout.field_duration_breast_feed, null);
         addView(viewDuration);
-        textViewDuration = viewDuration.findViewById(R.id.textView);
+        textViewDuration = ButterKnife.findById(viewDuration, R.id.textView);
 
         View viewLeft = inflate(getContext(), R.layout.field_duration_left, null);
         addView(viewLeft);
         textViewDurationLeftWrapper = viewLeft.findViewById(R.id.textViewWrapper);
         textViewDurationLeftWrapper.setOnClickListener(this);
-        textViewDurationLeft = viewLeft.findViewById(R.id.textView);
-        imageViewLeft = viewLeft.findViewById(R.id.imageView);
+        textViewDurationLeft = ButterKnife.findById(viewLeft, R.id.textView);
+        imageViewLeft = ButterKnife.findById(viewLeft, R.id.imageView);
 
         View viewRight = inflate(getContext(), R.layout.field_duration_right, null);
         addView(viewRight);
         textViewDurationRightWrapper = viewRight.findViewById(R.id.textViewWrapper);
         textViewDurationRightWrapper.setOnClickListener(this);
-        textViewDurationRight = viewRight.findViewById(R.id.textView);
-        imageViewRight = viewRight.findViewById(R.id.imageView);
+        textViewDurationRight = ButterKnife.findById(viewRight, R.id.textView);
+        imageViewRight = ButterKnife.findById(viewRight, R.id.imageView);
     }
 
     public void setLeftDuration(@Nullable Integer value) {

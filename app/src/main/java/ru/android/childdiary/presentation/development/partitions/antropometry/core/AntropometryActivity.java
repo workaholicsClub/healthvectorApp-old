@@ -18,6 +18,7 @@ import org.joda.time.LocalDate;
 import java.util.Calendar;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.childdiary.R;
@@ -104,7 +105,7 @@ public abstract class AntropometryActivity<V extends AntropometryView> extends B
     @Override
     protected void setContentViewBeforeBind() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        ViewGroup detailsView = findViewById(R.id.detailsView);
+        ViewGroup detailsView = ButterKnife.findById(this, R.id.detailsView);
         inflater.inflate(R.layout.activity_antropometry, detailsView);
     }
 

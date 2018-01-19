@@ -16,6 +16,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import lombok.Getter;
 import ru.android.childdiary.R;
@@ -50,17 +51,17 @@ public class FieldAmountMlPumpView extends FieldEditTextView {
 
         View viewAmount = inflate(getContext(), R.layout.field_amount_ml_pump, null);
         addView(viewAmount);
-        textViewAmountMl = viewAmount.findViewById(R.id.textView);
+        textViewAmountMl = ButterKnife.findById(viewAmount, R.id.textView);
 
         View viewLeft = inflate(getContext(), R.layout.field_amount_ml_pump_left, null);
         addView(viewLeft);
-        imageViewLeft = viewLeft.findViewById(R.id.imageView);
-        editTextAmountMlLeft = viewLeft.findViewById(R.id.editText);
+        imageViewLeft = ButterKnife.findById(viewLeft, R.id.imageView);
+        editTextAmountMlLeft = ButterKnife.findById(viewLeft, R.id.editText);
 
         View viewRight = inflate(getContext(), R.layout.field_amount_ml_pump_right, null);
         addView(viewRight);
-        imageViewRight = viewRight.findViewById(R.id.imageView);
-        editTextAmountMlRight = viewRight.findViewById(R.id.editText);
+        imageViewRight = ButterKnife.findById(viewRight, R.id.imageView);
+        editTextAmountMlRight = ButterKnife.findById(viewRight, R.id.editText);
     }
 
     @Override

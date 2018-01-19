@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import lombok.Getter;
 import ru.android.childdiary.R;
 import ru.android.childdiary.data.types.Sex;
@@ -90,10 +91,10 @@ public abstract class FieldRadioView<T extends Enum<T>> extends LinearLayout imp
         addView(child);
         child.setOnClickListener(this);
         child.setTag(value);
-        TextView textView = child.findViewById(R.id.textView);
+        TextView textView = ButterKnife.findById(child, R.id.textView);
         textView.setText(getTextForValue(value));
         texts.add(textView);
-        ImageView radio = child.findViewById(R.id.imageView);
+        ImageView radio = ButterKnife.findById(child, R.id.imageView);
         radios.add(radio);
         View marginView = child.findViewById(R.id.marginView);
         marginView.setVisibility(showIcon ? VISIBLE : GONE);
