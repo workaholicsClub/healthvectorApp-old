@@ -56,7 +56,7 @@ public class AccountService extends BaseService {
 
     private AccountManager accountManager;
 
-    public static Intent getServiceIntent(Context context) {
+    private static Intent getServiceIntent(Context context) {
         return new Intent(context, AccountService.class);
     }
 
