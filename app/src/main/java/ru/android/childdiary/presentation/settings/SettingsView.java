@@ -15,6 +15,9 @@ import ru.android.childdiary.presentation.cloud.core.CloudView;
 
 public interface SettingsView extends CloudView {
     @StateStrategyType(AddToEndSingleStrategy.class)
+    void showDeletingProfile(boolean loading);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void showChildList(@NonNull List<Child> childList);
 
     @StateStrategyType(AddToEndSingleStrategy.class)

@@ -67,6 +67,8 @@ import static android.app.Activity.RESULT_OK;
 public class SettingsFragment extends BaseMvpFragment implements SettingsView,
         IntentSettingsItem.Listener, ProfileGroupSettingsItem.Listener, ProfileSettingsItem.Listener,
         AlertDialogFragment.Listener {
+    private static final String TAG_PROGRESS_DIALOG_DELETING_PROFILE = "TAG_PROGRESS_DIALOG_DELETING_PROFILE";
+
     private static final String TAG_PROGRESS_DIALOG_AUTHORIZE = "TAG_PROGRESS_DIALOG_AUTHORIZE";
     private static final String TAG_PROGRESS_DIALOG_RESTORE = "TAG_PROGRESS_DIALOG_RESTORE";
     private static final String TAG_PROGRESS_DIALOG_BACKUP = "TAG_PROGRESS_DIALOG_BACKUP";
@@ -163,6 +165,17 @@ public class SettingsFragment extends BaseMvpFragment implements SettingsView,
             return;
         }
         getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void showDeletingProfile(boolean loading) {
+        if (loading) {
+            showProgress(TAG_PROGRESS_DIALOG_DELETING_PROFILE,
+                    getString(R.string.please_wait),
+                    getString(R.string.profile_deleting));
+        } else {
+            hideProgress(TAG_PROGRESS_DIALOG_DELETING_PROFILE);
+        }
     }
 
     @Override

@@ -15,12 +15,9 @@ import ru.android.childdiary.domain.child.data.Child;
 import ru.android.childdiary.domain.child.requests.DeleteChildRequest;
 import ru.android.childdiary.domain.child.requests.DeleteChildResponse;
 import ru.android.childdiary.presentation.cloud.core.CloudPresenter;
-import ru.android.childdiary.presentation.core.adapters.DeletedItemsManager;
 
 @InjectViewState
 public class SettingsPresenter extends CloudPresenter<SettingsView> {
-    private final DeletedItemsManager<Child> deletedItemsManager = new DeletedItemsManager<>();
-
     @Inject
     ChildInteractor childInteractor;
 
@@ -65,29 +62,23 @@ public class SettingsPresenter extends CloudPresenter<SettingsView> {
     }
 
     public void editChild(@NonNull Child child) {
-        if (deletedItemsManager.check(child)) {
-            return;
-        }
         getViewState().navigateToProfileEdit(child);
     }
 
     public void deleteChild(@NonNull Child child) {
-        if (deletedItemsManager.check(child)) {
-            return;
-        }
         getViewState().showDeleteChildConfirmation(child);
     }
 
     public void forceDeleteChild(@NonNull Child child) {
-        if (deletedItemsManager.checkAndAdd(child)) {
-            return;
-        }
+        getViewState().showDeletingProfile(true);
         unsubscribeOnDestroy(childInteractor.delete(DeleteChildRequest.builder().child(child).build())
                 .map(DeleteChildResponse::getRequest)
                 .map(DeleteChildRequest::getChild)
                 .doOnNext(deletedChild -> logger.debug("child deleted: " + deletedChild))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(response -> getViewState().showDeletingProfile(false))
+                .doOnError(throwable -> getViewState().showDeletingProfile(false))
                 .subscribe(getViewState()::childDeleted, this::onUnexpectedError));
     }
 }
