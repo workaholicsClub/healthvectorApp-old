@@ -18,6 +18,7 @@ import ru.android.childdiary.domain.dictionaries.medicinemeasure.data.MedicineMe
 import ru.android.childdiary.domain.medical.data.MedicineMeasureValue;
 import ru.android.childdiary.presentation.core.BaseMvpDialogFragment;
 import ru.android.childdiary.presentation.core.widgets.CustomEditText;
+import ru.android.childdiary.utils.ObjectUtils;
 import ru.android.childdiary.utils.strings.DoubleUtils;
 import ru.android.childdiary.utils.ui.ThemeUtils;
 
@@ -89,10 +90,12 @@ public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<Me
                             Double amount = readAmount();
                             MedicineMeasure medicineMeasure = readMedicineMeasure();
                             if (listener != null) {
-                                MedicineMeasureValue medicineMeasureValue = MedicineMeasureValue.builder()
+                                MedicineMeasureValue medicineMeasureValue = ObjectUtils.isPositive(amount)
+                                        ? MedicineMeasureValue.builder()
                                         .amount(amount)
                                         .medicineMeasure(medicineMeasure)
-                                        .build();
+                                        .build()
+                                        : null;
                                 listener.onSetMedicineMeasureValue(getTag(), medicineMeasureValue);
                             }
                         })
@@ -134,6 +137,6 @@ public class MedicineMeasureValueDialogFragment extends BaseMvpDialogFragment<Me
     }
 
     public interface Listener {
-        void onSetMedicineMeasureValue(String tag, @NonNull MedicineMeasureValue medicineMeasureValue);
+        void onSetMedicineMeasureValue(String tag, @Nullable MedicineMeasureValue medicineMeasureValue);
     }
 }

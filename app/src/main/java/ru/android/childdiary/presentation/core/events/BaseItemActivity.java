@@ -408,7 +408,7 @@ public abstract class BaseItemActivity<V extends BaseItemView<T>, T extends Seri
     }
 
     @Override
-    public void onSetMedicineMeasureValue(String tag, @NonNull MedicineMeasureValue medicineMeasureValue) {
+    public void onSetMedicineMeasureValue(String tag, @Nullable MedicineMeasureValue medicineMeasureValue) {
         if (getMedicineMeasureValueView() != null) {
             getMedicineMeasureValueView().setValue(medicineMeasureValue);
         }

@@ -227,6 +227,8 @@ public class CalendarInteractor {
                         .foodMeasure(foodMeasure)
                         .food(food)
                         .breast(Breast.LEFT)
+                        .leftDurationInMinutes(0)
+                        .rightDurationInMinutes(0)
                         .build());
     }
 

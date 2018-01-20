@@ -241,7 +241,7 @@ public class MedicineTakingEventDetailActivity
     }
 
     @Override
-    public void onSetMedicineMeasureValue(String tag, @NonNull MedicineMeasureValue medicineMeasureValue) {
+    public void onSetMedicineMeasureValue(String tag, @Nullable MedicineMeasureValue medicineMeasureValue) {
         medicineMeasureValueView.setValue(medicineMeasureValue);
     }
 
