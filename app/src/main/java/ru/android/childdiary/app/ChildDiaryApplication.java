@@ -1,6 +1,10 @@
 package ru.android.childdiary.app;
 
+import android.app.Application;
 import android.support.multidex.MultiDexApplication;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -23,6 +27,7 @@ public class ChildDiaryApplication extends MultiDexApplication {
     @Getter
     private static ApplicationComponent applicationComponent;
     private Logger logger;
+    private Tracker mTracker;
 
     @Override
     public void onCreate() {
@@ -50,5 +55,18 @@ public class ChildDiaryApplication extends MultiDexApplication {
                 .build());
 
         serviceController.onApplicationStart();
+    }
+
+    /**
+     * Получает счетчик {@link Tracker}, используемый по умолчанию для этого приложения {@link Application}.
+     * @return tracker
+     */
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            // Чтобы включить ведение журнала отладки, используйте adb shell setprop log.tag.GAv4 DEBUG
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return mTracker;
     }
 }

@@ -23,6 +23,8 @@ import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -39,6 +41,7 @@ import butterknife.ButterKnife;
 import icepick.State;
 import io.reactivex.Observable;
 import ru.android.childdiary.R;
+import ru.android.childdiary.app.ChildDiaryApplication;
 import ru.android.childdiary.data.types.Sex;
 import ru.android.childdiary.di.ApplicationComponent;
 import ru.android.childdiary.domain.child.data.Child;
@@ -86,6 +89,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @IdRes
     private static final int FRAGMENT_CONTAINER_ID = R.id.mainContent;
+
+    private Tracker analyticsTracker;
 
     private final PrimaryDrawerItem[] drawerItems = new PrimaryDrawerItem[]{
             new CustomPrimaryDrawerItem()
@@ -168,6 +173,9 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_with_one_fragment);
         buildUi();
+
+        ChildDiaryApplication application = (ChildDiaryApplication) getApplication();
+        analyticsTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -306,6 +314,11 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     public void childDeleted(@NonNull Child child) {
     }
 
+    public void trackScreen(String screenName) {
+        analyticsTracker.setScreenName(screenName);
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
     @Override
     public void navigateToCalendar(@NonNull AppPartitionArguments arguments) {
         openAppPartition(AppPartition.CALENDAR, arguments);
@@ -361,6 +374,9 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .replace(FRAGMENT_CONTAINER_ID, fragment, tag)
                 .addToBackStack(null)
                 .commit();
+
+        String screenName = tag;
+        trackScreen(screenName);
     }
 
     private Fragment createAppPartition(@NonNull AppPartition appPartition) {
