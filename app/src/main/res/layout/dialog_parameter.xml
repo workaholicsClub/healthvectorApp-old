@@ -13,7 +13,7 @@
         android:layout_marginTop="@dimen/base_margin_half"
         android:orientation="vertical">
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldDomanTestParameterView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldDomanTestParameterView
             android:id="@+id/domanTestParameterView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

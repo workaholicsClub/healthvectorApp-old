@@ -12,53 +12,53 @@
         android:paddingBottom="@dimen/field_margin_base"
         android:paddingTop="@dimen/field_margin_base">
 
-        <ru.android.childdiary.presentation.core.fields.widgets.TimerView
+        <ru.android.healthvector.presentation.core.fields.widgets.TimerView
             android:id="@+id/timerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldTitleView
             android:id="@+id/startTitleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldDateView
             android:id="@+id/startDateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldTimeView
             android:id="@+id/startTimeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldTitleView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldTitleView
             android:id="@+id/finishTitleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldDateView
             android:id="@+id/finishDateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldTimeView
             android:id="@+id/finishTimeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldDurationView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldDurationView
             android:id="@+id/durationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldNotifyTimeView
             android:id="@+id/notifyTimeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldNoteView
         android:id="@+id/noteView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

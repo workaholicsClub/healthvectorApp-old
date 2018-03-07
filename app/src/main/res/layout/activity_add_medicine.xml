@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/field_margin_base"
     android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView
         android:id="@+id/autoCompleteView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

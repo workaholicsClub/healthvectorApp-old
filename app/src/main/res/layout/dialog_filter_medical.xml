@@ -22,12 +22,12 @@
             android:text="@string/filter_by_date"
             android:textAppearance="@style/FilterPlaceholderTextAppearance" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateFilterView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldDateFilterView
             android:id="@+id/dateFromView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateFilterView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldDateFilterView
             android:id="@+id/dateToView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             android:text="@string/filter_by_doctor"
             android:textAppearance="@style/FilterPlaceholderTextAppearance" />
 
-        <ru.android.childdiary.presentation.medical.filter.visits.DoctorTokenCompleteTextView
+        <ru.android.healthvector.presentation.medical.filter.visits.DoctorTokenCompleteTextView
             android:id="@+id/doctorAutoCompleteTextView"
             style="@style/AutoCompleteTextViewStyle"
             android:hint="@string/doctor" />
@@ -60,7 +60,7 @@
             android:text="@string/filter_by_medicine"
             android:textAppearance="@style/FilterPlaceholderTextAppearance" />
 
-        <ru.android.childdiary.presentation.medical.filter.medicines.MedicineTokenCompleteTextView
+        <ru.android.healthvector.presentation.medical.filter.medicines.MedicineTokenCompleteTextView
             android:id="@+id/medicineAutoCompleteTextView"
             style="@style/AutoCompleteTextViewStyle"
             android:hint="@string/medicine" />

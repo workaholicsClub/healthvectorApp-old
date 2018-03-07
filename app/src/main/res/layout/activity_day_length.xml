@@ -8,13 +8,13 @@
     android:paddingBottom="@dimen/field_margin_base"
     android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldDayTimeView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldDayTimeView
         android:id="@+id/dayStartTimeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:fieldText="@string/day_start" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldDayTimeView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldDayTimeView
         android:id="@+id/dayFinishTimeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

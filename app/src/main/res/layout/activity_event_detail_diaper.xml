@@ -12,28 +12,28 @@
         android:paddingBottom="@dimen/field_margin_base"
         android:paddingTop="@dimen/field_margin_base">
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldDateView
             android:id="@+id/dateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldTimeView
             android:id="@+id/timeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldDiaperStateView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldDiaperStateView
             android:id="@+id/diaperStateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldNotifyTimeView
             android:id="@+id/notifyTimeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldNoteView
         android:id="@+id/noteView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

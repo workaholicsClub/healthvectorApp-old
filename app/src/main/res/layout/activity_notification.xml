@@ -8,29 +8,29 @@
     android:paddingBottom="@dimen/field_margin_base"
     android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldTextViewWithImageView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldTextViewWithImageView
         android:id="@+id/eventTypeNameView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:fieldIcon="@drawable/ic_notification" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldCheckBoxView
         android:id="@+id/checkBoxViewDontNotify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:fieldText="@string/dont_notify" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldNotifyTimeView
         android:id="@+id/notifyTimeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldSoundInfoView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldSoundInfoView
         android:id="@+id/soundInfoView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldCheckBoxView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldCheckBoxView
         android:id="@+id/checkBoxViewVibration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

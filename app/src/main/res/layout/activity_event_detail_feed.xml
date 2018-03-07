@@ -12,58 +12,58 @@
         android:paddingBottom="@dimen/field_margin_base"
         android:paddingTop="@dimen/field_margin_base">
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldFeedTypeView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldFeedTypeView
             android:id="@+id/feedTypeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldDateView
             android:id="@+id/dateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldTimeView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldTimeView
             android:id="@+id/timeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldAmountMlView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldAmountMlView
             android:id="@+id/amountMlView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldBreastView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldBreastView
             android:id="@+id/breastView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldBreastFeedDurationView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldBreastFeedDurationView
             android:id="@+id/durationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldFoodView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldFoodView
             android:id="@+id/foodView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldAmountView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldAmountView
             android:id="@+id/amountView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldFoodMeasureView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldFoodMeasureView
             android:id="@+id/foodMeasureView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldNotifyTimeView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldNotifyTimeView
             android:id="@+id/notifyTimeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldNoteView
         android:id="@+id/noteView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

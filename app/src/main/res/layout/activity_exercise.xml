@@ -17,7 +17,7 @@
         android:orientation="vertical"
         android:paddingTop="@dimen/field_margin_base">
 
-        <ru.android.childdiary.presentation.core.fields.widgets.FieldJustifiedTextView
+        <ru.android.healthvector.presentation.core.fields.widgets.FieldJustifiedTextView
             android:id="@+id/exerciseDescriptionView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

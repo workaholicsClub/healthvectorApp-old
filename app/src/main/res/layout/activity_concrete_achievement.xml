@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/field_margin_base"
     android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldEditTextWithImageAutocompleteView
         android:id="@+id/achievementNameView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,17 +17,17 @@
         app:fieldIcon="@drawable/ic_name"
         app:fieldMaxLength="@integer/max_length_name" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldAchievementTypeView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldAchievementTypeView
         android:id="@+id/achievementTypeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldDateView
         android:id="@+id/dateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldNoteWithPhotoView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldNoteWithPhotoView
         android:id="@+id/noteWithPhotoView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

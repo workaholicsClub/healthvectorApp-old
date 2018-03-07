@@ -29,7 +29,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/appBarLayout" />
 
-    <ru.android.childdiary.presentation.core.widgets.FabToolbar
+    <ru.android.healthvector.presentation.core.widgets.FabToolbar
         android:id="@+id/fabToolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

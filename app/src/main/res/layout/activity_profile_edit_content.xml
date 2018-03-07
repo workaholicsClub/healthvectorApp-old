@@ -43,7 +43,7 @@
                 android:textAppearance="@style/PlaceholderTextAppearance" />
         </RelativeLayout>
 
-        <ru.android.childdiary.presentation.core.widgets.CustomEditText
+        <ru.android.healthvector.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextChildName"
             style="@style/NameEditTextStyle"
             android:layout_width="0dp"
@@ -168,7 +168,7 @@
         android:layout_marginRight="@dimen/base_margin"
         android:orientation="horizontal">
 
-        <ru.android.childdiary.presentation.core.widgets.CustomEditText
+        <ru.android.healthvector.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextBirthHeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"
@@ -185,7 +185,7 @@
             android:textColorHint="@color/placeholder_text"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
 
-        <ru.android.childdiary.presentation.core.widgets.CustomEditText
+        <ru.android.healthvector.presentation.core.widgets.CustomEditText
             android:id="@+id/editTextBirthWeight"
             android:layout_width="0dp"
             android:layout_height="@dimen/profile_field_height"

@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/field_margin_base"
     android:paddingTop="@dimen/field_margin_base">
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldWeightView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldWeightView
         android:id="@+id/weightView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         app:fieldIcon="@drawable/ic_measure_unit"
         app:fieldText="@string/weight" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldHeightView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldHeightView
         android:id="@+id/heightView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         app:fieldIcon="@drawable/ic_height"
         app:fieldText="@string/height" />
 
-    <ru.android.childdiary.presentation.core.fields.widgets.FieldDateView
+    <ru.android.healthvector.presentation.core.fields.widgets.FieldDateView
         android:id="@+id/dateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

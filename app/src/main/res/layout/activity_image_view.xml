@@ -6,7 +6,7 @@
 
     <include layout="@layout/toolbar" />
 
-    <ru.android.childdiary.presentation.core.images.review.TouchImageView
+    <ru.android.healthvector.presentation.core.images.review.TouchImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

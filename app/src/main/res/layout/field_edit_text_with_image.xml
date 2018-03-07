@@ -12,7 +12,7 @@
         android:layout_height="@dimen/field_icon_size"
         android:scaleType="center" />
 
-    <ru.android.childdiary.presentation.core.widgets.CustomEditText
+    <ru.android.healthvector.presentation.core.widgets.CustomEditText
         android:id="@+id/editText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
