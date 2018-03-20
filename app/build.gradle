@@ -44,11 +44,11 @@ android {
             // 20:FB:F4:CD:2E:1B:66:22:7A:BA:68:27:91:AB:5E:AE:E0:FE:FF:97
         }
         release {
-            storeFile file("healthvector.jks")
-            storePassword 'healthvector18'
-            keyAlias 'healthvector'
-            keyPassword 'healthvector18'
-            // 1C:CF:F0:4E:37:BE:71:C5:FD:AC:73:C0:40:90:7C:9E:3D:38:21:EF
+            storeFile file("cev.jks")
+            storePassword 'Opaocah7'
+            keyAlias 'CevKey'
+            keyPassword 'Ro8weinu'
+            // C3:2C:72:48:24:A5:4E:38:02:C6:49:93:EC:67:5A:E9:8C:0D:32:66
         }
     }
     buildTypes {
