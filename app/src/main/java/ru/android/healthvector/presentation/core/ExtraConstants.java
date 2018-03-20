@@ -1,7 +1,7 @@
 package ru.android.healthvector.presentation.core;
 
 public class ExtraConstants {
-    public static final String PACKAGE_NAME = "ru.android.childdiary";
+    public static final String PACKAGE_NAME = "ru.android.healthvector";
     public static final String EXTRA_CHILD = PACKAGE_NAME + ".child";
     public static final String EXTRA_DATE = PACKAGE_NAME + ".date";
     public static final String EXTRA_SEX = PACKAGE_NAME + ".sex";

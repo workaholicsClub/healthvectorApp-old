@@ -16,7 +16,7 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         Context testContext = InstrumentationRegistry.getContext();
 
-        assertEquals("ru.android.childdiary", appContext.getPackageName());
-        assertEquals("ru.android.childdiary.test", testContext.getPackageName());
+        assertEquals("ru.android.healthvector", appContext.getPackageName());
+        assertEquals("ru.android.healthvector.test", testContext.getPackageName());
     }
 }
