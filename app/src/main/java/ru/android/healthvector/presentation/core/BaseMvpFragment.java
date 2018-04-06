@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,10 +42,17 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
 
     private Unbinder unbinder;
 
+    protected Tracker analyticsTracker;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         logger.debug("onAttach");
+    }
+
+    protected void setupTracker() {
+        ChildDiaryApplication application = (ChildDiaryApplication) getActivity().getApplication();
+        analyticsTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -53,6 +62,8 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
         ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
         injectFragment(component);
         permissionHelper = new FragmentPermissionHelper(this);
+
+        setupTracker();
     }
 
     @Nullable
@@ -157,6 +168,11 @@ public abstract class BaseMvpFragment extends MvpAppCompatFragment
     protected abstract Sex getSex();
 
     protected void injectFragment(ApplicationComponent component) {
+    }
+
+    public void trackScreen(String screenName) {
+        analyticsTracker.setScreenName(screenName);
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public void showProgress(String tag, String title, String message) {

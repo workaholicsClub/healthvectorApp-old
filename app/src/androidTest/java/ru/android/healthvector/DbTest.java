@@ -24,6 +24,7 @@ import io.reactivex.Observable;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
 import lombok.val;
+import ru.android.healthvector.data.db.CustomDatabaseSource;
 import ru.android.healthvector.data.db.DbUtils;
 import ru.android.healthvector.data.repositories.calendar.CleanUpDbService;
 import ru.android.healthvector.data.repositories.calendar.mappers.RepeatParametersMapper;
@@ -81,7 +82,7 @@ public class DbTest {
 
         JodaTimeAndroid.init(context);
 
-        val source = DbUtils.getDatabaseSource(context, DB_NAME, DB_VERSION);
+        CustomDatabaseSource source = DbUtils.getDatabaseSource(context, DB_NAME, DB_VERSION);
         dataStore = DbUtils.getDataStore(source);
 
         ChildMapper childMapper = new ChildMapper();

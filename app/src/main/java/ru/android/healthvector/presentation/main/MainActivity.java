@@ -90,8 +90,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     @IdRes
     private static final int FRAGMENT_CONTAINER_ID = R.id.mainContent;
 
-    private Tracker analyticsTracker;
-
     private final PrimaryDrawerItem[] drawerItems = new PrimaryDrawerItem[]{
             new CustomPrimaryDrawerItem()
                     .withTag(AppPartition.CALENDAR)
@@ -131,6 +129,8 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     private ImageView switcherImage;
     private ListPopupWindow popupWindow;
     private Runnable navigationCommand;
+
+    private boolean isFirstTime = false;
 
     public static Intent getIntent(Context context,
                                    @NonNull AppPartition appPartition,
@@ -173,9 +173,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_with_one_fragment);
         buildUi();
-
-        ChildDiaryApplication application = (ChildDiaryApplication) getApplication();
-        analyticsTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -279,6 +276,7 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     public void navigateToProfileAddFirstTime() {
         AppPartition appPartition = readAppPartition(getIntent());
         if (appPartition == AppPartition.CALENDAR) {
+            isFirstTime = true;
             navigateToProfileAdd();
         }
     }
@@ -312,11 +310,6 @@ public class MainActivity extends BaseMvpActivity implements MainView,
 
     @Override
     public void childDeleted(@NonNull Child child) {
-    }
-
-    public void trackScreen(String screenName) {
-        analyticsTracker.setScreenName(screenName);
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -376,7 +369,14 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 .commit();
 
         String screenName = tag;
-        trackScreen(screenName);
+        boolean skipTrackCalendarWhenProfileOpen = screenName.equals("CALENDAR") && isFirstTime;
+
+        if (!skipTrackCalendarWhenProfileOpen) {
+            trackScreen(screenName);
+        }
+        else {
+            isFirstTime = false;
+        }
     }
 
     private Fragment createAppPartition(@NonNull AppPartition appPartition) {

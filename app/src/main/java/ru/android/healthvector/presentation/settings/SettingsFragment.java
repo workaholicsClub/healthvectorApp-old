@@ -14,6 +14,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.joda.time.LocalDate;
@@ -29,6 +31,7 @@ import io.reactivex.Observable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import ru.android.healthvector.R;
+import ru.android.healthvector.app.ChildDiaryApplication;
 import ru.android.healthvector.data.types.Sex;
 import ru.android.healthvector.di.ApplicationComponent;
 import ru.android.healthvector.domain.child.data.Child;

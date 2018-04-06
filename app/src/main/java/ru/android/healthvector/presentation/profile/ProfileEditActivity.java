@@ -27,6 +27,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -157,7 +159,9 @@ public class ProfileEditActivity extends BaseMvpActivity implements ProfileEditV
         setupImage();
         setupDate();
         setupTime();
+        setupTracker();
 
+        trackScreen("PROFILE");
         unsubscribeOnDestroy(presenter.listenForDoneButtonUpdate(new ChildObservable(this)));
     }
 

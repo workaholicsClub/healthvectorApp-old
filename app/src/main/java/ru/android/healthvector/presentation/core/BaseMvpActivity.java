@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,6 +93,8 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
 
     private TextView toolbarTitle;
 
+    protected Tracker analyticsTracker;
+
     protected void unsubscribeOnDestroy(@NonNull Disposable disposable) {
         compositeDisposable.add(disposable);
     }
@@ -119,11 +123,22 @@ public abstract class BaseMvpActivity extends MvpAppCompatActivity
         super.onCreate(savedInstanceState);
         logger.debug("onCreate");
         setupDagger();
+        setupTracker();
+    }
+
+    protected void setupTracker() {
+        ChildDiaryApplication application = (ChildDiaryApplication) getApplication();
+        analyticsTracker = application.getDefaultTracker();
     }
 
     private void setupDagger() {
         ApplicationComponent component = ChildDiaryApplication.getApplicationComponent();
         injectActivity(component);
+    }
+
+    public void trackScreen(String screenName) {
+        analyticsTracker.setScreenName(screenName);
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
