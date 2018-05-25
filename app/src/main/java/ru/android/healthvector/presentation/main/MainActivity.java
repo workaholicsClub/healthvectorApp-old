@@ -51,6 +51,8 @@ import ru.android.healthvector.presentation.core.AppPartitionFragment;
 import ru.android.healthvector.presentation.core.BaseMvpActivity;
 import ru.android.healthvector.presentation.core.ExtraConstants;
 import ru.android.healthvector.presentation.core.adapters.swipe.FabController;
+import ru.android.healthvector.presentation.core.adapters.swipe.FabShowBarController;
+import ru.android.healthvector.presentation.core.widgets.FabToolbar;
 import ru.android.healthvector.presentation.development.DevelopmentDiaryFragment;
 import ru.android.healthvector.presentation.development.partitions.core.ChartContainer;
 import ru.android.healthvector.presentation.exercises.ExercisesFragment;
@@ -94,6 +96,10 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             new CustomPrimaryDrawerItem()
                     .withTag(AppPartition.CALENDAR)
                     .withName(R.string.drawer_item_calendar)
+                    .withOnDrawerItemClickListener(this),
+            new CustomPrimaryDrawerItem()
+                    .withTag(AppPartition.ADD_EVENT)
+                    .withName(R.string.drawer_item_add_event)
                     .withOnDrawerItemClickListener(this),
             new CustomPrimaryDrawerItem()
                     .withTag(AppPartition.DEVELOPMENT_DIARY)
@@ -318,6 +324,15 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     }
 
     @Override
+    public void showBar() {
+        getSupportFragmentManager().executePendingTransactions();
+        FabShowBarController fabController = findShowBarController();
+        if (fabController != null) {
+            fabController.showBar();
+        }
+    }
+
+    @Override
     public void navigateToDevelopmentDiary(@NonNull AppPartitionArguments arguments) {
         openAppPartition(AppPartition.DEVELOPMENT_DIARY, arguments);
     }
@@ -514,6 +529,9 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         switch (appPartition) {
             case CALENDAR:
                 navigationCommand = () -> presenter.openCalendar();
+                return false;
+            case ADD_EVENT:
+                navigationCommand = () -> presenter.openCalendarAndAddEventBar();
                 return false;
             case DEVELOPMENT_DIARY:
                 navigationCommand = () -> presenter.openDevelopmentDiary();
@@ -751,6 +769,12 @@ public class MainActivity extends BaseMvpActivity implements MainView,
     private FabController findFabController() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(FRAGMENT_CONTAINER_ID);
         return fragment instanceof FabController ? (FabController) fragment : null;
+    }
+
+    @Nullable
+    private FabShowBarController findShowBarController() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("CALENDAR");
+        return (FabShowBarController) fragment;
     }
 
     @Nullable

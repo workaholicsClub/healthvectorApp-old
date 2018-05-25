@@ -4,6 +4,7 @@
     <!-- \n - символ переноса строки -->
     <string name="app_name_splash">Вектор\nразвития</string>
     <string name="drawer_item_calendar">Календарь</string>
+    <string name="drawer_item_add_event">Добавить событие</string>
     <string name="drawer_item_development_diary">Дневник развития</string>
     <string name="drawer_item_exercises">Занятия</string>
     <string name="drawer_item_medical_data">Медицинские данные</string>

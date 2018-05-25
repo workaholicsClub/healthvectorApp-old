@@ -116,6 +116,23 @@ public class MainPresenter extends BasePresenter<MainView> {
                         .subscribe(getViewState()::navigateToCalendar, this::onUnexpectedError));
     }
 
+    public void openCalendarAndAddEventBar() {
+        unsubscribeOnDestroy(
+                Observable.combineLatest(
+                        childInteractor.getActiveChildOnce(),
+                        calendarInteractor.getSelectedDateOnce(),
+                        (child, selectedDate) -> AppPartitionArguments.builder()
+                                .child(child)
+                                .selectedDate(selectedDate)
+                                .build())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(arguments -> {
+                            getViewState().navigateToCalendar((AppPartitionArguments) arguments);
+                            getViewState().showBar();
+                        }, this::onUnexpectedError));
+    }
+
     public void openDevelopmentDiary() {
         unsubscribeOnDestroy(
                 Observable.combineLatest(

@@ -72,7 +72,7 @@ public class FabToolbar extends RevealFrameLayout {
         fab.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 
-    private void showBar() {
+    public void showBar() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             cx = (fab.getLeft() + fab.getRight()) / 2;
             cy = (fab.getTop() + fab.getBottom()) / 2;

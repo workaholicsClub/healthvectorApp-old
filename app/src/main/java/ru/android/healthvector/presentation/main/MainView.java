@@ -54,4 +54,7 @@ public interface MainView extends BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void navigateToHelp(@NonNull AppPartitionArguments arguments);
+
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showBar();
 }

@@ -32,6 +32,7 @@ import ru.android.healthvector.presentation.calendar.partitions.MonthFragment;
 import ru.android.healthvector.presentation.calendar.partitions.WeekFragment;
 import ru.android.healthvector.presentation.core.AppPartitionFragment;
 import ru.android.healthvector.presentation.core.adapters.swipe.FabController;
+import ru.android.healthvector.presentation.core.adapters.swipe.FabShowBarController;
 import ru.android.healthvector.presentation.core.adapters.swipe.SwipeViewAdapter;
 import ru.android.healthvector.presentation.core.widgets.FabToolbar;
 import ru.android.healthvector.presentation.events.DiaperEventDetailActivity;
@@ -46,7 +47,7 @@ import ru.android.healthvector.utils.ui.WidgetsUtils;
 import static android.support.v4.app.FragmentTransaction.TRANSIT_UNSET;
 
 public class CalendarFragment extends AppPartitionFragment implements CalendarView,
-        FabController {
+        FabController, FabShowBarController {
     private static final String KEY_SELECTED_PAGE = "calendar.selected_page";
     private static final int REQUEST_ADD_EVENT = 1;
 
@@ -300,6 +301,11 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
     @Override
     public void showFab() {
         fabToolbar.showFab();
+    }
+
+    @Override
+    public void showBar() {
+        fabToolbar.showBar();
     }
 
     @Override
