@@ -25,8 +25,8 @@ android {
         minSdkVersion 14
         // TODO чтобы поднять target sdk version до 26+, надо переписать сервисы
         targetSdkVersion 25
-        versionCode 75
-        versionName '1.0.2'
+        versionCode 76
+        versionName '1.0.3'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField "int", "DB_VERSION", "1"
         buildConfigField "String", "DB_NAME", "\"diary.db\""
@@ -36,7 +36,13 @@ android {
         resValue "string", "font_path_medium", "fonts/Roboto-Medium.ttf"
         resValue "string", "font_path_splash", "fonts/Proxima-Nova-Semibold.otf"
         multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
     }
     signingConfigs {
         debug {
@@ -65,8 +71,8 @@ android {
 
             ext.enableCrashlytics = false
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
-            manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
             manifestPlaceholders += [screenOrientation: "unspecified"]
+            //manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
 
             // logging
             buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "true"
@@ -91,9 +97,9 @@ android {
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
 
             ext.enableCrashlytics = true
-            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
-            manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
             manifestPlaceholders += [screenOrientation: "portrait"]
+            //manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
 
             // logging
             buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "true"
@@ -118,9 +124,9 @@ android {
             proguardFiles 'proguard.cfg', 'proguard-rules.pro'
 
             ext.enableCrashlytics = true
-            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
-            manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
             manifestPlaceholders += [screenOrientation: "portrait"]
+            //manifestPlaceholders += [fabricApiKey: "22d69a10edc8bae02f118c1fc460a0c40c48c56b"]
 
             // logging
             buildConfigField "boolean", "PRINT_LOGS_TO_FILE", "false"

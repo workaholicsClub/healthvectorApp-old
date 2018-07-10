@@ -74,6 +74,7 @@ public class ResourcesUtils {
         if (sex == null || sex == Sex.MALE) {
             return new int[]{
                     R.drawable.navigation_drawer_item_calendar_boy,
+                    R.drawable.navigation_drawer_item_calendar_boy,
                     R.drawable.navigation_drawer_item_development_diary_boy,
                     R.drawable.navigation_drawer_item_exercises_boy,
                     R.drawable.navigation_drawer_item_medical_data_boy,
@@ -82,6 +83,7 @@ public class ResourcesUtils {
             };
         } else {
             return new int[]{
+                    R.drawable.navigation_drawer_item_calendar_girl,
                     R.drawable.navigation_drawer_item_calendar_girl,
                     R.drawable.navigation_drawer_item_development_diary_girl,
                     R.drawable.navigation_drawer_item_exercises_girl,

@@ -2,6 +2,7 @@ package ru.android.healthvector.presentation.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -120,6 +121,10 @@ public class MainActivity extends BaseMvpActivity implements MainView,
             new CustomPrimaryDrawerItem()
                     .withTag(AppPartition.HELP)
                     .withName(R.string.help)
+                    .withOnDrawerItemClickListener(this),
+            new CustomPrimaryDrawerItem()
+                    .withTag(AppPartition.PRIVACY_POLICY)
+                    .withName(R.string.drawer_item_privacy_policy)
                     .withOnDrawerItemClickListener(this)
     };
 
@@ -357,6 +362,11 @@ public class MainActivity extends BaseMvpActivity implements MainView,
         openAppPartition(AppPartition.HELP, arguments);
     }
 
+    public void openPrivacyPolicy() {
+        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse("https://vectordev.org/mobile_app/"));
+        startActivity(intent);
+    }
+
     private void openAppPartition(@NonNull AppPartition appPartition,
                                   @NonNull AppPartitionArguments arguments) {
         updateTitle(appPartition, arguments.getChild());
@@ -547,6 +557,9 @@ public class MainActivity extends BaseMvpActivity implements MainView,
                 return false;
             case HELP:
                 navigationCommand = () -> presenter.openHelp();
+                return false;
+            case PRIVACY_POLICY:
+                openPrivacyPolicy();
                 return false;
             default:
                 return false;

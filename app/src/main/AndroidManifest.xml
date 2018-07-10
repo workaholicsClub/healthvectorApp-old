@@ -369,8 +369,8 @@
             </intent-filter>
         </receiver>
 
-        <meta-data
+        <!--meta-data
             android:name="io.fabric.ApiKey"
-            android:value="${fabricApiKey}" />
+            android:value="${fabricApiKey}" /-->
     </application>
 </manifest>
