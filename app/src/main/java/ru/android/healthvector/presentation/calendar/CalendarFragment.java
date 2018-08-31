@@ -232,26 +232,31 @@ public class CalendarFragment extends AppPartitionFragment implements CalendarVi
 
     @OnClick(R.id.addDiaperEvent)
     void onAddDiaperEventClick() {
+        trackScreen("ADD_DIAPER_EVENT");
         presenter.addDiaperEvent();
     }
 
     @OnClick(R.id.addSleepEvent)
     void onAddSleepEventClick() {
+        trackScreen("ADD_SLEEP_EVENT");
         presenter.addSleepEvent();
     }
 
     @OnClick(R.id.addFeedEvent)
     void onAddFeedEventClick() {
+        trackScreen("ADD_FEED_EVENT");
         presenter.addFeedEvent();
     }
 
     @OnClick(R.id.addPumpEvent)
     void onAddPumpEventClick() {
+        trackScreen("ADD_PUMP_EVENT");
         presenter.addPumpEvent();
     }
 
     @OnClick(R.id.addOtherEvent)
     void onAddOtherEventClick() {
+        trackScreen("ADD_OTHER_EVENT");
         presenter.addOtherEvent();
     }
 

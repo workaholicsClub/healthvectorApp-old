@@ -66,6 +66,7 @@ public class ChildDiaryApplication extends MultiDexApplication {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             // Чтобы включить ведение журнала отладки, используйте adb shell setprop log.tag.GAv4 DEBUG
             mTracker = analytics.newTracker(R.xml.global_tracker);
+            mTracker.enableAdvertisingIdCollection(true);
         }
         return mTracker;
     }

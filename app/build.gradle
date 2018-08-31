@@ -25,7 +25,7 @@ android {
         minSdkVersion 14
         // TODO чтобы поднять target sdk version до 26+, надо переписать сервисы
         targetSdkVersion 25
-        versionCode 76
+        versionCode 77
         versionName '1.0.3'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField "int", "DB_VERSION", "1"
